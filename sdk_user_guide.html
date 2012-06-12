@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +7,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Socialize SDK (Advanced) Guide &mdash; Socialize Android SDK v1.6.4 documentation</title>
+    <title>Socialize Android Developer Guide &mdash; Socialize Android SDK v2.0 documentation</title>
     
-    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/nature.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     'v1.6.4',
+        VERSION:     'v2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,21 +25,21 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v1.6.4 documentation" href="index.html?v=v1.6.4" />
-    <link rel="next" title="Configuration Settings" href="config.html?v=v1.6.4" />
-    <link rel="prev" title="Entity Loaders" href="entity_loader.html?v=v1.6.4" /> 
+    <link rel="top" title="Socialize Android SDK v2.0 documentation" href="index.html?v=v2.0" />
+    <link rel="next" title="Configuration Settings" href="config.html?v=v2.0" />
+    <link rel="prev" title="Entity Loaders" href="entity_loader.html?v=v2.0" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="config.html?v=v1.6.4" title="Configuration Settings"
+          <a href="config.html?v=v2.0" title="Configuration Settings"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="entity_loader.html?v=v1.6.4" title="Entity Loaders"
+          <a href="entity_loader.html?v=v2.0" title="Entity Loaders"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html?v=v1.6.4">Socialize Android SDK v1.6.4 documentation</a> &raquo;</li> 
+        <li><a href="index.html?v=v2.0">Socialize Android SDK v2.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -51,15 +50,6 @@
             
       <META HTTP-EQUIV="Pragma" CONTENT="no-cache"/>
     <META HTTP-EQUIV="Expires" CONTENT="-1"/>
-
-    <link rel="stylesheet" href="static/css/shCore.css" type="text/css" />
-    <link rel="stylesheet" href="static/css/shCoreEclipse.css" type="text/css" />
-    <link rel="stylesheet" href="static/css/shThemeEclipse.css" type="text/css" />
-    <link rel="stylesheet" href="static/css/gist.css" type="text/css" />
-    <script type="text/javascript" src="static/js/shCore.js"></script>
-    <script type="text/javascript" src="static/js/shBrushXml.js"></script>
-    <script type="text/javascript" src="static/js/shBrushJava.js"></script>
-    <script type="text/javascript" src="static/js/shBrushJavaProperties.js"></script>
 
     <script type="text/javascript">
     var _gaq = _gaq || [];
@@ -72,8 +62,28 @@
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
-</script><div class="section" id="socialize-sdk-advanced-guide">
-<h1>Socialize SDK (Advanced) Guide<a class="headerlink" href="#socialize-sdk-advanced-guide" title="Permalink to this headline">¶</a></h1>
+</script>
+
+    <script type="text/javascript" charset="utf-8">
+      var is_ssl = ("https:" == document.location.protocol);
+      var asset_host = is_ssl ? "https://s3.amazonaws.com/getsatisfaction.com/" : "http://s3.amazonaws.com/getsatisfaction.com/";
+      document.write(unescape("%3Cscript src='" + asset_host + "javascripts/feedback-v2.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+
+    <script type="text/javascript" charset="utf-8">
+      var feedback_widget_options = {};
+      feedback_widget_options.display = "overlay";
+      feedback_widget_options.company = "socialize";
+      feedback_widget_options.placement = "right";
+      feedback_widget_options.color = "#222";
+      feedback_widget_options.style = "question";
+      feedback_widget_options.product = "socialize_android_sdk";
+      feedback_widget_options.limit = "3";
+      GSFN.feedback_widget.prototype.local_base_url = "http://support.getsocialize.com";
+      GSFN.feedback_widget.prototype.local_ssl_base_url = "http://support.getsocialize.com";
+      var feedback_widget = new GSFN.feedback_widget(feedback_widget_options);
+    </script><div class="section" id="socialize-android-developer-guide">
+<h1>Socialize Android Developer Guide<a class="headerlink" href="#socialize-android-developer-guide" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>The Socialize SDK provides a simple set of classes and methods built upon the <a class="reference external" href="http://www.getsocialize.com/docs/v1/">Socialize REST API</a></p>
@@ -84,266 +94,70 @@ waiting for a response from the Socialize server.</p>
 <p>You are notified of the outcome of calls to the Socialize service via a <em>SocializeListener</em>
 passed into each call to the Socialize SDK.</p>
 </div>
-<div class="section" id="initializing-socialize">
-<h2>Initializing Socialize<a class="headerlink" href="#initializing-socialize" title="Permalink to this headline">¶</a></h2>
-<p>The Socialize SDK should be initialized in the <strong>onCreate()</strong> method of your Activity.</p>
-<pre class="brush: java">
-import com.socialize.Socialize;
-
-protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        Socialize.init(this);
-
-        // Your code goes here
-}
-
-</pre><p>The standard init method is <em>synchronous</em>, meaning that the main thread will block until Socialize is initialized.
-If you want an <em>asynchronous</em> initialization, this can be done using the <strong>initAsync()</strong> method:</p>
-<pre class="brush: java">
-import com.socialize.Socialize;
-import com.socialize.listener.SocializeInitListener;
-import com.socialize.error.SocializeException;
-import com.socialize.android.ioc.IOCContainer;
-
-protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Socialize.getSocialize().initAsync(null, new SocializeInitListener() {
-                @Override
-                public void onError(SocializeException error) {
-                        // Handle error
-                }
-
-                @Override
-                public void onInit(Context context, IOCContainer container) {
-                        // Socialize can be used ONLY after onInit
-                        // Your code goes here
-                }
-        });
-}
-
-</pre><div class="admonition note">
+<div class="section" id="initializing-socialize-optional">
+<h2>Initializing Socialize (Optional)<a class="headerlink" href="#initializing-socialize-optional" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">If using asynchronous init ensure that there are no operations on the Socialize instance before or while it is initializing!</p>
+<p class="last">Socialize will automatically initialize itself upon first use, however if you want more direct control over initialization you can initialize Socialize manually.</p>
 </div>
-</div>
-<div class="section" id="authentication">
-<h2>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h2>
-<p>Every call against the Socialize SDK MUST be authenticated.</p>
-<p>On the first successful call to &#8220;authenticate&#8221; the credentials are automatically cached in the
-application so subsequent calls are much faster.</p>
-<div class="section" id="authenticating-with-facebook">
-<h3>Authenticating with Facebook<a class="headerlink" href="#authenticating-with-facebook" title="Permalink to this headline">¶</a></h3>
-<p>Although not required, we stongly recommend authenticating with 3rd parties (e.g. Facebook) as this provides a better user experience
-and ensures that user profiles and IDs are retained across app sessions and installs.</p>
-<p>If you don&#8217;t want to use Facebook for authentication, you can always just use <a class="reference internal" href="#auth-anon"><em>Anonymous Authentication</em></a>.</p>
-<p><strong>You must already have a Facebook application</strong> to enable Facebook authentication in Socialize.</p>
-<p>A Facebook application is nothing more than an account on Facebook which links your Android application to
-a Facebook account and is required to &#8220;authorize&#8221; your Android app to access a user&#8217;s Facebook profile.</p>
-<p>If you already have a Facebook app, simply specify the ID of your Facebook app in the call
-to authenticate:</p>
-<div class="section" id="facebook-authentication-code-snippet">
-<span id="fb-snippet"></span><h4>Facebook Authentication Code Snippet<a class="headerlink" href="#facebook-authentication-code-snippet" title="Permalink to this headline">¶</a></h4>
-<pre class="brush: java">
+<p>The Socialize SDK should be initialized in the <strong>onCreate()</strong> method of your Activity.
+You should also include the onPause and onResume methods.</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="nd">@Override</span>
+<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+	<span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+	
+	<span class="c1">// Initialize socialize</span>
+	<span class="n">Socialize</span><span class="o">.</span><span class="na">initAsync</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+	
+	<span class="c1">// Your code here</span>
+<span class="o">}</span>
 
-import com.socialize.Socialize;
-import com.socialize.api.SocializeSession;
-import com.socialize.auth.AuthProviderType;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeAuthListener;
-import com.socialize.auth.facebook.FacebookAuthProviderInfo;
+<span class="nd">@Override</span>
+<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onPause</span><span class="o">()</span> <span class="o">{</span>
+	<span class="kd">super</span><span class="o">.</span><span class="na">onPause</span><span class="o">();</span>
+	<span class="n">Socialize</span><span class="o">.</span><span class="na">onPause</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+<span class="o">}</span>
 
-// The "this" reference below refers to a Context object
-
-FacebookAuthProviderInfo info = new FacebookAuthProviderInfo();
-info.setAppId(facebookAppId); // Your facebook app ID
-
-Socialize.getSocialize().authenticate(
-        this,
-        consumerKey, // From your account at getsocialize.com
-        consumerSecret, // From your account at getsocialize.com
-        info,
-        new SocializeAuthListener() {
-                public void onAuthSuccess(SocializeSession session) {
-                        // Success!
-                }
-                public void onAuthFail(SocializeException error) {
-                        // Handle auth fail
-                }
-                public void onError(SocializeException error) {
-                        // Handle error
-                }
-                public void onCancel() {
-                        // Handle cancel
-                }
-
-        });
-</pre><p>If you have specified your Socialize consumer key, secret AND your Facebook App ID in <strong>assets/socialize.properties</strong></p>
-<pre class="brush: java">
-
-import com.socialize.Socialize;
-import com.socialize.api.SocializeSession;
-import com.socialize.auth.AuthProviderType;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeAuthListener;
-
-// The "this" reference below refers to a Context object
-Socialize.getSocialize().authenticate(
-        this,
-        AuthProviderType.FACEBOOK,
-        new SocializeAuthListener() {
-                public void onAuthSuccess(SocializeSession session) {
-                        // Success!
-                }
-                public void onAuthFail(SocializeException error) {
-                        // Handle auth fail
-                }
-                public void onError(SocializeException error) {
-                        // Handle error
-                }
-                public void onCancel() {
-                        // Handle cancel
-                }
-
-        });
-</pre><p>If you <strong>do not</strong> already have a Facebook app refer to <a class="reference internal" href="facebook.html?v=v1.6.4"><em>Facebook Integration</em></a> for more information.</p>
-</div>
-</div>
-<div class="section" id="authenticating-with-twitter">
-<h3>Authenticating with Twitter<a class="headerlink" href="#authenticating-with-twitter" title="Permalink to this headline">¶</a></h3>
-<p>Although not required, we stongly recommend authenticating with 3rd parties (e.g. Twitter) as this provides a better user experience
-and ensures that user profiles and IDs are retained across app sessions and installs.</p>
-<p>If you don&#8217;t want to use Twitter for authentication, you can always just use <a class="reference internal" href="#auth-anon"><em>Anonymous Authentication</em></a>.</p>
-<p><strong>You must already have a Twitter application</strong> to enable Twitter authentication in Socialize.</p>
-<p>A Twitter application is nothing more than an account on Twitter which links your Android application to
-a Twitter account and is required to &#8220;authorize&#8221; your Android app to access a user&#8217;s Twitter feed.</p>
-<p>If you already have a Twitter app, simply specify the consumer key and secret of your Twitter app in the call
-to authenticate:</p>
-<div class="section" id="twitter-authentication-code-snippet">
-<span id="tw-snippet"></span><h4>Twitter Authentication Code Snippet<a class="headerlink" href="#twitter-authentication-code-snippet" title="Permalink to this headline">¶</a></h4>
-<pre class="brush: java">
-
-import com.socialize.Socialize;
-import com.socialize.api.SocializeSession;
-import com.socialize.auth.AuthProviderType;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeAuthListener;
-import com.socialize.auth.twitter.TwitterAuthProviderInfo;
-
-// The "this" reference below refers to a Context object
-
-TwitterAuthProviderInfo info = new TwitterAuthProviderInfo();
-info.setConsumerKey(twitterConsumerKey); // Your twitter consumer key
-info.setConsumerSecret(twitterConsumerSecret); // Your twitter consumer secret
-
-Socialize.getSocialize().authenticate(
-                this,
-                consumerKey, // From your account at getsocialize.com
-                consumerSecret, // From your account at getsocialize.com
-                info,
-                new SocializeAuthListener() {
-                        public void onAuthSuccess(SocializeSession session) {
-                                // Success!
-                        }
-                        public void onAuthFail(SocializeException error) {
-                                // Handle auth fail
-                        }
-                        public void onError(SocializeException error) {
-                                // Handle error
-                        }
-                        public void onCancel() {
-                                // Handle cancel
-                        }
-
-                });
-</pre><p>If you have specified your Socialize consumer key, secret AND your Twitter consumer key and secret in <strong>assets/socialize.properties</strong></p>
-<pre class="brush: java">
-
-import com.socialize.Socialize;
-import com.socialize.api.SocializeSession;
-import com.socialize.auth.AuthProviderType;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeAuthListener;
-
-// The "this" reference below refers to a Context object
-Socialize.getSocialize().authenticate(
-        this,
-        AuthProviderType.TWITTER,
-        new SocializeAuthListener() {
-                public void onAuthSuccess(SocializeSession session) {
-                        // Success!
-                }
-                public void onAuthFail(SocializeException error) {
-                        // Handle auth fail
-                }
-                public void onError(SocializeException error) {
-                        // Handle error
-                }
-                public void onCancel() {
-                        // Handle cancel
-                }
-
-        });
-</pre><p>If you <strong>do not</strong> already have a Twitter app refer to <a class="reference internal" href="twitter.html?v=v1.6.4"><em>Twitter Integration</em></a> for more information.</p>
-</div>
-</div>
-<div class="section" id="anonymous-authentication">
-<span id="auth-anon"></span><h3>Anonymous Authentication<a class="headerlink" href="#anonymous-authentication" title="Permalink to this headline">¶</a></h3>
-<p>We recommend authenticating with 3rd parties (e.g. Facebook) as this provides a better user experience
-and ensures that user profiles and IDs are retained across app sessions and installs, however if you just
-want anonymous authentication, simply call the <strong>authenticate</strong> method:</p>
-<pre class="brush: java">
-
-import com.socialize.Socialize;
-import com.socialize.api.SocializeSession;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeAuthListener;
-
-// The "this" reference below refers to a Context object
-Socialize.getSocialize().authenticate(
-        this,
-        consumerKey, // From your account at getsocialize.com
-        consumerSecret, // From your account at getsocialize.com
-        new SocializeAuthListener() {
-                public void onAuthSuccess(SocializeSession session) {
-                        // Success!
-                }
-                public void onAuthFail(SocializeException error) {
-                        // Handle auth fail
-                }
-                public void onError(SocializeException error) {
-                        // Handle error
-                }
-                public void onCancel() {
-                        // Handle cancel
-                }
-        });
-</pre><p>If you have specified your Socialize consumer key, secret in <strong>assets/socialize.properties</strong></p>
-<pre class="brush: java">
-
-import com.socialize.Socialize;
-import com.socialize.api.SocializeSession;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeAuthListener;
-
-// The "this" reference below refers to a Context object
-Socialize.getSocialize().authenticate(
-        this,
-        new SocializeAuthListener() {
-                public void onAuthSuccess(SocializeSession session) {
-                        // Success!
-                }
-                public void onAuthFail(SocializeException error) {
-                        // Handle auth fail
-                }
-                public void onError(SocializeException error) {
-                        // Handle error
-                }
-                public void onCancel() {
-                        // Handle cancel
-                }
-        });
+<span class="nd">@Override</span>
+<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onResume</span><span class="o">()</span> <span class="o">{</span>
+	<span class="kd">super</span><span class="o">.</span><span class="na">onResume</span><span class="o">();</span>
+	<span class="n">Socialize</span><span class="o">.</span><span class="na">onResume</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+<span class="o">}</span>
 </pre></div>
+</div>
+<p>If you want to know about initialization success (e.g. if you want to access Socialize after init), you can also specify a listener</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="nd">@Override</span>
+<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+	<span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+	
+	<span class="c1">// Initialize socialize</span>
+	<span class="n">Socialize</span><span class="o">.</span><span class="na">initAsync</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="k">new</span> <span class="n">SocializeInitListener</span><span class="o">()</span> <span class="o">{</span>
+		
+		<span class="nd">@Override</span>
+		<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+			<span class="c1">// Handle error</span>
+		<span class="o">}</span>
+		
+		<span class="nd">@Override</span>
+		<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInit</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">,</span> <span class="n">IOCContainer</span> <span class="n">container</span><span class="o">)</span> <span class="o">{</span>
+			<span class="c1">// If you want to access Socialize directly, do it here</span>
+		<span class="o">}</span>
+	<span class="o">});</span>
+<span class="o">}</span>
+
+<span class="nd">@Override</span>
+<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onPause</span><span class="o">()</span> <span class="o">{</span>
+	<span class="kd">super</span><span class="o">.</span><span class="na">onPause</span><span class="o">();</span>
+	<span class="n">Socialize</span><span class="o">.</span><span class="na">onPause</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="nd">@Override</span>
+<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onResume</span><span class="o">()</span> <span class="o">{</span>
+	<span class="kd">super</span><span class="o">.</span><span class="na">onResume</span><span class="o">();</span>
+	<span class="n">Socialize</span><span class="o">.</span><span class="na">onResume</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+<span class="o">}</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="entities">
 <span id="id1"></span><h2>Entities<a class="headerlink" href="#entities" title="Permalink to this headline">¶</a></h2>
@@ -351,440 +165,856 @@ Socialize.getSocialize().authenticate(
 <p>Throughout the documentation and the code snippets we refer to an &#8220;entity&#8221;.  This is simply a
 generic term for something that can be view, shared, liked or commented on.  Generally this will
 correspond to a single item of content in your app.</p>
-<p>Entities in Socialize MUST be associated with s unique key.  It is recommended that where possible an
+<p>Entities in Socialize MUST be associated with a unique key.  It is recommended that where possible an
 HTTP URL be used (i.e. one that corresponds to an active web page).</p>
-<div class="section" id="creating-an-entity">
-<h3>Creating an Entity<a class="headerlink" href="#creating-an-entity" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="using-entities">
+<h3>Using Entities<a class="headerlink" href="#using-entities" title="Permalink to this headline">¶</a></h3>
+<p>When posting a comment, share or like using Socialize an entity object must be provided.
+This can either be an entity you created previously, or a new entity which will be created inline with the call to Socialize.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You should always specify a name when creating an entity, however if you have previously created the entity with a name and do not want to specify the name every time you can provide a &#8220;null&#8221; argument for the name.  This will instruct Socialize to ignore the name attribute and the name of the entity will NOT be updated.</p>
+</div>
+</div>
+<div class="section" id="creating-an-entity-inline">
+<h3>Creating an Entity Inline<a class="headerlink" href="#creating-an-entity-inline" title="Permalink to this headline">¶</a></h3>
+<p>A typical use of an entity might be when posting a comment.  Here the entity name is specified.</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;name&quot;</span><span class="o">);</span>
+
+<span class="n">CommentUtils</span><span class="o">.</span><span class="na">addComment</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="s">&quot;The comment&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">CommentAddListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Comment</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle success</span>
+	<span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+<p>Alternatively a <strong>null</strong> argument can be specified for the name which will instruct the server to leave the existing name intact.</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+
+<span class="n">CommentUtils</span><span class="o">.</span><span class="na">addComment</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="s">&quot;The comment&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">CommentAddListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Comment</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle success</span>
+	<span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-an-entity-explicitly">
+<h3>Creating an Entity Explicitly<a class="headerlink" href="#creating-an-entity-explicitly" title="Permalink to this headline">¶</a></h3>
 <p>An entity consists of a <strong>key</strong> and a <strong>name</strong>.  The name should be descriptive and help you identify the
 entity when viewing reports on the Socialize dashboard.</p>
 <p>Creating an entity explicitly in this manner is <strong>optional but recommended</strong>.  If you simply post a
 comment,view,share or like against a key that does not currently exist, it will be automatically created
 for you.</p>
-<p>To create an entity, simply call the <strong>addEntity</strong> method:</p>
-<pre class="brush: java">
+<p>To create an entity, simply call the <strong>saveEntity</strong> method:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;name&quot;</span><span class="o">);</span>
 
-import com.socialize.Socialize;
-import com.socialize.entity.Entity;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.entity.EntityAddListener;
-
-if(Socialize.getSocialize().isAuthenticated()) {
-
-        // Create a new entity with a name
-        Entity entity = Entity.newInstance("http://someurl.com", "My Entity");
-
-        // The "this" reference below refers to a Context object
-        Socialize.getSocialize().addEntity(this, entity, new EntityAddListener() {
-
-                public void onError(SocializeException error) {
-                        // Handle error
-                }
-
-                public void onCreate(Entity entity) {
-                        // Handle success
-                }
-        });
-}
+<span class="n">EntityUtils</span><span class="o">.</span><span class="na">saveEntity</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntityAddListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Entity</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle success</span>
+	<span class="o">}</span>
+<span class="o">});</span>
 </pre></div>
+</div>
+</div>
 <div class="section" id="retrieving-entity-data">
-<h3>Retrieving Entity data<a class="headerlink" href="#retrieving-entity-data" title="Permalink to this headline">¶</a></h3>
+<h3>Retrieving Entity Data<a class="headerlink" href="#retrieving-entity-data" title="Permalink to this headline">¶</a></h3>
 <p>An existing entity can be retrieved via the <strong>getEntity</strong> method.  Entities obtained in this way will also
-provide aggregate data on comments, likes, shares and views.  Refer to the <a class="reference external" href="http://www.getsocialize.com/docs/v1/#entity-object">Entity object structure in the API Docs</a>.
+provide aggregate data on comments, likes, shares and views.  Refer to the <a class="reference external" href="http://api.getsocialize.com/docs/v1/#entity-object">Entity object structure in the API Docs</a>.
 for more detail on these aggregate values.</p>
-<pre class="brush: java">
-
-import com.socialize.Socialize;
-import com.socialize.entity.Entity;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.entity.EntityAddListener;
-
-if(Socialize.getSocialize().isAuthenticated()) {
-        Socialize.getSocialize().getEntity("http://someurl.com", new EntityGetListener() {
-
-                public void onError(SocializeException error) {
-                        // Handle error
-                }
-
-                public void onGet(Entity entity) {
-                        // Handle success
-                }
-        });
-}
+<div class="highlight-java"><div class="highlight"><pre><span class="n">EntityUtils</span><span class="o">.</span><span class="na">getEntity</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntityGetListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGet</span><span class="o">(</span><span class="n">Entity</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle success</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span><span class="o">(</span><span class="n">isNotFoundError</span><span class="o">(</span><span class="n">error</span><span class="o">))</span> <span class="o">{</span>
+			<span class="c1">// No entity found</span>
+		<span class="o">}</span>
+		<span class="k">else</span> <span class="o">{</span>
+			<span class="c1">// Handle error</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+<span class="o">});</span>
 </pre></div>
 </div>
-<div class="section" id="view">
-<h2>View<a class="headerlink" href="#view" title="Permalink to this headline">¶</a></h2>
-<p>A &#8216;view&#8217; is simply an event that records when a user views an entity.  Views are reported on the Socialize
-dashboard and provide an excellent way for you to determine which content items in your app are getting the
-most interest.</p>
-<div class="section" id="creating-a-view">
-<h3>Creating a &#8216;View&#8217;<a class="headerlink" href="#creating-a-view" title="Permalink to this headline">¶</a></h3>
-<p>To create a view, simply call the <strong>view</strong> method:</p>
-<pre class="brush: java">
+<p>You can also retrieve several entities in one call:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">EntityUtils</span><span class="o">.</span><span class="na">getEntities</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntityListListener</span><span class="o">()</span> <span class="o">{</span>
 
-import com.socialize.Socialize;
-import com.socialize.entity.Entity;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.view.ViewAddListener;
-
-if(Socialize.getSocialize().isAuthenticated()) {
-
-        // Create or retrieve your entity object
-        Entity entity = Entity.newInstance("http://someurl.com", "My Entity");
-
-        // Record a view
-        // The "this" reference below refers to a Context object
-        Socialize.getSocialize().view(this, entity, new ViewAddListener() {
-
-                public void onError(SocializeException error) {
-                        // Handle error
-                }
-
-                public void onCreate(com.socialize.entity.View view) {
-                        // Handle success
-                }
-        });
-}
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onList</span><span class="o">(</span><span class="n">ListResult</span><span class="o">&lt;</span><span class="n">Entity</span><span class="o">&gt;</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+		
+		<span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">getTotalCount</span><span class="o">();</span>
+		<span class="n">List</span><span class="o">&lt;</span><span class="n">Entity</span><span class="o">&gt;</span> <span class="n">items</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">getItems</span><span class="o">();</span>
+		
+		<span class="c1">// Handle success</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+<span class="o">},</span> <span class="s">&quot;key0&quot;</span><span class="o">,</span> <span class="s">&quot;key1&quot;</span><span class="o">);</span>
 </pre></div>
 </div>
-<div class="section" id="like">
-<h2>Like<a class="headerlink" href="#like" title="Permalink to this headline">¶</a></h2>
-<p>A &#8216;like&#8217; represents a user&#8217;s vote for an entity.  Likes are a way for you to determine which content items
-in your app are the most popular, and what is of most interest to your users.</p>
-<div class="section" id="creating-a-like">
-<h3>Creating a &#8216;Like&#8217;<a class="headerlink" href="#creating-a-like" title="Permalink to this headline">¶</a></h3>
-<p>To create a like, simply call the <strong>like</strong> method:</p>
-<pre class="brush: java">
-
-import com.socialize.Socialize;
-import com.socialize.entity.Entity;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.like.LikeAddListener;
-import com.socialize.entity.Like;
-
-if(Socialize.getSocialize().isAuthenticated()) {
-        // Create or retrieve your entity object
-        Entity entity = Entity.newInstance("http://someurl.com", "My Entity");
-
-        // Add a like to an entity defined by its URL
-        // The "this" reference below refers to a Context object
-        Socialize.getSocialize().like(this, entity, new LikeAddListener() {
-
-                public void onError(SocializeException error) {
-                        // Handle error
-                }
-
-                public void onCreate(Like like) {
-                        // Handle success
-                }
-        });
-}
-</pre></div>
-<div class="section" id="removing-a-like">
-<h3>Removing a &#8216;Like&#8217;<a class="headerlink" href="#removing-a-like" title="Permalink to this headline">¶</a></h3>
-<p>Removing a like (i.e. an &#8216;unlike&#8217;) is done via the <strong>unlike</strong> method.  In order to remove a like, you will
-need the ID of the like.  This is returned from the initial call to <strong>like</strong></p>
-<pre class="brush: java">
-
-import com.socialize.Socialize;
-import com.socialize.entity.Entity;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.like.LikeDeleteListener;
-
-if(Socialize.getSocialize().isAuthenticated()) {
-        // Remove an existing like based on its numeric ID
-        Socialize.getSocialize().unlike(1234, new LikeDeleteListener() {
-
-                public void onError(SocializeException error) {
-                        // Handle error
-                }
-
-                public void onDelete() {
-                        // Handle success
-                }
-        });
-}
-</pre></div>
-<div class="section" id="listing-likes-for-a-user">
-<h3>Listing &#8216;Likes&#8217; for a User<a class="headerlink" href="#listing-likes-for-a-user" title="Permalink to this headline">¶</a></h3>
-<p>To obtain a list of all entities &#8216;liked&#8217; by a single user, use the <strong>listLikesByUser</strong> method:</p>
-<pre class="brush: java">
-
-import com.socialize.Socialize;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.like.LikeListListener;
-import com.socialize.entity.Like;
-import com.socialize.entity.ListResult;
-
-if(Socialize.getSocialize().isAuthenticated()) {
-        // List likes for a single user
-        Socialize.getSocialize().listLikesByUser(1234, new LikeListListener() {
-
-                public void onError(SocializeException error) {
-                        // Handle error
-                }
-
-                public void onList(ListResult&lt;Like&gt; likes) {
-                        // Handle success
-                }
-        });
-}
+</div>
+<div class="section" id="entity-stats">
+<h3>Entity Stats<a class="headerlink" href="#entity-stats" title="Permalink to this headline">¶</a></h3>
+<p>Each entity object retrieved from the server contains aggregate statistics about the number of comments,likes,views and shares:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">EntityUtils</span><span class="o">.</span><span class="na">getEntity</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntityGetListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGet</span><span class="o">(</span><span class="n">Entity</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Get the stats</span>
+		<span class="n">EntityStats</span> <span class="n">entityStats</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">getEntityStats</span><span class="o">();</span>
+		
+		<span class="n">entityStats</span><span class="o">.</span><span class="na">getLikes</span><span class="o">();</span>
+		<span class="n">entityStats</span><span class="o">.</span><span class="na">getComments</span><span class="o">();</span>
+		<span class="n">entityStats</span><span class="o">.</span><span class="na">getViews</span><span class="o">();</span>
+		<span class="n">entityStats</span><span class="o">.</span><span class="na">getShares</span><span class="o">();</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span><span class="o">(</span><span class="n">isNotFoundError</span><span class="o">(</span><span class="n">error</span><span class="o">))</span> <span class="o">{</span>
+			<span class="c1">// No entity found</span>
+		<span class="o">}</span>
+		<span class="k">else</span> <span class="o">{</span>
+			<span class="c1">// Handle error</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+<span class="o">});</span>
 </pre></div>
 </div>
-<div class="section" id="comment">
-<h2>Comment<a class="headerlink" href="#comment" title="Permalink to this headline">¶</a></h2>
-<p>Comments are a great way to build engagement in your app, and users love making comments!</p>
-<div class="section" id="creating-a-comment">
-<h3>Creating a Comment<a class="headerlink" href="#creating-a-comment" title="Permalink to this headline">¶</a></h3>
-<p>To create a comment on an entity, use the <strong>addComment</strong> method:</p>
-<pre class="brush: java">
+</div>
+<div class="section" id="entity-meta-data">
+<h3>Entity Meta Data<a class="headerlink" href="#entity-meta-data" title="Permalink to this headline">¶</a></h3>
+<p>Entities stored in Socialize can optionally include <em>meta data</em>.  This is for any additional information you want to store about the entity.</p>
+<p>Meta data is stored with the entity and returned then the entity is requested.</p>
+<div class="highlight-java"><div class="highlight"><pre>	
+<span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;name&quot;</span><span class="o">);</span>
+<span class="n">entity</span><span class="o">.</span><span class="na">setMetaData</span><span class="o">(</span><span class="s">&quot;meta data&quot;</span><span class="o">);</span>
 
-import com.socialize.Socialize;
-import com.socialize.entity.Entity;
-import com.socialize.entity.Comment;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.comment.CommentAddListener;
+<span class="n">EntityUtils</span><span class="o">.</span><span class="na">saveEntity</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntityAddListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Entity</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Entity was created</span>
+	<span class="o">}</span>
+<span class="o">});</span>
 
-if(Socialize.getSocialize().isAuthenticated()) {
-
-        // Create or retrieve your entity object
-        Entity entity = Entity.newInstance("http://someurl.com", "My Entity");
-
-        String comment = "The comment to be added";
-
-        // Add a comment to an entity
-        // The "this" reference below refers to a Context object
-        Socialize.getSocialize().addComment(this, entity, comment, new CommentAddListener() {
-
-                public void onError(SocializeException error) {
-                        // Handle error
-                }
-
-                public void onCreate(Comment comment) {
-                        // Handle success
-                }
-        });
-}
-</pre></div>
-<div class="section" id="retrieving-a-single-comment">
-<h3>Retrieving a single Comment<a class="headerlink" href="#retrieving-a-single-comment" title="Permalink to this headline">¶</a></h3>
-<p>If you want to retrieve a single comment you can use the <strong>getCommentById</strong> method.  You will need the ID
-of the comment which was returned from the inital call to <strong>addComment</strong>:</p>
-<pre class="brush: java">
-
-import com.socialize.Socialize;
-import com.socialize.entity.Comment;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.comment.CommentGetListener;
-
-if(Socialize.getSocialize().isAuthenticated()) {
-        // Get a single comment based on its numeric ID
-        Socialize.getSocialize().getCommentById(1234, new CommentGetListener() {
-
-                public void onError(SocializeException error) {
-                        // Handle error
-                }
-
-                public void onGet(Comment entity) {
-                        // Handle success
-                }
-        });
-}
-</pre></div>
-<div class="section" id="listing-comments">
-<h3>Listing Comments<a class="headerlink" href="#listing-comments" title="Permalink to this headline">¶</a></h3>
-<p>To list all comments for an entity use the <strong>listCommentsByEntity</strong> method.  This will return a <strong>maximum of 100 comments</strong></p>
-<pre class="brush: java">
-
-import com.socialize.Socialize;
-import com.socialize.entity.Comment;
-import com.socialize.entity.ListResult;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.comment.CommentListListener;
-
-if(Socialize.getSocialize().isAuthenticated()) {
-        // List comments for an entity without pagination (maximum 100 will be returned)
-        Socialize.getSocialize().listCommentsByEntity("http://someurl.com", new CommentListListener() {
-
-                public void onError(SocializeException error) {
-                        // Handle error
-                }
-
-                public void onList(ListResult&lt;Comment&gt; result) {
-                        // Handle success
-                }
-        });
-}
-</pre></div>
-<div class="section" id="comments-with-pagination">
-<h3>Comments with pagination<a class="headerlink" href="#comments-with-pagination" title="Permalink to this headline">¶</a></h3>
-<p>The <strong>recommended</strong> approach is to use pagination when listing comments:</p>
-<pre class="brush: java">
-
-import com.socialize.Socialize;
-import com.socialize.entity.Comment;
-import com.socialize.entity.ListResult;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.comment.CommentListListener;
-
-if(Socialize.getSocialize().isAuthenticated()) {
-        // List comments for an entity with pagination (start and end index)
-        Socialize.getSocialize().listCommentsByEntity("http://someurl.com", 0, 100, new CommentListListener() {
-
-                public void onError(SocializeException error) {
-                        // Handle error
-                }
-
-                public void onList(ListResult&lt;Comment&gt; result) {
-                        // Handle success
-                }
-        });
-}
-</pre></div>
-<div class="section" id="listing-comments-for-a-user">
-<h3>Listing Comments for a User<a class="headerlink" href="#listing-comments-for-a-user" title="Permalink to this headline">¶</a></h3>
-<p>To obtain a list of all comments made by a single user, use the <strong>listCommentsByUser</strong> method:</p>
-<pre class="brush: java">
-
-import com.socialize.Socialize;
-import com.socialize.entity.Comment;
-import com.socialize.entity.ListResult;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.comment.CommentListListener;
-
-if(Socialize.getSocialize().isAuthenticated()) {
-        // List comments for a single user
-        Socialize.getSocialize().listCommentsByUser(1234, new CommentListListener() {
-
-                public void onError(SocializeException error) {
-                        // Handle error
-                }
-
-                public void onList(ListResult&lt;Comment&gt; result) {
-                        // Handle success
-                }
-        });
-}
+<span class="c1">// Later, when you retrieve the entity...</span>
+	
+<span class="n">EntityUtils</span><span class="o">.</span><span class="na">getEntity</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntityGetListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGet</span><span class="o">(</span><span class="n">Entity</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Get the meta data</span>
+		<span class="n">String</span> <span class="n">metaData</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">getMetaData</span><span class="o">();</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span><span class="o">(</span><span class="n">isNotFoundError</span><span class="o">(</span><span class="n">error</span><span class="o">))</span> <span class="o">{</span>
+			<span class="c1">// No entity found</span>
+		<span class="o">}</span>
+		<span class="k">else</span> <span class="o">{</span>
+			<span class="c1">// Handle error</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+<span class="o">});</span>
 </pre></div>
 </div>
-<div class="section" id="share">
-<h2>Share<a class="headerlink" href="#share" title="Permalink to this headline">¶</a></h2>
-<p>Users love to share content, especially to their favorite social network.  Socialize makes sharing easy with a set
-of very simple SDK calls.</p>
-<div class="section" id="sharing-to-facebook">
-<h3>Sharing to Facebook<a class="headerlink" href="#sharing-to-facebook" title="Permalink to this headline">¶</a></h3>
-<p>The example below shows sharing an entity to Facebook.</p>
-<pre class="brush: java">
+<p>If you want a more complex data structure, we recommend using JSON as an object notation</p>
+<div class="highlight-java"><div class="highlight"><pre>	
+<span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;name&quot;</span><span class="o">);</span>
 
-import com.socialize.Socialize;
-import com.socialize.entity.Entity;
-import com.socialize.entity.Share;
-import com.socialize.networks.ShareOptions;
-import com.socialize.networks.SocialNetwork;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.share.ShareAddListener;
+<span class="c1">// Store a custom dictionary as a JSON object</span>
+<span class="n">JSONObject</span> <span class="n">metaData</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JSONObject</span><span class="o">();</span>
+<span class="n">metaData</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;some_key&quot;</span><span class="o">,</span> <span class="s">&quot;some_value&quot;</span><span class="o">);</span>
 
-if(Socialize.getSocialize().isAuthenticated()) {
+<span class="n">entity</span><span class="o">.</span><span class="na">setMetaData</span><span class="o">(</span><span class="n">metaData</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
 
-        // Create or retrieve your entity object
-        Entity entity = Entity.newInstance("http://someurl.com", "My Entity");
+<span class="n">EntityUtils</span><span class="o">.</span><span class="na">saveEntity</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntityAddListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Entity</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Entity was created</span>
+	<span class="o">}</span>
+<span class="o">});</span>
 
-        String comment = "The comment to be added";
 
-        // Create a share options instance to nomimate the sharing preferences.
-        ShareOptions shareOptions = new ShareOptions();
+<span class="c1">// Later, when you retrieve the entity...</span>
+	
+<span class="n">EntityUtils</span><span class="o">.</span><span class="na">getEntity</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntityGetListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGet</span><span class="o">(</span><span class="n">Entity</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Get the meta data</span>
+		<span class="n">String</span> <span class="n">metaData</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">getMetaData</span><span class="o">();</span>
+		
+		<span class="k">try</span> <span class="o">{</span>
+			<span class="n">JSONObject</span> <span class="n">json</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JSONObject</span><span class="o">(</span><span class="n">metaData</span><span class="o">);</span>
+			<span class="n">String</span> <span class="n">myValue</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">&quot;some_key&quot;</span><span class="o">);</span>
+		<span class="o">}</span>
+		<span class="k">catch</span> <span class="o">(</span><span class="n">JSONException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+			<span class="c1">// Handle error</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span><span class="o">(</span><span class="n">isNotFoundError</span><span class="o">(</span><span class="n">error</span><span class="o">))</span> <span class="o">{</span>
+			<span class="c1">// No entity found</span>
+		<span class="o">}</span>
+		<span class="k">else</span> <span class="o">{</span>
+			<span class="c1">// Handle error</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="entity-activity">
+<h3>Entity Activity<a class="headerlink" href="#entity-activity" title="Permalink to this headline">¶</a></h3>
+<p>All actions performed on an entity (comment,share,like) can be retrieved using <strong>ActionUtils</strong></p>
+<div class="highlight-java"><div class="highlight"><pre><span class="c1">// Get the last 10 actions performed in the app for the entity with the key &quot;key&quot;</span>
+<span class="n">ActionUtils</span><span class="o">.</span><span class="na">getActionsByEntity</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="k">new</span> <span class="n">ActionListListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onList</span><span class="o">(</span><span class="n">ListResult</span><span class="o">&lt;</span><span class="n">SocializeAction</span><span class="o">&gt;</span> <span class="n">actions</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle result</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="users-user-activity">
+<h2>Users &amp; User Activity<a class="headerlink" href="#users-user-activity" title="Permalink to this headline">¶</a></h2>
+<p>Every device running Socialize has a &#8220;User&#8221;, however Socialize automatically manages this User for you so there is no need to explicitly create one.</p>
+<p>A User has both Settings and Activity.  The Settings correspond to the User&#8217;s preferences while using Socialize whereas the Activity relates to their social actions.</p>
+<div class="section" id="getting-a-user">
+<h3>Getting a User<a class="headerlink" href="#getting-a-user" title="Permalink to this headline">¶</a></h3>
+<p>To obtain a reference to the current user simply call the <strong>getCurrentUser</strong> method</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">User</span> <span class="n">currentUser</span> <span class="o">=</span> <span class="n">UserUtils</span><span class="o">.</span><span class="na">getCurrentUser</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+</pre></div>
+</div>
+<p>To obtain a User object for a user other than the current user</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kt">long</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">123L</span><span class="o">;</span>
 
-        // Set to share on Facebook.
-        shareOptions.setShareTo(SocialNetwork.FACEBOOK);
+<span class="n">UserUtils</span><span class="o">.</span><span class="na">getUser</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">id</span><span class="o">,</span> <span class="k">new</span> <span class="n">UserGetListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGet</span><span class="o">(</span><span class="n">User</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Found the user</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span><span class="o">(</span><span class="n">isNotFoundError</span><span class="o">(</span><span class="n">error</span><span class="o">))</span> <span class="o">{</span>
+			<span class="c1">// No such user</span>
+		<span class="o">}</span>
+		<span class="k">else</span> <span class="o">{</span>
+			<span class="c1">// Handle error</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="user-settings">
+<h3>User Settings<a class="headerlink" href="#user-settings" title="Permalink to this headline">¶</a></h3>
+<p>To allow a user to update their settings you can simply present them with the User Settings view:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">UserUtils</span><span class="o">.</span><span class="na">showUserSettings</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+</pre></div>
+</div>
+<p>If you want to build your own UI to update a User&#8217;s settings you can simply call the <em>saveUserSettings</em> method</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">UserSettings</span> <span class="n">userSettings</span> <span class="o">=</span> <span class="n">UserUtils</span><span class="o">.</span><span class="na">getUserSettings</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
 
-        // Share to facebook
-        // The "this" reference below refers to a Context object
-        Socialize.getSocialize().share(this, entity, comment, shareOptions, new ShareAddListener() {
-
-                public void onError(SocializeException error) {
-                        // Handle error
-                }
-
-                public void onCreate(Share comment) {
-                        // Handle success
-                }
-        });
-}
-</pre><p>Actually almost any social action performed with Socialize can be shared to facebook.
-Check out the <a class="reference internal" href="facebook.html?v=v1.6.4#propagate-fb"><em>Propagating Socialize Actions to Facebook</em></a> section for more examples</p>
+<span class="n">UserUtils</span><span class="o">.</span><span class="na">saveUserSettings</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">userSettings</span><span class="o">,</span> <span class="k">new</span> <span class="n">UserSaveListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onUpdate</span><span class="o">(</span><span class="n">User</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// User was updated</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
 </div>
 </div>
 <div class="section" id="user-activity">
-<h2>User Activity<a class="headerlink" href="#user-activity" title="Permalink to this headline">¶</a></h2>
-<p>Comments, Shares and Likes made by a single user can all be retrieved in a single call using the SDK.</p>
-<div class="section" id="listing-activity-for-a-user">
-<h3>Listing Activity for a User<a class="headerlink" href="#listing-activity-for-a-user" title="Permalink to this headline">¶</a></h3>
-<p>To obtain a list of all activity conducted by a single user, use the <strong>listActivityByUser</strong> method:</p>
-<pre class="brush: java">
+<h3>User Activity<a class="headerlink" href="#user-activity" title="Permalink to this headline">¶</a></h3>
+<p>You can display a profile view for any user which includes their recent activity</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">UserUtils</span><span class="o">.</span><span class="na">getCurrentUser</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
 
-import com.socialize.Socialize;
-import com.socialize.entity.ListResult;
-import com.socialize.entity.SocializeAction;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.activity.UserActivityListListener;
-
-if(Socialize.getSocialize().isAuthenticated()) {
-
-        // You can provide any user id you like, but here's how to use the current logged in user
-        Long userId = Socialize.getSocialize().getSession().getUser().getId();
-
-        // List all activity for a single user
-        Socialize.getSocialize().listActivityByUser(userId, new UserActivityListListener() {
-
-                public void onError(SocializeException error) {
-                        // Handle error
-                }
-
-                public void onList(ListResult&lt;SocializeAction&gt; activity) {
-                        // Handle success
-                }
-        });
-}
+<span class="n">UserUtils</span><span class="o">.</span><span class="na">showUserProfile</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">user</span><span class="o">);</span>
 </pre></div>
-<div class="section" id="listing-activity-for-a-user-with-pagination">
-<h3>Listing Activity for a User with Pagination<a class="headerlink" href="#listing-activity-for-a-user-with-pagination" title="Permalink to this headline">¶</a></h3>
-<p>As with all list operations the user activity list supports pagination:</p>
-<pre class="brush: java">
+</div>
+<p>Or retrieve the raw list of actions performed by a user using <strong>ActionUtils</strong></p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">UserUtils</span><span class="o">.</span><span class="na">getCurrentUser</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
 
-import com.socialize.Socialize;
-import com.socialize.entity.ListResult;
-import com.socialize.entity.SocializeAction;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.activity.UserActivityListListener;
+<span class="c1">// Get the most recent 10 actions by this user</span>
+<span class="n">ActionUtils</span><span class="o">.</span><span class="na">getActionsByUser</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">user</span><span class="o">.</span><span class="na">getId</span><span class="o">(),</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="k">new</span> <span class="n">ActionListListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onList</span><span class="o">(</span><span class="n">ListResult</span><span class="o">&lt;</span><span class="n">SocializeAction</span><span class="o">&gt;</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Found a result</span>
+		<span class="kt">int</span> <span class="n">totalCount</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">getTotalCount</span><span class="o">();</span>
+		<span class="n">List</span><span class="o">&lt;</span><span class="n">SocializeAction</span><span class="o">&gt;</span> <span class="n">items</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">getItems</span><span class="o">();</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+<p>Or get the list of actions by a user on a single entity</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="c1">// Get the last 10 actions performed in the app for the entity with the key &quot;key&quot; by the current user</span>
+<span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">UserUtils</span><span class="o">.</span><span class="na">getCurrentUser</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+	
+<span class="n">ActionUtils</span><span class="o">.</span><span class="na">getActionsByUserAndEntity</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">user</span><span class="o">.</span><span class="na">getId</span><span class="o">(),</span> <span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="k">new</span> <span class="n">ActionListListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onList</span><span class="o">(</span><span class="n">ListResult</span><span class="o">&lt;</span><span class="n">SocializeAction</span><span class="o">&gt;</span> <span class="n">actions</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle result</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="application-activity">
+<h2>Application Activity<a class="headerlink" href="#application-activity" title="Permalink to this headline">¶</a></h2>
+<p>Using the <strong>ActionUtils</strong> class you can also retrieve application-wide activity</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="c1">// Get the last 10 actions performed in the app</span>
+<span class="n">ActionUtils</span><span class="o">.</span><span class="na">getActionsByApplication</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="k">new</span> <span class="n">ActionListListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onList</span><span class="o">(</span><span class="n">ListResult</span><span class="o">&lt;</span><span class="n">SocializeAction</span><span class="o">&gt;</span> <span class="n">actions</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle result</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sharing">
+<h2>Sharing<a class="headerlink" href="#sharing" title="Permalink to this headline">¶</a></h2>
+<p>Socialize provides a complete set of helper functions to make sharing content in your app as easy as possible.</p>
+<div class="section" id="default-share-dialog">
+<h3>Default Share Dialog<a class="headerlink" href="#default-share-dialog" title="Permalink to this headline">¶</a></h3>
+<p>The simplest way to allow users to share an entity (your content) is via the share dialog</p>
+<img alt="images/2_0_share_default.png" src="images/2_0_share_default.png" />
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>	
 
-if(Socialize.getSocialize().isAuthenticated()) {
+<span class="n">ShareUtils</span><span class="o">.</span><span class="na">showShareDialog</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="custom-share-dialog">
+<span id="custom-share"></span><h3>Custom Share Dialog<a class="headerlink" href="#custom-share-dialog" title="Permalink to this headline">¶</a></h3>
+<p>If you just want to allow sharing to Facebook or Twitter</p>
+<img alt="images/2_0_share_via_networks.png" src="images/2_0_share_via_networks.png" />
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>	
 
-        // You can provide any user id you like, but here's how to use the current logged in user
-        Long userId = Socialize.getSocialize().getSession().getUser().getId();
+<span class="c1">// Setup the options for display</span>
+<span class="kt">int</span> <span class="n">options</span> <span class="o">=</span> <span class="n">ShareUtils</span><span class="o">.</span><span class="na">FACEBOOK</span> <span class="o">|</span> <span class="n">ShareUtils</span><span class="o">.</span><span class="na">TWITTER</span><span class="o">;</span>
 
-        // Set the start/end index for pagination
-        int startIndex = 0;
-        int endIndex = 10;
+<span class="n">ShareUtils</span><span class="o">.</span><span class="na">showShareDialog</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="k">new</span> <span class="n">SocialNetworkDialogListener</span><span class="o">()</span> <span class="o">{</span>
 
-        // List all activity for a single user
-        Socialize.getSocialize().listActivityByUser(
-                userId,
-                startIndex,
-                endIndex,
-                new UserActivityListListener() {
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCancel</span><span class="o">(</span><span class="n">Dialog</span> <span class="n">dialog</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// User cancelled</span>
+	<span class="o">}</span>
 
-                        public void onError(SocializeException error) {
-                                // Handle error
-                        }
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
 
-                        public void onList(ListResult&lt;SocializeAction&gt; activity) {
-                                // Handle success
-                        }
-                });
-}
-</pre><script type="text/javascript">
-        SyntaxHighlighter.defaults['toolbar'] = false;
-        SyntaxHighlighter.all();
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onNetworkError</span><span class="o">(</span><span class="n">Activity</span> <span class="n">context</span><span class="o">,</span> <span class="n">SocialNetwork</span> <span class="n">network</span><span class="o">,</span> <span class="n">Exception</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Failed to post to given network</span>
+	<span class="o">}</span>
+	
+<span class="o">},</span> <span class="n">options</span><span class="o">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="adding-text-to-a-share">
+<h3>Adding Text to a Share<a class="headerlink" href="#adding-text-to-a-share" title="Permalink to this headline">¶</a></h3>
+<p>If you want to allow the user to add a comment when sharing but you still want to use the default UI controls
+you can implement a <em>Flow Interrupt</em> to extract text from the user before the share</p>
+<img alt="images/2_0_share_with_comment.png" src="images/2_0_share_with_comment.png" />
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>	
+
+<span class="n">ShareUtils</span><span class="o">.</span><span class="na">showShareDialog</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="k">new</span> <span class="n">ShareDialogListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onShow</span><span class="o">(</span><span class="n">Dialog</span> <span class="n">dialog</span><span class="o">,</span> <span class="n">SharePanelView</span> <span class="n">dialogView</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// The dialog was shown.</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCancel</span><span class="o">(</span><span class="n">Dialog</span> <span class="n">dialog</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// User cancelled.</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onFlowInterrupted</span><span class="o">(</span><span class="n">DialogFlowController</span> <span class="n">controller</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// This will only be called if onContinue returns false</span>
+		
+		<span class="c1">// Obtain a comment from the user</span>
+		<span class="n">String</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&quot;...&quot;</span><span class="o">;</span>
+		
+		<span class="c1">// Call continue when you want flow to resume</span>
+		<span class="n">controller</span><span class="o">.</span><span class="na">onContinue</span><span class="o">(</span><span class="n">text</span><span class="o">);</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">onContinue</span><span class="o">(</span><span class="n">Dialog</span> <span class="n">dialog</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">remember</span><span class="o">,</span> <span class="n">SocialNetwork</span><span class="o">...</span> <span class="n">networks</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Return true if you want to interrupt the flow</span>
+		<span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="customizing-the-content-of-facebook-posts">
+<h3>Customizing the Content of Facebook Posts<a class="headerlink" href="#customizing-the-content-of-facebook-posts" title="Permalink to this headline">¶</a></h3>
+<p>In some situations you may want to override the default behavior of posting to Facebook.  In these cases you can
+implement the <strong>onBeforePost</strong> method of the listener you pass to the ShareUtils call</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>	
+
+<span class="c1">// Setup the options for display</span>
+<span class="kt">int</span> <span class="n">options</span> <span class="o">=</span> <span class="n">ShareUtils</span><span class="o">.</span><span class="na">SOCIAL</span><span class="o">;</span> <span class="c1">// This is just a shortcut for Twitter and Facebook.</span>
+
+<span class="n">ShareUtils</span><span class="o">.</span><span class="na">showShareDialog</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="k">new</span> <span class="n">SocialNetworkDialogListener</span><span class="o">()</span> <span class="o">{</span>
+
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCancel</span><span class="o">(</span><span class="n">Dialog</span> <span class="n">dialog</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// User cancelled</span>
+	<span class="o">}</span>
+
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onNetworkError</span><span class="o">(</span><span class="n">Activity</span> <span class="n">context</span><span class="o">,</span> <span class="n">SocialNetwork</span> <span class="n">network</span><span class="o">,</span> <span class="n">Exception</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Failed to post to given network</span>
+	<span class="o">}</span>
+
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onBeforePost</span><span class="o">(</span><span class="n">Activity</span> <span class="n">parent</span><span class="o">,</span> <span class="n">SocialNetwork</span> <span class="n">socialNetwork</span><span class="o">,</span> <span class="n">PostData</span> <span class="n">postData</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Change data for facebook post</span>
+		<span class="k">if</span><span class="o">(</span><span class="n">socialNetwork</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">socialNetwork</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">SocialNetwork</span><span class="o">.</span><span class="na">FACEBOOK</span><span class="o">))</span> <span class="o">{</span>
+			<span class="n">postData</span><span class="o">.</span><span class="na">getPostValues</span><span class="o">().</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;foo&quot;</span><span class="o">,</span> <span class="s">&quot;bar&quot;</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+	
+<span class="o">},</span> <span class="n">options</span><span class="o">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="comments">
+<h2>Comments<a class="headerlink" href="#comments" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="displaying-the-comment-list-ui">
+<h3>Displaying the Comment List UI<a class="headerlink" href="#displaying-the-comment-list-ui" title="Permalink to this headline">¶</a></h3>
+<p>The standard Socialize Comment List UI is included with the <a class="reference internal" href="action_bar.html?v=v2.0"><em>Socialize Action Bar</em></a> however if you wanted to create your own ActionBar or
+simply want to launch the Comment List from elsewhere in your app this can simply be done with a few lines of code</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
+
+<span class="c1">// Show the comment list view</span>
+<span class="n">CommentUtils</span><span class="o">.</span><span class="na">showCommentView</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">);</span>
+</pre></div>
+</div>
+<p>You can also display the UI with a listener to handle events</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
+
+<span class="n">CommentUtils</span><span class="o">.</span><span class="na">showCommentView</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="k">new</span> <span class="n">OnCommentViewActionListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onRender</span><span class="o">(</span><span class="n">CommentListView</span> <span class="n">view</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Called when the list view is rendered</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onReload</span><span class="o">(</span><span class="n">CommentListView</span> <span class="n">view</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Called when a reload event is posted to the list view.</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onPostComment</span><span class="o">(</span><span class="n">Comment</span> <span class="n">comment</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Called after a comment is posted.</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">CommentListView</span> <span class="n">view</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Called when the list view component was created (but may not be shown)</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCommentList</span><span class="o">(</span><span class="n">CommentListView</span> <span class="n">view</span><span class="o">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Comment</span><span class="o">&gt;</span> <span class="n">comments</span><span class="o">,</span> <span class="kt">int</span> <span class="n">start</span><span class="o">,</span> <span class="kt">int</span> <span class="n">end</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Called when a list of comments is retrieved.</span>
+	<span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="adding-comments">
+<h3>Adding Comments<a class="headerlink" href="#adding-comments" title="Permalink to this headline">¶</a></h3>
+<p>To create a comment programmatically you simply call the <strong>addComment</strong> method on <strong>CommentUtils</strong></p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
+
+<span class="n">CommentUtils</span><span class="o">.</span><span class="na">addComment</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="s">&quot;This the comment&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">CommentAddListener</span><span class="o">()</span> <span class="o">{</span>
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Comment</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Comment was created</span>
+	<span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+<p>You can also manually specify how the comment is to be propagated to 3rd party networks such as Facebook and Twitter</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
+
+<span class="c1">// Get the default options for the user.</span>
+<span class="n">CommentOptions</span> <span class="n">commentOptions</span> <span class="o">=</span> <span class="n">CommentUtils</span><span class="o">.</span><span class="na">getUserCommentOptions</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+
+<span class="c1">// Automatically subscribe this user to new comments on this entity (requires SmartAlerts)</span>
+<span class="n">commentOptions</span><span class="o">.</span><span class="na">setSubscribeToUpdates</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+
+<span class="c1">// Pass the share options in the call to create the comment.</span>
+<span class="n">CommentUtils</span><span class="o">.</span><span class="na">addComment</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="s">&quot;This the comment&quot;</span><span class="o">,</span> <span class="n">commentOptions</span><span class="o">,</span> <span class="k">new</span> <span class="n">CommentAddListener</span><span class="o">()</span> <span class="o">{</span>
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Comment</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Comment was created</span>
+	<span class="o">}</span>
+
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onNetworkError</span><span class="o">(</span><span class="n">Activity</span> <span class="n">context</span><span class="o">,</span> <span class="n">SocialNetwork</span> <span class="n">network</span><span class="o">,</span> <span class="n">Exception</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Failed to share to the given network</span>
+	<span class="o">}</span>
+
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onBeforePost</span><span class="o">(</span><span class="n">Activity</span> <span class="n">parent</span><span class="o">,</span> <span class="n">SocialNetwork</span> <span class="n">socialNetwork</span><span class="o">,</span> <span class="n">PostData</span> <span class="n">postData</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Called before the post to the given network is made</span>
+	<span class="o">}</span>
+
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAfterPost</span><span class="o">(</span><span class="n">Activity</span> <span class="n">parent</span><span class="o">,</span> <span class="n">SocialNetwork</span> <span class="n">socialNetwork</span><span class="o">,</span> <span class="n">JSONObject</span> <span class="n">responseObject</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Called after the post to the given network is made</span>
+	<span class="o">}</span>
+
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCancel</span><span class="o">()</span> <span class="o">{</span>
+		<span class="c1">// Called if the user canceled the auth process for social networks</span>
+	<span class="o">}</span>
+<span class="o">},</span> <span class="n">SocialNetwork</span><span class="o">.</span><span class="na">FACEBOOK</span><span class="o">,</span> <span class="n">SocialNetwork</span><span class="o">.</span><span class="na">TWITTER</span><span class="o">);</span> <span class="c1">// Share to multiple networks simultaneously</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="retreiving-comments">
+<h3>Retreiving Comments<a class="headerlink" href="#retreiving-comments" title="Permalink to this headline">¶</a></h3>
+<p>You can retrieve existing comments by User, Entity or directly using an ID</p>
+<p>List comments by User</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">UserUtils</span><span class="o">.</span><span class="na">getCurrentUser</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+
+<span class="c1">// Get first 10 comments by user</span>
+<span class="n">CommentUtils</span><span class="o">.</span><span class="na">getCommentsByUser</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">user</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="k">new</span> <span class="n">CommentListListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onList</span><span class="o">(</span><span class="n">ListResult</span><span class="o">&lt;</span><span class="n">Comment</span><span class="o">&gt;</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Found comments</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+<p>List comments by Entity</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">String</span> <span class="n">entityKey</span> <span class="o">=</span> <span class="s">&quot;http://getsocialize.com&quot;</span><span class="o">;</span>
+
+<span class="c1">// Get first 10 comments</span>
+<span class="n">CommentUtils</span><span class="o">.</span><span class="na">getCommentsByEntity</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entityKey</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="k">new</span> <span class="n">CommentListListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onList</span><span class="o">(</span><span class="n">ListResult</span><span class="o">&lt;</span><span class="n">Comment</span><span class="o">&gt;</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Found comments</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+<p>List comments by ID</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kt">long</span> <span class="n">commentId0</span> <span class="o">=</span> <span class="mi">123</span><span class="o">;</span>
+<span class="kt">long</span> <span class="n">commentId1</span> <span class="o">=</span> <span class="mi">456</span><span class="o">;</span>
+
+<span class="n">CommentUtils</span><span class="o">.</span><span class="na">getComments</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="k">new</span> <span class="n">CommentListListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onList</span><span class="o">(</span><span class="n">ListResult</span><span class="o">&lt;</span><span class="n">Comment</span><span class="o">&gt;</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Found comments</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span><span class="o">(</span><span class="n">isNotFoundError</span><span class="o">(</span><span class="n">error</span><span class="o">))</span> <span class="o">{</span>
+			<span class="c1">// No comment with ID found</span>
+		<span class="o">}</span>
+		<span class="k">else</span> <span class="o">{</span>
+			<span class="c1">// Some other error</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+<span class="o">},</span> <span class="n">commentId0</span><span class="o">,</span> <span class="n">commentId1</span><span class="o">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="likes">
+<h2>Likes<a class="headerlink" href="#likes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="liking">
+<h3>Liking<a class="headerlink" href="#liking" title="Permalink to this headline">¶</a></h3>
+<p>To create a like programmatically you simply call the <strong>like</strong> method on <strong>LikeUtils</strong></p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
+
+<span class="n">LikeUtils</span><span class="o">.</span><span class="na">like</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="k">new</span> <span class="n">LikeAddListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Like</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Like was created</span>
+	<span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+<p>You can also manually specify how the like is to be propagated to 3rd party networks such as Facebook and Twitter</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
+
+<span class="c1">// Get the default options for the user.</span>
+<span class="n">LikeOptions</span> <span class="n">likeOptions</span> <span class="o">=</span> <span class="n">LikeUtils</span><span class="o">.</span><span class="na">getUserLikeOptions</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+
+<span class="c1">// Pass the share options in the call to create the like.</span>
+<span class="n">LikeUtils</span><span class="o">.</span><span class="na">like</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="n">likeOptions</span><span class="o">,</span> <span class="k">new</span> <span class="n">LikeAddListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Like</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Like was created</span>
+	<span class="o">}</span>
+
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onNetworkError</span><span class="o">(</span><span class="n">Activity</span> <span class="n">context</span><span class="o">,</span> <span class="n">SocialNetwork</span> <span class="n">network</span><span class="o">,</span> <span class="n">Exception</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Failed to share to the given network</span>
+	<span class="o">}</span>
+
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onBeforePost</span><span class="o">(</span><span class="n">Activity</span> <span class="n">parent</span><span class="o">,</span> <span class="n">SocialNetwork</span> <span class="n">socialNetwork</span><span class="o">,</span> <span class="n">PostData</span> <span class="n">postData</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Called before the post to the given network is made</span>
+	<span class="o">}</span>
+
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAfterPost</span><span class="o">(</span><span class="n">Activity</span> <span class="n">parent</span><span class="o">,</span> <span class="n">SocialNetwork</span> <span class="n">socialNetwork</span><span class="o">,</span> <span class="n">JSONObject</span> <span class="n">responseObject</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Called after the post to the given network is made</span>
+	<span class="o">}</span>
+
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCancel</span><span class="o">()</span> <span class="o">{</span>
+		<span class="c1">// Called if the user canceled the auth process for social networks</span>
+	<span class="o">}</span>
+<span class="o">},</span> <span class="n">SocialNetwork</span><span class="o">.</span><span class="na">FACEBOOK</span><span class="o">,</span> <span class="n">SocialNetwork</span><span class="o">.</span><span class="na">TWITTER</span><span class="o">);</span> <span class="c1">// Share to multiple networks simultaneously</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="un-liking">
+<h3>Un-Liking<a class="headerlink" href="#un-liking" title="Permalink to this headline">¶</a></h3>
+<p>You can also remove a previous like from an entity</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="c1">// Just use the entity key of the entity that was liked</span>
+<span class="n">LikeUtils</span><span class="o">.</span><span class="na">unlike</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">LikeDeleteListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onDelete</span><span class="o">()</span> <span class="o">{</span>
+		<span class="c1">// Like was deleted</span>
+	<span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="retreiving-likes">
+<h3>Retreiving Likes<a class="headerlink" href="#retreiving-likes" title="Permalink to this headline">¶</a></h3>
+<p>You can retrieve existing likes by User or Entity</p>
+<p>List likes by User</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">UserUtils</span><span class="o">.</span><span class="na">getCurrentUser</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+
+<span class="c1">// Get first 10 likes by user</span>
+<span class="n">LikeUtils</span><span class="o">.</span><span class="na">getLikesByUser</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">user</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="k">new</span> <span class="n">LikeListListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onList</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Like</span><span class="o">&gt;</span> <span class="n">likes</span><span class="o">,</span> <span class="kt">int</span> <span class="n">totalCount</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Found likes</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+<p>List likes by Entity</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">String</span> <span class="n">entityKey</span> <span class="o">=</span> <span class="s">&quot;http://getsocialize.com&quot;</span><span class="o">;</span>
+
+<span class="c1">// Get first 10 likes</span>
+<span class="n">LikeUtils</span><span class="o">.</span><span class="na">getLikesByEntity</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entityKey</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="k">new</span> <span class="n">LikeListListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onList</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Like</span><span class="o">&gt;</span> <span class="n">likes</span><span class="o">,</span> <span class="kt">int</span> <span class="n">totalCount</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Found likes</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="views">
+<h2>Views<a class="headerlink" href="#views" title="Permalink to this headline">¶</a></h2>
+<p>A &#8220;view&#8221; represents the action of a user <em>viewing</em> an entity and is an extremely useful analytics tool</p>
+<div class="section" id="recording-views">
+<h3>Recording Views<a class="headerlink" href="#recording-views" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
+
+<span class="n">ViewUtils</span><span class="o">.</span><span class="na">view</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="k">new</span> <span class="n">ViewAddListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">View</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// View was created</span>
+	<span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="retrieving-views">
+<h3>Retrieving Views<a class="headerlink" href="#retrieving-views" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">UserUtils</span><span class="o">.</span><span class="na">getCurrentUser</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+
+<span class="c1">// Get first 10 views by user</span>
+<span class="n">ViewUtils</span><span class="o">.</span><span class="na">getViewsByUser</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">user</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="k">new</span> <span class="n">ViewListListener</span><span class="o">()</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onList</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">View</span><span class="o">&gt;</span> <span class="n">views</span><span class="o">,</span> <span class="kt">int</span> <span class="n">totalCount</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Found views</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+<script type="text/javascript">
 </script></div>
 </div>
 </div>
@@ -797,7 +1027,7 @@ if(Socialize.getSocialize().isAuthenticated()) {
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="search.html?v=v1.6.4" method="get">
+    <form class="search" action="search.html?v=v2.0" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -808,65 +1038,32 @@ if(Socialize.getSocialize().isAuthenticated()) {
     </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-<h3><a href="index.html?v=v1.6.4">Table Of Contents</a></h3>
+<h3><a href="index.html?v=v2.0">Table Of Contents</a></h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v1.6.4">What&#8217;s New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v1.6.4">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v1.6.4">Facebook Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v1.6.4">Twitter Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v1.6.4">Socialize Action Bar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v1.6.4">Socialize Like Button</a></li>
-<li class="toctree-l1"><a class="reference internal" href="comment_view.html?v=v1.6.4">Socialize Comments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v1.6.4">SmartAlerts (Push Notifications)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v1.6.4">Entity Loaders</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Socialize SDK (Advanced) Guide</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v2.0">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v2.0">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v2.0">Socialize Action Bar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v2.0">Facebook Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v2.0">Twitter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v2.0">SmartAlerts (Push Notifications)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v2.0">Entity Loaders</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Socialize Android Developer Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#initializing-socialize">Initializing Socialize</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#authentication">Authentication</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#authenticating-with-facebook">Authenticating with Facebook</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#authenticating-with-twitter">Authenticating with Twitter</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#anonymous-authentication">Anonymous Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#initializing-socialize-optional">Initializing Socialize (Optional)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#entities">Entities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#users-user-activity">Users &amp; User Activity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#application-activity">Application Activity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sharing">Sharing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#comments">Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#likes">Likes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#views">Views</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#entities">Entities</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#creating-an-entity">Creating an Entity</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#retrieving-entity-data">Retrieving Entity data</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#view">View</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#creating-a-view">Creating a &#8216;View&#8217;</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#like">Like</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#creating-a-like">Creating a &#8216;Like&#8217;</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#removing-a-like">Removing a &#8216;Like&#8217;</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#listing-likes-for-a-user">Listing &#8216;Likes&#8217; for a User</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#comment">Comment</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#creating-a-comment">Creating a Comment</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#retrieving-a-single-comment">Retrieving a single Comment</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#listing-comments">Listing Comments</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#comments-with-pagination">Comments with pagination</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#listing-comments-for-a-user">Listing Comments for a User</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#share">Share</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#sharing-to-facebook">Sharing to Facebook</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#user-activity">User Activity</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#listing-activity-for-a-user">Listing Activity for a User</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#listing-activity-for-a-user-with-pagination">Listing Activity for a User with Pagination</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="config.html?v=v1.6.4">Configuration Settings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v1.6.4">Amazon AppStore URLs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v1.6.4">ProGuard Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v1.6.4">Troubleshooting &amp; Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v1.6.4">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html?v=v2.0">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v2.0">Amazon AppStore URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v2.0">ProGuard Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v2.0">Troubleshooting &amp; Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v2.0">Change Log</a></li>
 </ul>
 
         </div>
@@ -877,12 +1074,12 @@ if(Socialize.getSocialize().isAuthenticated()) {
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="config.html?v=v1.6.4" title="Configuration Settings"
+          <a href="config.html?v=v2.0" title="Configuration Settings"
              >next</a></li>
         <li class="right" >
-          <a href="entity_loader.html?v=v1.6.4" title="Entity Loaders"
+          <a href="entity_loader.html?v=v2.0" title="Entity Loaders"
              >previous</a> |</li>
-        <li><a href="index.html?v=v1.6.4">Socialize Android SDK v1.6.4 documentation</a> &raquo;</li> 
+        <li><a href="index.html?v=v2.0">Socialize Android SDK v2.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

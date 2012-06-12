@@ -17,7 +17,8 @@ debug logs in the Android LogCat display.
 
 By default Socialize will only render logs of level WARN to logcat.  To override this, simply add an entry to your **socialize.properties** file:
 
-.. include:: snippets/props_log.txt
+.. literalinclude:: snippets/props_log.txt
+   :language: properties
 
 Socialize will now render more details logs to the logcat console.  All Socialize logs will be tagged with the word "Socialize" so you can 
 filter them in the logcat display:
@@ -43,20 +44,16 @@ ActionBar is "pushed up" by the soft keyboard like so:
 
 You can correct this by setting **android:isScrollContainer="false"** in the declaration of your ScrollView
 
-.. raw:: html
+.. code-block:: xml
 
-	<pre class="brush: xml;">
-
-	&lt;ScrollView 
+	<ScrollView 
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:isScrollContainer="false">
 		
 		...
 		
-	&lt;/ScrollView>
-	
-	</pre>
+	</ScrollView>
 	
 Action Bar doesn't fit (appears unusually large)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -67,23 +64,15 @@ If your action bar appears too large for the display the most likelt culprit is 
 
 If you have the following setting in your manifest:
 
-.. raw:: html
+.. code-block:: xml
 
-	<pre class="brush: xml;">
-
-	&lt;supports-screens android:anyDensity="false"/>
-	
-	</pre>
+	<supports-screens android:anyDensity="false"/>
 
 This will need to be changed to:
 
-.. raw:: html
+.. code-block:: xml
 
-	<pre class="brush: xml;">
-
-	&lt;supports-screens android:anyDensity="true"/>
-	
-	</pre>
+	<supports-screens android:anyDensity="true"/>
 	
 Or just removed completely as **false** is the default value for newer (1.6+) Android versions.
 	

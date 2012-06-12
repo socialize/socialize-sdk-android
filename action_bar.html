@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +7,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Socialize Action Bar &mdash; Socialize Android SDK v1.6.4 documentation</title>
+    <title>Socialize Action Bar &mdash; Socialize Android SDK v2.0 documentation</title>
     
-    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/nature.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     'v1.6.4',
+        VERSION:     'v2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,21 +25,21 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v1.6.4 documentation" href="index.html?v=v1.6.4" />
-    <link rel="next" title="Socialize Like Button" href="like_button.html?v=v1.6.4" />
-    <link rel="prev" title="Twitter Integration" href="twitter.html?v=v1.6.4" /> 
+    <link rel="top" title="Socialize Android SDK v2.0 documentation" href="index.html?v=v2.0" />
+    <link rel="next" title="Facebook Integration" href="facebook.html?v=v2.0" />
+    <link rel="prev" title="Getting Started" href="getting_started.html?v=v2.0" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="like_button.html?v=v1.6.4" title="Socialize Like Button"
+          <a href="facebook.html?v=v2.0" title="Facebook Integration"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="twitter.html?v=v1.6.4" title="Twitter Integration"
+          <a href="getting_started.html?v=v2.0" title="Getting Started"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html?v=v1.6.4">Socialize Android SDK v1.6.4 documentation</a> &raquo;</li> 
+        <li><a href="index.html?v=v2.0">Socialize Android SDK v2.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -51,15 +50,6 @@
             
       <META HTTP-EQUIV="Pragma" CONTENT="no-cache"/>
     <META HTTP-EQUIV="Expires" CONTENT="-1"/>
-
-    <link rel="stylesheet" href="static/css/shCore.css" type="text/css" />
-    <link rel="stylesheet" href="static/css/shCoreEclipse.css" type="text/css" />
-    <link rel="stylesheet" href="static/css/shThemeEclipse.css" type="text/css" />
-    <link rel="stylesheet" href="static/css/gist.css" type="text/css" />
-    <script type="text/javascript" src="static/js/shCore.js"></script>
-    <script type="text/javascript" src="static/js/shBrushXml.js"></script>
-    <script type="text/javascript" src="static/js/shBrushJava.js"></script>
-    <script type="text/javascript" src="static/js/shBrushJavaProperties.js"></script>
 
     <script type="text/javascript">
     var _gaq = _gaq || [];
@@ -72,279 +62,258 @@
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
-</script><div class="section" id="socialize-action-bar">
+</script>
+
+    <script type="text/javascript" charset="utf-8">
+      var is_ssl = ("https:" == document.location.protocol);
+      var asset_host = is_ssl ? "https://s3.amazonaws.com/getsatisfaction.com/" : "http://s3.amazonaws.com/getsatisfaction.com/";
+      document.write(unescape("%3Cscript src='" + asset_host + "javascripts/feedback-v2.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+
+    <script type="text/javascript" charset="utf-8">
+      var feedback_widget_options = {};
+      feedback_widget_options.display = "overlay";
+      feedback_widget_options.company = "socialize";
+      feedback_widget_options.placement = "right";
+      feedback_widget_options.color = "#222";
+      feedback_widget_options.style = "question";
+      feedback_widget_options.product = "socialize_android_sdk";
+      feedback_widget_options.limit = "3";
+      GSFN.feedback_widget.prototype.local_base_url = "http://support.getsocialize.com";
+      GSFN.feedback_widget.prototype.local_ssl_base_url = "http://support.getsocialize.com";
+      var feedback_widget = new GSFN.feedback_widget(feedback_widget_options);
+    </script><div class="section" id="socialize-action-bar">
 <h1>Socialize Action Bar<a class="headerlink" href="#socialize-action-bar" title="Permalink to this headline">¶</a></h1>
-<p>Brand new in v0.7.0 of the Socialize SDK for Android is the &#8220;Action Bar&#8221; which provides a single
-entry point into the entire set of Socialize features.</p>
+<p>The Socialize Action Bar is a single all inclusive control that can be easily added to any Android application.</p>
 <img alt="images/action_bar.png" src="images/action_bar.png" />
-<img alt="images/share.png" src="images/share.png" />
-<img alt="images/add_comment.png" src="images/add_comment.png" />
+<p>The Action Bar provides immediate access to all Socialize features including</p>
+<ul class="simple">
+<li>Commenting</li>
+<li>Sharing vie Facebook, Twitter, Email and SMS</li>
+<li>Liking</li>
+<li>Recording Views</li>
+<li>User Profile screens with recent user activity</li>
+<li>User Settings to allow users to customize their experience</li>
+<li>Subscribe/Unsubscribe to SmartAlerts for users</li>
+</ul>
 <div class="section" id="displaying-the-action-bar">
 <h2>Displaying the Action Bar<a class="headerlink" href="#displaying-the-action-bar" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="using-socialize-properties-configuration">
-<h3>Using socialize.properties configuration<a class="headerlink" href="#using-socialize-properties-configuration" title="Permalink to this headline">¶</a></h3>
-<p>Refer to the <a class="reference internal" href="getting_started.html?v=v1.6.4"><em>Getting Started</em></a> section for details on configuring your <strong>socialize.properties</strong> file.</p>
-<pre class="brush: java;">
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.View;
-import com.socialize.Socialize;
-import com.socialize.entity.Entity;
+<p>The Action Bar is designed to automatically &#8220;pin&#8221; iteself to the bottom of your view.</p>
+<p>Adding the Action Bar to your app is done with a simple call to <strong>showActionBar</strong> from ActionBarUtils</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">android.app.Activity</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.os.Bundle</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.view.View</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.socialize.ActionBarUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.socialize.entity.Entity</span><span class="o">;</span>
 
-public class SampleActionBarActivity extends Activity {
-
-        public void onCreate(Bundle savedInstanceState) {
-
-                super.onCreate(savedInstanceState);
-
-                // Your entity key. May be passed as a Bundle parameter to your activity
-                String entityKey = "http://www.getsocialize.com";
-
-                // Create an entity object including a name
-                // The Entity object is Serializable, so you could also store the whole object in the Intent
-                Entity entity = Entity.newInstance(entityKey, "Socialize");
-
-                // Wrap your existing view with the action bar.
-                // your_layout refers to the resource ID of your current layout.
-                View actionBarWrapped = Socialize.getSocializeUI().showActionBar(this, R.layout.your_layout, entity);
-
-                // Now set the view for your activity to be the wrapped view.
-                setContentView(actionBarWrapped);
-        }
-}
-</pre></div>
-<div class="section" id="using-programmatic-configuration">
-<h3>Using programmatic configuration<a class="headerlink" href="#using-programmatic-configuration" title="Permalink to this headline">¶</a></h3>
-<p>If you prefer to do things the old fashioned way, you can set all the parameters programmatically.</p>
-<pre class="brush: java">
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.View;
-
-import com.socialize.Socialize;
-import com.socialize.entity.Entity;
-
-public class SampleActionBarProgrammaticActivity extends Activity {
-
-        public void onCreate(Bundle savedInstanceState) {
-
-                super.onCreate(savedInstanceState);
-
-                // These can be specified in a config file
-                // called socialize.properties and places in your assets path.
-                String consumerKey = "00000000-0000-0000-000000000000";
-                String consumerSecret = "00000000-0000-0000-000000000000";
-
-                // YOUR Facebook App ID
-                String facebookAppId = "1234567890";
-
-                // Your entity key. May be passed as a Bundle parameter to your activity
-                String entityKey = "http://www.getsocialize.com";
-
-                // Create an entity object including a name
-                // The Entity object is Serializable, so you could also store the whole object in the Intent
-                Entity entity = Entity.newInstance(entityKey, "Socialize");
-
-                // Setup the credentials for Socialize
-                Socialize.getSocialize().getConfig().setSocializeCredentials(consumerKey, consumerSecret);
-                Socialize.getSocialize().getConfig().setFacebookAppId(facebookAppId);
-
-                // Disable ONLY if you experience problems
-                Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(true);
-
-                // Wrap your existing view with the action bar.
-                // your_layout refers to the resource ID of your current layout.
-                View actionBarWrapped = Socialize.getSocializeUI().showActionBar(this, R.layout.your_layout, entity);
-
-                // Now set the view for your activity to be the wrapped view.
-                setContentView(actionBarWrapped);
-        }
-}
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ActionBarSample</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+		
+		<span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+		
+		<span class="c1">// Your entity key. May be passed as a Bundle parameter to your activity</span>
+		<span class="n">String</span> <span class="n">entityKey</span> <span class="o">=</span> <span class="s">&quot;http://www.getsocialize.com&quot;</span><span class="o">;</span>
+		
+		<span class="c1">// Create an entity object including a name</span>
+		<span class="c1">// The Entity object is Serializable, so you could also store the whole object in the Intent</span>
+		<span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="n">entityKey</span><span class="o">,</span> <span class="s">&quot;Socialize&quot;</span><span class="o">);</span>
+		
+		<span class="c1">// Wrap your existing view with the action bar.</span>
+		<span class="c1">// your_layout refers to the resource ID of your current layout.</span>
+		<span class="n">View</span> <span class="n">actionBarWrapped</span> <span class="o">=</span> <span class="n">ActionBarUtils</span><span class="o">.</span><span class="na">showActionBar</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">actionbar</span><span class="o">,</span> <span class="n">entity</span><span class="o">);</span>
+		
+		<span class="c1">// Now set the view for your activity to be the wrapped view.</span>
+		<span class="n">setContentView</span><span class="o">(</span><span class="n">actionBarWrapped</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
-<div class="section" id="advanced-features">
-<h2>Advanced Features<a class="headerlink" href="#advanced-features" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="using-the-entity-loader">
-<h3>Using the Entity Loader<a class="headerlink" href="#using-the-entity-loader" title="Permalink to this headline">¶</a></h3>
-<p>New in v1.1 of Socialize is the &#8220;Recent Activity&#8221; view shown in a user&#8217;s profile.  This displays the recent actions
-performed by the user within the app.  To maximize the benefit of this it is recommended that an &#8220;Entity Loader&#8221; implementation
-be provided to Socialize to that it knows how to load the original view for the entity.</p>
-<p>Developers should create an implementation of a SocializeEntityLoader and provide this implementation to the SocializeUI instance:</p>
-<pre class="brush: java">
-
-// Defined in your app
-public class MyEntityLoader implements SocializeEntityLoader {
-
-        // MUST define a parameterless constructor
-        public MyEntityLoader() {
-                super();
-        }
-
-        public void loadEntity(Activity activity, Entity entity) {
-                // Load the original view for this entity
-        }
-
-        public boolean canLoad(Context context, Entity entity) {
-                // Return true if this entity can be loaded
-        }
-}
-
-</pre><p>Refer to the <a class="reference internal" href="entity_loader.html?v=v1.6.4"><em>Entity Loaders</em></a> section for more details.</p>
+<p>(Refer to the <a class="reference internal" href="getting_started.html?v=v2.0"><em>Getting Started</em></a> section for details on configuring your <strong>socialize.properties</strong> file.)</p>
 </div>
 <div class="section" id="disabling-the-scrollview">
-<h3>Disabling the ScrollView<a class="headerlink" href="#disabling-the-scrollview" title="Permalink to this headline">¶</a></h3>
+<h2>Disabling the ScrollView<a class="headerlink" href="#disabling-the-scrollview" title="Permalink to this headline">¶</a></h2>
 <p>By default the ActionBar will create a ScrollView to house your existing content.
 This is typically necessary so that the ActionBar doesn&#8217;t impede the use of your existing content.</p>
 <p>If you don&#8217;t want your content to be scrollable however, you can disable this feature by using <strong>ActionBarOptions</strong></p>
-<pre class="brush: java">
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.View;
-import com.socialize.Socialize;
-import com.socialize.entity.Entity;
-import com.socialize.ui.actionbar.ActionBarOptions;
+<div class="highlight-java"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">android.app.Activity</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.os.Bundle</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.view.View</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.socialize.ActionBarUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.socialize.entity.Entity</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.socialize.ui.actionbar.ActionBarOptions</span><span class="o">;</span>
 
-public class SampleActionBarActivityNoScrollView extends Activity {
-
-        public void onCreate(Bundle savedInstanceState) {
-
-                super.onCreate(savedInstanceState);
-
-                // Your entity key. May be passed as a Bundle parameter to your activity
-                String entityKey = "http://www.getsocialize.com";
-
-                // Create an entity object including a name
-                // The Entity object is Serializable, so you could also store the whole object in the Intent
-                Entity entity = Entity.newInstance(entityKey, "Socialize");
-
-                // Add more options
-                ActionBarOptions options = new ActionBarOptions();
-                options.setAddScrollView(false); // Disable scroll view
-
-                // Wrap your existing view with the action bar.
-                // your_layout refers to the resource ID of your current layout.
-                View actionBarWrapped = Socialize.getSocializeUI().showActionBar(this, R.layout.your_layout, entity, options);
-
-                // Now set the view for your activity to be the wrapped view.
-                setContentView(actionBarWrapped);
-        }
-}
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ActionBarSampleNoScroll</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+		
+		<span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+		
+		<span class="c1">// Your entity key. May be passed as a Bundle parameter to your activity</span>
+		<span class="n">String</span> <span class="n">entityKey</span> <span class="o">=</span> <span class="s">&quot;http://www.getsocialize.com&quot;</span><span class="o">;</span>
+		
+		<span class="c1">// Create an entity object including a name</span>
+		<span class="c1">// The Entity object is Serializable, so you could also store the whole object in the Intent</span>
+		<span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="n">entityKey</span><span class="o">,</span> <span class="s">&quot;Socialize&quot;</span><span class="o">);</span>
+		
+		<span class="c1">// Add more options</span>
+		<span class="n">ActionBarOptions</span> <span class="n">options</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ActionBarOptions</span><span class="o">();</span>
+		<span class="n">options</span><span class="o">.</span><span class="na">setAddScrollView</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span> <span class="c1">// Disable scroll view   		</span>
+		
+		<span class="c1">// Wrap your existing view with the action bar.</span>
+		<span class="c1">// your_layout refers to the resource ID of your current layout.</span>
+		<span class="n">View</span> <span class="n">actionBarWrapped</span> <span class="o">=</span> <span class="n">ActionBarUtils</span><span class="o">.</span><span class="na">showActionBar</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">actionbar</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="n">options</span><span class="o">);</span>
+		
+		<span class="c1">// Now set the view for your activity to be the wrapped view.</span>
+		<span class="n">setContentView</span><span class="o">(</span><span class="n">actionBarWrapped</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
-<div class="section" id="actionbar-creation-listener">
-<h3>ActionBar Creation Listener<a class="headerlink" href="#actionbar-creation-listener" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="actionbar-listener">
+<h2>ActionBar Listener<a class="headerlink" href="#actionbar-listener" title="Permalink to this headline">¶</a></h2>
 <p>If you need or want to obtain a reference to the ActionBar view at runtime, you can use a creation listener to listen
-for the &#8220;onCreate&#8221; event of the ActionBar:</p>
-<pre class="brush: java;">
-import com.socialize.Socialize;
-import com.socialize.entity.Entity;
-import com.socialize.ui.actionbar.ActionBarListener;
-
-Socialize.getSocializeUI().showActionBar(this, R.layout.your_layout, entity, new ActionBarListener() {
-        public void onCreate(ActionBarView actionBar) {
-                // The ActionBar is really just a fancy LinearLayout
-        }
-});
-</pre></div>
-<div class="section" id="actionbar-event-listener">
-<h3>ActionBar Event Listener<a class="headerlink" href="#actionbar-event-listener" title="Permalink to this headline">¶</a></h3>
+for the &#8220;onCreate&#8221; event of the ActionBar.</p>
 <p>If you want to attach your own events to user operations on the ActionBar you can bind an <strong>OnActionBarEventListener</strong>
-to capture these:</p>
-<pre class="brush: java;">
-import com.socialize.Socialize;
-import com.socialize.entity.Entity;
-import com.socialize.ui.actionbar.ActionBarListener;
-import com.socialize.ui.actionbar.OnActionBarEventListener;
+to capture these.</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">android.app.Activity</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.os.Bundle</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.view.View</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.socialize.ActionBarUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.socialize.entity.Entity</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.socialize.entity.Like</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.socialize.entity.Share</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.socialize.ui.actionbar.ActionBarListener</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.socialize.ui.actionbar.ActionBarOptions</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.socialize.ui.actionbar.ActionBarView</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.socialize.ui.actionbar.OnActionBarEventListener</span><span class="o">;</span>
 
-Socialize.getSocializeUI().showActionBar(this, R.layout.your_layout, entity, new ActionBarListener() {
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ActionBarSampleListener</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+		
+		<span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+		
+		<span class="c1">// Your entity key. May be passed as a Bundle parameter to your activity</span>
+		<span class="n">String</span> <span class="n">entityKey</span> <span class="o">=</span> <span class="s">&quot;http://www.getsocialize.com&quot;</span><span class="o">;</span>
+		
+		<span class="c1">// Create an entity object including a name</span>
+		<span class="c1">// The Entity object is Serializable, so you could also store the whole object in the Intent</span>
+		<span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="n">entityKey</span><span class="o">,</span> <span class="s">&quot;Socialize&quot;</span><span class="o">);</span>
+		
+		<span class="c1">// Add more options</span>
+		<span class="n">ActionBarOptions</span> <span class="n">options</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ActionBarOptions</span><span class="o">();</span>
+		
+		<span class="c1">// Wrap your existing view with the action bar.</span>
+		<span class="c1">// your_layout refers to the resource ID of your current layout.</span>
+		<span class="n">View</span> <span class="n">actionBarWrapped</span> <span class="o">=</span> <span class="n">ActionBarUtils</span><span class="o">.</span><span class="na">showActionBar</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">actionbar</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="n">options</span><span class="o">,</span> <span class="k">new</span> <span class="n">ActionBarListener</span><span class="o">()</span> <span class="o">{</span>
+			
+			<span class="nd">@Override</span>
+			<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">ActionBarView</span> <span class="n">actionBar</span><span class="o">)</span> <span class="o">{</span>
+				
+				<span class="n">actionBar</span><span class="o">.</span><span class="na">setOnActionBarEventListener</span><span class="o">(</span><span class="k">new</span> <span class="n">OnActionBarEventListener</span><span class="o">()</span> <span class="o">{</span>
 
-        @Override
-        public void onCreate(ActionBarView actionBar) {
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onUpdate</span><span class="o">(</span><span class="n">ActionBarView</span> <span class="n">actionBar</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// Called when the action bar has its data updated</span>
+					<span class="o">}</span>
 
-                actionBar.setOnActionBarEventListener(new OnActionBarEventListener() {
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onPostUnlike</span><span class="o">(</span><span class="n">ActionBarView</span> <span class="n">actionBar</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// Called AFTER a user has removed a like</span>
+					<span class="o">}</span>
 
-                        @Override
-                        public void onUpdate(ActionBarView actionBar) {
-                                // Called when the action bar has its data updated
-                        }
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onPostShare</span><span class="o">(</span><span class="n">ActionBarView</span> <span class="n">actionBar</span><span class="o">,</span> <span class="n">Share</span> <span class="n">share</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// Called AFTER a user has posted a share</span>
+					<span class="o">}</span>
 
-                        @Override
-                        public void onPostUnlike(ActionBarView actionBar) {
-                                // Called AFTER a user has removed a like
-                        }
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onPostLike</span><span class="o">(</span><span class="n">ActionBarView</span> <span class="n">actionBar</span><span class="o">,</span> <span class="n">Like</span> <span class="n">like</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// Called AFTER a user has posted a like</span>
+					<span class="o">}</span>
 
-                        @Override
-                        public void onPostShare(ActionBarView actionBar, Share share) {
-                                // Called AFTER a user has posted a share
-                        }
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onLoad</span><span class="o">(</span><span class="n">ActionBarView</span> <span class="n">actionBar</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// Called when the action bar is loaded</span>
+					<span class="o">}</span>
 
-                        @Override
-                        public void onPostLike(ActionBarView actionBar, Like like) {
-                                // Called AFTER a user has posted a like
-                        }
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGetLike</span><span class="o">(</span><span class="n">ActionBarView</span> <span class="n">actionBar</span><span class="o">,</span> <span class="n">Like</span> <span class="n">like</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// Called when the action bar retrieves the like for the</span>
+						<span class="c1">// current user</span>
+					<span class="o">}</span>
 
-                        @Override
-                        public void onLoad(ActionBarView actionBar) {
-                                // Called when the action bar is loaded
-                        }
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGetEntity</span><span class="o">(</span><span class="n">ActionBarView</span> <span class="n">actionBar</span><span class="o">,</span> <span class="n">Entity</span> <span class="n">entity</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// Called when the action bar retrieves the entity data</span>
+					<span class="o">}</span>
 
-                        @Override
-                        public void onGetLike(ActionBarView actionBar, Like like) {
-                                // Called when the action bar retrieves the like for the
-                                // current user
-                        }
-
-                        @Override
-                        public void onGetEntity(ActionBarView actionBar, Entity entity) {
-                                // Called when the action bar retrieves the entity data
-                        }
-
-                        @Override
-                        public void onClick(ActionBarView actionBar, ActionBarEvent evt) {
-                                // Called when the user clicks on the action bar
-                        }
-                });
-        }
-});
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">onClick</span><span class="o">(</span><span class="n">ActionBarView</span> <span class="n">actionBar</span><span class="o">,</span> <span class="n">ActionBarEvent</span> <span class="n">evt</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// Called when the user clicks on the action bar</span>
+						<span class="c1">// Return true to indicate you do NOT want the action to continue</span>
+						<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+					<span class="o">}</span>
+				<span class="o">});</span>				
+				
+			<span class="o">}</span>
+		<span class="o">});</span>
+		
+		<span class="c1">// Now set the view for your activity to be the wrapped view.</span>
+		<span class="n">setContentView</span><span class="o">(</span><span class="n">actionBarWrapped</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
-<div class="section" id="reloading-the-action-bar-changing-its-entity">
-<h3>Reloading the Action Bar (Changing its entity)<a class="headerlink" href="#reloading-the-action-bar-changing-its-entity" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="reloading-the-action-bar">
+<h2>Reloading the Action Bar<a class="headerlink" href="#reloading-the-action-bar" title="Permalink to this headline">¶</a></h2>
 <p>If you want to maintain a single action bar instance shared across multiple entities you can simply use the <strong>refresh</strong> method
-to instruct the ActionBar to reload after you change the entity key:</p>
-<pre class="brush: java;">
-// Create a class to capture the action bar reference
-public class MyActionBarListener implements ActionBarListener {
-        private ActionBarView actionBarView;
+to instruct the ActionBar to reload after you change the entity key.</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="c1">// Create a class to capture the action bar reference</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyActionBarListener</span> <span class="kd">implements</span> <span class="n">ActionBarListener</span> <span class="o">{</span>
+	<span class="kd">private</span> <span class="n">ActionBarView</span> <span class="n">actionBarView</span><span class="o">;</span>
 
-        @Override
-        public void onCreate(ActionBarView actionBar) {
-                // Store a reference to the actionBar view
-                this.actionBarView = actionBar;
-        }
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">ActionBarView</span> <span class="n">actionBar</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// Store a reference to the actionBar view</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">actionBarView</span> <span class="o">=</span> <span class="n">actionBar</span><span class="o">;</span>
+	<span class="o">}</span>
 
-        public ActionBarView getActionBarView() {
-                return actionBarView;
-        }
-}
-
-// The in the Activity which renders the ActionBar
-
-// Setup a listener to retain a reference
-MyActionBarListener listener = new MyActionBarListener();
-
-// Use the listener when you show the action bar
-Socialize.getSocializeUI().showActionBar(this, R.layout.your_layout, entity, listener);
-
-// Later (After the action bar has loaded!), you can reference the view to refresh
-ActionBarView view = listener.getActionBarView();
-
-if (view != null) {
-        Entity newEntity = new Entity(); // This would be your new entity
-        view.setEntity(newEntity);
-        view.refresh();
-}
+	<span class="kd">public</span> <span class="n">ActionBarView</span> <span class="nf">getActionBarView</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">actionBarView</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
+</div>
+<div class="highlight-java"><div class="highlight"><pre><span class="c1">// The in the Activity which renders the ActionBar</span>
+<span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://getsocialize.com&quot;</span><span class="o">,</span> <span class="s">&quot;Socialize&quot;</span><span class="o">);</span>
+
+<span class="c1">// Setup a listener to retain a reference</span>
+<span class="n">MyActionBarListener</span> <span class="n">listener</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MyActionBarListener</span><span class="o">();</span>
+
+<span class="c1">// Use the listener when you show the action bar</span>
+<span class="n">ActionBarUtils</span><span class="o">.</span><span class="na">showActionBar</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">actionbar</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">listener</span><span class="o">);</span>
+
+<span class="c1">// Later (After the action bar has loaded!), you can reference the view to refresh</span>
+<span class="n">ActionBarView</span> <span class="n">view</span> <span class="o">=</span> <span class="n">listener</span><span class="o">.</span><span class="na">getActionBarView</span><span class="o">();</span>
+
+<span class="k">if</span> <span class="o">(</span><span class="n">view</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+	<span class="n">Entity</span> <span class="n">newEntity</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Entity</span><span class="o">();</span> <span class="c1">// This would be your new entity</span>
+	<span class="n">view</span><span class="o">.</span><span class="na">setEntity</span><span class="o">(</span><span class="n">newEntity</span><span class="o">);</span>
+	<span class="n">view</span><span class="o">.</span><span class="na">refresh</span><span class="o">();</span>
+<span class="o">}</span>	
+		
+</pre></div>
+</div>
+</div>
 <div class="section" id="xml-based-layout">
-<h3>XML Based Layout<a class="headerlink" href="#xml-based-layout" title="Permalink to this headline">¶</a></h3>
+<h2>XML Based Layout<a class="headerlink" href="#xml-based-layout" title="Permalink to this headline">¶</a></h2>
 <p>If the &#8220;auto-pin&#8221; feature of the Action Bar is not to your liking, or doesn&#8217;t play well with your existing layout
 you can always just add the view manually.</p>
 <div class="admonition note">
@@ -357,62 +326,64 @@ you can always just add the view manually.</p>
 <li>It MUST be included as the LAST element in your XML layout, otherwise you may get some strange behaviour with layers sliding over/under content.</li>
 </ol>
 <p>Here is the recommended way to include the Action Bar in your XML layout:</p>
-<pre class="brush: xml;">
-&lt;?xml version="1.0" encoding="utf-8"?>
-&lt;RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
-        &lt;ScrollView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_above="@+id/socializeActionBar"
-                android:fillViewport="true"
-                android:isScrollContainer="false">
-
-                &lt;LinearLayout
-                android:orientation="vertical"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
-
-
-                &lt;!-- Your existing content goes here -->
-
-                &lt;/LinearLayout>
-
-        &lt;/ScrollView>
-
-        &lt;!-- The ActionBar MUST appear AFTER your content in your layout -->
-        &lt;com.socialize.ui.actionbar.ActionBarView
-                android:id="@id/socializeActionBar"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"/>
-
-&lt;/RelativeLayout>
-</pre><p>In this case you will still need to set the entity in code:</p>
-<pre class="brush: java;">
-import android.os.Bundle;
-import android.app.Activity;
-
-import com.socialize.entity.Entity;
-import com.socialize.ui.actionbar.ActionBarView;
-
-public class ActionBarSampleActivity extends Activity {
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-                setContentView(R.layout.main);
-                ActionBarView socializeActionBarView = (ActionBarView) findViewById(R.id.socializeActionBar);
-                socializeActionBarView.setEntity(Entity.newInstance("foo", "bar"));
-                socializeActionBarView.refresh(); // Optional.. only if changing entity key.
-        }
-}
-</pre><script type="text/javascript">
-        SyntaxHighlighter.defaults['toolbar'] = false;
-        SyntaxHighlighter.all();
-</script></div>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;RelativeLayout</span>
+	<span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
+	<span class="na">android:layout_width=</span><span class="s">&quot;fill_parent&quot;</span>
+	<span class="na">android:layout_height=</span><span class="s">&quot;fill_parent&quot;</span><span class="nt">&gt;</span>
+	
+	<span class="nt">&lt;ScrollView</span>
+		<span class="na">android:layout_width=</span><span class="s">&quot;fill_parent&quot;</span>
+		<span class="na">android:layout_height=</span><span class="s">&quot;fill_parent&quot;</span>
+		<span class="na">android:layout_above=</span><span class="s">&quot;@+id/socializeActionBar&quot;</span>
+		<span class="na">android:fillViewport=</span><span class="s">&quot;true&quot;</span>
+		<span class="na">android:isScrollContainer=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>
+	
+		<span class="nt">&lt;LinearLayout</span>
+		<span class="na">android:orientation=</span><span class="s">&quot;vertical&quot;</span>
+		<span class="na">android:layout_width=</span><span class="s">&quot;fill_parent&quot;</span>
+		<span class="na">android:layout_height=</span><span class="s">&quot;fill_parent&quot;</span><span class="nt">&gt;</span>
+		
+		
+		<span class="c">&lt;!-- Your existing content goes here --&gt;</span>
+		
+		<span class="nt">&lt;/LinearLayout&gt;</span>
+		
+	<span class="nt">&lt;/ScrollView&gt;</span>
+	
+	<span class="c">&lt;!-- The ActionBar MUST appear AFTER your content in your layout --&gt;</span>
+	<span class="nt">&lt;com.socialize.ui.actionbar.ActionBarView</span>
+		<span class="na">android:id=</span><span class="s">&quot;@id/socializeActionBar&quot;</span>
+		<span class="na">android:layout_width=</span><span class="s">&quot;fill_parent&quot;</span>
+		<span class="na">android:layout_height=</span><span class="s">&quot;wrap_content&quot;</span>
+		<span class="na">android:layout_alignParentBottom=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
+	
+<span class="nt">&lt;/RelativeLayout&gt;</span>
+</pre></div>
 </div>
+<p>In this case you will still need to set the entity in code:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">android.app.Activity</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.os.Bundle</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.socialize.entity.Entity</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.socialize.ui.actionbar.ActionBarView</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ActionBarSampleLayout</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+		
+		<span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+		
+		<span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">main</span><span class="o">);</span>
+		<span class="n">ActionBarView</span> <span class="n">socializeActionBarView</span> <span class="o">=</span> <span class="o">(</span><span class="n">ActionBarView</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">socializeActionBar</span><span class="o">);</span>
+		<span class="n">socializeActionBarView</span><span class="o">.</span><span class="na">setEntity</span><span class="o">(</span><span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;foo&quot;</span><span class="o">,</span> <span class="s">&quot;bar&quot;</span><span class="o">));</span>
+		<span class="n">socializeActionBarView</span><span class="o">.</span><span class="na">refresh</span><span class="o">();</span> <span class="c1">// Optional.. only if changing entity key.</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<script type="text/javascript">
+</script></div>
 </div>
 
 
@@ -423,7 +394,7 @@ public class ActionBarSampleActivity extends Activity {
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="search.html?v=v1.6.4" method="get">
+    <form class="search" action="search.html?v=v2.0" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -434,39 +405,28 @@ public class ActionBarSampleActivity extends Activity {
     </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-<h3><a href="index.html?v=v1.6.4">Table Of Contents</a></h3>
+<h3><a href="index.html?v=v2.0">Table Of Contents</a></h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v1.6.4">What&#8217;s New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v1.6.4">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v1.6.4">Facebook Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v1.6.4">Twitter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v2.0">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v2.0">Getting Started</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Socialize Action Bar</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#displaying-the-action-bar">Displaying the Action Bar</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#using-socialize-properties-configuration">Using socialize.properties configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#using-programmatic-configuration">Using programmatic configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#displaying-the-action-bar">Displaying the Action Bar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#disabling-the-scrollview">Disabling the ScrollView</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#actionbar-listener">ActionBar Listener</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reloading-the-action-bar">Reloading the Action Bar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#xml-based-layout">XML Based Layout</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#advanced-features">Advanced Features</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#using-the-entity-loader">Using the Entity Loader</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#disabling-the-scrollview">Disabling the ScrollView</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#actionbar-creation-listener">ActionBar Creation Listener</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#actionbar-event-listener">ActionBar Event Listener</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#reloading-the-action-bar-changing-its-entity">Reloading the Action Bar (Changing its entity)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#xml-based-layout">XML Based Layout</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v1.6.4">Socialize Like Button</a></li>
-<li class="toctree-l1"><a class="reference internal" href="comment_view.html?v=v1.6.4">Socialize Comments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v1.6.4">SmartAlerts (Push Notifications)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v1.6.4">Entity Loaders</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v1.6.4">Socialize SDK (Advanced) Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html?v=v1.6.4">Configuration Settings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v1.6.4">Amazon AppStore URLs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v1.6.4">ProGuard Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v1.6.4">Troubleshooting &amp; Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v1.6.4">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v2.0">Facebook Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v2.0">Twitter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v2.0">SmartAlerts (Push Notifications)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v2.0">Entity Loaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v2.0">Socialize Android Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html?v=v2.0">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v2.0">Amazon AppStore URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v2.0">ProGuard Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v2.0">Troubleshooting &amp; Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v2.0">Change Log</a></li>
 </ul>
 
         </div>
@@ -477,12 +437,12 @@ public class ActionBarSampleActivity extends Activity {
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="like_button.html?v=v1.6.4" title="Socialize Like Button"
+          <a href="facebook.html?v=v2.0" title="Facebook Integration"
              >next</a></li>
         <li class="right" >
-          <a href="twitter.html?v=v1.6.4" title="Twitter Integration"
+          <a href="getting_started.html?v=v2.0" title="Getting Started"
              >previous</a> |</li>
-        <li><a href="index.html?v=v1.6.4">Socialize Android SDK v1.6.4 documentation</a> &raquo;</li> 
+        <li><a href="index.html?v=v2.0">Socialize Android SDK v2.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +7,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>SmartAlerts (Push Notifications) &mdash; Socialize Android SDK v1.6.4 documentation</title>
+    <title>SmartAlerts (Push Notifications) &mdash; Socialize Android SDK v2.0 documentation</title>
     
-    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/nature.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     'v1.6.4',
+        VERSION:     'v2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,21 +25,21 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v1.6.4 documentation" href="index.html?v=v1.6.4" />
-    <link rel="next" title="Entity Loaders" href="entity_loader.html?v=v1.6.4" />
-    <link rel="prev" title="Socialize Comments" href="comment_view.html?v=v1.6.4" /> 
+    <link rel="top" title="Socialize Android SDK v2.0 documentation" href="index.html?v=v2.0" />
+    <link rel="next" title="Entity Loaders" href="entity_loader.html?v=v2.0" />
+    <link rel="prev" title="Twitter Integration" href="twitter.html?v=v2.0" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="entity_loader.html?v=v1.6.4" title="Entity Loaders"
+          <a href="entity_loader.html?v=v2.0" title="Entity Loaders"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="comment_view.html?v=v1.6.4" title="Socialize Comments"
+          <a href="twitter.html?v=v2.0" title="Twitter Integration"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html?v=v1.6.4">Socialize Android SDK v1.6.4 documentation</a> &raquo;</li> 
+        <li><a href="index.html?v=v2.0">Socialize Android SDK v2.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -51,15 +50,6 @@
             
       <META HTTP-EQUIV="Pragma" CONTENT="no-cache"/>
     <META HTTP-EQUIV="Expires" CONTENT="-1"/>
-
-    <link rel="stylesheet" href="static/css/shCore.css" type="text/css" />
-    <link rel="stylesheet" href="static/css/shCoreEclipse.css" type="text/css" />
-    <link rel="stylesheet" href="static/css/shThemeEclipse.css" type="text/css" />
-    <link rel="stylesheet" href="static/css/gist.css" type="text/css" />
-    <script type="text/javascript" src="static/js/shCore.js"></script>
-    <script type="text/javascript" src="static/js/shBrushXml.js"></script>
-    <script type="text/javascript" src="static/js/shBrushJava.js"></script>
-    <script type="text/javascript" src="static/js/shBrushJavaProperties.js"></script>
 
     <script type="text/javascript">
     var _gaq = _gaq || [];
@@ -72,22 +62,51 @@
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
-</script><div class="section" id="smartalerts-push-notifications">
+</script>
+
+    <script type="text/javascript" charset="utf-8">
+      var is_ssl = ("https:" == document.location.protocol);
+      var asset_host = is_ssl ? "https://s3.amazonaws.com/getsatisfaction.com/" : "http://s3.amazonaws.com/getsatisfaction.com/";
+      document.write(unescape("%3Cscript src='" + asset_host + "javascripts/feedback-v2.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+
+    <script type="text/javascript" charset="utf-8">
+      var feedback_widget_options = {};
+      feedback_widget_options.display = "overlay";
+      feedback_widget_options.company = "socialize";
+      feedback_widget_options.placement = "right";
+      feedback_widget_options.color = "#222";
+      feedback_widget_options.style = "question";
+      feedback_widget_options.product = "socialize_android_sdk";
+      feedback_widget_options.limit = "3";
+      GSFN.feedback_widget.prototype.local_base_url = "http://support.getsocialize.com";
+      GSFN.feedback_widget.prototype.local_ssl_base_url = "http://support.getsocialize.com";
+      var feedback_widget = new GSFN.feedback_widget(feedback_widget_options);
+    </script><div class="section" id="smartalerts-push-notifications">
 <span id="notifications"></span><h1>SmartAlerts (Push Notifications)<a class="headerlink" href="#smartalerts-push-notifications" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>In v1.3 of Socialize we introduced <a class="reference external" href="http://blog.getsocialize.com/smartalerts">SmartAlerts</a>.  This provides your app with a simple and effective way to bring users back into the
-&#8220;viral loop&#8221; of the app.</p>
-<img alt="images/comment.png" src="images/comment.png" />
-<img alt="images/subscribe.png" src="images/subscribe.png" />
-<div class="section" id="smartalerts-in-comment-threads">
-<h3>SmartAlerts in Comment Threads<a class="headerlink" href="#smartalerts-in-comment-threads" title="Permalink to this headline">¶</a></h3>
-<p>When a user posts a comment they can elect to subscribe to updates for that topic.</p>
-<p>When another user then posts a comment, the original user will receive a push notification to their device bringing them back into the app.</p>
-</div>
-</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="images/smartalerts.png" class="first last" src="images/smartalerts.png" />
+</td>
+<td><div class="first last"><div style="font-size:16pt;font-weight:bold;padding:10px">Welcome to The Loop</div>
+<div style="font-size:12pt;padding:10px">
+The Loop is a viral loop in your app that puts your users to work boosting
+downloads and re-engagement in your app.
+<br/><br/>
+Use Socialize SmartAlerts to create a viral loop in your app where a users' actions help
+bring other users back into your app.
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="setup-smartalerts">
+<h2>Setup SmartAlerts<a class="headerlink" href="#setup-smartalerts" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="step-1-enable-notifications-on-http-www-getsocialize-com">
-<h2>Step 1: Enable Notifications on <a class="reference external" href="http://www.getsocialize.com">http://www.getsocialize.com</a><a class="headerlink" href="#step-1-enable-notifications-on-http-www-getsocialize-com" title="Permalink to this headline">¶</a></h2>
+<h3>Step 1: Enable Notifications on <a class="reference external" href="http://www.getsocialize.com">http://www.getsocialize.com</a><a class="headerlink" href="#step-1-enable-notifications-on-http-www-getsocialize-com" title="Permalink to this headline">¶</a></h3>
 <p>For SmartAlerts to work they must be enabled on a compatible plan at <a class="reference external" href="http://getsocialize.com/apps">http://getsocialize.com/apps</a></p>
 <p>Select your app and click &#8220;Notification Settings&#8221;</p>
 <img alt="images/notification_settings.png" src="images/notification_settings.png" />
@@ -99,124 +118,131 @@
 </div>
 </div>
 <div class="section" id="step-2-add-configuration-to-androidmanifest-xml">
-<h2>Step 2: Add Configuration to AndroidManifest.xml<a class="headerlink" href="#step-2-add-configuration-to-androidmanifest-xml" title="Permalink to this headline">¶</a></h2>
+<h3>Step 2: Add Configuration to AndroidManifest.xml<a class="headerlink" href="#step-2-add-configuration-to-androidmanifest-xml" title="Permalink to this headline">¶</a></h3>
 <p>The default configuration for Socialize needs to be augmented slightly for push notifications.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Make sure you replace every occurrance of <strong>your_package_name</strong> with the package name of your app!</p>
 </div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Make sure to add your <strong>Entity Loader Class Name</strong> to the service meta data!</p>
-</div>
 <p>Add the following additional configurations to the <strong>&lt;application.../&gt;</strong> element of your <strong>AndroidManifest.xml</strong></p>
-<pre class="brush: xml;tab-size: 4;highlight: [15,19]">
-        &lt;manifest...>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;manifest...&gt;</span>
 
-                &lt;application...>
+    <span class="nt">&lt;application...&gt;</span>
+    
+        <span class="c">&lt;!-- Activities Required for Socialize Push Notifications --&gt;</span>           
+        <span class="nt">&lt;activity</span> <span class="na">android:name=</span><span class="s">&quot;com.socialize.ui.SocializeLaunchActivity&quot;</span> <span class="na">android:noHistory=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
 
-                        &lt;!-- Activities Required for Socialize Push Notifications -->
-                        &lt;activity android:name="com.socialize.ui.SocializeLaunchActivity" android:noHistory="true"/>
+        <span class="c">&lt;!-- Socialize Notification Receiver --&gt;</span>
+        <span class="nt">&lt;service</span> <span class="na">android:name=</span><span class="s">&quot;com.socialize.notifications.SocializeC2DMReceiver&quot;</span><span class="nt">/&gt;</span>
+        
+        <span class="c">&lt;!-- Replace your_package_name with your app package name --&gt;</span>
+        <span class="nt">&lt;receiver</span> <span class="na">android:name=</span><span class="s">&quot;com.socialize.notifications.SocializeBroadcastReceiver&quot;</span> <span class="na">android:permission=</span><span class="s">&quot;com.google.android.c2dm.permission.SEND&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;intent-filter&gt;</span>
+                <span class="nt">&lt;action</span> <span class="na">android:name=</span><span class="s">&quot;com.google.android.c2dm.intent.RECEIVE&quot;</span> <span class="nt">/&gt;</span>
+<span class="hll">                <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">&quot;your_package_name&quot;</span> <span class="nt">/&gt;</span>
+</span>            <span class="nt">&lt;/intent-filter&gt;</span>
+            <span class="nt">&lt;intent-filter&gt;</span>
+                <span class="nt">&lt;action</span> <span class="na">android:name=</span><span class="s">&quot;com.google.android.c2dm.intent.REGISTRATION&quot;</span> <span class="nt">/&gt;</span>
+<span class="hll">                <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">&quot;your_package_name&quot;</span> <span class="nt">/&gt;</span>
+</span>            <span class="nt">&lt;/intent-filter&gt;</span>
+        <span class="nt">&lt;/receiver&gt;</span>
 
-                        &lt;!-- Socialize Notification Receiver -->
-                        &lt;service android:name="com.socialize.notifications.SocializeC2DMReceiver"/>
+    <span class="nt">&lt;/application&gt;</span>
 
-                        &lt;!-- Replace your_package_name with your app package name -->
-                        &lt;receiver android:name="com.socialize.notifications.SocializeBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
-                                &lt;intent-filter>
-                                        &lt;action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                                        &lt;category android:name="your_package_name" />
-                                &lt;/intent-filter>
-                                &lt;intent-filter>
-                                        &lt;action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-                                        &lt;category android:name="your_package_name" />
-                                &lt;/intent-filter>
-                        &lt;/receiver>
+<span class="nt">&lt;/manifest&gt;</span>
+</pre></div>
+</div>
+<p>Add the following additional configurations to the <strong>&lt;manifest.../&gt;</strong> element of your <strong>AndroidManifest.xml</strong></p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;manifest...&gt;</span>
 
-                &lt;/application>
+    <span class="c">&lt;!-- Permissions required for Push Notifications --&gt;</span>
+    <span class="c">&lt;!-- Replace your_package_name with your app package name --&gt;</span>
+<span class="hll">    <span class="nt">&lt;permission</span> <span class="na">android:name=</span><span class="s">&quot;your_package_name.permission.C2D_MESSAGE&quot;</span> <span class="na">android:protectionLevel=</span><span class="s">&quot;signature&quot;</span> <span class="nt">/&gt;</span>
+</span>    
+<span class="hll">    <span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">&quot;your_package_name.permission.C2D_MESSAGE&quot;</span> <span class="nt">/&gt;</span>
+</span>    <span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">&quot;com.google.android.c2dm.permission.RECEIVE&quot;</span> <span class="nt">/&gt;</span>           
 
-        &lt;/manifest>
-</pre><p>Add the following additional configurations to the <strong>&lt;manifest.../&gt;</strong> element of your <strong>AndroidManifest.xml</strong></p>
-<pre class="brush: xml;tab-size: 4;highlight: [5,7]">
-        &lt;manifest...>
+<span class="nt">&lt;/manifest&gt;</span>
+</pre></div>
+</div>
+<p>The full <strong>AndroidManifest.xml</strong> should look something like this</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;manifest...&gt;</span>
 
-                &lt;!-- Permissions required for Push Notifications -->
-                &lt;!-- Replace your_package_name with your app package name -->
-                &lt;permission android:name="your_package_name.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+    <span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">&quot;android.permission.INTERNET&quot;</span><span class="nt">/&gt;</span>
+    
+    <span class="c">&lt;!-- Optional but recommended --&gt;</span>
+    <span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">&quot;android.permission.READ_PHONE_STATE&quot;</span> <span class="nt">/&gt;</span>
+    
+    <span class="c">&lt;!-- Optionally add ONE of the following to include location data in comments --&gt;</span>
+    <span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">&quot;android.permission.ACCESS_COARSE_LOCATION&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">&quot;android.permission.ACCESS_FINE_LOCATION&quot;</span><span class="nt">/&gt;</span>
+    
+    <span class="c">&lt;!-- Permissions required for Push Notifications --&gt;</span>
+    <span class="c">&lt;!-- Replace your_package_name with your app package name --&gt;</span>
+<span class="hll">    <span class="nt">&lt;permission</span> <span class="na">android:name=</span><span class="s">&quot;your_package_name.permission.C2D_MESSAGE&quot;</span> <span class="na">android:protectionLevel=</span><span class="s">&quot;signature&quot;</span> <span class="nt">/&gt;</span>
+</span>    
+<span class="hll">    <span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">&quot;your_package_name.permission.C2D_MESSAGE&quot;</span> <span class="nt">/&gt;</span>
+</span>    <span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">&quot;com.google.android.c2dm.permission.RECEIVE&quot;</span> <span class="nt">/&gt;</span>           
 
-                &lt;uses-permission android:name="your_package_name.permission.C2D_MESSAGE" />
-                &lt;uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <span class="nt">&lt;application...&gt;</span>
+    
+        <span class="c">&lt;!-- Base Activities Required by Socialize --&gt;</span>
+        <span class="nt">&lt;activity</span> <span class="na">android:name=</span><span class="s">&quot;com.socialize.ui.comment.CommentActivity&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;activity</span> <span class="na">android:name=</span><span class="s">&quot;com.socialize.ui.action.ActionDetailActivity&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;activity</span> <span class="na">android:name=</span><span class="s">&quot;com.socialize.ui.profile.ProfileActivity&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;activity</span> <span class="na">android:name=</span><span class="s">&quot;com.socialize.auth.facebook.FacebookActivity&quot;</span><span class="nt">/&gt;</span>
+        
+        <span class="c">&lt;!-- Activities Required for Socialize Push Notifications --&gt;</span>           
+        <span class="nt">&lt;activity</span> <span class="na">android:name=</span><span class="s">&quot;com.socialize.ui.SocializeLaunchActivity&quot;</span> <span class="na">android:noHistory=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
 
-        &lt;/manifest>
-</pre><p>The full <strong>AndroidManifest.xml</strong> should look something like this</p>
-<pre class="brush: xml;tab-size: 4;highlight: [21,25,42,44]">
-        &lt;manifest...>
+        <span class="c">&lt;!-- Socialize Notification Receiver --&gt;</span>
+        <span class="nt">&lt;service</span> <span class="na">android:name=</span><span class="s">&quot;com.socialize.notifications.SocializeC2DMReceiver&quot;</span><span class="nt">/&gt;</span>
+        
+        <span class="c">&lt;!-- Replace your_package_name with your app package name --&gt;</span>
+        <span class="nt">&lt;receiver</span> <span class="na">android:name=</span><span class="s">&quot;com.socialize.notifications.SocializeBroadcastReceiver&quot;</span> <span class="na">android:permission=</span><span class="s">&quot;com.google.android.c2dm.permission.SEND&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;intent-filter&gt;</span>
+                <span class="nt">&lt;action</span> <span class="na">android:name=</span><span class="s">&quot;com.google.android.c2dm.intent.RECEIVE&quot;</span> <span class="nt">/&gt;</span>
+<span class="hll">                <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">&quot;your_package_name&quot;</span> <span class="nt">/&gt;</span>
+</span>            <span class="nt">&lt;/intent-filter&gt;</span>
+            <span class="nt">&lt;intent-filter&gt;</span>
+                <span class="nt">&lt;action</span> <span class="na">android:name=</span><span class="s">&quot;com.google.android.c2dm.intent.REGISTRATION&quot;</span> <span class="nt">/&gt;</span>
+<span class="hll">                <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">&quot;your_package_name&quot;</span> <span class="nt">/&gt;</span>
+</span>            <span class="nt">&lt;/intent-filter&gt;</span>
+        <span class="nt">&lt;/receiver&gt;</span>
 
-                &lt;application...>
+    <span class="nt">&lt;/application&gt;</span>
 
-                        &lt;!-- Base Activities Required by Socialize -->
-                        &lt;activity android:name="com.socialize.ui.comment.CommentActivity"/>
-                        &lt;activity android:name="com.socialize.ui.action.ActionDetailActivity"/>
-                        &lt;activity android:name="com.socialize.ui.profile.ProfileActivity"/>
-                        &lt;activity android:name="com.socialize.auth.facebook.FacebookActivity"/>
-
-                        &lt;!-- Activities Required for Socialize Push Notifications -->
-                        &lt;activity android:name="com.socialize.ui.SocializeLaunchActivity" android:noHistory="true"/>
-
-                        &lt;!-- Socialize Notification Receiver -->
-                        &lt;service android:name="com.socialize.notifications.SocializeC2DMReceiver"/>
-
-                        &lt;!-- Replace your_package_name with your app package name -->
-                        &lt;receiver android:name="com.socialize.notifications.SocializeBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
-                                &lt;intent-filter>
-                                        &lt;action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                                        &lt;category android:name="your_package_name" />
-                                &lt;/intent-filter>
-                                &lt;intent-filter>
-                                        &lt;action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-                                        &lt;category android:name="your_package_name" />
-                                &lt;/intent-filter>
-                        &lt;/receiver>
-
-                &lt;/application>
-
-                &lt;uses-permission android:name="android.permission.INTERNET"/>
-
-                &lt;!-- Optional but recommended -->
-                &lt;uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
-                &lt;!-- Optionally add ONE of the following to include location data in comments -->
-                &lt;uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-                &lt;uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-
-                &lt;!-- Permissions required for Push Notifications -->
-                &lt;!-- Replace your_package_name with your app package name -->
-                &lt;permission android:name="your_package_name.permission.C2D_MESSAGE" android:protectionLevel="signature" />
-
-                &lt;uses-permission android:name="your_package_name.permission.C2D_MESSAGE" />
-                &lt;uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-
-        &lt;/manifest>
-</pre><div class="section" id="i-already-have-a-broadcastreceiver-defined">
-<h3>I already have a BroadcastReceiver defined<a class="headerlink" href="#i-already-have-a-broadcastreceiver-defined" title="Permalink to this headline">¶</a></h3>
+<span class="nt">&lt;/manifest&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-3-create-an-entity-loader">
+<h3>Step 3: Create an Entity Loader<a class="headerlink" href="#step-3-create-an-entity-loader" title="Permalink to this headline">¶</a></h3>
+<p>In order for Socialize to know how to handle a notification it needs an &#8220;Entity Loader&#8221;.  This is a class
+provided by you which tells Socialize how to load content in your app.</p>
+<p>Refer to the <a class="reference internal" href="entity_loader.html?v=v2.0#entity-loader"><em>Entity Loaders</em></a> section for details on how to implement a Socialize Entity Loader.</p>
+</div>
+</div>
+<div class="section" id="i-already-have-a-broadcastreceiver">
+<h2>I already have a BroadcastReceiver<a class="headerlink" href="#i-already-have-a-broadcastreceiver" title="Permalink to this headline">¶</a></h2>
 <p>If you already have a BroadcastReceiver defined in your application, you can simply call the Socialize handler
 in your existing broadcast receiver&#8217;s <strong>onReceive()</strong> method:</p>
-<pre class="brush: java">
-
-/* (non-Javadoc)
- * @see android.content.BroadcastReceiver#onReceive(android.content.Context, android.content.Intent)
- */
-@Override
-public void onReceive(Context context, Intent intent) {
-        if(!Socialize.getSocialize().handleBroadcastIntent(context, intent)) {
-                // Message was NOT handled by Socialize.
-        }
-}
-
-</pre><p>Make sure however, that you add the intent filters and permissions required by Socialize to your existing receiver definition.</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="cm">/*</span>
+<span class="cm"> * (non-Javadoc)</span>
+<span class="cm"> * @see android.content.BroadcastReceiver#onReceive(android.content.Context, android.content.Intent)</span>
+<span class="cm"> */</span>
+<span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onReceive</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">,</span> <span class="n">Intent</span> <span class="n">intent</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">if</span><span class="o">(!</span><span class="n">SmartAlertUtils</span><span class="o">.</span><span class="na">handleBroadcastIntent</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">intent</span><span class="o">))</span> <span class="o">{</span>
+		<span class="c1">// Message was NOT handled by Socialize.</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
 </div>
-<div class="section" id="i-am-already-using-google-c2dm-for-push-notifications">
-<h3>I am already using Google C2DM for Push Notifications<a class="headerlink" href="#i-am-already-using-google-c2dm-for-push-notifications" title="Permalink to this headline">¶</a></h3>
+<p>Make sure however, that you add the intent filters and permissions required by Socialize to your existing receiver definition.</p>
+</div>
+<div class="section" id="i-am-already-using-google-c2dm">
+<h2>I am already using Google C2DM<a class="headerlink" href="#i-am-already-using-google-c2dm" title="Permalink to this headline">¶</a></h2>
 <p>If you are already using Google&#8217;s C2DM for push notifications you will need to enter your C2DM sender credentials into the
 Socialize website.  This is due to a limitation of Google&#8217;s C2DM service which does not allow multiple senders for the same
 app.</p>
@@ -226,20 +252,16 @@ app.</p>
 </div>
 <img alt="images/c2dm.png" src="images/c2dm.png" />
 </div>
-</div>
-<div class="section" id="step-3-create-an-entity-loader">
-<h2>Step 3: Create an Entity Loader<a class="headerlink" href="#step-3-create-an-entity-loader" title="Permalink to this headline">¶</a></h2>
-<p>In order for Socialize to know how to handle a notification it needs an &#8220;Entity Loader&#8221;.  This is a class
-provided by you which tells Socialize how to load content in your app.</p>
-<p>Refer to the <a class="reference internal" href="entity_loader.html?v=v1.6.4#entity-loader"><em>Entity Loaders</em></a> section for details on how to implement a Socialize Entity Loader.</p>
-</div>
-<div class="section" id="step-4-registering-for-google-c2dm">
-<h2>Step 4: Registering for Google C2DM<a class="headerlink" href="#step-4-registering-for-google-c2dm" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="high-volume-usage">
+<h2>High Volume Usage<a class="headerlink" href="#high-volume-usage" title="Permalink to this headline">¶</a></h2>
+<p>If you app is expected to have a high volume of SmartAlerts we recommend you register your own Google C2DM token to avoid any unexpected quota issues</p>
+<div class="section" id="registering-for-google-c2dm">
+<h3>Registering for Google C2DM<a class="headerlink" href="#registering-for-google-c2dm" title="Permalink to this headline">¶</a></h3>
 <p>Socialize provides a default quota of SmartAlerts that should satisfy the needs of most users, however if you are experiencing issues with SmartAlerts quota
 you can always simply register your own C2DM token with Socialize.</p>
 <p>Google&#8217;s Cloud To Device (C2DM) system allows any app developer to register and obtain a token. Configuring your application for SmartAlerts using your own C2DM token is a 3 step process:</p>
 <div class="section" id="step-1-register-with-google-for-c2dm">
-<h3>Step 1: Register with Google for C2DM<a class="headerlink" href="#step-1-register-with-google-for-c2dm" title="Permalink to this headline">¶</a></h3>
+<h4>Step 1: Register with Google for C2DM<a class="headerlink" href="#step-1-register-with-google-for-c2dm" title="Permalink to this headline">¶</a></h4>
 <p>To register your app with Google&#8217;s C2DM system, just go to <a class="reference external" href="http://code.google.com/android/c2dm">http://code.google.com/android/c2dm</a> and select: &#8220;Sign Up for C2DM&#8221;:</p>
 <img alt="images/c2dm_signup0.png" src="images/c2dm_signup0.png" />
 <p>Fill out all the required information and submit, you should see a message like this:</p>
@@ -250,17 +272,19 @@ you can always simply register your own C2DM token with Socialize.</p>
 </div>
 </div>
 <div class="section" id="step-2-add-your-c2dm-sender-id-to-your-socialize-properties-file">
-<h3>Step 2: Add your C2DM sender ID to your <strong>socialize.properties</strong> file<a class="headerlink" href="#step-2-add-your-c2dm-sender-id-to-your-socialize-properties-file" title="Permalink to this headline">¶</a></h3>
+<h4>Step 2: Add your C2DM sender ID to your <strong>socialize.properties</strong> file<a class="headerlink" href="#step-2-add-your-c2dm-sender-id-to-your-socialize-properties-file" title="Permalink to this headline">¶</a></h4>
 <p>The Socialize SDK needs to know who will be sending SmartAlerts to the device.  Simply add your C2DM Sender ID to your <strong>socialize.properties</strong> file
 under the key <strong>socialize.c2dm.sender.id</strong></p>
-<pre class="brush: java-properties">
-# Your C2DM Sender ID
-socialize.c2dm.sender.id=myaccount@gmail.com
+<div class="highlight-properties"><div class="highlight"><pre><span class="c"># Your C2DM Sender ID</span>
+<span class="na">socialize.c2dm.sender.id</span><span class="o">=</span><span class="s">myaccount@gmail.com	</span>
 </pre></div>
+</div>
+</div>
 <div class="section" id="step-3-add-your-c2dm-token-to-the-socialize-website">
-<h3>Step 3: Add your C2DM token to the Socialize website<a class="headerlink" href="#step-3-add-your-c2dm-token-to-the-socialize-website" title="Permalink to this headline">¶</a></h3>
+<h4>Step 3: Add your C2DM token to the Socialize website<a class="headerlink" href="#step-3-add-your-c2dm-token-to-the-socialize-website" title="Permalink to this headline">¶</a></h4>
 <p>Once you receive your C2DM token from Google, simply add it to your account on the getsocialize.com website:</p>
 <img alt="images/c2dm.png" src="images/c2dm.png" />
+</div>
 </div>
 </div>
 <div class="section" id="testing-smartalerts">
@@ -278,16 +302,15 @@ are indeed being sent.</p>
 </div>
 <p>If you are still experiencing problems and want to post a question to our support forum, it is useful to include your device token
 when posting any question.  To determine your device token you will first need to enable the <strong>INFO</strong> level logging in Socialize.</p>
-<p>Refer to the <a class="reference internal" href="troubleshooting.html?v=v1.6.4#debug-logs"><em>Displaying debug logs in LogCat</em></a> section for more information on enabling logs.</p>
+<p>Refer to the <a class="reference internal" href="troubleshooting.html?v=v2.0#debug-logs"><em>Displaying debug logs in LogCat</em></a> section for more information on enabling logs.</p>
 <p>Once info logging is enabled, a <strong>new</strong> instance of your app should produce log entries that look something like this:</p>
-<div class="highlight-python"><pre>INFO/Socialize(15860): Not registered with C2DM, sending registration request...
-INFO/Socialize(15860): Registration with C2DM successful: APA91bHd0aL-d75F6_7NcDf_nil8...OBg5-Ixk_8c9rg9b14fsVwvMXTy4
-INFO/Socialize(15860): Registration with Socialize for C2DM successful.</pre>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">INFO</span><span class="o">/</span><span class="n">Socialize</span><span class="o">(</span><span class="mi">15860</span><span class="o">):</span> <span class="n">Not</span> <span class="n">registered</span> <span class="n">with</span> <span class="n">C2DM</span><span class="o">,</span> <span class="n">sending</span> <span class="n">registration</span> <span class="n">request</span><span class="o">...</span>
+<span class="n">INFO</span><span class="o">/</span><span class="n">Socialize</span><span class="o">(</span><span class="mi">15860</span><span class="o">):</span> <span class="n">Registration</span> <span class="n">with</span> <span class="n">C2DM</span> <span class="nl">successful:</span> <span class="n">APA91bHd0aL</span><span class="o">-</span><span class="n">d75F6_7NcDf_nil8</span><span class="o">...</span><span class="na">OBg5</span><span class="o">-</span><span class="n">Ixk_8c9rg9b14fsVwvMXTy4</span>
+<span class="n">INFO</span><span class="o">/</span><span class="n">Socialize</span><span class="o">(</span><span class="mi">15860</span><span class="o">):</span> <span class="n">Registration</span> <span class="n">with</span> <span class="n">Socialize</span> <span class="k">for</span> <span class="n">C2DM</span> <span class="n">successful</span><span class="o">.</span>
+</pre></div>
 </div>
 <p>The &#8220;Registration with C2DM successful&#8221; log entry shows the device token used for SmartAlerts</p>
 <script type="text/javascript">
-        SyntaxHighlighter.defaults['toolbar'] = false;
-        SyntaxHighlighter.all();
 </script></div>
 </div>
 </div>
@@ -300,7 +323,7 @@ INFO/Socialize(15860): Registration with Socialize for C2DM successful.</pre>
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="search.html?v=v1.6.4" method="get">
+    <form class="search" action="search.html?v=v2.0" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -311,46 +334,28 @@ INFO/Socialize(15860): Registration with Socialize for C2DM successful.</pre>
     </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-<h3><a href="index.html?v=v1.6.4">Table Of Contents</a></h3>
+<h3><a href="index.html?v=v2.0">Table Of Contents</a></h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v1.6.4">What&#8217;s New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v1.6.4">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v1.6.4">Facebook Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v1.6.4">Twitter Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v1.6.4">Socialize Action Bar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v1.6.4">Socialize Like Button</a></li>
-<li class="toctree-l1"><a class="reference internal" href="comment_view.html?v=v1.6.4">Socialize Comments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v2.0">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v2.0">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v2.0">Socialize Action Bar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v2.0">Facebook Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v2.0">Twitter Integration</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">SmartAlerts (Push Notifications)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#smartalerts-in-comment-threads">SmartAlerts in Comment Threads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setup-smartalerts">Setup SmartAlerts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#i-already-have-a-broadcastreceiver">I already have a BroadcastReceiver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#i-am-already-using-google-c2dm">I am already using Google C2DM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#high-volume-usage">High Volume Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing-smartalerts">Testing SmartAlerts</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#step-1-enable-notifications-on-http-www-getsocialize-com">Step 1: Enable Notifications on http://www.getsocialize.com</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#step-2-add-configuration-to-androidmanifest-xml">Step 2: Add Configuration to AndroidManifest.xml</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#i-already-have-a-broadcastreceiver-defined">I already have a BroadcastReceiver defined</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#i-am-already-using-google-c2dm-for-push-notifications">I am already using Google C2DM for Push Notifications</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#step-3-create-an-entity-loader">Step 3: Create an Entity Loader</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#step-4-registering-for-google-c2dm">Step 4: Registering for Google C2DM</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#step-1-register-with-google-for-c2dm">Step 1: Register with Google for C2DM</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#step-2-add-your-c2dm-sender-id-to-your-socialize-properties-file">Step 2: Add your C2DM sender ID to your <strong>socialize.properties</strong> file</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#step-3-add-your-c2dm-token-to-the-socialize-website">Step 3: Add your C2DM token to the Socialize website</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#testing-smartalerts">Testing SmartAlerts</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#locating-your-device-token">Locating your Device Token</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v1.6.4">Entity Loaders</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v1.6.4">Socialize SDK (Advanced) Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html?v=v1.6.4">Configuration Settings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v1.6.4">Amazon AppStore URLs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v1.6.4">ProGuard Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v1.6.4">Troubleshooting &amp; Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v1.6.4">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v2.0">Entity Loaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v2.0">Socialize Android Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html?v=v2.0">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v2.0">Amazon AppStore URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v2.0">ProGuard Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v2.0">Troubleshooting &amp; Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v2.0">Change Log</a></li>
 </ul>
 
         </div>
@@ -361,12 +366,12 @@ INFO/Socialize(15860): Registration with Socialize for C2DM successful.</pre>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="entity_loader.html?v=v1.6.4" title="Entity Loaders"
+          <a href="entity_loader.html?v=v2.0" title="Entity Loaders"
              >next</a></li>
         <li class="right" >
-          <a href="comment_view.html?v=v1.6.4" title="Socialize Comments"
+          <a href="twitter.html?v=v2.0" title="Twitter Integration"
              >previous</a> |</li>
-        <li><a href="index.html?v=v1.6.4">Socialize Android SDK v1.6.4 documentation</a> &raquo;</li> 
+        <li><a href="index.html?v=v2.0">Socialize Android SDK v2.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

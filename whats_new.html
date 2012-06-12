@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +7,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>What’s New &mdash; Socialize Android SDK v1.6.4 documentation</title>
+    <title>What’s New &mdash; Socialize Android SDK v2.0 documentation</title>
     
-    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/nature.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     'v1.6.4',
+        VERSION:     'v2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,21 +25,21 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v1.6.4 documentation" href="index.html?v=v1.6.4" />
-    <link rel="next" title="Getting Started" href="getting_started.html?v=v1.6.4" />
-    <link rel="prev" title="Socialize Android SDK" href="index.html?v=v1.6.4" /> 
+    <link rel="top" title="Socialize Android SDK v2.0 documentation" href="index.html?v=v2.0" />
+    <link rel="next" title="Getting Started" href="getting_started.html?v=v2.0" />
+    <link rel="prev" title="Socialize Android SDK" href="index.html?v=v2.0" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="getting_started.html?v=v1.6.4" title="Getting Started"
+          <a href="getting_started.html?v=v2.0" title="Getting Started"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="index.html?v=v1.6.4" title="Socialize Android SDK"
+          <a href="index.html?v=v2.0" title="Socialize Android SDK"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html?v=v1.6.4">Socialize Android SDK v1.6.4 documentation</a> &raquo;</li> 
+        <li><a href="index.html?v=v2.0">Socialize Android SDK v2.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -51,15 +50,6 @@
             
       <META HTTP-EQUIV="Pragma" CONTENT="no-cache"/>
     <META HTTP-EQUIV="Expires" CONTENT="-1"/>
-
-    <link rel="stylesheet" href="static/css/shCore.css" type="text/css" />
-    <link rel="stylesheet" href="static/css/shCoreEclipse.css" type="text/css" />
-    <link rel="stylesheet" href="static/css/shThemeEclipse.css" type="text/css" />
-    <link rel="stylesheet" href="static/css/gist.css" type="text/css" />
-    <script type="text/javascript" src="static/js/shCore.js"></script>
-    <script type="text/javascript" src="static/js/shBrushXml.js"></script>
-    <script type="text/javascript" src="static/js/shBrushJava.js"></script>
-    <script type="text/javascript" src="static/js/shBrushJavaProperties.js"></script>
 
     <script type="text/javascript">
     var _gaq = _gaq || [];
@@ -72,94 +62,155 @@
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
-</script><div class="section" id="what-s-new">
+</script>
+
+    <script type="text/javascript" charset="utf-8">
+      var is_ssl = ("https:" == document.location.protocol);
+      var asset_host = is_ssl ? "https://s3.amazonaws.com/getsatisfaction.com/" : "http://s3.amazonaws.com/getsatisfaction.com/";
+      document.write(unescape("%3Cscript src='" + asset_host + "javascripts/feedback-v2.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+
+    <script type="text/javascript" charset="utf-8">
+      var feedback_widget_options = {};
+      feedback_widget_options.display = "overlay";
+      feedback_widget_options.company = "socialize";
+      feedback_widget_options.placement = "right";
+      feedback_widget_options.color = "#222";
+      feedback_widget_options.style = "question";
+      feedback_widget_options.product = "socialize_android_sdk";
+      feedback_widget_options.limit = "3";
+      GSFN.feedback_widget.prototype.local_base_url = "http://support.getsocialize.com";
+      GSFN.feedback_widget.prototype.local_ssl_base_url = "http://support.getsocialize.com";
+      var feedback_widget = new GSFN.feedback_widget(feedback_widget_options);
+    </script><div class="section" id="what-s-new">
 <span id="whats-new"></span><h1>What&#8217;s New<a class="headerlink" href="#what-s-new" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="v1-6-2-automatic-authentication">
-<h2>v1.6.2 Automatic Authentication<a class="headerlink" href="#v1-6-2-automatic-authentication" title="Permalink to this headline">¶</a></h2>
-<p>v1.6.2 introduces <em>Automatic Authentication</em> for your users.  Our data indicates that users who authenticate with a 3rd party (e.g. Twitter or Facebook)
-are much more likely to introduce new users to your app via the viral effect of activity within your app propagating to these
-3rd party networks.  From v1.6.2 onwards the Socialize SDK will default to requiring users authenticate with a 3rd party prior to performing
-any social action (e.g. <em>Comment</em> or <em>Like</em>).</p>
-<p>This default behavior can be overridden by the developer (you) via configuration options in your <strong>socialize.properties</strong> file.</p>
-<p>Refer to the <a class="reference internal" href="config.html?v=v1.6.4#config"><em>Configuration Settings</em></a> section for details on the configuration settings required to override <em>Automatic Authentication</em>.</p>
+<p>v2.0 of the Socialize SDK represents a major improvement over previous releases in both easy of use and stability.</p>
+<p>In this new release we are introducing several new features and bug fixes as well as a complete reworking of the core interfaces needed to
+access the entire range of Socialize services.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p><strong>Backwards Compatibility</strong></p>
+<p>In this new version we have tried to make the developer interfaces to Socialize as simple as possible and whilst we have done our
+best to ensure backwards compatibility with older versions some incompatibilities may exist.</p>
+<p class="last">If you are already using an older version of Socialize we <strong>STRONGLY RECOMMEND</strong> that any calls to deprecated methods be replaced with
+their non-deprecated counterparts.</p>
 </div>
-<div class="section" id="v1-6-direct-smartalerts">
-<h2>v1.6 Direct SmartAlerts<a class="headerlink" href="#v1-6-direct-smartalerts" title="Permalink to this headline">¶</a></h2>
-<p>v1.6 of the Socialize SDK for Android adds support for direct SmartAlerts.  This allows developers to push SmartAlert notifications
-to their user-base directly from the web.</p>
-<p>Simply log into your Socialize account at <a class="reference external" href="http://www.getsocialize.com">http://www.getsocialize.com</a> and go to the dashboard for your app:</p>
-<img alt="images/direct_alerts.png" src="images/direct_alerts.png" />
-<p>Refer to the <a class="reference internal" href="push_notifications.html?v=v1.6.4#notifications"><em>SmartAlerts (Push Notifications)</em></a> section for details on implementing SmartAlerts.</p>
+<div class="section" id="looking-good">
+<h2>Looking Good!<a class="headerlink" href="#looking-good" title="Permalink to this headline">¶</a></h2>
+<p>We have re-designed the Share Dialog to bring it more in line with end user expectations and to make the job of the developer (you) easier</p>
+<p>This new dialog is also completely customizable</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="47%" />
+<col width="53%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="images/2_0_share_default.png" class="first last" src="images/2_0_share_default.png" />
+</td>
+<td><img alt="images/2_0_share_via_networks.png" class="first last" src="images/2_0_share_via_networks.png" />
+</td>
+</tr>
+</tbody>
+</table>
+<p>Take a look at the <a class="reference internal" href="sdk_user_guide.html?v=v2.0#custom-share"><em>Custom Share Dialog</em></a> section for more details on customizing the share dialog.</p>
 </div>
-<div class="section" id="v1-5-twitter">
-<h2>v1.5 Twitter!<a class="headerlink" href="#v1-5-twitter" title="Permalink to this headline">¶</a></h2>
-<img alt="images/twitter_sm.png" src="images/twitter_sm.png" />
-<p>v1.5 of Socialize includes support for sharing to twitter as well auto-posting comments and likes (if using the <a class="reference internal" href="action_bar.html?v=v1.6.4"><em>Socialize Action Bar</em></a>)</p>
-<p>Refer to the <a class="reference internal" href="twitter.html?v=v1.6.4"><em>Twitter Integration</em></a> section for details on how to integrate Twitter into Socialize.</p>
+<div class="section" id="complete-control">
+<h2>Complete Control<a class="headerlink" href="#complete-control" title="Permalink to this headline">¶</a></h2>
+<p>In this new version we have completely rewritten the top level interfaces exposed to the developer to make them simpler and more powerful.</p>
+<p>Developers can now access a set of <em>utility</em> classes that provide access to the entire suite of Socialize features.</p>
+<p>Head over to the <a class="reference internal" href="sdk_user_guide.html?v=v2.0"><em>Socialize Android Developer Guide</em></a> section for detailed descriptions and code samples</p>
+<ul>
+<li><dl class="first docutils">
+<dt>ShareUtils</dt>
+<dd><ul class="first last simple">
+<li>Access all sharing functions and UIs to enable sharing to Facebook, Twitter, Email and SMS.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>CommentUtils</dt>
+<dd><ul class="first last simple">
+<li>Create and retrieve comments as well as access to the packaged UIs for commenting.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>UserUtils</dt>
+<dd><ul class="first last simple">
+<li>Access to all things User including User Settings and User Profile screens.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>LikeUtils</dt>
+<dd><ul class="first last simple">
+<li>Simplified access to allow your users to <em>Like</em> content in your app.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>EntityUtils</dt>
+<dd><ul class="first last simple">
+<li>Complete control over the creation and management of entities in your app.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>ActionUtils</dt>
+<dd><ul class="first last simple">
+<li>Display all activity occuring in your app at the User, Entity and Application level.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>ViewUtils</dt>
+<dd><ul class="first last simple">
+<li>Track and report on the behavior of users within your app by creating Socialize Views.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>The SDK also includes several helper classes to make life easier.</p>
+<ul>
+<li><dl class="first docutils">
+<dt>ActionBarUtils</dt>
+<dd><ul class="first last simple">
+<li>Quickly and easily render the Socialize Action Bar</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>LocationUtils</dt>
+<dd><ul class="first last simple">
+<li>Simple and easy access to location services on the device.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>ConfigUtils</dt>
+<dd><ul class="first last simple">
+<li>Programmatic access to the gloabl Socialize config (socialize.properties)</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
 </div>
-<div class="section" id="v1-4-socialize-like-button">
-<h2>v1.4 Socialize Like Button<a class="headerlink" href="#v1-4-socialize-like-button" title="Permalink to this headline">¶</a></h2>
-<p>Introduced in v1.4 is a stand-alone &#8220;like&#8221; button which can be added to any view and which automatically handles all authentication
-with 3rd party social networks like Facebook.</p>
-<p>Refer to the <a class="reference internal" href="like_button.html?v=v1.6.4#like-button"><em>Socialize Like Button</em></a> section for details on how to implement the Socialize Like button.</p>
-</div>
-<div class="section" id="v1-3-2-entity-loader-change">
-<h2>v1.3.2 Entity Loader Change<a class="headerlink" href="#v1-3-2-entity-loader-change" title="Permalink to this headline">¶</a></h2>
-<p><strong>Existing users please read</strong></p>
-<p>As of 1.3.2 a small change was made to the SocializeEntityLoader class which <strong>may</strong> cause a compilation error in your app.</p>
-<p>If you are using the Entity Loader system, you will notice a new method has been added to this interface:</p>
-<pre class="brush: java">
-/**
- * Returns true if this entity can be loaded.
- * @param entity
- * @return
- */
-public boolean canLoad(Context context, Entity entity);
-</pre><p>This new method allows you to inform Socialize whether it should attempt to load your entity or not.</p>
-</div>
-<div class="section" id="v1-3-1-meta-data-is-here">
-<h2>v1.3.1 Meta data is here!<a class="headerlink" href="#v1-3-1-meta-data-is-here" title="Permalink to this headline">¶</a></h2>
-<p>In v1.3.1 we have added support for meta data on an entity.  This means you can add arbitrary meta data to an entity when it is created
-and you will be given this data back when the entity is loaded from Socialize.</p>
-<pre class="brush: java">
-Entity entity = new Entity();
-entity.setKey("mykey");
-entity.setName("The Name");
-entity.setMetaData("extra_info");
-
-Socialize.getSocialize().addEntity(this, entity, new EntityAddListener() {
-
-        @Override
-        public void onError(SocializeException error) {
-                // Handle error
-        }
-
-        @Override
-        public void onCreate(Entity entity) {
-                // Handle success
-        }
-});
-</pre></div>
-<div class="section" id="v1-3-smartalerts">
-<h2>v1.3 SmartAlerts<a class="headerlink" href="#v1-3-smartalerts" title="Permalink to this headline">¶</a></h2>
-<p>v1.3 of Socialize includes a full push notification framework designed to bring users back to your app!</p>
-<img alt="images/comment.png" src="images/comment.png" />
-<img alt="images/subscribe.png" src="images/subscribe.png" />
-<p>Refer to the <a class="reference internal" href="push_notifications.html?v=v1.6.4#notifications"><em>SmartAlerts (Push Notifications)</em></a> section for details on how to implement SmartAlerts.</p>
-</div>
-<div class="section" id="v1-1-recent-activity-in-user-profile">
-<h2>v1.1 Recent Activity in User Profile<a class="headerlink" href="#v1-1-recent-activity-in-user-profile" title="Permalink to this headline">¶</a></h2>
-<p>In v1.1 we introduced recent activity in the user profile view:</p>
-<img alt="images/profile_activity.png" src="images/profile_activity.png" />
-<p>This can provide a significant boost to in-app engagement, however to maximize its benefit
-developers must implement a Socialize &#8220;Entity Loader&#8221;.  This provides Socialize with the information
-needed to load the original view of the entity the user acted upon.</p>
-<p>With a Socialize Entity Loader specified, users will be able to navigate from the recent activity to
-other parts of your application.</p>
-<p>Refer to the <a class="reference internal" href="entity_loader.html?v=v1.6.4#entity-loader"><em>Entity Loaders</em></a> section for details on how to implement a Socialize Entity Loader</p>
+<div class="section" id="new-sample-app">
+<h2>New Sample App!<a class="headerlink" href="#new-sample-app" title="Permalink to this headline">¶</a></h2>
+<p>To showcase these new features and to provide developers with concrete examples of how to use the new library we have created a completely
+new sample app.</p>
+<p>The new sample app is located in the same place as always, the <strong>/sample</strong> directory of the SDK download.</p>
 <script type="text/javascript">
-        SyntaxHighlighter.defaults['toolbar'] = false;
-        SyntaxHighlighter.all();
 </script></div>
 </div>
 
@@ -171,7 +222,7 @@ other parts of your application.</p>
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="search.html?v=v1.6.4" method="get">
+    <form class="search" action="search.html?v=v2.0" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -182,33 +233,26 @@ other parts of your application.</p>
     </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-<h3><a href="index.html?v=v1.6.4">Table Of Contents</a></h3>
+<h3><a href="index.html?v=v2.0">Table Of Contents</a></h3>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="">What&#8217;s New</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#v1-6-2-automatic-authentication">v1.6.2 Automatic Authentication</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#v1-6-direct-smartalerts">v1.6 Direct SmartAlerts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#v1-5-twitter">v1.5 Twitter!</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#v1-4-socialize-like-button">v1.4 Socialize Like Button</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#v1-3-2-entity-loader-change">v1.3.2 Entity Loader Change</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#v1-3-1-meta-data-is-here">v1.3.1 Meta data is here!</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#v1-3-smartalerts">v1.3 SmartAlerts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#v1-1-recent-activity-in-user-profile">v1.1 Recent Activity in User Profile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#looking-good">Looking Good!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#complete-control">Complete Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#new-sample-app">New Sample App!</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v1.6.4">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v1.6.4">Facebook Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v1.6.4">Twitter Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v1.6.4">Socialize Action Bar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v1.6.4">Socialize Like Button</a></li>
-<li class="toctree-l1"><a class="reference internal" href="comment_view.html?v=v1.6.4">Socialize Comments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v1.6.4">SmartAlerts (Push Notifications)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v1.6.4">Entity Loaders</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v1.6.4">Socialize SDK (Advanced) Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html?v=v1.6.4">Configuration Settings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v1.6.4">Amazon AppStore URLs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v1.6.4">ProGuard Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v1.6.4">Troubleshooting &amp; Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v1.6.4">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v2.0">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v2.0">Socialize Action Bar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v2.0">Facebook Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v2.0">Twitter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v2.0">SmartAlerts (Push Notifications)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v2.0">Entity Loaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v2.0">Socialize Android Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html?v=v2.0">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v2.0">Amazon AppStore URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v2.0">ProGuard Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v2.0">Troubleshooting &amp; Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v2.0">Change Log</a></li>
 </ul>
 
         </div>
@@ -219,12 +263,12 @@ other parts of your application.</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="getting_started.html?v=v1.6.4" title="Getting Started"
+          <a href="getting_started.html?v=v2.0" title="Getting Started"
              >next</a></li>
         <li class="right" >
-          <a href="index.html?v=v1.6.4" title="Socialize Android SDK"
+          <a href="index.html?v=v2.0" title="Socialize Android SDK"
              >previous</a> |</li>
-        <li><a href="index.html?v=v1.6.4">Socialize Android SDK v1.6.4 documentation</a> &raquo;</li> 
+        <li><a href="index.html?v=v2.0">Socialize Android SDK v2.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
