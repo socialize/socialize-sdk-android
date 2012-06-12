@@ -68,20 +68,20 @@ public class ShareUtils {
 	 */
 	public static final int SHOW_REMEMBER = 1<<4;
 	
-	/**
-	 * Used to instruct the dialog to allow the user to not select any Social Network
-	 */
-	public static final int ALLOW_NONE = 1<<5;
+//	/**
+//	 * Used to instruct the dialog to allow the user to not select any Social Network
+//	 */
+//	public static final int ALLOW_NONE = 1<<5;
 	
 	/**
 	 * Used to instruct the dialog to display the "more options" link.
 	 */
-	public static final int MORE_OPTIONS = 1<<6;
+	public static final int MORE_OPTIONS = 1<<5;
 	
-	/**
-	 * Default share dialog state for comment and like share prompts.
-	 */
-	public static final int COMMENT_AND_LIKE = FACEBOOK|TWITTER|ALLOW_NONE;
+//	/**
+//	 * Default share dialog state for comment and like share prompts.
+//	 */
+//	public static final int COMMENT_AND_LIKE = FACEBOOK|TWITTER|ALLOW_NONE;
 	
 	/**
 	 * Displays only Social Network options.

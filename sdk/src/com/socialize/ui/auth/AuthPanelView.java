@@ -137,7 +137,6 @@ public class AuthPanelView extends DialogPanelView {
 			contentLayout.addView(shareBadge);
 		}
 		
-		
 		if(facebookSignInCell != null || twitterSignInCell != null) {
 			if(facebookSignInCell != null) {
 				socialNetworkButtonLayout.addView(facebookSignInCell);

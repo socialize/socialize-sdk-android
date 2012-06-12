@@ -40,5 +40,12 @@
         android:layout_width="260dip"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Share to Twitter"/>    
+        android:text="Share to Twitter"/> 
+        
+    <Button 
+        android:id="@+id/btnConfig"
+        android:layout_width="260dip"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Set Config"/>       
 </LinearLayout>

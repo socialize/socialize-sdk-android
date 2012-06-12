@@ -394,6 +394,7 @@
 		<property name="panelViewFactory" ref="authPanelViewFactory"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
+		<property name="logger" ref="logger"/>
 	</bean>
 	
 	<bean 
@@ -404,6 +405,7 @@
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="colors" ref="colors"/>
+		<property name="config" ref="config"/>
 		<property name="facebookShareCellFactory" ref="facebookShareCellFactory"/>
 		<property name="twitterShareCellFactory" ref="twitterShareCellFactory"/>
 		<property name="emailCellFactory" ref="emailCellFactory"/>
@@ -424,8 +426,8 @@
 		<property name="panelViewFactory" ref="sharePanelViewFactory"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
+		<property name="logger" ref="logger"/>
 	</bean>	
-	 
 	
 	<bean 
 		id="emailCell" 

@@ -216,7 +216,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 						listener.onCancel();
 					}
 				}
-			}, ShareUtils.COMMENT_AND_LIKE|ShareUtils.SHOW_REMEMBER);
+			}, ShareUtils.SOCIAL|ShareUtils.SHOW_REMEMBER);
 		}
 		else {
 			doCommentWithoutShare(context, session, entity, text, listener);

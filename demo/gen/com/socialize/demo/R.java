@@ -27,6 +27,7 @@ public final class R {
         public static final int btnComment0=0x7f050003;
         public static final int btnComment1=0x7f050006;
         public static final int btnComment2=0x7f050009;
+        public static final int btnConfig=0x7f050025;
         public static final int btnDemo=0x7f050018;
         public static final int btnFacebook=0x7f05000c;
         public static final int btnLike=0x7f050014;
@@ -42,7 +43,7 @@ public final class R {
         public static final int btnShareSocialNetwork=0x7f050022;
         public static final int btnShareTwitter=0x7f050024;
         public static final int btnShareWithComment=0x7f050021;
-        public static final int btnSubscription=0x7f050025;
+        public static final int btnSubscription=0x7f050026;
         public static final int btnTwitter=0x7f05000d;
         public static final int chkAllowAnon=0x7f050010;
         public static final int chkFB=0x7f050011;
