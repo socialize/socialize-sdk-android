@@ -19,7 +19,6 @@ By default Socialize will only render logs of level WARN to logcat.  To override
 
 .. literalinclude:: snippets/props_log.txt
    :language: properties
-   :linenos:
 
 Socialize will now render more details logs to the logcat console.  All Socialize logs will be tagged with the word "Socialize" so you can 
 filter them in the logcat display:

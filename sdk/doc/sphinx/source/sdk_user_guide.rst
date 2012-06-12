@@ -217,6 +217,7 @@ The simplest way to allow users to share an entity (your content) is via the sha
 	:start-after: begin-snippet-0
 	:end-before: end-snippet-0
 
+.. _custom_share:	
 
 Custom Share Dialog
 ~~~~~~~~~~~~~~~~~~~
