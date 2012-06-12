@@ -74,6 +74,7 @@ public class AuthButtonsActivity extends DemoActivity {
 					@Override
 					public void onSkipAuth(Activity context, Dialog dialog) {
 						DemoUtils.showToast(AuthButtonsActivity.this, "Skipped");
+						dialog.dismiss();
 					}
 					
 					@Override

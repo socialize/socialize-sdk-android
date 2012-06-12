@@ -60,7 +60,7 @@ public class AddViewActivity extends SDKDemoActivity {
 	
 	@Override
 	public boolean isTextEntryRequired() {
-		return true;
+		return false;
 	}
 
 	/* (non-Javadoc)

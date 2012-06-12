@@ -75,12 +75,17 @@ Once you have your facebook app ID, you can add it to the **socialize.properties
 =================================
 Now that you have your environment all setup, it's time to include Socialize.  
 
-The core component of the Socialize SDK is the "Action Bar"
+You can either install the pre-packaged Socialize Action Bar which includes the entire suite of Socialize features in a matter of minutes
 
-.. image:: images/action_bar.png
+Checkout the :doc:`action_bar` section for details on implementing the default Socialize Action Bar...
 
-This is a general purpose toolbar that sits at the bottom of your app and provides a central "one-stop-shop" 
-of social features for your users.
+.. image:: images/action_bar_std.png
+
+Or if you prefer a more customized approach use our simple SDK interfaces to "roll your own"
+
+Head over to the :doc:`sdk_user_guide` section to start customizing Socialize to suit your needs...
+
+.. image:: images/action_bar_mockup.jpg
 
 Each Action Bar instance in your app is bound to an *Entity*.  An Entity is simply an item of content in your app.
 Each Socialize action (comment, share, like etc.) is associated with an Entity.  
@@ -91,13 +96,6 @@ It is not necessary to explicitly create an Entity object when rendering the Act
 however entities *can* be created manually.  
 
 .. note:: Refer to the :ref:`entities` section for details on creating entities directly using the SDK.
-
-The Action Bar is designed to automatically "pin" iteself to the bottom of your view.  
-Adding the Action Bar to your app is done with a simple call to **showActionBar** from ActionBarUtils
-
-.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ActionBarSample.java
-	:start-after: begin-snippet-0
-	:end-before: end-snippet-0
 
 Next Steps...
 =============

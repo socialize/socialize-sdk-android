@@ -13,16 +13,23 @@ The Action Bar provides immediate access to all Socialize features including
 - Commenting
 - Sharing vie Facebook, Twitter, Email and SMS
 - Liking
-- Recording Views 	
+- Recording Views
+- User Profile screens with recent user activity 	
+- User Settings to allow users to customize their experience
+- Subscribe/Unsubscribe to SmartAlerts for users
 
 Displaying the Action Bar
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Refer to the :doc:`getting_started` section for details on configuring your **socialize.properties** file.
+The Action Bar is designed to automatically "pin" iteself to the bottom of your view.
+  
+Adding the Action Bar to your app is done with a simple call to **showActionBar** from ActionBarUtils
 
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ActionBarSample.java
 	:start-after: begin-snippet-0
 	:end-before: end-snippet-0
+	
+(Refer to the :doc:`getting_started` section for details on configuring your **socialize.properties** file.)
 
 Disabling the ScrollView
 ~~~~~~~~~~~~~~~~~~~~~~~~
