@@ -22,13 +22,15 @@
 package com.socialize.api.action.like;
 
 import android.app.Activity;
+import android.content.Context;
+import com.socialize.annotations.Synchronous;
 import com.socialize.entity.Entity;
 import com.socialize.entity.User;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
-import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetwork;
 
 
 /**
@@ -36,13 +38,18 @@ import com.socialize.networks.ShareOptions;
  *
  */
 public interface LikeUtilsProxy {
+	
+	@Synchronous
+	public LikeOptions getUserLikeOptions(Context context);
 
 	public void like (Activity context, Entity entity, LikeAddListener listener);
 	
-	public void like (Activity context, Entity entity, ShareOptions shareOptions, LikeAddListener listener);
+	public void like (Activity context, Entity entity, LikeOptions likeOptions, LikeAddListener listener, SocialNetwork...shareTo);
 	
 	public void unlike (Activity context, String entityKey, LikeDeleteListener listener);
  
+	public void getLike (Activity context, long id, LikeGetListener listener);
+	
 	public void getLike (Activity context, String entityKey, LikeGetListener listener);
 	
 	public void getLikesByUser (Activity context, User user, int start, int end, LikeListListener listener);

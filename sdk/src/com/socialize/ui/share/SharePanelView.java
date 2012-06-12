@@ -38,6 +38,7 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
@@ -64,6 +65,7 @@ public class SharePanelView extends DialogPanelView {
 	private ShareDialogListener shareDialogListener;
 	private SocialNetworkListener socialNetworkListener;
 	private Colors colors;
+	private SocializeConfig config;
 	
 	private SocializeButton continueButton;
 	private SocializeButton cancelButton;
@@ -90,7 +92,7 @@ public class SharePanelView extends DialogPanelView {
 	}
 	
 	public SharePanelView(Context context) {
-		this(context, null, null, null, ShareUtils.COMMENT_AND_LIKE);
+		this(context, null, null, null, ShareUtils.SOCIAL);
 	}
 	
 	private IBeanFactory<FacebookShareCell> facebookShareCellFactory;
@@ -211,7 +213,7 @@ public class SharePanelView extends DialogPanelView {
 							rememberCell.setVisibility(View.VISIBLE);
 						}
 						
-						if((displayOptions & ShareUtils.ALLOW_NONE) == 0) {
+						if(!config.isAllowAnonymousUser()) {
 							continueButton.setEnabled(true);
 						}
 						
@@ -222,7 +224,7 @@ public class SharePanelView extends DialogPanelView {
 							rememberCell.setVisibility(View.GONE);
 						}
 						
-						if((displayOptions & ShareUtils.ALLOW_NONE) == 0) {
+						if(!config.isAllowAnonymousUser()) {
 							continueButton.setEnabled(false);
 						}
 					}
@@ -596,7 +598,10 @@ public class SharePanelView extends DialogPanelView {
 		this.rememberCellFactory = rememberCellFactory;
 	}
 	
-	
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
+	}
+
 	public Entity getEntity() {
 		return entity;
 	}

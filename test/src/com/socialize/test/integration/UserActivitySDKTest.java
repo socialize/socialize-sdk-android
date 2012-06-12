@@ -34,7 +34,7 @@ import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeAction;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.activity.UserActivityListListener;
+import com.socialize.listener.activity.ActionListListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
@@ -77,7 +77,7 @@ public class UserActivitySDKTest extends SDKIntegrationTest {
 						addResult(0, comment);
 						
 						// now get activity
-						Socialize.getSocialize().listActivityByUser(userId, new UserActivityListListener() {
+						Socialize.getSocialize().listActivityByUser(userId, new ActionListListener() {
 							
 							@Override
 							public void onList(ListResult<SocializeAction> entities) {

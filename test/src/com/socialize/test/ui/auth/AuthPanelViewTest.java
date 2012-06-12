@@ -23,29 +23,18 @@ package com.socialize.test.ui.auth;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.location.Location;
 import android.view.View;
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.SocializeSystem;
-import com.socialize.api.action.ShareType;
-import com.socialize.entity.Share;
-import com.socialize.entity.SocializeAction;
 import com.socialize.ioc.SocializeIOC;
-import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.FacebookAuthClickListener;
 import com.socialize.networks.facebook.FacebookSignInCell;
 import com.socialize.networks.twitter.TwitterAuthClickListener;
 import com.socialize.networks.twitter.TwitterSignInCell;
-import com.socialize.share.ShareHandler;
 import com.socialize.test.ui.SocializeUIActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.auth.AuthPanelView;
-import com.socialize.ui.share.EmailCell;
-import com.socialize.ui.share.SMSCell;
 
 /**
  * @author Jason Polites

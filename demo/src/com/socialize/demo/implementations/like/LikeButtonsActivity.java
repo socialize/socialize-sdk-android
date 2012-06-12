@@ -79,7 +79,7 @@ public class LikeButtonsActivity extends DemoActivity {
 						@Override
 						public void onError(SocializeException error) {
 							progress.dismiss();
-							handleError(error);
+							handleError(LikeButtonsActivity.this, error);
 						}
 						
 						@Override
@@ -100,7 +100,7 @@ public class LikeButtonsActivity extends DemoActivity {
 						@Override
 						public void onError(SocializeException error) {
 							progress.dismiss();
-							handleError(error);
+							handleError(LikeButtonsActivity.this, error);
 						}
 						
 						@Override

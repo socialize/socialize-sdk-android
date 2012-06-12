@@ -51,7 +51,7 @@ public class GetCommentsByUserActivity extends SDKDemoActivity {
 			
 			@Override
 			public void onError(SocializeException error) {
-				handleError(error);
+				handleError(GetCommentsByUserActivity.this, error);
 			}
 		});
 	}

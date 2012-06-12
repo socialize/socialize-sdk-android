@@ -24,6 +24,7 @@ package com.socialize.test.integration.services;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import com.socialize.ConfigUtils;
 import com.socialize.LikeUtils;
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
@@ -63,7 +64,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		
 		// Force no config
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
 		LikeUtils.like(getActivity(), entityKey, null, new LikeAddListener() {
 			
@@ -95,7 +96,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		clearResults();
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		
-		Socialize.getSocialize().getLikeById(like.getId(), new LikeGetListener() {
+		LikeUtils.getLike(getActivity(), like.getId(), new LikeGetListener() {
 			
 			@Override
 			public void onGet(Like entity) {
@@ -126,7 +127,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		
 		// Force no config
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 				
 		
 		LikeUtils.like(getActivity(), entityKey, null, new LikeAddListener() {
@@ -194,7 +195,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		
 		// Force no config
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
 		LikeUtils.like(getActivity(), entityKey, null, new LikeAddListener() {
 			
@@ -237,7 +238,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		
 		// Force no config
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
 		LikeUtils.like(getActivity(), entityKey, null, new LikeAddListener() {
 			
@@ -280,7 +281,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		
 		// Force no config
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
 		LikeUtils.like(getActivity(), entityKey, null, new LikeAddListener() {
 			

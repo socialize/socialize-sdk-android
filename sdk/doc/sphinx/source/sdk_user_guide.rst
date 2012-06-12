@@ -1,8 +1,8 @@
 .. include:: header.inc
 	
-=========================
-Socialize Developer Guide
-=========================
+=================================
+Socialize Android Developer Guide
+=================================
 
 Introduction
 ------------
@@ -28,13 +28,13 @@ You should also include the onPause and onResume methods.
 	:start-after: begin-snippet-0
 	:end-before: end-snippet-0
 	
-.. note:: Make sure that there are no operations on the Socialize instance before or while it is initializing!
-
 If you want to know about initialization success (e.g. if you want to access Socialize after init), you can also specify a listener
 
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/SocializeInitSnippetA.java
 	:start-after: begin-snippet-0
 	:end-before: end-snippet-0
+	
+.. _entities:	
 	
 Entities
 --------
@@ -78,7 +78,7 @@ Creating an entity explicitly in this manner is **optional but recommended**.  I
 comment,view,share or like against a key that does not currently exist, it will be automatically created 
 for you.
 
-To create an entity, simply call the **addEntity** method:
+To create an entity, simply call the **saveEntity** method:
 
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/EntitySnippets.java
 	:start-after: begin-snippet-2
@@ -87,7 +87,7 @@ To create an entity, simply call the **addEntity** method:
 Retrieving Entity Data
 ~~~~~~~~~~~~~~~~~~~~~~
 An existing entity can be retrieved via the **getEntity** method.  Entities obtained in this way will also 
-provide aggregate data on comments, likes, shares and views.  Refer to the `Entity object structure in the API Docs <http://www.getsocialize.com/docs/v1/#entity-object>`_.
+provide aggregate data on comments, likes, shares and views.  Refer to the `Entity object structure in the API Docs <http://api.getsocialize.com/docs/v1/#entity-object>`_.
 for more detail on these aggregate values.
 
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/EntitySnippets.java
@@ -123,6 +123,15 @@ If you want a more complex data structure, we recommend using JSON as an object 
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/EntitySnippets.java
 	:start-after: begin-snippet-7
 	:end-before: end-snippet-7
+	
+Entity Activity
+~~~~~~~~~~~~~~~
+
+All actions performed on an entity (comment,share,like) can be retrieved using **ActionUtils**
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ActionSnippets.java
+	:start-after: begin-snippet-1
+	:end-before: end-snippet-1
 
 Users & User Activity
 ---------------------
@@ -175,6 +184,22 @@ Or retrieve the raw list of actions performed by a user using **ActionUtils**
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/UserSnippets.java
 	:start-after: begin-snippet-5
 	:end-before: end-snippet-5
+	
+Or get the list of actions by a user on a single entity
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ActionSnippets.java
+	:start-after: begin-snippet-2
+	:end-before: end-snippet-2
+	
+	
+Application Activity
+--------------------
+
+Using the **ActionUtils** class you can also retrieve application-wide activity
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ActionSnippets.java
+	:start-after: begin-snippet-0
+	:end-before: end-snippet-0
 
 Sharing
 -------
@@ -192,6 +217,7 @@ The simplest way to allow users to share an entity (your content) is via the sha
 	:start-after: begin-snippet-0
 	:end-before: end-snippet-0
 
+.. _custom_share:	
 
 Custom Share Dialog
 ~~~~~~~~~~~~~~~~~~~
@@ -229,48 +255,125 @@ implement the **onBeforePost** method of the listener you pass to the ShareUtils
 Comments
 --------
 
-Likes
------
+Displaying the Comment List UI
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Views
------
+The standard Socialize Comment List UI is included with the :doc:`action_bar` however if you wanted to create your own ActionBar or
+simply want to launch the Comment List from elsewhere in your app this can simply be done with a few lines of code
 
-Facebook
---------
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/CommentSnippets.java
+	:start-after: begin-snippet-1
+	:end-before: end-snippet-1	
 
-Socialize provides a simple interface into the Facebook graph API, including linking users to their Facebook account.
+You can also display the UI with a listener to handle events
 
-Linking with Facebook
-~~~~~~~~~~~~~~~~~~~~~
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/CommentSnippets.java
+	:start-after: begin-snippet-2
+	:end-before: end-snippet-2	
 
-.. note:: You must already have a Facebook application to enable Facebook authentication in Socialize.  Refer to :doc:`facebook` for more information 
+Adding Comments
+~~~~~~~~~~~~~~~
 
-A Facebook application is nothing more than an account on Facebook which links your Android application to 
-a Facebook account and is required to "authorize" your Android app to access a user's Facebook profile.
+To create a comment programmatically you simply call the **addComment** method on **CommentUtils**
 
-To link a user to their Facebook account, simply call the link method of **FacebookUtils**
-
-.. _fb_snippet:
-
-.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/FacebookSnippets.java
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/CommentSnippets.java
 	:start-after: begin-snippet-0
 	:end-before: end-snippet-0
 
-If you have already authenticated your user with Facebook you can link their account with Socialize by providing their Facebook token 
-in the link call
+You can also manually specify how the comment is to be propagated to 3rd party networks such as Facebook and Twitter 
 
-.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/FacebookSnippets.java
-	:start-after: begin-snippet-1
-	:end-before: end-snippet-1
-	
-You can also elect to just render the default *Link* dialog
-
-.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ShareSnippets.java
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/CommentSnippets.java
 	:start-after: begin-snippet-4
 	:end-before: end-snippet-4
 
 
-Twitter
--------
+Retreiving Comments
+~~~~~~~~~~~~~~~~~~~
+
+You can retrieve existing comments by User, Entity or directly using an ID
+
+List comments by User
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/CommentSnippets.java
+	:start-after: begin-snippet-5
+	:end-before: end-snippet-5
+	
+List comments by Entity
+	
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/CommentSnippets.java
+	:start-after: begin-snippet-6
+	:end-before: end-snippet-6
+	
+List comments by ID	
+	
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/CommentSnippets.java
+	:start-after: begin-snippet-7
+	:end-before: end-snippet-7
+
+
+Likes
+-----
+
+Liking
+~~~~~~~
+
+To create a like programmatically you simply call the **like** method on **LikeUtils**
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/LikeSnippets.java
+	:start-after: begin-snippet-0
+	:end-before: end-snippet-0
+
+You can also manually specify how the like is to be propagated to 3rd party networks such as Facebook and Twitter 
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/LikeSnippets.java
+	:start-after: begin-snippet-4
+	:end-before: end-snippet-4
+
+Un-Liking
+~~~~~~~~~
+
+You can also remove a previous like from an entity
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/LikeSnippets.java
+	:start-after: begin-snippet-1
+	:end-before: end-snippet-1
+
+Retreiving Likes
+~~~~~~~~~~~~~~~~
+
+You can retrieve existing likes by User or Entity
+
+List likes by User
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/LikeSnippets.java
+	:start-after: begin-snippet-5
+	:end-before: end-snippet-5
+	
+List likes by Entity
+	
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/LikeSnippets.java
+	:start-after: begin-snippet-6
+	:end-before: end-snippet-6
+	
+
+Views
+-----
+
+A "view" represents the action of a user *viewing* an entity and is an extremely useful analytics tool
+
+Recording Views
+~~~~~~~~~~~~~~~
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ViewSnippets.java
+	:start-after: begin-snippet-0
+	:end-before: end-snippet-0
+
+
+Retrieving Views
+~~~~~~~~~~~~~~~~
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ViewSnippets.java
+	:start-after: begin-snippet-1
+	:end-before: end-snippet-1
 
 .. include:: footer.inc			

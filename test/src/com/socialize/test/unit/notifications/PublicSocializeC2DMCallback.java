@@ -23,7 +23,7 @@ package com.socialize.test.unit.notifications;
 
 import android.content.Context;
 import android.os.Bundle;
-import com.socialize.entity.User;
+import com.socialize.api.SocializeSession;
 import com.socialize.notifications.NotificationMessage;
 import com.socialize.notifications.SocializeC2DMCallback;
 
@@ -33,10 +33,10 @@ import com.socialize.notifications.SocializeC2DMCallback;
  *
  */
 public class PublicSocializeC2DMCallback extends SocializeC2DMCallback {
-
+	
 	@Override
-	public void handleNotification(Context context, Bundle data, User user) {
-		super.handleNotification(context, data, user);
+	public void handleNotification(Context context, Bundle data, SocializeSession session) {
+		super.handleNotification(context, data, session);
 	}
 
 	@Override

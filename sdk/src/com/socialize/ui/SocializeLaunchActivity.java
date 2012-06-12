@@ -34,7 +34,6 @@ import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.event.EventSystem;
-import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.error.SocializeException;
 import com.socialize.launcher.AsyncLauncher;
@@ -199,7 +198,7 @@ public class SocializeLaunchActivity extends Activity {
 										
 										@Override
 										public void onAfterLaunch(boolean launched) {
-											if(!launched || launcher.shouldFinish()) {
+											if(!launched || launcher.shouldFinish(SocializeLaunchActivity.this)) {
 												finish();
 											}
 										}
@@ -207,7 +206,7 @@ public class SocializeLaunchActivity extends Activity {
 								}
 								else {
 									boolean launched = launcher.launch(SocializeLaunchActivity.this, extras);
-									if(!launched || launcher.shouldFinish()) {
+									if(!launched || launcher.shouldFinish(SocializeLaunchActivity.this)) {
 										finish();
 									}
 								}
@@ -253,18 +252,6 @@ public class SocializeLaunchActivity extends Activity {
 	
 	protected IOCContainer getContainer() {
 		return ActivityIOCProvider.getInstance().getContainer();
-	}
-	
-	protected String getConsumerKey(IOCContainer container) {
-		return getSocialize().getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-	}
-	
-	protected String getConsumerSecret(IOCContainer container) {
-		return getSocialize().getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
-	}
-	
-	protected String getFacebookAppId(IOCContainer container) {
-		return getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
 	}
 	
 	protected void initSocialize() {

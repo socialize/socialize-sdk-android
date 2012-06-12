@@ -1,8 +1,8 @@
 .. include:: header.inc
 
-==============
-Facebook Setup
-==============
+====================
+Facebook Integration
+====================
 
 Introduction
 ------------
@@ -20,8 +20,11 @@ This provides significant benefits to both your application and your users inclu
 To add Facebook authentication, you'll need a Facebook App ID.  If you already have a Facebook app, 
 you can skip this section.
 
+Setting up Facebook
+-------------------
+
 Creating a Facebook Application
--------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 If you **do not** already have a Facebook app just follow these simple steps:
 
 	1. First create a Facebook app.  Go to https://developers.facebook.com/apps and create a new app:
@@ -60,25 +63,83 @@ Once you have a facebook application, simply add your Facebook app Id your **soc
 
 .. literalinclude:: snippets/props_facebook.txt
    :language: properties
-   :linenos:
 
 .. _propagate_fb:
 
-Propagating Socialize Actions to Facebook
------------------------------------------
+Linking Users with Facebook
+---------------------------
 
-Social actions such as Comment and Like can optionally be propagated to Facebook via the SDK.
+To be able to post to a user's Facebook wall the user must first link with their Facebook account
 
-.. note:: 
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/FacebookSnippets.java
+	:start-after: begin-snippet-0
+	:end-before: end-snippet-0
 
-	Propagation is automatic when using the Socialize Action Bar.  The following is only required for developers
-	electing to use the SDK manually
+If you already have Facebook integration in your app and do not wish to replace this with the Socialize implementation you 
+can still link the user to Facebook within Socialize by providing the user's Facebook auth token
 
-The following example shows posting a comment and simultaneously sharing the comment to the user's facebook wall.
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/FacebookSnippets.java
+	:start-after: begin-snippet-1
+	:end-before: end-snippet-1
+	
+To unlink a user from their Facebook account simple call **unlink**.  This call executes synchronously.
 
-.. literalinclude:: snippets/create_comment_fb.txt
-   :language: java
-   :linenos:
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/FacebookSnippets.java
+	:start-after: begin-snippet-3
+	:end-before: end-snippet-3
+
+Posting to Facebook
+-------------------
+
+By default all actions created using the SDK will provide the end user with the opportunity to share their 
+action with Facebook (if Facebook has been configured) however it is also possible to manually post content to a user's
+Facebook wall.
+
+Posting Socialize Entities to Facebook
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The simplest and most effective use of Facebook within Socialize is to post entities.  This approach takes full advantage of 
+Socialize SmartDownloads as well as automatically supporting Facebook Open Graph which helps maximize the effectiveness of your social strategy.
+
+To post an entity to a user's Facebook timeline simply call the **postEntity** method.
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/FacebookSnippets.java
+	:start-after: begin-snippet-4
+	:end-before: end-snippet-4
+	
+Posting Directly to Facebook
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you want complete control over what is posted to Facebook Socialize provides a simple interface to the Facebook Graph API.
+
+Refer to the Facebook Graph API documentation for more specific implementation information
+
+http://developers.facebook.com/docs/reference/api/
+
+Executing a **POST**
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/FacebookSnippets.java
+	:start-after: begin-snippet-5
+	:end-before: end-snippet-5
+	
+If you want to take full advantage of Socialize SmartDownloads and post the auto-generated SmartDownload urls for your entity or app you can 
+do this by creating a simple share object without propagation first.
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/FacebookSnippets.java
+	:start-after: begin-snippet-8
+	:end-before: end-snippet-8
+	
+Executing a **GET**
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/FacebookSnippets.java
+	:start-after: begin-snippet-6
+	:end-before: end-snippet-6
+	
+Executing a **DELETE**
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/FacebookSnippets.java
+	:start-after: begin-snippet-7
+	:end-before: end-snippet-7	
 
 Facebook Single Sign On (SSO)
 -----------------------------
@@ -87,8 +148,8 @@ Some users have reported having problems with the Single Sign On implementation 
 
 If you have experienced problems with this (e.g. the "invalid_key" error), you can easily disable this feature:
 
-.. literalinclude:: snippets/no_sso.txt
-   :language: java
-   :linenos:
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/FacebookSnippets.java
+	:start-after: begin-snippet-2
+	:end-before: end-snippet-2
 
 .. include:: footer.inc	

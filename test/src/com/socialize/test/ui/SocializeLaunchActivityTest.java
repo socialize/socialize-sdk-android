@@ -157,7 +157,7 @@ public class SocializeLaunchActivityTest extends SocializeUIActivityTest {
 		AndroidMock.expect(launchManager.getLaucher(action)).andReturn(launcher);
 		AndroidMock.expect(launcher.isAsync()).andReturn(false);
 		AndroidMock.expect(launcher.launch(activity, extras)).andReturn(true);
-		AndroidMock.expect(launcher.shouldFinish()).andReturn(true);
+		AndroidMock.expect(launcher.shouldFinish(activity)).andReturn(true);
 		
 		AndroidMock.replay(intent, mockContainer, launchManager, launcher);
 		

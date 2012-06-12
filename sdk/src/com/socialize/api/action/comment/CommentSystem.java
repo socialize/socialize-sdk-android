@@ -25,7 +25,7 @@ import com.socialize.api.SocializeSession;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.listener.comment.CommentListener;
-import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetwork;
 
 
 /**
@@ -36,9 +36,9 @@ public interface CommentSystem {
 	
 	public static final String ENDPOINT = "/comment/";
 
-	public void addComment(SocializeSession session, Comment comment, ShareOptions shareOptions, CommentListener listener);
+	public void addComment(SocializeSession session, Comment comment, CommentOptions commentOptions, CommentListener listener, SocialNetwork... networks);
 
-	public void addComment(SocializeSession session, Entity entity, String comment, ShareOptions shareOptions, CommentListener listener);
+	public void addComment(SocializeSession session, Entity entity, String comment, CommentOptions commentOptions, CommentListener listener, SocialNetwork... networks);
 	
 	public void getCommentsByEntity(SocializeSession session, String entityKey, CommentListener listener);
 	

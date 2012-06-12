@@ -32,13 +32,14 @@ import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.like.LikeOptions;
 import com.socialize.api.action.like.LikeSystem;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.like.LikeListener;
-import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.test.mock.MockLikeSystem;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.actionbar.ActionBarLayoutView;
@@ -59,7 +60,7 @@ public class AuthRequestDialogFactoryTest extends ActionBarAutoTest {
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
 			
 			@Override
-			public void addLike(SocializeSession session, Entity entityKey, ShareOptions shareOptions, LikeListener listener) {
+			public void addLike(SocializeSession session, Entity entity, LikeOptions shareOptions, LikeListener listener, SocialNetwork... networks) {
 				TestUtils.addResult("fail");
 			}
 

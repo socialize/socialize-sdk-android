@@ -42,7 +42,7 @@ public class GetActionsByUserActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(String text) {
 		
-		ActionUtils.getActionsByUser(this, UserUtils.getCurrentUser(this), 0, 50, new ActionListListener() {
+		ActionUtils.getActionsByUser(this, UserUtils.getCurrentUser(this).getId(), 0, 50, new ActionListListener() {
 			
 			@Override
 			public void onList(ListResult<SocializeAction> result) {
@@ -51,7 +51,7 @@ public class GetActionsByUserActivity extends SDKDemoActivity {
 			
 			@Override
 			public void onError(SocializeException error) {
-				handleError(error);
+				handleError(GetActionsByUserActivity.this, error);
 			}
 		});
 	}

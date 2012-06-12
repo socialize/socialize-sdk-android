@@ -26,6 +26,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.json.JSONObject;
 import android.app.Activity;
+import com.socialize.ConfigUtils;
 import com.socialize.ShareUtils;
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
@@ -181,11 +182,11 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 	
 	public void test_isAvailable() {
 		
-		Socialize.getSocialize().getConfig().setTwitterKeySecret("foo", "bar");
+		ConfigUtils.getConfig(getContext()).setTwitterKeySecret("foo", "bar");
 		
 		assertTrue(TwitterUtils.isAvailable(getContext()));
 		
-		Socialize.getSocialize().getConfig().setTwitterKeySecret(null, null);
+		ConfigUtils.getConfig(getContext()).setTwitterKeySecret(null, null);
 		
 		assertFalse(TwitterUtils.isAvailable(getContext()));
 	}
@@ -194,8 +195,8 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		String consumerKey = "foo";
 		String consumerSecret = "bar";
 		TwitterUtils.setCredentials(getContext(), consumerKey, consumerSecret);
-		assertEquals(consumerKey, Socialize.getSocialize().getConfig().getProperty(SocializeConfig.TWITTER_CONSUMER_KEY));
-		assertEquals(consumerSecret, Socialize.getSocialize().getConfig().getProperty(SocializeConfig.TWITTER_CONSUMER_SECRET));
+		assertEquals(consumerKey, ConfigUtils.getConfig(getContext()).getProperty(SocializeConfig.TWITTER_CONSUMER_KEY));
+		assertEquals(consumerSecret, ConfigUtils.getConfig(getContext()).getProperty(SocializeConfig.TWITTER_CONSUMER_SECRET));
 	}
 	
 	
@@ -300,7 +301,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		
 		// Make sure we have a share object
-		ShareUtils.getSharesByUser(getContext(), UserUtils.getCurrentUser(getContext()), 0, 100, new ShareListListener() {
+		ShareUtils.getSharesByUser(getContext(), UserUtils.getCurrentUser(getContext()).getId(), 0, 100, new ShareListListener() {
 			@Override
 			public void onList(ListResult<Share> entities) {
 				addResult(2, entities);

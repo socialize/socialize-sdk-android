@@ -26,12 +26,12 @@ package com.socialize.auth;
  */
 public class SocializeAuthProviderInfoFactory extends BaseAuthProviderInfoFactory<SocializeAuthProviderInfo> {
 	@Override
-	protected SocializeAuthProviderInfo initInstance() {
+	protected SocializeAuthProviderInfo initInstance(String...permissions) {
 		return new SocializeAuthProviderInfo();
 	}
 
 	@Override
-	protected void update(SocializeAuthProviderInfo instance) {}
+	protected void update(SocializeAuthProviderInfo instance, String... permissions) {}
 	
 	
 }

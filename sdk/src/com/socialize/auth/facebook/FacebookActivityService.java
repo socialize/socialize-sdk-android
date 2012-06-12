@@ -38,6 +38,7 @@ public class FacebookActivityService {
 			
 			if(extras != null) {
 				String appId = extras.getString("appId");
+				String[] permissions = extras.getStringArray("permissions");
 				
 				facebookSessionStore = activity.getBean("facebookSessionStore");
 				listenerHolder = activity.getBean("listenerHolder");
@@ -49,7 +50,12 @@ public class FacebookActivityService {
 				boolean photos = config.getBooleanProperty(SocializeConfig.FACEBOOK_PHOTOS_ENABLED, false);
 				boolean sso = config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true);
 				
-				service.authenticate(sso, photos);
+				if(permissions != null && permissions.length > 0) {
+					service.authenticate(sso, photos, permissions);
+				}
+				else {
+					service.authenticate(sso, photos);
+				}
 			}
 			else {
 				activity.finish();
@@ -67,7 +73,7 @@ public class FacebookActivityService {
 	}
     
     public FacebookService getFacebookService() {
-    	service = new FacebookService(activity, facebook, facebookSessionStore, (AuthProviderListener) listenerHolder.get("auth"), dialogFactory);
+    	service = new FacebookService(activity, facebook, facebookSessionStore, (AuthProviderListener) listenerHolder.pop("auth"), dialogFactory);
     	return service;
     }
 	

@@ -35,6 +35,7 @@ import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
+import com.socialize.ui.profile.UserSettings;
 import com.socialize.util.AppUtils;
 import com.socialize.util.StringUtils;
 
@@ -112,7 +113,7 @@ public class SocializeC2DMCallback implements C2DMCallback {
 					
 					@Override
 					public void onAuthSuccess(SocializeSession session) {
-						handleNotification(context, data, session.getUser());
+						handleNotification(context, data, session);
 					}
 					
 					@Override
@@ -123,8 +124,12 @@ public class SocializeC2DMCallback implements C2DMCallback {
 				null);
 	}
 	
-	protected void handleNotification(final Context context, final Bundle data, final User user) {
-		if(user.isNotificationsEnabled()) {
+	protected void handleNotification(final Context context, final Bundle data, final SocializeSession session) {
+		
+		final UserSettings settings = session.getUserSettings();
+		final User user = session.getUser();
+		
+		if(settings.isNotificationsEnabled()) {
 
 			String json = data.getString(MESSAGE_KEY);
 			

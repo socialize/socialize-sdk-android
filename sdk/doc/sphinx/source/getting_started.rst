@@ -6,28 +6,6 @@
 Getting Started
 ===============
 
-.. raw:: html
-
-	<script type="text/javascript" charset="utf-8">
-	  var is_ssl = ("https:" == document.location.protocol);
-	  var asset_host = is_ssl ? "https://s3.amazonaws.com/getsatisfaction.com/" : "http://s3.amazonaws.com/getsatisfaction.com/";
-	  document.write(unescape("%3Cscript src='" + asset_host + "javascripts/feedback-v2.js' type='text/javascript'%3E%3C/script%3E"));
-	</script>
-	
-	<script type="text/javascript" charset="utf-8">
-	  var feedback_widget_options = {};
-	  feedback_widget_options.display = "overlay";  
-	  feedback_widget_options.company = "socialize";
-	  feedback_widget_options.placement = "right";
-	  feedback_widget_options.color = "#222";
-	  feedback_widget_options.style = "question";
-	  feedback_widget_options.product = "socialize_android_sdk";
-	  feedback_widget_options.limit = "3";
-	  GSFN.feedback_widget.prototype.local_base_url = "http://support.getsocialize.com";
-	  GSFN.feedback_widget.prototype.local_ssl_base_url = "http://support.getsocialize.com";
-	  var feedback_widget = new GSFN.feedback_widget(feedback_widget_options);
-	</script>
-
 Introduction
 ------------
 Socialize is a drop-in social platform for iOS and Android which allows developers to add social 
@@ -49,7 +27,7 @@ If you're using eclipse, you'll need to add the socialize-x.x.x.jar as a referen
 
 .. image:: images/library_refs.png
 
-.. note:: Socialize supports Android v2.1 and above
+.. note:: Socialize supports Android v2.1 and above and does not support LDPI devices.
 
 2. Set up your Socialize Keys
 =============================
@@ -64,7 +42,6 @@ Within this file, enter your Socialize consumer key and secret:
 
 .. literalinclude:: snippets/props.txt
    :language: properties
-   :linenos:
 
 (Replace 00000000-0000-0000-000000000000 with your key/secret from your Socialize account)
 
@@ -75,14 +52,12 @@ Add the following lines to your AndroidManifest.xml within the **<manifest...>**
 
 .. literalinclude:: snippets/permissions.txt
    :language: xml
-   :linenos:
    :tab-width: 4
 
 Add the following lines to your AndroidManifest.xml within the **<application...>** element
 
 .. literalinclude:: snippets/manifest.txt
    :language: xml
-   :linenos:
    :tab-width: 4
 	
 4. Configure Facebook Integration
@@ -95,18 +70,22 @@ Once you have your facebook app ID, you can add it to the **socialize.properties
 
 .. literalinclude:: snippets/props_fb.txt
    :language: properties
-   :linenos:
 	
 5. Include Socialize in your App!
 =================================
 Now that you have your environment all setup, it's time to include Socialize.  
 
-The core component of the Socialize SDK is the "Action Bar"
+You can either install the pre-packaged Socialize Action Bar which includes the entire suite of Socialize features in a matter of minutes
 
-.. image:: images/action_bar.png
+Checkout the :doc:`action_bar` section for details on implementing the default Socialize Action Bar...
 
-This is a general purpose toolbar that sits at the bottom of your app and provides a central "one-stop-shop" 
-of social features for your users.
+.. image:: images/action_bar_std.png
+
+Or if you prefer a more customized approach use our simple SDK interfaces to "roll your own"
+
+Head over to the :doc:`sdk_user_guide` section to start customizing Socialize to suit your needs...
+
+.. image:: images/action_bar_mockup.jpg
 
 Each Action Bar instance in your app is bound to an *Entity*.  An Entity is simply an item of content in your app.
 Each Socialize action (comment, share, like etc.) is associated with an Entity.  
@@ -117,14 +96,6 @@ It is not necessary to explicitly create an Entity object when rendering the Act
 however entities *can* be created manually.  
 
 .. note:: Refer to the :ref:`entities` section for details on creating entities directly using the SDK.
-
-The Action Bar is designed to automatically "pin" iteself to the bottom of your view.  
-Adding the Action Bar to your app is done with a simple call to **showActionBar** from the SocializeUI instance:
-
-.. literalinclude:: snippets/action_bar.txt
-   :language: java
-   :linenos:
-   :tab-width: 4
 
 Next Steps...
 =============

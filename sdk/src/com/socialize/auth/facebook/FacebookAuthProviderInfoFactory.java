@@ -34,14 +34,16 @@ public class FacebookAuthProviderInfoFactory extends BaseAuthProviderInfoFactory
 	private IBeanFactory<FacebookAuthProviderInfo> facebookAuthProviderInfoInstanceFactory;
 	
 	@Override
-	protected FacebookAuthProviderInfo initInstance() {
+	protected FacebookAuthProviderInfo initInstance(String...permissions) {
 		FacebookAuthProviderInfo info = facebookAuthProviderInfoInstanceFactory.getBean();
+		info.setPermissions(permissions);
 		return info;
 	}
 
 	@Override
-	protected void update(FacebookAuthProviderInfo info) {
+	protected void update(FacebookAuthProviderInfo info, String... permissions) {
 		info.setAppId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID));
+		info.setPermissions(permissions);
 	}
 
 	public void setFacebookAuthProviderInfoInstanceFactory(IBeanFactory<FacebookAuthProviderInfo> facebookAuthProviderInfoInstanceFactory) {

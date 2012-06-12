@@ -31,6 +31,7 @@ import com.socialize.listener.user.UserSaveListener;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.profile.ProfileActivity;
+import com.socialize.ui.profile.UserSettings;
 
 
 /**
@@ -83,17 +84,19 @@ public class UserUtilsTest extends SocializeActivityTest {
 		profile.finish();
 	}
 	
-	public void testSaveUser() throws InterruptedException  {
+	public void testSaveUserSettings() throws InterruptedException  {
 		
+		UserSettings userSettings = UserUtils.getUserSettings(getActivity());
 		User user = UserUtils.getCurrentUser(getActivity());
+		
 		String name = "foobar" + Math.random();
-		user.setFirstName(name);
+		userSettings.setFirstName(name);
 		
 		long idBefore = user.getId();
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
-		UserUtils.saveUserSettings(getContext(), user, new UserSaveListener() {
+		UserUtils.saveUserSettings(getContext(), userSettings, new UserSaveListener() {
 			
 			@Override
 			public void onUpdate(User entity) {

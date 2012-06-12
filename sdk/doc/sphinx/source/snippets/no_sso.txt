@@ -1,3 +1,0 @@
-// Disable ONLY if you experience problems
-Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(false);
- 

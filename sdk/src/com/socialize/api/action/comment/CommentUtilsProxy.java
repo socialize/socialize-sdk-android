@@ -22,12 +22,14 @@
 package com.socialize.api.action.comment;
 
 import android.app.Activity;
+import android.content.Context;
+import com.socialize.annotations.Synchronous;
 import com.socialize.entity.Entity;
 import com.socialize.entity.User;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
-import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetwork;
 
 
 /**
@@ -35,10 +37,13 @@ import com.socialize.networks.ShareOptions;
  *
  */
 public interface CommentUtilsProxy {
+	
+	@Synchronous
+	public CommentOptions getUserCommentOptions(Context context);
 
 	public void addComment (Activity context, Entity entity, String text, CommentAddListener listener);
 	
-	public void addComment (Activity context, Entity entity, String text, ShareOptions shareOptions, CommentAddListener listener);
+	public void addComment (Activity context, Entity entity, String text, CommentOptions shareOptions, CommentAddListener listener, SocialNetwork...networks);
 	
 	public void getComment (Activity context, long id, CommentGetListener listener);
 	

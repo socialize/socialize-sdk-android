@@ -139,7 +139,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		
 		user.setId(Long.parseLong(userId));
 		
-		ShareUtils.getSharesByUser(getActivity(), user, 0, 100, new ShareListListener() {
+		ShareUtils.getSharesByUser(getActivity(), user.getId(), 0, 100, new ShareListListener() {
 			@Override
 			public void onList(ListResult<Share> entities) {
 				addResult(entities);

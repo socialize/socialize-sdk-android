@@ -78,8 +78,11 @@ public class FacebookService {
 		authenticate(DEFAULT_PERMISSIONS, sso);
 	}
 	
-	public void authenticate(boolean sso, boolean photos) {
-		if(photos) {
+	public void authenticate(boolean sso, boolean photos, String...permissions) {
+		if(permissions != null && permissions.length > 0) {
+			authenticate(permissions, sso);
+		}
+		else if(photos) {
 			authenticate(PHOTO_PERMISSIONS, sso);
 		}
 		else {

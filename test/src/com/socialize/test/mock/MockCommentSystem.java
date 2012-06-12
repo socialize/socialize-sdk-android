@@ -1,13 +1,14 @@
 package com.socialize.test.mock;
 
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.comment.CommentOptions;
 import com.socialize.api.action.comment.CommentSystem;
 import com.socialize.entity.Application;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.User;
 import com.socialize.listener.comment.CommentListener;
-import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetwork;
 
 public class MockCommentSystem extends MockSystem<Comment> implements CommentSystem {
 	
@@ -25,15 +26,13 @@ public class MockCommentSystem extends MockSystem<Comment> implements CommentSys
 		super(comment);
 	}
 	
-	
-
 	@Override
-	public void addComment(SocializeSession session, Comment comment, ShareOptions shareOptions, CommentListener listener) {
+	public void addComment(SocializeSession session, Comment comment, CommentOptions commentOptions, CommentListener listener, SocialNetwork... networks) {
 		if(listener != null) listener.onCreate(comment);
 	}
 
 	@Override
-	public void addComment(SocializeSession session, Entity entity, String comment, ShareOptions shareOptions, CommentListener listener) {
+	public void addComment(SocializeSession session, Entity entity, String comment, CommentOptions commentOptions, CommentListener listener, SocialNetwork... networks) {
 		if(listener != null) listener.onCreate(action);
 	}
 

@@ -31,13 +31,13 @@ import com.socialize.config.SocializeConfig;
 public class TwitterAuthProviderInfoFactory extends BaseAuthProviderInfoFactory<TwitterAuthProviderInfo> {
 
 	@Override
-	protected TwitterAuthProviderInfo initInstance() {
+	protected TwitterAuthProviderInfo initInstance(String...permissions) {
 		TwitterAuthProviderInfo info = new TwitterAuthProviderInfo();
 		return info;
 	}
 
 	@Override
-	protected void update(TwitterAuthProviderInfo info) {
+	protected void update(TwitterAuthProviderInfo info, String... permissions) {
 		info.setConsumerKey(config.getProperty(SocializeConfig.TWITTER_CONSUMER_KEY));
 		info.setConsumerSecret(config.getProperty(SocializeConfig.TWITTER_CONSUMER_SECRET));
 	}

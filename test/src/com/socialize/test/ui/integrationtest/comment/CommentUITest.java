@@ -2,7 +2,6 @@ package com.socialize.test.ui.integrationtest.comment;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.test.ActivityInstrumentationTestCase2;
@@ -32,8 +31,6 @@ import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.comment.CommentDetailActivity;
 import com.socialize.ui.comment.CommentEditField;
 import com.socialize.ui.comment.CommentEntryView;
-import com.socialize.ui.dialog.AlertDialogFactory;
-import com.socialize.ui.dialog.SimpleDialogFactory;
 import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.ui.view.LoadingListView;
 import com.socialize.ui.view.SocializeButton;
@@ -130,14 +127,14 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 	}
 	
 	public void testNotificationSubscribe() throws Throwable {
-		doSubscribeUnsubscribeTest(false, "Subscribe Successful", "We will notify you when someone posts a comment to this discussion.");
+		doSubscribeUnsubscribeTest(false);
 	}
 
 	public void testNotificationUnSubscribe() throws Throwable {
-		doSubscribeUnsubscribeTest(true, "Unsubscribe Successful", "You will no longer receive notifications for updates to this discussion.");
+		doSubscribeUnsubscribeTest(true);
 	}
 	
-	protected void doSubscribeUnsubscribeTest(final boolean isSubscribed, String dialogTitle, String dialogBody) throws Throwable {
+	protected void doSubscribeUnsubscribeTest(final boolean isSubscribed) throws Throwable {
 		
 		final MockSubscriptionSystem mockSystem = new MockSubscriptionSystem() {
 			@Override
@@ -152,6 +149,13 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 				Subscription sub = new Subscription();
 				sub.setSubscribed(false);
 				listener.onCreate(sub);
+				
+				if(isSubscribed) {
+					addResult(0, "success");
+				}
+				else {
+					addResult(0, "fail");
+				}
 			}
 
 			@Override
@@ -159,6 +163,13 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 				Subscription sub = new Subscription();
 				sub.setSubscribed(true);
 				listener.onCreate(sub);
+				
+				if(!isSubscribed) {
+					addResult(0, "success");
+				}
+				else {
+					addResult(0, "fail");
+				}
 			}
 		};
 		
@@ -169,14 +180,14 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 			}
 		};
 		
-		final SimpleDialogFactory<AlertDialog> dialogFactory = new AlertDialogFactory() {
-			@Override
-			public AlertDialog show(Context context, String title, String message) {
-				addResult(0, title);
-				addResult(1, message);
-				return null;
-			}
-		};
+//		final SimpleDialogFactory<AlertDialog> dialogFactory = new AlertDialogFactory() {
+//			@Override
+//			public AlertDialog show(Context context, String title, String message) {
+//				addResult(0, title);
+//				addResult(1, message);
+//				return null;
+//			}
+//		};
 		
 		final CommentSystem commentSystem = new MockCommentSystem() {
 
@@ -216,13 +227,13 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 					System.err.println("AppUtils Proxy is null!!");
 				}	
 				
-				ProxyObject<SimpleDialogFactory<AlertDialog>> alertDialogFactoryProxy = container.getProxy("alertDialogFactory");
-				if(proxy != null) {
-					alertDialogFactoryProxy.setDelegate(dialogFactory);
-				}
-				else {
-					System.err.println("DialogFactory Proxy is null!!");
-				}	
+//				ProxyObject<SimpleDialogFactory<AlertDialog>> alertDialogFactoryProxy = container.getProxy("alertDialogFactory");
+//				if(proxy != null) {
+//					alertDialogFactoryProxy.setDelegate(dialogFactory);
+//				}
+//				else {
+//					System.err.println("DialogFactory Proxy is null!!");
+//				}	
 				
 				ProxyObject<CommentSystem> commentSystemProxy = container.getProxy("commentSystem");
 				if(proxy != null) {
@@ -260,14 +271,14 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 
 		latch.await(10, TimeUnit.SECONDS);
 		
-		String titleAfter = getResult(0);
-		String bodyAfter = getResult(1);
+		String valueAfter = getResult(0);
+//		String bodyAfter = getResult(1);
 		
-		assertNotNull(titleAfter);
-		assertNotNull(bodyAfter);
+		assertNotNull(valueAfter);
+//		assertNotNull(bodyAfter);
 		
-		assertEquals(dialogTitle, titleAfter);
-		assertEquals(dialogBody, bodyAfter);
+		assertEquals("success", valueAfter);
+//		assertEquals(dialogBody, bodyAfter);
 	}	
 	
 	public void testCommentListAndView() {

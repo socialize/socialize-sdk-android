@@ -59,7 +59,7 @@ public class GetSharesByIDActivity extends SDKDemoActivity {
 						
 						@Override
 						public void onError(SocializeException error) {
-							handleError(error);
+							handleError(GetSharesByIDActivity.this, error);
 						}
 					}, shares.getItems().get(0).getId());
 				}
@@ -67,7 +67,7 @@ public class GetSharesByIDActivity extends SDKDemoActivity {
 			
 			@Override
 			public void onError(SocializeException error) {
-				handleError(error);
+				handleError(GetSharesByIDActivity.this, error);
 			}
 		});
 	}

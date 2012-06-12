@@ -48,7 +48,7 @@ public class AddViewActivity extends SDKDemoActivity {
 			
 			@Override
 			public void onError(SocializeException error) {
-				handleError(error);
+				handleError(AddViewActivity.this, error);
 			}
 			
 			@Override
@@ -60,7 +60,7 @@ public class AddViewActivity extends SDKDemoActivity {
 	
 	@Override
 	public boolean isTextEntryRequired() {
-		return true;
+		return false;
 	}
 
 	/* (non-Javadoc)

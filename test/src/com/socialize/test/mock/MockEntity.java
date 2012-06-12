@@ -2,6 +2,7 @@ package com.socialize.test.mock;
 
 import com.socialize.entity.Entity;
 import com.socialize.entity.EntityStats;
+import com.socialize.entity.UserEntityStats;
 
 public class MockEntity extends Entity {
 
@@ -12,4 +13,8 @@ public class MockEntity extends Entity {
 		super.setEntityStats(stats);
 	}
 
+	@Override
+	public void setUserEntityStats(UserEntityStats userEntityStats) {
+		super.setUserEntityStats(userEntityStats);
+	}
 }

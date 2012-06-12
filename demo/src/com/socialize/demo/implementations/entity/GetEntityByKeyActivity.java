@@ -61,7 +61,7 @@ public class GetEntityByKeyActivity extends SDKDemoActivity {
 							"]");
 				}
 				else {
-					handleError(error);
+					handleError(GetEntityByKeyActivity.this, error);
 				}
 			}
 		});

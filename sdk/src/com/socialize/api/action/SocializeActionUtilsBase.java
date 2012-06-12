@@ -24,17 +24,19 @@ package com.socialize.api.action;
 import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
+import com.socialize.UserUtils;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.SocializeAction;
-import com.socialize.entity.User;
 import com.socialize.networks.PostData;
-import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.share.ShareHandler;
 import com.socialize.share.ShareHandlers;
+import com.socialize.ui.profile.UserSettings;
 
 
 /**
@@ -45,20 +47,23 @@ public abstract class SocializeActionUtilsBase {
 	
 	private ShareHandlers shareHandlers;
 	
-	protected boolean isDisplayAuthDialog(ShareOptions options) {
+	protected void populateActionOptions(Context context, ActionOptions options) {
+		options.setAuthRequired(ConfigUtils.getConfig(context).isAuthRequired());
+	}	
+	
+	protected boolean isDisplayAuthDialog(Context context, ActionOptions options, SocialNetwork...networks) {
 		
 		if(options == null) {
-			return isDisplayAuthDialog();
+			return isDisplayAuthDialog(context);
 		}
 		
 		boolean authRequired = options.isAuthRequired();
 		boolean authSupported = false;
 		
 		if(authRequired) {
-			SocialNetwork[] all = options.getShareTo();
 			
-			if(all != null) {
-				for (SocialNetwork network : all) {
+			if(networks != null) {
+				for (SocialNetwork network : networks) {
 					AuthProviderType type = AuthProviderType.valueOf(network);
 					if(getSocialize().isSupported(type)) {
 						authSupported = true;
@@ -79,9 +84,9 @@ public abstract class SocializeActionUtilsBase {
 	}
 	
 	
-	protected boolean isDisplayAuthDialog() {
+	protected boolean isDisplayAuthDialog(Context context) {
 		
-		boolean authRequired = getSocialize().getConfig().isAuthRequired();
+		boolean authRequired = ConfigUtils.getConfig(context).isAuthRequired();
 		boolean authSupported = false;
 		
 		if(authRequired) {
@@ -104,18 +109,22 @@ public abstract class SocializeActionUtilsBase {
 		return (authRequired && authSupported);
 	}	
 	
-	protected boolean isDisplayShareDialog() {
+	protected boolean isDisplayShareDialog(Context context) {
 		
-		boolean shareRequired = false;
+		boolean fbSupported = getSocialize().isSupported(AuthProviderType.FACEBOOK);
+		boolean twSupported = getSocialize().isSupported(AuthProviderType.TWITTER);
+		boolean shareRequired = fbSupported || twSupported;
 		
-		User user = getSocialize().getSession().getUser();
-		
-		if(getSocialize().isSupported(AuthProviderType.TWITTER)) {
-			shareRequired |= !user.isAutoPostToTwitter();
-		}
-		
-		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
-			shareRequired |= !user.isAutoPostToFacebook();
+		if(shareRequired) {
+			UserSettings settings = UserUtils.getUserSettings(context);
+			
+			if(shareRequired && fbSupported) {
+				shareRequired &= !settings.isAutoPostFacebook();
+			}
+			
+			if(shareRequired && twSupported) {
+				shareRequired &= !settings.isAutoPostTwitter();
+			}	
 		}
 		
 		return shareRequired;

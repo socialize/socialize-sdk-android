@@ -33,6 +33,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout.LayoutParams;
 import com.socialize.android.ioc.BeanCreationListener;
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.log.SocializeLogger;
 import com.socialize.ui.util.Colors;
 import com.socialize.util.DisplayUtils;
 
@@ -45,6 +46,7 @@ public abstract class AsyncDialogFactory<V extends DialogPanelView, L extends So
 	private IBeanFactory<V> panelViewFactory;
 	private DisplayUtils displayUtils;
 	private Colors colors;
+	private SocializeLogger logger;
 	
 	protected void makeDialog(final Context context, final L listener, Object...args) {
 		
@@ -90,15 +92,6 @@ public abstract class AsyncDialogFactory<V extends DialogPanelView, L extends So
 				
 			    lp.copyFrom(dialog.getWindow().getAttributes());
 			    
-//			    if(displayUtils.isLandscape()) {
-//			    	lp.width = WindowManager.LayoutParams.FILL_PARENT;
-//			    	lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-//			    }
-//			    else {
-//			    	lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
-//			    	lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-//			    }
-			    
 			    lp.width = WindowManager.LayoutParams.FILL_PARENT;
 		    	lp.height = WindowManager.LayoutParams.FILL_PARENT;
 			    
@@ -116,8 +109,12 @@ public abstract class AsyncDialogFactory<V extends DialogPanelView, L extends So
 					}
 				}
 				catch (Exception e) {
-					// TODO: log error
-					e.printStackTrace();
+					if(logger != null) {
+						logger.warn("Error displaying dialog", e);
+					}
+					else {
+						e.printStackTrace();
+					}
 				}
 			}
 		}, args);
@@ -135,5 +132,9 @@ public abstract class AsyncDialogFactory<V extends DialogPanelView, L extends So
 	
 	public void setColors(Colors colors) {
 		this.colors = colors;
+	}
+	
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
 	}
 }

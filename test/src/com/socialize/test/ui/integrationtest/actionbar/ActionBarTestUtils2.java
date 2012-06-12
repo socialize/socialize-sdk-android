@@ -21,8 +21,13 @@
  */
 package com.socialize.test.ui.integrationtest.actionbar;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
@@ -33,7 +38,9 @@ import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.like.LikeOptions;
 import com.socialize.api.action.like.LikeSystem;
+import com.socialize.api.action.like.SocializeLikeUtils;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderInfoBuilder;
 import com.socialize.auth.AuthProviderInfoFactory;
@@ -44,8 +51,10 @@ import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeInitListener;
+import com.socialize.listener.like.LikeAddListener;
+import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListener;
-import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.test.mock.MockLikeSystem;
 import com.socialize.test.ui.util.TestUtils;
@@ -54,8 +63,6 @@ import com.socialize.ui.auth.AuthDialogFactory;
 import com.socialize.ui.auth.AuthDialogListener;
 import com.socialize.ui.share.ShareDialogFactory;
 import com.socialize.ui.share.ShareDialogListener;
-
-import static android.test.ActivityInstrumentationTestCase2.*;
 
 /**
  * @author Jason Polites
@@ -82,7 +89,7 @@ public class ActionBarTestUtils2 {
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
 			
 			@Override
-			public void addLike(SocializeSession session, Entity entityKey, ShareOptions shareOptions, LikeListener listener) {
+			public void addLike(SocializeSession session, Entity entity, LikeOptions shareOptions, LikeListener listener, SocialNetwork... networks) {
 				TestUtils.addResult("fail");
 			}
 
@@ -135,17 +142,31 @@ public class ActionBarTestUtils2 {
 		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, "");
 		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, "");
 		
-		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
+//		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
+//			@Override
+//			public void addLike(SocializeSession session, Entity entity, LikeOptions shareOptions, LikeListener listener, SocialNetwork... networks) {
+//				TestUtils.addResult("success");
+//			}
+//
+//			@Override
+//			public void getLike(SocializeSession session, String entityKey, LikeListener listener) {
+//				listener.onGet(null); // not liked
+//			}
+//		};
+		
+		final SocializeLikeUtils mockLikeUtils = new SocializeLikeUtils() {
 			@Override
-			public void addLike(SocializeSession session, Entity entityKey, ShareOptions shareOptions, LikeListener listener) {
+			public void like(Activity context, Entity entity, LikeAddListener listener) {
 				TestUtils.addResult("success");
 			}
 
 			@Override
-			public void getLike(SocializeSession session, String entityKey, LikeListener listener) {
+			public void getLike(Activity context, String entityKey, LikeGetListener listener) {
 				listener.onGet(null); // not liked
 			}
 		};
+		
+		SocializeAccess.setLikeUtilsProxy(mockLikeUtils);
 		
 		SocializeAccess.setInitListener(new SocializeInitListener() {
 			
@@ -167,14 +188,14 @@ public class ActionBarTestUtils2 {
 					System.err.println("No bean with name config!!!");
 				}
 				
-				ProxyObject<LikeSystem> proxy = container.getProxy("likeSystem");
-				if(proxy != null) {
-					proxy.setDelegate(mockLikeSystem);
-				}
-				else {
-					System.err.println("Proxy is null!!");
-				}
-				
+//				ProxyObject<LikeSystem> proxy = container.getProxy("likeSystem");
+//				if(proxy != null) {
+//					proxy.setDelegate(mockLikeSystem);
+//				}
+//				else {
+//					System.err.println("Proxy is null!!");
+//				}
+//				
 			}
 		});
 		
@@ -192,7 +213,7 @@ public class ActionBarTestUtils2 {
 			@Override
 			public void run() {
 				assertTrue(actionBar.getLikeButton().performClick());
-				TestUtils.sleep(1000);
+				TestUtils.sleep(500);
 				String result = TestUtils.getNextResult();
 				assertNotNull(result);
 				assertEquals("success", result);
@@ -213,18 +234,33 @@ public class ActionBarTestUtils2 {
 			}
 		};
 		
-		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
-			
+//		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
+//			
+//			@Override
+//			public void addLike(SocializeSession session, Entity entity, LikeOptions shareOptions, LikeListener listener, SocialNetwork... networks) {
+//				TestUtils.addResult("success");
+//			}
+//
+//			@Override
+//			public void getLike(SocializeSession session, String entityKey, LikeListener listener) {
+//				listener.onGet(null); // not liked
+//			}
+//		};		
+		
+		
+		final SocializeLikeUtils mockLikeUtils = new SocializeLikeUtils() {
 			@Override
-			public void addLike(SocializeSession session, Entity entityKey, ShareOptions shareOptions, LikeListener listener) {
+			public void like(Activity context, Entity entity, LikeAddListener listener) {
 				TestUtils.addResult("success");
 			}
 
 			@Override
-			public void getLike(SocializeSession session, String entityKey, LikeListener listener) {
+			public void getLike(Activity context, String entityKey, LikeGetListener listener) {
 				listener.onGet(null); // not liked
 			}
-		};		
+		};
+		
+		SocializeAccess.setLikeUtilsProxy(mockLikeUtils);		
 		
 		final AuthProviderInfoBuilder mockAuthProviderInfoBuilder = new AuthProviderInfoBuilder() {
 			@Override
@@ -271,18 +307,18 @@ public class ActionBarTestUtils2 {
 					System.err.println("Proxy is null!!");
 				}
 				
-				ProxyObject<LikeSystem> proxyLike = container.getProxy("likeSystem");
-				if(proxyLike != null) {
-					proxyLike.setDelegate(mockLikeSystem);
-				}
-				else {
-					System.err.println("proxyLike is null!!");
-				}
+//				ProxyObject<LikeSystem> proxyLike = container.getProxy("likeSystem");
+//				if(proxyLike != null) {
+//					proxyLike.setDelegate(mockLikeSystem);
+//				}
+//				else {
+//					System.err.println("proxyLike is null!!");
+//				}
 				
 				
 				ProxyObject<AuthProviderInfoBuilder> proxyAuthProviderInfoBuilder = container.getProxy("authProviderInfoBuilder");
 				
-				if(proxyLike != null) {
+				if(proxyAuthProviderInfoBuilder != null) {
 					proxyAuthProviderInfoBuilder.setDelegate(mockAuthProviderInfoBuilder);
 				}
 				else {
@@ -328,7 +364,7 @@ public class ActionBarTestUtils2 {
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
 			
 			@Override
-			public void addLike(SocializeSession session, Entity entityKey, ShareOptions shareOptions, LikeListener listener) {
+			public void addLike(SocializeSession session, Entity entity, LikeOptions shareOptions, LikeListener listener, SocialNetwork... networks) {
 				TestUtils.addResult("success");
 			}
 

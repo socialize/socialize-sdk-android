@@ -55,21 +55,6 @@ public class PublicSocializeLaunchActivity extends SocializeLaunchActivity {
 	}
 
 	@Override
-	public String getConsumerKey(IOCContainer container) {
-		return super.getConsumerKey(container);
-	}
-
-	@Override
-	public String getConsumerSecret(IOCContainer container) {
-		return super.getConsumerSecret(container);
-	}
-
-	@Override
-	public String getFacebookAppId(IOCContainer container) {
-		return super.getFacebookAppId(container);
-	}
-
-	@Override
 	public void initSocialize() {
 		super.initSocialize();
 	}

@@ -61,9 +61,9 @@ public abstract class DemoActivity extends Activity implements DialogRegister {
 		return dialogs;
 	}
 	
-	protected void handleError(Exception error) {
+	protected void handleError(Activity context, Exception error) {
 		error.printStackTrace();
-		DemoUtils.showErrorDialog(this, error);
+		DemoUtils.showErrorDialog(context, error);
 	}
 
 	

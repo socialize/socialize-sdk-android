@@ -23,6 +23,7 @@ package com.socialize.test.ui;
 
 import android.test.ActivityInstrumentationTestCase2;
 import com.socialize.Socialize;
+import com.socialize.SocializeAccess;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.sample.EmptyActivity;
 
@@ -40,6 +41,7 @@ public abstract class SocializeUIActivityTest extends ActivityInstrumentationTes
 		Socialize.getSocialize().clearSessionCache(getContext());
 		Socialize.getSocialize().destroy(true);
 		SocializeIOC.clearStubs();
+		SocializeAccess.revertProxies();
 		super.setUp();
 	}
 	

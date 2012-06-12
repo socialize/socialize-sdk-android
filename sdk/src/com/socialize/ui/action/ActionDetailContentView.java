@@ -154,7 +154,7 @@ public class ActionDetailContentView extends BaseView {
 		actionbg.setAlpha(32);
 		
 		actionView.setBackground(actionbg);
-		actionView.setVisibility(View.INVISIBLE);
+		actionView.setVisibility(View.GONE);
 		actionLocationLine.setVisibility(View.INVISIBLE);
 		
 		LayoutParams actionWebViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -287,12 +287,12 @@ public class ActionDetailContentView extends BaseView {
 
 	public void loadUserActivity(User user, SocializeAction current) {
 		if(userActivityView != null) {
-			if(current != null) {
+//			if(current != null) {
 				userActivityView.loadUserActivity(user.getId(), current);
-			}
-			else {
-				userActivityView.clearUserActivity();
-			}
+//			}
+//			else {
+//				userActivityView.clearUserActivity();
+//			}
 		}
 	}
 	

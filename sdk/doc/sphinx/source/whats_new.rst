@@ -6,92 +6,82 @@
 What's New
 ==========
 
-v1.6.2 Automatic Authentication
--------------------------------
-v1.6.2 introduces *Automatic Authentication* for your users.  Our data indicates that users who authenticate with a 3rd party (e.g. Twitter or Facebook)
-are much more likely to introduce new users to your app via the viral effect of activity within your app propagating to these 
-3rd party networks.  From v1.6.2 onwards the Socialize SDK will default to requiring users authenticate with a 3rd party prior to performing 
-any social action (e.g. *Comment* or *Like*).
+v2.0 of the Socialize SDK represents a major improvement over previous releases in both easy of use and stability.
 
-This default behavior can be overridden by the developer (you) via configuration options in your **socialize.properties** file.
-
-Refer to the :ref:`config` section for details on the configuration settings required to override *Automatic Authentication*.
-
-v1.6 Direct SmartAlerts 
------------------------
-v1.6 of the Socialize SDK for Android adds support for direct SmartAlerts.  This allows developers to push SmartAlert notifications 
-to their user-base directly from the web.
-
-Simply log into your Socialize account at http://www.getsocialize.com and go to the dashboard for your app:
-
-.. image:: images/direct_alerts.png
-
-Refer to the :ref:`notifications` section for details on implementing SmartAlerts.
+In this new release we are introducing several new features and bug fixes as well as a complete reworking of the core interfaces needed to 
+access the entire range of Socialize services.
 
 
-v1.5 Twitter! 
+.. note:: 
+	**Backwards Compatibility**
+	
+	In this new version we have tried to make the developer interfaces to Socialize as simple as possible and whilst we have done our
+	best to ensure backwards compatibility with older versions some incompatibilities may exist.  
+	
+	If you are already using an older version of Socialize we **STRONGLY RECOMMEND** that any calls to deprecated methods be replaced with 
+	their non-deprecated counterparts.
+
+
+Looking Good!
 -------------
-.. image:: images/twitter_sm.png
 
-v1.5 of Socialize includes support for sharing to twitter as well auto-posting comments and likes (if using the :doc:`action_bar`)
+We have re-designed the Share Dialog to bring it more in line with end user expectations and to make the job of the developer (you) easier
 
-Refer to the :doc:`twitter` section for details on how to integrate Twitter into Socialize.
+This new dialog is also completely customizable
 
-v1.4 Socialize Like Button
---------------------------
+=======================================		============================================
+.. image:: images/2_0_share_default.png		.. image:: images/2_0_share_via_networks.png
+=======================================		============================================
 
-Introduced in v1.4 is a stand-alone "like" button which can be added to any view and which automatically handles all authentication
-with 3rd party social networks like Facebook.
+Take a look at the :ref:`custom_share` section for more details on customizing the share dialog.
 
-Refer to the :ref:`like_button` section for details on how to implement the Socialize Like button.
+Complete Control
+----------------
 
-v1.3.2 Entity Loader Change
----------------------------
+In this new version we have completely rewritten the top level interfaces exposed to the developer to make them simpler and more powerful.
 
-**Existing users please read**
+Developers can now access a set of *utility* classes that provide access to the entire suite of Socialize features.
 
-As of 1.3.2 a small change was made to the SocializeEntityLoader class which **may** cause a compilation error in your app.
+Head over to the :doc:`sdk_user_guide` section for detailed descriptions and code samples
 
-If you are using the Entity Loader system, you will notice a new method has been added to this interface:
+- ShareUtils
+	- Access all sharing functions and UIs to enable sharing to Facebook, Twitter, Email and SMS.
+	
+- CommentUtils
+	- Create and retrieve comments as well as access to the packaged UIs for commenting.
 
-.. literalinclude:: snippets/entity_loader_can_load.txt
-   :language: java
-   :linenos:
+- UserUtils
+	- Access to all things User including User Settings and User Profile screens.
+	
+- LikeUtils
+	- Simplified access to allow your users to *Like* content in your app.
+	
+- EntityUtils
+	- Complete control over the creation and management of entities in your app.
+	
+- ActionUtils
+	- Display all activity occuring in your app at the User, Entity and Application level.
+	
+- ViewUtils
+	- Track and report on the behavior of users within your app by creating Socialize Views.
 
-This new method allows you to inform Socialize whether it should attempt to load your entity or not.
+The SDK also includes several helper classes to make life easier.
 
-v1.3.1 Meta data is here!
--------------------------
-In v1.3.1 we have added support for meta data on an entity.  This means you can add arbitrary meta data to an entity when it is created
-and you will be given this data back when the entity is loaded from Socialize.
+- ActionBarUtils
+	- Quickly and easily render the Socialize Action Bar
+	
+- LocationUtils
+	- Simple and easy access to location services on the device.
 
-.. literalinclude:: snippets/entity_meta_data.txt
-   :language: java
-   :linenos:
+- ConfigUtils
+	- Programmatic access to the gloabl Socialize config (socialize.properties)
 
-v1.3 SmartAlerts
------------------------
-v1.3 of Socialize includes a full push notification framework designed to bring users back to your app!
+New Sample App!
+---------------
 
-.. image:: images/comment.png
-.. image:: images/subscribe.png
+To showcase these new features and to provide developers with concrete examples of how to use the new library we have created a completely 
+new sample app.  
 
-Refer to the :ref:`notifications` section for details on how to implement SmartAlerts.
-
-v1.1 Recent Activity in User Profile
--------------------------------------
-
-In v1.1 we introduced recent activity in the user profile view:
-
-.. image:: images/profile_activity.png
-
-This can provide a significant boost to in-app engagement, however to maximize its benefit 
-developers must implement a Socialize "Entity Loader".  This provides Socialize with the information 
-needed to load the original view of the entity the user acted upon.
-
-With a Socialize Entity Loader specified, users will be able to navigate from the recent activity to 
-other parts of your application.
-
-Refer to the :ref:`entity_loader` section for details on how to implement a Socialize Entity Loader
+The new sample app is located in the same place as always, the **/sample** directory of the SDK download.
 
 .. include:: footer.inc	

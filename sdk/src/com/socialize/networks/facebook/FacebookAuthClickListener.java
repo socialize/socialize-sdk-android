@@ -32,6 +32,5 @@ public class FacebookAuthClickListener extends SocialNetworkAuthClickListener {
 	@Override
 	protected SocialNetwork getSocialNetwork() {
 		return SocialNetwork.FACEBOOK;
-		
 	}
 }

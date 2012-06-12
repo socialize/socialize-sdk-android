@@ -26,6 +26,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -58,6 +59,8 @@ public abstract class SDKDemoActivity extends DemoActivity {
 		setContentView(R.layout.demo_activity);
 		
 		resultText = (TextView) findViewById(R.id.txtResult);
+		resultText.setMovementMethod(new ScrollingMovementMethod());
+		
 		entryText = (TextView) findViewById(R.id.txtEntry);
 		entryText.setMovementMethod(new ScrollingMovementMethod());
 		
@@ -97,7 +100,7 @@ public abstract class SDKDemoActivity extends DemoActivity {
 		}
 	}
 	
-	protected void handleError(Exception error) {
+	protected void handleError(Activity context, Exception error) {
 		if(progress != null) {
 			progress.dismiss();
 		}
@@ -108,7 +111,7 @@ public abstract class SDKDemoActivity extends DemoActivity {
 		String trace = new String(out.toByteArray());
 		resultText.setText(trace);
 		
-		super.handleError(error);
+		super.handleError(context, error);
 		
 	}
 	

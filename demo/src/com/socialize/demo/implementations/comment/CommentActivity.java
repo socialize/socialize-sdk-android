@@ -27,7 +27,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import com.socialize.CommentUtils;
 import com.socialize.demo.R;
+import com.socialize.entity.Entity;
 
 
 /**
@@ -35,7 +37,7 @@ import com.socialize.demo.R;
  *
  */
 public class CommentActivity extends ListActivity {
-	final String[] values = new String[] { "Add Comment", "Get Comments By Entity", "Get Comments By User", "Get Comment By ID"};
+	final String[] values = new String[] { "Show Comment List", "Add Comment", "Get Comments By Entity", "Get Comments By User", "Get Comment By ID"};
 	final Class<?>[] activities = new Class<?>[] { AddCommentActivity.class, GetCommentsByEntityActivity.class, GetCommentsByUserActivity.class, GetCommentsByIDActivity.class};
 	
 	@Override
@@ -46,13 +48,17 @@ public class CommentActivity extends ListActivity {
 		setListAdapter(adapter);
 	}
 	
-
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		Class<?> activityClass = activities[position];
-		if(activityClass != null) {
-			Intent intent = new Intent(this, activityClass);
-			startActivity(intent);
+		if(position == 0) {
+			CommentUtils.showCommentView(this, Entity.newInstance("http://getsocialize.com", "Socialize"));
+		}
+		else {
+			Class<?> activityClass = activities[position-1];
+			if(activityClass != null) {
+				Intent intent = new Intent(this, activityClass);
+				startActivity(intent);
+			}
 		}
 	}
 }

@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
+import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
@@ -64,36 +65,17 @@ import com.socialize.util.StringUtils;
 public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	
 	private SocializeLogger logger;
-//	private AppUtils appUtils;
-//	private ShareMessageBuilder shareMessageBuilder;
 	private FacebookImageUtils facebookImageUtils;
 	private IBeanFactory<AsyncFacebookRunner> facebookRunnerFactory;
 	
 	@Override
 	public void postLike(Activity parent, Entity entity, PropagationInfo propInfo, SocialNetworkListener listener) {
-//		String linkName = appUtils.getAppName();
-		
-//		StringBuilder builder = new StringBuilder();
-		
-//		builder.append("Likes ");
-//		builder.append(shareMessageBuilder.getEntityLink(entity, propInfo, false));
-//		builder.append("\n\n");
-//		builder.append("Posted from ");
-//		builder.append(linkName);
 		post(parent, entity, "", propInfo, listener);		
 	}
 
 	@Override
 	public void postComment(Activity parent, Entity entity, String comment, PropagationInfo propInfo, SocialNetworkListener listener) {
-//		String linkName = appUtils.getAppName();
-		StringBuilder builder = new StringBuilder();
-//		builder.append(shareMessageBuilder.getEntityLink(entity, propInfo, false));
-//		builder.append("\n\n");
-		builder.append(comment);
-//		builder.append("\n\n");
-//		builder.append("Posted from ");
-//		builder.append(linkName);
-		post(parent, entity, builder.toString(), propInfo, listener);		
+		post(parent, entity, comment, propInfo, listener);		
 	}
 
 	@Override
@@ -102,7 +84,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		String entityUrl = propInfo.getEntityUrl();
 		String linkName = entityUrl;
 		String link = entityUrl;
-		String appId = getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
+		String appId = ConfigUtils.getConfig(parent).getProperty(SocializeConfig.FACEBOOK_APP_ID);
 		
 		if(entity != null) {
 			linkName = entity.getDisplayName();
@@ -155,7 +137,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		postData.setPostValues(params);
 		postData.setPropagationInfo(propInfo);
 		
-		post(parent, getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID), listener, postData);
+		post(parent, ConfigUtils.getConfig(parent).getProperty(SocializeConfig.FACEBOOK_APP_ID), listener, postData);
 	}
 
 	@Override
@@ -193,7 +175,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		
 		if(propInfo != null) {
 			String link = propInfo.getAppUrl();
-			String appId = getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
+			String appId = ConfigUtils.getConfig(parent).getProperty(SocializeConfig.FACEBOOK_APP_ID);
 			
 			if(!StringUtils.isEmpty(appId)) {
 				postPhoto(parent, appId, link, comment, photoUri, listener);
@@ -261,10 +243,14 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	
 	protected void doFacebookCall(Activity parent, String appId, Map<String, String> postData, String graphPath, String method, SocialNetworkPostListener listener) {
 		Bundle bundle = new Bundle();
-		Set<Entry<String, String>> entries = postData.entrySet();
-		for (Entry<String, String> entry : entries) {
-			bundle.putString(entry.getKey(), entry.getValue());
+		
+		if(postData != null) {
+			Set<Entry<String, String>> entries = postData.entrySet();
+			for (Entry<String, String> entry : entries) {
+				bundle.putString(entry.getKey(), entry.getValue());
+			}	
 		}
+
 		doFacebookCall(parent, appId, bundle, graphPath, method, listener);
 	}
 	

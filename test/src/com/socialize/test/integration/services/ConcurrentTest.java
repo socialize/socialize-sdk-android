@@ -24,6 +24,7 @@ package com.socialize.test.integration.services;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import android.app.Activity;
+import com.socialize.ConfigUtils;
 import com.socialize.LikeUtils;
 import com.socialize.Socialize;
 import com.socialize.config.SocializeConfig;
@@ -41,10 +42,22 @@ import com.socialize.test.ui.util.TestUtils;
  */
 public class ConcurrentTest extends SocializeActivityTest {
 	
+	@Override
+	protected void tearDown() throws Exception {
+		System.clearProperty("debug");
+		super.tearDown();
+	}
+
 	public void testConcurrentLikeIsSameUser() throws Throwable {
+		
+		System.setProperty("debug", "true");
+		
 		final Entity entityKey = Entity.newInstance("ConcurrentTest", "ConcurrentTest");
 		
 		final Activity context = getContext();
+		
+		// Force no notifications
+		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_ENABLED, "false");
 		
 		// Make sure we don't have a cached session
 		Socialize.getSocialize().init(context);
@@ -54,7 +67,7 @@ public class ConcurrentTest extends SocializeActivityTest {
 		TestUtils.waitForIdleSync(this, 5000);
 		
 		// Force no auth
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
 		// Create a latch to wait for completion
 		final CountDownLatch completeLatch = new CountDownLatch(2);

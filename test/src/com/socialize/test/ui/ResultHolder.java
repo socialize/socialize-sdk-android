@@ -42,7 +42,8 @@ public class ResultHolder {
 	}
 	
 	public void addResult(Object obj) {
-		bucket.add(obj);
+		if(obj != null)
+			bucket.add(obj);
 	}
 	
 	public List<Object> getAllResults() {

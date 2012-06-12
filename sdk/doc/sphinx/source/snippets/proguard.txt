@@ -6,6 +6,3 @@
 
 # Keep Socialize classes
 -keep public class com.socialize.** { *; }
--keep public class oauth.signpost.** {  *; }
--keep public class oauth.socialize.** {  *; }
--keep public class com.google.** { *; }

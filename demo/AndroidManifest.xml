@@ -31,9 +31,44 @@
             </intent-filter>
         </activity>
         
-        <activity
-            android:name=".DemoList">
-        </activity> 
+        
+        
+        
+        <!--****************************************************************-->   
+        <!--************** STANDARD SOCIALIZE CONFIGURATION ****************-->
+        <!--****************************************************************-->   
+        
+       	<!-- Base Activities Required by Socialize UI -->
+       	<activity android:name="com.socialize.ui.comment.CommentActivity"/>
+       	<activity android:name="com.socialize.ui.action.ActionDetailActivity"/>
+       	<activity android:name="com.socialize.ui.profile.ProfileActivity"/>
+       	<activity android:name="com.socialize.auth.facebook.FacebookActivity"/> 
+       	<activity android:name="com.socialize.ui.SocializeLaunchActivity" android:noHistory="true"/>
+ 
+        <!-- SmartAlerts Config -->
+        <service android:name="com.socialize.notifications.SocializeC2DMReceiver"/>
+        <receiver android:name="com.socialize.notifications.SocializeBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
+			<intent-filter>
+				<action android:name="com.google.android.c2dm.intent.RECEIVE" />
+				<category android:name="com.socialize.demo" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+				<category android:name="com.socialize.demo" />
+			</intent-filter>
+        </receiver>  
+        
+        <!--****************************************************************-->   
+        <!--************ END STANDARD SOCIALIZE CONFIGURATION **************-->
+        <!--****************************************************************-->  
+        
+        
+        
+        <!--****************************************************************-->   
+        <!--**************** SOCIALIZE DEMO CONFIGURATION ******************-->
+        <!--****************************************************************-->  
+        
+        <activity android:name=".DemoList"/>
         
         <!-- Comment -->
         <activity android:name=".implementations.comment.CommentActivity"/>
@@ -70,6 +105,7 @@
         <activity android:name=".implementations.actionbar.ActionBarActivity"/>
         <activity android:name=".implementations.actionbar.DefaultActionBarActivity"/>
         <activity android:name=".implementations.actionbar.CustomActionBarActivity"/>
+        <activity android:name=".implementations.actionbar.MultiActionBarActivity"/>
         
         <!-- User Activity -->
         <activity android:name=".implementations.action.ActionActivity"/>
@@ -87,26 +123,20 @@
         <!-- Auth -->
         <activity android:name=".implementations.auth.AuthButtonsActivity"/>  
         
+        <!-- Facebook -->
+        <activity android:name=".implementations.facebook.FacebookActivity"/> 
+        <activity android:name=".implementations.facebook.ListFriendsActivity"/> 
+        <activity android:name=".implementations.facebook.ListCheckinsActivity"/> 
+        <activity android:name=".implementations.facebook.PostToWallActivity"/> 
+        <activity android:name=".implementations.facebook.GetTokenActivity"/> 
+        <activity android:name=".implementations.facebook.OpenGraphActivity"/>
         
-       	<!-- Base Activities Required by Socialize UI -->
-       	<activity android:name="com.socialize.ui.comment.CommentActivity"/>
-       	<activity android:name="com.socialize.ui.action.ActionDetailActivity"/>
-       	<activity android:name="com.socialize.ui.profile.ProfileActivity"/>
-       	<activity android:name="com.socialize.auth.facebook.FacebookActivity"/> 
-       	<activity android:name="com.socialize.ui.SocializeLaunchActivity" android:noHistory="true"/>
- 
-        <!-- Socialize Notification Receiver -->
-        <service android:name="com.socialize.notifications.SocializeC2DMReceiver"/>
-        <receiver android:name="com.socialize.notifications.SocializeBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
-			<intent-filter>
-				<action android:name="com.google.android.c2dm.intent.RECEIVE" />
-				<category android:name="com.socialize.demo" />
-			</intent-filter>
-			<intent-filter>
-				<action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-				<category android:name="com.socialize.demo" />
-			</intent-filter>
-        </receiver>        
+        <!-- User -->
+        <activity android:name=".implementations.user.UserActivity"/> 
+        
+        <!--****************************************************************-->   
+        <!--************** END SOCIALIZE DEMO CONFIGURATION ****************-->
+        <!--****************************************************************-->           
              
     </application>
 

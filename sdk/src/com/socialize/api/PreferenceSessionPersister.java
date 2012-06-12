@@ -37,6 +37,8 @@ import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.entity.User;
 import com.socialize.entity.UserFactory;
 import com.socialize.log.SocializeLogger;
+import com.socialize.ui.profile.UserSettings;
+import com.socialize.ui.profile.UserSettingsFactory;
 import com.socialize.util.JSONUtils;
 import com.socialize.util.StringUtils;
 
@@ -52,6 +54,7 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 	private static final String USER_AUTH_DATA = "user_auth_data";
 	
 	private UserFactory userFactory;
+	private UserSettingsFactory userSettingsFactory;
 	private SocializeSessionFactory sessionFactory;
 	
 	private SocializeLogger logger = null;
@@ -68,14 +71,14 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 	}
 	
 	@Override
-	public void saveUser(Context context, User user) {
+	public synchronized void saveUser(Context context, User user, UserSettings userSettings) {
 		SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 		Editor editor = prefs.edit();
-		saveUser(editor, user);
+		saveUser(editor, user, userSettings);
 		editor.commit();
 	}
 	
-	protected void saveUser(Editor editor, User user) {
+	public synchronized void saveUser(Editor editor, User user, UserSettings userSettings) {
 		if(user != null) {
 			try {
 				String userJSON = userFactory.toJSON(user).toString();
@@ -89,7 +92,25 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 					e.printStackTrace();
 				}
 			}
-		}
+			
+			if(userSettings == null) {
+				// Legacy
+				userSettings = createSettingsLegacy(user);
+			}
+			
+			try {
+				String userJSON = userSettingsFactory.toJSON(userSettings).toString();
+				editor.putString("user-settings", userJSON);
+			}
+			catch (JSONException e) {
+				if(logger != null) {
+					logger.error("Failed to serialize user settings object", e);
+				}
+				else {
+					e.printStackTrace();
+				}
+			}
+		}			
 	}
 	
 	/*
@@ -97,7 +118,7 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 	 * @see com.socialize.api.SocializeSessionPersister#delete(android.content.Context, com.socialize.auth.AuthProviderType)
 	 */
 	@Override
-	public void delete(Context context, AuthProviderType type) {
+	public synchronized void delete(Context context, AuthProviderType type) {
 		
 		SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 		
@@ -131,7 +152,7 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 	 * @see com.socialize.api.SocializeSessionPersister#save(android.content.Context, com.socialize.api.SocializeSession)
 	 */
 	@Override
-	public void save(Context context, SocializeSession session) {
+	public synchronized void save(Context context, SocializeSession session) {
 		SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 		
 		Editor editor = prefs.edit();
@@ -148,23 +169,24 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 		editor.putString(USER_AUTH_DATA, userProviderCredentials);	
 		
 		User user = session.getUser();
+		UserSettings settings = session.getUserSettings();
 		
-		if(user != null) {
-			try {
-				String userJSON = userFactory.toJSON(user).toString();
-				editor.putString("user", userJSON);
-			}
-			catch (JSONException e) {
-				if(logger != null) {
-					logger.error("Failed to serialize user object", e);
-				}
-				else {
-					e.printStackTrace();
-				}
-			}
-		}
-		
+		saveUser(editor, user, settings);
+
 		editor.commit();
+	}
+	
+
+	@SuppressWarnings("deprecation")
+	protected UserSettings createSettingsLegacy(User user) {
+		UserSettings userSettings = new UserSettings();
+		userSettings.setAutoPostFacebook(user.isAutoPostToFacebook());
+		userSettings.setAutoPostTwitter(user.isAutoPostToTwitter());
+		userSettings.setFirstName(user.getFirstName());
+		userSettings.setLastName(user.getLastName());
+		userSettings.setLocationEnabled(user.isShareLocation());
+		userSettings.setNotificationsEnabled(user.isNotificationsEnabled());	
+		return userSettings;
 	}
 	
 	protected UserProviderCredentialsMap loadUserProviderCredentials(SharedPreferences prefs) {
@@ -241,7 +263,7 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 	 * @see com.socialize.api.SocializeSessionPersister#load(android.content.Context)
 	 */
 	@Override
-	public WritableSession load(Context context) {
+	public synchronized WritableSession load(Context context) {
 		
 		SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 		
@@ -253,15 +275,25 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 		WritableSession session = sessionFactory.create(key, secret, userProviderCredentials);
 			
 		session.setRestored(true);
-		session.setConsumerToken(prefs.getString("consumer_token", null));
-		session.setConsumerTokenSecret(prefs.getString("consumer_token_secret", null));
+		
+		String oauth_token = prefs.getString("consumer_token", null);
+		String oauth_token_secret = prefs.getString("consumer_token_secret", null);
+		
+		if(StringUtils.isEmpty(oauth_token) || StringUtils.isEmpty(oauth_token_secret)) {
+			return null;
+		}
+
+		session.setConsumerToken(oauth_token);
+		session.setConsumerTokenSecret(oauth_token_secret);
 		
 		String userJson = prefs.getString("user", null);
+		
+		User user = null;
 		
 		if(userJson != null) {
 			try {
 				JSONObject json = new JSONObject(userJson);
-				User user = userFactory.fromJSON(json);
+				user = userFactory.fromJSON(json);
 				session.setUser(user);
 			}
 			catch (JSONException e) {
@@ -274,6 +306,27 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 			}
 		}
 		
+		String userSettingsJson = prefs.getString("user-settings", null);
+		
+		if(userSettingsJson != null) {
+			try {
+				JSONObject json = new JSONObject(userSettingsJson);
+				UserSettings userSettings = userSettingsFactory.fromJSON(json);
+				session.setUserSettings(userSettings);
+			}
+			catch (JSONException e) {
+				if(logger != null) {
+					logger.error("Failed to deserialize user object", e);
+				}
+				else {
+					e.printStackTrace();
+				}
+			}
+		}
+		else if(user != null) {
+			session.setUserSettings(createSettingsLegacy(user));
+		}
+		
 		return session;
 	}
 
@@ -281,7 +334,7 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 	 * @see com.socialize.api.SocializeSessionPersister#delete(android.content.Context)
 	 */
 	@Override
-	public void delete(Context context) {
+	public synchronized void delete(Context context) {
 		SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 		prefs.edit().clear().commit();
 	}
@@ -300,5 +353,9 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 
 	public void setJsonUtils(JSONUtils jsonUtils) {
 		this.jsonUtils = jsonUtils;
+	}
+	
+	public void setUserSettingsFactory(UserSettingsFactory userSettingsFactory) {
+		this.userSettingsFactory = userSettingsFactory;
 	}
 }

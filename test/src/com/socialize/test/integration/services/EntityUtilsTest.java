@@ -26,6 +26,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import com.socialize.ConfigUtils;
 import com.socialize.EntityUtils;
 import com.socialize.Socialize;
 import com.socialize.config.SocializeConfig;
@@ -64,9 +65,9 @@ public class EntityUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		
 		// Force no config
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
-		EntityUtils.addEntity(getActivity(), entity, new EntityAddListener() {
+		EntityUtils.saveEntity(getActivity(), entity, new EntityAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -96,7 +97,8 @@ public class EntityUtilsTest extends SocializeActivityTest {
 		clearResults();
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		
-		Socialize.getSocialize().getEntityById(entityAfter.getId(), new EntityGetListener() {
+		
+		EntityUtils.getEntity(getActivity(), entityAfter.getId(), new EntityGetListener() {
 			
 			@Override
 			public void onGet(Entity entity) {
@@ -145,6 +147,9 @@ public class EntityUtilsTest extends SocializeActivityTest {
 		
 		assertNotNull(after);
 		assertEquals("http://entity1.com", after.getKey());
+		
+		assertNotNull(after.getEntityStats());
+		assertNotNull(after.getUserEntityStats());
 	}	
 	
 
