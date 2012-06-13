@@ -23,24 +23,25 @@ package com.socialize.auth.twitter;
 
 
 import org.apache.http.client.HttpClient;
-import com.socialize.oauth.signpost.OAuthConsumer;
-import com.socialize.oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
-
 import android.os.AsyncTask;
+import com.socialize.oauth.signpost.OAuthConsumer;
+import com.socialize.oauth.signpost.OAuthTokenListener;
+import com.socialize.oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
+import com.socialize.oauth.signpost.http.HttpParameters;
 
 /**
  * @author Jason Polites
  *
  */
 public class TwitterOAuthProvider extends CommonsHttpOAuthProvider {
-	
+
 	private static final long serialVersionUID = 3804709921717607933L;
-	
+
 	public static final String OAUTH_CALLBACK_URL = "socializeoauth://sign-in-with-twitter";
 	public static final String REQUEST_TOKEN_ENDPOINT = "https://api.twitter.com/oauth/request_token";
 	public static final String ACCESS_TOKEN_ENDPOINT = "https://api.twitter.com/oauth/access_token";
 	public static final String AUTHORIZE_ENDPOINT = "https://api.twitter.com/oauth/authorize";
-	
+
 	public TwitterOAuthProvider(HttpClient httpClient) {
 		super(REQUEST_TOKEN_ENDPOINT, ACCESS_TOKEN_ENDPOINT, AUTHORIZE_ENDPOINT, httpClient);
 	}
@@ -50,9 +51,9 @@ public class TwitterOAuthProvider extends CommonsHttpOAuthProvider {
 	}
 
 	public void retrieveRequestTokenAsync(final OAuthConsumer consumer, final String callbackUrl, final OAuthRequestTokenUrlListener listener) {
-		
+
 		new AsyncTask<Void, Void, Void>() {
-			
+
 			String url;
 			Exception error;
 
@@ -64,7 +65,7 @@ public class TwitterOAuthProvider extends CommonsHttpOAuthProvider {
 				catch (Exception e) {
 					error = e;
 				}
-			
+
 				return null;
 			}
 
@@ -81,4 +82,48 @@ public class TwitterOAuthProvider extends CommonsHttpOAuthProvider {
 			}
 		}.execute();
 	}
+
+
+	public void retrieveAccessTokenAsync(final OAuthConsumer consumer, final String oauthVerifier, final OAuthTokenListener listener) {
+
+		new AsyncTask<Void, Void, Void>() {
+
+			HttpParameters httpParameters = new HttpParameters();
+			Exception error;
+
+			@Override
+			protected Void doInBackground(Void... params) {
+				try {
+					retrieveAccessToken(consumer, oauthVerifier, new OAuthTokenListener() {
+						@Override
+						public void onResponse(HttpParameters parameters) {
+							httpParameters.merge(parameters);
+						}
+
+						@Override
+						public void onError(Exception e) {
+							error = e;
+						}
+					});
+				} 
+				catch (Exception e) {
+					error = e;
+				}
+
+				return null;
+			}
+
+			@Override
+			protected void onPostExecute(Void result) {
+				if(listener != null) {
+					if(error != null)  {
+						listener.onError(error);
+					}
+					else {
+						listener.onResponse(httpParameters);
+					}
+				}
+			}
+		}.execute();
+	}	
 }
