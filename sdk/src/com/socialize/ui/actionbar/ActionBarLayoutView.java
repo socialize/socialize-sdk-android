@@ -47,6 +47,11 @@ import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
+import com.socialize.config.SocializeConfig;
+import java.util.Properties;
+import android.content.Context;
+import android.util.Log;
+import java.io.IOException;
 
 /**
  * @author Jason Polites
@@ -84,9 +89,15 @@ public class ActionBarLayoutView extends BaseView {
 	final String loadingText = "...";
 	
 	private OnActionBarEventListener onActionBarEventListener;
+
+	private static final int ACTION_BAR_BUTTONS_COUNT = 4;
+
+	private static Activity contextActivity;
+
 	
 	public ActionBarLayoutView(Activity context, ActionBarView actionBarView) {
 		super(context);
+		contextActivity = context;
 		this.actionBarView = actionBarView;
 	}
 	
@@ -107,11 +118,45 @@ public class ActionBarLayoutView extends BaseView {
 		Drawable shareBg = drawables.getDrawable("action_bar_button_hi.png#share", true, false, true);
 		Drawable likeBg = drawables.getDrawable("action_bar_button_hi.png#like", true, false, true);
 		
-		int width = ActionBarView.ACTION_BAR_BUTTON_WIDTH;
+		boolean showShareButton = true;
+		boolean showLikeButton = true;
+		boolean showCommentButton = true;
+		boolean showAlreadyLikedButton = true;
+
+		Properties props = new Properties();
+		try {
+			props.load(contextActivity.getAssets().open(SocializeConfig.SOCIALIZE_PROPERTIES_PATH));
+
+			String propertyString = props.getProperty(SocializeConfig.SOCIALIZE_SHARING_ENABLED);
+			showShareButton = (propertyString == null) ? true : Boolean.parseBoolean(propertyString);
+			Log.v("Socialize: ActionBarLayoutView", "should show share button? " + ((showShareButton) ? "YES" : "NO"));
+
+			propertyString = props.getProperty(SocializeConfig.SOCIALIZE_LIKE_ENABLED);
+			showLikeButton = (propertyString == null) ? true : Boolean.parseBoolean(propertyString);
+			Log.v("Socialize: ActionBarLayoutView", "should show like button? " + ((showLikeButton) ? "YES" : "NO"));
+
+			propertyString = props.getProperty(SocializeConfig.SOCIALIZE_COMMENTS_ENABLED);
+			showCommentButton = (propertyString == null) ? true : Boolean.parseBoolean(propertyString);
+			Log.v("Socialize: ActionBarLayoutView", "should show comment button? " + ((showCommentButton) ? "YES" : "NO"));
+
+			propertyString = props.getProperty(SocializeConfig.SOCIALIZE_ALREADY_LIKED_ENABLED);
+			showAlreadyLikedButton = (propertyString == null) ? true : Boolean.parseBoolean(propertyString);
+			Log.v("Socialize: ActionBarLayoutView", "should show already liked button? " + ((showAlreadyLikedButton) ? "YES" : "NO"));
+		} catch (IOException ex) {
+
+		}
+		contextActivity = null;
+
+		int enabledButtonsCount = showShareButton ? 1 : 0;
+		enabledButtonsCount += showLikeButton ? 1 : 0;
+		enabledButtonsCount += showCommentButton ? 1 : 0;
+		enabledButtonsCount += showAlreadyLikedButton ? 1 : 0;
+
+		int width = ActionBarView.ACTION_BAR_BUTTON_WIDTH * ACTION_BAR_BUTTONS_COUNT / enabledButtonsCount + 1;
 		
 		int likeWidth = width - 5;
 		int commentWidth = width + 15;
-		int shareWidth = width- 5;
+		int shareWidth = width - 5;
 		
 		ticker = tickerFactory.getBean();
 		
@@ -229,10 +274,10 @@ public class ActionBarLayoutView extends BaseView {
 		shareButton.setText("Share");
 		commentButton.setText("Comment");
 		
-		addView(ticker);
-		addView(likeButton);
-		addView(shareButton);
-		addView(commentButton);
+		if (showAlreadyLikedButton) addView(ticker);
+		if (showLikeButton) addView(likeButton);
+		if (showShareButton) addView(shareButton);
+		if (showCommentButton) addView(commentButton);
 	}
 	
 	@Override
