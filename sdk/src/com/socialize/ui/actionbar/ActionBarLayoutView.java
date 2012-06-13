@@ -124,8 +124,10 @@ public class ActionBarLayoutView extends BaseView {
 		boolean showAlreadyLikedButton = true;
 
 		Properties props = new Properties();
+		InputStream is = null;
 		try {
-			props.load(contextActivity.getAssets().open(SocializeConfig.SOCIALIZE_PROPERTIES_PATH));
+			is = contextActivity.getAssets().open(SocializeConfig.SOCIALIZE_PROPERTIES_PATH);
+			props.load(is);
 
 			String propertyString = props.getProperty(SocializeConfig.SOCIALIZE_SHARING_ENABLED);
 			showShareButton = (propertyString == null) ? true : Boolean.parseBoolean(propertyString);
@@ -142,10 +144,20 @@ public class ActionBarLayoutView extends BaseView {
 			propertyString = props.getProperty(SocializeConfig.SOCIALIZE_ALREADY_LIKED_ENABLED);
 			showAlreadyLikedButton = (propertyString == null) ? true : Boolean.parseBoolean(propertyString);
 			Log.v("Socialize: ActionBarLayoutView", "should show already liked button? " + ((showAlreadyLikedButton) ? "YES" : "NO"));
-		} catch (IOException ex) {
+		} catch (IOException ignored) {
+			// ignored IOException
+		} finally {
+			props = null;
+			contextActivity = null;
 
+			if (is != null) {
+				try {
+					is.close();
+				} catch (IOException ignored) {
+					// ignored IOException
+				}
+			}
 		}
-		contextActivity = null;
 
 		int enabledButtonsCount = showShareButton ? 1 : 0;
 		enabledButtonsCount += showLikeButton ? 1 : 0;
