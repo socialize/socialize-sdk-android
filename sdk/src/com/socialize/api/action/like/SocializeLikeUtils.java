@@ -41,7 +41,6 @@ import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.auth.AuthDialogListener;
 import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.auth.IAuthDialogFactory;
-import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.ui.profile.UserSettings;
 import com.socialize.ui.share.DialogFlowController;
 import com.socialize.ui.share.IShareDialogFactory;
@@ -156,11 +155,9 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 	}
 	
 	protected void doLikeWithoutShare(final Activity context, final SocializeSession session, final Entity entity, final LikeOptions likeOptions, final LikeAddListener listener, final SocialNetwork...networks) {
-		final SafeProgressDialog progress = SafeProgressDialog.show(context, "Posting like", "Please wait...");
 		likeSystem.addLike(session, entity, likeOptions, new LikeAddListener() {
 			@Override
 			public void onError(SocializeException error) {
-				progress.dismiss();
 				if(listener != null) {
 					listener.onError(error);
 				}
@@ -172,12 +169,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 					listener.onCreate(like);
 				}
 				if(networks != null) {
-					doActionShare(context, like, null, progress, listener, networks);
-				}
-				else {
-					if(progress != null) {
-						progress.dismiss();
-					}
+					doActionShare(context, like, null, listener, networks);
 				}
 			}
 		}, networks);		
@@ -198,15 +190,8 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 				@Override
 				public boolean onContinue(final Dialog dialog, boolean remember, final SocialNetwork... networks) {
 
-					int count = 0;
 					
 					UserSettings settings = session.getUserSettings();
-					
-					if(networks != null) {
-						count = networks.length;
-					}
-					
-					final SafeProgressDialog progress = SafeProgressDialog.show(context, count);
 					
 					if(remember && settings.setAutoPostPreferences(networks)) {
 						UserUtils.saveUserSettings(context, settings, null);
@@ -218,7 +203,6 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 
 						@Override
 						public void onError(SocializeException error) {
-							progress.dismissAll();
 							dialog.dismiss();
 							if(listener != null) {
 								listener.onError(error);
@@ -232,7 +216,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 								listener.onCreate(like);
 							}
 							
-							doActionShare(context, like, null, progress, listener, networks);
+							doActionShare(context, like, null, listener, networks);
 							
 							dialog.dismiss();
 						}

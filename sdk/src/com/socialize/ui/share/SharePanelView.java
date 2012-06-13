@@ -32,6 +32,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import com.socialize.ShareUtils;
 import com.socialize.android.ioc.IBeanFactory;
@@ -115,7 +116,7 @@ public class SharePanelView extends DialogPanelView {
 	int padding = 8;
 	int headerHeight = 45;
 	float headerRadius = 3;
-	int landscapeButtonWidth = 190;
+//	int landscapeButtonWidth = 190;
 	
 	private float[] fbRadii = new float[]{radii, radii, radii, radii, 0.0f, 0.0f, 0.0f, 0.0f};
 	private int[] fbStroke = new int[]{1, 1, 0, 1};
@@ -128,6 +129,8 @@ public class SharePanelView extends DialogPanelView {
 		boolean landscape = false;
 		boolean lowRes = false;
 		
+//		int halfPadding = 0;
+		
 		if(displayUtils != null) {
 			padding = displayUtils.getDIP(12);
 			headerRadius = displayUtils.getDIP(3);
@@ -135,9 +138,10 @@ public class SharePanelView extends DialogPanelView {
 			radii = displayUtils.getDIP(radii);
 			landscape = displayUtils.isLandscape();
 			lowRes = displayUtils.isLowRes();
-			landscapeButtonWidth = displayUtils.getDIP(landscapeButtonWidth);
 			fbRadii = new float[]{radii, radii, radii, radii, 0.0f, 0.0f, 0.0f, 0.0f};
 			twRadii = new float[]{0.0f, 0.0f, 0.0f, 0.0f, radii, radii, radii, radii};
+			
+//			halfPadding = Math.round((float) padding / 2.0f);
 		}
 		
 		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
@@ -157,32 +161,36 @@ public class SharePanelView extends DialogPanelView {
 		View continueButtonLayout = makeContinueButton();
 		View header = makeHeaderView(headerHeight, headerRadius);
 		
-		RelativeLayout.LayoutParams contentParams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		LayoutParams contentParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		contentParams.setMargins(padding, padding, padding, 0);
-		contentParams.addRule(RelativeLayout.CENTER_IN_PARENT);
 		
 		LinearLayout contentLayout = new LinearLayout(getContext());
-		contentLayout.setPadding(padding, padding, padding, 0);
+		contentLayout.setPadding(padding,padding, padding, 0);
 		contentLayout.setLayoutParams(contentParams);
 		contentLayout.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.TOP);
 		
 		LayoutParams socialNetworkButtonParams = null;
 		LayoutParams emailSMSButtonParams = null;
 		
-		if(landscape) {
-			socialNetworkButtonParams = new LayoutParams(landscapeButtonWidth, LayoutParams.WRAP_CONTENT);
-			emailSMSButtonParams = new LayoutParams(landscapeButtonWidth, LayoutParams.WRAP_CONTENT);
-			contentLayout.setOrientation(HORIZONTAL);
-			
-			socialNetworkButtonParams.setMargins(0, 0, padding/2, 0);
-			emailSMSButtonParams.setMargins(padding/2, 0, 0, 0);
-		}
-		else {
-			socialNetworkButtonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-			emailSMSButtonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-			emailSMSButtonParams.setMargins(0, padding, 0, 0);
-			contentLayout.setOrientation(VERTICAL);
-		}
+		socialNetworkButtonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		emailSMSButtonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		emailSMSButtonParams.setMargins(0, padding, 0, 0);
+		contentLayout.setOrientation(VERTICAL);
+		
+//		if(landscape) {
+////			socialNetworkButtonParams = new LayoutParams(landscapeButtonWidth, LayoutParams.WRAP_CONTENT);
+////			emailSMSButtonParams = new LayoutParams(landscapeButtonWidth, LayoutParams.WRAP_CONTENT);
+//			contentLayout.setOrientation(HORIZONTAL);
+//			
+//			socialNetworkButtonParams.setMargins(0, 0, padding/2, 0);
+//			emailSMSButtonParams.setMargins(padding/2, 0, 0, 0);
+//		}
+//		else {
+////			socialNetworkButtonParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+////			emailSMSButtonParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+//			emailSMSButtonParams.setMargins(0, padding, 0, 0);
+//			contentLayout.setOrientation(VERTICAL);
+//		}
 		
 		LinearLayout socialNetworkButtonLayout = new LinearLayout(getContext());
 		socialNetworkButtonLayout.setPadding(0, 0, 0, 0);
@@ -268,11 +276,12 @@ public class SharePanelView extends DialogPanelView {
 			otherOptions.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL);
 			otherOptions.setPadding(0, 0, 0, padding);
 			
-			LayoutParams skipAuthParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-			skipAuthParams.gravity = Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
-			skipAuthParams.weight = 1.0f;
+			LayoutParams otherOptionsParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+			otherOptionsParams.gravity = Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
+			otherOptionsParams.weight = 1.0f;
+			otherOptionsParams.setMargins(0, padding, 0, 0);
 			
-			otherOptions.setLayoutParams(skipAuthParams);
+			otherOptions.setLayoutParams(otherOptionsParams);
 			
 			otherOptions.setOnClickListener(new OnClickListener() {
 				@Override
@@ -297,7 +306,19 @@ public class SharePanelView extends DialogPanelView {
 			contentLayout.addView(otherOptions);
 		}
 		
-		container.addView(contentLayout);
+		
+
+		ScrollView scroller = new ScrollView(getContext());
+		
+		RelativeLayout.LayoutParams scrollerParams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+//		scrollerParams.setMargins(halfPadding, halfPadding, halfPadding, 0);
+		scrollerParams.addRule(RelativeLayout.CENTER_IN_PARENT);		
+		
+		scroller.setLayoutParams(scrollerParams);		
+//		scroller.setPadding(halfPadding, halfPadding, halfPadding, 0);
+		scroller.addView(contentLayout);
+		
+		container.addView(scroller);
 		
 		addView(header);
 		addView(container);
@@ -367,7 +388,7 @@ public class SharePanelView extends DialogPanelView {
 	protected View makeShareBadge() {
 		RelativeLayout.LayoutParams badgeParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		
-		LayoutParams badgeLayoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		LayoutParams badgeLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		
 		badgeLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 		
@@ -450,7 +471,7 @@ public class SharePanelView extends DialogPanelView {
 		
 		if(rememberOk) {
 			rememberCell = rememberCellFactory.getBean();
-			LayoutParams rememberCellParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+			LayoutParams rememberCellParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			rememberCellParams.setMargins(0, padding, 0, 0);
 			rememberCell.setLayoutParams(rememberCellParams);
 		}

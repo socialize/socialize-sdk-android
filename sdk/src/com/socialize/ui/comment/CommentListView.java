@@ -233,31 +233,29 @@ public class CommentListView extends BaseView {
 			@Override
 			public void onComment(String text, boolean shareLocation, boolean subscribe, SocialNetwork... networks) {
 				text = StringUtils.replaceNewLines(text, 3, 2);
+				
+				if(progressDialogFactory != null) {
+					dialog = progressDialogFactory.show(getContext(), "Posting comment", "Please wait...");
+				}
+				
+				CommentOptions options = newShareOptions();
+				options.setSubscribeToUpdates(subscribe);
+				
 				if(networks == null || networks.length == 0) {
-					CommentUtils.addComment(CommentListView.this.getActivity(), entity, text, getCommentAddListener(subscribe));
+					CommentUtils.addComment(CommentListView.this.getActivity(), entity, text, options, getCommentAddListener(subscribe));
 				}
 				else {
-					doPostComment(text, shareLocation, subscribe, networks);
+					CommentUtils.addComment(getActivity(), entity, text, options, getCommentAddListener(subscribe), networks);
+				}		
+				
+				// Won't persist.. but that's ok.
+				SocializeSession session = getSocialize().getSession();
+				
+				if(session != null && session.getUserSettings() != null) {
+					session.getUserSettings().setLocationEnabled(shareLocation);
 				}
 			}
 		});
-	}
-	
-	public void doPostComment(String text, boolean shareLocation, final boolean subscribe, SocialNetwork...networks) {
-		if(progressDialogFactory != null) {
-			dialog = progressDialogFactory.show(getContext(), "Posting comment", "Please wait...");
-		}
-		
-		CommentOptions options = newShareOptions();
-		options.setSubscribeToUpdates(subscribe);
-		
-		CommentUtils.addComment(getActivity(), entity, text, options, getCommentAddListener(subscribe), networks);
-		
-		// Won't persist.. but that's ok.
-		SocializeSession session = getSocialize().getSession();
-		if(session != null && session.getUserSettings() != null) {
-			session.getUserSettings().setLocationEnabled(shareLocation);
-		}
 	}
 	
 	protected CommentAddListener getCommentAddListener(final boolean subscribe) {

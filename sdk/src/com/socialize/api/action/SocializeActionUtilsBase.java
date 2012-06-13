@@ -23,7 +23,6 @@ package com.socialize.api.action;
 
 import org.json.JSONObject;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
@@ -134,7 +133,7 @@ public abstract class SocializeActionUtilsBase {
 		return Socialize.getSocialize();
 	}
 	
-	protected void doActionShare(final Activity context, final SocializeAction action, final String text, final ProgressDialog progress, final SocialNetworkListener listener, final SocialNetwork...networks) {
+	protected void doActionShare(final Activity context, final SocializeAction action, final String text, final SocialNetworkListener listener, final SocialNetwork...networks) {
 
 		if(networks != null && networks.length > 0) {
 			for (SocialNetwork socialNetwork : networks) {
@@ -146,11 +145,6 @@ public abstract class SocializeActionUtilsBase {
 							if(listener != null) {
 								listener.onNetworkError(context, network, error);
 							}
-							
-							if(progress != null) {
-								progress.dismiss();
-							}
-							
 						}
 						
 						@Override
@@ -158,10 +152,6 @@ public abstract class SocializeActionUtilsBase {
 							if(listener != null) {
 								listener.onCancel();
 							}
-							
-							if(progress != null) {
-								progress.dismiss();
-							}							
 						}
 
 						@Override
@@ -176,24 +166,12 @@ public abstract class SocializeActionUtilsBase {
 							if(listener != null) {
 								listener.onAfterPost(parent, socialNetwork, responseObject);
 							}
-							
-							if(progress != null) {
-								progress.dismiss();
-							}
 						}
 					});
 				}
 				else {
 					// TODO: Log error!
-					if(progress != null) {
-						progress.dismiss();
-					}
 				}
-			}
-		}
-		else {
-			if(progress != null) {
-				progress.dismiss();
 			}
 		}
 	}
