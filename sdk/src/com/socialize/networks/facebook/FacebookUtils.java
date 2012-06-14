@@ -21,10 +21,12 @@
  */
 package com.socialize.networks.facebook;
 
+import java.io.IOException;
 import java.lang.reflect.Proxy;
 import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import com.socialize.SocializeActionProxy;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.Entity;
@@ -301,5 +303,16 @@ public class FacebookUtils {
 				}
 			});
 		}			
+	}
+	
+	/**
+	 * Returns image data suitable for posting to facebook.
+	 * @param context The current context.
+	 * @param imagePath The path to the image.
+	 * @return A byte array containing the bytes to be posted.
+	 * @throws IOException
+	 */
+	public static byte[] getImageForPost(Activity context, Uri imagePath) throws IOException {
+		return proxy.getImageForPost(context, imagePath);
 	}
 }

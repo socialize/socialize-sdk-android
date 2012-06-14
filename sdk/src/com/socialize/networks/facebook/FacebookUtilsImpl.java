@@ -21,9 +21,11 @@
  */
 package com.socialize.networks.facebook;
 
+import java.io.IOException;
 import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
@@ -56,6 +58,7 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	private UserSystem userSystem;
 	private ShareSystem shareSystem;
 	private FacebookWallPoster facebookWallPoster;
+	private FacebookImageUtils facebookImageUtils;
 
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#link(android.app.Activity, com.socialize.listener.SocializeAuthListener)
@@ -171,6 +174,11 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	public void delete(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {
 		SocializeConfig config = ConfigUtils.getConfig(context);
 		facebookWallPoster.delete(context, graphPath, config.getProperty(SocializeConfig.FACEBOOK_APP_ID), postData, listener);
+	}
+
+	@Override
+	public byte[] getImageForPost(Activity context, Uri imagePath) throws IOException {
+		return facebookImageUtils.scaleImage(context, imagePath);
 	}
 
 	public void setUserSystem(UserSystem userSystem) {

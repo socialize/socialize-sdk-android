@@ -21,9 +21,11 @@
  */
 package com.socialize.networks.facebook;
 
+import java.io.IOException;
 import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import com.socialize.annotations.Synchronous;
 import com.socialize.entity.Entity;
 import com.socialize.listener.SocializeAuthListener;
@@ -60,4 +62,5 @@ public interface FacebookUtilsProxy {
 	
 	public void delete(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener);
 
+	public byte[] getImageForPost(Activity context, Uri imagePath) throws IOException;
 }
