@@ -70,13 +70,13 @@ public class CommentUtils {
 	}
 	
 	/**
-	 * Adds a comment to the given entity.  This method will NOT prompt the user to share their comment.
+	 * Adds a comment to the given entity.  This method will NOT prompt the user to share their comment as the desired networks are passed as a parameter.
 	 * @param context The current context.
 	 * @param entity The entity on which the comment will be associated.
 	 * @param text The text of the comment.
 	 * @param commentOptions Optional parameters for the comment.
 	 * @param listener A listener to handle the result.
-	 * @param networks 0 or more networks on which to share the comment.
+	 * @param networks 0 or more networks on which to share the comment.  It is assumed that the user is already linked to the given networks.  If not an error will be reported in the listener for each propagation failure. 
 	 */
 	public static void addComment (Activity context, Entity entity, String text, CommentOptions commentOptions, CommentAddListener listener, SocialNetwork...networks) {
 		proxy.addComment(context, entity, text, commentOptions, listener, networks);

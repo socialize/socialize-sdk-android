@@ -1,51 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
+<ScrollView 
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#000000"
-    android:orientation="vertical"
-    android:padding="8dip">
+    android:layout_height="fill_parent">
+    
+	<LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:background="#000000"
+	    android:orientation="vertical"
+	    android:padding="8dip">
+	
+	    <Button 
+	        android:id="@+id/btnShare"
+	        android:layout_width="260dip"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_horizontal"
+	        android:text="Default Share Dialog"/>
+	    
+	    <Button 
+	        android:id="@+id/btnShareWithComment"
+	        android:layout_width="260dip"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_horizontal"
+	        android:text="Default Share Dialog With Comment"/>
+	    
+	    <Button 
+	        android:id="@+id/btnShareSocialNetwork"
+	        android:layout_width="260dip"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_horizontal"
+	        android:text="Share to Social Networks"/>
+	    
+	    <Button 
+	        android:id="@+id/btnShareFacebook"
+	        android:layout_width="260dip"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_horizontal"
+	        android:text="Share to Facebook"/>
+	    
+	    <Button 
+	        android:id="@+id/btnShareTwitter"
+	        android:layout_width="260dip"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_horizontal"
+	        android:text="Share to Twitter"/> 
+	        
+	    <Button 
+	        android:id="@+id/btnConfig"
+	        android:layout_width="260dip"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_horizontal"
+	        android:text="Set Config"/>       
+	</LinearLayout>
+</ScrollView>
 
-    <Button 
-        android:id="@+id/btnShare"
-        android:layout_width="260dip"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Default Share Dialog"/>
-    
-    <Button 
-        android:id="@+id/btnShareWithComment"
-        android:layout_width="260dip"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Default Share Dialog With Comment"/>
-    
-    <Button 
-        android:id="@+id/btnShareSocialNetwork"
-        android:layout_width="260dip"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Share to Social Networks"/>
-    
-    <Button 
-        android:id="@+id/btnShareFacebook"
-        android:layout_width="260dip"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Share to Facebook"/>
-    
-    <Button 
-        android:id="@+id/btnShareTwitter"
-        android:layout_width="260dip"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Share to Twitter"/> 
-        
-    <Button 
-        android:id="@+id/btnConfig"
-        android:layout_width="260dip"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Set Config"/>       
-</LinearLayout>

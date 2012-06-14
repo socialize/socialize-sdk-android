@@ -23,7 +23,6 @@ package com.socialize.api.action;
 
 import org.json.JSONObject;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
@@ -34,6 +33,8 @@ import com.socialize.entity.SocializeAction;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.facebook.FacebookUtils;
+import com.socialize.networks.twitter.TwitterUtils;
 import com.socialize.share.ShareHandler;
 import com.socialize.share.ShareHandlers;
 import com.socialize.ui.profile.UserSettings;
@@ -48,17 +49,16 @@ public abstract class SocializeActionUtilsBase {
 	private ShareHandlers shareHandlers;
 	
 	protected void populateActionOptions(Context context, ActionOptions options) {
-		options.setAuthRequired(ConfigUtils.getConfig(context).isAuthRequired());
+		options.setShowAuthDialog(ConfigUtils.getConfig(context).isAuthRequired());
 	}	
 	
 	protected boolean isDisplayAuthDialog(Context context, ActionOptions options, SocialNetwork...networks) {
-		
-		if(options == null) {
-			return isDisplayAuthDialog(context);
-		}
-		
-		boolean authRequired = options.isAuthRequired();
+		boolean authRequired = false;
 		boolean authSupported = false;
+		
+		if(options != null) {
+			authRequired = options.isShowAuthDialog();
+		}
 		
 		if(authRequired) {
 			
@@ -109,32 +109,39 @@ public abstract class SocializeActionUtilsBase {
 		return (authRequired && authSupported);
 	}	
 	
-	protected boolean isDisplayShareDialog(Context context) {
+	protected boolean isDisplayShareDialog(Context context, ShareableActionOptions options) {
 		
-		boolean fbSupported = getSocialize().isSupported(AuthProviderType.FACEBOOK);
-		boolean twSupported = getSocialize().isSupported(AuthProviderType.TWITTER);
-		boolean shareRequired = fbSupported || twSupported;
-		
-		if(shareRequired) {
-			UserSettings settings = UserUtils.getUserSettings(context);
+		if(options == null || options.isShowShareDialog()) {
 			
-			if(shareRequired && fbSupported) {
-				shareRequired &= !settings.isAutoPostFacebook();
+			boolean fbSupported = FacebookUtils.isAvailable(context);
+			boolean twSupported = TwitterUtils.isAvailable(context);
+			
+			boolean shareRequired = fbSupported || twSupported;
+			
+			if(shareRequired) {
+				UserSettings settings = UserUtils.getUserSettings(context);
+				
+				if(shareRequired && fbSupported) {
+					shareRequired &= !settings.isAutoPostFacebook();
+				}
+				
+				if(shareRequired && twSupported) {
+					shareRequired &= !settings.isAutoPostTwitter();
+				}	
 			}
 			
-			if(shareRequired && twSupported) {
-				shareRequired &= !settings.isAutoPostTwitter();
-			}	
+			return shareRequired;
 		}
 		
-		return shareRequired;
+		return false;
+
 	}
 	
 	protected SocializeService getSocialize() {
 		return Socialize.getSocialize();
 	}
 	
-	protected void doActionShare(final Activity context, final SocializeAction action, final String text, final ProgressDialog progress, final SocialNetworkListener listener, final SocialNetwork...networks) {
+	protected void doActionShare(final Activity context, final SocializeAction action, final String text, final SocialNetworkListener listener, final SocialNetwork...networks) {
 
 		if(networks != null && networks.length > 0) {
 			for (SocialNetwork socialNetwork : networks) {
@@ -146,11 +153,6 @@ public abstract class SocializeActionUtilsBase {
 							if(listener != null) {
 								listener.onNetworkError(context, network, error);
 							}
-							
-							if(progress != null) {
-								progress.dismiss();
-							}
-							
 						}
 						
 						@Override
@@ -158,10 +160,6 @@ public abstract class SocializeActionUtilsBase {
 							if(listener != null) {
 								listener.onCancel();
 							}
-							
-							if(progress != null) {
-								progress.dismiss();
-							}							
 						}
 
 						@Override
@@ -176,24 +174,12 @@ public abstract class SocializeActionUtilsBase {
 							if(listener != null) {
 								listener.onAfterPost(parent, socialNetwork, responseObject);
 							}
-							
-							if(progress != null) {
-								progress.dismiss();
-							}
 						}
 					});
 				}
 				else {
 					// TODO: Log error!
-					if(progress != null) {
-						progress.dismiss();
-					}
 				}
-			}
-		}
-		else {
-			if(progress != null) {
-				progress.dismiss();
 			}
 		}
 	}

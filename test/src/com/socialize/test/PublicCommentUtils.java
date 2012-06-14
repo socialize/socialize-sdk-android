@@ -22,10 +22,10 @@
 package com.socialize.test;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ShareableActionOptions;
 import com.socialize.api.action.comment.CommentOptions;
 import com.socialize.api.action.comment.SocializeCommentUtils;
 import com.socialize.entity.Entity;
@@ -42,18 +42,18 @@ import com.socialize.networks.SocialNetworkListener;
 public class PublicCommentUtils extends SocializeCommentUtils {
 
 	@Override
-	public void doCommentWithShare(Activity context, SocializeSession session, Entity entity, String text, CommentAddListener listener) {
-		super.doCommentWithShare(context, session, entity, text, listener);
+	public void doCommentWithShareDialog(Activity context, SocializeSession session, Entity entity, String text, CommentOptions commentOptions, CommentAddListener listener) {
+		super.doCommentWithShareDialog(context, session, entity, text, commentOptions, listener);
 	}
 
 	@Override
-	public void doCommentWithoutShare(Activity context, SocializeSession session, Entity entity, String text, CommentAddListener listener) {
-		super.doCommentWithoutShare(context, session, entity, text, listener);
+	public void doCommentWithoutShareDialog(Activity context, SocializeSession session, Entity entity, String text, CommentOptions commentOptions, CommentAddListener listener) {
+		super.doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener);
 	}
-	
+
 	@Override
-	public void doCommentWithoutShare(Activity context, SocializeSession session, Entity entity, String text, CommentOptions commentOptions, CommentAddListener listener, SocialNetwork... networks) {
-		super.doCommentWithoutShare(context, session, entity, text, commentOptions, listener, networks);
+	public void doCommentWithoutShareDialog(Activity context, SocializeSession session, Entity entity, String text, CommentOptions commentOptions, CommentAddListener listener, SocialNetwork... networks) {
+		super.doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener, networks);
 	}
 
 	@Override
@@ -62,8 +62,8 @@ public class PublicCommentUtils extends SocializeCommentUtils {
 	}
 
 	@Override
-	public boolean isDisplayShareDialog(Context context) {
-		return super.isDisplayShareDialog(context);
+	public boolean isDisplayShareDialog(Context context, ShareableActionOptions options) {
+		return super.isDisplayShareDialog(context, options);
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class PublicCommentUtils extends SocializeCommentUtils {
 	}
 
 	@Override
-	public void doActionShare(Activity context, SocializeAction action, String text, ProgressDialog progress, SocialNetworkListener listener, SocialNetwork... networks) {
-		super.doActionShare(context, action, text, progress, listener, networks);
+	public void doActionShare(Activity context, SocializeAction action, String text, SocialNetworkListener listener, SocialNetwork... networks) {
+		super.doActionShare(context, action, text, listener, networks);
 	}
 }

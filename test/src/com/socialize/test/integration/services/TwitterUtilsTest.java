@@ -121,7 +121,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		TwitterAuthProvider mockTwitterAuthProvider = new TwitterAuthProvider() {
 			@Override
 			public void authenticate(TwitterAuthProviderInfo info, AuthProviderListener listener) {
-				fail();
+				addResult(1, "fail");
 			}
 		};
 		
@@ -141,12 +141,12 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onError(SocializeException error) {
 				error.printStackTrace();
-				fail();
+				addResult(1, "fail");
 			}
 			
 			@Override
 			public void onCancel() {
-				fail();
+				addResult(1, "fail");
 			}
 			
 			@Override
@@ -158,14 +158,16 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onAuthFail(SocializeException error) {
 				error.printStackTrace();
-				fail();
+				addResult(1, "fail");
 			}
 		});
 		
 		latch.await(20, TimeUnit.SECONDS);
 		
 		SocializeSession session = getResult(0);
+		String fail = getResult(1);
 		
+		assertNull(fail);
 		assertNotNull(session);
 		
 		UserProviderCredentials userProviderCredentials = session.getUserProviderCredentials(AuthProviderType.TWITTER);

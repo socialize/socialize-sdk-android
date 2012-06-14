@@ -160,6 +160,33 @@ CommentUtils.addComment(this, entity, "This the comment", commentOptions, new Co
 }
 
 
+public void addCommentWithNoShare() {
+// begin-snippet-8
+Entity entity = Entity.newInstance("http://myentity.com", "My Name");
+
+// Get the default options for the user.
+CommentOptions commentOptions = CommentUtils.getUserCommentOptions(this);
+
+// Do NOT promt the user to share
+commentOptions.setShowShareDialog(false);
+
+// Pass the share options in the call to create the comment.
+CommentUtils.addComment(this, entity, "This the comment", commentOptions, new CommentAddListener() {
+	@Override
+	public void onError(SocializeException error) {
+		// Handle error
+	}
+	
+	@Override
+	public void onCreate(Comment result) {
+		// Comment was created
+	}
+
+});
+//end-snippet-8
+}
+
+
 public void getCommentById() {
 
 long commentId = 123L; 

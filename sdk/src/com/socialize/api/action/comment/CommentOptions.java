@@ -21,14 +21,14 @@
  */
 package com.socialize.api.action.comment;
 
-import com.socialize.api.action.ActionOptions;
+import com.socialize.api.action.ShareableActionOptions;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class CommentOptions extends ActionOptions {
+public class CommentOptions extends ShareableActionOptions {
 	
 	protected CommentOptions() {
 		super();

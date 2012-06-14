@@ -217,13 +217,13 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		SocialNetworkListener listenerAfter = getResult(2);
 		
 		assertNotNull(data);
-		Map<String, String> postValues = data.getPostValues();
+		Map<String, Object> postValues = data.getPostValues();
 		
 		assertNotNull(postValues);
 		
-		String linkNameAfter = postValues.get("name");
-		String messageAfter = postValues.get("message");
-		String linkAfter = postValues.get("link");
+		String linkNameAfter = postValues.get("name").toString();
+		String messageAfter = postValues.get("message").toString();
+		String linkAfter = postValues.get("link").toString();
 		
 		assertEquals(fbId, fbIdAfter);
 		assertEquals(linkName, linkNameAfter);

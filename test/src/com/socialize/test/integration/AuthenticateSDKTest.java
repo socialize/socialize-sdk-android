@@ -45,8 +45,8 @@ public class AuthenticateSDKTest extends SDKIntegrationTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Activity context = getContext();
 		
-		runTestOnUiThread(new Runnable() {
-			
+		new Thread() {
+
 			@Override
 			public void run() {
 				Socialize.getSocialize().init(context);
@@ -63,7 +63,9 @@ public class AuthenticateSDKTest extends SDKIntegrationTest {
 				
 				latch.countDown();
 			}
-		});
+			
+		}.start();
+		
 		
 		latch.await(20, TimeUnit.SECONDS);
 		

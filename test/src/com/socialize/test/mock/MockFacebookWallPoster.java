@@ -15,21 +15,21 @@ import com.socialize.networks.facebook.FacebookWallPoster;
 public class MockFacebookWallPoster implements FacebookWallPoster {
 	
 	@Override
-	public void post(Activity parent, String graphPath, String appId, Map<String, String> postData, SocialNetworkPostListener listener) {
+	public void post(Activity parent, String graphPath, String appId, Map<String, Object> postData, SocialNetworkPostListener listener) {
 		if(listener != null) {
 			listener.onAfterPost(parent, SocialNetwork.FACEBOOK, null);
 		}
 	}
 
 	@Override
-	public void get(Activity parent, String graphPath, String appId, Map<String, String> postData, SocialNetworkPostListener listener) {
+	public void get(Activity parent, String graphPath, String appId, Map<String, Object> postData, SocialNetworkPostListener listener) {
 		if(listener != null) {
 			listener.onAfterPost(parent, SocialNetwork.FACEBOOK, null);
 		}
 	}
 
 	@Override
-	public void delete(Activity parent, String graphPath, String appId, Map<String, String> postData, SocialNetworkPostListener listener) {
+	public void delete(Activity parent, String graphPath, String appId, Map<String, Object> postData, SocialNetworkPostListener listener) {
 		if(listener != null) {
 			listener.onAfterPost(parent, SocialNetwork.FACEBOOK, null);
 		}

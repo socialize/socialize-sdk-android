@@ -394,55 +394,12 @@ public class ActionBarLayoutView extends BaseView {
 			}
 		});
 	}
-	
-//	protected void doLike(final ActionBarButton button, final CacheableEntity localEntity, SocialNetwork...networks) {
-//		
-//		button.showLoading();
-//		
-//		ShareOptions options = new ShareOptions();
-//		
-//		if(networks == null || networks.length == 0) {
-//			if(getSocialize().getSession().getUser().isAutoPostToFacebook() && getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-//				if(getSocialize().getSession().getUser().isAutoPostToTwitter() && getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
-//					options.setShareTo(SocialNetwork.FACEBOOK, SocialNetwork.TWITTER);
-//				}
-//				else {
-//					options.setShareTo(SocialNetwork.FACEBOOK);
-//				}
-//
-//			}
-//			else if(getSocialize().getSession().getUser().isAutoPostToTwitter() && getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
-//				options.setShareTo(SocialNetwork.TWITTER);
-//			}
-//		}
-//		else {
-//			options.setShareTo(networks);
-//		}
-//		
-//		getSocialize().like(getActivity(), localEntity.getEntity(), options, new LikeAddListener() {
-//			
-//			@Override
-//			public void onError(SocializeException error) {
-//				logError("Error posting like", error);
-//				button.hideLoading();
-//			}
-//			
-//			@Override
-//			public void onCreate(Like entity) {
-//				localEntity.setLiked(true);
-//				localEntity.setLikeId(entity.getId());
-//				button.hideLoading();
-//				setEntityData(localEntity);
-//				
-//				if(onActionBarEventListener != null) {
-//					onActionBarEventListener.onPostLike(actionBarView, entity);
-//				}
-//			}
-//		});
-//	}
-	
+
 	protected CacheableEntity getLocalEntity() {
-		return entityCache.get(actionBarView.getEntity().getKey());
+		if(entityCache != null && actionBarView != null && actionBarView.getEntity() != null) {
+			return entityCache.get(actionBarView.getEntity().getKey());
+		}
+		return null;
 	}
 	
 	protected CacheableEntity setLocalEntity(Entity entity) {

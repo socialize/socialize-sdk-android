@@ -42,6 +42,7 @@ import com.socialize.listener.like.LikeListListener;
  * @author Jason Polites
  *
  */
+@Deprecated
 public class LikeSDKTest extends SDKIntegrationTest {
 
 	public void testCreateLike() throws Throwable {
@@ -50,13 +51,13 @@ public class LikeSDKTest extends SDKIntegrationTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Activity context = getContext();
 		
+		Socialize.getSocialize().init(context);
+		Socialize.getSocialize().authenticateSynchronous(context);
+		
 		runTestOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
-				Socialize.getSocialize().init(context);
-				Socialize.getSocialize().authenticateSynchronous(context);
-				
 				Socialize.getSocialize().like(getContext(), e, new LikeAddListener() {
 					
 					@Override
@@ -88,12 +89,13 @@ public class LikeSDKTest extends SDKIntegrationTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Activity context = getContext();
 		
+		Socialize.getSocialize().init(context);
+		Socialize.getSocialize().authenticateSynchronous(context);
+		
 		runTestOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
-				Socialize.getSocialize().init(context);
-				Socialize.getSocialize().authenticateSynchronous(context);
 				
 				Socialize.getSocialize().like(getContext(), e, new LikeAddListener() {
 					
@@ -151,12 +153,13 @@ public class LikeSDKTest extends SDKIntegrationTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Activity context = getContext();
 		
+		Socialize.getSocialize().init(context);
+		final SocializeSession session = Socialize.getSocialize().authenticateSynchronous(context);
+		
 		runTestOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
-				Socialize.getSocialize().init(context);
-				SocializeSession session = Socialize.getSocialize().authenticateSynchronous(context);
 				final long userId = session.getUser().getId();
 				
 				// Make sure we have a like
@@ -236,12 +239,14 @@ public class LikeSDKTest extends SDKIntegrationTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Activity context = getContext();
 		
+		Socialize.getSocialize().init(context);
+		final SocializeSession session = Socialize.getSocialize().authenticateSynchronous(context);
+		
 		runTestOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
-				Socialize.getSocialize().init(context);
-				SocializeSession session = Socialize.getSocialize().authenticateSynchronous(context);
+		
 				final long userId = session.getUser().getId();
 				
 				// Make sure we have a like

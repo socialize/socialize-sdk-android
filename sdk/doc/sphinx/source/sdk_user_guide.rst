@@ -286,6 +286,14 @@ You can also manually specify how the comment is to be propagated to 3rd party n
 	:start-after: begin-snippet-4
 	:end-before: end-snippet-4
 
+Adding Comments Without Sharing
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you want to explicity disable sharing of comments you can do this using the **CommentOptions**
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/CommentSnippets.java
+	:start-after: begin-snippet-8
+	:end-before: end-snippet-8
 
 Retreiving Comments
 ~~~~~~~~~~~~~~~~~~~

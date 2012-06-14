@@ -23,7 +23,7 @@ package com.socialize.demo.snippets;
 
 import android.app.Activity;
 import com.socialize.ActionBarUtils;
-import com.socialize.R;
+import com.socialize.demo.R;
 import com.socialize.entity.Entity;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarView;

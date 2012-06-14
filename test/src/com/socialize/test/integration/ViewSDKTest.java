@@ -37,6 +37,7 @@ import com.socialize.listener.view.ViewAddListener;
  * @author Jason Polites
  *
  */
+@Deprecated
 public class ViewSDKTest extends SDKIntegrationTest {
 
 	public void testCreateView() throws Throwable {
@@ -45,12 +46,13 @@ public class ViewSDKTest extends SDKIntegrationTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Activity context = getContext();
 		
+		Socialize.getSocialize().init(context);
+		Socialize.getSocialize().authenticateSynchronous(context);
+		
 		runTestOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
-				Socialize.getSocialize().init(context);
-				Socialize.getSocialize().authenticateSynchronous(context);
 				
 				// Get the entity to find its stats
 				Socialize.getSocialize().getEntity(e.getKey(), new EntityGetListener() {

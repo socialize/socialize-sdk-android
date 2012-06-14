@@ -19,39 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.networks;
-
-import java.util.Map;
-import com.socialize.entity.PropagationInfo;
+package com.socialize.api.action;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class DefaultPostData implements PostData {
-	
-	private PropagationInfo propagationInfo;
-	private Map<String, Object> postValues;
+public class ShareableActionOptions extends ActionOptions {
 
-	@Override
-	public PropagationInfo getPropagationInfo() {
-		return propagationInfo;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.networks.PostData#getPostValues()
-	 */
-	@Override
-	public Map<String, Object> getPostValues() {
-		return postValues;
+	private boolean showShareDialog = true;
+	
+	public boolean isShowShareDialog() {
+		return showShareDialog;
 	}
 	
-	public void setPropagationInfo(PropagationInfo propagationInfo) {
-		this.propagationInfo = propagationInfo;
-	}
-	
-	public void setPostValues(Map<String, Object> postValues) {
-		this.postValues = postValues;
+	public void setShowShareDialog(boolean showShareDialog) {
+		this.showShareDialog = showShareDialog;
 	}
 }

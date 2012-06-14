@@ -129,7 +129,7 @@ public class SocializeC2DMCallback implements C2DMCallback {
 		final UserSettings settings = session.getUserSettings();
 		final User user = session.getUser();
 		
-		if(settings.isNotificationsEnabled()) {
+		if(settings != null && settings.isNotificationsEnabled()) {
 
 			String json = data.getString(MESSAGE_KEY);
 			
