@@ -21,12 +21,14 @@
  */
 package com.socialize.test.unit.facebook;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.net.Uri;
 import android.view.View;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
@@ -121,6 +123,11 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 			
 			@Override
 			public String getAccessToken(Context context) {
+				return null;
+			}
+			
+			@Override
+			public byte[] getImageForPost(Activity context, Uri imagePath) throws IOException {
 				return null;
 			}
 
