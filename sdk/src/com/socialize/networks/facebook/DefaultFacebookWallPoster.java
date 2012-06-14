@@ -92,7 +92,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		
 		if(!StringUtils.isEmpty(appId)) {
 			
-			final Map<String, String> params = new HashMap<String, String>();
+			final Map<String, Object> params = new HashMap<String, Object>();
 			params.put("name", linkName);
 			params.put("message", message);
 			params.put("link", link);
@@ -113,7 +113,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	@Deprecated
 	@Override
 	public void post(final Activity parent, String appId, String linkName, String message, String link, String caption, final SocialNetworkListener listener) {
-		final Map<String, String> params = new HashMap<String, String>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("name", linkName);
 		params.put("message", message);
 		params.put("link", link);
@@ -127,7 +127,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	@Override
 	public void postShare(Activity parent, Share share, SocialNetworkListener listener) {
 		PropagationInfo propInfo = share.getPropagationInfoResponse().getPropagationInfo(ShareType.FACEBOOK);
-		final Map<String, String> params = new HashMap<String, String>();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("name", share.getEntityDisplayName());
 		params.put("link", propInfo.getEntityUrl());
 		params.put("message", share.getText());
@@ -148,10 +148,17 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		
 		Bundle bundle = new Bundle();
 		
-		Set<Entry<String, String>> entries = postData.getPostValues().entrySet();
+		Set<Entry<String, Object>> entries = postData.getPostValues().entrySet();
 		
-		for (Entry<String, String> entry : entries) {
-			bundle.putString(entry.getKey(), entry.getValue());
+		for (Entry<String, Object> entry : entries) {
+			Object value = entry.getValue();
+			
+			if(value instanceof byte[]) {
+				bundle.putByteArray(entry.getKey(), (byte[]) value);
+			}
+			else {
+				bundle.putString(entry.getKey(), value.toString());
+			}
 		}
 		
 		Facebook fb = newFacebook(appId);
@@ -227,27 +234,35 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	}
 
 	@Override
-	public void post(Activity parent, String graphPath, String appId, Map<String, String> postData, SocialNetworkPostListener listener) {
+	public void post(Activity parent, String graphPath, String appId, Map<String, Object> postData, SocialNetworkPostListener listener) {
 		doFacebookCall(parent, appId, postData, graphPath, "POST", listener);
 	}
 
 	@Override
-	public void get(Activity parent, String graphPath, String appId, Map<String, String> postData, SocialNetworkPostListener listener) {
+	public void get(Activity parent, String graphPath, String appId, Map<String, Object> postData, SocialNetworkPostListener listener) {
 		doFacebookCall(parent, appId, postData, graphPath, "GET", listener);
 	}
 
 	@Override
-	public void delete(Activity parent, String graphPath, String appId, Map<String, String> postData, SocialNetworkPostListener listener) {
+	public void delete(Activity parent, String graphPath, String appId, Map<String, Object> postData, SocialNetworkPostListener listener) {
 		doFacebookCall(parent, appId, postData, graphPath, "DELETE", listener);
 	}
 	
-	protected void doFacebookCall(Activity parent, String appId, Map<String, String> postData, String graphPath, String method, SocialNetworkPostListener listener) {
+	protected void doFacebookCall(Activity parent, String appId, Map<String, Object> postData, String graphPath, String method, SocialNetworkPostListener listener) {
 		Bundle bundle = new Bundle();
 		
 		if(postData != null) {
-			Set<Entry<String, String>> entries = postData.entrySet();
-			for (Entry<String, String> entry : entries) {
-				bundle.putString(entry.getKey(), entry.getValue());
+			Set<Entry<String, Object>> entries = postData.entrySet();
+			for (Entry<String, Object> entry : entries) {
+				
+				Object value = entry.getValue();
+				
+				if(value instanceof byte[]) {
+					bundle.putByteArray(entry.getKey(), (byte[]) value);
+				}
+				else {
+					bundle.putString(entry.getKey(), value.toString());
+				}
 			}	
 		}
 

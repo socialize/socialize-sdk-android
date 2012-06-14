@@ -334,7 +334,7 @@ public class SocializeServiceImpl implements SocializeService {
 									"]");
 						}
 						
-						Logger.logLevel = Log.DEBUG;
+//						Logger.logLevel = Log.DEBUG;
 					}	
 					
 					

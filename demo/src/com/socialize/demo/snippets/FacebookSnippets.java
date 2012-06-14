@@ -157,7 +157,7 @@ String graphPath = "me/links";
 
 // The data to be posted. This is based on the graphPath
 // See http://developers.facebook.com/docs/reference/api/
-Map<String, String> postData = new HashMap<String, String>();
+Map<String, Object> postData = new HashMap<String, Object>();
 postData.put("message", "A message to post");
 postData.put("link", "http://getsocialize.com");
 postData.put("name", "Socialize SDK!");
@@ -285,7 +285,7 @@ ShareUtils.registerShare(this, entity, options, new ShareAddListener() {
 
 		// The data to be posted. This is based on the graphPath
 		// See http://developers.facebook.com/docs/reference/api/
-		Map<String, String> postData = new HashMap<String, String>();
+		Map<String, Object> postData = new HashMap<String, Object>();
 		postData.put("message", "A message to post");
 		postData.put("link", propagationInfo.getEntityUrl()); // Use the SmartDownload URL
 		postData.put("name", entity.getDisplayName());

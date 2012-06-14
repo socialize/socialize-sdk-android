@@ -175,7 +175,7 @@ public class FacebookUtils {
 	 * @param params The data to be sent in the request.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void post(final Activity context, final String graphPath, final Map<String, String> params, final SocialNetworkPostListener listener) {
+	public static void post(final Activity context, final String graphPath, final Map<String, Object> params, final SocialNetworkPostListener listener) {
 		
 		if(proxy.isLinked(context)) {
 			proxy.post(context, graphPath, params, listener);
@@ -221,7 +221,7 @@ public class FacebookUtils {
 	 * @param params The data to be sent in the request.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void get(final Activity context, final String graphPath, final Map<String, String> params, final SocialNetworkPostListener listener) {
+	public static void get(final Activity context, final String graphPath, final Map<String, Object> params, final SocialNetworkPostListener listener) {
 		
 		if(proxy.isLinked(context)) {
 			proxy.get(context, graphPath, params, listener);
@@ -267,7 +267,7 @@ public class FacebookUtils {
 	 * @param params The data to be sent in the request.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void delete(final Activity context, final String graphPath, final Map<String, String> params, final SocialNetworkPostListener listener) {
+	public static void delete(final Activity context, final String graphPath, final Map<String, Object> params, final SocialNetworkPostListener listener) {
 		if(proxy.isLinked(context)) {
 			proxy.delete(context, graphPath, params, listener);
 		}

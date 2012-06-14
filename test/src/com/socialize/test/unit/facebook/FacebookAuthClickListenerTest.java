@@ -125,13 +125,13 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 			}
 
 			@Override
-			public void post(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener) {}
+			public void post(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {}
 
 			@Override
-			public void get(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener) {}
+			public void get(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {}
 
 			@Override
-			public void delete(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener) {}
+			public void delete(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {}
 		};
 		
 		// Stub in facebook utils

@@ -62,7 +62,7 @@ public class OpenGraphActivity extends SDKDemoActivity {
 			@Override
 			public void onAuthSuccess(SocializeSession session) {
 				
-				Map<String, String> postData = new HashMap<String, String>();
+				Map<String, Object> postData = new HashMap<String, Object>();
 				postData.put("dish", "http://samples.ogp.me/228268990626132"); // <-- Entity URL, expects OG tag of socializeandroidtest:dish
 				
 				String graphPath = "me/socializeandroidtest:eat";

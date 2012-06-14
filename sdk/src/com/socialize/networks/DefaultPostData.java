@@ -32,7 +32,7 @@ import com.socialize.entity.PropagationInfo;
 public class DefaultPostData implements PostData {
 	
 	private PropagationInfo propagationInfo;
-	private Map<String, String> postValues;
+	private Map<String, Object> postValues;
 
 	@Override
 	public PropagationInfo getPropagationInfo() {
@@ -43,7 +43,7 @@ public class DefaultPostData implements PostData {
 	 * @see com.socialize.networks.PostData#getPostValues()
 	 */
 	@Override
-	public Map<String, String> getPostValues() {
+	public Map<String, Object> getPostValues() {
 		return postValues;
 	}
 	
@@ -51,7 +51,7 @@ public class DefaultPostData implements PostData {
 		this.propagationInfo = propagationInfo;
 	}
 	
-	public void setPostValues(Map<String, String> postValues) {
+	public void setPostValues(Map<String, Object> postValues) {
 		this.postValues = postValues;
 	}
 }

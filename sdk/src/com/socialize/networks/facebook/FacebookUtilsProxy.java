@@ -54,10 +54,10 @@ public interface FacebookUtilsProxy {
 	
 	public void postEntity(Activity context, Entity entity, String text, SocialNetworkListener listener);
 	
-	public void post(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener);
+	public void post(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener);
 	
-	public void get(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener);
+	public void get(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener);
 	
-	public void delete(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener);
+	public void delete(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener);
 
 }

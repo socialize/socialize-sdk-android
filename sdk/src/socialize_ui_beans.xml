@@ -1555,6 +1555,7 @@
 		<constructor-arg type="activity"/>
 		<property name="logger" ref="logger"/>
 		<init-method name="init"/>
+		<destroy-method name="destroy"/>
 	</bean>
 	
 	<factory id="directUrlWebViewFactory" makes="directUrlWebView"/>

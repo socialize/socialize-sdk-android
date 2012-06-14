@@ -156,19 +156,19 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	}
 
 	@Override
-	public void post(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener) {
+	public void post(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {
 		SocializeConfig config = ConfigUtils.getConfig(context);
 		facebookWallPoster.post(context, graphPath, config.getProperty(SocializeConfig.FACEBOOK_APP_ID), postData, listener);
 	}
 
 	@Override
-	public void get(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener) {
+	public void get(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {
 		SocializeConfig config = ConfigUtils.getConfig(context);
 		facebookWallPoster.get(context, graphPath, config.getProperty(SocializeConfig.FACEBOOK_APP_ID), postData, listener);
 	}
 
 	@Override
-	public void delete(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener) {
+	public void delete(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {
 		SocializeConfig config = ConfigUtils.getConfig(context);
 		facebookWallPoster.delete(context, graphPath, config.getProperty(SocializeConfig.FACEBOOK_APP_ID), postData, listener);
 	}

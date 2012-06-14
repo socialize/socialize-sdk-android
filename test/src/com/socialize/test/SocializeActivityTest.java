@@ -51,7 +51,7 @@ public abstract class SocializeActivityTest extends ActivityInstrumentationTestC
 	@Override
 	protected void tearDown() throws Exception {
 		holder.clear();
-		TestUtils.waitForIdleSync(this, 5000);
+//		TestUtils.waitForIdleSync(this, 5000);
 		super.tearDown();
 	}
 	
