@@ -43,8 +43,6 @@ public interface CommentUtilsProxy {
 
 	public void addComment (Activity context, Entity entity, String text, CommentAddListener listener);
 	
-	public void addComment (Activity context, Entity entity, String text, CommentOptions commentOptions, CommentAddListener listener);
-	
 	public void addComment (Activity context, Entity entity, String text, CommentOptions commentOptions, CommentAddListener listener, SocialNetwork...networks);
 	
 	public void getComment (Activity context, long id, CommentGetListener listener);

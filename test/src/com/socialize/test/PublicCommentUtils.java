@@ -25,6 +25,7 @@ import android.app.Activity;
 import android.content.Context;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ShareableActionOptions;
 import com.socialize.api.action.comment.CommentOptions;
 import com.socialize.api.action.comment.SocializeCommentUtils;
 import com.socialize.entity.Entity;
@@ -61,8 +62,8 @@ public class PublicCommentUtils extends SocializeCommentUtils {
 	}
 
 	@Override
-	public boolean isDisplayShareDialog(Context context) {
-		return super.isDisplayShareDialog(context);
+	public boolean isDisplayShareDialog(Context context, ShareableActionOptions options) {
+		return super.isDisplayShareDialog(context, options);
 	}
 
 	@Override

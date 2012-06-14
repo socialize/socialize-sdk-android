@@ -19,17 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.action.like;
-
-import com.socialize.api.action.ShareableActionOptions;
+package com.socialize.api.action;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class LikeOptions extends ShareableActionOptions {
-	protected LikeOptions() {
-		super();
+public class ShareableActionOptions extends ActionOptions {
+
+	private boolean showShareDialog = true;
+	
+	public boolean isShowShareDialog() {
+		return showShareDialog;
+	}
+	
+	public void setShowShareDialog(boolean showShareDialog) {
+		this.showShareDialog = showShareDialog;
 	}
 }

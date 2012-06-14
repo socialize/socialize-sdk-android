@@ -170,7 +170,7 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 			ShareOptions shareOptions = new ShareOptions();
 			
 			// TODO: Is this needed?
-			shareOptions.setAuthRequired(true);
+			shareOptions.setShowAuthDialog(true);
 			
 			setPropagationData(c, shareOptions, network);
 		}

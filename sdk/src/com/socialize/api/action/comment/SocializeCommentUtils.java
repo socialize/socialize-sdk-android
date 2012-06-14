@@ -69,58 +69,8 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 	}
 
 	@Override
-	public void addComment(Activity context, final Entity entity, final String text, final CommentOptions commentOptions, final CommentAddListener listener) {
-		
-		final SocializeSession session = getSocialize().getSession();
-		
-		if(isDisplayAuthDialog(context)) {
-			
-			authDialogFactory.show(context, new AuthDialogListener() {
-				
-				@Override
-				public void onShow(Dialog dialog, AuthPanelView dialogView) {}
-				
-				@Override
-				public void onCancel(Dialog dialog) {
-					if(listener != null) {
-						listener.onCancel();
-					}
-				}
-				
-				@Override
-				public void onSkipAuth(Activity context, Dialog dialog) {
-					
-					dialog.dismiss();
-					
-					doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener);
-				}
-
-				@Override
-				public void onError(Activity context, Dialog dialog, Exception error) {
-					
-					dialog.dismiss();
-					
-					if(listener != null) {
-						listener.onError(SocializeException.wrap(error));
-					}
-				}
-
-				@Override
-				public void onAuthenticate(Activity context, Dialog dialog, SocialNetwork network) {
-					
-					dialog.dismiss();
-					
-					doCommentWithShareDialog(context, session, entity, text, commentOptions, listener);
-				}
-			});
-		}
-		else {
-			doCommentWithShareDialog(context, session, entity, text, commentOptions, listener);
-		}		
-	}
-	
-	@Override
-	public void addComment(final Activity context, final Entity entity, final String text, final CommentOptions commentOptions, final CommentAddListener listener, SocialNetwork...networks) {
+	public void addComment(final Activity context, final Entity entity, final String text, final CommentOptions commentOptions, final CommentAddListener listener, final SocialNetwork...networks) {
+		final boolean doShare = networks != null && networks.length > 0;
 		final SocializeSession session = getSocialize().getSession();
 		
 		if(isDisplayAuthDialog(context, commentOptions, networks)) {
@@ -154,18 +104,28 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 				@Override
 				public void onAuthenticate(Activity context, Dialog dialog, SocialNetwork network) {
 					dialog.dismiss();
-					doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener, network);
+					if(doShare) {
+						doCommentWithShareDialog(context, session, entity, text, commentOptions, listener);
+					}
+					else {
+						doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener, networks);
+					}
 				}
 			});
 		}
 		else {
-			doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener, networks);
+			if(doShare) {
+				doCommentWithShareDialog(context, session, entity, text, commentOptions, listener);
+			}
+			else {
+				doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener, networks);
+			}
 		}			
 	}
 
 	protected void doCommentWithShareDialog(final Activity context, final SocializeSession session, final Entity entity, final String text, final CommentOptions commentOptions, final CommentAddListener listener) {
 		
-		if(isDisplayShareDialog(context)) {
+		if(isDisplayShareDialog(context, commentOptions)) {
 			shareDialogFactory.show(context, entity, null,  new ShareDialogListener() {
 				@Override
 				public void onShow(Dialog dialog, SharePanelView dialogView) {}
