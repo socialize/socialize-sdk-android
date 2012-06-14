@@ -12,6 +12,49 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v2.0
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Developer can access Socialize 2.0 using User interfaces
+[feature] Developer can access Socialize 2.0 using Comment interfaces
+[feature] Developer can access Socialize 2.0 using Like interfaces
+[feature] Add loading modal to Twitter auth webview
+[bug] Auth mismatch is not reflected correctly on device. Leads to 3rd part propagation failure
+[feature] Developer can access Socialize 2.0 using Share interfaces
+[feature] Developer can access Socialize 2.0 using View interfaces
+[feature] Redesign Auth Dialog to handle multiple selections
+[bug] authenticateKnownUser does not correctly save credentials
+[feature] Developer can access Socialize 2.0 using Facebook interfaces
+[feature] Developer can access Socialize 2.0 using Entity interfaces
+[feature] Developer can access Socialize 2.0 using Activity interfaces
+[feature] Implement new visual design for Auth Dialog (Share Dialog)
+[feature] ActionBar uses new Share dialog
+[feature] Developer can access Socialize 2.0 using Twitter interfaces
+[feature] Developer can access SmartAlertUtils in Socialize 2.0 interfaces
+[feature] Developer can access ActionBarUtils in Socialize 2.0 interfaces
+[feature] Developer can access LocationUtils in Socialize 2.0 interfaces
+[feature] Facebook wall posts should use entity URL as link
+[feature] Share dialog supports landscape orientation
+[bug] Twitter auth fails on ICS due to network access on main thread
+[bug] Landscape orientation does not reflect in socialize display utils after load
+[feature] Developer can add comment dialog to share functions
+[bug] Notification registration initializes static Socialize container at startup with wrong context
+[bug] Launcher system not compatible with Android 4.x
+[bug] ShareType is OTHER even when only one network is selected
+[feature] Developer can launch Auth Dialog
+[feature] Create new sample app for 2.0 interfaces
+[feature] Comment and Like process follows (new) standard auth->share model
+[feature] Developer can post directly to FB using FacebookUtils
+[feature] Developer can access local User settings as separate object to standard (server) User object
+[feature] Developer can nominate CommentOptions for a comment with separate SocialNetwork selections
+[feature] Developer can nominate LikeOptions for a like with separate SocialNetwork selections
+[feature] Developer can nominate arbitrary permissions for Direct Facebook access
+[bug] Not all actions using User's preference for location sharing
+[feature] Developer can learn about new 2.0 interfaces in documentation
+
+v1.7.0
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] SMS sending short link with ")" included in link causing unknown URL error when clicked
+
 v1.6.8
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [bug] Duplicate file (socialize.properties) error on some platforms
