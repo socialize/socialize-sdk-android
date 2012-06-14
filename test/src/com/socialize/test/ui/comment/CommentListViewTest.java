@@ -143,9 +143,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 
 		AndroidMock.expect(progressDialogFactory.show(getContext(), title, message)).andReturn(dialog);
 		
-//		comment.setText(commentString);
-//		comment.setEntitySafe(entity);
-		
 		AndroidMock.expect(comment.getText()).andReturn(commentString);
 		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
 		AndroidMock.expect(commentAdapter.getTotalCount()).andReturn(totalCount).anyTimes();
@@ -478,6 +475,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		AndroidMock.replay(comments);
 		AndroidMock.replay(content);
 		AndroidMock.replay(error);
+		
 		
 		final CommentUtilsProxy mockCommentUtilsProxy = new SocializeCommentUtils() {
 			@Override
