@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
 import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
@@ -180,6 +182,11 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	public byte[] getImageForPost(Activity context, Uri imagePath) throws IOException {
 		return facebookImageUtils.scaleImage(context, imagePath);
 	}
+	
+	@Override
+	public byte[] getImageForPost(Activity context, Bitmap image, CompressFormat format) throws IOException {
+		return facebookImageUtils.scaleImage(context, image, format);
+	}
 
 	public void setUserSystem(UserSystem userSystem) {
 		this.userSystem = userSystem;
@@ -191,6 +198,10 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 
 	public void setFacebookWallPoster(FacebookWallPoster facebookWallPoster) {
 		this.facebookWallPoster = facebookWallPoster;
+	}
+	
+	public void setFacebookImageUtils(FacebookImageUtils facebookImageUtils) {
+		this.facebookImageUtils = facebookImageUtils;
 	}
 
 	protected SocializeService getSocialize() {

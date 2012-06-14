@@ -26,6 +26,8 @@ import java.lang.reflect.Proxy;
 import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
 import com.socialize.SocializeActionProxy;
 import com.socialize.api.SocializeSession;
@@ -314,5 +316,18 @@ public class FacebookUtils {
 	 */
 	public static byte[] getImageForPost(Activity context, Uri imagePath) throws IOException {
 		return proxy.getImageForPost(context, imagePath);
+	}
+	
+	
+	/**
+	 * Returns image data suitable for posting to facebook.
+	 * @param context The current context.
+	 * @param image The image to be compressed.
+	 * @param format The compression format to use (one of JPEG or PNG).
+	 * @return A byte array containing the bytes to be posted.
+	 * @throws IOException
+	 */
+	public static byte[] getImageForPost(Activity context, Bitmap image, CompressFormat format) throws IOException {
+		return proxy.getImageForPost(context, image, format);
 	}
 }

@@ -40,6 +40,7 @@ import com.socialize.networks.twitter.TwitterUtils;
 public class TwitterSnippets extends Activity{
 public void linkFB() {
 // begin-snippet-0
+// The "this" argument refers to the current Activity 
 TwitterUtils.link(this, new SocializeAuthListener() {
 
 	@Override

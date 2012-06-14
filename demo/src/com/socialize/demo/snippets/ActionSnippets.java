@@ -37,6 +37,7 @@ public class ActionSnippets extends Activity {
 public void getApplicationActivity() {
 // begin-snippet-0
 // Get the last 10 actions performed in the app
+// The "this" argument refers to the current Activity
 ActionUtils.getActionsByApplication(this, 0, 10, new ActionListListener() {
 	
 	@Override

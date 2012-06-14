@@ -60,6 +60,7 @@ Entity entity = Entity.newInstance("http://getsocialize.com", "Socialize");
 MyActionBarListener listener = new MyActionBarListener();
 
 // Use the listener when you show the action bar
+// The "this" argument refers to the current Activity
 ActionBarUtils.showActionBar(this, R.layout.actionbar, entity, null, listener);
 
 // Later (After the action bar has loaded!), you can reference the view to refresh

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#000000"
+    android:orientation="vertical"
+    android:padding="8dip">
+    
+	<LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal">
+    
+	    <Button   
+	        android:id="@+id/btnPhoto"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Take Photo..."/>
+	    
+	    <Button   
+	        android:id="@+id/btnPostPhoto"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Post to Facebook"
+	        android:visibility="gone"/>  
+	        
+	</LinearLayout>        
+    
+    <ImageView
+         android:id="@+id/imgPhoto"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"/>
+ 
+</LinearLayout>

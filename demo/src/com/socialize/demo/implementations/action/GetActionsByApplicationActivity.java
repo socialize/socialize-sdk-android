@@ -21,39 +21,48 @@
  */
 package com.socialize.demo.implementations.action;
 
-import android.app.ListActivity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import com.socialize.demo.R;
+import com.socialize.ActionUtils;
+import com.socialize.demo.SDKDemoActivity;
+import com.socialize.entity.ListResult;
+import com.socialize.entity.SocializeAction;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.activity.ActionListListener;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class ActionActivity extends ListActivity {
+public class GetActionsByApplicationActivity extends SDKDemoActivity {
 
-	final String[] values = new String[] { "Get Actions By Entity", "Get Actions By User", "Get Actions By User & Entity", "Get Actions for Entire App"};
-	final Class<?>[] activities = new Class<?>[] { GetActionsByEntityActivity.class, GetActionsByUserActivity.class, GetActionsByUserEntityActivity.class, GetActionsByApplicationActivity.class};
-	
+	/* (non-Javadoc)
+	 * @see com.socialize.demo.DemoActivity#executeDemo()
+	 */
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.demo_list);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
-		setListAdapter(adapter);
+	public void executeDemo(String text) {
+		ActionUtils.getActionsByApplication(this, 0, 50, new ActionListListener() {
+			@Override
+			public void onList(ListResult<SocializeAction> result) {
+				handleSocializeResult(result);
+			}
+			
+			@Override
+			public void onError(SocializeException error) {
+				handleError(GetActionsByApplicationActivity.this, error);
+			}
+		});
 	}
 	
-
 	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		Class<?> activityClass = activities[position];
-		if(activityClass != null) {
-			Intent intent = new Intent(this, activityClass);
-			startActivity(intent);
-		}
+	public boolean isTextEntryRequired() {
+		return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.demo.DemoActivity#getButtonText()
+	 */
+	@Override
+	public String getButtonText() {
+		return "List 50 Actions for this app";
 	}
 }

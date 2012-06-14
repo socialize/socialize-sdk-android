@@ -41,6 +41,23 @@ import android.provider.MediaStore;
 public class FacebookImageUtils {
 
 	private static int MAX_IMAGE_DIMENSION = 720;
+	
+	public byte[] scaleImage(Context context, Bitmap bitmap, Bitmap.CompressFormat format) {
+		
+		int width = bitmap.getWidth();
+		
+		if(width > MAX_IMAGE_DIMENSION) {
+			float ratio = (float) MAX_IMAGE_DIMENSION / (float) width;
+			
+			width = MAX_IMAGE_DIMENSION;
+			int height = (int)((float)bitmap.getHeight() * ratio);
+			bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height);
+		}
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		bitmap.compress(format, 100, stream);
+		return stream.toByteArray();
+	}
 
 	public byte[] scaleImage(Context context, Uri photoUri) throws IOException {
 		InputStream is = context.getContentResolver().openInputStream(photoUri);

@@ -28,6 +28,8 @@ import java.util.concurrent.TimeUnit;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
 import android.view.View;
 import com.google.android.testing.mocking.AndroidMock;
@@ -128,6 +130,11 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 			
 			@Override
 			public byte[] getImageForPost(Activity context, Uri imagePath) throws IOException {
+				return null;
+			}
+			
+			@Override
+			public byte[] getImageForPost(Activity context, Bitmap image, CompressFormat format) throws IOException {
 				return null;
 			}
 

@@ -1635,6 +1635,7 @@
 		<property name="userSystem" ref="userSystem"/>
 		<property name="shareSystem" ref="shareSystem"/>
 		<property name="facebookWallPoster" ref="facebookWallPoster"/>
+		<property name="facebookImageUtils" ref="facebookImageUtils"/>
 	</bean>
 	
 	<bean id="twitterUtils" class="com.socialize.networks.twitter.TwitterUtilsImpl">
