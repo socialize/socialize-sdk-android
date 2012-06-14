@@ -36,10 +36,15 @@ public class SafeBitmapDrawable extends BitmapDrawable {
 	@Override
 	public void draw(Canvas canvas) {
 		if(!isRecycled()) {
-			super.draw(canvas);
+			try {
+				super.draw(canvas);
+			}
+			catch (Throwable e) {
+				Log.w("SafeBitmapDrawable", "Bitmap was recycled");
+			}
 		}
 		else {
-			Log.w("SafeBitmapDrawable", "Bitmap is null or recycled");
+			Log.w("SafeBitmapDrawable", "Bitmap was recycled");
 		}
 	}
 	

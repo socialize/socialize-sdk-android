@@ -22,8 +22,10 @@
 package com.socialize.ui.actionbutton;
 
 import android.app.Activity;
+import com.socialize.LikeUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
+import com.socialize.api.action.like.LikeOptions;
 import com.socialize.entity.Entity;
 import com.socialize.entity.EntityStats;
 import com.socialize.entity.Like;
@@ -35,6 +37,7 @@ import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.cache.EntityCache;
 
 /**
@@ -151,7 +154,7 @@ public class LikeActionButtonHandler extends BaseActionButtonHandler<Like> {
 	}
 
 	@Override
-	protected void handleAction(final Activity context, final Entity entity, ShareOptions shareOptions, final OnActionButtonEventListener<Like> listener) {
+	protected void handleAction(final Activity context, final Entity entity, ShareOptions shareOptions, final OnActionButtonEventListener<Like> listener, SocialNetwork...networks) {
 		
 		if(liked) {
 			liked = false;
@@ -183,7 +186,11 @@ public class LikeActionButtonHandler extends BaseActionButtonHandler<Like> {
 			});	
 		}
 		else {
-			getSocialize().like(context, entity, shareOptions, new LikeAddListener() {
+			
+			LikeOptions likeOptions = LikeUtils.getUserLikeOptions(context);
+			likeOptions.merge(shareOptions);
+			
+			LikeUtils.like(context, entity, likeOptions, new LikeAddListener() {
 				@Override
 				public void onError(SocializeException error) {
 					if(listener != null) {
@@ -200,7 +207,8 @@ public class LikeActionButtonHandler extends BaseActionButtonHandler<Like> {
 						listener.onAfterAction(context, like, like.getEntity());
 					}
 				}
-			});	
+			}, networks);
+			
 		}
 	}
 

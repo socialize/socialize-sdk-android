@@ -27,7 +27,7 @@ import com.socialize.api.action.comment.SubscriptionUtilsProxy;
 import com.socialize.entity.Entity;
 import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
-import com.socialize.notifications.NotificationType;
+import com.socialize.notifications.SubscriptionType;
 
 
 /**
@@ -48,9 +48,10 @@ public class SubscriptionUtils {
 	 * Subscribes the current user to notifications for new comments on this entity.
 	 * @param context The current context.
 	 * @param e The entity.
+	 * @param type The subscription type.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void subscribe (Activity context, Entity e, NotificationType type, SubscriptionResultListener listener) {
+	public static void subscribe (Activity context, Entity e, SubscriptionType type, SubscriptionResultListener listener) {
 		subscriptionUtils.subscribe(context, e, type, listener);
 	}
 	
@@ -58,9 +59,10 @@ public class SubscriptionUtils {
 	 * Un-Subscribes the current user from notifications for new comments on this entity.
 	 * @param context The current context.
 	 * @param e The entity.
+	 * @param type The subscription type.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void unsubscribe (Activity context, Entity e, NotificationType type, SubscriptionResultListener listener) {
+	public static void unsubscribe (Activity context, Entity e, SubscriptionType type, SubscriptionResultListener listener) {
 		subscriptionUtils.unsubscribe(context, e, type, listener);
 	}
 	
@@ -68,9 +70,10 @@ public class SubscriptionUtils {
 	 * Determines if the current user is subscribed to notifications on new comments for the given entity.
 	 * @param context The current context.
 	 * @param e The entity.
+	 * @param type The subscription type.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void isSubscribed (Activity context, Entity e, NotificationType type, SubscriptionGetListener listener) {
+	public static void isSubscribed (Activity context, Entity e, SubscriptionType type, SubscriptionGetListener listener) {
 		subscriptionUtils.isSubscribed(context, e, type, listener);
 	}
 		

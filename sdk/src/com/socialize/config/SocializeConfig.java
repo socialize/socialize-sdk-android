@@ -328,6 +328,10 @@ public class SocializeConfig {
 		return getBooleanProperty(SOCIALIZE_ALLOW_ANON, false);
 	}
 	
+	public boolean isNotificationsEnabled() {
+		return getBooleanProperty(SOCIALIZE_NOTIFICATIONS_ENABLED, true);
+	}
+	
 	public boolean isAuthRequired() {
 		return getBooleanProperty(SOCIALIZE_REQUIRE_AUTH, true);
 	}

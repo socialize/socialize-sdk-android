@@ -50,7 +50,7 @@ public class GetSharesByEntityActivity extends SDKDemoActivity {
 			
 			@Override
 			public void onError(SocializeException error) {
-				handleError(error);
+				handleError(GetSharesByEntityActivity.this, error);
 			}
 		});
 	}

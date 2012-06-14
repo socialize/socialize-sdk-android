@@ -1,6 +1,0 @@
-/**
- * Returns true if this entity can be loaded.
- * @param entity
- * @return
- */
-public boolean canLoad(Context context, Entity entity);

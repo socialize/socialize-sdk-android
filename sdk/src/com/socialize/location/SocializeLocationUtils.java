@@ -41,6 +41,11 @@ public class SocializeLocationUtils implements LocationUtilsProxy {
 		return locationProvider.getLastKnownLocation();
 	}
 
+	@Override
+	public void updateLocation(Context context) {
+		locationProvider.getLocation(context);
+	}
+
 	public void setLocationProvider(SocializeLocationProvider locationProvider) {
 		this.locationProvider = locationProvider;
 	}

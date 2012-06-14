@@ -23,6 +23,8 @@ package com.socialize;
 
 import java.lang.reflect.Proxy;
 import android.app.Activity;
+import android.content.Context;
+import com.socialize.api.action.like.LikeOptions;
 import com.socialize.api.action.like.LikeUtilsProxy;
 import com.socialize.entity.Entity;
 import com.socialize.entity.User;
@@ -31,7 +33,7 @@ import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
-import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetwork;
 
 
 /**
@@ -48,6 +50,16 @@ public class LikeUtils {
 				new Class[]{LikeUtilsProxy.class},
 				new SocializeActionProxy("likeUtils"));	// Bean name
 	}
+	
+	/**
+	 * Returns the default sharing options for the user.
+	 * @param context
+	 * @return
+	 */
+	public static LikeOptions getUserLikeOptions(Context context) {
+		return proxy.getUserLikeOptions(context);
+	}
+	
 
 	/**
 	 * Records a like against the given entity for the current user. This method will also prompt the user to share their like.
@@ -63,11 +75,12 @@ public class LikeUtils {
 	 * Records a like against the given entity for the current user.  This method will NOT prompt the user to share their like.
 	 * @param context The current context.
 	 * @param entity The entity to be liked.
-	 * @param shareOptions Optional parameters to propagate the like to external social networks.
+	 * @param likeOptions Optional parameters for the like.
 	 * @param listener A listener to handle the result.
+	 * @param networks 0 or more networks on which to share the like.
 	 */
-	public static void like (Activity context, Entity entity, ShareOptions shareOptions, LikeAddListener listener) {
-		proxy.like(context, entity, shareOptions, listener);
+	public static void like (Activity context, Entity entity, LikeOptions likeOptions, LikeAddListener listener, SocialNetwork...networks) {
+		proxy.like(context, entity, likeOptions, listener, networks);
 	}
 		
 	
@@ -89,6 +102,16 @@ public class LikeUtils {
 	 */
 	public static void getLike (Activity context, String entityKey, LikeGetListener listener) {
 		proxy.getLike(context, entityKey, listener);
+	}
+	
+	/**
+	 * Retrieves a like based on its ID.
+	 * @param context The current context.
+	 * @param id The id of the like.
+	 * @param listener A listener to handle the result.
+	 */
+	public static void getLike (Activity context, long id, LikeGetListener listener) {
+		proxy.getLike(context, id, listener);
 	}
 	
 	/**

@@ -22,6 +22,7 @@
 package com.socialize.demo.snippets;
 
 import java.util.List;
+import android.app.Activity;
 import com.socialize.ActionUtils;
 import com.socialize.UserUtils;
 import com.socialize.entity.ListResult;
@@ -31,7 +32,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.activity.ActionListListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
-import android.app.Activity;
+import com.socialize.ui.profile.UserSettings;
 
 
 /**
@@ -63,9 +64,9 @@ UserUtils.showUserProfile(this, user);
 
 public void saveUser() {
 // begin-snippet-3
-User user = UserUtils.getCurrentUser(this);
+UserSettings userSettings = UserUtils.getUserSettings(this);
 
-UserUtils.saveUserSettings(this, user, new UserSaveListener() {
+UserUtils.saveUserSettings(this, userSettings, new UserSaveListener() {
 	
 	@Override
 	public void onUpdate(User result) {
@@ -109,7 +110,7 @@ public void getActivity() {
 User user = UserUtils.getCurrentUser(this);
 
 // Get the most recent 10 actions by this user
-ActionUtils.getActionsByUser(this, user, 0, 10, new ActionListListener() {
+ActionUtils.getActionsByUser(this, user.getId(), 0, 10, new ActionListListener() {
 	
 	@Override
 	public void onList(ListResult<SocializeAction> result) {

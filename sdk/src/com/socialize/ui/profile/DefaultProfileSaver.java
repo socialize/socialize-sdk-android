@@ -22,11 +22,10 @@
 package com.socialize.ui.profile;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
+import com.socialize.UserUtils;
 import com.socialize.listener.user.UserSaveListener;
-import com.socialize.util.BitmapUtils;
 
 /**
  * @author Jason Polites
@@ -34,28 +33,16 @@ import com.socialize.util.BitmapUtils;
  */
 public class DefaultProfileSaver implements ProfileSaver {
 	
-	private BitmapUtils bitmapUtils;
-
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.ui.profile.ProfileSaver#save(android.content.Context, java.lang.String, android.graphics.Bitmap, com.socialize.listener.user.UserSaveListener)
 	 */
 	@Override
-	public void save(Context context, UserProfile profile, UserSaveListener listener) {
-		Bitmap image = profile.getImage();
-		if(image != null && !image.isRecycled()) {
-			profile.setEncodedImage(bitmapUtils.encode(image));
-		}
-		getSocialize().saveCurrentUserProfile(context, profile,listener);
+	public void save(Context context, UserSettings profile, UserSaveListener listener) {
+		UserUtils.saveUserSettings(context, profile, listener);
 	}
 
 	protected SocializeService getSocialize() {
 		return Socialize.getSocialize();
 	}
-
-	public void setBitmapUtils(BitmapUtils bitmapUtils) {
-		this.bitmapUtils = bitmapUtils;
-	}
-	
-	
 }

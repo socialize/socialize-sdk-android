@@ -59,6 +59,16 @@ public class FacebookUtils {
 	}
 	
 	/**
+	 * Links the current user to a facebook account with custom FB permissions.  The user will be presented with the Facebook authentication dialog.
+	 * @param context The current context.
+	 * @param listener A listener to handle the result.
+	 * @param permissions One or more permissions defined by http://developers.facebook.com/docs/authentication/permissions/
+	 */
+	public static void link (Activity context, SocializeAuthListener listener, String...permissions){
+		proxy.link(context, listener, permissions);
+	}	
+	
+	/**
 	 * Links an existing Facebook access token with the current user.  No authentication dialog will be shown.
 	 * @param context The current context.
 	 * @param token The Facebook access token.
@@ -162,13 +172,13 @@ public class FacebookUtils {
 	 * This method is asynchronous and can be run from the main UI thread.
 	 * @param context The current context.
 	 * @param graphPath The path on the Facebook graph api to be called for the CURRENT user.  E.g. me/feed
-	 * @param postData The data to be posted.
+	 * @param params The data to be sent in the request.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void post(final Activity context, final String graphPath, final Map<String, String> postData, final SocialNetworkPostListener listener) {
+	public static void post(final Activity context, final String graphPath, final Map<String, String> params, final SocialNetworkPostListener listener) {
 		
 		if(proxy.isLinked(context)) {
-			proxy.post(context, graphPath, postData, listener);
+			proxy.post(context, graphPath, params, listener);
 		}
 		else {
 			proxy.link(context, new SocializeAuthListener() {
@@ -189,7 +199,7 @@ public class FacebookUtils {
 				
 				@Override
 				public void onAuthSuccess(SocializeSession session) {
-					proxy.post(context, graphPath, postData, listener);
+					proxy.post(context, graphPath, params, listener);
 				}
 				
 				@Override
@@ -208,13 +218,13 @@ public class FacebookUtils {
 	 * This method is asynchronous and can be run from the main UI thread.
 	 * @param context The current context.
 	 * @param graphPath The path on the Facebook graph api to be called for the CURRENT user.  E.g. me/feed
-	 * @param postData The data to be posted.
+	 * @param params The data to be sent in the request.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void get(final Activity context, final String graphPath, final Map<String, String> postData, final SocialNetworkPostListener listener) {
+	public static void get(final Activity context, final String graphPath, final Map<String, String> params, final SocialNetworkPostListener listener) {
 		
 		if(proxy.isLinked(context)) {
-			proxy.get(context, graphPath, postData, listener);
+			proxy.get(context, graphPath, params, listener);
 		}
 		else {
 			proxy.link(context, new SocializeAuthListener() {
@@ -235,7 +245,7 @@ public class FacebookUtils {
 				
 				@Override
 				public void onAuthSuccess(SocializeSession session) {
-					proxy.get(context, graphPath, postData, listener);
+					proxy.get(context, graphPath, params, listener);
 				}
 				
 				@Override
@@ -254,12 +264,12 @@ public class FacebookUtils {
 	 * This method is asynchronous and can be run from the main UI thread.
 	 * @param context The current context.
 	 * @param graphPath The path on the Facebook graph api to be called for the CURRENT user.  E.g. me/feed
-	 * @param postData The data to be posted.
+	 * @param params The data to be sent in the request.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void delete(final Activity context, final String graphPath, final Map<String, String> postData, final SocialNetworkPostListener listener) {
+	public static void delete(final Activity context, final String graphPath, final Map<String, String> params, final SocialNetworkPostListener listener) {
 		if(proxy.isLinked(context)) {
-			proxy.delete(context, graphPath, postData, listener);
+			proxy.delete(context, graphPath, params, listener);
 		}
 		else {
 			proxy.link(context, new SocializeAuthListener() {
@@ -280,7 +290,7 @@ public class FacebookUtils {
 				
 				@Override
 				public void onAuthSuccess(SocializeSession session) {
-					proxy.delete(context, graphPath, postData, listener);
+					proxy.delete(context, graphPath, params, listener);
 				}
 				
 				@Override

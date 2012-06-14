@@ -84,11 +84,6 @@ public class DefaultLocationProvider implements SocializeLocationProvider {
 
 	@Override
 	public Location getLocation(Context context) {
-		
-		if(logger != null && logger.isDebugEnabled()) {
-			logger.debug("LocationProvider Requesting location...");
-		}			
-
 		if(location == null) {
 			if(appUtils.hasPermission(context, "android.permission.ACCESS_FINE_LOCATION")) {
 				requestLocation(context, Criteria.ACCURACY_FINE);
@@ -107,7 +102,7 @@ public class DefaultLocationProvider implements SocializeLocationProvider {
 	protected void requestLocation(Context context, int accuracy) {
 		
 		if(logger != null && logger.isDebugEnabled()) {
-			logger.debug("LocationProvider requesting location...");
+			logger.debug("LocationProvider Requesting location...");
 		}
 		
 		Criteria criteria = new Criteria();
@@ -127,15 +122,41 @@ public class DefaultLocationProvider implements SocializeLocationProvider {
 				location = mostRecentLocation;
 				locationManager.removeUpdates(listener);
 			}
-			else if(locationManager.isProviderEnabled(provider) && listener != null) {
+			else if(locationManager.isProviderEnabled(provider)) {
 				
-				if(logger != null && logger.isDebugEnabled()) {
-					logger.debug("No last known location, requesting from device...");
+				if(listener != null) {
+					if(logger != null && logger.isDebugEnabled()) {
+						logger.debug("No last known location, requesting from device...");
+					}
+					
+					if(context instanceof Activity) {
+						locationManager.requestLocationUpdates((Activity) context, provider, 1, 0, listener);
+					}
+					else {
+						if(logger != null && logger.isWarnEnabled()) {
+							logger.warn("Cannot request location using a non-activity context");
+						}
+					}
 				}
-				
-				if(context instanceof Activity) {
-					locationManager.requestLocationUpdates((Activity) context, provider, 1, 0, listener);
+				else {
+					if(logger != null && logger.isWarnEnabled()) {
+						logger.warn("No listener specified for location callback");
+					}
 				}
+			}
+			else {
+				if(logger != null && logger.isWarnEnabled()) {
+					logger.warn("Location provider [" +
+							provider +
+							"] is not enabled");
+				}
+			}
+		}
+		else {
+			if(logger != null && logger.isWarnEnabled()) {
+				logger.warn("No provider found to determine location based on accuracy [" +
+						accuracy +
+						"].  Check that location is enabled in the device and location permissions set on the app");
 			}
 		}
 	}

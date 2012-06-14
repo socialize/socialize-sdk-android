@@ -50,7 +50,7 @@ public class GetCommentsByEntityActivity extends SDKDemoActivity {
 			
 			@Override
 			public void onError(SocializeException error) {
-				handleError(error);
+				handleError(GetCommentsByEntityActivity.this, error);
 			}
 		});
 	}

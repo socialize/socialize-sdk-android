@@ -26,7 +26,6 @@ public class SocializeActivityTestCase extends SocializeUIActivityTest {
 		callback.setActivity((Activity)AndroidMock.anyObject());
 		callback.initSocialize();
 		callback.onPostSocializeInit(container);
-		callback.destroySocialize();
 		
 		ActivityIOCProvider.getInstance().setContainer(container);
 		

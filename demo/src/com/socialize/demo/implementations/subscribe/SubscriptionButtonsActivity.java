@@ -32,7 +32,7 @@ import com.socialize.entity.Subscription;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
-import com.socialize.notifications.NotificationType;
+import com.socialize.notifications.SubscriptionType;
 import com.socialize.ui.dialog.SafeProgressDialog;
 
 
@@ -53,7 +53,7 @@ public class SubscriptionButtonsActivity extends DemoActivity {
 		progress.setCancelable(false);
 		
 		// Check if we are liked
-		SubscriptionUtils.isSubscribed(this, entity, NotificationType.NEW_COMMENTS, new SubscriptionGetListener() {
+		SubscriptionUtils.isSubscribed(this, entity, SubscriptionType.NEW_COMMENTS, new SubscriptionGetListener() {
 			
 			@Override
 			public void onGet(Subscription result) {
@@ -70,7 +70,7 @@ public class SubscriptionButtonsActivity extends DemoActivity {
 			@Override
 			public void onError(SocializeException error) {
 				progress.dismiss();
-				handleError(error);
+				handleError(SubscriptionButtonsActivity.this, error);
 			}
 		});
 		
@@ -84,12 +84,12 @@ public class SubscriptionButtonsActivity extends DemoActivity {
 				if(btnSubscription.getText().equals("Subscribe")) {
 					
 					
-					SubscriptionUtils.subscribe(SubscriptionButtonsActivity.this, entity, NotificationType.NEW_COMMENTS, new SubscriptionResultListener() {
+					SubscriptionUtils.subscribe(SubscriptionButtonsActivity.this, entity, SubscriptionType.NEW_COMMENTS, new SubscriptionResultListener() {
 						
 						@Override
 						public void onError(SocializeException error) {
 							progress.dismiss();
-							handleError(error);
+							handleError(SubscriptionButtonsActivity.this, error);
 						}
 						
 						@Override
@@ -103,12 +103,12 @@ public class SubscriptionButtonsActivity extends DemoActivity {
 				else {
 					
 					
-					SubscriptionUtils.unsubscribe(SubscriptionButtonsActivity.this, entity, NotificationType.NEW_COMMENTS, new SubscriptionResultListener() {
+					SubscriptionUtils.unsubscribe(SubscriptionButtonsActivity.this, entity, SubscriptionType.NEW_COMMENTS, new SubscriptionResultListener() {
 						
 						@Override
 						public void onError(SocializeException error) {
 							progress.dismiss();
-							handleError(error);
+							handleError(SubscriptionButtonsActivity.this, error);
 						}
 						
 						@Override

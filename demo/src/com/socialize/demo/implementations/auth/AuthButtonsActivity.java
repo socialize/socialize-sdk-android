@@ -74,11 +74,12 @@ public class AuthButtonsActivity extends DemoActivity {
 					@Override
 					public void onSkipAuth(Activity context, Dialog dialog) {
 						DemoUtils.showToast(AuthButtonsActivity.this, "Skipped");
+						dialog.dismiss();
 					}
 					
 					@Override
 					public void onError(Activity context, Dialog dialog, Exception error) {
-						handleError(error);
+						handleError(context, error);
 					}
 					
 					@Override
@@ -117,7 +118,7 @@ public class AuthButtonsActivity extends DemoActivity {
 						
 						@Override
 						public void onError(SocializeException error) {
-							handleError(error);
+							handleError(AuthButtonsActivity.this, error);
 							btnFacebook.setEnabled(true);
 						}
 						
@@ -135,7 +136,7 @@ public class AuthButtonsActivity extends DemoActivity {
 						
 						@Override
 						public void onAuthFail(SocializeException error) {
-							handleError(error);
+							handleError(AuthButtonsActivity.this, error);
 							btnFacebook.setEnabled(true);
 						}
 					});
@@ -161,7 +162,7 @@ public class AuthButtonsActivity extends DemoActivity {
 						
 						@Override
 						public void onError(SocializeException error) {
-							handleError(error);
+							handleError(AuthButtonsActivity.this, error);
 							btnTwitter.setEnabled(true);
 						}
 						
@@ -179,7 +180,7 @@ public class AuthButtonsActivity extends DemoActivity {
 						
 						@Override
 						public void onAuthFail(SocializeException error) {
-							handleError(error);
+							handleError(AuthButtonsActivity.this, error);
 							btnTwitter.setEnabled(true);
 						}
 					});

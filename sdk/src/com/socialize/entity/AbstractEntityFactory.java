@@ -37,6 +37,8 @@ public abstract class AbstractEntityFactory<T extends Entity> extends SocializeO
 	private static final String COMMENTS = "comments";
 	private static final String VIEWS = "views";
 	
+	private static final String USER_ACTION_SUMMARY = "user_action_summary";
+	
 	public AbstractEntityFactory() {
 		super();
 	}
@@ -55,6 +57,20 @@ public abstract class AbstractEntityFactory<T extends Entity> extends SocializeO
 		stats.setViews(getInt(object, VIEWS));
 		
 		entry.setEntityStats(stats);
+		
+		if(object.has(USER_ACTION_SUMMARY) && !object.isNull(USER_ACTION_SUMMARY)) {
+			
+			JSONObject userStats = object.getJSONObject(USER_ACTION_SUMMARY);
+			
+			UserEntityStatsImpl userEntityStats = newUserEntityStatsImpl();
+			userEntityStats.setComments(getInt(userStats, COMMENTS));
+			userEntityStats.setShares(getInt(userStats, SHARES));
+			int liked = getInt(userStats, LIKES);
+			
+			userEntityStats.setLiked(liked>0);
+			
+			entry.setUserEntityStats(userEntityStats);
+		}
 	}
 
 	@Override
@@ -82,6 +98,11 @@ public abstract class AbstractEntityFactory<T extends Entity> extends SocializeO
 	// So we can mock.
 	protected EntityStatsImpl newEntityStatsImpl() {
 		return new EntityStatsImpl();
+	}
+	
+	// So we can mock.
+	protected UserEntityStatsImpl newUserEntityStatsImpl() {
+		return new UserEntityStatsImpl();
 	}
 	
 }

@@ -21,6 +21,7 @@
  */
 package com.socialize.auth.facebook;
 
+import java.util.Arrays;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.error.SocializeException;
@@ -34,6 +35,7 @@ public class FacebookAuthProviderInfo implements AuthProviderInfo {
 	private static final long serialVersionUID = -6472972851879738516L;
 	
 	private String appId;
+	private String[] permissions;
 
 	/* (non-Javadoc)
 	 * @see com.socialize.api.AuthProviderInfo#getType()
@@ -65,7 +67,15 @@ public class FacebookAuthProviderInfo implements AuthProviderInfo {
 	public void setAppId(String appId) {
 		this.appId = appId;
 	}
-
+	
+	public String[] getPermissions() {
+		return permissions;
+	}
+	
+	public void setPermissions(String[] permissions) {
+		this.permissions = permissions;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -86,13 +96,37 @@ public class FacebookAuthProviderInfo implements AuthProviderInfo {
 		if (appId == null) {
 			if (other.appId != null)
 				return false;
-		} else if (!appId.equals(other.appId))
+		}
+		else if (!appId.equals(other.appId))
 			return false;
 		return true;
 	}
 
 	@Override
 	public boolean matches(AuthProviderInfo info) {
-		return this.equals(info);
+		if(this.equals(info)) {
+			
+			if(info instanceof FacebookAuthProviderInfo) {
+				FacebookAuthProviderInfo that = (FacebookAuthProviderInfo) info;
+				
+				// Ensure THIS object contains all permissions of other object
+				if(Arrays.equals(permissions, that.permissions)) {
+					return true;
+				}
+				else if (permissions != null && that.permissions != null){
+					Arrays.sort(permissions);
+					
+					for (int i = 0; i < that.permissions.length; i++) {
+						if(Arrays.binarySearch(permissions, that.permissions[i]) < 0) {
+							return false;
+						}
+					}
+					
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 }

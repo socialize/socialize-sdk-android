@@ -50,9 +50,10 @@ public interface Launcher {
 
 	/**
 	 * Returns true if the launcher activity should call finish after launch.
+	 * @param context The current context.
 	 * @return
 	 */
-	public boolean shouldFinish();
+	public boolean shouldFinish(Activity context);
 	
 	public boolean isAsync();
 	

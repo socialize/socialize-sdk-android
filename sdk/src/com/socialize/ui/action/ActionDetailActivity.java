@@ -25,8 +25,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.widget.Toast;
-
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
@@ -69,19 +67,19 @@ public class ActionDetailActivity extends SocializeUIActivity {
 				finish();
 			}
 			else {
-				Bundle extras = intent.getExtras();
+//				Bundle extras = intent.getExtras();
 
-				if (extras == null || !extras.containsKey(Socialize.ACTION_ID)) {
-					Toast.makeText(this, "No action id provided", Toast.LENGTH_SHORT).show();
-					finish();
-				}
-				else {
+//				if (extras == null || !extras.containsKey(Socialize.ACTION_ID)) {
+//					Toast.makeText(this, "No action id provided", Toast.LENGTH_SHORT).show();
+//					finish();
+//				}
+//				else {
 					// TODO: do we need this?
-					setResult(SocializeUIActivity.PROFILE_UPDATE);
+//					setResult(SocializeUIActivity.PROFILE_UPDATE);
 					view = new ActionDetailView(this);
 					setContentView(view);
 				}
-			}
+//			}
 		}	
 	}
 

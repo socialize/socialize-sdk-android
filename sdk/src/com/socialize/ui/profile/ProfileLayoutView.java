@@ -5,7 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.LinearLayout;
-import com.socialize.Socialize;
+import com.socialize.UserUtils;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
@@ -71,21 +71,23 @@ public class ProfileLayoutView extends BaseView {
 		long id = Long.parseLong(userId);
 		dialog = progressDialogFactory.show(getContext(), "Loading", "Please wait...");
 		
-		getSocialize().getUser(id, new UserGetListener() {
+		UserUtils.getUser(getContext(), id, new UserGetListener() {
 			
 			@Override
 			public void onGet(User user) {
 				
 				// Merge the current session user
-				User sessionUser = Socialize.getSocialize().getSession().getUser();
+				User currentUser = UserUtils.getCurrentUser(getContext());
+				UserSettings settings = UserUtils.getUserSettings(getContext());
 				
-				if(sessionUser.getId().equals(user.getId())) {
-					sessionUser.merge(user);
-					user = sessionUser;
+				if(currentUser.getId().equals(user.getId())) {
+					currentUser.update(user);
+					settings.update(user);
+					user = currentUser;
 				}
 				
 				// Set the user details into the view elements
-				setUserDetails(user);
+				setUserDetails(user, settings);
 				
 				if(dialog != null) {
 					dialog.dismiss();
@@ -113,8 +115,8 @@ public class ProfileLayoutView extends BaseView {
 		}
 	}
 	
-	public void setUserDetails(User user) {
-		content.setUserDetails(user);
+	public void setUserDetails(User user, UserSettings settings) {
+		content.setUserDetails(user, settings);
 	}
 	
 	public void setUserId(String entityKey) {

@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import com.socialize.CommentUtils;
+import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.SubscriptionUtils;
 import com.socialize.UserUtils;
@@ -39,7 +40,7 @@ import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
-import com.socialize.notifications.NotificationType;
+import com.socialize.notifications.SubscriptionType;
 import com.socialize.test.SocializeActivityTest;
 
 
@@ -60,7 +61,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 	public void test_addComment() throws Exception {
 		
 		// Set auto auth off
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
 		final Entity entityKey = Entity.newInstance("test_addComment", "test_addComment");
 		final CountDownLatch latch = new CountDownLatch(1);
@@ -114,7 +115,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 
 		// Set auto auth off
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
 		CommentUtils.addComment(getActivity(), entityKey, "foobar0", null, new CommentAddListener() {
 
@@ -194,7 +195,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 
 		// Set auto auth off
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
 		CommentUtils.addComment(getActivity(), entityKey, "foobar0", null, new CommentAddListener() {
 
@@ -271,7 +272,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 
 		// Set auto auth off
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
 		CommentUtils.addComment(getActivity(), entityKey, "foobar0", null, new CommentAddListener() {
 
@@ -345,7 +346,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 	public void test_subscribe_unsubscribe() throws Exception {
 		final Entity e = Entity.newInstance("test_unsubscribe" + Math.random(),"test_unsubscribe");
 		final CountDownLatch latch = new CountDownLatch(1);
-		SubscriptionUtils.subscribe(getActivity(), e, NotificationType.NEW_COMMENTS, new SubscriptionResultListener() {
+		SubscriptionUtils.subscribe(getActivity(), e, SubscriptionType.NEW_COMMENTS, new SubscriptionResultListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -369,7 +370,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		assertTrue(subscription.isSubscribed());
 		
 		final CountDownLatch latch2 = new CountDownLatch(1);
-		SubscriptionUtils.isSubscribed(getActivity(), e, NotificationType.NEW_COMMENTS, new SubscriptionGetListener() {
+		SubscriptionUtils.isSubscribed(getActivity(), e, SubscriptionType.NEW_COMMENTS, new SubscriptionGetListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -393,7 +394,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		assertTrue(subscription.isSubscribed());			
 		
 		final CountDownLatch latch3 = new CountDownLatch(1);
-		SubscriptionUtils.unsubscribe(getActivity(), e, NotificationType.NEW_COMMENTS, new SubscriptionResultListener() {
+		SubscriptionUtils.unsubscribe(getActivity(), e, SubscriptionType.NEW_COMMENTS, new SubscriptionResultListener() {
 			
 			@Override
 			public void onError(SocializeException error) {

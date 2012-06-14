@@ -143,6 +143,20 @@ public class ProfilePictureEditView extends ClickableSectionCell {
 			profilePicture.getBackground().setAlpha(255);
 		}
 	}		
+	
+	public void setProfileImage(Drawable drawable) {
+		if(profilePicture != null) {
+			profilePicture.setImageDrawable(drawable);
+		}
+	}
+	
+	public Drawable getProfileImage() {
+		if(profilePicture != null) {
+			return profilePicture.getDrawable();
+		}
+		
+		return null;
+	}
 
 	// So we can mock
 	protected GradientDrawable makeGradient(int bottom, int top) {

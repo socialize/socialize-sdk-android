@@ -29,13 +29,12 @@ import com.socialize.test.SocializeUnitTest;
  * @author Jason Polites
  * 
  */
+@Deprecated
 public class ShareOptionsTest extends SocializeUnitTest {
-
 	public void testIsShareTo() {
 		SocialNetwork[] shareTo = { SocialNetwork.FACEBOOK };
 		ShareOptions options = new ShareOptions();
 		options.setShareTo(shareTo);
 		assertTrue(options.isShareTo(SocialNetwork.FACEBOOK));
 	}
-
 }

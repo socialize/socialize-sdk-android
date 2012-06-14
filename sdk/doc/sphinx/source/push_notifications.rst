@@ -8,23 +8,25 @@
 SmartAlerts (Push Notifications)
 ================================
 
-Introduction
-------------
-In v1.3 of Socialize we introduced SmartAlerts_.  This provides your app with a simple and effective way to bring users back into the 
-"viral loop" of the app.
+=================================	==========================================================================================
+.. image:: images/smartalerts.png	.. raw:: html
 
-.. image:: images/comment.png
-.. image:: images/subscribe.png
+										<div style="font-size:16pt;font-weight:bold;padding:10px">Welcome to The Loop</div>
+										<div style="font-size:12pt;padding:10px">
+									 	The Loop is a viral loop in your app that puts your users to work boosting 
+									 	downloads and re-engagement in your app.
+									 	<br/><br/> 
+									 	Use Socialize SmartAlerts to create a viral loop in your app where a users' actions help 
+									 	bring other users back into your app.
+										</div>
 
-SmartAlerts in Comment Threads
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=================================	==========================================================================================
 
-When a user posts a comment they can elect to subscribe to updates for that topic.  
-
-When another user then posts a comment, the original user will receive a push notification to their device bringing them back into the app.
+Setup SmartAlerts
+-----------------
 
 Step 1: Enable Notifications on http://www.getsocialize.com
------------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 For SmartAlerts to work they must be enabled on a compatible plan at http://getsocialize.com/apps
 
@@ -39,19 +41,16 @@ Then select "enabled"
 .. note:: You must enter your Android package name into the `Socialize website <http://getsocialize.com/apps>`_ to enable notifications
 
 Step 2: Add Configuration to AndroidManifest.xml
-------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The default configuration for Socialize needs to be augmented slightly for push notifications. 
 
 .. note:: Make sure you replace every occurrance of **your_package_name** with the package name of your app!
 
-.. note:: Make sure to add your **Entity Loader Class Name** to the service meta data!
-
 Add the following additional configurations to the **<application.../>** element of your **AndroidManifest.xml**
 
 .. literalinclude:: snippets/notification_manifest_snippet0.txt
    :language: xml
-   :linenos:
    :emphasize-lines: 15,19
    :tab-width: 4
 
@@ -59,7 +58,6 @@ Add the following additional configurations to the **<manifest.../>** element of
 
 .. literalinclude:: snippets/notification_manifest_snippet1.txt
    :language: xml
-   :linenos:
    :emphasize-lines: 5,7
    :tab-width: 4
 
@@ -67,24 +65,31 @@ The full **AndroidManifest.xml** should look something like this
 
 .. literalinclude:: snippets/notification_manifest.txt
    :language: xml
-   :linenos:
-   :emphasize-lines: 21,25,42,44
+   :emphasize-lines: 14,16,37,41
    :tab-width: 4
 
-I already have a BroadcastReceiver defined
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Step 3: Create an Entity Loader
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In order for Socialize to know how to handle a notification it needs an "Entity Loader".  This is a class 
+provided by you which tells Socialize how to load content in your app.
+
+Refer to the :ref:`entity_loader` section for details on how to implement a Socialize Entity Loader.
+
+I already have a BroadcastReceiver
+----------------------------------
 
 If you already have a BroadcastReceiver defined in your application, you can simply call the Socialize handler
 in your existing broadcast receiver's **onReceive()** method:
 
-.. literalinclude:: snippets/broadcast_handle.txt
-   :language: java
-   :linenos:
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/SmartAlertSnippets.java
+	:start-after: begin-snippet-0
+	:end-before: end-snippet-0
 
 Make sure however, that you add the intent filters and permissions required by Socialize to your existing receiver definition.
 
-I am already using Google C2DM for Push Notifications
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+I am already using Google C2DM
+------------------------------
 
 If you are already using Google's C2DM for push notifications you will need to enter your C2DM sender credentials into the 
 Socialize website.  This is due to a limitation of Google's C2DM service which does not allow multiple senders for the same 
@@ -94,16 +99,13 @@ app.
 
 .. image:: images/c2dm.png 
 
-Step 3: Create an Entity Loader
--------------------------------
+High Volume Usage
+-----------------
 
-In order for Socialize to know how to handle a notification it needs an "Entity Loader".  This is a class 
-provided by you which tells Socialize how to load content in your app.
+If you app is expected to have a high volume of SmartAlerts we recommend you register your own Google C2DM token to avoid any unexpected quota issues
 
-Refer to the :ref:`entity_loader` section for details on how to implement a Socialize Entity Loader.
-
-Step 4: Registering for Google C2DM (Optional)
-----------------------------------------------
+Registering for Google C2DM
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Socialize provides a default quota of SmartAlerts that should satisfy the needs of most users, however if you are experiencing issues with SmartAlerts quota 
 you can always simply register your own C2DM token with Socialize.
@@ -111,7 +113,7 @@ you can always simply register your own C2DM token with Socialize.
 Google's Cloud To Device (C2DM) system allows any app developer to register and obtain a token. Configuring your application for SmartAlerts using your own C2DM token is a 3 step process:
 
 Step 1: Register with Google for C2DM
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 To register your app with Google's C2DM system, just go to http://code.google.com/android/c2dm and select: "Sign Up for C2DM":
 
 .. image:: images/c2dm_signup0.png
@@ -124,16 +126,15 @@ Fill out all the required information and submit, you should see a message like 
 
  
 Step 2: Add your C2DM sender ID to your **socialize.properties** file
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The Socialize SDK needs to know who will be sending SmartAlerts to the device.  Simply add your C2DM Sender ID to your **socialize.properties** file 
 under the key **socialize.c2dm.sender.id**
 
 .. literalinclude:: snippets/props_c2dm.txt
    :language: properties
-   :linenos:
 
 Step 3: Add your C2DM token to the Socialize website
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Once you receive your C2DM token from Google, simply add it to your account on the getsocialize.com website:
 
 .. image:: images/c2dm.png 

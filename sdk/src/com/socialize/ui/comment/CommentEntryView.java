@@ -39,8 +39,8 @@ import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
-import com.socialize.entity.User;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.ui.profile.UserSettings;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.util.KeyboardUtils;
 import com.socialize.ui.view.CustomCheckbox;
@@ -66,13 +66,9 @@ public class CommentEntryView extends BaseView {
 	private KeyboardUtils keyboardUtils;
 	private EditText commentField;
 	
-//	private IBeanFactory<CustomCheckbox> autoPostFacebookOptionFactory;
-//	private IBeanFactory<CustomCheckbox> autoPostTwitterOptionFactory;
 	private IBeanFactory<CustomCheckbox> locationEnabledOptionFactory;
 	private IBeanFactory<CustomCheckbox> notificationEnabledOptionFactory;
 	
-//	private CustomCheckbox facebookCheckbox;
-//	private CustomCheckbox twitterCheckbox;
 	private CustomCheckbox locationCheckBox;
 	private CustomCheckbox notifyCheckBox;
 	
@@ -183,19 +179,6 @@ public class CommentEntryView extends BaseView {
 					keyboardUtils.hideKeyboard(commentField);
 					boolean shareLocation = false;
 					SocialNetwork[] shareTo = null;
-					
-//					if(facebookCheckbox != null && facebookCheckbox.isChecked()) {
-//						if(twitterCheckbox != null && twitterCheckbox.isChecked()) {
-//							shareTo = new SocialNetwork[] {SocialNetwork.FACEBOOK, SocialNetwork.TWITTER};
-//						}
-//						else {
-//							shareTo = new SocialNetwork[] {SocialNetwork.FACEBOOK};
-//						}
-//					}
-//					else if(twitterCheckbox != null && twitterCheckbox.isChecked()) {
-//						shareTo = new SocialNetwork[] {SocialNetwork.TWITTER};
-//					}
-					
 					if(locationCheckBox != null) {
 						shareLocation = locationCheckBox.isChecked(); 
 					}
@@ -288,9 +271,7 @@ public class CommentEntryView extends BaseView {
 		
 		if(fbSupported || twSupported || locationSupported) {
 			
-			User user = Socialize.getSocialize().getSession().getUser();
-//			final boolean fbOK = Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK);
-//			final boolean twOK = Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER);
+			UserSettings settings = Socialize.getSocialize().getSession().getUserSettings();
 			
 			int padding = displayUtils.getDIP(4);
 			
@@ -318,54 +299,13 @@ public class CommentEntryView extends BaseView {
 			toolbarLayout.addView(toolbarLayoutLeft);
 			toolbarLayout.addView(toolbarLayoutRight);		
 			
-//			if(fbSupported) {
-//				facebookCheckbox = autoPostFacebookOptionFactory.getBean();
-//			}
-//			
-//			if(twSupported) {
-//				twitterCheckbox = autoPostTwitterOptionFactory.getBean();
-//			}
-			
 			if(locationSupported) {
 				locationCheckBox = locationEnabledOptionFactory.getBean();
 			}		
-			
-//			if(facebookCheckbox != null) {
-//				
-//				if(fbOK) {
-//					facebookCheckbox.setChecked(user.isAutoPostToFacebook());
-//				}
-//				else {
-//					facebookCheckbox.setChecked(false);
-//				}
-//				
-//				facebookCheckbox.setOnClickListener(getSocialNetworkClickListener(facebookCheckbox, AuthProviderType.FACEBOOK, "Facebook sharing enabled", "Facebook sharing disabled"));
-//			}
-//			
-//			if(twitterCheckbox != null) {
-//				if(twOK) {
-//					twitterCheckbox.setChecked(user.isAutoPostToTwitter());
-//				}
-//				else {
-//					twitterCheckbox.setChecked(false);
-//				}
-//				twitterCheckbox.setOnClickListener(getSocialNetworkClickListener(twitterCheckbox, AuthProviderType.TWITTER, "Twitter sharing enabled", "Twitter sharing disabled"));
-//			}		
 
 			if(locationCheckBox != null) {
-				locationCheckBox.setChecked(user.isShareLocation());
+				locationCheckBox.setChecked(settings.isLocationEnabled());
 			}		
-			
-//			if(facebookCheckbox != null || twitterCheckbox != null) {
-//				
-//				if(facebookCheckbox != null) {
-//					toolbarLayoutRight.addView(facebookCheckbox);
-//				}
-//				
-//				if(twitterCheckbox != null) {
-//					toolbarLayoutRight.addView(twitterCheckbox);
-//				}			
-//			}	
 			
 			if(notifyCheckBox != null && displayUtils.getOrientation() != Configuration.ORIENTATION_PORTRAIT) {
 				toolbarLayoutRight.addView(notifyCheckBox);
@@ -534,28 +474,8 @@ public class CommentEntryView extends BaseView {
 		SocializeSession session = Socialize.getSocialize().getSession();
 		
 		if(session != null) {
-			User user = session.getUser();
-			
-//			if(facebookCheckbox != null) {
-//				if(!facebookCheckbox.isChanged() && Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-//					facebookCheckbox.setChecked(user.isAutoPostToFacebook());
-//				}
-//				else {
-//					facebookCheckbox.setChecked(false);
-//				}
-//			}
-//			
-//			if(twitterCheckbox != null) {
-//				if(!twitterCheckbox.isChanged() && Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
-//					twitterCheckbox.setChecked(user.isAutoPostToTwitter());
-//				}
-//				else {
-//					twitterCheckbox.setChecked(false);
-//				}
-//			}		
-			
 			if(locationCheckBox != null && !locationCheckBox.isChanged()) {
-				locationCheckBox.setChecked(user.isShareLocation());
+				locationCheckBox.setChecked(session.getUserSettings().isLocationEnabled());
 			}
 		}
 	}
@@ -575,18 +495,10 @@ public class CommentEntryView extends BaseView {
 	protected void reset() {
 		keyboardUtils.hideKeyboard(commentField);
 		commentField.setText("");
-		update();
+//		update();
 	}
 	
 	public void update() {
-//		if(facebookCheckbox != null) {
-//			facebookCheckbox.setChanged(false);
-//		}
-//		
-//		if(twitterCheckbox != null) {
-//			twitterCheckbox.setChanged(false);
-//		}
-		
 		if(locationCheckBox != null) {
 			locationCheckBox.setChanged(false);
 		}
@@ -594,7 +506,7 @@ public class CommentEntryView extends BaseView {
 		SocializeSession session = Socialize.getSocialize().getSession();
 		
 		if(session != null) {
-			User user = session.getUser();
+			UserSettings user = session.getUserSettings();
 			if(user != null) {
 				notificationsAvailable = user.isNotificationsEnabled() && appUtils.isNotificationsAvailable(getContext());
 			}

@@ -30,6 +30,7 @@ import android.os.Bundle;
 import android.test.mock.MockContext;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.api.SocializeSession;
 import com.socialize.entity.JSONFactory;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
@@ -41,6 +42,7 @@ import com.socialize.notifications.NotificationRegistrationSystem;
 import com.socialize.notifications.NotificationType;
 import com.socialize.notifications.SocializeC2DMCallback;
 import com.socialize.test.SocializeUnitTest;
+import com.socialize.ui.profile.UserSettings;
 
 /**
  * @author Jason Polites
@@ -74,13 +76,15 @@ public class SocializeC2DMCallbackTest extends SocializeUnitTest {
 	@SuppressWarnings("unchecked")
 	@UsesMocks ({
 		User.class, 
+		UserSettings.class,
 		JSONObject.class, 
 		Map.class, 
 		JSONFactory.class, 
 		NotificationMessageBuilder.class, 
 		NotificationMessage.class, 
 		Notification.class, 
-		MockContext.class})
+		MockContext.class,
+		SocializeSession.class})
 	public void test_handleNotification() throws JSONException, SocializeException {
 		
 		Bundle data = new Bundle();
@@ -91,7 +95,9 @@ public class SocializeC2DMCallbackTest extends SocializeUnitTest {
 		final long entityId = 55378008;
 		
 		final Context context = AndroidMock.createMock(MockContext.class);
+		final SocializeSession session = AndroidMock.createMock(SocializeSession.class);
 		final User user = AndroidMock.createMock(User.class);
+		final UserSettings userSettings = AndroidMock.createMock(UserSettings.class);
 		final JSONObject message = AndroidMock.createMock(JSONObject.class);
 		final NotificationType notificationType = NotificationType.NEW_COMMENTS;
 		final Map<String, JSONFactory<NotificationMessage>> messageFactories = AndroidMock.createMock(Map.class);
@@ -101,7 +107,9 @@ public class SocializeC2DMCallbackTest extends SocializeUnitTest {
 		final NotificationMessage notificationMessage = AndroidMock.createMock(NotificationMessage.class);
 		final Notification notification = AndroidMock.createMock(Notification.class);
 		
-		AndroidMock.expect(user.isNotificationsEnabled()).andReturn(true);
+		AndroidMock.expect(session.getUser()).andReturn(user);
+		AndroidMock.expect(session.getUserSettings()).andReturn(userSettings);
+		AndroidMock.expect(userSettings.isNotificationsEnabled()).andReturn(true);
 		AndroidMock.expect(message.has("notification_type")).andReturn(true);
 		AndroidMock.expect(message.isNull("notification_type")).andReturn(false);
 		AndroidMock.expect(message.getString("notification_type")).andReturn(notificationType.name().toLowerCase());
@@ -111,7 +119,7 @@ public class SocializeC2DMCallbackTest extends SocializeUnitTest {
 		AndroidMock.expect(builder.build(context, data, notificationMessage, icon)).andReturn(notification);
 		AndroidMock.expect(notificationMessage.getEntityId()).andReturn(entityId).anyTimes();
 	
-		AndroidMock.replay(user, message, factory, messageBuilders, messageFactories, builder, context, notificationMessage);
+		AndroidMock.replay(session, user, userSettings, message, factory, messageBuilders, messageFactories, builder, context, notificationMessage);
 		
 		PublicSocializeC2DMCallback callback = new PublicSocializeC2DMCallback() {
 			@Override
@@ -141,9 +149,9 @@ public class SocializeC2DMCallbackTest extends SocializeUnitTest {
 		
 		callback.setMessageBuilders(messageBuilders);
 		callback.setMessageFactories(messageFactories);
-		callback.handleNotification(context, data, user);
+		callback.handleNotification(context, data, session);
 		
-		AndroidMock.verify(user, message, factory, messageBuilders, messageFactories, builder, context, notificationMessage);
+		AndroidMock.verify(session, user, userSettings, message, factory, messageBuilders, messageFactories, builder, context, notificationMessage);
 
 		String tag = getResult(0);
 		Integer id = getResult(1);

@@ -21,11 +21,149 @@
  */
 package com.socialize.demo.snippets;
 
+import java.util.List;
+import org.json.JSONObject;
+import android.app.Activity;
+import com.socialize.LikeUtils;
+import com.socialize.UserUtils;
+import com.socialize.api.action.like.LikeOptions;
+import com.socialize.entity.Entity;
+import com.socialize.entity.Like;
+import com.socialize.entity.User;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.like.LikeAddListener;
+import com.socialize.listener.like.LikeDeleteListener;
+import com.socialize.listener.like.LikeListListener;
+import com.socialize.networks.PostData;
+import com.socialize.networks.SocialNetwork;
+
 
 /**
  * @author Jason Polites
  *
  */
-public class LikeSnippets {
+public class LikeSnippets extends Activity {
 
+public void addLikeWithAutoShare() {
+// begin-snippet-0
+Entity entity = Entity.newInstance("http://myentity.com", "My Name");
+
+LikeUtils.like(this, entity, new LikeAddListener() {
+	
+	@Override
+	public void onError(SocializeException error) {
+		// Handle error
+	}
+	
+	@Override
+	public void onCreate(Like result) {
+		// Like was created
+	}
+});
+// end-snippet-0
+}
+
+
+public void unlike() {
+// begin-snippet-1
+// Just use the entity key of the entity that was liked
+LikeUtils.unlike(this, "http://myentity.com", new LikeDeleteListener() {
+	
+	@Override
+	public void onError(SocializeException error) {
+		// Handle error
+	}
+	
+	@Override
+	public void onDelete() {
+		// Like was deleted
+	}
+});
+// end-snippet-1
+}
+
+
+public void addLikeWithManualShare() {
+// begin-snippet-4
+Entity entity = Entity.newInstance("http://myentity.com", "My Name");
+
+// Get the default options for the user.
+LikeOptions likeOptions = LikeUtils.getUserLikeOptions(this);
+
+// Pass the share options in the call to create the like.
+LikeUtils.like(this, entity, likeOptions, new LikeAddListener() {
+	
+	@Override
+	public void onError(SocializeException error) {
+		// Handle error
+	}
+	
+	@Override
+	public void onCreate(Like result) {
+		// Like was created
+	}
+
+	@Override
+	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+		// Failed to share to the given network
+	}
+
+	@Override
+	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+		// Called before the post to the given network is made
+	}
+
+	@Override
+	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+		// Called after the post to the given network is made
+	}
+
+	@Override
+	public void onCancel() {
+		// Called if the user canceled the auth process for social networks
+	}
+}, SocialNetwork.FACEBOOK, SocialNetwork.TWITTER); // Share to multiple networks simultaneously
+//end-snippet-4
+}
+
+public void getLikesByEntity() {
+// begin-snippet-6
+String entityKey = "http://getsocialize.com";
+
+// Get first 10 likes
+LikeUtils.getLikesByEntity(this, entityKey, 0, 10, new LikeListListener() {
+	
+	@Override
+	public void onList(List<Like> likes, int totalCount) {
+		// Found likes
+	}
+	
+	@Override
+	public void onError(SocializeException error) {
+		// Handle error
+	}
+});
+//end-snippet-6
+}
+
+public void getLikesByUser() {
+// begin-snippet-5
+User user = UserUtils.getCurrentUser(this);
+
+// Get first 10 likes by user
+LikeUtils.getLikesByUser(this, user, 0, 10, new LikeListListener() {
+	
+	@Override
+	public void onList(List<Like> likes, int totalCount) {
+		// Found likes
+	}
+	
+	@Override
+	public void onError(SocializeException error) {
+		// Handle error
+	}
+});
+//end-snippet-5
+}
+	
 }

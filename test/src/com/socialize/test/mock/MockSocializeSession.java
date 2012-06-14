@@ -28,6 +28,7 @@ import com.socialize.auth.DefaultUserProviderCredentialsMap;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.entity.User;
+import com.socialize.ui.profile.UserSettings;
 
 /**
  * @author Jason Polites
@@ -38,6 +39,7 @@ public class MockSocializeSession implements WritableSession {
 	private static final long serialVersionUID = 2821519529554271142L;
 	
 	User user;
+	UserSettings userSettings;
 	String key = "all";
 	String sec = "my";
 	String tok = "base";
@@ -50,6 +52,16 @@ public class MockSocializeSession implements WritableSession {
 		super();
 		user = new User();
 		user.setId(-1L);
+		
+		userSettings = new UserSettings();
+	}
+
+	public UserSettings getUserSettings() {
+		return userSettings;
+	}
+
+	public void setUserSettings(UserSettings userSettings) {
+		this.userSettings = userSettings;
 	}
 
 	/* (non-Javadoc)

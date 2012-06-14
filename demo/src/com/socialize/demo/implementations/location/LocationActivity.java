@@ -28,7 +28,11 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.socialize.LocationUtils;
 import com.socialize.demo.DemoActivity;
 import com.socialize.demo.R;
@@ -48,6 +52,9 @@ public class LocationActivity extends DemoActivity {
 
 		Location lastKnownLocation = LocationUtils.getLastKnownLocation(this);
 		TextView text = (TextView) findViewById(R.id.txtLocation);
+		Button btnLocation = (Button) findViewById(R.id.btnLocation);
+		
+		
 		Address geoCoded = null;
 		if(lastKnownLocation != null) {
 			try {
@@ -64,8 +71,15 @@ public class LocationActivity extends DemoActivity {
 		else {
 			text.setText("Unknown");
 		}
+		
+		btnLocation.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				LocationUtils.updateLocation(LocationActivity.this);
+				Toast.makeText(LocationActivity.this, "Update requested", Toast.LENGTH_SHORT).show();
+			}
+		});
 	}
-
 
 	public Address geoCode(Location location) throws IOException  {
 		Geocoder geocoder = new Geocoder(this, Locale.getDefault());

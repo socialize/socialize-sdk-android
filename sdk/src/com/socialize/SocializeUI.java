@@ -61,6 +61,9 @@ public interface SocializeUI {
 
 	public void showCommentView(Activity context, Entity entity);
 
+	public void showActionDetailView(Activity context, User user, SocializeAction action);
+	
+	@Deprecated
 	public void showActionDetailViewForResult(Activity context, User user, SocializeAction action, int requestCode);
 	
 	@Deprecated

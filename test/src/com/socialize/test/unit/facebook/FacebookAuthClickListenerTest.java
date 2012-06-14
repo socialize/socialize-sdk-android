@@ -101,6 +101,9 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 			public void link(Activity context, String token, SocializeAuthListener listener) {}
 			
 			@Override
+			public void link(Activity context, SocializeAuthListener listener, String... permissions) {}
+
+			@Override
 			public void link(Activity context, SocializeAuthListener listener) {
 				addResult(0, listener);
 				latch.countDown();

@@ -27,6 +27,7 @@ import com.socialize.ui.actionbutton.ActionButtonConfig;
  * @author Jason Polites
  *
  */
+@Deprecated
 public class PublicActionButtonConfig extends ActionButtonConfig {
 	public PublicActionButtonConfig() {
 		super();

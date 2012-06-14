@@ -1,8 +1,8 @@
 .. include:: header.inc
 
-=============
-Twitter Setup
-=============
+===================
+Twitter Integration
+===================
 
 Introduction
 ------------
@@ -20,8 +20,11 @@ This provides significant benefits to both your application, and your users incl
 To add Twitter authentication, you'll need a Twitter Application and the consumer key/consumer secret for the Twitter app.  
 If you already have a Twitter app, you can skip this section.
 
+Setting up Twitter
+-------------------
+
 Creating a Twitter Application
--------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 If you **do not** already have a Twitter app just follow these simple steps:
 
 	1. First create a Twitter app.  Go to https://dev.twitter.com/ and create a new app:
@@ -58,22 +61,46 @@ Once you have a twitter application, simply add your Twitter consumer key and se
 
 .. literalinclude:: snippets/props_twitter.txt
    :language: properties
-   :linenos:
 
-Propagating Socialize Actions to Twitter
------------------------------------------
+Linking Users with Twitter
+---------------------------
 
-Social actions such as Comment and Like can optionally be propagated to Twitter via the SDK.
+To be able to post to a user's Twitter feed the user must first link with their Twitter account
 
-.. note:: 
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/TwitterSnippets.java
+	:start-after: begin-snippet-0
+	:end-before: end-snippet-0
 
-	Propagation is automatic when using the Socialize Action Bar.  The following is only required for developers
-	electing to use the SDK manually
+If you already have Twitter integration in your app and do not wish to replace this with the Socialize implementation you 
+can still link the user to Twitter within Socialize by providing the user's Twitter auth token and secret
 
-The following example shows posting a comment and simultaneously tweeting the comment on the user's twitter feed.
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/TwitterSnippets.java
+	:start-after: begin-snippet-1
+	:end-before: end-snippet-1
+	
+To unlink a user from their Twitter account simple call **unlink**.  This call executes synchronously.
 
-.. literalinclude:: snippets/create_comment_tw.txt
-   :language: java
-   :linenos:
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/TwitterSnippets.java
+	:start-after: begin-snippet-3
+	:end-before: end-snippet-3
+
+Posting to Twitter
+-------------------
+
+By default all actions created using the SDK will provide the end user with the opportunity to share their 
+action with Twitter (if Twitter has been configured) however it is also possible to manually post content to a user's
+Twitter feed.
+
+Posting Socialize Entities to Twitter
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The simplest and most effective use of Twitter within Socialize is to post entities.  This approach takes full advantage of 
+Socialize SmartDownloads which helps maximize the effectiveness of your social strategy.
+
+To post an entity to a user's Twitter feed simply call the **tweetEntity** method.
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/TwitterSnippets.java
+	:start-after: begin-snippet-4
+	:end-before: end-snippet-4
 
 .. include:: footer.inc	

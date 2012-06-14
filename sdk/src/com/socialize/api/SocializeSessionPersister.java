@@ -25,6 +25,7 @@ import android.content.Context;
 
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
+import com.socialize.ui.profile.UserSettings;
 
 /**
  * @author Jason Polites
@@ -39,5 +40,5 @@ public interface SocializeSessionPersister {
 	
 	public void delete(Context context, AuthProviderType type);
 	
-	public void saveUser(Context context, User user);
+	public void saveUser(Context context, User user, UserSettings settings);
 }

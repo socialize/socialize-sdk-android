@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.socialize.Socialize;
+import com.socialize.UserUtils;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.view.EntityView;
 
@@ -45,6 +46,9 @@ public class ProfileView extends EntityView {
 		if(profileLayoutView != null) {
 			profileLayoutView.onImageChange(bitmap);
 		}
+		
+		// Set the image in the user settings
+		UserUtils.getUserSettings(getContext()).setImage(bitmap);
 	}
 	
 	@Override

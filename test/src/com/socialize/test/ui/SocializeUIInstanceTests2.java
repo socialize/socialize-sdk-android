@@ -33,7 +33,6 @@ import com.socialize.entity.User;
 import com.socialize.test.PublicSocialize;
 import com.socialize.ui.action.ActionDetailActivity;
 import com.socialize.ui.comment.CommentActivity;
-import com.socialize.ui.comment.CommentView;
 import com.socialize.ui.comment.OnCommentViewActionListener;
 import com.socialize.ui.profile.ProfileActivity;
 
@@ -88,6 +87,8 @@ public class SocializeUIInstanceTests2 extends SocializeUIActivityTest {
 			}
 		};
 		
+		socialize.init(getContext());
+		
 		AndroidMock.replay(intent);
 		
 		socialize.showCommentView(context, entity, listener);
@@ -100,10 +101,10 @@ public class SocializeUIInstanceTests2 extends SocializeUIActivityTest {
 		assertEquals(CommentActivity.class, clsAfter);
 		assertSame(intent, intentAfter);
 		
-		OnCommentViewActionListener listenerAfter = (OnCommentViewActionListener) Socialize.STATIC_LISTENERS.get(CommentView.COMMENT_LISTENER);
-		
-		assertNotNull(listenerAfter);
-		assertSame(listener, listenerAfter);	
+//		OnCommentViewActionListener listenerAfter = (OnCommentViewActionListener) Socialize.STATIC_LISTENERS.get(CommentView.COMMENT_LISTENER);
+//		
+//		assertNotNull(listenerAfter);
+//		assertSame(listener, listenerAfter);	
 	}	
 	
 	@UsesMocks ({Intent.class})
@@ -191,7 +192,6 @@ public class SocializeUIInstanceTests2 extends SocializeUIActivityTest {
 
 		final Long userId = 101L;
 		final Long actionId = 201L;
-		final int requestCode = 69;
 		
 		final User user = new User();
 		final SocializeAction action = new Comment();
@@ -208,9 +208,8 @@ public class SocializeUIInstanceTests2 extends SocializeUIActivityTest {
 		Activity context = new Activity() {
 
 			@Override
-			public void startActivityForResult(Intent intent, int requestCode) {
+			public void startActivity(Intent intent) {
 				addResult(intent);
-				addResult(requestCode);
 			}
 		};
 		
@@ -225,17 +224,15 @@ public class SocializeUIInstanceTests2 extends SocializeUIActivityTest {
 		
 		AndroidMock.replay(intent);
 		
-		socialize.showActionDetailViewForResult(context, user, action, requestCode);
+		socialize.showActionDetailView(context, user, action);
 		
 		AndroidMock.verify(intent);		
 		
 		Class<?> clsAfter = getNextResult();
 		Intent intentAfter = getNextResult();
-		Integer code = getNextResult();
 		
 		assertEquals(ActionDetailActivity.class, clsAfter);
 		assertSame(intent, intentAfter);
-		assertEquals(requestCode, code.intValue());			
 	}		
 	
 }

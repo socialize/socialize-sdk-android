@@ -21,12 +21,8 @@
  */
 package com.socialize;
 
-import java.util.HashMap;
-import java.util.Map;
 import android.content.Context;
-import com.socialize.config.SocializeConfig;
 import com.socialize.listener.SocializeInitListener;
-import com.socialize.listener.SocializeListener;
 import com.socialize.log.SocializeLogger.LogLevel;
 
 /**
@@ -36,12 +32,12 @@ import com.socialize.log.SocializeLogger.LogLevel;
 public class Socialize {
 	
 	// This will be set during the build process
-	public static final String VERSION = "2.0-BETA";
+	public static final String VERSION = "2.0";
 	
 	public static final String ENTITY_OBJECT = "socialize.entity";
 	public static final String ENTITY_ID = "socialize.entity.id";
 	
-	public static final Map<String, SocializeListener> STATIC_LISTENERS = new HashMap<String, SocializeListener>();
+//	public static final Map<String, SocializeListener> STATIC_LISTENERS = new HashMap<String, SocializeListener>();
 	
 	public static final String ACTION_ID = "socialize.action.id";
 	public static final String ACTION_TYPE = "socialize.action.type";
@@ -60,7 +56,7 @@ public class Socialize {
 	}
 
 	/**
-	 * Initialize Socialize synnchronously.  Should not be called from the main UI thread.
+	 * Initialize Socialize synchronously.  Should not be called from the main UI thread.
 	 * @param context
 	 */
 	public static final void init(Context context) {
@@ -102,19 +98,10 @@ public class Socialize {
 		return instance;
 	}
 	
-	/**
-	 * Returns the global configuration object.
-	 * @return The global configuration object.
-	 */
-	public static SocializeConfig getConfig() {
-		return getSocialize().getConfig();
-	}
-	
 	@Deprecated
 	public static final SocializeUI getSocializeUI() {
 		return instance;
 	}
-	
 	
 	static Object getBean(String name) {
 		return instance.getContainer().getBean(name);

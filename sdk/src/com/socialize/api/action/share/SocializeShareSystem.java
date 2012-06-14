@@ -39,7 +39,6 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.log.SocializeLogger;
-import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.provider.SocializeProvider;
@@ -169,9 +168,11 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 		
 		if(network != null && network.length > 0) {
 			ShareOptions shareOptions = new ShareOptions();
-			shareOptions.setShareTo(network);
-			shareOptions.setShareLocation(true);
-			setPropagationData(c, shareOptions);
+			
+			// TODO: Is this needed?
+			shareOptions.setAuthRequired(true);
+			
+			setPropagationData(c, shareOptions, network);
 		}
 		else if(shareType != null) {
 			// Set propagation data for non-network share types

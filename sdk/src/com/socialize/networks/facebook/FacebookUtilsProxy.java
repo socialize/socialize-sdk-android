@@ -36,6 +36,8 @@ import com.socialize.networks.SocialNetworkPostListener;
 public interface FacebookUtilsProxy {
 	public void link (Activity context, SocializeAuthListener listener);
 	public void link (Activity context, String token, SocializeAuthListener listener);
+	public void link(Activity context, SocializeAuthListener listener, String...permissions);
+	
 	public void unlink (Context context);
 	
 	@Synchronous
@@ -57,4 +59,5 @@ public interface FacebookUtilsProxy {
 	public void get(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener);
 	
 	public void delete(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener);
+
 }

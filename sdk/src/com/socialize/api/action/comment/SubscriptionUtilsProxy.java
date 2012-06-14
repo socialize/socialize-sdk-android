@@ -25,7 +25,7 @@ import android.app.Activity;
 import com.socialize.entity.Entity;
 import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
-import com.socialize.notifications.NotificationType;
+import com.socialize.notifications.SubscriptionType;
 
 
 /**
@@ -33,27 +33,10 @@ import com.socialize.notifications.NotificationType;
  *
  */
 public interface SubscriptionUtilsProxy {
-	/**
-	 * Subscribes the current user to notifications for new comments on this entity.
-	 * @param context The current context.
-	 * @param e The entity.
-	 * @param listener A listener to handle the result.
-	 */
-	public void subscribe (Activity context, Entity e, NotificationType type, SubscriptionResultListener listener);
+
+	public void subscribe (Activity context, Entity e, SubscriptionType type, SubscriptionResultListener listener);
 	
-	/**
-	 * Un-Subscribes the current user from notifications for new comments on this entity.
-	 * @param context The current context.
-	 * @param e The entity.
-	 * @param listener A listener to handle the result.
-	 */
-	public void unsubscribe (Activity context, Entity e, NotificationType type, SubscriptionResultListener listener);
-	
-	/**
-	 * Determines if the current user is subscribed to notifications on new comments for the given entity.
-	 * @param context The current context.
-	 * @param e The entity.
-	 * @param listener A listener to handle the result.
-	 */
-	public void isSubscribed (Activity context, Entity e, NotificationType type, SubscriptionGetListener listener);
+	public void unsubscribe (Activity context, Entity e, SubscriptionType type, SubscriptionResultListener listener);
+
+	public void isSubscribed (Activity context, Entity e, SubscriptionType type, SubscriptionGetListener listener);
 }

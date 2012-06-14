@@ -13,7 +13,6 @@ To do this, simply add a configuration entry to your **socialize.properties** fi
 
 .. literalinclude:: snippets/props_amazon.txt
    :language: properties
-   :linenos:
    
 The value for the Amazon AppStore is "amazon" (lowercase)
 

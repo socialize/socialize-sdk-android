@@ -44,6 +44,7 @@ public abstract class SocializeAction extends SocializeObject {
 	private Double lat;
 	private Long date;
 	private boolean locationShared;
+	
 	private boolean notificationsEnabled;
 	
 	public Application getApplication() {
@@ -59,6 +60,12 @@ public abstract class SocializeAction extends SocializeObject {
 	public void setEntity(Entity entity) {
 		this.entity = entity;
 	}
+	
+	/**
+	 * Reverts to only set the entity key if the name is not defined.  
+	 * This ensures an existing entity name is not wiped out when the action is saved.
+	 * @param entity
+	 */
 	public void setEntitySafe(Entity entity) {
 		if(StringUtils.isEmpty(entity.getName())) {
 			setEntityKey(entity.getKey());

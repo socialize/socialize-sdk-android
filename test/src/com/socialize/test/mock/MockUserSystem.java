@@ -13,6 +13,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.user.UserListener;
 import com.socialize.ui.profile.UserProfile;
+import com.socialize.ui.profile.UserSettings;
 
 public class MockUserSystem implements UserSystem {
 	
@@ -96,12 +97,7 @@ public class MockUserSystem implements UserSystem {
 	}
 
 	@Override
-	public void saveUserProfile(Context context, SocializeSession session, UserProfile profile, UserListener listener) {
-		listener.onUpdate(user);
-	}
-	
-	@Override
-	public void saveUserProfile(Context context, SocializeSession session, User user, boolean resetC2DM, UserListener listener) {
+	public void saveUserSettings(Context context, SocializeSession session, UserSettings profile, UserListener listener) {
 		listener.onUpdate(user);
 	}
 

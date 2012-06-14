@@ -36,6 +36,7 @@ import android.widget.EditText;
 import com.socialize.ShareUtils;
 import com.socialize.api.action.share.SocialNetworkDialogListener;
 import com.socialize.api.action.share.SocialNetworkShareListener;
+import com.socialize.demo.ConfigDialog;
 import com.socialize.demo.DemoActivity;
 import com.socialize.demo.DemoUtils;
 import com.socialize.demo.R;
@@ -63,6 +64,7 @@ public class ShareButtonsActivity extends DemoActivity {
 		Button btnShareSocialNetwork = (Button) findViewById(R.id.btnShareSocialNetwork);
 		Button btnShareFacebook = (Button) findViewById(R.id.btnShareFacebook);
 		Button btnShareTwitter = (Button) findViewById(R.id.btnShareTwitter);
+		Button btnConfig = (Button) findViewById(R.id.btnConfig);
 		
 		btnShareTwitter.setOnClickListener(new OnClickListener() {
 			@Override
@@ -166,6 +168,14 @@ public class ShareButtonsActivity extends DemoActivity {
 				});
 			}
 		});		
+		
+		
+		btnConfig.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ConfigDialog.showConfigDialog(ShareButtonsActivity.this);
+			}
+		});
 	}
 
 	

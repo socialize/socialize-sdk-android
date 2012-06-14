@@ -137,7 +137,7 @@ public class SocializeUrlLauncher extends BaseLauncher implements UrlLauncher {
 	 * @see com.socialize.launcher.Launcher#shouldFinish()
 	 */
 	@Override
-	public boolean shouldFinish() {
+	public boolean shouldFinish(Activity context) {
 		// Don't finish!
 		return false;
 	}

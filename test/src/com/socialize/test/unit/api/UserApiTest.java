@@ -36,7 +36,7 @@ import com.socialize.listener.user.UserSaveListener;
 import com.socialize.notifications.NotificationRegistrationSystem;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeUnitTest;
-import com.socialize.ui.profile.UserProfile;
+import com.socialize.ui.profile.UserSettings;
 
 /**
  * @author Jason Polites
@@ -87,22 +87,22 @@ public class UserApiTest extends SocializeUnitTest {
 		Context context = new MockContext();
 		String firstName = "foo";
 		String lastName = "bar";
-		String encodedImage = "foobar_encoded";
+//		String encodedImage = "foobar_encoded";
 		
 		User user = AndroidMock.createMock(User.class);
 		
 		AndroidMock.expect(session.getUser()).andReturn(user);
 		AndroidMock.expect(user.getId()).andReturn(id);
-		AndroidMock.expect(user.isNotificationsEnabled()).andReturn(true);
-		AndroidMock.expect(user.isShareLocation()).andReturn(false);
-		
+//		AndroidMock.expect(user.isNotificationsEnabled()).andReturn(true);
+//		AndroidMock.expect(user.isShareLocation()).andReturn(false);
+//		
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
-		user.setProfilePicData(encodedImage);
-		user.setAutoPostToFacebook(true);
-		user.setAutoPostToTwitter(true);
-		user.setNotificationsEnabled(false);
-		user.setShareLocation(true);
+//		user.setProfilePicData(encodedImage);
+//		user.setAutoPostToFacebook(true);
+//		user.setAutoPostToTwitter(true);
+//		user.setNotificationsEnabled(false);
+//		user.setShareLocation(true);
 		
 		SocializeUserSystem api = new SocializeUserSystem(provider) {
 			@Override
@@ -114,16 +114,16 @@ public class UserApiTest extends SocializeUnitTest {
 		AndroidMock.replay(session);
 		AndroidMock.replay(user);
 		
-		UserProfile profile = new UserProfile();
+		UserSettings profile = new UserSettings();
 		profile.setFirstName(firstName);
 		profile.setLastName(lastName);
-		profile.setEncodedImage(encodedImage);
+//		profile.setEncodedImage(encodedImage);
 		profile.setAutoPostFacebook(true);
 		profile.setAutoPostTwitter(true);
 		profile.setNotificationsEnabled(false);
 		profile.setLocationEnabled(true);
 		
-		api.saveUserProfile(context, session, profile, listener);
+		api.saveUserSettings(context, session, profile, listener);
 		
 		AndroidMock.verify(session);
 		AndroidMock.verify(user);
@@ -133,9 +133,9 @@ public class UserApiTest extends SocializeUnitTest {
 	}
 	
 	/**
-	 * Tests that the listener created in saveUserProfile behaves correctly.
+	 * Tests that the listener created in saveUserSettings behaves correctly.
 	 */
-	@UsesMocks ({SocializeException.class, SocializeSessionPersister.class, NotificationRegistrationSystem.class})
+	@UsesMocks ({SocializeException.class, SocializeSessionPersister.class, NotificationRegistrationSystem.class, User.class, UserSettings.class})
 	public void testSaveUserProfileListener() {
 		
 		final long id = 69;
@@ -143,34 +143,40 @@ public class UserApiTest extends SocializeUnitTest {
 		Context context = new MockContext();
 		String firstName = "foo";
 		String lastName = "bar";
-		String encodedImage = "foobar_encoded";
+		
+		UserSettings profile = new UserSettings();
+		profile.setFirstName(firstName);
+		profile.setLastName(lastName);
+		profile.setAutoPostFacebook(true);
+		profile.setAutoPostTwitter(true);
+		profile.setNotificationsEnabled(false);
+		profile.setLocationEnabled(true);
+				
 		
 		User user = AndroidMock.createMock(User.class);
+		UserSettings userSettings = AndroidMock.createMock(UserSettings.class);
 		SocializeSessionPersister sessionPersister = AndroidMock.createMock(SocializeSessionPersister.class);
 		SocializeException exception = AndroidMock.createMock(SocializeException.class);
 		NotificationRegistrationSystem notificationRegistrationSystem = AndroidMock.createMock(NotificationRegistrationSystem.class);
 		
 		AndroidMock.expect(session.getUser()).andReturn(user).times(2);
+		AndroidMock.expect(session.getUserSettings()).andReturn(userSettings).times(2);
 		AndroidMock.expect(user.getId()).andReturn(id);
-		AndroidMock.expect(user.isNotificationsEnabled()).andReturn(true);
-		AndroidMock.expect(user.isShareLocation()).andReturn(false);
+		AndroidMock.expect(userSettings.isNotificationsEnabled()).andReturn(true);
+//		AndroidMock.expect(userSettings.isLocationEnabled()).andReturn(false);
 		
 		notificationRegistrationSystem.registerC2DMAsync(context);
 		
-		user.merge(user);
+		user.update(user);
+		userSettings.update(profile);
 		
 		listener.onUpdate(user);
 		listener.onError(exception);
 		
-		sessionPersister.saveUser(context, user);
+		sessionPersister.saveUser(context, user, profile);
 		
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
-		user.setProfilePicData(encodedImage);
-		user.setAutoPostToFacebook(true);
-		user.setAutoPostToTwitter(true);
-		user.setNotificationsEnabled(false);
-		user.setShareLocation(true);
 		
 		SocializeUserSystem api = new SocializeUserSystem(provider) {
 			@Override
@@ -181,19 +187,10 @@ public class UserApiTest extends SocializeUnitTest {
 		
 		api.setSessionPersister(sessionPersister);
 		
-		AndroidMock.replay(session, listener, sessionPersister, user, notificationRegistrationSystem);
-		
-		UserProfile profile = new UserProfile();
-		profile.setFirstName(firstName);
-		profile.setLastName(lastName);
-		profile.setEncodedImage(encodedImage);
-		profile.setAutoPostFacebook(true);
-		profile.setAutoPostTwitter(true);
-		profile.setNotificationsEnabled(false);
-		profile.setLocationEnabled(true);
-		
+		AndroidMock.replay(session, listener, sessionPersister, user, userSettings, notificationRegistrationSystem);
+
 		api.setNotificationRegistrationSystem(notificationRegistrationSystem);
-		api.saveUserProfile(context, session, profile, listener);
+		api.saveUserSettings(context, session, profile, listener);
 		
 		// This will fail if it's the wrong type
 		UserSaveListener listenerFound = getNextResult();
@@ -204,7 +201,7 @@ public class UserApiTest extends SocializeUnitTest {
 		listenerFound.onUpdate(user);
 		listenerFound.onError(exception);
 		
-		AndroidMock.verify(session, listener, sessionPersister, user, notificationRegistrationSystem);
+		AndroidMock.verify(session, listener, sessionPersister, user, userSettings, notificationRegistrationSystem);
 		
 	}
 }

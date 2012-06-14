@@ -43,8 +43,30 @@ public class FacebookAuthProviderInfoTest extends SocializeUnitTest {
 		assertTrue(info0.equals(info0));
 		assertTrue(info0.equals(info1));
 		assertFalse(info0.equals(info2));
+	}
+	
+	public void testMatches() {
+		FacebookAuthProviderInfo info0 = new FacebookAuthProviderInfo();
+		FacebookAuthProviderInfo info1 = new FacebookAuthProviderInfo();
+		FacebookAuthProviderInfo info2 = new FacebookAuthProviderInfo();
+		
+		info0.setAppId("abc");
+		info1.setAppId("abc");
+		info2.setAppId("abc");
+		
+		info0.setPermissions(new String[]{"a","b","c"});
+		info1.setPermissions(new String[]{"b","c"});
+		info2.setPermissions(new String[]{"c","a","b"});
 		
 		
+		assertTrue(info0.matches(info1));
+		assertTrue(info0.matches(info2));
+		
+		assertTrue(info2.matches(info1));
+		assertTrue(info2.matches(info0));
+		
+		assertFalse(info1.matches(info2));
+		assertFalse(info1.matches(info0));
 	}
 	
 }

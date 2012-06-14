@@ -40,6 +40,7 @@ import com.socialize.ui.actionbutton.SocializeActionButton;
 /**
  * @author Jason Polites
  */
+@Deprecated
 public class SocializeActionButtonTest extends SocializeUITestCase {
 	
 	public void testConstructorA() {

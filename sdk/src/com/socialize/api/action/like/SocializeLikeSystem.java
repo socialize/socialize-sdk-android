@@ -33,7 +33,7 @@ import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.like.LikeListener;
-import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.provider.SocializeProvider;
 
 /**
@@ -50,11 +50,11 @@ public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Li
 	 * @see com.socialize.api.action.LikeSystem#addLike(com.socialize.api.SocializeSession, com.socialize.entity.Entity, android.location.Location, com.socialize.networks.ShareOptions, com.socialize.listener.like.LikeListener)
 	 */
 	@Override
-	public void addLike(SocializeSession session, Entity entity, ShareOptions shareOptions, LikeListener listener) {
+	public void addLike(SocializeSession session, Entity entity, LikeOptions shareOptions, LikeListener listener, SocialNetwork... networks) {
 		Like c = new Like();
 		c.setEntitySafe(entity);
 		
-		setPropagationData(c, shareOptions);
+		setPropagationData(c, shareOptions, networks);
 		setLocation(c);
 		
 		List<Like> list = new ArrayList<Like>(1);

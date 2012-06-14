@@ -121,7 +121,7 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 
 					launcherProxy.setDelegate(new BaseLauncher() {
 						@Override
-						public boolean shouldFinish() {
+						public boolean shouldFinish(Activity context) {
 							return true;
 						}
 						

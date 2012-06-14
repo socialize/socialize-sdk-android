@@ -19,13 +19,6 @@
 		</init-method>
 	</bean>	
 	
-	<bean id="bitmapBuilder" class="com.socialize.util.BitmapBuilder"/>
-	
-	<bean id="bitmapUtils" class="com.socialize.util.BitmapUtils">
-		<property name="bitmapBuilder" ref="bitmapBuilder"/>
-		<property name="base64Utils" ref="base64Utils"/>
-	</bean>
-	
 	<bean id="drawables" class="com.socialize.util.Drawables">
 		<property name="classLoaderProvider" ref="classLoaderProvider"/>
 		<property name="cache" ref="cache"/>
@@ -401,6 +394,7 @@
 		<property name="panelViewFactory" ref="authPanelViewFactory"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
+		<property name="logger" ref="logger"/>
 	</bean>
 	
 	<bean 
@@ -411,6 +405,7 @@
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="colors" ref="colors"/>
+		<property name="config" ref="config"/>
 		<property name="facebookShareCellFactory" ref="facebookShareCellFactory"/>
 		<property name="twitterShareCellFactory" ref="twitterShareCellFactory"/>
 		<property name="emailCellFactory" ref="emailCellFactory"/>
@@ -431,8 +426,8 @@
 		<property name="panelViewFactory" ref="sharePanelViewFactory"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
+		<property name="logger" ref="logger"/>
 	</bean>	
-	 
 	
 	<bean 
 		id="emailCell" 
@@ -526,7 +521,6 @@
 	<bean 
 		id="socialNetworkAuthClickListener" 
 		abstract="true">
-		<property name="config" ref="config"/>
 		<property name="dialogFactory" ref="progressDialogFactory"/>
 	</bean>
 	
@@ -851,7 +845,7 @@
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="logger" ref="logger"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
-		<property name="alertDialogFactory" ref="alertDialogFactory"/>
+		<!-- <property name="alertDialogFactory" ref="alertDialogFactory"/> -->
 		<property name="commentHeaderFactory" ref="commentHeaderFactory"/>
 		<property name="commentEditFieldFactory" ref="commentEditFieldFactory"/>
 		<property name="commentContentViewFactory" ref="loadingListViewFactory"/>
@@ -1229,9 +1223,7 @@
 	<bean 
 		id="profileSaver" 
 		singleton="true"
-		class="com.socialize.ui.profile.DefaultProfileSaver">
-		<property name="bitmapUtils" ref="bitmapUtils"/>
-	</bean>
+		class="com.socialize.ui.profile.DefaultProfileSaver"/>
 	
 	<bean 
 		id="profileSaveButtonListener" 
@@ -1631,6 +1623,7 @@
 
 	<bean id="userUtils" class="com.socialize.api.action.user.SocializeUserUtils">
 		<property name="userSystem" ref="userSystem"/>
+		<property name="sessionPersister" ref="sessionPersister"/>
 	</bean>
 	
 	<bean id="actionUtils" class="com.socialize.api.action.activity.SocializeActionUtils">
@@ -1646,10 +1639,15 @@
 	<bean id="twitterUtils" class="com.socialize.networks.twitter.TwitterUtilsImpl">
 		<property name="userSystem" ref="userSystem"/>
 		<property name="shareSystem" ref="shareSystem"/>
+		<property name="config" ref="config"/>
 	</bean>	
 
 	<bean id="locationUtils" class="com.socialize.location.SocializeLocationUtils">
 		<property name="locationProvider" ref="locationProvider"/>
 	</bean>	
+	
+	<bean id="configUtils" class="com.socialize.config.SocializeConfigUtils">
+		<property name="config" ref="config"/>
+	</bean>
 
 </beans>

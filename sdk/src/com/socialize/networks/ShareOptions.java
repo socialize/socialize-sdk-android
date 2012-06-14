@@ -21,23 +21,32 @@
  */
 package com.socialize.networks;
 
+import com.socialize.api.action.ActionOptions;
+
 
 /**
  * Allows for the specification of options for sharing.
  * @author Jason Polites
+ * @deprecated use LikeOptions or ShareOptions.
  */
-public class ShareOptions {
-	
+@Deprecated
+public class ShareOptions extends ActionOptions {
+	@Deprecated
 	private boolean shareLocation;
-	private SocialNetwork[] shareTo;
-	private SocialNetworkListener listener;
-	private boolean selfManaged = false;
-	private boolean authRequired = true;
 	
+	@Deprecated
+	private SocialNetwork[] shareTo;
+	
+	@Deprecated
+	private SocialNetworkListener listener;
+	
+
 	/**
 	 * If true and if available, the user's location is shared.
-	 * @return
+	 * @return 
+	 * @deprecated The user's preference will be automatically used.
 	 */
+	@Deprecated
 	public boolean isShareLocation() {
 		return shareLocation;
 	}
@@ -45,19 +54,24 @@ public class ShareOptions {
 	/**
 	 * If true and if available, the user's location is shared.
 	 * @param shareLocation
+	 * @deprecated The user's preference will be automatically used.
 	 */
+	@Deprecated
 	public void setShareLocation(boolean shareLocation) {
 		this.shareLocation = shareLocation;
 	}
 	
+	@Deprecated
 	public SocialNetwork[] getShareTo() {
 		return shareTo;
 	}
 
+	@Deprecated
 	public void setShareTo(SocialNetwork...shareTo) {
 		this.shareTo = shareTo;
 	}
 
+	@Deprecated
 	public SocialNetworkListener getListener() {
 		return listener;
 	}
@@ -66,10 +80,12 @@ public class ShareOptions {
 	 * Allows for the capture of events when sharing on social networks like facebook.
 	 * @param listener
 	 */
+	@Deprecated
 	public void setListener(SocialNetworkListener listener) {
 		this.listener = listener;
 	}
 	
+	@Deprecated
 	public boolean isShareTo(SocialNetwork destination) {
 		if(shareTo != null) {
 			for (SocialNetwork d : shareTo) {
@@ -81,32 +97,15 @@ public class ShareOptions {
 		
 		return false;
 	}
-	
-	public boolean isSelfManaged() {
-		return selfManaged;
-	}
 
-	/**
-	 * Set to true if the sharing to 3rd party networks will be handled by the client (default: false)
-	 * @param selfManaged
-	 */
-	public void setSelfManaged(boolean selfManaged) {
-		this.selfManaged = selfManaged;
+	@Override
+	public void merge(ActionOptions other) {
+		super.merge(other);
+		if(other instanceof ShareOptions) {
+			ShareOptions sOther = (ShareOptions) other;
+			setShareLocation(sOther.isShareLocation());
+			setListener(sOther.getListener());
+			setShareTo(sOther.getShareTo());
+		}
 	}
-
-	
-	public boolean isAuthRequired() {
-		return authRequired;
-	}
-
-	/**
-	 * Set to false if you DON'T want the authenticate dialog to show when sharing.
-	 * Defaults to socialize.require.auth config property.
-	 * @param requireAuth
-	 */
-	public void setAuthRequired(boolean requireAuth) {
-		this.authRequired = requireAuth;
-	}
-	
-	
 }

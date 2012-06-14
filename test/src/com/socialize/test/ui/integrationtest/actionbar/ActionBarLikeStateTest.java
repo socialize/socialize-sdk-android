@@ -20,7 +20,6 @@ import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.like.LikeListener;
-import com.socialize.networks.ShareOptions;
 import com.socialize.sample.ui.ActionBarManualActivity2;
 import com.socialize.test.mock.MockEntitySystem;
 import com.socialize.test.mock.MockLikeSystem;
@@ -65,16 +64,6 @@ public class ActionBarLikeStateTest extends ActivityInstrumentationTestCase2<Act
 			
 			int callCount = 0;
 			
-			@Override
-			public void addLike(SocializeSession session, Entity entityKey, ShareOptions shareOptions, LikeListener listener) {
-				super.addLike(session, entityKey, shareOptions, listener);
-			}
-
-			@Override
-			public void deleteLike(SocializeSession session, long id, LikeListener listener) {
-				super.deleteLike(session, id, listener);
-			}
-
 			@Override
 			public void getLike(SocializeSession session, String entityKey, LikeListener listener) {
 				if(callCount == 0) {

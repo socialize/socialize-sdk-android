@@ -29,6 +29,8 @@ import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
+import com.socialize.networks.SocialNetwork;
+import com.socialize.ui.profile.UserSettings;
 
 
 /**
@@ -46,6 +48,14 @@ public class UserUtils {
 				new SocializeActionProxy("userUtils"));	// Bean name
 	}
 	
+	/**
+	 * Gets the Social Networks the user has elected to auto-post to.
+	 * @param context The current context.
+	 * @return An array of SocialNetworks, or null if the user has not elected to auto post to any.
+	 */
+	public static SocialNetwork[] getAutoPostSocialNetworks(Context context) {
+		return proxy.getAutoPostSocialNetworks(context);
+	}
 
 	/**
 	 * Returns the current logged in user.  If no user is currently authenticated this will authenticate synchronously.
@@ -55,6 +65,15 @@ public class UserUtils {
 	 */
 	public static User getCurrentUser(Context context)  {
 		return proxy.getCurrentUser(context);
+	}
+	
+	/**
+	 * Returns the settings for the current user.
+	 * @param context
+	 * @return
+	 */
+	public static UserSettings getUserSettings(Context context) {
+		return proxy.getUserSettings(context);
 	}
 	
 	/**
@@ -73,7 +92,7 @@ public class UserUtils {
 	 * @param user
 	 */
 	public static void showUserProfile (Activity context, User user) {
-		Socialize.getSocialize().showUserProfileView(context, user.getId());
+		Socialize.getSocialize().showActionDetailView(context, user, null);
 	}
 	
 	/**
@@ -91,8 +110,8 @@ public class UserUtils {
 	 * @param user
 	 * @param listener
 	 */
-	public static void saveUserSettings (Activity context, User user, UserSaveListener listener) {
-		proxy.saveUserSettings(context, user, listener);
+	public static void saveUserSettings (Context context, UserSettings userSettings, UserSaveListener listener) {
+		proxy.saveUserSettings(context, userSettings, listener);
 	}
 	
 	/**

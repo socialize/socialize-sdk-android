@@ -51,7 +51,7 @@ public class CommentView extends EntityView {
 				commentListView = container.getBean("commentList", entity);
 				ListenerHolder holder = container.getBean("listenerHolder");
 				if(holder != null) {
-					OnCommentViewActionListener onCommentViewActionListener = holder.get(COMMENT_LISTENER);
+					OnCommentViewActionListener onCommentViewActionListener = holder.pop(COMMENT_LISTENER);
 					commentListView.setOnCommentViewActionListener(onCommentViewActionListener);
 				}	
 			}

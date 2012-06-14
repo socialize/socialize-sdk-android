@@ -26,6 +26,7 @@ import android.content.Context;
 import android.location.Location;
 import android.os.AsyncTask;
 import com.socialize.Socialize;
+import com.socialize.api.action.ActionOptions;
 import com.socialize.api.action.ActionType;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProvider;
@@ -46,10 +47,10 @@ import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.location.SocializeLocationProvider;
 import com.socialize.log.SocializeLogger;
-import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.notifications.NotificationChecker;
 import com.socialize.provider.SocializeProvider;
+import com.socialize.ui.profile.UserSettings;
 import com.socialize.util.AppUtils;
 import com.socialize.util.HttpUtils;
 import com.socialize.util.StringUtils;
@@ -70,6 +71,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	private SocializeLocationProvider locationProvider;
 	private NotificationChecker notificationChecker;
 	private AppUtils appUtils;
+	protected SocializeConfig config;
 	
 	public static enum RequestType {AUTH,PUT,POST,PUT_AS_POST,GET,LIST,LIST_AS_GET,LIST_WITHOUT_ENTITY,DELETE};
 	
@@ -114,29 +116,30 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	}
 	
 	
-	protected void setPropagationData(SocializeAction action, ShareOptions shareOptions) {
-		if(shareOptions != null) {
-			SocialNetwork[] shareTo = shareOptions.getShareTo();
-			if(shareTo != null) {
-				Propagation propagation = null;
-				Propagation localPropagation = null;
-				
-				for (SocialNetwork socialNetwork : shareTo) {
-					if(socialNetwork.isLocalPropagation() || shareOptions.isSelfManaged()) {
-						if(localPropagation == null) {
-							localPropagation = newPropagation();
-						}
-						localPropagation.addThirdParty(socialNetwork);
+	protected void setPropagationData(SocializeAction action, ActionOptions shareOptions, SocialNetwork...networks) {
+		
+		boolean selfManaged = (shareOptions == null) ? false : shareOptions.isSelfManaged();
+		
+		if(networks != null) {
+			Propagation propagation = null;
+			Propagation localPropagation = null;
+			
+			for (SocialNetwork socialNetwork : networks) {
+				if(socialNetwork.isLocalPropagation() || selfManaged) {
+					if(localPropagation == null) {
+						localPropagation = newPropagation();
 					}
-					else {
-						if(propagation == null) {
-							propagation = newPropagation();
-						}
-						propagation.addThirdParty(socialNetwork);
-					}
+					localPropagation.addThirdParty(socialNetwork);
 				}
-				
-				SocializeConfig config = Socialize.getSocialize().getConfig();
+				else {
+					if(propagation == null) {
+						propagation = newPropagation();
+					}
+					propagation.addThirdParty(socialNetwork);
+				}
+			}
+			
+			if(config != null) {
 				String appStore = config.getProperty(SocializeConfig.REDIRECT_APP_STORE);
 				
 				if(!StringUtils.isEmpty(appStore)) {
@@ -150,11 +153,11 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 					if(propagation != null) {
 						propagation.addExtraParam("f", abbrev);
 					}
-				}		
-				
-				action.setPropagation(propagation);
-				action.setPropagationInfoRequest(localPropagation);
+				}	
 			}
+			
+			action.setPropagation(propagation);
+			action.setPropagationInfoRequest(localPropagation);
 		}
 	}
 	
@@ -162,14 +165,17 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		if(shareType != null) {
 			Propagation localPropagation = newPropagation();
 			localPropagation.addThirdParty(shareType);
+			String appStore = null;
 			
-			SocializeConfig config = Socialize.getSocialize().getConfig();
-			String appStore = config.getProperty(SocializeConfig.REDIRECT_APP_STORE);
+			if(config != null) {
+				appStore = config.getProperty(SocializeConfig.REDIRECT_APP_STORE);
+			}
 			
 			if(!StringUtils.isEmpty(appStore)) {
 				String abbrev = appUtils.getAppStoreAbbreviation(appStore);
 				localPropagation.addExtraParam("f", abbrev);
-			}		
+			}	
+			
 			action.setPropagationInfoRequest(localPropagation);
 		}
 	}	
@@ -614,6 +620,10 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		this.appUtils = appUtils;
 	}
 	
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
+	}
+
 	public void setNotificationChecker(NotificationChecker notificationChecker) {
 		this.notificationChecker = notificationChecker;
 	}
@@ -727,6 +737,16 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		if(location != null) {
 			action.setLon(location.getLongitude());
 			action.setLat(location.getLatitude());
+		}
+		
+		SocializeSession session = Socialize.getSocialize().getSession();
+		
+		if(session != null) {
+			UserSettings settings = session.getUserSettings();
+			
+			if(settings != null) {
+				action.setLocationShared(settings.isLocationEnabled());
+			}
 		}
 	}
 	

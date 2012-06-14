@@ -29,7 +29,7 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.listener.comment.CommentListener;
-import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.provider.SocializeProvider;
 
 /**
@@ -42,12 +42,13 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 	}
 	
 	@Override
-	public void addComment(SocializeSession session, Comment comment, ShareOptions shareOptions, CommentListener listener) {
-		boolean shareLocation = (shareOptions == null || shareOptions.isShareLocation());
+	public void addComment(SocializeSession session, Comment comment, CommentOptions commentOptions, CommentListener listener, SocialNetwork... networks) {
 		
-		comment.setLocationShared(shareLocation);
+		if(commentOptions != null) {
+			comment.setNotificationsEnabled(commentOptions.isSubscribeToUpdates());
+		}
 		
-		setPropagationData(comment, shareOptions);
+		setPropagationData(comment, commentOptions, networks);
 		setLocation(comment);
 		
 		List<Comment> list = new ArrayList<Comment>(1);
@@ -62,11 +63,11 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 	 * @see com.socialize.api.action.CommentSystem#addComment(com.socialize.api.SocializeSession, com.socialize.entity.Entity, java.lang.String, android.location.Location, com.socialize.networks.ShareOptions, com.socialize.listener.comment.CommentListener)
 	 */
 	@Override
-	public void addComment(SocializeSession session, Entity entity, String comment, ShareOptions shareOptions, CommentListener listener) {
+	public void addComment(SocializeSession session, Entity entity, String comment, CommentOptions commentOptions, CommentListener listener, SocialNetwork... networks) {
 		Comment c = new Comment();
 		c.setText(comment);
 		c.setEntitySafe(entity);
-		addComment(session, c, shareOptions, listener);
+		addComment(session, c, commentOptions, listener, networks);
 	}
 
 	/* (non-Javadoc)

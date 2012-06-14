@@ -35,4 +35,7 @@ public interface LocationUtilsProxy {
 	@Synchronous
 	public Location getLastKnownLocation(Context context);
 	
+	@Synchronous
+	public void updateLocation(Context context);
+	
 }

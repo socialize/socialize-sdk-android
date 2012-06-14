@@ -23,13 +23,14 @@ package com.socialize.test;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.comment.CommentOptions;
 import com.socialize.api.action.comment.SocializeCommentUtils;
 import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeAction;
 import com.socialize.listener.comment.CommentAddListener;
-import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 
@@ -49,20 +50,20 @@ public class PublicCommentUtils extends SocializeCommentUtils {
 	public void doCommentWithoutShare(Activity context, SocializeSession session, Entity entity, String text, CommentAddListener listener) {
 		super.doCommentWithoutShare(context, session, entity, text, listener);
 	}
-
+	
 	@Override
-	public void doCommentWithoutShare(Activity context, SocializeSession session, Entity entity, String text, ShareOptions shareOptions, CommentAddListener listener) {
-		super.doCommentWithoutShare(context, session, entity, text, shareOptions, listener);
+	public void doCommentWithoutShare(Activity context, SocializeSession session, Entity entity, String text, CommentOptions commentOptions, CommentAddListener listener, SocialNetwork... networks) {
+		super.doCommentWithoutShare(context, session, entity, text, commentOptions, listener, networks);
 	}
 
 	@Override
-	public boolean isDisplayAuthDialog() {
-		return super.isDisplayAuthDialog();
+	public boolean isDisplayAuthDialog(Context context) {
+		return super.isDisplayAuthDialog(context);
 	}
 
 	@Override
-	public boolean isDisplayShareDialog() {
-		return super.isDisplayShareDialog();
+	public boolean isDisplayShareDialog(Context context) {
+		return super.isDisplayShareDialog(context);
 	}
 
 	@Override

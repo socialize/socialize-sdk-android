@@ -18,7 +18,6 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.Comment;
 import com.socialize.entity.User;
 import com.socialize.log.SocializeLogger;
-import com.socialize.ui.SocializeUIActivity;
 import com.socialize.ui.image.ImageLoader;
 import com.socialize.ui.util.DateUtils;
 import com.socialize.ui.view.CachedImageView;
@@ -177,7 +176,7 @@ public class CommentAdapter extends BaseAdapter {
 							@Override
 							public void onClick(View v) {
 								if(user != null && user.getId() != null) {
-									Socialize.getSocialize().showActionDetailViewForResult(context, user, item, SocializeUIActivity.PROFILE_UPDATE);
+									Socialize.getSocialize().showActionDetailView(context, user, item);
 								}
 								else {
 									if(logger != null) {

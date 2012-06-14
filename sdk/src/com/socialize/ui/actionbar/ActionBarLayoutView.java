@@ -25,8 +25,10 @@ import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import com.socialize.CommentUtils;
+import com.socialize.EntityUtils;
 import com.socialize.LikeUtils;
 import com.socialize.ShareUtils;
+import com.socialize.ViewUtils;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.Entity;
 import com.socialize.entity.EntityStats;
@@ -342,7 +344,7 @@ public class ActionBarLayoutView extends BaseView {
 		CacheableEntity localEntity = getLocalEntity();
 		
 		if(localEntity == null) {
-			getSocialize().view(getActivity(), entity, new ViewAddListener() {
+			ViewUtils.view(getActivity(), entity, new ViewAddListener() {
 				@Override
 				public void onError(SocializeException error) {
 					error.printStackTrace();
@@ -421,7 +423,8 @@ public class ActionBarLayoutView extends BaseView {
 	
 	protected void doUnLike(final ActionBarButton button, final CacheableEntity localEntity) {
 		button.showLoading();
-		getSocialize().unlike(localEntity.getLikeId(), new LikeDeleteListener() {
+		
+		LikeUtils.unlike(getActivity(), localEntity.getKey(), new LikeDeleteListener() {
 			@Override
 			public void onError(SocializeException error) {
 				logError("Error deleting like", error);
@@ -506,7 +509,7 @@ public class ActionBarLayoutView extends BaseView {
 	protected void getLike(final String entityKey) {
 		
 		// Get the like
-		getSocialize().getLike(entityKey, new LikeGetListener() {
+		LikeUtils.getLike(getActivity(), entityKey, new LikeGetListener() {
 			
 			@Override
 			public void onGet(Like like) {
@@ -546,7 +549,7 @@ public class ActionBarLayoutView extends BaseView {
 	}
 	
 	protected void getEntity(String entityKey) {
-		getSocialize().getEntity(entityKey, new EntityGetListener() {
+		EntityUtils.getEntity(getActivity(), entityKey, new EntityGetListener() {
 			@Override
 			public void onGet(Entity entity) {
 				CacheableEntity putEntity = setLocalEntity(entity);
