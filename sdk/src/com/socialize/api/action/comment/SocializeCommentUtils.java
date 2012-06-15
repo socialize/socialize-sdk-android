@@ -65,7 +65,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 	
 	@Override
 	public void addComment(Activity context, Entity entity, String text, CommentAddListener listener) {
-		addComment(context, entity, text, getUserCommentOptions(context), listener);
+		addComment(context, entity, text, getUserCommentOptions(context), listener, SocialNetwork.TWITTER, SocialNetwork.FACEBOOK);
 	}
 
 	@Override

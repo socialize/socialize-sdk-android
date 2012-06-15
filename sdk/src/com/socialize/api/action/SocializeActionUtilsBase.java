@@ -53,7 +53,7 @@ public abstract class SocializeActionUtilsBase {
 	}	
 	
 	protected boolean isDisplayAuthDialog(Context context, ActionOptions options, SocialNetwork...networks) {
-		boolean authRequired = false;
+		boolean authRequired = true;
 		boolean authSupported = false;
 		
 		if(options != null) {
@@ -62,7 +62,7 @@ public abstract class SocializeActionUtilsBase {
 		
 		if(authRequired) {
 			
-			if(networks != null) {
+			if(networks != null && networks.length > 0) {
 				for (SocialNetwork network : networks) {
 					AuthProviderType type = AuthProviderType.valueOf(network);
 					if(getSocialize().isSupported(type)) {

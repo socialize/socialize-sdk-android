@@ -37,8 +37,8 @@ import com.socialize.entity.Entity;
  *
  */
 public class CommentActivity extends ListActivity {
-	final String[] values = new String[] { "Show Comment List", "Add Comment", "Get Comments By Entity", "Get Comments By User", "Get Comment By ID"};
-	final Class<?>[] activities = new Class<?>[] { AddCommentActivity.class, GetCommentsByEntityActivity.class, GetCommentsByUserActivity.class, GetCommentsByIDActivity.class};
+	final String[] values = new String[] { "Show Comment List", "Add Comment", "Add Comment Without Share", "Get Comments By Entity", "Get Comments By User", "Get Comment By ID"};
+	final Class<?>[] activities = new Class<?>[] { AddCommentActivity.class, AddCommentWithoutShareActivity.class, GetCommentsByEntityActivity.class, GetCommentsByUserActivity.class, GetCommentsByIDActivity.class};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

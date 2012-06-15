@@ -73,6 +73,7 @@
         <!-- Comment -->
         <activity android:name=".implementations.comment.CommentActivity"/>
         <activity android:name=".implementations.comment.AddCommentActivity"/>
+        <activity android:name=".implementations.comment.AddCommentWithoutShareActivity"/>
         <activity android:name=".implementations.comment.GetCommentsByEntityActivity"/>
         <activity android:name=".implementations.comment.GetCommentsByUserActivity"/>
         <activity android:name=".implementations.comment.GetCommentsByIDActivity"/>
