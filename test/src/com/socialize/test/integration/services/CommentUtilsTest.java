@@ -62,7 +62,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 
 		// Set auto auth off
-		CommentOptions options = CommentUtils.getUserCommentOptions(getContext());
+		final CommentOptions options = CommentUtils.getUserCommentOptions(getContext());
 		options.setShowAuthDialog(false);
 		options.setShowShareDialog(false);
 		
@@ -77,7 +77,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(Comment entity) {
 				addResult(0, entity);
-				CommentUtils.addComment(getActivity(), entityKey, "foobar1", new CommentAddListener() {
+				CommentUtils.addComment(getActivity(), entityKey, "foobar1", options, new CommentAddListener() {
 
 					@Override
 					public void onError(SocializeException error) {
@@ -144,7 +144,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 
 		// Set auto auth off
-		CommentOptions options = CommentUtils.getUserCommentOptions(getContext());
+		final CommentOptions options = CommentUtils.getUserCommentOptions(getContext());
 		options.setShowAuthDialog(false);
 		options.setShowShareDialog(false);
 		
@@ -159,7 +159,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(Comment entity) {
 				addResult(0, entity);
-				CommentUtils.addComment(getActivity(), entityKey, "foobar1", new CommentAddListener() {
+				CommentUtils.addComment(getActivity(), entityKey, "foobar1", options, new CommentAddListener() {
 
 					@Override
 					public void onError(SocializeException error) {
@@ -223,7 +223,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 
 		// Set auto auth off
-		CommentOptions options = CommentUtils.getUserCommentOptions(getContext());
+		final CommentOptions options = CommentUtils.getUserCommentOptions(getContext());
 		options.setShowAuthDialog(false);
 		options.setShowShareDialog(false);
 		
@@ -238,7 +238,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(Comment entity) {
 				addResult(0, entity);
-				CommentUtils.addComment(getActivity(), entityKey, "foobar1", new CommentAddListener() {
+				CommentUtils.addComment(getActivity(), entityKey, "foobar1", options, new CommentAddListener() {
 
 					@Override
 					public void onError(SocializeException error) {

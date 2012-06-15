@@ -107,7 +107,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 
 	@Override
 	public void like(final Activity context, final Entity entity, final LikeOptions likeOptions, final LikeAddListener listener, final SocialNetwork...networks) {
-		final boolean doShare = likeOptions.isShowShareDialog();
+		final boolean doShare = likeOptions == null || likeOptions.isShowShareDialog();
 		final SocializeSession session = getSocialize().getSession();
 
 		if(isDisplayAuthDialog(context, likeOptions, networks)) {

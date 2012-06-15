@@ -133,7 +133,19 @@ public class TestUtils {
 		return holder.getNextResult();
 	}	
 	
+	public static void clear() {
+		holder.clear();
+	}
+	
 	public static void setUp(ActivityInstrumentationTestCase2<?> test)  {
+		
+		try {
+			TestUtils.waitForIdle(test, 5000);
+		}
+		catch (InterruptedException e) {
+			ActivityInstrumentationTestCase2.fail();
+		}
+		
 		testCase = test;
 		holder = new ResultHolder();
 		holder.setUp();
@@ -810,25 +822,16 @@ public class TestUtils {
 		
 	}
 	
-	public static boolean waitForIdleSync(final ActivityInstrumentationTestCase2<?> test, long timeout) throws InterruptedException {
-		
+	public static boolean waitForIdle(final ActivityInstrumentationTestCase2<?> test, long timeout) throws InterruptedException {
 		final CountDownLatch latch = new CountDownLatch(1);
-		Thread thread = new Thread() {
-
+		test.getInstrumentation().waitForIdle(new Runnable() {
 			@Override
 			public void run() {
-				test.getInstrumentation().waitForIdleSync();
 				latch.countDown();
 			}
-		};
-		
-		thread.start();
+		});
 		
 		boolean await = latch.await(timeout, TimeUnit.MILLISECONDS);
-		
-		if(!await) {
-			thread.interrupt();
-		}
 		
 		return await;
 	}
