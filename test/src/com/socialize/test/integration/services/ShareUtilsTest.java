@@ -191,6 +191,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onShow(Dialog dialog, SharePanelView dialogView) {
 				addResult(0, dialogView);
+				addResult(1, dialog);
 				latch0.countDown();
 			}
 		}, ShareUtils.DEFAULT);
@@ -198,6 +199,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		latch0.await(20, TimeUnit.SECONDS);
 		
 		SharePanelView view = getResult(0);
+		Dialog dialog = getResult(1);
 		
 		assertNotNull(view);
 		
@@ -205,6 +207,8 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		final TwitterShareCell twButton = TestUtils.findView(view, TwitterShareCell.class);
 		final EmailCell emailCell = TestUtils.findView(view, EmailCell.class);
 		final SMSCell smsCell = TestUtils.findView(view, SMSCell.class);
+		
+		dialog.dismiss();
 		
 		assertNotNull(fbButton);
 		assertNotNull(twButton);
@@ -220,6 +224,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onShow(Dialog dialog, SharePanelView dialogView) {
 				addResult(0, dialogView);
+				addResult(1, dialog);
 				latch0.countDown();
 			}
 		}, ShareUtils.SOCIAL);
@@ -227,6 +232,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		latch0.await(20, TimeUnit.SECONDS);
 		
 		SharePanelView view = getResult(0);
+		Dialog dialog = getResult(1);
 		
 		assertNotNull(view);
 		
@@ -234,6 +240,8 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		final TwitterShareCell twButton = TestUtils.findView(view, TwitterShareCell.class);
 		final EmailCell emailCell = TestUtils.findView(view, EmailCell.class);
 		final SMSCell smsCell = TestUtils.findView(view, SMSCell.class);
+		
+		dialog.dismiss();
 		
 		assertNotNull(fbButton);
 		assertNotNull(twButton);
