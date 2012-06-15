@@ -142,11 +142,48 @@ valid URL for callback otherwise authentication will fail.</p>
 <span class="na">twitter.consumer.secret</span><span class="o">=</span><span class="s">AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUu</span>
 </pre></div>
 </div>
+<div style="background-color:#b4ff9d;border-style:solid;border-color:#1a6f00;border-width:1px;">
+
+<table border="0">
+	<tr>
+		<td>
+			<img src="static/tick.png"/>
+		</td>
+		<td>
+			<div style="font-size:1.2em;font-weight:bold;padding:8px;color:#1a6f00;padding-left:0px;">
+			Finished!
+			</div>
+		</td>
+	</tr>
+</table>
+<div style="font-size:0.9em;font-weight:normal;padding:8px;color:#1a6f00;">
+You've successfully completed the setup for <b>Twitter</b>
 </div>
+</div></div>
 <div class="section" id="linking-users-with-twitter">
 <h2>Linking Users with Twitter<a class="headerlink" href="#linking-users-with-twitter" title="Permalink to this headline">¶</a></h2>
-<p>To be able to post to a user&#8217;s Twitter feed the user must first link with their Twitter account</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">TwitterUtils</span><span class="o">.</span><span class="na">link</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="k">new</span> <span class="n">SocializeAuthListener</span><span class="o">()</span> <span class="o">{</span>
+<div style="background-color:#ffcccc;border-style:solid;border-color:#5e0000;border-width:1px;">
+
+<table border="0">
+	<tr>
+		<td>
+			<img src="static/stop.png"/>
+		</td>
+		<td>
+			<div style="font-size:1.2em;font-weight:bold;padding:8px;color:#5e0000;padding-left:0px;">
+			Advanced Use
+			</div>
+		</td>
+	</tr>
+</table>
+
+
+<div style="font-size:0.9em;font-weight:normal;padding:8px;color:#5e0000;">
+The following section is not required if you are simply using the <b>Action Bar</b>
+</div>
+</div><p>To be able to post to a user&#8217;s Twitter feed the user must first link with their Twitter account</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="c1">// The &quot;this&quot; argument refers to the current Activity </span>
+<span class="n">TwitterUtils</span><span class="o">.</span><span class="na">link</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="k">new</span> <span class="n">SocializeAuthListener</span><span class="o">()</span> <span class="o">{</span>
 
 	<span class="nd">@Override</span>
 	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCancel</span><span class="o">()</span> <span class="o">{</span>
@@ -209,7 +246,26 @@ can still link the user to Twitter within Socialize by providing the user&#8217;
 </div>
 <div class="section" id="posting-to-twitter">
 <h2>Posting to Twitter<a class="headerlink" href="#posting-to-twitter" title="Permalink to this headline">¶</a></h2>
-<p>By default all actions created using the SDK will provide the end user with the opportunity to share their
+<div style="background-color:#ffcccc;border-style:solid;border-color:#5e0000;border-width:1px;">
+
+<table border="0">
+	<tr>
+		<td>
+			<img src="static/stop.png"/>
+		</td>
+		<td>
+			<div style="font-size:1.2em;font-weight:bold;padding:8px;color:#5e0000;padding-left:0px;">
+			Advanced Use
+			</div>
+		</td>
+	</tr>
+</table>
+
+
+<div style="font-size:0.9em;font-weight:normal;padding:8px;color:#5e0000;">
+The following section is not required if you are simply using the <b>Action Bar</b>
+</div>
+</div><p>By default all actions created using the SDK will provide the end user with the opportunity to share their
 action with Twitter (if Twitter has been configured) however it is also possible to manually post content to a user&#8217;s
 Twitter feed.</p>
 <div class="section" id="posting-socialize-entities-to-twitter">

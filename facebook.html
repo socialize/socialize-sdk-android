@@ -146,11 +146,48 @@ you are going to publish.</p>
 <span class="na">facebook.app.id</span><span class="o">=</span><span class="s">1234567890</span>
 </pre></div>
 </div>
+<div style="background-color:#b4ff9d;border-style:solid;border-color:#1a6f00;border-width:1px;">
+
+<table border="0">
+	<tr>
+		<td>
+			<img src="static/tick.png"/>
+		</td>
+		<td>
+			<div style="font-size:1.2em;font-weight:bold;padding:8px;color:#1a6f00;padding-left:0px;">
+			Finished!
+			</div>
+		</td>
+	</tr>
+</table>
+<div style="font-size:0.9em;font-weight:normal;padding:8px;color:#1a6f00;">
+You've successfully completed the setup for <b>Facebook</b>
 </div>
+</div></div>
 <div class="section" id="linking-users-with-facebook">
 <span id="propagate-fb"></span><h2>Linking Users with Facebook<a class="headerlink" href="#linking-users-with-facebook" title="Permalink to this headline">¶</a></h2>
-<p>To be able to post to a user&#8217;s Facebook wall the user must first link with their Facebook account</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">FacebookUtils</span><span class="o">.</span><span class="na">link</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="k">new</span> <span class="n">SocializeAuthListener</span><span class="o">()</span> <span class="o">{</span>
+<div style="background-color:#ffcccc;border-style:solid;border-color:#5e0000;border-width:1px;">
+
+<table border="0">
+	<tr>
+		<td>
+			<img src="static/stop.png"/>
+		</td>
+		<td>
+			<div style="font-size:1.2em;font-weight:bold;padding:8px;color:#5e0000;padding-left:0px;">
+			Advanced Use
+			</div>
+		</td>
+	</tr>
+</table>
+
+
+<div style="font-size:0.9em;font-weight:normal;padding:8px;color:#5e0000;">
+The following section is not required if you are simply using the <b>Action Bar</b>
+</div>
+</div><p>To be able to post to a user&#8217;s Facebook wall the user must first link with their Facebook account</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
+<span class="n">FacebookUtils</span><span class="o">.</span><span class="na">link</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="k">new</span> <span class="n">SocializeAuthListener</span><span class="o">()</span> <span class="o">{</span>
 
 	<span class="nd">@Override</span>
 	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCancel</span><span class="o">()</span> <span class="o">{</span>
@@ -179,6 +216,7 @@ can still link the user to Facebook within Socialize by providing the user&#8217
 <div class="highlight-java"><div class="highlight"><pre><span class="c1">// The user&#39;s Facebook auth token</span>
 <span class="n">String</span> <span class="n">fbToken</span> <span class="o">=</span> <span class="s">&quot;ABCDEF...GHIJKL&quot;</span><span class="o">;</span>
 
+<span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">FacebookUtils</span><span class="o">.</span><span class="na">link</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">fbToken</span><span class="o">,</span> <span class="k">new</span> <span class="n">SocializeAuthListener</span><span class="o">()</span> <span class="o">{</span>
 
 	<span class="nd">@Override</span>
@@ -205,13 +243,33 @@ can still link the user to Facebook within Socialize by providing the user&#8217
 </div>
 <p>To unlink a user from their Facebook account simple call <strong>unlink</strong>.  This call executes synchronously.</p>
 <div class="highlight-java"><div class="highlight"><pre><span class="c1">// Disconnect the user from their Facebook account</span>
+<span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">FacebookUtils</span><span class="o">.</span><span class="na">unlink</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>	
 </pre></div>
 </div>
 </div>
 <div class="section" id="posting-to-facebook">
 <h2>Posting to Facebook<a class="headerlink" href="#posting-to-facebook" title="Permalink to this headline">¶</a></h2>
-<p>By default all actions created using the SDK will provide the end user with the opportunity to share their
+<div style="background-color:#ffcccc;border-style:solid;border-color:#5e0000;border-width:1px;">
+
+<table border="0">
+	<tr>
+		<td>
+			<img src="static/stop.png"/>
+		</td>
+		<td>
+			<div style="font-size:1.2em;font-weight:bold;padding:8px;color:#5e0000;padding-left:0px;">
+			Advanced Use
+			</div>
+		</td>
+	</tr>
+</table>
+
+
+<div style="font-size:0.9em;font-weight:normal;padding:8px;color:#5e0000;">
+The following section is not required if you are simply using the <b>Action Bar</b>
+</div>
+</div><p>By default all actions created using the SDK will provide the end user with the opportunity to share their
 action with Facebook (if Facebook has been configured) however it is also possible to manually post content to a user&#8217;s
 Facebook wall.</p>
 <div class="section" id="posting-socialize-entities-to-facebook">
@@ -221,6 +279,7 @@ Socialize SmartDownloads as well as automatically supporting Facebook Open Graph
 <p>To post an entity to a user&#8217;s Facebook timeline simply call the <strong>postEntity</strong> method.</p>
 <div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
 	
+<span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">FacebookUtils</span><span class="o">.</span><span class="na">postEntity</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="s">&quot;Text to be posted&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">SocialNetworkListener</span><span class="o">()</span> <span class="o">{</span>
 	
 	<span class="nd">@Override</span>
@@ -266,6 +325,7 @@ Socialize SmartDownloads as well as automatically supporting Facebook Open Graph
 <span class="n">postData</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;name&quot;</span><span class="o">,</span> <span class="s">&quot;Socialize SDK!&quot;</span><span class="o">);</span>
 	
 <span class="c1">// Execute a POST on facebook</span>
+<span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">FacebookUtils</span><span class="o">.</span><span class="na">post</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">graphPath</span><span class="o">,</span> <span class="n">postData</span><span class="o">,</span> <span class="k">new</span> <span class="n">SocialNetworkListener</span><span class="o">()</span> <span class="o">{</span>
 	
 	<span class="nd">@Override</span>
@@ -298,6 +358,7 @@ do this by creating a simple share object without propagation first.</p>
 
 <span class="n">ShareOptions</span> <span class="n">options</span> <span class="o">=</span> <span class="n">ShareUtils</span><span class="o">.</span><span class="na">getUserShareOptions</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
 
+<span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">ShareUtils</span><span class="o">.</span><span class="na">registerShare</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="n">options</span><span class="o">,</span> <span class="k">new</span> <span class="n">ShareAddListener</span><span class="o">()</span> <span class="o">{</span>
 	
 	<span class="nd">@Override</span>
@@ -356,6 +417,7 @@ do this by creating a simple share object without propagation first.</p>
 <span class="n">String</span> <span class="n">graphPath</span> <span class="o">=</span> <span class="s">&quot;me/links&quot;</span><span class="o">;</span>
 
 <span class="c1">// Execute a GET on facebook</span>
+<span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">FacebookUtils</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">graphPath</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="n">SocialNetworkListener</span><span class="o">()</span> <span class="o">{</span>
 	
 	<span class="nd">@Override</span>
@@ -386,6 +448,7 @@ do this by creating a simple share object without propagation first.</p>
 <span class="n">String</span> <span class="n">graphPath</span> <span class="o">=</span> <span class="s">&quot;me/links/1234&quot;</span><span class="o">;</span>
 
 <span class="c1">// Execute a DELETE on facebook</span>
+<span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">FacebookUtils</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">graphPath</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="n">SocialNetworkListener</span><span class="o">()</span> <span class="o">{</span>
 	
 	<span class="nd">@Override</span>
@@ -418,6 +481,7 @@ do this by creating a simple share object without propagation first.</p>
 <p>Some users have reported having problems with the Single Sign On implementation in the Facebook SDK.</p>
 <p>If you have experienced problems with this (e.g. the &#8220;invalid_key&#8221; error), you can easily disable this feature:</p>
 <div class="highlight-java"><div class="highlight"><pre><span class="c1">// Disable ONLY if you experience problems</span>
+<span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">ConfigUtils</span><span class="o">.</span><span class="na">getConfig</span><span class="o">(</span><span class="k">this</span><span class="o">).</span><span class="na">setFacebookSingleSignOnEnabled</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>	
 </pre></div>
 </div>

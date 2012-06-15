@@ -75,9 +75,13 @@ Once you have your facebook app ID, you can add it to the **socialize.properties
 =================================
 Now that you have your environment all setup, it's time to include Socialize.  
 
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ActionBarSample.java
+	:start-after: begin-snippet-0
+	:end-before: end-snippet-0
+
 You can either install the pre-packaged Socialize Action Bar which includes the entire suite of Socialize features in a matter of minutes
 
-Checkout the :doc:`action_bar` section for details on implementing the default Socialize Action Bar...
+Checkout the :doc:`action_bar` section for more details on the default Socialize Action Bar...
 
 .. image:: images/action_bar_std.png
 
@@ -96,6 +100,9 @@ It is not necessary to explicitly create an Entity object when rendering the Act
 however entities *can* be created manually.  
 
 .. note:: Refer to the :ref:`entities` section for details on creating entities directly using the SDK.
+
+.. raw:: html
+   :file: snippets/setup_complete.html
 
 Next Steps...
 =============

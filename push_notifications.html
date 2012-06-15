@@ -223,9 +223,53 @@ provided by you which tells Socialize how to load content in your app.</p>
 <p>Refer to the <a class="reference internal" href="entity_loader.html?v=v2.0.1#entity-loader"><em>Entity Loaders</em></a> section for details on how to implement a Socialize Entity Loader.</p>
 </div>
 </div>
+<div class="section" id="testing-smartalerts">
+<h2>Testing SmartAlerts<a class="headerlink" href="#testing-smartalerts" title="Permalink to this headline">¶</a></h2>
+<p>When implementing SmartAlerts it is useful to know whether all the setup steps have been completed successfully and that messages
+are indeed being sent.</p>
+<p>The simplest way to verify that SmartAlerts are working for your app is to send a test message from the Socialize website.</p>
+<p>This can be found in the dashboard for your app:</p>
+<img alt="images/smart_alert.png" src="images/smart_alert.png" />
+<div class="section" id="locating-your-device-token">
+<h3>Locating your Device Token<a class="headerlink" href="#locating-your-device-token" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The Device Token is DIFFERENT to the C2DM Token.  Each Device has a unique token whereas your C2DM token (if you have one) corresponds to your Sender ID</p>
+</div>
+<p>If you are still experiencing problems and want to post a question to our support forum, it is useful to include your device token
+when posting any question.  To determine your device token you will first need to enable the <strong>INFO</strong> level logging in Socialize.</p>
+<p>Refer to the <a class="reference internal" href="troubleshooting.html?v=v2.0.1#debug-logs"><em>Displaying debug logs in LogCat</em></a> section for more information on enabling logs.</p>
+<p>Once info logging is enabled, a <strong>new</strong> instance of your app should produce log entries that look something like this:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">INFO</span><span class="o">/</span><span class="n">Socialize</span><span class="o">(</span><span class="mi">15860</span><span class="o">):</span> <span class="n">Not</span> <span class="n">registered</span> <span class="n">with</span> <span class="n">C2DM</span><span class="o">,</span> <span class="n">sending</span> <span class="n">registration</span> <span class="n">request</span><span class="o">...</span>
+<span class="n">INFO</span><span class="o">/</span><span class="n">Socialize</span><span class="o">(</span><span class="mi">15860</span><span class="o">):</span> <span class="n">Registration</span> <span class="n">with</span> <span class="n">C2DM</span> <span class="nl">successful:</span> <span class="n">APA91bHd0aL</span><span class="o">-</span><span class="n">d75F6_7NcDf_nil8</span><span class="o">...</span><span class="na">OBg5</span><span class="o">-</span><span class="n">Ixk_8c9rg9b14fsVwvMXTy4</span>
+<span class="n">INFO</span><span class="o">/</span><span class="n">Socialize</span><span class="o">(</span><span class="mi">15860</span><span class="o">):</span> <span class="n">Registration</span> <span class="n">with</span> <span class="n">Socialize</span> <span class="k">for</span> <span class="n">C2DM</span> <span class="n">successful</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>The &#8220;Registration with C2DM successful&#8221; log entry shows the device token used for SmartAlerts</p>
+</div>
+</div>
 <div class="section" id="i-already-have-a-broadcastreceiver">
 <h2>I already have a BroadcastReceiver<a class="headerlink" href="#i-already-have-a-broadcastreceiver" title="Permalink to this headline">¶</a></h2>
-<p>If you already have a BroadcastReceiver defined in your application, you can simply call the Socialize handler
+<div style="background-color:#ffcccc;border-style:solid;border-color:#5e0000;border-width:1px;">
+
+<table border="0">
+	<tr>
+		<td>
+			<img src="static/stop.png"/>
+		</td>
+		<td>
+			<div style="font-size:1.2em;font-weight:bold;padding:8px;color:#5e0000;padding-left:0px;">
+			Advanced Use
+			</div>
+		</td>
+	</tr>
+</table>
+
+
+<div style="font-size:0.9em;font-weight:normal;padding:8px;color:#5e0000;">
+The following section is not required for most users
+</div>
+</div><p>If you already have a BroadcastReceiver defined in your application, you can simply call the Socialize handler
 in your existing broadcast receiver&#8217;s <strong>onReceive()</strong> method:</p>
 <div class="highlight-java"><div class="highlight"><pre><span class="cm">/*</span>
 <span class="cm"> * (non-Javadoc)</span>
@@ -243,7 +287,26 @@ in your existing broadcast receiver&#8217;s <strong>onReceive()</strong> method:
 </div>
 <div class="section" id="i-am-already-using-google-c2dm">
 <h2>I am already using Google C2DM<a class="headerlink" href="#i-am-already-using-google-c2dm" title="Permalink to this headline">¶</a></h2>
-<p>If you are already using Google&#8217;s C2DM for push notifications you will need to enter your C2DM sender credentials into the
+<div style="background-color:#ffcccc;border-style:solid;border-color:#5e0000;border-width:1px;">
+
+<table border="0">
+	<tr>
+		<td>
+			<img src="static/stop.png"/>
+		</td>
+		<td>
+			<div style="font-size:1.2em;font-weight:bold;padding:8px;color:#5e0000;padding-left:0px;">
+			Advanced Use
+			</div>
+		</td>
+	</tr>
+</table>
+
+
+<div style="font-size:0.9em;font-weight:normal;padding:8px;color:#5e0000;">
+The following section is not required for most users
+</div>
+</div><p>If you are already using Google&#8217;s C2DM for push notifications you will need to enter your C2DM sender credentials into the
 Socialize website.  This is due to a limitation of Google&#8217;s C2DM service which does not allow multiple senders for the same
 app.</p>
 <div class="admonition note">
@@ -254,7 +317,26 @@ app.</p>
 </div>
 <div class="section" id="high-volume-usage">
 <h2>High Volume Usage<a class="headerlink" href="#high-volume-usage" title="Permalink to this headline">¶</a></h2>
-<p>If you app is expected to have a high volume of SmartAlerts we recommend you register your own Google C2DM token to avoid any unexpected quota issues</p>
+<div style="background-color:#ffcccc;border-style:solid;border-color:#5e0000;border-width:1px;">
+
+<table border="0">
+	<tr>
+		<td>
+			<img src="static/stop.png"/>
+		</td>
+		<td>
+			<div style="font-size:1.2em;font-weight:bold;padding:8px;color:#5e0000;padding-left:0px;">
+			Advanced Use
+			</div>
+		</td>
+	</tr>
+</table>
+
+
+<div style="font-size:0.9em;font-weight:normal;padding:8px;color:#5e0000;">
+The following section is not required for most users
+</div>
+</div><p>If you app is expected to have a high volume of SmartAlerts we recommend you register your own Google C2DM token to avoid any unexpected quota issues</p>
 <div class="section" id="registering-for-google-c2dm">
 <h3>Registering for Google C2DM<a class="headerlink" href="#registering-for-google-c2dm" title="Permalink to this headline">¶</a></h3>
 <p>Socialize provides a default quota of SmartAlerts that should satisfy the needs of most users, however if you are experiencing issues with SmartAlerts quota
@@ -284,34 +366,9 @@ under the key <strong>socialize.c2dm.sender.id</strong></p>
 <h4>Step 3: Add your C2DM token to the Socialize website<a class="headerlink" href="#step-3-add-your-c2dm-token-to-the-socialize-website" title="Permalink to this headline">¶</a></h4>
 <p>Once you receive your C2DM token from Google, simply add it to your account on the getsocialize.com website:</p>
 <img alt="images/c2dm.png" src="images/c2dm.png" />
-</div>
-</div>
-</div>
-<div class="section" id="testing-smartalerts">
-<h2>Testing SmartAlerts<a class="headerlink" href="#testing-smartalerts" title="Permalink to this headline">¶</a></h2>
-<p>When implementing SmartAlerts it is useful to know whether all the setup steps have been completed successfully and that messages
-are indeed being sent.</p>
-<p>The simplest way to verify that SmartAlerts are working for your app is to send a test message from the Socialize website.</p>
-<p>This can be found in the dashboard for your app:</p>
-<img alt="images/smart_alert.png" src="images/smart_alert.png" />
-<div class="section" id="locating-your-device-token">
-<h3>Locating your Device Token<a class="headerlink" href="#locating-your-device-token" title="Permalink to this headline">¶</a></h3>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The Device Token is DIFFERENT to the C2DM Token.  Each Device has a unique token whereas your C2DM token (if you have one) corresponds to your Sender ID</p>
-</div>
-<p>If you are still experiencing problems and want to post a question to our support forum, it is useful to include your device token
-when posting any question.  To determine your device token you will first need to enable the <strong>INFO</strong> level logging in Socialize.</p>
-<p>Refer to the <a class="reference internal" href="troubleshooting.html?v=v2.0.1#debug-logs"><em>Displaying debug logs in LogCat</em></a> section for more information on enabling logs.</p>
-<p>Once info logging is enabled, a <strong>new</strong> instance of your app should produce log entries that look something like this:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">INFO</span><span class="o">/</span><span class="n">Socialize</span><span class="o">(</span><span class="mi">15860</span><span class="o">):</span> <span class="n">Not</span> <span class="n">registered</span> <span class="n">with</span> <span class="n">C2DM</span><span class="o">,</span> <span class="n">sending</span> <span class="n">registration</span> <span class="n">request</span><span class="o">...</span>
-<span class="n">INFO</span><span class="o">/</span><span class="n">Socialize</span><span class="o">(</span><span class="mi">15860</span><span class="o">):</span> <span class="n">Registration</span> <span class="n">with</span> <span class="n">C2DM</span> <span class="nl">successful:</span> <span class="n">APA91bHd0aL</span><span class="o">-</span><span class="n">d75F6_7NcDf_nil8</span><span class="o">...</span><span class="na">OBg5</span><span class="o">-</span><span class="n">Ixk_8c9rg9b14fsVwvMXTy4</span>
-<span class="n">INFO</span><span class="o">/</span><span class="n">Socialize</span><span class="o">(</span><span class="mi">15860</span><span class="o">):</span> <span class="n">Registration</span> <span class="n">with</span> <span class="n">Socialize</span> <span class="k">for</span> <span class="n">C2DM</span> <span class="n">successful</span><span class="o">.</span>
-</pre></div>
-</div>
-<p>The &#8220;Registration with C2DM successful&#8221; log entry shows the device token used for SmartAlerts</p>
 <script type="text/javascript">
 </script></div>
+</div>
 </div>
 </div>
 
@@ -343,10 +400,10 @@ when posting any question.  To determine your device token you will first need t
 <li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v2.0.1">Twitter Integration</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">SmartAlerts (Push Notifications)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#setup-smartalerts">Setup SmartAlerts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing-smartalerts">Testing SmartAlerts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#i-already-have-a-broadcastreceiver">I already have a BroadcastReceiver</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#i-am-already-using-google-c2dm">I am already using Google C2DM</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#high-volume-usage">High Volume Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#testing-smartalerts">Testing SmartAlerts</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v2.0.1">Entity Loaders</a></li>

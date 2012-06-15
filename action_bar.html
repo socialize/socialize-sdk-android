@@ -298,6 +298,7 @@ to instruct the ActionBar to reload after you change the entity key.</p>
 <span class="n">MyActionBarListener</span> <span class="n">listener</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MyActionBarListener</span><span class="o">();</span>
 
 <span class="c1">// Use the listener when you show the action bar</span>
+<span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">ActionBarUtils</span><span class="o">.</span><span class="na">showActionBar</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">actionbar</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">listener</span><span class="o">);</span>
 
 <span class="c1">// Later (After the action bar has loaded!), you can reference the view to refresh</span>
