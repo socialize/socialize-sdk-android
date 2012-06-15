@@ -60,22 +60,24 @@ public abstract class SocializeActionUtilsBase {
 			authRequired = options.isShowAuthDialog();
 		}
 		
+		if(networks == null || networks.length == 0) {
+			networks = new SocialNetwork[] {SocialNetwork.TWITTER, SocialNetwork.FACEBOOK};
+		}
+		
 		if(authRequired) {
 			
-			if(networks != null && networks.length > 0) {
-				for (SocialNetwork network : networks) {
-					AuthProviderType type = AuthProviderType.valueOf(network);
-					if(getSocialize().isSupported(type)) {
-						authSupported = true;
-						if(getSocialize().isAuthenticated(type)) {
-							authRequired = false;
-							break;
-						}
-					}
-					
-					if(!authRequired) {
+			for (SocialNetwork network : networks) {
+				AuthProviderType type = AuthProviderType.valueOf(network);
+				if(getSocialize().isSupported(type)) {
+					authSupported = true;
+					if(getSocialize().isAuthenticated(type)) {
+						authRequired = false;
 						break;
 					}
+				}
+				
+				if(!authRequired) {
+					break;
 				}
 			}
 		}
