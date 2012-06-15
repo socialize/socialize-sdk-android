@@ -41,6 +41,23 @@ import android.provider.MediaStore;
 public class FacebookImageUtils {
 
 	private static int MAX_IMAGE_DIMENSION = 720;
+	
+	public byte[] scaleImage(Context context, Bitmap bitmap, Bitmap.CompressFormat format) {
+		
+		int width = bitmap.getWidth();
+		
+		if(width > MAX_IMAGE_DIMENSION) {
+			float ratio = (float) MAX_IMAGE_DIMENSION / (float) width;
+			
+			width = MAX_IMAGE_DIMENSION;
+			int height = (int)((float)bitmap.getHeight() * ratio);
+			bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height);
+		}
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		bitmap.compress(format, 100, stream);
+		return stream.toByteArray();
+	}
 
 	public byte[] scaleImage(Context context, Uri photoUri) throws IOException {
 		InputStream is = context.getContentResolver().openInputStream(photoUri);
@@ -61,7 +78,7 @@ public class FacebookImageUtils {
 			rotatedHeight = dbo.outHeight;
 		}
 
-		Bitmap srcBitmap;
+		Bitmap bitmap;
 		is = context.getContentResolver().openInputStream(photoUri);
 		if (rotatedWidth > MAX_IMAGE_DIMENSION || rotatedHeight > MAX_IMAGE_DIMENSION) {
 			float widthRatio = ((float) rotatedWidth) / ((float) MAX_IMAGE_DIMENSION);
@@ -71,10 +88,10 @@ public class FacebookImageUtils {
 			// Create the bitmap from file
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inSampleSize = (int) maxRatio;
-			srcBitmap = BitmapFactory.decodeStream(is, null, options);
+			bitmap = BitmapFactory.decodeStream(is, null, options);
 		}
 		else {
-			srcBitmap = BitmapFactory.decodeStream(is);
+			bitmap = BitmapFactory.decodeStream(is);
 		}
 		is.close();
 
@@ -86,16 +103,16 @@ public class FacebookImageUtils {
 			Matrix matrix = new Matrix();
 			matrix.postRotate(orientation);
 
-			srcBitmap = Bitmap.createBitmap(srcBitmap, 0, 0, srcBitmap.getWidth(), srcBitmap.getHeight(), matrix, true);
+			bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 		}
 
 		String type = context.getContentResolver().getType(photoUri);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		if (type.equals("image/png")) {
-			srcBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+			bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
 		}
 		else if (type.equals("image/jpg") || type.equals("image/jpeg")) {
-			srcBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 		}
 		byte[] bMapArray = baos.toByteArray();
 		baos.close();

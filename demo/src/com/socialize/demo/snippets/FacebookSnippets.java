@@ -21,10 +21,12 @@
  */
 package com.socialize.demo.snippets;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import org.json.JSONObject;
 import android.app.Activity;
+import android.net.Uri;
 import com.socialize.ConfigUtils;
 import com.socialize.ShareUtils;
 import com.socialize.api.SocializeSession;
@@ -39,6 +41,7 @@ import com.socialize.listener.share.ShareAddListener;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.facebook.FacebookUtils;
 
 
@@ -49,6 +52,7 @@ import com.socialize.networks.facebook.FacebookUtils;
 public class FacebookSnippets extends Activity {
 public void linkFB() {
 // begin-snippet-0
+// The "this" argument refers to the current Activity
 FacebookUtils.link(this, new SocializeAuthListener() {
 
 	@Override
@@ -79,6 +83,7 @@ public void linkFBWithToken() {
 // The user's Facebook auth token
 String fbToken = "ABCDEF...GHIJKL";
 
+// The "this" argument refers to the current Activity
 FacebookUtils.link(this, fbToken, new SocializeAuthListener() {
 
 	@Override
@@ -107,12 +112,14 @@ FacebookUtils.link(this, fbToken, new SocializeAuthListener() {
 public void setSingleSignOn() {
 // begin-snippet-2
 // Disable ONLY if you experience problems
+// The "this" argument refers to the current Activity
 ConfigUtils.getConfig(this).setFacebookSingleSignOnEnabled(false);	
 // end-snippet-2
 }
 public void unlink() {
 // begin-snippet-3
 // Disconnect the user from their Facebook account
+// The "this" argument refers to the current Activity
 FacebookUtils.unlink(this);	
 // end-snippet-3
 }
@@ -121,6 +128,7 @@ public void postEntity() {
 // begin-snippet-4
 Entity entity = Entity.newInstance("http://myentity.com", "My Name");
 	
+// The "this" argument refers to the current Activity
 FacebookUtils.postEntity(this, entity, "Text to be posted", new SocialNetworkListener() {
 	
 	@Override
@@ -157,12 +165,13 @@ String graphPath = "me/links";
 
 // The data to be posted. This is based on the graphPath
 // See http://developers.facebook.com/docs/reference/api/
-Map<String, String> postData = new HashMap<String, String>();
+Map<String, Object> postData = new HashMap<String, Object>();
 postData.put("message", "A message to post");
 postData.put("link", "http://getsocialize.com");
 postData.put("name", "Socialize SDK!");
 	
 // Execute a POST on facebook
+// The "this" argument refers to the current Activity
 FacebookUtils.post(this, graphPath, postData, new SocialNetworkListener() {
 	
 	@Override
@@ -195,6 +204,7 @@ public void get() {
 String graphPath = "me/links";
 
 // Execute a GET on facebook
+// The "this" argument refers to the current Activity
 FacebookUtils.get(this, graphPath, null, new SocialNetworkListener() {
 	
 	@Override
@@ -228,6 +238,7 @@ public void delete() {
 String graphPath = "me/links/1234";
 
 // Execute a DELETE on facebook
+// The "this" argument refers to the current Activity
 FacebookUtils.delete(this, graphPath, null, new SocialNetworkListener() {
 	
 	@Override
@@ -265,6 +276,7 @@ final Entity entity = Entity.newInstance("http://myentity.com", "My Name");
 
 ShareOptions options = ShareUtils.getUserShareOptions(this);
 
+// The "this" argument refers to the current Activity
 ShareUtils.registerShare(this, entity, options, new ShareAddListener() {
 	
 	@Override
@@ -285,7 +297,7 @@ ShareUtils.registerShare(this, entity, options, new ShareAddListener() {
 
 		// The data to be posted. This is based on the graphPath
 		// See http://developers.facebook.com/docs/reference/api/
-		Map<String, String> postData = new HashMap<String, String>();
+		Map<String, Object> postData = new HashMap<String, Object>();
 		postData.put("message", "A message to post");
 		postData.put("link", propagationInfo.getEntityUrl()); // Use the SmartDownload URL
 		postData.put("name", entity.getDisplayName());
@@ -317,6 +329,33 @@ ShareUtils.registerShare(this, entity, options, new ShareAddListener() {
 	}
 }, SocialNetwork.FACEBOOK);
 // end-snippet-8
+}
+
+public void postPhoto() throws IOException {
+	
+Map<String, Object> postData = new HashMap<String, Object>();
+Uri photoUri = null; // Get the URI of your image from the local device.
+
+postData.put("photo", FacebookUtils.getImageForPost(this, photoUri));
+// Add other fields to postData as necessary
+
+// The "this" argument refers to the current Activity
+FacebookUtils.post(this, "me/photos", postData, new SocialNetworkPostListener() {
+	
+	@Override
+	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+	}
+	
+	@Override
+	public void onCancel() {
+		
+	}
+	
+	@Override
+	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+	}
+});
+	
 }
 
 }

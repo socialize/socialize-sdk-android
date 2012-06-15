@@ -31,11 +31,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import com.socialize.ActionUtils;
 import com.socialize.CommentUtils;
-import com.socialize.ConfigUtils;
 import com.socialize.LikeUtils;
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
-import com.socialize.config.SocializeConfig;
+import com.socialize.api.action.comment.CommentOptions;
+import com.socialize.api.action.like.LikeOptions;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
@@ -147,11 +147,17 @@ public class ActionUtilsTest extends SocializeActivityTest {
 		final Entity entityKey = Entity.newInstance("testGetActionsByEntity" + Math.random(), "testGetActionsByEntity");
 		
 		// Set auto auth off
-		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		final LikeOptions options = LikeUtils.getUserLikeOptions(getContext());
+		options.setShowAuthDialog(false);
+		options.setShowShareDialog(false);
+		
+		final CommentOptions commentOptions = CommentUtils.getUserCommentOptions(getContext());
+		commentOptions.setShowAuthDialog(false);
+		commentOptions.setShowShareDialog(false);
+		
 		
 		// Add some new actions to really make the test "real"
-		
-		LikeUtils.like(getContext(), entityKey, null, new LikeAddListener() {
+		LikeUtils.like(getContext(), entityKey, options, new LikeAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -162,7 +168,7 @@ public class ActionUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(Like like) {
 				actions.add(like);
-				CommentUtils.addComment(getContext(), entityKey, "Blah", null, new CommentAddListener() {
+				CommentUtils.addComment(getContext(), entityKey, "Blah", commentOptions, new CommentAddListener() {
 					
 					@Override
 					public void onError(SocializeException error) {
@@ -215,10 +221,16 @@ public class ActionUtilsTest extends SocializeActivityTest {
 		final Entity entityKey = Entity.newInstance("testGetActionsByUserAndEntity" + Math.random(), "testGetActionsByUserAndEntity");
 		
 		// Set auto auth off
-		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		final LikeOptions options = LikeUtils.getUserLikeOptions(getContext());
+		options.setShowAuthDialog(false);
+		options.setShowShareDialog(false);
+		
+		final CommentOptions commentOptions = CommentUtils.getUserCommentOptions(getContext());
+		commentOptions.setShowAuthDialog(false);
+		commentOptions.setShowShareDialog(false);
 		
 		// Add some new actions to really make the test "real"
-		LikeUtils.like(getContext(), entityKey, null, new LikeAddListener() {
+		LikeUtils.like(getContext(), entityKey, options, new LikeAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -229,7 +241,7 @@ public class ActionUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(Like like) {
 				actions.add(like);
-				CommentUtils.addComment(getContext(), entityKey, "Blah", null, new CommentAddListener() {
+				CommentUtils.addComment(getContext(), entityKey, "Blah", commentOptions, new CommentAddListener() {
 					
 					@Override
 					public void onError(SocializeException error) {

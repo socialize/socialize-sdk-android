@@ -1,36 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
+<ScrollView 
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:id="@+id/config_layout"
-    android:background="#000000"
-    android:orientation="vertical"
-    android:padding="8dip">
+    android:layout_height="fill_parent">
     
-	<CheckBox android:id="@+id/chkRequireAuth"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="Require Authentication"/>  
-	        
-	<CheckBox android:id="@+id/chkAllowAnon"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="Allow Anonymous Posts"/> 
-	        
-	<CheckBox android:id="@+id/chkFB"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="Facebook Enabled"/>  
-	        
-	<CheckBox android:id="@+id/chkTW"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="Twitter Enabled"/>  			
-	        
-	<CheckBox android:id="@+id/chkFBSSO"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="FB Single Sign On Enabled"/>  	
-</LinearLayout>
+	<LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:id="@+id/config_layout"
+	    android:background="#000000"
+	    android:orientation="vertical"
+	    android:padding="8dip">
+	    
+		<CheckBox android:id="@+id/chkRequireAuth"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="Require Authentication"/>  
+		        
+		<CheckBox android:id="@+id/chkAllowAnon"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="Allow Anonymous Posts"/> 
+		        
+		<CheckBox android:id="@+id/chkFB"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="Facebook Enabled"/>  
+		        
+		<CheckBox android:id="@+id/chkTW"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="Twitter Enabled"/>  			
+		        
+		<CheckBox android:id="@+id/chkFBSSO"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="FB Single Sign On Enabled"/>  	
+	</LinearLayout>
 
+</ScrollView>

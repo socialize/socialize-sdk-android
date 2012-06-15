@@ -27,6 +27,7 @@ import android.app.Activity;
 import com.socialize.ConfigUtils;
 import com.socialize.LikeUtils;
 import com.socialize.Socialize;
+import com.socialize.api.action.like.LikeOptions;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
@@ -64,10 +65,12 @@ public class ConcurrentTest extends SocializeActivityTest {
 		Socialize.getSocialize().clearSessionCache(context);
 		Socialize.getSocialize().destroy(true);
 		
-		TestUtils.waitForIdleSync(this, 5000);
+		TestUtils.waitForIdle(this, 5000);
 		
 		// Force no auth
-		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		final LikeOptions options = LikeUtils.getUserLikeOptions(getContext());
+		options.setShowAuthDialog(false);
+		options.setShowShareDialog(false);
 		
 		// Create a latch to wait for completion
 		final CountDownLatch completeLatch = new CountDownLatch(2);
@@ -76,7 +79,7 @@ public class ConcurrentTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				LikeUtils.like(context, entityKey, null, new LikeAddListener() {
+				LikeUtils.like(context, entityKey, options, new LikeAddListener() {
 					@Override
 					public void onError(SocializeException error) {
 						error.printStackTrace();
@@ -97,7 +100,7 @@ public class ConcurrentTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				LikeUtils.like(context, entityKey, null, new LikeAddListener() {
+				LikeUtils.like(context, entityKey, options, new LikeAddListener() {
 					@Override
 					public void onError(SocializeException error) {
 						error.printStackTrace();

@@ -41,6 +41,7 @@ import com.socialize.test.ui.util.TestUtils;
 /**
  * @author Jason Polites
  */
+@Deprecated
 public class CommentSDKTest extends SDKIntegrationTest {
 
 	public void testGetComment() throws Throwable{
@@ -58,12 +59,13 @@ public class CommentSDKTest extends SDKIntegrationTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Activity context = getContext();
 		
+		Socialize.getSocialize().init(context);
+		Socialize.getSocialize().authenticateSynchronous(context);
+		
 		runTestOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
-				Socialize.getSocialize().init(context);
-				Socialize.getSocialize().authenticateSynchronous(context);
 				Socialize.getSocialize().getCommentById(Integer.parseInt(id), new CommentGetListener() {
 					
 					@Override
@@ -132,13 +134,13 @@ public class CommentSDKTest extends SDKIntegrationTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Activity context = getContext();
 		
+		Socialize.getSocialize().init(context);
+		Socialize.getSocialize().authenticateSynchronous(context);
+		
 		runTestOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
-				Socialize.getSocialize().init(context);
-				Socialize.getSocialize().authenticateSynchronous(context);
-				
 				Socialize.getSocialize().listCommentsByEntity(DEFAULT_GET_ENTITY, new CommentListListener() {
 					
 					@Override
@@ -174,13 +176,13 @@ public class CommentSDKTest extends SDKIntegrationTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Activity context = getContext();
 		
+		Socialize.getSocialize().init(context);
+		Socialize.getSocialize().authenticateSynchronous(context);
+		
 		runTestOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
-				Socialize.getSocialize().init(context);
-				Socialize.getSocialize().authenticateSynchronous(context);
-				
 				Socialize.getSocialize().listCommentsByEntity(DEFAULT_GET_ENTITY, 5, 10, new CommentListListener() {
 					
 					@Override
@@ -222,13 +224,13 @@ public class CommentSDKTest extends SDKIntegrationTest {
 		JSONObject userObject = jsonObject.getJSONObject("user");
 		final String commentUserId = userObject.getString("id");	
 		
+		Socialize.getSocialize().init(context);
+		Socialize.getSocialize().authenticateSynchronous(context);
+		
 		runTestOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
-				Socialize.getSocialize().init(context);
-				Socialize.getSocialize().authenticateSynchronous(context);
-				
 				Socialize.getSocialize().listCommentsByUser(Integer.parseInt(commentUserId), new CommentListListener() {
 					
 					@Override

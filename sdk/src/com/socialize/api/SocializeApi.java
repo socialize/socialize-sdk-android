@@ -342,6 +342,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	public void postAsync(SocializeSession session, String endpoint, List<T> objects, SocializeActionListener listener) {
 		postAsync(session, endpoint, objects, true, listener);
 	}
+	
 	@SuppressWarnings("unchecked")
 	public void postAsync(SocializeSession session, String endpoint, List<T> objects, boolean jsonResponse, SocializeActionListener listener) {
 		AsyncPutter poster = new AsyncPutter(session, listener);

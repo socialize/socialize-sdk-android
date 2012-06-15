@@ -59,7 +59,13 @@ public abstract class AsyncDialogFactory<V extends DialogPanelView, L extends So
 			public void onError(String name, Exception e) {
 				dialog.dismiss();
 				progress.dismiss();
-				e.printStackTrace();
+				
+				if(logger != null) {
+					logger.error("Error creating dialog", e);
+				}
+				else {
+					e.printStackTrace();
+				}
 			}
 			
 			@Override
@@ -78,9 +84,7 @@ public abstract class AsyncDialogFactory<V extends DialogPanelView, L extends So
 				
 				view.setBackgroundDrawable(background);				
 				dialog.setContentView(view, params);
-				
-				WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-				
+			
 				dialog.setOnCancelListener(new OnCancelListener() {
 					@Override
 					public void onCancel(DialogInterface dlg) {
@@ -90,14 +94,12 @@ public abstract class AsyncDialogFactory<V extends DialogPanelView, L extends So
 					}
 				});
 				
+				WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
 			    lp.copyFrom(dialog.getWindow().getAttributes());
-			    
 			    lp.width = WindowManager.LayoutParams.FILL_PARENT;
 		    	lp.height = WindowManager.LayoutParams.FILL_PARENT;
-			    
 			    lp.horizontalMargin = 0.0f;
 			    lp.verticalMargin = 0.0f;
-			    
 			    dialog.getWindow().setAttributes(lp);				
 				
 				progress.dismiss();

@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 package com.socialize.demo.snippets;
-import com.socialize.R;
+import com.socialize.demo.R;
 //begin-snippet-0
 import android.app.Activity;
 import android.os.Bundle;

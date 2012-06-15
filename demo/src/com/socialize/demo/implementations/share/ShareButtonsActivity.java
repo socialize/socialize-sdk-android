@@ -68,7 +68,7 @@ public class ShareButtonsActivity extends DemoActivity {
 		
 		btnShareTwitter.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v) {
+			public void onClick(final View v) {
 				
 				final SafeProgressDialog progress = SafeProgressDialog.show(v.getContext());
 				
@@ -77,6 +77,7 @@ public class ShareButtonsActivity extends DemoActivity {
 					@Override
 					public void onCancel() {
 						progress.dismiss();
+						DemoUtils.showToast((Activity)v.getContext(), "Cancelled");
 					}
 
 					@Override
@@ -93,13 +94,15 @@ public class ShareButtonsActivity extends DemoActivity {
 						progress.dismiss();
 						DemoUtils.showToast(parent, "Shared to " + socialNetwork.name());
 					}
+					
+					
 				});				
 			}
 		});
 		
 		btnShareFacebook.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v) {
+			public void onClick(final View v) {
 				
 				final SafeProgressDialog progress = SafeProgressDialog.show(v.getContext());
 				
@@ -118,6 +121,12 @@ public class ShareButtonsActivity extends DemoActivity {
 					public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject response) {
 						progress.dismiss();
 						DemoUtils.showToast(parent, "Shared to " + socialNetwork.name());
+					}
+
+					@Override
+					public void onCancel() {
+						progress.dismiss();
+						DemoUtils.showToast((Activity)v.getContext(), "Cancelled");
 					}
 				});
 			}

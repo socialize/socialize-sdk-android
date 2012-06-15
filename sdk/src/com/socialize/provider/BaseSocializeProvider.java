@@ -29,8 +29,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.json.JSONArray;
@@ -295,7 +297,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 								"]");
 					}
 					
-					HttpResponse response = client.execute(request);
+					HttpResponse response = executeRequest(client, request);
 					
 					entity = response.getEntity();
 					
@@ -529,7 +531,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 				
 				HttpClient client = clientFactory.getClient();
 				
-				HttpResponse response = client.execute(request);
+				HttpResponse response = executeRequest(client, request);
 				
 				entity = response.getEntity();
 				
@@ -563,6 +565,31 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 			return null;
 		}
 	}
+	
+	private HttpResponse executeRequest(HttpClient client, HttpUriRequest request) throws ClientProtocolException, IOException {
+		
+		if(logger != null && logger.isDebugEnabled()) {
+			
+			StringBuilder builder = new StringBuilder();
+			Header[] allHeaders = request.getAllHeaders();
+			
+			for (Header header : allHeaders) {
+				builder.append(header.getName());
+				builder.append(":");
+				builder.append(header.getValue());
+				builder.append("\n");
+			}
+			
+			logger.debug("Executing request \nurl:[" +
+					request.getURI().toString() +
+					"] \nheaders:\n" +
+					builder.toString() +
+					"");
+			
+		}
+		
+		return client.execute(request);
+	}
 
 	private ListResult<T> doListTypeRequest(HttpUriRequest request, ActionType type) throws SocializeException {
 		return doListTypeRequest(request, type, true);	
@@ -584,7 +611,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 					logger.debug("Request: " + request.getMethod() + " " + request.getRequestLine().getUri());
 				}
 
-				HttpResponse response = client.execute(request);
+				HttpResponse response = executeRequest(client, request);
 				
 				if(logger != null && logger.isDebugEnabled()) {
 					logger.debug("Response: " + response.getStatusLine().getStatusCode());

@@ -4,6 +4,9 @@
 Socialize Android Developer Guide
 =================================
 
+.. raw:: html
+   :file: snippets/expert_warning.html
+
 Introduction
 ------------
 The Socialize SDK provides a simple set of classes and methods built upon the `Socialize REST API <http://www.getsocialize.com/docs/v1/>`_
@@ -19,6 +22,9 @@ passed into each call to the Socialize SDK.
 
 Initializing Socialize (Optional)
 ---------------------------------
+.. raw:: html
+   :file: snippets/expert_warning.html
+   
 .. note:: Socialize will automatically initialize itself upon first use, however if you want more direct control over initialization you can initialize Socialize manually.
 
 The Socialize SDK should be initialized in the **onCreate()** method of your Activity.  
@@ -38,6 +44,9 @@ If you want to know about initialization success (e.g. if you want to access Soc
 	
 Entities
 --------
+.. raw:: html
+   :file: snippets/expert_warning.html
+   
 An entity is a single item of content in your app
 
 Throughout the documentation and the code snippets we refer to an "entity".  This is simply a 
@@ -135,6 +144,9 @@ All actions performed on an entity (comment,share,like) can be retrieved using *
 
 Users & User Activity
 ---------------------
+.. raw:: html
+   :file: snippets/expert_warning.html
+   
 Every device running Socialize has a "User", however Socialize automatically manages this User for you so there is no need to explicitly create one.
 
 A User has both Settings and Activity.  The Settings correspond to the User's preferences while using Socialize whereas the Activity relates to their social actions.
@@ -194,7 +206,9 @@ Or get the list of actions by a user on a single entity
 	
 Application Activity
 --------------------
-
+.. raw:: html
+   :file: snippets/expert_warning.html
+   
 Using the **ActionUtils** class you can also retrieve application-wide activity
 
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ActionSnippets.java
@@ -203,7 +217,9 @@ Using the **ActionUtils** class you can also retrieve application-wide activity
 
 Sharing
 -------
-
+.. raw:: html
+   :file: snippets/expert_warning.html
+   
 Socialize provides a complete set of helper functions to make sharing content in your app as easy as possible.
 
 Default Share Dialog
@@ -254,6 +270,8 @@ implement the **onBeforePost** method of the listener you pass to the ShareUtils
 
 Comments
 --------
+.. raw:: html
+   :file: snippets/expert_warning.html
 
 Displaying the Comment List UI
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -286,6 +304,14 @@ You can also manually specify how the comment is to be propagated to 3rd party n
 	:start-after: begin-snippet-4
 	:end-before: end-snippet-4
 
+Adding Comments Without Sharing
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you want to explicity disable sharing of comments you can do this using the **CommentOptions**
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/CommentSnippets.java
+	:start-after: begin-snippet-8
+	:end-before: end-snippet-8
 
 Retreiving Comments
 ~~~~~~~~~~~~~~~~~~~
@@ -313,7 +339,9 @@ List comments by ID
 
 Likes
 -----
-
+.. raw:: html
+   :file: snippets/expert_warning.html
+   
 Liking
 ~~~~~~~
 
@@ -355,9 +383,10 @@ List likes by Entity
 	:start-after: begin-snippet-6
 	:end-before: end-snippet-6
 	
-
 Views
 -----
+.. raw:: html
+   :file: snippets/expert_warning.html
 
 A "view" represents the action of a user *viewing* an entity and is an extremely useful analytics tool
 

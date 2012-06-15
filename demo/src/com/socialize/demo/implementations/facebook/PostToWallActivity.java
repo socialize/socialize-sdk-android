@@ -63,7 +63,7 @@ public class PostToWallActivity extends SDKDemoActivity {
 			public void onAuthSuccess(SocializeSession session) {
 				
 				// Params for a Post at: http://developers.facebook.com/docs/reference/api/post/
-				Map<String, String> postData = new HashMap<String, String>();
+				Map<String, Object> postData = new HashMap<String, Object>();
 				postData.put("name", "Socialize Test");
 				postData.put("link", "http://getsocialize.com");
 				postData.put("message", text);

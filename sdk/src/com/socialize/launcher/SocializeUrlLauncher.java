@@ -29,6 +29,7 @@ import android.content.DialogInterface.OnDismissListener;
 import android.content.DialogInterface.OnKeyListener;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.webkit.WebView;
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.log.SocializeLogger;
@@ -67,7 +68,7 @@ public class SocializeUrlLauncher extends BaseLauncher implements UrlLauncher {
 			dialog.setOnCancelListener(new OnCancelListener() {
 				@Override
 				public void onCancel(DialogInterface dialog) {
-					handleCloseEvent(context);
+					handleCloseEvent(webView, context);
 				}
 			});
 			
@@ -75,7 +76,7 @@ public class SocializeUrlLauncher extends BaseLauncher implements UrlLauncher {
 				
 				@Override
 				public void onDismiss(DialogInterface dialog) {
-					handleCloseEvent(context);
+					handleCloseEvent(webView, context);
 				}
 			});
 			
@@ -91,6 +92,7 @@ public class SocializeUrlLauncher extends BaseLauncher implements UrlLauncher {
 					return false;
 				}
 			});
+			
 		
 			boolean show = true;
 			
@@ -114,11 +116,18 @@ public class SocializeUrlLauncher extends BaseLauncher implements UrlLauncher {
 		return false;
 	}
 	
-	protected void handleCloseEvent(Activity context) {
+	protected void handleCloseEvent(WebView webView, Activity context) {
 		
 		if(directUrlListener != null) {
 			directUrlListener.onDialogClose();
 		}
+		
+		if(webView != null) {
+			try {
+				webView.destroy();
+			}
+			catch (Throwable ignore) {}
+		}		
 		
 		DefaultAppUtils.launchMainApp(context);
 		context.finish();

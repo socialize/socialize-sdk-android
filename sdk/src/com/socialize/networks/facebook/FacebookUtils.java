@@ -21,10 +21,14 @@
  */
 package com.socialize.networks.facebook;
 
+import java.io.IOException;
 import java.lang.reflect.Proxy;
 import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.net.Uri;
 import com.socialize.SocializeActionProxy;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.Entity;
@@ -175,7 +179,7 @@ public class FacebookUtils {
 	 * @param params The data to be sent in the request.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void post(final Activity context, final String graphPath, final Map<String, String> params, final SocialNetworkPostListener listener) {
+	public static void post(final Activity context, final String graphPath, final Map<String, Object> params, final SocialNetworkPostListener listener) {
 		
 		if(proxy.isLinked(context)) {
 			proxy.post(context, graphPath, params, listener);
@@ -221,7 +225,7 @@ public class FacebookUtils {
 	 * @param params The data to be sent in the request.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void get(final Activity context, final String graphPath, final Map<String, String> params, final SocialNetworkPostListener listener) {
+	public static void get(final Activity context, final String graphPath, final Map<String, Object> params, final SocialNetworkPostListener listener) {
 		
 		if(proxy.isLinked(context)) {
 			proxy.get(context, graphPath, params, listener);
@@ -267,7 +271,7 @@ public class FacebookUtils {
 	 * @param params The data to be sent in the request.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void delete(final Activity context, final String graphPath, final Map<String, String> params, final SocialNetworkPostListener listener) {
+	public static void delete(final Activity context, final String graphPath, final Map<String, Object> params, final SocialNetworkPostListener listener) {
 		if(proxy.isLinked(context)) {
 			proxy.delete(context, graphPath, params, listener);
 		}
@@ -301,5 +305,29 @@ public class FacebookUtils {
 				}
 			});
 		}			
+	}
+	
+	/**
+	 * Returns image data suitable for posting to facebook.
+	 * @param context The current context.
+	 * @param imagePath The path to the image.
+	 * @return A byte array containing the bytes to be posted.
+	 * @throws IOException
+	 */
+	public static byte[] getImageForPost(Activity context, Uri imagePath) throws IOException {
+		return proxy.getImageForPost(context, imagePath);
+	}
+	
+	
+	/**
+	 * Returns image data suitable for posting to facebook.
+	 * @param context The current context.
+	 * @param image The image to be compressed.
+	 * @param format The compression format to use (one of JPEG or PNG).
+	 * @return A byte array containing the bytes to be posted.
+	 * @throws IOException
+	 */
+	public static byte[] getImageForPost(Activity context, Bitmap image, CompressFormat format) throws IOException {
+		return proxy.getImageForPost(context, image, format);
 	}
 }

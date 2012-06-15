@@ -21,14 +21,14 @@
  */
 package com.socialize.api.action.like;
 
-import com.socialize.api.action.ActionOptions;
+import com.socialize.api.action.ShareableActionOptions;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class LikeOptions extends ActionOptions {
+public class LikeOptions extends ShareableActionOptions {
 	protected LikeOptions() {
 		super();
 	}

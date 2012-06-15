@@ -30,7 +30,7 @@ package com.socialize.api.action;
 public class ActionOptions {
 	
 	private boolean selfManaged = false;
-	private boolean authRequired = true;
+	private boolean showAuthDialog = true;
 	
 	protected ActionOptions() {
 		super();
@@ -52,8 +52,8 @@ public class ActionOptions {
 	 * Returns true if auth is required for sharing.  Defaults to socialize.require.auth
 	 * @return
 	 */
-	public boolean isAuthRequired() {
-		return authRequired;
+	public boolean isShowAuthDialog() {
+		return showAuthDialog;
 	}
 
 	/**
@@ -61,8 +61,8 @@ public class ActionOptions {
 	 * Defaults to socialize.require.auth config property.
 	 * @param requireAuth
 	 */
-	public void setAuthRequired(boolean requireAuth) {
-		this.authRequired = requireAuth;
+	public void setShowAuthDialog(boolean requireAuth) {
+		this.showAuthDialog = requireAuth;
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public class ActionOptions {
 	 * @param other
 	 */
 	public void merge(ActionOptions other) {
-		setAuthRequired(other.isAuthRequired());
+		setShowAuthDialog(other.isShowAuthDialog());
 		setSelfManaged(other.isSelfManaged());
 	}
 }

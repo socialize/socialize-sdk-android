@@ -50,12 +50,15 @@ User currentUser = UserUtils.getCurrentUser(this);
 
 public void userSettings() {
 // begin-snippet-1
+// The "this" argument refers to the current Activity
 UserUtils.showUserSettings(this);
 // end-snippet-1	
 }
 
 public void userProfile() {
 // begin-snippet-2
+	
+// The "this" argument refers to the current Activity
 User user = UserUtils.getCurrentUser(this);
 
 UserUtils.showUserProfile(this, user);
@@ -64,6 +67,8 @@ UserUtils.showUserProfile(this, user);
 
 public void saveUser() {
 // begin-snippet-3
+	
+// The "this" argument refers to the current Activity	
 UserSettings userSettings = UserUtils.getUserSettings(this);
 
 UserUtils.saveUserSettings(this, userSettings, new UserSaveListener() {
@@ -84,7 +89,7 @@ UserUtils.saveUserSettings(this, userSettings, new UserSaveListener() {
 public void getOtherUser() {
 // begin-snippet-4
 long id = 123L;
-
+// The "this" argument refers to the current Activity
 UserUtils.getUser(this, id, new UserGetListener() {
 	
 	@Override
@@ -110,6 +115,7 @@ public void getActivity() {
 User user = UserUtils.getCurrentUser(this);
 
 // Get the most recent 10 actions by this user
+// The "this" argument refers to the current Activity
 ActionUtils.getActionsByUser(this, user.getId(), 0, 10, new ActionListListener() {
 	
 	@Override

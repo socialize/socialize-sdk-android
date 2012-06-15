@@ -25,7 +25,6 @@ import com.socialize.listener.comment.CommentListListener;
 import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.log.SocializeLogger;
-import com.socialize.networks.SocialNetwork;
 import com.socialize.notifications.SubscriptionType;
 import com.socialize.ui.dialog.SimpleDialogFactory;
 import com.socialize.ui.header.SocializeHeader;
@@ -231,34 +230,28 @@ public class CommentListView extends BaseView {
 			}
 
 			@Override
-			public void onComment(String text, boolean shareLocation, boolean subscribe, SocialNetwork... networks) {
+			public void onComment(String text, boolean shareLocation, boolean subscribe) {
 				text = StringUtils.replaceNewLines(text, 3, 2);
-				doPostComment(text, shareLocation, subscribe, networks);
-//				if(networks == null || networks.length == 0) {
-//					CommentUtils.addComment(CommentListView.this.getActivity(), entity, text, getCommentAddListener(subscribe));
-//				}
-//				else {
-//					doPostComment(text, shareLocation, subscribe, networks);
-//				}
+				
+				if(progressDialogFactory != null) {
+					dialog = progressDialogFactory.show(getContext(), "Posting comment", "Please wait...");
+				}
+				
+				CommentOptions options = newShareOptions();
+				options.setSubscribeToUpdates(subscribe);
+				options.setShowAuthDialog(true);
+				options.setShowShareDialog(true);
+				
+				CommentUtils.addComment(CommentListView.this.getActivity(), entity, text, options, getCommentAddListener(subscribe));
+				
+				// Won't persist.. but that's ok.
+				SocializeSession session = getSocialize().getSession();
+				
+				if(session != null && session.getUserSettings() != null) {
+					session.getUserSettings().setLocationEnabled(shareLocation);
+				}
 			}
 		});
-	}
-	
-	public void doPostComment(String text, boolean shareLocation, final boolean subscribe, SocialNetwork...networks) {
-		if(progressDialogFactory != null) {
-			dialog = progressDialogFactory.show(getContext(), "Posting comment", "Please wait...");
-		}
-		
-		CommentOptions options = newShareOptions();
-		options.setSubscribeToUpdates(subscribe);
-		
-		CommentUtils.addComment(getActivity(), entity, text, options, getCommentAddListener(subscribe), networks);
-		
-		// Won't persist.. but that's ok.
-		SocializeSession session = getSocialize().getSession();
-		if(session != null && session.getUserSettings() != null) {
-			session.getUserSettings().setLocationEnabled(shareLocation);
-		}
 	}
 	
 	protected CommentAddListener getCommentAddListener(final boolean subscribe) {
@@ -311,6 +304,13 @@ public class CommentListView extends BaseView {
 				
 				if(onCommentViewActionListener != null) {
 					onCommentViewActionListener.onPostComment(entity);
+				}
+			}
+
+			@Override
+			public void onCancel() {
+				if(dialog != null) {
+					dialog.dismiss();
 				}
 			}
 		};

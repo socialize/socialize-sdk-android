@@ -23,7 +23,7 @@ package com.socialize.demo.snippets;
 
 import android.app.Activity;
 import com.socialize.ActionBarUtils;
-import com.socialize.R;
+import com.socialize.demo.R;
 import com.socialize.entity.Entity;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarView;
@@ -60,6 +60,7 @@ Entity entity = Entity.newInstance("http://getsocialize.com", "Socialize");
 MyActionBarListener listener = new MyActionBarListener();
 
 // Use the listener when you show the action bar
+// The "this" argument refers to the current Activity
 ActionBarUtils.showActionBar(this, R.layout.actionbar, entity, null, listener);
 
 // Later (After the action bar has loaded!), you can reference the view to refresh

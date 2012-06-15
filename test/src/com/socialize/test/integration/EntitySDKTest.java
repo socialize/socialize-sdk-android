@@ -36,6 +36,7 @@ import com.socialize.listener.entity.EntityGetListener;
  * @author Jason Polites
  *
  */
+@Deprecated
 public class EntitySDKTest extends SDKIntegrationTest {
 
 	public void testCreateEntity() throws Throwable {
@@ -44,12 +45,13 @@ public class EntitySDKTest extends SDKIntegrationTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Activity context = getContext();
 		
+		Socialize.getSocialize().init(context);
+		Socialize.getSocialize().authenticateSynchronous(context);
+		
 		runTestOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
-				Socialize.getSocialize().init(context);
-				Socialize.getSocialize().authenticateSynchronous(context);
 				Socialize.getSocialize().addEntity(context, e, new EntityAddListener() {
 					
 					@Override

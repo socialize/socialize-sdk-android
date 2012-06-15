@@ -43,6 +43,7 @@ public void addView() {
 // begin-snippet-0
 Entity entity = Entity.newInstance("http://myentity.com", "My Name");
 
+//The "this" argument refers to the current Activity
 ViewUtils.view(this, entity, new ViewAddListener() {
 	
 	@Override
@@ -63,6 +64,7 @@ public void getViewsByUser() {
 User user = UserUtils.getCurrentUser(this);
 
 // Get first 10 views by user
+//The "this" argument refers to the current Activity
 ViewUtils.getViewsByUser(this, user, 0, 10, new ViewListListener() {
 	
 	@Override

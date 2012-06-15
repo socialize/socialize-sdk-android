@@ -91,7 +91,7 @@ public class AuthRequestDialogFactoryTest extends ActionBarAutoTest {
 					System.err.println("proxyLike is null!!");
 				}
 			}
-		});			
+		});		
 		
 		Intent intent = new Intent();
 		Bundle extras = new Bundle();
@@ -100,7 +100,7 @@ public class AuthRequestDialogFactoryTest extends ActionBarAutoTest {
 		intent.putExtras(extras);
 		setActivityIntent(intent);
 		
-		getInstrumentation().waitForIdleSync();
+		TestUtils.waitForIdle(this, 5000);
 		
 		final ActionBarLayoutView actionBar = TestUtils.findView(getActivity(), ActionBarLayoutView.class, 20000);	
 		final ActionBarView actionBarView = TestUtils.findView(getActivity(), ActionBarView.class, 20000);	

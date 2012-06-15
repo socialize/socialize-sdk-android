@@ -98,6 +98,19 @@ public class FbDialog extends Dialog {
 				mListener.onCancel();
 			}
 		});
+		
+		setOnDismissListener(new OnDismissListener() {
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				if(mWebView != null) {
+					try {
+						mWebView.clearCache(false);
+						mWebView.destroyDrawingCache();
+					}
+					catch (Throwable ignore) {}
+				}
+			}
+		});
 	}
 
 	private void createCrossImage() {

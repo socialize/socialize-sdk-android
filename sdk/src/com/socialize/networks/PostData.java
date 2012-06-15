@@ -33,6 +33,6 @@ public interface PostData {
 
 	public PropagationInfo getPropagationInfo();
 	
-	public Map<String, String> getPostValues();
+	public Map<String, Object> getPostValues();
 	
 }

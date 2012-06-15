@@ -21,12 +21,8 @@
  */
 package com.socialize.test.ui.network;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.widget.Button;
 import com.socialize.networks.SocialNetworkSignOutClickListener;
 import com.socialize.test.SocializeActivityTest;
 
@@ -38,55 +34,55 @@ import com.socialize.test.SocializeActivityTest;
 public class SocialNetworkSignOutClickListenerTest extends SocializeActivityTest {
 
 	// TODO: Test broken (incompete).. performClick returns true but DOESN'T call button click handler!
-	public void testOnClickYes() throws Throwable {
-		
-		final PublicSocialNetworkSignOutClickListener listener = new PublicSocialNetworkSignOutClickListener() {
-			@Override
-			protected void doSignOut(Context context) {
-				addResult("doSignOut");
-			}
-		};
-		
-		final CountDownLatch latch = new CountDownLatch(1);
-//		final CountDownLatch latch1 = new CountDownLatch(1);
-		
-		final AlertDialog dialog = listener.makeDialog(getContext());
-		
-		runTestOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				dialog.show();
-				Button button = dialog.getButton(Dialog.BUTTON_POSITIVE);
-				
-				for (int i = 0; i < 5; i++) {
-					System.out.println(button.performClick());
-				}
-//				assertTrue(button.performClick());
-				latch.countDown();
-			}
-		});
-	
-		latch.await(10, TimeUnit.SECONDS);
-		
-		// Wait for show
-		getInstrumentation().waitForIdleSync();
-		
+//	public void testOnClickYes() throws Throwable {
+//		
+//		final PublicSocialNetworkSignOutClickListener listener = new PublicSocialNetworkSignOutClickListener() {
+//			@Override
+//			protected void doSignOut(Context context) {
+//				addResult("doSignOut");
+//			}
+//		};
+//		
+//		final CountDownLatch latch = new CountDownLatch(1);
+////		final CountDownLatch latch1 = new CountDownLatch(1);
+//		
+//		final AlertDialog dialog = listener.makeDialog(getContext());
+//		
 //		runTestOnUiThread(new Runnable() {
 //			@Override
 //			public void run() {
-//
+//				dialog.show();
+//				Button button = dialog.getButton(Dialog.BUTTON_POSITIVE);
+//				
+//				for (int i = 0; i < 5; i++) {
+//					System.out.println(button.performClick());
+//				}
+////				assertTrue(button.performClick());
+//				latch.countDown();
 //			}
 //		});
-		
-//		latch1.await(10, TimeUnit.SECONDS);
-		
-		// Wait for click
+//	
+//		latch.await(10, TimeUnit.SECONDS);
+//		
+//		// Wait for show
 //		getInstrumentation().waitForIdleSync();
-		
-//		assertNotNull(getNextResult());
-		
-		dialog.dismiss();
-	}
+//		
+////		runTestOnUiThread(new Runnable() {
+////			@Override
+////			public void run() {
+////
+////			}
+////		});
+//		
+////		latch1.await(10, TimeUnit.SECONDS);
+//		
+//		// Wait for click
+////		getInstrumentation().waitForIdleSync();
+//		
+////		assertNotNull(getNextResult());
+//		
+//		dialog.dismiss();
+//	}
 	
 	class PublicSocialNetworkSignOutClickListener extends SocialNetworkSignOutClickListener {
 		@Override

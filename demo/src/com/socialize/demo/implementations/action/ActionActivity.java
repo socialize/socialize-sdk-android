@@ -36,8 +36,8 @@ import com.socialize.demo.R;
  */
 public class ActionActivity extends ListActivity {
 
-	final String[] values = new String[] { "Get Actions By Entity", "Get Actions By User", "Get Actions By User & Entity"};
-	final Class<?>[] activities = new Class<?>[] { GetActionsByEntityActivity.class, GetActionsByUserActivity.class, GetActionsByUserEntityActivity.class};
+	final String[] values = new String[] { "Get Actions By Entity", "Get Actions By User", "Get Actions By User & Entity", "Get Actions for Entire App"};
+	final Class<?>[] activities = new Class<?>[] { GetActionsByEntityActivity.class, GetActionsByUserActivity.class, GetActionsByUserEntityActivity.class, GetActionsByApplicationActivity.class};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

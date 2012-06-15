@@ -57,6 +57,11 @@ public class DirectUrlWebView extends WebView {
 		setWebViewClient(newWebViewClient());
 	}
 	
+	public void destroy() {
+		clearCache(false);
+		destroyDrawingCache();
+	}
+	
 	protected WebChromeClient newWebChromeClient() {
 		WebChromeClient client = new WebChromeClient() {
 
@@ -94,23 +99,6 @@ public class DirectUrlWebView extends WebView {
 		return client;
 	}
 	
-	
-
-//	@Override
-//	public boolean onTouchEvent(MotionEvent ev) {
-//		
-//		if(ev.getAction() == MotionEvent.ACTION_DOWN) {
-//			if(ev.getPointerCount() > 1) {
-//				;
-//			}
-//			else {
-//				getSettings().setSupportZoom(false);
-//			}			
-//		}
-//		
-//		return super.onTouchEvent(ev);
-//	}
-
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}

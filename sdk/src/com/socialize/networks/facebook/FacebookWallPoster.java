@@ -54,9 +54,9 @@ public interface FacebookWallPoster {
 	
 	public void post(final Activity parent, String appId, SocialNetworkListener listener, PostData postData);
 	
-	public void post(final Activity parent, String graphPath, String appId, Map<String, String> postData, SocialNetworkPostListener listener);
+	public void post(final Activity parent, String graphPath, String appId, Map<String, Object> postData, SocialNetworkPostListener listener);
 
-	public void get(final Activity parent, String graphPath, String appId, Map<String, String> postData, SocialNetworkPostListener listener);
+	public void get(final Activity parent, String graphPath, String appId, Map<String, Object> postData, SocialNetworkPostListener listener);
 	
-	public void delete(final Activity parent, String graphPath, String appId, Map<String, String> postData, SocialNetworkPostListener listener);
+	public void delete(final Activity parent, String graphPath, String appId, Map<String, Object> postData, SocialNetworkPostListener listener);
 }

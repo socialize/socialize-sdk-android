@@ -42,27 +42,12 @@ import android.app.Dialog;
  */
 public class ShareSnippets extends Activity {
 
-/**
-canShareViaEmail(Activity)
-canShareViaSMS(Activity)
-getShare(Activity, ShareGetListener, long)
-getShares(Activity, ShareListListener, long...)
-getSharesByEntity(Activity, String, int, int, ShareListListener)
-getSharesByUser(Activity, User, int, int, ShareListListener)
-getUserShareOptions(Context)
-shareViaEmail(Activity, Entity, ShareAddListener)
-shareViaOther(Activity, Entity, ShareAddListener)
-shareViaSMS(Activity, Entity, ShareAddListener)
-shareViaSocialNetworks(Activity, Entity, String, ShareOptions, SocialNetworkShareListener)
-showLinkDialog(Activity, AuthDialogListener)
-showShareDialog(Activity, Entity, SocialNetworkDialogListener, int)
- */
-	
 	
 public void showShareDialog() {
 // begin-snippet-0
-Entity entity = Entity.newInstance("http://myentity.com", "My Name");	
+Entity entity = Entity.newInstance("http://myentity.com", "My Name");
 
+// The "this" argument refers to the current Activity
 ShareUtils.showShareDialog(this, entity);
 //end-snippet-0	
 }
@@ -71,6 +56,7 @@ public void showShareDialogWithInterrupt() {
 // begin-snippet-1
 Entity entity = Entity.newInstance("http://myentity.com", "My Name");	
 
+// The "this" argument refers to the current Activity
 ShareUtils.showShareDialog(this, entity, new ShareDialogListener() {
 	
 	@Override
@@ -110,6 +96,7 @@ Entity entity = Entity.newInstance("http://myentity.com", "My Name");
 // Setup the options for display
 int options = ShareUtils.FACEBOOK | ShareUtils.TWITTER;
 
+// The "this" argument refers to the current Activity
 ShareUtils.showShareDialog(this, entity, new SocialNetworkDialogListener() {
 
 	@Override
@@ -139,6 +126,7 @@ Entity entity = Entity.newInstance("http://myentity.com", "My Name");
 // Setup the options for display
 int options = ShareUtils.SOCIAL; // This is just a shortcut for Twitter and Facebook.
 
+// The "this" argument refers to the current Activity
 ShareUtils.showShareDialog(this, entity, new SocialNetworkDialogListener() {
 
 	@Override
@@ -170,6 +158,7 @@ ShareUtils.showShareDialog(this, entity, new SocialNetworkDialogListener() {
 
 public void showLinkDialog() {
 // begin-snippet-4
+// The "this" argument refers to the current Activity
 ShareUtils.showLinkDialog(this, new AuthDialogListener() {
 	
 	@Override

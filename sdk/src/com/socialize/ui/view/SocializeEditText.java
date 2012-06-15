@@ -71,6 +71,7 @@ public class SocializeEditText extends LinearLayout {
 		objEdit.setMaxLines(1); 
 		objEdit.setSingleLine(true);
 		objEdit.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+		objEdit.setTextColor(Color.BLACK);
 		
 		if(text != null) {
 			objEdit.setText(text);

@@ -51,6 +51,7 @@ public void addCommentWithAutoShare() {
 // begin-snippet-0
 Entity entity = Entity.newInstance("http://myentity.com", "My Name");
 
+// The "this" argument refers to the current Activity
 CommentUtils.addComment(this, entity, "This the comment", new CommentAddListener() {
 	@Override
 	public void onError(SocializeException error) {
@@ -70,6 +71,7 @@ public void showCommentView() {
 Entity entity = Entity.newInstance("http://myentity.com", "My Name");
 
 // Show the comment list view
+// The "this" argument refers to the current Activity
 CommentUtils.showCommentView(this, entity);
 //end-snippet-1
 }
@@ -78,6 +80,7 @@ public void showCommentViewWithListener() {
 // begin-snippet-2
 Entity entity = Entity.newInstance("http://myentity.com", "My Name");
 
+// The "this" argument refers to the current Activity
 CommentUtils.showCommentView(this, entity, new OnCommentViewActionListener() {
 	
 	@Override
@@ -125,6 +128,7 @@ CommentOptions commentOptions = CommentUtils.getUserCommentOptions(this);
 commentOptions.setSubscribeToUpdates(true);
 
 // Pass the share options in the call to create the comment.
+// The "this" argument refers to the current Activity
 CommentUtils.addComment(this, entity, "This the comment", commentOptions, new CommentAddListener() {
 	@Override
 	public void onError(SocializeException error) {
@@ -160,10 +164,39 @@ CommentUtils.addComment(this, entity, "This the comment", commentOptions, new Co
 }
 
 
+public void addCommentWithNoShare() {
+// begin-snippet-8
+Entity entity = Entity.newInstance("http://myentity.com", "My Name");
+
+// Get the default options for the user.
+CommentOptions commentOptions = CommentUtils.getUserCommentOptions(this);
+
+// Do NOT promt the user to share
+commentOptions.setShowShareDialog(false);
+
+// Pass the share options in the call to create the comment.
+// The "this" argument refers to the current Activity
+CommentUtils.addComment(this, entity, "This the comment", commentOptions, new CommentAddListener() {
+	@Override
+	public void onError(SocializeException error) {
+		// Handle error
+	}
+	
+	@Override
+	public void onCreate(Comment result) {
+		// Comment was created
+	}
+
+});
+//end-snippet-8
+}
+
+
 public void getCommentById() {
 
 long commentId = 123L; 
 
+// The "this" argument refers to the current Activity
 CommentUtils.getComment(this, new CommentGetListener() {
 	
 	@Override
@@ -189,6 +222,7 @@ public void getCommentsById() {
 long commentId0 = 123;
 long commentId1 = 456;
 
+// The "this" argument refers to the current Activity
 CommentUtils.getComments(this, new CommentListListener() {
 	
 	@Override
@@ -214,6 +248,7 @@ public void getCommentsByEntity() {
 String entityKey = "http://getsocialize.com";
 
 // Get first 10 comments
+// The "this" argument refers to the current Activity
 CommentUtils.getCommentsByEntity(this, entityKey, 0, 10, new CommentListListener() {
 	
 	@Override
@@ -234,6 +269,7 @@ public void getCommentsByUser() {
 User user = UserUtils.getCurrentUser(this);
 
 // Get first 10 comments by user
+// The "this" argument refers to the current Activity
 CommentUtils.getCommentsByUser(this, user, 0, 10, new CommentListListener() {
 	
 	@Override
