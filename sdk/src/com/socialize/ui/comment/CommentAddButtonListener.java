@@ -22,11 +22,6 @@
 package com.socialize.ui.comment;
 
 import android.content.Context;
-import com.socialize.ConfigUtils;
-import com.socialize.Socialize;
-import com.socialize.SocializeService;
-import com.socialize.config.SocializeConfig;
-import com.socialize.networks.SocialNetwork;
 import com.socialize.util.StringUtils;
 
 /**
@@ -35,14 +30,18 @@ import com.socialize.util.StringUtils;
  */
 public class CommentAddButtonListener {
 
-	private String consumerKey;
-	private String consumerSecret;
-	private Context context;
+//	private String consumerKey;
+//	private String consumerSecret;
+//	private Context context;
 	private CommentButtonCallback callback;
 	
+	public CommentAddButtonListener() {
+		super();
+	}
+
 	public CommentAddButtonListener(Context context) {
 		super();
-		this.context = context;
+//		this.context = context;
 	}
 
 	public CommentAddButtonListener(
@@ -52,31 +51,21 @@ public class CommentAddButtonListener {
 		this(context);
 		
 		this.callback = callback;
-		this.consumerKey = ConfigUtils.getConfig(context).getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-		this.consumerSecret = ConfigUtils.getConfig(context).getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+//		this.consumerKey = ConfigUtils.getConfig(context).getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+//		this.consumerSecret = ConfigUtils.getConfig(context).getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 	}
 	
-	
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
-	}
+//	protected SocializeService getSocialize() {
+//		return Socialize.getSocialize();
+//	}
 	
 	public void onCancel() {
 		callback.onCancel();
 	}
 
-	public void onComment(String comment, boolean shareLocation, boolean subscribe, SocialNetwork...networks) {
+	public void onComment(String comment, boolean shareLocation, boolean subscribe) {
 		if(!StringUtils.isEmpty(comment)) {
-			if(!getSocialize().isAuthenticated()) {
-				getSocialize().authenticate(
-						context,
-						consumerKey, 
-						consumerSecret,
-						new CommentReAuthListener(context, callback, comment, shareLocation, subscribe, networks));
-			}
-			else {
-				callback.onComment(comment, shareLocation, subscribe, networks);
-			}
+			callback.onComment(comment, shareLocation, subscribe);
 		}
 	}
 
