@@ -24,11 +24,10 @@ package com.socialize.test.integration.services;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import com.socialize.ConfigUtils;
 import com.socialize.LikeUtils;
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
-import com.socialize.config.SocializeConfig;
+import com.socialize.api.action.like.LikeOptions;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.User;
@@ -63,10 +62,11 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		final Entity entityKey = Entity.newInstance("testAddLike", "testAddLike");
 		final CountDownLatch latch = new CountDownLatch(1);
 		
-		// Force no config
-		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		final LikeOptions options = LikeUtils.getUserLikeOptions(getContext());
+		options.setShowAuthDialog(false);
+		options.setShowShareDialog(false);
 		
-		LikeUtils.like(getActivity(), entityKey, null, new LikeAddListener() {
+		LikeUtils.like(getActivity(), entityKey, options, new LikeAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -126,11 +126,11 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
-		// Force no config
-		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
-				
+		final LikeOptions options = LikeUtils.getUserLikeOptions(getContext());
+		options.setShowAuthDialog(false);
+		options.setShowShareDialog(false);
 		
-		LikeUtils.like(getActivity(), entityKey, null, new LikeAddListener() {
+		LikeUtils.like(getActivity(), entityKey, options, new LikeAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -195,9 +195,11 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		
 		// Force no config
-		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		final LikeOptions options = LikeUtils.getUserLikeOptions(getContext());
+		options.setShowAuthDialog(false);
+		options.setShowShareDialog(false);
 		
-		LikeUtils.like(getActivity(), entityKey, null, new LikeAddListener() {
+		LikeUtils.like(getActivity(), entityKey, options, new LikeAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -238,9 +240,11 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		
 		// Force no config
-		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		final LikeOptions options = LikeUtils.getUserLikeOptions(getContext());
+		options.setShowAuthDialog(false);
+		options.setShowShareDialog(false);
 		
-		LikeUtils.like(getActivity(), entityKey, null, new LikeAddListener() {
+		LikeUtils.like(getActivity(), entityKey, options, new LikeAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -281,9 +285,11 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		
 		// Force no config
-		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		final LikeOptions options = LikeUtils.getUserLikeOptions(getContext());
+		options.setShowAuthDialog(false);
+		options.setShowShareDialog(false);
 		
-		LikeUtils.like(getActivity(), entityKey, null, new LikeAddListener() {
+		LikeUtils.like(getActivity(), entityKey, options, new LikeAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {

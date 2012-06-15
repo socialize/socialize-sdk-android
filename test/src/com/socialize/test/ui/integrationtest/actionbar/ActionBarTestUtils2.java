@@ -107,7 +107,7 @@ public class ActionBarTestUtils2 {
 		intent.putExtra(Socialize.ENTITY_OBJECT, entity);
 		testCase.setActivityIntent(intent);
 		
-		testCase.getInstrumentation().waitForIdleSync();
+		TestUtils.waitForIdle(testCase, 5000);
 		
 		final ActionBarLayoutView actionBar = TestUtils.findView(testCase.getActivity(), ActionBarLayoutView.class, 25000);	
 		
@@ -203,7 +203,7 @@ public class ActionBarTestUtils2 {
 		intent.putExtra(Socialize.ENTITY_OBJECT, entity);
 		testCase.setActivityIntent(intent);
 		
-		testCase.getInstrumentation().waitForIdleSync();
+		TestUtils.waitForIdle(testCase, 5000);
 		
 		final ActionBarLayoutView actionBar = TestUtils.findView(testCase.getActivity(), ActionBarLayoutView.class, 25000);	
 		
@@ -332,7 +332,7 @@ public class ActionBarTestUtils2 {
 		intent.putExtra(Socialize.ENTITY_OBJECT, entity);
 		testCase.setActivityIntent(intent);
 		
-		testCase.getInstrumentation().waitForIdleSync();
+		TestUtils.waitForIdle(testCase, 5000);
 		
 		final ActionBarLayoutView actionBar = TestUtils.findView(testCase.getActivity(), ActionBarLayoutView.class, 25000);	
 		
@@ -464,7 +464,7 @@ public class ActionBarTestUtils2 {
 		intent.putExtra(Socialize.ENTITY_OBJECT, entity);
 		testCase.setActivityIntent(intent);
 		
-		testCase.getInstrumentation().waitForIdleSync();
+		TestUtils.waitForIdle(testCase, 5000);
 		
 		final ActionBarLayoutView actionBar = TestUtils.findView(testCase.getActivity(), ActionBarLayoutView.class, 25000);	
 		

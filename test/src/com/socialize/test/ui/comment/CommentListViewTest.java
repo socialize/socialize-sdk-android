@@ -191,7 +191,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		view.setEndIndex(endIndex);
 		view.setEntity(entity);
 		
-		view.getCommentAddButtonListener().onComment(commentString, shareLocation, false, SocialNetwork.FACEBOOK);
+		view.getCommentAddButtonListener().onComment(commentString, shareLocation, false);
 		
 		AndroidMock.verify(progressDialogFactory);
 		AndroidMock.verify(commentAdapter);
@@ -258,7 +258,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		view.setProgressDialogFactory(progressDialogFactory);
 		view.setEntity(entity);
 		
-		view.getCommentAddButtonListener().onComment(comment, true, false, SocialNetwork.FACEBOOK);
+		view.getCommentAddButtonListener().onComment(comment, true, false);
 		
 		AndroidMock.verify(progressDialogFactory);
 		AndroidMock.verify(dialog);

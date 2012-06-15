@@ -25,7 +25,6 @@ import com.socialize.listener.comment.CommentListListener;
 import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.log.SocializeLogger;
-import com.socialize.networks.SocialNetwork;
 import com.socialize.notifications.SubscriptionType;
 import com.socialize.ui.dialog.SimpleDialogFactory;
 import com.socialize.ui.header.SocializeHeader;
@@ -231,7 +230,7 @@ public class CommentListView extends BaseView {
 			}
 
 			@Override
-			public void onComment(String text, boolean shareLocation, boolean subscribe, SocialNetwork... networks) {
+			public void onComment(String text, boolean shareLocation, boolean subscribe) {
 				text = StringUtils.replaceNewLines(text, 3, 2);
 				
 				if(progressDialogFactory != null) {
@@ -240,13 +239,10 @@ public class CommentListView extends BaseView {
 				
 				CommentOptions options = newShareOptions();
 				options.setSubscribeToUpdates(subscribe);
+				options.setShowAuthDialog(true);
+				options.setShowShareDialog(true);
 				
-				if(networks == null || networks.length == 0) {
-					CommentUtils.addComment(CommentListView.this.getActivity(), entity, text, options, getCommentAddListener(subscribe));
-				}
-				else {
-					CommentUtils.addComment(getActivity(), entity, text, options, getCommentAddListener(subscribe), networks);
-				}		
+				CommentUtils.addComment(CommentListView.this.getActivity(), entity, text, options, getCommentAddListener(subscribe));
 				
 				// Won't persist.. but that's ok.
 				SocializeSession session = getSocialize().getSession();
@@ -308,6 +304,13 @@ public class CommentListView extends BaseView {
 				
 				if(onCommentViewActionListener != null) {
 					onCommentViewActionListener.onPostComment(entity);
+				}
+			}
+
+			@Override
+			public void onCancel() {
+				if(dialog != null) {
+					dialog.dismiss();
 				}
 			}
 		};

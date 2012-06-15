@@ -48,6 +48,7 @@ public void createInline() {
 // begin-snippet-0
 Entity entity = Entity.newInstance("key", "name");
 
+// The "this" argument refers to the current Activity
 CommentUtils.addComment(this, entity, "The comment", new CommentAddListener() {
 	
 	@Override
@@ -67,6 +68,7 @@ public void createInline2() {
 // begin-snippet-1
 Entity entity = Entity.newInstance("key", null);
 
+// The "this" argument refers to the current Activity
 CommentUtils.addComment(this, entity, "The comment", new CommentAddListener() {
 	
 	@Override
@@ -86,6 +88,7 @@ public void createExplicit() {
 // begin-snippet-2
 Entity entity = Entity.newInstance("key", "name");
 
+// The "this" argument refers to the current Activity
 EntityUtils.saveEntity(this, entity, new EntityAddListener() {
 	
 	@Override
@@ -103,6 +106,7 @@ EntityUtils.saveEntity(this, entity, new EntityAddListener() {
 
 public void getEntity() {
 // begin-snippet-3
+// The "this" argument refers to the current Activity	
 EntityUtils.getEntity(this, "key", new EntityGetListener() {
 	
 	@Override
@@ -126,6 +130,7 @@ EntityUtils.getEntity(this, "key", new EntityGetListener() {
 @SuppressWarnings("unused")
 public void getEntities() {
 // begin-snippet-4
+// The "this" argument refers to the current Activity
 EntityUtils.getEntities(this, new EntityListListener() {
 
 	@Override
@@ -146,6 +151,7 @@ EntityUtils.getEntities(this, new EntityListListener() {
 }
 public void getEntityStats() {
 // begin-snippet-5
+// The "this" argument refers to the current Activity	
 EntityUtils.getEntity(this, "key", new EntityGetListener() {
 	
 	@Override
@@ -183,6 +189,7 @@ metaData.put("some_key", "some_value");
 
 entity.setMetaData(metaData.toString());
 
+// The "this" argument refers to the current Activity
 EntityUtils.saveEntity(this, entity, new EntityAddListener() {
 	
 	@Override
@@ -231,10 +238,10 @@ EntityUtils.getEntity(this, "key", new EntityGetListener() {
 @SuppressWarnings("unused")
 public void entityMetaDataWith() throws JSONException {
 // begin-snippet-6
-	
 Entity entity = Entity.newInstance("key", "name");
 entity.setMetaData("meta data");
 
+// The "this" argument refers to the current Activity
 EntityUtils.saveEntity(this, entity, new EntityAddListener() {
 	
 	@Override

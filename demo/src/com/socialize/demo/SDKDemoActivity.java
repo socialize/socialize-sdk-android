@@ -36,6 +36,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
+import com.socialize.api.action.ActionType;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.SocializeObject;
@@ -133,7 +134,12 @@ public abstract class SDKDemoActivity extends DemoActivity {
 	protected <A extends SocializeAction> void handleSocializeResult(List<A> items) {
 		Collection<String> strResults = new ArrayList<String>();
 		for (A socializeAction : items) {
-			strResults.add(socializeAction.getDisplayText());
+			if(socializeAction.getActionType().equals(ActionType.LIKE)) {
+				strResults.add(socializeAction.getActionType().name() + " On entity: " + socializeAction.getEntityDisplayName() + " by " + socializeAction.getUser().getDisplayName());
+			}
+			else {
+				strResults.add(socializeAction.getActionType().name() + ": " + socializeAction.getDisplayText() + " by " + socializeAction.getUser().getDisplayName());
+			}
 		}
 		
 		handleResults(strResults);

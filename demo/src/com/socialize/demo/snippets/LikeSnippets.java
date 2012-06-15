@@ -48,6 +48,7 @@ public void addLikeWithAutoShare() {
 // begin-snippet-0
 Entity entity = Entity.newInstance("http://myentity.com", "My Name");
 
+// The "this" argument refers to the current Activity
 LikeUtils.like(this, entity, new LikeAddListener() {
 	
 	@Override
@@ -67,6 +68,7 @@ LikeUtils.like(this, entity, new LikeAddListener() {
 public void unlike() {
 // begin-snippet-1
 // Just use the entity key of the entity that was liked
+// The "this" argument refers to the current Activity
 LikeUtils.unlike(this, "http://myentity.com", new LikeDeleteListener() {
 	
 	@Override
@@ -91,6 +93,7 @@ Entity entity = Entity.newInstance("http://myentity.com", "My Name");
 LikeOptions likeOptions = LikeUtils.getUserLikeOptions(this);
 
 // Pass the share options in the call to create the like.
+// The "this" argument refers to the current Activity
 LikeUtils.like(this, entity, likeOptions, new LikeAddListener() {
 	
 	@Override
@@ -131,6 +134,7 @@ public void getLikesByEntity() {
 String entityKey = "http://getsocialize.com";
 
 // Get first 10 likes
+// The "this" argument refers to the current Activity
 LikeUtils.getLikesByEntity(this, entityKey, 0, 10, new LikeListListener() {
 	
 	@Override
@@ -151,6 +155,7 @@ public void getLikesByUser() {
 User user = UserUtils.getCurrentUser(this);
 
 // Get first 10 likes by user
+// The "this" argument refers to the current Activity
 LikeUtils.getLikesByUser(this, user, 0, 10, new LikeListListener() {
 	
 	@Override

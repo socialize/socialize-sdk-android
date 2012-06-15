@@ -76,9 +76,41 @@ provided by you which tells Socialize how to load content in your app.
 
 Refer to the :ref:`entity_loader` section for details on how to implement a Socialize Entity Loader.
 
+Testing SmartAlerts
+-------------------
+
+When implementing SmartAlerts it is useful to know whether all the setup steps have been completed successfully and that messages
+are indeed being sent.  
+
+The simplest way to verify that SmartAlerts are working for your app is to send a test message from the Socialize website.  
+
+This can be found in the dashboard for your app:
+
+.. image:: images/smart_alert.png 
+
+Locating your Device Token
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. note:: The Device Token is DIFFERENT to the C2DM Token.  Each Device has a unique token whereas your C2DM token (if you have one) corresponds to your Sender ID 
+
+If you are still experiencing problems and want to post a question to our support forum, it is useful to include your device token 
+when posting any question.  To determine your device token you will first need to enable the **INFO** level logging in Socialize.  
+
+Refer to the :ref:`debug_logs` section for more information on enabling logs.
+
+Once info logging is enabled, a **new** instance of your app should produce log entries that look something like this::
+	
+	INFO/Socialize(15860): Not registered with C2DM, sending registration request...
+	INFO/Socialize(15860): Registration with C2DM successful: APA91bHd0aL-d75F6_7NcDf_nil8...OBg5-Ixk_8c9rg9b14fsVwvMXTy4
+	INFO/Socialize(15860): Registration with Socialize for C2DM successful.	
+
+The "Registration with C2DM successful" log entry shows the device token used for SmartAlerts
+
 I already have a BroadcastReceiver
 ----------------------------------
-
+.. raw:: html
+   :file: snippets/expert_warning_push.html
+   
 If you already have a BroadcastReceiver defined in your application, you can simply call the Socialize handler
 in your existing broadcast receiver's **onReceive()** method:
 
@@ -90,6 +122,8 @@ Make sure however, that you add the intent filters and permissions required by S
 
 I am already using Google C2DM
 ------------------------------
+.. raw:: html
+   :file: snippets/expert_warning_push.html
 
 If you are already using Google's C2DM for push notifications you will need to enter your C2DM sender credentials into the 
 Socialize website.  This is due to a limitation of Google's C2DM service which does not allow multiple senders for the same 
@@ -101,7 +135,9 @@ app.
 
 High Volume Usage
 -----------------
-
+.. raw:: html
+   :file: snippets/expert_warning_push.html
+   
 If you app is expected to have a high volume of SmartAlerts we recommend you register your own Google C2DM token to avoid any unexpected quota issues
 
 Registering for Google C2DM
@@ -124,7 +160,6 @@ Fill out all the required information and submit, you should see a message like 
 
 .. note:: Make sure you retain the Sender ID you used during this sign up process (it will most likely be your Google email address), you will need this in the next step. 
 
- 
 Step 2: Add your C2DM sender ID to your **socialize.properties** file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The Socialize SDK needs to know who will be sending SmartAlerts to the device.  Simply add your C2DM Sender ID to your **socialize.properties** file 
@@ -138,37 +173,5 @@ Step 3: Add your C2DM token to the Socialize website
 Once you receive your C2DM token from Google, simply add it to your account on the getsocialize.com website:
 
 .. image:: images/c2dm.png 
-
-Testing SmartAlerts
--------------------
-
-When implementing SmartAlerts it is useful to know whether all the setup steps have been completed successfully and that messages
-are indeed being sent.  
-
-The simplest way to verify that SmartAlerts are working for your app is to send a test message from the Socialize website.  
-
-This can be found in the dashboard for your app:
-
-.. image:: images/smart_alert.png 
-
-Locating your Device Token
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. note:: The Device Token is DIFFERENT to the C2DM Token.  Each Device has a unique token whereas your C2DM token (if you have one) corresponds to your Sender ID 
-
-
-If you are still experiencing problems and want to post a question to our support forum, it is useful to include your device token 
-when posting any question.  To determine your device token you will first need to enable the **INFO** level logging in Socialize.  
-
-Refer to the :ref:`debug_logs` section for more information on enabling logs.
-
-Once info logging is enabled, a **new** instance of your app should produce log entries that look something like this::
-	
-	INFO/Socialize(15860): Not registered with C2DM, sending registration request...
-	INFO/Socialize(15860): Registration with C2DM successful: APA91bHd0aL-d75F6_7NcDf_nil8...OBg5-Ixk_8c9rg9b14fsVwvMXTy4
-	INFO/Socialize(15860): Registration with Socialize for C2DM successful.	
-
-The "Registration with C2DM successful" log entry shows the device token used for SmartAlerts
-
 
 .. include:: footer.inc

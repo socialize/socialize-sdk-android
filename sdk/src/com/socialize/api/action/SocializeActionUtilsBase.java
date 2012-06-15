@@ -53,29 +53,31 @@ public abstract class SocializeActionUtilsBase {
 	}	
 	
 	protected boolean isDisplayAuthDialog(Context context, ActionOptions options, SocialNetwork...networks) {
-		boolean authRequired = false;
+		boolean authRequired = true;
 		boolean authSupported = false;
 		
 		if(options != null) {
 			authRequired = options.isShowAuthDialog();
 		}
 		
+		if(networks == null || networks.length == 0) {
+			networks = new SocialNetwork[] {SocialNetwork.TWITTER, SocialNetwork.FACEBOOK};
+		}
+		
 		if(authRequired) {
 			
-			if(networks != null) {
-				for (SocialNetwork network : networks) {
-					AuthProviderType type = AuthProviderType.valueOf(network);
-					if(getSocialize().isSupported(type)) {
-						authSupported = true;
-						if(getSocialize().isAuthenticated(type)) {
-							authRequired = false;
-							break;
-						}
-					}
-					
-					if(!authRequired) {
+			for (SocialNetwork network : networks) {
+				AuthProviderType type = AuthProviderType.valueOf(network);
+				if(getSocialize().isSupported(type)) {
+					authSupported = true;
+					if(getSocialize().isAuthenticated(type)) {
+						authRequired = false;
 						break;
 					}
+				}
+				
+				if(!authRequired) {
+					break;
 				}
 			}
 		}

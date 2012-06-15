@@ -49,7 +49,7 @@ public class ShareDialogViewTest extends ActionBarAutoTest {
 		
 		TestUtils.setupSocializeOverrides(true, true);
 		
-		getInstrumentation().waitForIdleSync();
+		TestUtils.waitForIdle(this, 5000);
 		
 		final ActionBarLayoutView actionBar = TestUtils.findView(getActivity(), ActionBarLayoutView.class, 10000);	
 		
@@ -91,7 +91,7 @@ public class ShareDialogViewTest extends ActionBarAutoTest {
 		
 		TestUtils.setupSocializeOverrides(true, true);
 		
-		getInstrumentation().waitForIdleSync();
+		TestUtils.waitForIdle(this, 5000);
 		
 		final ActionBarLayoutView actionBar = TestUtils.findView(getActivity(), ActionBarLayoutView.class, 10000);	
 		final ActionBarView actionBarView = TestUtils.findView(getActivity(), ActionBarView.class, 10000);	

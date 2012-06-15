@@ -19,65 +19,59 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo.snippets;
+package com.socialize.demo.implementations.comment;
 
-import java.util.List;
-import android.app.Activity;
-import com.socialize.UserUtils;
-import com.socialize.ViewUtils;
-import com.socialize.entity.Entity;
-import com.socialize.entity.User;
-import com.socialize.entity.View;
+import com.socialize.CommentUtils;
+import com.socialize.api.action.comment.CommentOptions;
+import com.socialize.demo.SDKDemoActivity;
+import com.socialize.entity.Comment;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.view.ViewAddListener;
-import com.socialize.listener.view.ViewListListener;
+import com.socialize.listener.comment.CommentAddListener;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class ViewSnippets extends Activity {
+public class AddCommentWithoutShareActivity extends SDKDemoActivity {
 
-public void addView() {
-// begin-snippet-0
-Entity entity = Entity.newInstance("http://myentity.com", "My Name");
-
-//The "this" argument refers to the current Activity
-ViewUtils.view(this, entity, new ViewAddListener() {
-	
+	/* (non-Javadoc)
+	 * @see com.socialize.demo.DemoActivity#executeDemo()
+	 */
 	@Override
-	public void onError(SocializeException error) {
-		// Handle error
+	public void executeDemo(String text) {
+		CommentOptions options = CommentUtils.getUserCommentOptions(this);
+		options.setShowAuthDialog(false);
+		options.setShowShareDialog(false);
+		
+		CommentUtils.addComment(this, entity, text, options, new CommentAddListener() {
+			@Override
+			public void onError(SocializeException error) {
+				handleError(AddCommentWithoutShareActivity.this, error);
+			}
+			
+			@Override
+			public void onCreate(Comment comment) {
+				handleSocializeResult(comment);
+			}
+
+			@Override
+			public void onCancel() {
+				handleCancel();
+			}
+		});
 	}
 	
 	@Override
-	public void onCreate(View result) {
-		// View was created
+	public boolean isTextEntryRequired() {
+		return true;
 	}
-});
-// end-snippet-0
-}
 
-public void getViewsByUser() {
-// begin-snippet-1
-User user = UserUtils.getCurrentUser(this);
-
-// Get first 10 views by user
-//The "this" argument refers to the current Activity
-ViewUtils.getViewsByUser(this, user, 0, 10, new ViewListListener() {
-	
+	/* (non-Javadoc)
+	 * @see com.socialize.demo.DemoActivity#getButtonText()
+	 */
 	@Override
-	public void onList(List<View> views, int totalCount) {
-		// Found views
+	public String getButtonText() {
+		return "Add Comment";
 	}
-	
-	@Override
-	public void onError(SocializeException error) {
-		// Handle error
-	}
-});
-//end-snippet-1
-}
-	
 }

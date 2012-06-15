@@ -61,9 +61,15 @@ Once you have a twitter application, simply add your Twitter consumer key and se
 
 .. literalinclude:: snippets/props_twitter.txt
    :language: properties
+   
+.. raw:: html
+   :file: snippets/twitter_complete.html   
 
 Linking Users with Twitter
 ---------------------------
+
+.. raw:: html
+   :file: snippets/expert_warning.html
 
 To be able to post to a user's Twitter feed the user must first link with their Twitter account
 
@@ -83,9 +89,12 @@ To unlink a user from their Twitter account simple call **unlink**.  This call e
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/TwitterSnippets.java
 	:start-after: begin-snippet-3
 	:end-before: end-snippet-3
-
+	
 Posting to Twitter
 -------------------
+
+.. raw:: html
+   :file: snippets/expert_warning.html
 
 By default all actions created using the SDK will provide the end user with the opportunity to share their 
 action with Twitter (if Twitter has been configured) however it is also possible to manually post content to a user's

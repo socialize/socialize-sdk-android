@@ -32,6 +32,7 @@ import com.socialize.networks.SocialNetwork;
  * @author Jason Polites
  *
  */
+@Deprecated
 public class CommentReAuthListener implements SocializeAuthListener {
 
 	private CommentButtonCallback callback;
@@ -40,15 +41,12 @@ public class CommentReAuthListener implements SocializeAuthListener {
 	private boolean shareLocation;
 	private boolean subscribe;
 	private Context context;
-	
-	private SocialNetwork[] networks;
 
 	public CommentReAuthListener(Context context, CommentButtonCallback callback, String comment, boolean shareLocation, boolean subscribe, SocialNetwork...networks) {
 		super();
 		this.callback = callback;
 		this.comment = comment;
 		this.context = context;
-		this.networks = networks;
 		this.shareLocation = shareLocation;
 		this.subscribe = subscribe;
 	}	
@@ -60,7 +58,7 @@ public class CommentReAuthListener implements SocializeAuthListener {
 
 	@Override
 	public void onAuthSuccess(SocializeSession session) {
-		callback.onComment(comment, shareLocation, subscribe, networks);
+		callback.onComment(comment, shareLocation, subscribe);
 	}
 
 	@Override

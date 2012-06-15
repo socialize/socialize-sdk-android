@@ -39,7 +39,6 @@ import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
-import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.profile.UserSettings;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.util.KeyboardUtils;
@@ -178,12 +177,11 @@ public class CommentEntryView extends BaseView {
 				public void onClick(View v) {
 					keyboardUtils.hideKeyboard(commentField);
 					boolean shareLocation = false;
-					SocialNetwork[] shareTo = null;
 					if(locationCheckBox != null) {
 						shareLocation = locationCheckBox.isChecked(); 
 					}
 					
-					listener.onComment(commentField.getText().toString().trim(), shareLocation, notificationsEnabled, shareTo);
+					listener.onComment(commentField.getText().toString().trim(), shareLocation, notificationsEnabled);
 				}
 			});
 			

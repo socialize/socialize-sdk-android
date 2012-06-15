@@ -70,7 +70,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 
 	@Override
 	public void addComment(final Activity context, final Entity entity, final String text, final CommentOptions commentOptions, final CommentAddListener listener, final SocialNetwork...networks) {
-		final boolean doShare = networks != null && networks.length > 0;
+		final boolean doShare = commentOptions == null || commentOptions.isShowShareDialog();
 		final SocializeSession session = getSocialize().getSession();
 		
 		if(isDisplayAuthDialog(context, commentOptions, networks)) {
