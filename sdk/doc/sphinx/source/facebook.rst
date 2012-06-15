@@ -64,10 +64,16 @@ Once you have a facebook application, simply add your Facebook app Id your **soc
 .. literalinclude:: snippets/props_facebook.txt
    :language: properties
 
+.. raw:: html
+   :file: snippets/facebook_complete.html  
+
 .. _propagate_fb:
 
 Linking Users with Facebook
 ---------------------------
+
+.. raw:: html
+   :file: snippets/expert_warning.html
 
 To be able to post to a user's Facebook wall the user must first link with their Facebook account
 
@@ -91,6 +97,9 @@ To unlink a user from their Facebook account simple call **unlink**.  This call 
 Posting to Facebook
 -------------------
 
+.. raw:: html
+   :file: snippets/expert_warning.html
+   
 By default all actions created using the SDK will provide the end user with the opportunity to share their 
 action with Facebook (if Facebook has been configured) however it is also possible to manually post content to a user's
 Facebook wall.
