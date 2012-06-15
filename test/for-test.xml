@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="fortest" default="test">
+
+	<target name="test">
+
+		<taskdef resource="net/sf/antcontrib/antlib.xml">
+			<classpath>
+				<pathelement location="libext/ant-contrib.jar" />
+			</classpath>
+		</taskdef>
+
+		<echo message="The first five letters of the alphabet are:" />
+		<for list="a,b,c,d,e" param="letter">
+			<sequential>
+				<echo>Letter @{letter}</echo>
+			</sequential>
+		</for>
+
+ 		<property name="emma.dump.path" value="/data/data/" />
+		<property name="emma.coverage.file" value="coverage-${test.package}.ec" />
+		<property name="emma.coverage.path.raw" value="${emma.dump.path}${emma.coverage.file}" />
+
+		<propertyregex 
+			property="emma.coverage.path" 
+			input="${emma.coverage.path.raw}"
+			regexp="\." 
+			replace="_" 
+			global="true" />
+
+		<echo>${emma.coverage.path}</echo>
+	</target>
+
+
+</project>

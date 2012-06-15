@@ -211,10 +211,15 @@ public class SocializeC2DMCallback implements C2DMCallback {
 			}	
 		}
 		else {
-			if(logger != null && logger.isDebugEnabled()) {
-				logger.debug("Notification for user [" +
-						user.getId() +
-						"] ignored.  Notifications are disabled for this user");
+			if(settings == null) {
+				handleError("No user settings found in session!");
+			}
+			else {
+				if(logger != null && logger.isDebugEnabled()) {
+					logger.debug("Notification for user [" +
+							user.getId() +
+							"] ignored.  Notifications are disabled for this user");
+				}
 			}
 		}
 	}

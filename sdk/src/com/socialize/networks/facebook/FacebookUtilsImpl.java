@@ -49,6 +49,7 @@ import com.socialize.listener.share.ShareAddListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
+import com.socialize.ui.profile.UserSettings;
 
 
 /**
@@ -101,7 +102,13 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	public void unlink(Context context) {
 		SocializeSession session = getSocialize().getSession();
 		session.clear(AuthProviderType.FACEBOOK);
-		session.getUserSettings().setAutoPostFacebook(false);
+		
+		UserSettings userSettings = session.getUserSettings();
+		
+		if(userSettings != null) {
+			userSettings.setAutoPostFacebook(false);
+		}
+		
 		userSystem.saveSession(context, session);
 	}
 
