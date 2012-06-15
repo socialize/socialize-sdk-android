@@ -36,9 +36,16 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import com.socialize.ShareUtils;
+import com.socialize.api.action.ShareType;
+import com.socialize.api.action.share.ShareOptions;
 import com.socialize.demo.DemoActivity;
 import com.socialize.demo.DemoUtils;
 import com.socialize.demo.R;
+import com.socialize.entity.PropagationInfo;
+import com.socialize.entity.Share;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.share.ShareAddListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.facebook.FacebookUtils;
@@ -82,40 +89,65 @@ public class PostPhotoActivity extends DemoActivity {
 					
 					final ProgressDialog progress = SafeProgressDialog.show(PostPhotoActivity.this);
 					
-					try {
-						// Get the bytes for the image
-						byte[] image = FacebookUtils.getImageForPost(PostPhotoActivity.this, mImageBitmap, CompressFormat.JPEG);
-						
-						Map<String, Object> params = new HashMap<String, Object>();
-						String graphPath = "me/photos";
-						
-						params.put("caption", "A test photo");
-						params.put("photo", image);
-						
-						FacebookUtils.post(PostPhotoActivity.this, graphPath, params, new SocialNetworkPostListener() {
+					
+						// First create a Socialize share object so we get the correct URLs
+						ShareOptions options = ShareUtils.getUserShareOptions(PostPhotoActivity.this);
+						ShareUtils.registerShare(PostPhotoActivity.this, entity, options, new ShareAddListener() {
 							
 							@Override
-							public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+							public void onError(SocializeException error) {
 								progress.dismiss();
 								handleError(PostPhotoActivity.this, error);
 							}
 							
 							@Override
-							public void onCancel() {
-								progress.dismiss();
-								DemoUtils.showToast(PostPhotoActivity.this, "Cancelled");
+							public void onCreate(Share result) {
+								
+								// We have the result, use the URLs to add to the post
+								PropagationInfo propagationInfo = result.getPropagationInfoResponse().getPropagationInfo(ShareType.FACEBOOK);
+								String link = propagationInfo.getEntityUrl();
+
+								// Now post to Facebook.
+								try {
+									// Get the bytes for the image
+									byte[] image = FacebookUtils.getImageForPost(PostPhotoActivity.this, mImageBitmap, CompressFormat.JPEG);
+									
+									Map<String, Object> params = new HashMap<String, Object>();
+									String graphPath = "me/photos";
+									
+									params.put("caption", "A test photo of something " + link);
+									params.put("photo", image);
+									
+									FacebookUtils.post(PostPhotoActivity.this, graphPath, params, new SocialNetworkPostListener() {
+										
+										@Override
+										public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+											progress.dismiss();
+											handleError(PostPhotoActivity.this, error);
+										}
+										
+										@Override
+										public void onCancel() {
+											progress.dismiss();
+											DemoUtils.showToast(PostPhotoActivity.this, "Cancelled");
+										}
+										
+										@Override
+										public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+											progress.dismiss();
+											DemoUtils.showToast(parent, "Photo Shared!");
+										}
+									});									
+									
+								}
+								catch (IOException e) {
+									handleError(PostPhotoActivity.this, e);
+								}	
+								
 							}
-							
-							@Override
-							public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
-								progress.dismiss();
-								DemoUtils.showToast(parent, "Photo Shared!");
-							}
-						});						
-					}
-					catch (IOException e) {
-						handleError(PostPhotoActivity.this, e);
-					}
+						}, SocialNetwork.FACEBOOK);
+											
+			
 				}
 			}
 		});

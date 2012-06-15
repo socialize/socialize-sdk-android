@@ -138,13 +138,13 @@ public class TestUtils {
 	}
 	
 	public static void setUp(ActivityInstrumentationTestCase2<?> test)  {
-		
-		try {
-			TestUtils.waitForIdle(test, 5000);
-		}
-		catch (InterruptedException e) {
-			ActivityInstrumentationTestCase2.fail();
-		}
+//		
+//		try {
+//			TestUtils.waitForIdle(test, 5000);
+//		}
+//		catch (InterruptedException e) {
+//			ActivityInstrumentationTestCase2.fail();
+//		}
 		
 		testCase = test;
 		holder = new ResultHolder();

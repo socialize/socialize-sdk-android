@@ -25,13 +25,16 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.view.View;
 import android.view.View.OnClickListener;
+import com.socialize.ShareUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.action.ShareType;
+import com.socialize.api.action.share.ShareOptions;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.share.ShareAddListener;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
 import com.socialize.ui.dialog.AlertDialogFactory;
@@ -76,11 +79,14 @@ public class ShareClickListener implements OnClickListener {
 	/* (non-Javadoc)
 	 * @see android.view.View.OnClickListener#onClick(android.view.View)
 	 */
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onClick(View view) {
 		final ProgressDialog dialog = progressDialogFactory.show(view.getContext(), "Share", "Sharing via " + shareType.getDisplayName() + "...");
-		getSocialize().share(context, entity, provider.getShareText(), shareType, new ShareAddListener() {
+		
+		ShareOptions shareOptions = ShareUtils.getUserShareOptions(context);
+		shareOptions.setText(provider.getShareText());
+		
+		ShareUtils.registerShare(context, entity, shareOptions, new ShareAddListener() {
 			@Override
 			public void onError(SocializeException error) {
 				dialog.dismiss();
@@ -94,7 +100,9 @@ public class ShareClickListener implements OnClickListener {
 					onActionBarEventListener.onPostShare(actionBarView, share);
 				}
 			}
-		});
+		}, SocialNetwork.valueOf(shareType));
+		
+//		getSocialize().share(context, entity, provider.getShareText(), shareType, );
 	}
 	
 	public void setProgressDialogFactory(ProgressDialogFactory progressDialogFactory) {
