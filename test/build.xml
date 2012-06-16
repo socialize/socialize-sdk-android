@@ -64,23 +64,23 @@
 		SOCIALIZE TARGETS
 		################################################################################################
 	-->		
-	
 		<target name="test" depends="build-all">
 			<property name="build.is.instrumented" value="true" />
 			<property name="build.target" value="instrument" />  
 			<property name="emma.enabled" value="true" />
-			
-			<echo>Executing tests for packages ${test.suite}</echo>
-			
 			<for list="${test.suite}" param="test.package">
 				<sequential>
+			    	<echo></echo>
+			    	<echo>##################################################################################################</echo>
+			    	<echo>########################### EXECUTING TEST FOR PACKAGE @{test.package} ###########################</echo>
+			    	<echo>##################################################################################################</echo>
+			    	<echo></echo>    			
 					<antcall target="install-all" inheritall="true" inheritrefs="true"/>
 					<antcall target="-test" inheritall="true" inheritrefs="true">
 						 <param name="test.package" value="@{test.package}" />
 					</antcall>
 				</sequential>
 			</for>
-			
 			<antcall target="generate-reports" inheritall="true" inheritrefs="true"/>
 		</target>
 	
