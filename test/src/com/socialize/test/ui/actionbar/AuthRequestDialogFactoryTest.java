@@ -91,7 +91,9 @@ public class AuthRequestDialogFactoryTest extends ActionBarAutoTest {
 					System.err.println("proxyLike is null!!");
 				}
 			}
-		});		
+		});	
+		
+		Socialize.init(getActivity());
 		
 		Intent intent = new Intent();
 		Bundle extras = new Bundle();
