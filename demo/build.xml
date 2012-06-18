@@ -37,13 +37,12 @@
 
          This file is an integral part of the build system for your
          application and should be checked into Version Control Systems. -->
-    <loadproperties srcFile="project.properties" />
+	
+	<!-- Replaced so we don't try to build a dependent library -->
+    <loadproperties srcFile="build.properties" />
 
     <!-- quick check on sdk.dir -->
-    <fail
-            message="sdk.dir is missing. Make sure to generate local.properties using 'android update project' or to inject it through an env var"
-            unless="sdk.dir"
-    />
+    <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project' or to inject it through an env var" unless="sdk.dir"/>
 
     <!--
         Import per project custom build rules if present at the root of the project.
@@ -93,14 +92,17 @@
 			<fileset dir="../sdk/build" includes="**/*.jar"/>
 		</copy>
 		
+		<!--
 		<echo>Removing project reference for sdk...</echo>
 		<replaceregexp file="project.properties" match="android\.library\.reference\.1=\.\./sdk" replace="#android.library.reference.1=../sdk" />
-
+		-->
 		<echo>Building demo...</echo>
 		<antcall target="release"/>
 		
+		<!--
 		<echo>Replacing project reference for sdk...</echo>
 		<replaceregexp file="project.properties" match="\#android\.library\.reference\.1=\.\./sdk" replace="android.library.reference.1=../sdk" />
+		-->
 		
 		<echo>Removing sdk jar...</echo>
 		<delete>
