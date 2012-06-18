@@ -79,5 +79,33 @@
     -->
     <!-- version-tag: 1 -->
     <import file="${sdk.dir}/tools/ant/build.xml" />
+	
+	
+	<target name="build">
+		
+		<echo>Building sdk...</echo>
+		
+		<subant target="jar">
+	      <fileset dir="../sdk" includes="build.xml"/>
+	    </subant>		
+		
+		<copy todir="libs" verbose="true" failonerror="false">
+			<fileset dir="../sdk/build" includes="**/*.jar"/>
+		</copy>
+		
+		<echo>Removing project reference for sdk...</echo>
+		<replaceregexp file="project.properties" match="android\.library\.reference\.1=\.\./sdk" replace="#android.library.reference.1=../sdk" />
+
+		<echo>Building demo...</echo>
+		<antcall target="release"/>
+		
+		<echo>Replacing project reference for sdk...</echo>
+		<replaceregexp file="project.properties" match="\#android\.library\.reference\.1=\.\./sdk" replace="android.library.reference.1=../sdk" />
+		
+		<echo>Removing sdk jar...</echo>
+		<delete>
+			<fileset dir="libs" includes="**/*.jar"/>
+		</delete>
+	</target>
 
 </project>
