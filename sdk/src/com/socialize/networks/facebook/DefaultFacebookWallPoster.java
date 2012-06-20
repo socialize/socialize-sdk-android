@@ -151,13 +151,18 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		Set<Entry<String, Object>> entries = postData.getPostValues().entrySet();
 		
 		for (Entry<String, Object> entry : entries) {
-			Object value = entry.getValue();
-			
-			if(value instanceof byte[]) {
-				bundle.putByteArray(entry.getKey(), (byte[]) value);
-			}
-			else {
-				bundle.putString(entry.getKey(), value.toString());
+			if(entry != null) {
+				Object value = entry.getValue();
+				String key = entry.getKey();
+				
+				if(key != null && value != null) {
+					if(value instanceof byte[]) {
+						bundle.putByteArray(entry.getKey(), (byte[]) value);
+					}
+					else {
+						bundle.putString(entry.getKey(), value.toString());
+					}
+				}
 			}
 		}
 		

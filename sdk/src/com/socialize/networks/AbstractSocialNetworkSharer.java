@@ -85,6 +85,23 @@ public abstract class AbstractSocialNetworkSharer implements SocialNetworkSharer
 					}
 				});
 			}
+			else {
+				SocializeException error = new SocializeException("User is not authenticated with [" +
+						getNetwork().name() +
+						"]");				
+				
+				if (logger != null) {
+					logger.error("Error during share", error);
+				}
+				else {
+					error.printStackTrace();
+				}
+
+				// Fail
+				if(listener != null) {
+					listener.onNetworkError(context, getNetwork(), error);
+				}
+			}
 		}	
 	}
 	

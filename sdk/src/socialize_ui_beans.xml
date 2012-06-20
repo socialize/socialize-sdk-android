@@ -1651,5 +1651,14 @@
 	<bean id="configUtils" class="com.socialize.config.SocializeConfigUtils">
 		<property name="config" ref="config"/>
 	</bean>
+	
+	<bean id="socializeTools" class="com.socialize.tools.SocializeToolsImpl">
+		<property name="imageLoader" ref="imageLoader"/>
+		<property name="geoUtils" ref="geoUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
+		<property name="keyboardUtils" ref="keyboardUtils"/>
+		<property name="ioUtils" ref="ioUtils"/>
+		<property name="appUtils" ref="appUtils"/>
+	</bean>	
 
 </beans>
