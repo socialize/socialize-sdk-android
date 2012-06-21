@@ -31,6 +31,7 @@ import android.graphics.Bitmap;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 /**
  * Convenience class for getting drawables from raw images.
@@ -163,8 +164,8 @@ public class Drawables {
 				try {
 					in.close();
 				}
-				catch (IOException ignore) {
-					ignore.printStackTrace();
+				catch (IOException e) {
+					Log.w(SocializeLogger.LOG_TAG, e.getMessage(), e);
 				}
 			}
 		}

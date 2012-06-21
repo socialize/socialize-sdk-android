@@ -23,6 +23,7 @@ package com.socialize.launcher;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
@@ -126,8 +127,7 @@ public class EntityLauncher extends BaseLauncher {
 			logger.error(msg, e);
 		}
 		else {
-			System.err.println(msg);
-			e.printStackTrace();
+			Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 		}
 	}	
 	

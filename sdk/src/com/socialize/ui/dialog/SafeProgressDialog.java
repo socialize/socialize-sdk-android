@@ -21,8 +21,10 @@
  */
 package com.socialize.ui.dialog;
 
+import com.socialize.log.SocializeLogger;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.util.Log;
 
 /**
  * @author Jason Polites
@@ -57,8 +59,8 @@ public class SafeProgressDialog extends ProgressDialog {
 				dismissCount--;
 			}
 		}
-		catch (Exception ignore) {
-			ignore.printStackTrace();
+		catch (Exception error) {
+			Log.e(SocializeLogger.LOG_TAG, error.getMessage(), error);
 		}
 		
 	}
@@ -68,8 +70,8 @@ public class SafeProgressDialog extends ProgressDialog {
 		try {
 			super.show();
 		}
-		catch (Throwable ignore) {
-			ignore.printStackTrace();
+		catch (Throwable error) {
+			Log.e(SocializeLogger.LOG_TAG, error.getMessage(), error);
 		}
 	}
 	

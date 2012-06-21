@@ -25,6 +25,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -38,6 +39,7 @@ import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.facebook.FacebookSignInCell;
 import com.socialize.networks.twitter.TwitterSignInCell;
@@ -312,7 +314,7 @@ public class AuthPanelView extends DialogPanelView {
 			
 			@Override
 			public void onError(SocializeException error) {
-				error.printStackTrace();
+				Log.e(SocializeLogger.LOG_TAG, error.getMessage(), error);
 				showErrorToast(getContext(), error);
 				if(authDialogListener != null) {
 					authDialogListener.onError(getActivity(), dialog, error);
@@ -328,7 +330,7 @@ public class AuthPanelView extends DialogPanelView {
 			
 			@Override
 			public void onAuthFail(SocializeException error) {
-				error.printStackTrace();
+				Log.e(SocializeLogger.LOG_TAG, error.getMessage(), error);
 				showErrorToast(getContext(), error);
 				if(authDialogListener != null) {
 					authDialogListener.onError(getActivity(), dialog, error);

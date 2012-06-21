@@ -24,6 +24,7 @@ package com.socialize.launcher.task;
 import java.util.List;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import com.socialize.error.SocializeException;
 import com.socialize.launcher.LaunchTask;
 import com.socialize.log.SocializeLogger;
@@ -53,7 +54,7 @@ public class NotificationLaunchTask implements LaunchTask {
 						logger.error("Error executing launcher task", e);
 					}
 					else {
-						e.printStackTrace();
+						Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 					}
 				}
 			}

@@ -22,10 +22,12 @@
 package com.socialize.networks.twitter;
 
 import java.lang.reflect.Proxy;
+import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
 import com.socialize.SocializeActionProxy;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
@@ -49,39 +51,88 @@ public class TwitterUtils {
 	}
 	
 	
+	/**
+	 * 
+	 * @param context
+	 * @param listener
+	 */
 	public static void link (Activity context, SocializeAuthListener listener) {
 		proxy.link(context, listener);
 	}
 	
+	/**
+	 * 
+	 * @param context
+	 * @param token
+	 * @param secret
+	 * @param listener
+	 */
 	public static void link (Activity context, String token, String secret, SocializeAuthListener listener) {
 		proxy.link(context, token, secret, listener);
 	}
 	
+	/**
+	 * 
+	 * @param context
+	 */
 	public static void unlink (Context context) {
 		proxy.unlink(context);
 	}
 
+	/**
+	 * 
+	 * @param context
+	 * @return
+	 */
 	public static boolean isLinked(Context context) {
 		return proxy.isLinked(context);
 	}
 
+	/**
+	 * 
+	 * @param context
+	 * @return
+	 */
 	public static boolean isAvailable(Context context) {
 		return proxy.isAvailable(context);
 	}
 
+	/**
+	 * 
+	 * @param context
+	 * @param consumerKey
+	 * @param consumerSecret
+	 */
 	public static void setCredentials(Context context, String consumerKey, String consumerSecret) {
 		proxy.setCredentials(context, consumerKey, consumerSecret);
 	}
 
+	/**
+	 * 
+	 * @param context
+	 * @return
+	 */
 	public static String getAccessToken(Context context) {
 		return proxy.getAccessToken(context);
 	}
 
+	/**
+	 * 
+	 * @param context
+	 * @return
+	 */
 	public static String getTokenSecret(Context context) {
 		return proxy.getTokenSecret(context);
 	}
 	
-	public static void tweetEntity(final Activity context, final Entity entity, final String text, final SocialNetworkListener listener) {
+	/**
+	 * 
+	 * @param context
+	 * @param entity
+	 * @param text
+	 * @param listener
+	 */
+	public static void tweetEntity(final Activity context, final Entity entity, final String text, final SocialNetworkShareListener listener) {
 		if(proxy.isLinked(context)) {
 			proxy.tweetEntity(context, entity, text, listener);
 		}
@@ -115,5 +166,126 @@ public class TwitterUtils {
 				}
 			});
 		}			
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @param resource
+	 * @param postData
+	 * @param listener
+	 */
+	public static void post(final Activity context, final String resource, final Map<String, Object> postData, final SocialNetworkListener listener) {
+		if(proxy.isLinked(context)) {
+			proxy.post(context, resource, postData, listener);
+		}
+		else {
+			proxy.link(context, new SocializeAuthListener() {
+				
+				@Override
+				public void onError(SocializeException error) {
+					if(listener != null) {
+						listener.onNetworkError(context, SocialNetwork.TWITTER, error);
+					}
+				}
+				
+				@Override
+				public void onCancel() {
+					if(listener != null) {
+						listener.onCancel();
+					}
+				}
+				
+				@Override
+				public void onAuthSuccess(SocializeSession session) {
+					proxy.post(context, resource, postData, listener);
+				}
+				
+				@Override
+				public void onAuthFail(SocializeException error) {
+					if(listener != null) {
+						listener.onNetworkError(context, SocialNetwork.TWITTER, error);
+					}
+				}
+			});			
+		}
+	}
+	
+	public static void get(final Activity context, final String resource, final SocialNetworkListener listener) {
+		if(proxy.isLinked(context)) {
+			proxy.get(context, resource, listener);
+		}
+		else {
+			proxy.link(context, new SocializeAuthListener() {
+				
+				@Override
+				public void onError(SocializeException error) {
+					if(listener != null) {
+						listener.onNetworkError(context, SocialNetwork.TWITTER, error);
+					}
+				}
+				
+				@Override
+				public void onCancel() {
+					if(listener != null) {
+						listener.onCancel();
+					}
+				}
+				
+				@Override
+				public void onAuthSuccess(SocializeSession session) {
+					proxy.get(context, resource, listener);
+				}
+				
+				@Override
+				public void onAuthFail(SocializeException error) {
+					if(listener != null) {
+						listener.onNetworkError(context, SocialNetwork.TWITTER, error);
+					}
+				}
+			});			
+		}
+	}	
+	
+	/**
+	 * 
+	 * @param context
+	 * @param tweet
+	 * @param listener
+	 */
+	public static void tweet(final Activity context, final Tweet tweet, final SocialNetworkListener listener) {
+		if(proxy.isLinked(context)) {
+			proxy.tweet(context, tweet, listener);
+		}
+		else {
+			proxy.link(context, new SocializeAuthListener() {
+				
+				@Override
+				public void onError(SocializeException error) {
+					if(listener != null) {
+						listener.onNetworkError(context, SocialNetwork.TWITTER, error);
+					}
+				}
+				
+				@Override
+				public void onCancel() {
+					if(listener != null) {
+						listener.onCancel();
+					}
+				}
+				
+				@Override
+				public void onAuthSuccess(SocializeSession session) {
+					proxy.tweet(context, tweet, listener);
+				}
+				
+				@Override
+				public void onAuthFail(SocializeException error) {
+					if(listener != null) {
+						listener.onNetworkError(context, SocialNetwork.TWITTER, error);
+					}
+				}
+			});			
+		}
 	}
 }

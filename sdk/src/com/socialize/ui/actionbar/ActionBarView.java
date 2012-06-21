@@ -24,8 +24,10 @@ package com.socialize.ui.actionbar;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import com.socialize.entity.Entity;
+import com.socialize.log.SocializeLogger;
 import com.socialize.ui.view.EntityView;
 
 /**
@@ -140,7 +142,7 @@ public class ActionBarView extends EntityView {
 	@Override
 	public void showError(Context context, Exception e) {
 		// Don't display popup
-		e.printStackTrace();
+		Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 	}
 
 	@Override

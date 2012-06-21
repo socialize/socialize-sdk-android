@@ -31,6 +31,7 @@ import com.socialize.ConfigUtils;
 import com.socialize.ShareUtils;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.share.ShareOptions;
+import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.PropagationInfoResponse;
@@ -129,7 +130,7 @@ public void postEntity() {
 Entity entity = Entity.newInstance("http://myentity.com", "My Name");
 	
 // The "this" argument refers to the current Activity
-FacebookUtils.postEntity(this, entity, "Text to be posted", new SocialNetworkListener() {
+FacebookUtils.postEntity(this, entity, "Text to be posted", new SocialNetworkShareListener() {
 	
 	@Override
 	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {

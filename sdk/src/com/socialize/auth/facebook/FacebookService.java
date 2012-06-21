@@ -146,7 +146,7 @@ public class FacebookService {
 				listener.onError(new SocializeException(e));
 			}
 			else {
-				e.printStackTrace();
+				Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 			}
 		}
 	}

@@ -24,12 +24,12 @@ package com.socialize.demo.snippets;
 import org.json.JSONObject;
 import android.app.Activity;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.twitter.TwitterUtils;
 
 
@@ -109,7 +109,7 @@ public void postEntity() {
 // begin-snippet-4
 Entity entity = Entity.newInstance("http://myentity.com", "My Name");
 	
-TwitterUtils.tweetEntity(this, entity, "Text to be posted", new SocialNetworkListener() {
+TwitterUtils.tweetEntity(this, entity, "Text to be posted", new SocialNetworkShareListener() {
 	
 	@Override
 	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {

@@ -67,4 +67,20 @@ public class DefaultOauthRequestSigner implements OAuthRequestSigner {
 			throw new SocializeException(e.getMessage(), e);
 		}
 	}
+
+	@Override
+	public <R extends HttpUriRequest> R sign(String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret, R request, OAuthSignListener listener) throws SocializeException {
+		try {
+			OAuthConsumer consumer = consumerFactory.createConsumer(consumerKey, consumerSecret);
+			consumer.setSigningStrategy(strategy);
+			consumer.setTokenWithSecret(accessToken, accessTokenSecret);
+			consumer.sign(request, listener);
+			return request;
+		}
+		catch (Exception e) {
+			throw new SocializeException(e.getMessage(), e);
+		}		
+	}
+	
+	
 }

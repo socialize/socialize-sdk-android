@@ -75,6 +75,12 @@ public class CommentFactoryBlackboxTest extends AbstractFactoryBlackBoxTest {
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
 				return request;
 			}
+
+			@Override
+			public <R extends HttpUriRequest> R sign(String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret, R request, OAuthSignListener listener) throws SocializeException {
+				return request;
+			}
+			
 		}, commentFactory);
 	}
 	

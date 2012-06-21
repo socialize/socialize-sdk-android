@@ -31,6 +31,7 @@ import com.socialize.ShareUtils;
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.auth.AuthProviderResponse;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.UserProviderCredentials;
@@ -47,7 +48,6 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.share.ShareListListener;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.twitter.TwitterUtils;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
@@ -274,8 +274,12 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		};
 		
 		SocializeIOC.registerStub("twitterProvider", mockTwitterAuthProvider);
+		
+		
+		// Need to mock twitter sharer so it doesn't actually tweet!
+		fail();
 
-		TwitterUtils.tweetEntity(getActivity(), entity, "AndroidSDK Test", new SocialNetworkListener() {
+		TwitterUtils.tweetEntity(getActivity(), entity, "AndroidSDK Test", new SocialNetworkShareListener() {
 			
 			@Override
 			public void onNetworkError(Activity context, SocialNetwork network, Exception error) {

@@ -32,6 +32,7 @@ import com.socialize.ShareUtils;
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.auth.AuthProviderResponse;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.UserProviderCredentials;
@@ -51,7 +52,6 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.share.ShareListListener;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.FacebookUtils;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
@@ -280,7 +280,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		SocializeIOC.registerStub("facebookRunner", mockRunner);
 		SocializeIOC.registerStub("facebookProvider", mockFacebookAuthProvider);
 
-		FacebookUtils.postEntity(getActivity(), entity, "test", new SocialNetworkListener() {
+		FacebookUtils.postEntity(getActivity(), entity, "test", new SocialNetworkShareListener() {
 			
 			@Override
 			public void onNetworkError(Activity context, SocialNetwork network, Exception error) {

@@ -23,6 +23,7 @@ package com.socialize.launcher;
 
 import java.util.Map;
 
+import android.util.Log;
 import com.socialize.log.SocializeLogger;
 
 
@@ -50,7 +51,7 @@ public class SocializeLaunchManager implements LaunchManager {
 						"] provided is not a known action", e);
 			}
 			else {
-				e.printStackTrace();
+				Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 			}
 			return null;
 		}

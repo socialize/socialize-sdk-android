@@ -29,6 +29,8 @@ import com.socialize.error.SocializeException;
 
 public interface OAuthRequestSigner {
 
+	public <R extends HttpUriRequest> R sign(String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret, R request, OAuthSignListener listener) throws SocializeException;
+	
 	public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException;
 	
 	public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException;

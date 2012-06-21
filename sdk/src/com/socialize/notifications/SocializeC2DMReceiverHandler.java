@@ -2,6 +2,7 @@ package com.socialize.notifications;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.log.SocializeLogger;
 
@@ -122,7 +123,7 @@ public class SocializeC2DMReceiverHandler implements C2DMReceiverHandler {
 			logger.error(msg, e);
 		}
 		else {
-			e.printStackTrace();
+			Log.e(SocializeLogger.LOG_TAG, msg, e);
 		}
 	}
 	

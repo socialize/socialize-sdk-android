@@ -22,6 +22,7 @@
 package com.socialize.api.action.user;
 
 import android.content.Context;
+import android.util.Log;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SessionLock;
 import com.socialize.api.SocializeApi;
@@ -267,8 +268,7 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 			logger.error(message, error);
 		}
 		else {
-			System.err.println(message);
-			error.printStackTrace();
+			Log.e(SocializeLogger.LOG_TAG, error.getMessage(), error);
 		}
 	}
 	

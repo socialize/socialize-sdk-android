@@ -1642,6 +1642,8 @@
 		<property name="userSystem" ref="userSystem"/>
 		<property name="shareSystem" ref="shareSystem"/>
 		<property name="config" ref="config"/>
+		<property name="httpRequestProvider" ref="httpRequestProvider"/>
+		<property name="requestSigner" ref="oauthSigner"/>
 	</bean>	
 
 	<bean id="locationUtils" class="com.socialize.location.SocializeLocationUtils">

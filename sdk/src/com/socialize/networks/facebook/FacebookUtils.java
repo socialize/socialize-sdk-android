@@ -31,11 +31,11 @@ import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
 import com.socialize.SocializeActionProxy;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
 
 
@@ -133,7 +133,7 @@ public class FacebookUtils {
 	 * @param text The text for the post.
 	 * @param listener A listnener to handle callbacks from the post.
 	 */
-	public static void postEntity(final Activity context, final Entity entity, final String text, final SocialNetworkListener listener){
+	public static void postEntity(final Activity context, final Entity entity, final String text, final SocialNetworkShareListener listener){
 		
 		if(proxy.isLinked(context)) {
 			proxy.postEntity(context, entity, text, listener);	

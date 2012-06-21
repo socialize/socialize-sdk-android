@@ -95,6 +95,11 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
 				return sign(session, request, null);
 			}
+
+			@Override
+			public <R extends HttpUriRequest> R sign(String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret, R request, OAuthSignListener listener) throws SocializeException {
+				return null;
+			}
 		};
 		
 
@@ -166,6 +171,11 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
 				return sign(session, request, null);
 			}
+			
+			@Override
+			public <R extends HttpUriRequest> R sign(String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret, R request, OAuthSignListener listener) throws SocializeException {
+				return null;
+			}
 		};
 
 		SocializeRequestFactory<SocializeObject> factory = new DefaultSocializeRequestFactory<SocializeObject>(signer, null);
@@ -197,6 +207,11 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 			@Override
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
 				return sign(session, request, null);
+			}
+			
+			@Override
+			public <R extends HttpUriRequest> R sign(String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret, R request, OAuthSignListener listener) throws SocializeException {
+				return null;
 			}
 
 		};
@@ -231,6 +246,11 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 			@Override
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
 				return sign(session, request, null);
+			}
+			
+			@Override
+			public <R extends HttpUriRequest> R sign(String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret, R request, OAuthSignListener listener) throws SocializeException {
+				return null;
 			}
 		};
 
@@ -279,6 +299,11 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 			@Override
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
 				return sign(session, request, null);
+			}
+			
+			@Override
+			public <R extends HttpUriRequest> R sign(String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret, R request, OAuthSignListener listener) throws SocializeException {
+				return null;
 			}
 		};
 
@@ -343,6 +368,11 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 			@Override
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
 				return sign(session, request, null);
+			}
+			
+			@Override
+			public <R extends HttpUriRequest> R sign(String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret, R request, OAuthSignListener listener) throws SocializeException {
+				return null;
 			}
 		};
 
@@ -421,6 +451,11 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
 				return sign(session, request, null);
 			}
+			
+			@Override
+			public <R extends HttpUriRequest> R sign(String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret, R request, OAuthSignListener listener) throws SocializeException {
+				return null;
+			}
 		};
 
 		SocializeRequestFactory<SocializeObject> reqFactory = new DefaultSocializeRequestFactory<SocializeObject>(signer, factory);
@@ -496,6 +531,11 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
 				return sign(session, request, null);
 			}
+			
+			@Override
+			public <R extends HttpUriRequest> R sign(String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret, R request, OAuthSignListener listener) throws SocializeException {
+				return null;
+			}
 		};
 
 		SocializeRequestFactory<SocializeObject> reqFactory = new DefaultSocializeRequestFactory<SocializeObject>(signer, factory);
@@ -564,6 +604,11 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 			@Override
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
 				return sign(session, request, null);
+			}
+
+			@Override
+			public <R extends HttpUriRequest> R sign(String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret, R request, OAuthSignListener listener) throws SocializeException {
+				return null;
 			}
 		};
 

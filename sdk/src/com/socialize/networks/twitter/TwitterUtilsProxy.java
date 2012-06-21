@@ -21,12 +21,15 @@
  */
 package com.socialize.networks.twitter;
 
+import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
 import com.socialize.annotations.Synchronous;
+import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.entity.Entity;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.SocialNetworkPostListener;
 
 
 /**
@@ -56,5 +59,13 @@ public interface TwitterUtilsProxy {
 	@Synchronous
 	public String getTokenSecret(Context context);
 	
-	public void tweetEntity(final Activity context, final Entity entity, final String text, final SocialNetworkListener listener);
+	public void tweetEntity(Activity context, Entity entity, String text, SocialNetworkShareListener listener);
+	
+	public void tweet(Activity context, Tweet tweet, SocialNetworkListener listener);
+	
+	public void post(Activity context, String resource, Map<String, Object> postData, SocialNetworkPostListener listener);
+	
+	public void get(Activity context, String resource, SocialNetworkPostListener listener);
+	
+	public void tweetPhoto(Activity context, PhotoTweet tweet, SocialNetworkListener listener);
 }

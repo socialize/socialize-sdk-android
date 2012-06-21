@@ -31,11 +31,13 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.StateListDrawable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.socialize.log.SocializeLogger;
 import com.socialize.ui.util.Colors;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
@@ -137,8 +139,8 @@ public class SocializeButton extends LinearLayout {
 			try {
 				align = TEXT_ALIGN.valueOf(textAlign);
 			}
-			catch (Exception ignore) {
-				ignore.printStackTrace();
+			catch (Exception e) {
+				Log.w(SocializeLogger.LOG_TAG, e.getMessage(), e);
 			}
 		}
 		

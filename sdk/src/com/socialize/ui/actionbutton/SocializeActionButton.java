@@ -23,12 +23,14 @@ package com.socialize.ui.actionbutton;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeAction;
+import com.socialize.log.SocializeLogger;
 import com.socialize.ui.view.AuthenticatedView;
 import com.socialize.util.StringUtils;
 
@@ -78,7 +80,7 @@ public class SocializeActionButton<A extends SocializeAction> extends Authentica
 			
 		} 
 		catch (Exception e) {
-			e.printStackTrace();
+			Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 		}
 		
 		return view;

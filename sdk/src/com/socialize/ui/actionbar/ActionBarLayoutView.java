@@ -23,6 +23,7 @@ package com.socialize.ui.actionbar;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.Gravity;
 import com.socialize.CommentUtils;
 import com.socialize.EntityUtils;
@@ -290,7 +291,7 @@ public class ActionBarLayoutView extends BaseView {
 			ViewUtils.view(getActivity(), entity, new ViewAddListener() {
 				@Override
 				public void onError(SocializeException error) {
-					error.printStackTrace();
+					Log.e(SocializeLogger.LOG_TAG, error.getMessage(), error);
 					getLike(entity.getKey());
 				}
 				
@@ -510,7 +511,7 @@ public class ActionBarLayoutView extends BaseView {
 			logger.error(msg, error);
 		}
 		else {
-			error.printStackTrace();	
+			Log.e(SocializeLogger.LOG_TAG, msg, error);
 		}
 	}
 	

@@ -22,6 +22,7 @@
 package com.socialize.networks;
 
 import android.app.Activity;
+import android.util.Log;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
@@ -94,7 +95,7 @@ public abstract class AbstractSocialNetworkSharer implements SocialNetworkSharer
 					logger.error("Error during share", error);
 				}
 				else {
-					error.printStackTrace();
+					Log.e(SocializeLogger.LOG_TAG, error.getMessage(), error);
 				}
 
 				// Fail
@@ -112,7 +113,7 @@ public abstract class AbstractSocialNetworkSharer implements SocialNetworkSharer
 			logger.error(msg, e);
 		}
 		else {
-			e.printStackTrace();
+			Log.e(SocializeLogger.LOG_TAG, msg, e);
 		}
 		
 		if(listener != null) {

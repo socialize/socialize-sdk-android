@@ -21,13 +21,29 @@
  */
 package com.socialize.networks.twitter;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
+import com.socialize.ConfigUtils;
+import com.socialize.ShareUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.ShareType;
-import com.socialize.api.action.share.ShareSystem;
+import com.socialize.api.action.share.ShareOptions;
+import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.api.action.user.UserSystem;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.DefaultUserProviderCredentials;
@@ -35,12 +51,13 @@ import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.twitter.TwitterAuthProviderInfo;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
-import com.socialize.entity.Share;
-import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.listener.share.ShareAddListener;
+import com.socialize.net.HttpRequestListener;
+import com.socialize.net.HttpRequestProvider;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.SocialNetworkPostListener;
+import com.socialize.oauth.OAuthRequestSigner;
 
 
 /**
@@ -50,8 +67,10 @@ import com.socialize.networks.SocialNetworkListener;
 public class TwitterUtilsImpl implements TwitterUtilsProxy {
 	
 	private UserSystem userSystem;
-	private ShareSystem shareSystem;
 	private SocializeConfig config;
+	private OAuthRequestSigner requestSigner;
+	private String apiEndpoint = "https://api.twitter.com/1/";
+	private HttpRequestProvider httpRequestProvider;
 
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.twitter.TwitterUtilsProxy#link(android.app.Activity, com.socialize.listener.SocializeAuthListener)
@@ -148,28 +167,159 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 	 * @see com.socialize.networks.twitter.TwitterUtilsProxy#tweet(android.app.Activity, com.socialize.entity.Entity, java.lang.String, com.socialize.networks.SocialNetworkListener)
 	 */
 	@Override
-	public void tweetEntity(final Activity context, Entity entity, String text, final SocialNetworkListener listener) {
-		
-		if(listener != null) {
-			listener.onBeforePost(context, SocialNetwork.TWITTER, null);
-		}
-		
-		shareSystem.addShare(context, getSocialize().getSession(), entity, text, ShareType.TWITTER, new ShareAddListener() {
-			@Override
-			public void onCreate(Share share) {
-				// Server does tweet.
-				if(listener != null) {
-					listener.onAfterPost(context, SocialNetwork.TWITTER, null);
-				}
-			}
+	public void tweetEntity(final Activity context, final Entity entity, final String text, final SocialNetworkShareListener listener) {
+		ShareOptions options = ShareUtils.getUserShareOptions(context);
+		options.setText(text);
+		options.setShowAuthDialog(false);
+		ShareUtils.shareViaSocialNetworks(context, entity, options, listener, SocialNetwork.TWITTER);
+	}
+	
+	@Override
+	public void tweetPhoto(Activity context, PhotoTweet tweet, SocialNetworkListener listener) {
 
-			@Override
-			public void onError(SocializeException error) {
-				if(listener != null) {
-					listener.onNetworkError(context, SocialNetwork.TWITTER, error);
+	}
+		
+
+	@Override
+	public void tweet(final Activity context, Tweet tweet, final SocialNetworkListener listener) {
+		
+		Map<String, Object> postData = new HashMap<String, Object>();
+		
+		postData.put("status", tweet.getText());
+		
+		// TODO: This currently fails with a 400 from twitter
+		// https://dev.twitter.com/discussions/8685
+		
+//		if(tweet.isShareLocation() && tweet.getLocation() != null) {
+//			postData.put("lat", String.valueOf(tweet.getLocation().getLatitude()));
+//			postData.put("long", String.valueOf(tweet.getLocation().getLongitude()));
+//			postData.put("display_coordinates", "true");
+//		}
+		
+		post(context, "statuses/update.json", postData, listener);
+	}	
+	
+	@Override
+	public void post(final Activity context, String resource, Map<String, Object> postData, final SocialNetworkPostListener listener) {
+
+		try {
+			resource = resource.trim();
+			
+			if(!resource.endsWith(".json")) {
+				resource += ".json";
+			}
+			
+			HttpPost post = new HttpPost(apiEndpoint + resource);
+
+			Set<Entry<String, Object>> entries = postData.entrySet();
+			
+			List<NameValuePair> data = new ArrayList<NameValuePair>();
+			
+			for (Entry<String, Object> entry : entries) {
+				String key = entry.getKey();
+				Object value = entry.getValue();
+				if(key != null && value != null) {
+					data.add(new BasicNameValuePair(key, value.toString()));
 				}
 			}
-		}, SocialNetwork.TWITTER);
+			
+			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(data, "UTF-8");
+			post.setEntity(entity);		
+			
+			SocializeSession session = getSocialize().getSession();
+			
+			UserProviderCredentials creds = session.getUserProviderCredentials(AuthProviderType.TWITTER);
+			
+			String consumerKey = ConfigUtils.getConfig(context).getProperty(SocializeConfig.TWITTER_CONSUMER_KEY);
+			String consumerSecret = ConfigUtils.getConfig(context).getProperty(SocializeConfig.TWITTER_CONSUMER_SECRET);			
+			
+			HttpPost signedRequest = requestSigner.sign(consumerKey, consumerSecret, creds.getAccessToken(), creds.getTokenSecret(), post, null);
+			
+			httpRequestProvider.post(signedRequest, new HttpRequestListener() {
+				
+				@Override
+				public void onSuccess(HttpResponse response, String responseData) {
+					
+					try {
+						JSONObject responseObject = new JSONObject(responseData);
+						if(listener != null) {
+							listener.onAfterPost(context, SocialNetwork.TWITTER, responseObject);
+						}
+					}
+					catch (JSONException e) {
+						if(listener != null) {
+							listener.onNetworkError(context, SocialNetwork.TWITTER, e);
+						}
+					}
+				}
+				
+				@Override
+				public void onError(Exception error, HttpResponse response, int errorCode, String responseData) {
+					if(listener != null) {
+						listener.onNetworkError(context, SocialNetwork.TWITTER, error);
+					}
+				}
+			});
+		}
+		catch (Exception e) {
+			if(listener != null) {
+				listener.onNetworkError(context, SocialNetwork.TWITTER, e);
+			}
+		}		
+	}
+
+	@Override
+	public void get(final Activity context, String resource, final SocialNetworkPostListener listener) {
+
+		try {
+			resource = resource.trim();
+			
+			if(!resource.endsWith(".json")) {
+				resource += ".json";
+			}
+			
+			HttpGet get = new HttpGet(apiEndpoint + resource);
+
+			SocializeSession session = getSocialize().getSession();
+			
+			UserProviderCredentials creds = session.getUserProviderCredentials(AuthProviderType.TWITTER);
+			
+			String consumerKey = ConfigUtils.getConfig(context).getProperty(SocializeConfig.TWITTER_CONSUMER_KEY);
+			String consumerSecret = ConfigUtils.getConfig(context).getProperty(SocializeConfig.TWITTER_CONSUMER_SECRET);			
+			
+			HttpGet signedRequest = requestSigner.sign(consumerKey, consumerSecret, creds.getAccessToken(), creds.getTokenSecret(), get, null);
+			
+			httpRequestProvider.get(signedRequest, new HttpRequestListener() {
+				
+				@Override
+				public void onSuccess(HttpResponse response, String responseData) {
+					
+					try {
+						JSONObject responseObject = new JSONObject(responseData);
+						if(listener != null) {
+							listener.onAfterPost(context, SocialNetwork.TWITTER, responseObject);
+						}
+					}
+					catch (JSONException e) {
+						if(listener != null) {
+							listener.onNetworkError(context, SocialNetwork.TWITTER, e);
+						}
+					}
+				}
+				
+				@Override
+				public void onError(Exception error, HttpResponse response, int errorCode, String responseData) {
+					if(listener != null) {
+						listener.onNetworkError(context, SocialNetwork.TWITTER, error);
+					}
+				}
+			});
+		}
+		catch (Exception e) {
+			if(listener != null) {
+				listener.onNetworkError(context, SocialNetwork.TWITTER, e);
+			}
+		}		
 	}
 
 	protected SocializeService getSocialize() {
@@ -179,12 +329,23 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 	public void setUserSystem(UserSystem userSystem) {
 		this.userSystem = userSystem;
 	}
-	
-	public void setShareSystem(ShareSystem shareSystem) {
-		this.shareSystem = shareSystem;
-	}
 
 	public void setConfig(SocializeConfig config) {
 		this.config = config;
 	}
+	
+	public void setRequestSigner(OAuthRequestSigner requestSigner) {
+		this.requestSigner = requestSigner;
+	}
+
+	
+	public void setApiEndpoint(String apiEndpoint) {
+		this.apiEndpoint = apiEndpoint;
+	}
+
+	public void setHttpRequestProvider(HttpRequestProvider httpRequestProvider) {
+		this.httpRequestProvider = httpRequestProvider;
+	}
+	
+	
 }

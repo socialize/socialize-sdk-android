@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import android.app.Notification;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.user.UserSystem;
 import com.socialize.config.SocializeConfig;
@@ -282,8 +283,7 @@ public class SocializeC2DMCallback implements C2DMCallback {
 			logger.error(msg, e);
 		}
 		else {
-			System.err.println(msg);
-			e.printStackTrace();
+			Log.e(SocializeLogger.LOG_TAG, msg, e);
 		}	
 	}
 

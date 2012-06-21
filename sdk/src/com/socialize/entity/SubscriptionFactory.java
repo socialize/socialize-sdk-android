@@ -95,7 +95,6 @@ public class SubscriptionFactory extends SocializeObjectFactory<Subscription> {
 			}			
 		}
 		catch (Throwable e) {
-			e.printStackTrace();
 			throw new JSONException(e.getMessage());
 		}		
 	}
