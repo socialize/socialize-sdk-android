@@ -33,6 +33,7 @@ import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
@@ -138,9 +139,9 @@ public class ActionBarTestUtils2 {
 		Entity entity = Entity.newInstance("http://entity1.com", "no name");
 		
 		// Ensure FB/TW are not supported
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_APP_ID, "");
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, "");
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, "");
+		ConfigUtils.getConfig(testCase.getActivity()).setProperty(SocializeConfig.FACEBOOK_APP_ID, "");
+		ConfigUtils.getConfig(testCase.getActivity()).setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, "");
+		ConfigUtils.getConfig(testCase.getActivity()).setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, "");
 		
 //		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
 //			@Override

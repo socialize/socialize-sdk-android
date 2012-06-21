@@ -12,7 +12,6 @@ import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.user.UserListener;
-import com.socialize.ui.profile.UserProfile;
 import com.socialize.ui.profile.UserSettings;
 
 public class MockUserSystem implements UserSystem {

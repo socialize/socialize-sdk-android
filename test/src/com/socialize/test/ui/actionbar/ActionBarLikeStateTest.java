@@ -54,11 +54,6 @@ public class ActionBarLikeStateTest extends ActivityInstrumentationTestCase2<Act
 		
 		Entity entity = Entity.newInstance("http://entity23.com", "no name");
 		
-		// Ensure sharing is not supported
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_APP_ID, "");
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, "");
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, "");
-		
 		final MockEntitySystem mockEntitySystem = new MockEntitySystem();
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
 			
@@ -92,10 +87,14 @@ public class ActionBarLikeStateTest extends ActivityInstrumentationTestCase2<Act
 			}
 			@Override
 			public void onInit(Context context, IOCContainer container) {
-				
 				// Disable auth prompt for this test
 				SocializeConfig bean = container.getBean("config");
-				bean.setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");			
+				bean.setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");	
+				
+				// Ensure sharing is not supported
+				bean.setProperty(SocializeConfig.FACEBOOK_APP_ID, "");
+				bean.setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, "");
+				bean.setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, "");				
 				
 				ProxyObject<LikeSystem> likeSystemProxy = container.getProxy("likeSystem");
 				ProxyObject<EntitySystem> entitySystemProxy = container.getProxy("entitySystem");

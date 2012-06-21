@@ -24,6 +24,12 @@ package com.socialize.test.integration.services;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import org.apache.http.HttpResponse;
+import org.apache.http.ProtocolVersion;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.message.BasicHttpResponse;
+import org.apache.http.message.BasicStatusLine;
 import org.json.JSONObject;
 import android.app.Activity;
 import com.socialize.ConfigUtils;
@@ -46,6 +52,8 @@ import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.share.ShareListListener;
+import com.socialize.net.HttpRequestListener;
+import com.socialize.net.HttpRequestProvider;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.twitter.TwitterUtils;
@@ -99,7 +107,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		// Now Link
 		TwitterUtils.link(context, null);
 		
-		latch.await(20, TimeUnit.SECONDS);
+		latch.await(10, TimeUnit.SECONDS);
 		
 		TwitterAuthProviderInfo data = getResult(0);
 		
@@ -162,7 +170,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 			}
 		});
 		
-		latch.await(20, TimeUnit.SECONDS);
+		latch.await(10, TimeUnit.SECONDS);
 		
 		SocializeSession session = getResult(0);
 		String fail = getResult(1);
@@ -206,6 +214,8 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final String token = TestUtils.getDummyTwitterToken(getContext());
 		final String secret = TestUtils.getDummyTwitterSecret(getContext());
+		
+		
 		// Stub in the TwitterAuthProvider
 		TwitterAuthProvider mockTwitterAuthProvider = new TwitterAuthProvider() {
 			@Override
@@ -224,12 +234,12 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onError(SocializeException error) {
 				error.printStackTrace();
-				fail();
+				addResult(0, "fail");
 			}
 			
 			@Override
 			public void onCancel() {
-				fail();	
+				addResult(0, "fail");
 			}
 			
 			@Override
@@ -244,7 +254,10 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 			}
 		});
 		
-		latch.await(20, TimeUnit.SECONDS);
+		assertTrue(latch.await(10, TimeUnit.SECONDS));
+		
+		assertNull(getResult(0));
+		
 		do_test_post();
 	}
 	
@@ -273,11 +286,26 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 			}
 		};
 		
+		final HttpResponse mockResponse = new BasicHttpResponse(new BasicStatusLine(new ProtocolVersion("https", 1, 0), 200, ""));
+		final String responseData = "{foo:bar}";
+		
+		// Stub in the http provider factory for the tweet
+		HttpRequestProvider mockProvider = new HttpRequestProvider() {
+			
+			@Override
+			public void post(HttpPost request, HttpRequestListener listener) {
+				listener.onSuccess(mockResponse, responseData);
+			}
+			
+			@Override
+			public void get(HttpGet request, HttpRequestListener listener) {
+				listener.onSuccess(mockResponse, responseData);
+			}
+		};
+		
+		
 		SocializeIOC.registerStub("twitterProvider", mockTwitterAuthProvider);
-		
-		
-		// Need to mock twitter sharer so it doesn't actually tweet!
-		fail();
+		SocializeIOC.registerStub("httpRequestProvider", mockProvider);
 
 		TwitterUtils.tweetEntity(getActivity(), entity, "AndroidSDK Test", new SocialNetworkShareListener() {
 			
@@ -302,7 +330,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 			public void onCancel() {}
 		});
 		
-		latch.await(20, TimeUnit.SECONDS);
+		assertTrue(latch.await(10, TimeUnit.SECONDS));
 		
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		
@@ -321,7 +349,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 			}
 		});
 		
-		latch2.await(20, TimeUnit.SECONDS);
+		assertTrue(latch2.await(20, TimeUnit.SECONDS));
 		
 		SocializeIOC.unregisterStub("twitterProvider");
 		

@@ -10,6 +10,7 @@ import com.socialize.api.action.user.UserUtilsProxy;
 import com.socialize.api.action.view.ViewUtilsProxy;
 import com.socialize.config.ConfigUtilsProxy;
 import com.socialize.listener.SocializeInitListener;
+import com.socialize.networks.twitter.TwitterUtilsImpl;
 
 public class SocializeAccess {
 	

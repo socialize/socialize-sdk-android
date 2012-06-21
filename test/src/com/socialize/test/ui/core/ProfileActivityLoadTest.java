@@ -23,6 +23,7 @@ package com.socialize.test.ui.core;
 
 import android.app.Activity;
 import android.content.Context;
+import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.api.action.user.SocializeUserUtils;
@@ -93,8 +94,8 @@ public class ProfileActivityLoadTest extends SocializeUIActivityTest {
 //		});
 		
 		// Ensure facebook is enabled
-		Socialize.getSocialize().getConfig().setFacebookAppId("1234567890");
-		Socialize.getSocialize().getConfig().setTwitterKeySecret("U18LUnVjULkkpGoJ6CoP3A", "RiIljnFq4RWV9LEaCM1ZLsAHf053vX2KyhJhmCOlBE");
+		ConfigUtils.getConfig(getContext()).setFacebookAppId("1234567890");
+		ConfigUtils.getConfig(getContext()).setTwitterKeySecret("U18LUnVjULkkpGoJ6CoP3A", "RiIljnFq4RWV9LEaCM1ZLsAHf053vX2KyhJhmCOlBE");
 		
 		Socialize.getSocialize().showUserProfileView(getActivity(), 69L);
 		

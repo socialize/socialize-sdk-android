@@ -8,7 +8,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.socialize.Socialize;
+import com.socialize.ConfigUtils;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
@@ -287,7 +287,7 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		
 		TestUtils.setUpActivityMonitor(CommentDetailActivity.class);
 		
-		Socialize.getSocialize().getConfig().setProperty("comment.page.size", String.valueOf(pageSize));
+		ConfigUtils.getConfig(getActivity()).setProperty("comment.page.size", String.valueOf(pageSize));
 		
 		startWithoutFacebook();
 		

@@ -19,54 +19,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.listener.like;
+package com.socialize.ui.actionbutton;
 
-import android.util.Log;
-import com.socialize.entity.Like;
-import com.socialize.error.SocializeApiError;
-import com.socialize.error.SocializeException;
-import com.socialize.log.SocializeLogger;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+
 
 /**
  * @author Jason Polites
  */
-public abstract class IsLikedListener extends LikeGetListener {
-
-	/* (non-Javadoc)
-	 * @see com.socialize.listener.AbstractSocializeListener#onGet(com.socialize.entity.SocializeObject)
-	 */
-	@Override
-	public void onGet(Like like) {
-		if(like != null) {
-			onLiked(like);
-		}
-		else {
-			onNotLiked();
-		}
-	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.listener.AbstractSocializeListener#onError(com.socialize.error.SocializeException)
-	 */
-	@Override
-	public void onError(SocializeException error) {
-		
-		if(error instanceof SocializeApiError) {
-			SocializeApiError aError = (SocializeApiError) error;
-			
-			if(aError.getResultCode() != 404) {
-				Log.e(SocializeLogger.LOG_TAG, error.getMessage(), error);
-			}
-		}
-		else {
-			Log.e(SocializeLogger.LOG_TAG, error.getMessage(), error);
-		}
-		
-		onNotLiked();
-	}
+public interface LikeButtonListener extends OnCheckedChangeListener {
 	
-	public abstract void onLiked(Like like);
+	/**
+	 * Called when the button is clicked.
+	 * @param button
+	 */
+	public void onClick(CompoundButton button);
 	
-	public abstract void onNotLiked();
-
+	/**
+	 * Called when an error occurs on a like button.
+	 * @param error
+	 */
+	public void onError(CompoundButton button, Exception error);
 }

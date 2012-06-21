@@ -15,22 +15,19 @@ public class AuthenticatedViewListenerTest extends SocializeUIActivityTest {
 	@UsesMocks ({AuthenticatedView.class, SocializeException.class, IOCContainer.class})
 	public void testOnError() {
 		AuthenticatedView view = AndroidMock.createMock(AuthenticatedView.class, getActivity());
-		SocializeException error = AndroidMock.createMock(SocializeException.class);
+		SocializeException error =  new SocializeException("TEST ERROR - IGNORE");
 		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
 		
 		view.onAfterAuthenticate(container);
 		view.removeAllViews();
 		view.showError(getActivity(), error);
-		error.printStackTrace();
 		
 		AndroidMock.replay(view);
-		AndroidMock.replay(error);
 		
 		AuthenticatedViewListener listener = new AuthenticatedViewListener(getActivity(), view, container);
 		listener.onError(error);
 		
 		AndroidMock.verify(view);
-		AndroidMock.verify(error);
 	}
 	
 	@UsesMocks ({AuthenticatedView.class, View.class, IOCContainer.class})
@@ -55,22 +52,18 @@ public class AuthenticatedViewListenerTest extends SocializeUIActivityTest {
 	@UsesMocks ({AuthenticatedView.class, SocializeException.class, IOCContainer.class})
 	public void testOnAuthFail() {
 		AuthenticatedView view = AndroidMock.createMock(AuthenticatedView.class, getActivity());
-		SocializeException error = AndroidMock.createMock(SocializeException.class);
+		SocializeException error =  new SocializeException("TEST ERROR - IGNORE");
 		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
-		
-		error.printStackTrace();
 		
 		view.onAfterAuthenticate(container);
 		view.showError(getActivity(), error);
 		
 		AndroidMock.replay(view);
-		AndroidMock.replay(error);
 		
 		AuthenticatedViewListener listener = new AuthenticatedViewListener(getActivity(), view, container);
 		listener.onAuthFail(error);
 		
 		AndroidMock.verify(view);
-		AndroidMock.verify(error);
 	}
 //	
 //	@Deprecated

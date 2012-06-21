@@ -98,6 +98,11 @@ public class AsyncHttpRequestProcessor extends AsyncTask<AsyncHttpRequest, Void,
 					}
 					else {
 						String responseData = ioUtils.readSafe(entity.getContent());
+						
+						if(logger != null && logger.isDebugEnabled()) {
+							logger.debug("Response JSON: " + responseData);
+						}						
+						
 						response.setResponseData(responseData);
 					}					
 				}

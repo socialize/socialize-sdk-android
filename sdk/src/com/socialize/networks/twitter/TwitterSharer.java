@@ -65,11 +65,12 @@ public class TwitterSharer extends AbstractSocialNetworkSharer {
 		Tweet tweet = new Tweet();
 		
 		switch(type) {
+		
 			case SHARE:
 				if(StringUtils.isEmpty(comment))  comment = "Shared " + entity.getDisplayName();
 				break;
 			case LIKE:
-				comment = "♥ likes " + entity.getDisplayName();
+				comment = "\u2764 likes " + entity.getDisplayName();
 				break;
 			case VIEW:
 				comment = "Viewed " + entity.getDisplayName();

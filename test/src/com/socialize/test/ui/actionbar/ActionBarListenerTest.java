@@ -3,6 +3,7 @@ package com.socialize.test.ui.actionbar;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import android.content.Intent;
+import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.ProxyObject;
@@ -63,7 +64,7 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 		entity.setName("foobar_name");
 		
 		intent.putExtra(Socialize.ENTITY_OBJECT, entity);
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, "false");
+		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, "false");
 		getActivity().startActivity(intent);		
 		
 		assertNotNull(waitForActionBar(10000));
@@ -81,7 +82,7 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 		
 		SocializeAccess.setBeanOverrides("socialize_ui_mock_beans.xml", "socialize_ui_mock_socialize_beans.xml");
 		
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, "false");
+		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, "false");
 		
 		getActivity().startActivity(intent);		
 		
