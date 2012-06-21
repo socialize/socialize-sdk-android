@@ -33,6 +33,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.SocialNetworkPostListener;
 
 
 /**
@@ -175,7 +176,7 @@ public class TwitterUtils {
 	 * @param postData
 	 * @param listener
 	 */
-	public static void post(final Activity context, final String resource, final Map<String, Object> postData, final SocialNetworkListener listener) {
+	public static void post(final Activity context, final String resource, final Map<String, Object> postData, final SocialNetworkPostListener listener) {
 		if(proxy.isLinked(context)) {
 			proxy.post(context, resource, postData, listener);
 		}
@@ -211,9 +212,9 @@ public class TwitterUtils {
 		}
 	}
 	
-	public static void get(final Activity context, final String resource, final SocialNetworkListener listener) {
+	public static void get(final Activity context, final String resource, final Map<String, Object> params, final SocialNetworkPostListener listener) {
 		if(proxy.isLinked(context)) {
-			proxy.get(context, resource, listener);
+			proxy.get(context, resource, params, listener);
 		}
 		else {
 			proxy.link(context, new SocializeAuthListener() {
@@ -234,7 +235,7 @@ public class TwitterUtils {
 				
 				@Override
 				public void onAuthSuccess(SocializeSession session) {
-					proxy.get(context, resource, listener);
+					proxy.get(context, resource, params, listener);
 				}
 				
 				@Override

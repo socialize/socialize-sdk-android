@@ -9,6 +9,7 @@ Contents:
 	whats_new
 	getting_started
 	action_bar
+	like_button
 	facebook
 	twitter	
 	push_notifications

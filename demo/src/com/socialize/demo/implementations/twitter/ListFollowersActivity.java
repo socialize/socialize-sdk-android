@@ -21,8 +21,7 @@
  */
 package com.socialize.demo.implementations.twitter;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.Activity;
@@ -32,26 +31,26 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkPostListener;
-import com.socialize.networks.facebook.FacebookUtils;
+import com.socialize.networks.twitter.TwitterUtils;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class OpenGraphActivity extends SDKDemoActivity {
+public class ListFollowersActivity extends SDKDemoActivity {
 
 	/* (non-Javadoc)
-	 * @see com.socialize.demo.SDKDemoActivity#executeDemo(java.lang.String)
+	 * @see com.socialize.demo.DemoActivity#executeDemo()
 	 */
 	@Override
-	public void executeDemo(final String text) {
+	public void executeDemo(String text) {
 		
-		FacebookUtils.link(this, new SocializeAuthListener() {
+		TwitterUtils.link(this, new SocializeAuthListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
-				handleError(OpenGraphActivity.this, error);
+				handleError(ListFollowersActivity.this, error);
 			}
 			
 			@Override
@@ -62,16 +61,11 @@ public class OpenGraphActivity extends SDKDemoActivity {
 			@Override
 			public void onAuthSuccess(SocializeSession session) {
 				
-				Map<String, Object> postData = new HashMap<String, Object>();
-				postData.put("dish", "http://samples.ogp.me/228268990626132"); // <-- Entity URL, expects OG tag of socializeandroidtest:dish
-				
-				String graphPath = "me/socializeandroidtest:eat";
-				
-				FacebookUtils.post(OpenGraphActivity.this, graphPath, postData, new SocialNetworkPostListener() {
+				TwitterUtils.get(ListFollowersActivity.this, "followers/ids.json", null, new SocialNetworkPostListener() {
 					
 					@Override
 					public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
-						handleError(OpenGraphActivity.this, error);
+						handleError(context, error);
 					}
 					
 					@Override
@@ -81,11 +75,25 @@ public class OpenGraphActivity extends SDKDemoActivity {
 					
 					@Override
 					public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+						
 						try {
-							handleResult(responseObject.toString(4));
+							JSONArray jsonArray = responseObject.getJSONArray("ids");
+							
+							StringBuilder builder = new StringBuilder();
+							
+							int len = jsonArray.length();
+							
+							for (int i = 0; i < len; i++) {
+								if(i > 0) {
+									builder.append("\n");
+								}
+								builder.append(jsonArray.getString(i));
+							}
+							
+							handleResult(builder.toString());
 						}
 						catch (JSONException e) {
-							handleError(OpenGraphActivity.this, e);
+							handleError(parent, e);
 						}
 					}
 				});
@@ -93,25 +101,21 @@ public class OpenGraphActivity extends SDKDemoActivity {
 			
 			@Override
 			public void onAuthFail(SocializeException error) {
-				handleError(OpenGraphActivity.this, error);
+				handleError(ListFollowersActivity.this, error);
 			}
-		}, "publish_actions");
+		});
+	}
+	
+	@Override
+	public boolean isTextEntryRequired() {
+		return false;
 	}
 
 	/* (non-Javadoc)
-	 * @see com.socialize.demo.SDKDemoActivity#getButtonText()
+	 * @see com.socialize.demo.DemoActivity#getButtonText()
 	 */
 	@Override
 	public String getButtonText() {
-		return "Eat a food";
+		return "List My Followers";
 	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.demo.SDKDemoActivity#isTextEntryRequired()
-	 */
-	@Override
-	public boolean isTextEntryRequired() {
-		return true;
-	}
-
 }

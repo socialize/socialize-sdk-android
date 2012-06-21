@@ -135,8 +135,9 @@
         <!-- Twitter -->
         <activity android:name=".implementations.twitter.TwitterActivity"/> 
         <activity android:name=".implementations.twitter.TweetActivity"/> 
-        <activity android:name=".implementations.twitter.TweetPhotoActivity"/> 
-        
+        <activity android:name=".implementations.twitter.ListFollowersActivity"/> 
+        <activity android:name=".implementations.twitter.GetTokenActivity"/>
+            
         <!-- User -->
         <activity android:name=".implementations.user.UserActivity"/> 
         

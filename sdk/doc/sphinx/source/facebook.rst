@@ -119,7 +119,7 @@ To post an entity to a user's Facebook timeline simply call the **postEntity** m
 Posting Directly to Facebook
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you want complete control over what is posted to Facebook Socialize provides a simple interface to the Facebook Graph API.
+If you want complete control over what is posted to Facebook, Socialize provides a simple interface to the Facebook Graph API.
 
 Refer to the Facebook Graph API documentation for more specific implementation information
 

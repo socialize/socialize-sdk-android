@@ -27,7 +27,7 @@ import com.socialize.auth.UserProviderCredentials;
 import com.socialize.demo.SDKDemoActivity;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.networks.facebook.FacebookUtils;
+import com.socialize.networks.twitter.TwitterUtils;
 
 
 /**
@@ -42,7 +42,7 @@ public class GetTokenActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(String text) {
 		
-		FacebookUtils.link(this, new SocializeAuthListener() {
+		TwitterUtils.link(this, new SocializeAuthListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -56,7 +56,7 @@ public class GetTokenActivity extends SDKDemoActivity {
 			
 			@Override
 			public void onAuthSuccess(SocializeSession session) {
-				UserProviderCredentials userProviderCredentials = session.getUserProviderCredentials(AuthProviderType.FACEBOOK);
+				UserProviderCredentials userProviderCredentials = session.getUserProviderCredentials(AuthProviderType.TWITTER);
 				handleResult(userProviderCredentials.getAccessToken());
 			}
 			

@@ -112,4 +112,38 @@ To post an entity to a user's Twitter feed simply call the **tweetEntity** metho
 	:start-after: begin-snippet-4
 	:end-before: end-snippet-4
 
+Posting Directly to Twitter
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you want complete control over what is posted to Twitter, Socialize provides a simple interface to the Twitter REST API.
+
+Refer to the Twitter REST API documentation for more specific implementation information
+
+http://dev.twitter.com/docs/api
+
+Sending a **Tweet**
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/TwitterSnippets.java
+	:start-after: begin-snippet-5
+	:end-before: end-snippet-5
+
+Executing a **POST**
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/TwitterSnippets.java
+	:start-after: begin-snippet-6
+	:end-before: end-snippet-6
+	
+If you want to take full advantage of Socialize SmartDownloads and post the auto-generated SmartDownload urls for your entity or app you can 
+do this by creating a simple share object without propagation first.
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/TwitterSnippets.java
+	:start-after: begin-snippet-8
+	:end-before: end-snippet-8
+	
+Executing a **GET**
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/TwitterSnippets.java
+	:start-after: begin-snippet-6
+	:end-before: end-snippet-6
+
 .. include:: footer.inc	

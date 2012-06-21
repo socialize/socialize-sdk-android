@@ -65,7 +65,7 @@ public interface TwitterUtilsProxy {
 	
 	public void post(Activity context, String resource, Map<String, Object> postData, SocialNetworkPostListener listener);
 	
-	public void get(Activity context, String resource, SocialNetworkPostListener listener);
+	public void get(Activity context, String resource, Map<String, Object> params, SocialNetworkPostListener listener);
 	
 	public void tweetPhoto(Activity context, PhotoTweet tweet, SocialNetworkListener listener);
 }

@@ -58,6 +58,7 @@ import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.oauth.OAuthRequestSigner;
+import com.socialize.util.UrlBuilder;
 
 
 /**
@@ -269,7 +270,7 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 	}
 
 	@Override
-	public void get(final Activity context, String resource, final SocialNetworkPostListener listener) {
+	public void get(final Activity context, String resource, Map<String, Object> params, final SocialNetworkPostListener listener) {
 
 		try {
 			resource = resource.trim();
@@ -278,7 +279,23 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 				resource += ".json";
 			}
 			
-			HttpGet get = new HttpGet(apiEndpoint + resource);
+			UrlBuilder builder = new UrlBuilder();
+			builder.start(apiEndpoint + resource);
+			
+			if(params != null) {
+				
+				Set<Entry<String, Object>> entries = params.entrySet();
+				
+				for (Entry<String, Object> entry : entries) {
+					String key = entry.getKey();
+					Object value = entry.getValue();
+					if(key != null && entry != null) {
+						builder.addParam(key, value.toString());
+					}
+				}
+			}
+			
+			HttpGet get = new HttpGet(builder.toString());
 
 			SocializeSession session = getSocialize().getSession();
 			

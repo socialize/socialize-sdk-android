@@ -173,7 +173,7 @@ postData.put("name", "Socialize SDK!");
 	
 // Execute a POST on facebook
 // The "this" argument refers to the current Activity
-FacebookUtils.post(this, graphPath, postData, new SocialNetworkListener() {
+FacebookUtils.post(this, graphPath, postData, new SocialNetworkPostListener() {
 	
 	@Override
 	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
@@ -189,11 +189,6 @@ FacebookUtils.post(this, graphPath, postData, new SocialNetworkListener() {
 	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
 		// Called after the post returned from Facebook.
 		// responseObject contains the raw JSON response from Facebook.
-	}
-	
-	@Override
-	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
-		// Called just prior to the post.
 	}
 });
 // end-snippet-5
@@ -206,7 +201,7 @@ String graphPath = "me/links";
 
 // Execute a GET on facebook
 // The "this" argument refers to the current Activity
-FacebookUtils.get(this, graphPath, null, new SocialNetworkListener() {
+FacebookUtils.get(this, graphPath, null, new SocialNetworkPostListener() {
 	
 	@Override
 	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
@@ -222,11 +217,6 @@ FacebookUtils.get(this, graphPath, null, new SocialNetworkListener() {
 	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
 		// Called after the post returned from Facebook.
 		// responseObject contains the raw JSON response from Facebook.
-	}
-	
-	@Override
-	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
-		// Called just prior to the post.
 	}
 });
 // end-snippet-6

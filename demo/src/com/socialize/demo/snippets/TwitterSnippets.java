@@ -21,15 +21,26 @@
  */
 package com.socialize.demo.snippets;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.json.JSONObject;
 import android.app.Activity;
+import com.socialize.ShareUtils;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.share.ShareOptions;
 import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.entity.Entity;
+import com.socialize.entity.PropagationInfo;
+import com.socialize.entity.PropagationInfoResponse;
+import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.listener.share.ShareAddListener;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.SocialNetworkPostListener;
+import com.socialize.networks.twitter.Tweet;
 import com.socialize.networks.twitter.TwitterUtils;
 
 
@@ -137,5 +148,161 @@ TwitterUtils.tweetEntity(this, entity, "Text to be posted", new SocialNetworkSha
 // end-snippet-4
 }
 
+
+public void tweet() {
+// begin-snippet-5
+// Create a Tweet object
+	
+Tweet tweet = new Tweet();
+
+tweet.setText("Test Message");
+
+// Execute a POST on twitter
+// The "this" argument refers to the current Activity
+TwitterUtils.tweet(this, tweet, new SocialNetworkListener() {
+	
+	@Override
+	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+		// Handle error
+	}
+	
+	@Override
+	public void onCancel() {
+		// The user cancelled the operation.
+	}
+	
+	@Override
+	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+		// Called after the post returned from Twitter.
+		// responseObject contains the raw JSON response from Twitter.
+	}
+	
+	@Override
+	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+		// Called just prior to the post.
+	}
+});
+// end-snippet-5
+}
+
+
+public void post() {
+// begin-snippet-6
+// The API path to be called
+String graphPath = "statuses/update.json";
+
+// The data to be posted. This is based on the API endpoint
+// See https://dev.twitter.com/docs/api
+Map<String, Object> postData = new HashMap<String, Object>();
+postData.put("status", "A message to post");
+	
+// Execute a POST on twitter
+// The "this" argument refers to the current Activity
+TwitterUtils.post(this, graphPath, postData, new SocialNetworkPostListener() {
+	
+	@Override
+	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+		// Handle error
+	}
+	
+	@Override
+	public void onCancel() {
+		// The user cancelled the operation.
+	}
+	
+	@Override
+	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+		// Called after the post returned from Twitter.
+		// responseObject contains the raw JSON response from Twitter.
+	}
+});
+// end-snippet-6
+}
+
+public void get() {
+// begin-snippet-7
+// The graph API path to be called
+String graphPath = "followers/ids.json";
+
+// Execute a GET on twitter
+// The "this" argument refers to the current Activity
+TwitterUtils.get(this, graphPath, null, new SocialNetworkPostListener() {
+	
+	@Override
+	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+		// Handle error
+	}
+	
+	@Override
+	public void onCancel() {
+		// The user cancelled the operation.
+	}
+	
+	@Override
+	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+		// Called after the post returned from Twitter.
+		// responseObject contains the raw JSON response from Twitter.
+	}
+});
+// end-snippet-7
+}
+
+
+public void postWithUrl() {
+final Activity context = this;
+// begin-snippet-8
+// Create a simple share object to get the propagation data
+final Entity entity = Entity.newInstance("http://myentity.com", "My Name");
+
+ShareOptions options = ShareUtils.getUserShareOptions(this);
+
+// The "this" argument refers to the current Activity
+ShareUtils.registerShare(this, entity, options, new ShareAddListener() {
+	
+	@Override
+	public void onError(SocializeException error) {
+		// Handle error
+	}
+	
+	@Override
+	public void onCreate(Share share) {
+		
+		// Get the propagation info from the result
+		PropagationInfoResponse propagationInfoResponse = share.getPropagationInfoResponse();
+		
+		PropagationInfo propagationInfo = propagationInfoResponse.getPropagationInfo(SocialNetwork.TWITTER);
+		
+		// Tweet the link
+		Tweet tweet = new Tweet();
+		tweet.setText("A message to post " + propagationInfo.getEntityUrl()); // Use the SmartDownload URL
+			
+		// Execute a POST on twitter
+		TwitterUtils.tweet(context, tweet, new SocialNetworkListener() {
+			
+			@Override
+			public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+				// Handle error
+			}
+			
+			@Override
+			public void onCancel() {
+				// The user cancelled the operation.
+			}
+			
+			@Override
+			public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+				// Called after the post returned from Twitter.
+				// responseObject contains the raw JSON response from Twitter.
+			}
+			
+			@Override
+			public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+				// Called just prior to the post.
+			}
+		});		
+	}
+}, SocialNetwork.TWITTER);
+// end-snippet-8
+}
 
 }
