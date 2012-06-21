@@ -66,25 +66,26 @@ public class TwitterSharer extends AbstractSocialNetworkSharer {
 		
 		switch(type) {
 			case SHARE:
-				if(StringUtils.isEmpty(comment))  comment = "Shared";
+				if(StringUtils.isEmpty(comment))  comment = "Shared " + entity.getDisplayName();
 				break;
 			case LIKE:
-				comment = "♥ likes";
+				comment = "♥ likes " + entity.getDisplayName();
 				break;
 			case VIEW:
-				comment = "Viewed";
+				comment = "Viewed " + entity.getDisplayName();
 				break;
 		}
 		
 		StringBuilder status = new StringBuilder();
 		
-		if(!StringUtils.isEmpty(comment)) {
+		if(StringUtils.isEmpty(comment)) {
+			status.append(entity.getDisplayName());
+		}
+		else {
 			status.append(comment);
-			status.append(" ");
 		}
 		
-		status.append(entity.getDisplayName());
-		status.append(" ");
+		status.append(", ");
 		status.append(urlSet.getEntityUrl());
 		
 		tweet.setText(status.toString());

@@ -62,47 +62,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 	 */
 	@Override
 	public void like(Activity context, final Entity entity, final LikeAddListener listener) {
-		
 		like(context, entity, getUserLikeOptions(context), listener);
-//
-//		final SocializeSession session = getSocialize().getSession();
-//		final LikeOptions likeOptions = ;
-//
-//		if(isDisplayAuthDialog(context)) {
-//			authDialogFactory.show(context, new AuthDialogListener() {
-//				@Override
-//				public void onShow(Dialog dialog, AuthPanelView dialogView) {}
-//
-//				@Override
-//				public void onCancel(Dialog dialog) {
-//					if(listener != null) {
-//						listener.onCancel();
-//					}
-//				}
-//
-//				@Override
-//				public void onSkipAuth(Activity context, Dialog dialog) {
-//					dialog.dismiss();
-//					doLikeWithoutShare(context, session, entity, listener);
-//				}
-//
-//				@Override
-//				public void onError(Activity context, Dialog dialog, Exception error) {
-//					dialog.dismiss();
-//					if(listener != null) {
-//						listener.onError(SocializeException.wrap(error));
-//					}
-//				}
-//				@Override
-//				public void onAuthenticate(Activity context, Dialog dialog, SocialNetwork network) {
-//					dialog.dismiss();
-//					doLikeWithShare(context, session, entity, likeOptions, listener);
-//				}
-//			});
-//		}
-//		else {
-//			doLikeWithShare(context, session, entity, likeOptions, listener);
-//		}
 	}
 
 	@Override
