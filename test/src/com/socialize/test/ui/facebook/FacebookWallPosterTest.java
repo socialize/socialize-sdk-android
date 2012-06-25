@@ -56,9 +56,9 @@ import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.facebook.DefaultFacebookWallPoster;
-import com.socialize.networks.facebook.FacebookImageUtils;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
+import com.socialize.util.ImageUtils;
 
 /**
  * @author Jason Polites
@@ -385,7 +385,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		FacebookSessionStore.class,
 		RequestListener.class,
 		SocialNetworkListener.class,
-		FacebookImageUtils.class
+		ImageUtils.class
 	})
 	public void testPostPhoto2() throws IOException {
 		
@@ -399,7 +399,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		final SocialNetworkListener socialNetworkListener = AndroidMock.createMock(SocialNetworkListener.class);
 		final FacebookSessionStore store = AndroidMock.createMock(FacebookSessionStore.class);
 		final RequestListener requestListener = AndroidMock.createMock(RequestListener.class);
-		final FacebookImageUtils facebookImageUtils = AndroidMock.createMock(FacebookImageUtils.class);
+		final ImageUtils imageUtils = AndroidMock.createMock(ImageUtils.class);
 		
 		final AsyncFacebookRunner runner = new AsyncFacebookRunner(fb) {
 			@Override
@@ -412,9 +412,9 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		};
 		
 		AndroidMock.expect( store.restore(fb, getActivity()) ).andReturn(true);
-		AndroidMock.expect(facebookImageUtils.scaleImage(getActivity(), photoUri)).andReturn(image);
+		AndroidMock.expect(imageUtils.scaleImage(getActivity(), photoUri)).andReturn(image);
 		
-		AndroidMock.replay(store, facebookImageUtils);
+		AndroidMock.replay(store, imageUtils);
 		
 		DefaultFacebookWallPoster poster = new DefaultFacebookWallPoster() {
 
@@ -440,11 +440,11 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 			}
 		};	
 		
-		poster.setFacebookImageUtils(facebookImageUtils);
+		poster.setImageUtils(imageUtils);
 		
 		poster.postPhoto(getActivity(), fbId, link, caption, photoUri, socialNetworkListener);
 		
-		AndroidMock.verify(store, facebookImageUtils);
+		AndroidMock.verify(store, imageUtils);
 		
 		String graphPath = getResult(0);
 		Bundle params = getResult(1);

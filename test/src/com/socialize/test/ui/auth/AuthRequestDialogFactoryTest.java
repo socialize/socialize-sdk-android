@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.test.ui.actionbar;
+package com.socialize.test.ui.auth;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -49,6 +49,7 @@ import com.socialize.listener.view.ViewAddListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.test.PublicEntity;
 import com.socialize.test.mock.MockLikeSystem;
+import com.socialize.test.ui.actionbar.ActionBarAutoTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.actionbar.ActionBarLayoutView;
 import com.socialize.ui.actionbar.ActionBarView;
@@ -61,13 +62,14 @@ import com.socialize.ui.auth.AuthPanelView;
  */
 public class AuthRequestDialogFactoryTest extends ActionBarAutoTest {
 	
-	
 	final EntityStatsImpl entityStats = new EntityStatsImpl();
 	final PublicEntity entity = new PublicEntity("http://entity1.com", "http://entity1.com");
 	
 	@Override
 	protected void setUp() throws Exception {
+		
 		super.setUp();
+		
 		entityStats.setComments(0);
 		entityStats.setLikes(0);
 		entityStats.setShares(0);

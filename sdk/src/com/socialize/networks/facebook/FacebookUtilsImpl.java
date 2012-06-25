@@ -46,6 +46,7 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.ui.profile.UserSettings;
+import com.socialize.util.ImageUtils;
 
 
 /**
@@ -56,7 +57,7 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	
 	private UserSystem userSystem;
 	private FacebookWallPoster facebookWallPoster;
-	private FacebookImageUtils facebookImageUtils;
+	private ImageUtils imageUtils;
 
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#link(android.app.Activity, com.socialize.listener.SocializeAuthListener)
@@ -172,12 +173,12 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 
 	@Override
 	public byte[] getImageForPost(Activity context, Uri imagePath) throws IOException {
-		return facebookImageUtils.scaleImage(context, imagePath);
+		return imageUtils.scaleImage(context, imagePath);
 	}
 	
 	@Override
 	public byte[] getImageForPost(Activity context, Bitmap image, CompressFormat format) throws IOException {
-		return facebookImageUtils.scaleImage(context, image, format);
+		return imageUtils.scaleImage(context, image, format);
 	}
 
 	public void setUserSystem(UserSystem userSystem) {
@@ -188,8 +189,8 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 		this.facebookWallPoster = facebookWallPoster;
 	}
 	
-	public void setFacebookImageUtils(FacebookImageUtils facebookImageUtils) {
-		this.facebookImageUtils = facebookImageUtils;
+	public void setImageUtils(ImageUtils imageUtils) {
+		this.imageUtils = imageUtils;
 	}
 
 	protected SocializeService getSocialize() {

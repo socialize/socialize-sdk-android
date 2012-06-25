@@ -28,4 +28,22 @@ package com.socialize.networks.twitter;
  */
 public class PhotoTweet extends Tweet {
 
+	private byte[] imageData;
+	private boolean possiblySensitive;
+	
+	public byte[] getImageData() {
+		return imageData;
+	}
+	
+	public void setImageData(byte[] imageData) {
+		this.imageData = imageData;
+	}
+	
+	public boolean isPossiblySensitive() {
+		return possiblySensitive;
+	}
+	
+	public void setPossiblySensitive(boolean possiblySensitive) {
+		this.possiblySensitive = possiblySensitive;
+	}
 }

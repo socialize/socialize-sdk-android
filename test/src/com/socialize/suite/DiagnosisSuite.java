@@ -14,7 +14,7 @@ public class DiagnosisSuite extends TestSuite {
 		suite.addTestSuite(com.socialize.test.ui.actionbar.ActionBarLikeManualTest.class);
 		suite.addTestSuite(com.socialize.test.ui.actionbar.ActionBarLikeStateTest.class);	
 		suite.addTestSuite(com.socialize.test.ui.actionbar.ActionBarListenerTest.class);
-		suite.addTestSuite(com.socialize.test.ui.actionbar.AuthRequestDialogFactoryTest.class);
+		suite.addTestSuite(com.socialize.test.ui.auth.AuthRequestDialogFactoryTest.class);
 
 		return suite;
 	}

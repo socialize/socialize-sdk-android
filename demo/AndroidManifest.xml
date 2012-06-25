@@ -104,7 +104,6 @@
         <!-- ActionBar -->
         <activity android:name=".implementations.actionbar.ActionBarActivity"/>
         <activity android:name=".implementations.actionbar.DefaultActionBarActivity"/>
-        <activity android:name=".implementations.actionbar.DefaultActionBarManualActivity"/>
         <activity android:name=".implementations.actionbar.CustomActionBarActivity"/>
         <activity android:name=".implementations.actionbar.MultiActionBarActivity"/>
         
@@ -138,6 +137,7 @@
         <activity android:name=".implementations.twitter.TweetActivity"/> 
         <activity android:name=".implementations.twitter.ListFollowersActivity"/> 
         <activity android:name=".implementations.twitter.GetTokenActivity"/>
+        <activity android:name=".implementations.twitter.TweetPhotoActivity"/>
             
         <!-- User -->
         <activity android:name=".implementations.user.UserActivity"/> 

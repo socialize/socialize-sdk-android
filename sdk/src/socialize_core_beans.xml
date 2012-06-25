@@ -560,8 +560,8 @@
 	</bean>
 	
 	<bean 
-		id="facebookImageUtils" 
-		class="com.socialize.networks.facebook.FacebookImageUtils">
+		id="imageUtils" 
+		class="com.socialize.util.ImageUtils">
 	</bean>	
 	
 	<bean 
@@ -575,7 +575,7 @@
 		id="facebookWallPoster" 
 		class="com.socialize.networks.facebook.DefaultFacebookWallPoster">
 		<property name="logger" ref="logger"/>
-		<property name="facebookImageUtils" ref="facebookImageUtils"/>
+		<property name="imageUtils" ref="imageUtils"/>
 		<property name="facebookRunnerFactory" ref="facebookRunnerFactory"/>
 	</bean>	
 	

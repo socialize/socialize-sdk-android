@@ -1634,7 +1634,7 @@
 	<bean id="facebookUtils" class="com.socialize.networks.facebook.FacebookUtilsImpl">
 		<property name="userSystem" ref="userSystem"/>
 		<property name="facebookWallPoster" ref="facebookWallPoster"/>
-		<property name="facebookImageUtils" ref="facebookImageUtils"/>
+		<property name="imageUtils" ref="imageUtils"/>
 	</bean>
 	
 	<bean id="twitterUtils" class="com.socialize.networks.twitter.TwitterUtilsImpl">
@@ -1642,6 +1642,7 @@
 		<property name="config" ref="config"/>
 		<property name="httpRequestProvider" ref="httpRequestProvider"/>
 		<property name="requestSigner" ref="oauthSigner"/>
+		<property name="imageUtils" ref="imageUtils"/>
 	</bean>	
 
 	<bean id="locationUtils" class="com.socialize.location.SocializeLocationUtils">

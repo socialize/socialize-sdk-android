@@ -36,8 +36,8 @@ import com.socialize.demo.R;
  */
 public class ActionBarActivity extends ListActivity {
 	
-	final String[] values = new String[] { "Default Action Bar", "Default Action Bar w Options", "Custom Action Bar", "Multiple Action Bar"};
-	final Class<?>[] activities = new Class<?>[] { DefaultActionBarActivity.class, DefaultActionBarManualActivity.class, CustomActionBarActivity.class, MultiActionBarActivity.class};
+	final String[] values = new String[] { "Default Action Bar", "Custom Action Bar", "Multiple Action Bar"};
+	final Class<?>[] activities = new Class<?>[] { DefaultActionBarActivity.class, CustomActionBarActivity.class, MultiActionBarActivity.class};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

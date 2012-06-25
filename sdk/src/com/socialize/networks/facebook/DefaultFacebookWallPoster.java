@@ -57,6 +57,7 @@ import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
+import com.socialize.util.ImageUtils;
 import com.socialize.util.StringUtils;
 
 /**
@@ -66,7 +67,7 @@ import com.socialize.util.StringUtils;
 public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	
 	private SocializeLogger logger;
-	private FacebookImageUtils facebookImageUtils;
+	private ImageUtils imageUtils;
 	private IBeanFactory<AsyncFacebookRunner> facebookRunnerFactory;
 	
 	@Override
@@ -211,7 +212,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		try {
 			Bundle params = new Bundle();
 			params.putString("caption", caption + ": " + link);
-			params.putByteArray("photo", facebookImageUtils.scaleImage(parent, photoUri));
+			params.putByteArray("photo", imageUtils.scaleImage(parent, photoUri));
 			
 			Facebook fb = newFacebook(appId);
 			
@@ -387,14 +388,6 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		this.logger = logger;
 	}
 
-//	public void setShareMessageBuilder(ShareMessageBuilder shareMessageBuilder) {
-//		this.shareMessageBuilder = shareMessageBuilder;
-//	}
-
-//	public void setAppUtils(AppUtils appUtils) {
-//		this.appUtils = appUtils;
-//	}
-
 	protected void onError(final Activity parent, final String msg, final Throwable e, final SocialNetworkPostListener listener) {
 		
 		if(logger != null) {
@@ -424,13 +417,11 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		}
 	}
 
-	public void setFacebookImageUtils(FacebookImageUtils facebookImageUtils) {
-		this.facebookImageUtils = facebookImageUtils;
+	public void setImageUtils(ImageUtils imageUtils) {
+		this.imageUtils = imageUtils;
 	}
 	
 	public void setFacebookRunnerFactory(IBeanFactory<AsyncFacebookRunner> facebookRunnerFactory) {
 		this.facebookRunnerFactory = facebookRunnerFactory;
 	}
-	
-	
 }

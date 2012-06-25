@@ -21,9 +21,13 @@
  */
 package com.socialize.networks.twitter;
 
+import java.io.IOException;
 import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.net.Uri;
 import com.socialize.annotations.Synchronous;
 import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.entity.Entity;
@@ -67,5 +71,9 @@ public interface TwitterUtilsProxy {
 	
 	public void get(Activity context, String resource, Map<String, Object> params, SocialNetworkPostListener listener);
 	
-	public void tweetPhoto(Activity context, PhotoTweet tweet, SocialNetworkListener listener);
+	public void tweetPhoto(Activity context, PhotoTweet tweet, SocialNetworkPostListener listener);
+	
+	public byte[] getImageForPost(Activity context, Uri imagePath) throws IOException;
+	
+	public byte[] getImageForPost(Activity context, Bitmap image, CompressFormat format) throws IOException;
 }

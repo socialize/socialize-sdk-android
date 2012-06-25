@@ -58,7 +58,7 @@ import com.socialize.view.BaseView;
  */
 public class ActionBarLayoutView extends BaseView {
 	
-	static final NumberFormat countFormat = new DecimalFormat("0.0K");
+	static final NumberFormat countFormat = new DecimalFormat("##0.0K");
 
 	private ActionBarButton commentButton;
 	private ActionBarButton likeButton;

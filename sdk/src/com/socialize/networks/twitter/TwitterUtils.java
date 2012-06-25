@@ -21,10 +21,14 @@
  */
 package com.socialize.networks.twitter;
 
+import java.io.IOException;
 import java.lang.reflect.Proxy;
 import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.net.Uri;
 import com.socialize.SocializeActionProxy;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.share.SocialNetworkShareListener;
@@ -288,5 +292,73 @@ public class TwitterUtils {
 				}
 			});			
 		}
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @param tweet
+	 * @param listener
+	 */
+	public static void tweetPhoto(final Activity context, final PhotoTweet tweet, final SocialNetworkPostListener listener) {
+		if(proxy.isLinked(context)) {
+			proxy.tweetPhoto(context, tweet, listener);
+		}
+		else {
+			proxy.link(context, new SocializeAuthListener() {
+				
+				@Override
+				public void onError(SocializeException error) {
+					if(listener != null) {
+						listener.onNetworkError(context, SocialNetwork.TWITTER, error);
+					}
+				}
+				
+				@Override
+				public void onCancel() {
+					if(listener != null) {
+						listener.onCancel();
+					}
+				}
+				
+				@Override
+				public void onAuthSuccess(SocializeSession session) {
+					proxy.tweetPhoto(context, tweet, listener);
+				}
+				
+				@Override
+				public void onAuthFail(SocializeException error) {
+					if(listener != null) {
+						listener.onNetworkError(context, SocialNetwork.TWITTER, error);
+					}
+				}
+			});			
+		}
+	}
+	
+	
+	
+	/**
+	 * Returns image data suitable for posting to twitter.
+	 * @param context The current context.
+	 * @param imagePath The path to the image.
+	 * @return A byte array containing the bytes to be posted.
+	 * @throws IOException
+	 */
+	public static byte[] getImageForPost(Activity context, Uri imagePath) throws IOException {
+		return proxy.getImageForPost(context, imagePath);
+	}
+	
+	
+	/**
+	 * Returns image data suitable for posting to twitter.
+	 * @param context The current context.
+	 * @param image The image to be compressed.
+	 * @param format The compression format to use (one of JPEG or PNG).
+	 * @return A byte array containing the bytes to be posted.
+	 * @throws IOException
+	 */
+	public static byte[] getImageForPost(Activity context, Bitmap image, CompressFormat format) throws IOException {
+		return proxy.getImageForPost(context, image, format);
 	}
 }
