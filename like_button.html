@@ -1,0 +1,263 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Custom Like Buttons &mdash; Socialize Android SDK v2.1 documentation</title>
+    
+    <link rel="stylesheet" href="static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     'v2.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="shortcut icon" href="static/favicon.ico"/>
+    <link rel="top" title="Socialize Android SDK v2.1 documentation" href="index.html?v=v2.1" />
+    <link rel="next" title="Facebook Integration" href="facebook.html?v=v2.1" />
+    <link rel="prev" title="Socialize Action Bar" href="action_bar.html?v=v2.1" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="facebook.html?v=v2.1" title="Facebook Integration"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="action_bar.html?v=v2.1" title="Socialize Action Bar"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html?v=v2.1">Socialize Android SDK v2.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+      <META HTTP-EQUIV="Pragma" CONTENT="no-cache"/>
+    <META HTTP-EQUIV="Expires" CONTENT="-1"/>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-9835027-5']);
+    _gaq.push(['_setDomainName', '.getsocialize.com']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+
+    <script type="text/javascript" charset="utf-8">
+      var is_ssl = ("https:" == document.location.protocol);
+      var asset_host = is_ssl ? "https://s3.amazonaws.com/getsatisfaction.com/" : "http://s3.amazonaws.com/getsatisfaction.com/";
+      document.write(unescape("%3Cscript src='" + asset_host + "javascripts/feedback-v2.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+
+    <script type="text/javascript" charset="utf-8">
+      var feedback_widget_options = {};
+      feedback_widget_options.display = "overlay";
+      feedback_widget_options.company = "socialize";
+      feedback_widget_options.placement = "right";
+      feedback_widget_options.color = "#222";
+      feedback_widget_options.style = "question";
+      feedback_widget_options.product = "socialize_android_sdk";
+      feedback_widget_options.limit = "3";
+      GSFN.feedback_widget.prototype.local_base_url = "http://support.getsocialize.com";
+      GSFN.feedback_widget.prototype.local_ssl_base_url = "http://support.getsocialize.com";
+      var feedback_widget = new GSFN.feedback_widget(feedback_widget_options);
+    </script><div class="section" id="custom-like-buttons">
+<h1>Custom Like Buttons<a class="headerlink" href="#custom-like-buttons" title="Permalink to this headline">¶</a></h1>
+<p>One of the most commonly used social features is a simple &#8220;like&#8221; button.  Socialize provides a way to quickly and easily create a customized
+like button that you can include in your app with minimal effort.</p>
+<p>The following step-by-step guide will show you how to include a basic like button with custom images and text.</p>
+<div class="section" id="how-to-guide">
+<h2>How-To Guide<a class="headerlink" href="#how-to-guide" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="step-1-setup-socialize">
+<h3>Step 1 - Setup Socialize<a class="headerlink" href="#step-1-setup-socialize" title="Permalink to this headline">¶</a></h3>
+<p>If you haven&#8217;t already, make sure you have successfully completed the <a class="reference internal" href="getting_started.html?v=v2.1"><em>Getting Started</em></a> process</p>
+</div>
+<div class="section" id="step-2-create-a-button-state-drawable">
+<h3>Step 2 - Create a Button State Drawable<a class="headerlink" href="#step-2-create-a-button-state-drawable" title="Permalink to this headline">¶</a></h3>
+<p>If you want your like button to match the look and feel of your app you can do this by creating a <a class="reference external" href="http://developer.android.com/guide/topics/resources/drawable-resource.html#StateList">StateListDrawable</a> as an XML configuration saved to <strong>res/drawable</strong></p>
+<img alt="images/state_list_drawable.png" src="images/state_list_drawable.png" />
+<div class="highlight-xml"><div class="highlight"><pre><span class="c">&lt;!-- </span>
+<span class="c">Create a state list drawable to represent the button states then</span>
+<span class="c">add to res/drawable/like_button_state.xml </span>
+<span class="c">--&gt;</span>
+<span class="nt">&lt;selector</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;item</span>
+        <span class="na">android:drawable=</span><span class="s">&quot;@drawable/like&quot;</span>
+        <span class="na">android:state_checked=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;item</span>
+        <span class="na">android:drawable=</span><span class="s">&quot;@drawable/unlike&quot;</span>
+        <span class="na">android:state_checked=</span><span class="s">&quot;false&quot;</span><span class="nt">/&gt;</span>    
+<span class="nt">&lt;/selector&gt;</span>
+</pre></div>
+</div>
+<p>This example is using two images from our demo app called &#8220;like&#8221; and &#8220;unlike&#8221;</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="48%" />
+<col width="52%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="images/like.png" class="first last" src="images/like.png" />
+</td>
+<td><img alt="images/unlike.png" class="first last" src="images/unlike.png" />
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="step-3-create-a-button">
+<h3>Step 3 - Create a Button<a class="headerlink" href="#step-3-create-a-button" title="Permalink to this headline">¶</a></h3>
+<p>The Socialize Like Button behavior can be applied to any type of <a class="reference external" href="http://developer.android.com/reference/android/widget/CompoundButton.html">CompoundButton</a>.  This includes <a class="reference external" href="http://developer.android.com/reference/android/widget/CheckBox.html">CheckBox</a>, <a class="reference external" href="http://developer.android.com/reference/android/widget/RadioButton.html">RadioButton</a>, <a class="reference external" href="http://developer.android.com/reference/android/widget/ToggleButton.html">ToggleButton</a> and <a class="reference external" href="http://developer.android.com/reference/android/widget/Switch.html">Switch</a> (API 11)</p>
+<p>To turn one of these button types into a Socialize Like Button, first define a button in your layout.  The following example uses a Checkbox:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="c">&lt;!-- Set the android:button attribute to your state list drawable --&gt;</span>
+<span class="nt">&lt;CheckBox</span> 
+    <span class="na">android:id=</span><span class="s">&quot;@+id/btnCustomCheckBoxLike&quot;</span>
+    <span class="na">android:layout_height=</span><span class="s">&quot;wrap_content&quot;</span>
+    <span class="na">android:layout_width=</span><span class="s">&quot;wrap_content&quot;</span>
+    <span class="na">android:layout_gravity=</span><span class="s">&quot;left|center_vertical&quot;</span> 
+    <span class="na">android:button=</span><span class="s">&quot;@drawable/like_button_state&quot;</span><span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-4-transform-the-button">
+<h3>Step 4 - Transform the Button<a class="headerlink" href="#step-4-transform-the-button" title="Permalink to this headline">¶</a></h3>
+<p>The final step in the process is to transform your button into a Socialize Like Button.</p>
+<p>In the <strong>onCreate</strong> method of your Activity simply call the <strong>makeLikeButton</strong> method on the LikeUtils instance.</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="nd">@Override</span>
+<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+	<span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+		
+	<span class="c1">// Define/obtain your entity</span>
+	<span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://getsocialize.com&quot;</span><span class="o">,</span> <span class="s">&quot;Socialize&quot;</span><span class="o">);</span>
+	
+	<span class="c1">// Get a reference to the button you want to transform</span>
+	<span class="c1">// This can be any type of CompoundButton (CheckBox, RadioButton, Switch, ToggleButton)</span>
+	
+	<span class="n">CheckBox</span> <span class="n">btnCustomCheckBoxLike</span> <span class="o">=</span> <span class="o">(</span><span class="n">CheckBox</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">btnCustomCheckBoxLike</span><span class="o">);</span>
+	
+	<span class="c1">// Make the button a socialize like button!</span>
+	<span class="n">LikeUtils</span><span class="o">.</span><span class="na">makeLikeButton</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">btnCustomCheckBoxLike</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="k">new</span> <span class="n">LikeButtonListener</span><span class="o">()</span> <span class="o">{</span>
+	
+		<span class="nd">@Override</span>
+		<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onClick</span><span class="o">(</span><span class="n">CompoundButton</span> <span class="n">button</span><span class="o">)</span> <span class="o">{</span>
+			<span class="c1">// You can use this callback to set any loading text or display a progress dialog</span>
+			<span class="n">button</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="s">&quot;--&quot;</span><span class="o">);</span>
+		<span class="o">}</span>
+	
+		<span class="nd">@Override</span>
+		<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCheckedChanged</span><span class="o">(</span><span class="n">CompoundButton</span> <span class="n">button</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">isChecked</span><span class="o">)</span> <span class="o">{</span>
+			<span class="c1">// The like was posted successfully, change the button to reflect the change</span>
+			<span class="k">if</span><span class="o">(</span><span class="n">isChecked</span><span class="o">)</span> <span class="o">{</span>
+				<span class="n">button</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="s">&quot;Unlike&quot;</span><span class="o">);</span>
+			<span class="o">}</span>
+			<span class="k">else</span> <span class="o">{</span>
+				<span class="n">button</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="s">&quot;Like&quot;</span><span class="o">);</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+	
+		<span class="nd">@Override</span>
+		<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">CompoundButton</span> <span class="n">button</span><span class="o">,</span> <span class="n">Exception</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+			<span class="c1">// An error occurred posting the like, we need to return the button to its original state</span>
+			<span class="n">Log</span><span class="o">.</span><span class="na">e</span><span class="o">(</span><span class="s">&quot;Socialize&quot;</span><span class="o">,</span> <span class="s">&quot;Error on like button&quot;</span><span class="o">,</span> <span class="n">error</span><span class="o">);</span>
+			<span class="k">if</span><span class="o">(</span><span class="n">button</span><span class="o">.</span><span class="na">isChecked</span><span class="o">())</span> <span class="o">{</span>
+				<span class="n">button</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="s">&quot;Unlike&quot;</span><span class="o">);</span>
+			<span class="o">}</span>
+			<span class="k">else</span> <span class="o">{</span>
+				<span class="n">button</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="s">&quot;Like&quot;</span><span class="o">);</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+	<span class="o">});</span>		
+<span class="o">}</span>
+</pre></div>
+</div>
+<script type="text/javascript">
+</script><p>This will result in a completely custom Socialize Like Button!</p>
+<img alt="images/like_button.png" src="images/like_button.png" />
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html?v=v2.1" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html?v=v2.1">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v2.1">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v2.1">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v2.1">Socialize Action Bar</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Custom Like Buttons</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-guide">How-To Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v2.1">Facebook Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v2.1">Twitter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook_adv.html?v=v2.1">Advanced Facebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter_adv.html?v=v2.1">Advanced Twitter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v2.1">SmartAlerts (Push Notifications)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v2.1">Entity Loaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v2.1">Socialize Android Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html?v=v2.1">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v2.1">Amazon AppStore URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v2.1">ProGuard Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v2.1">Troubleshooting &amp; Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v2.1">Change Log</a></li>
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="facebook.html?v=v2.1" title="Facebook Integration"
+             >next</a></li>
+        <li class="right" >
+          <a href="action_bar.html?v=v2.1" title="Socialize Action Bar"
+             >previous</a> |</li>
+        <li><a href="index.html?v=v2.1">Socialize Android SDK v2.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Socialize Inc.
+    </div>
+  </body>
+</html>

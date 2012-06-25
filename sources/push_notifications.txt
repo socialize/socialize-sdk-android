@@ -158,9 +158,27 @@ Fill out all the required information and submit, you should see a message like 
 
 .. image:: images/c2dm_signup1.png
 
-.. note:: Make sure you retain the Sender ID you used during this sign up process (it will most likely be your Google email address), you will need this in the next step. 
+.. note:: 
+	Make sure you retain the Sender ID you used during this sign up process (it will most likely be your Google email address), you will need this in the next step.
+	
+	You **may not receive an email from Google** despite the above message in which case you will need to retrieve your token manually in the next step. 
 
-Step 2: Add your C2DM sender ID to your **socialize.properties** file
+Step 2: Retrieve your C2DM token from Google
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Once you are registered for C2DM with Google you'll need to retrieve your C2DM token.  The simplest way to do this is by issuing a **curl** command 
+from your command prompt::
+
+	curl https://www.google.com/accounts/ClientLogin -d Email=<your sender ID> -d "Passwd=<your password>" -d accountType=HOSTED_OR_GOOGLE -d source=MDMServer -d service=ac2dm
+
+This will respond with a message that looks something like this::
+
+	SID=DQAAAMIAAACKP1yxVpldSaWB2ZvNnzZRQB4kk6MyMd...CR_BFwNIvjbwSSJHSe6tK5ix5IKQgOCZcD4AuMluH5C
+	LSID=DQAAAMMAAADranxreScVQXuhmvY-fHDb4IlRgz09u...z-UrcSZPHNYr_FhRZ9FM3r6yyN86hZs-uWKOxMaC51H
+	Auth=DQAAAMUAAABYV6-h9KWj9IrqIn4plD2kjtr8zvf5S...Kx81M9x0QCC_4Lbl5a13E8vx8kdgoEYzF6JpAiWykOY
+	
+The C2DM token you need is the alpha-numeric sequence found under the **Auth** key.
+
+Step 3: Add your C2DM sender ID to your **socialize.properties** file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The Socialize SDK needs to know who will be sending SmartAlerts to the device.  Simply add your C2DM Sender ID to your **socialize.properties** file 
 under the key **socialize.c2dm.sender.id**
@@ -168,7 +186,7 @@ under the key **socialize.c2dm.sender.id**
 .. literalinclude:: snippets/props_c2dm.txt
    :language: properties
 
-Step 3: Add your C2DM token to the Socialize website
+Step 4: Add your C2DM token to the Socialize website
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Once you receive your C2DM token from Google, simply add it to your account on the getsocialize.com website:
 
