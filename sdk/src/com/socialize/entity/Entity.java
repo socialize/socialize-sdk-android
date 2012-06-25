@@ -23,6 +23,7 @@ package com.socialize.entity;
 
 import java.io.Serializable;
 import com.socialize.util.StringUtils;
+import android.util.Log;
 
 
 /**
@@ -39,6 +40,11 @@ public class Entity extends SocializeObject implements Serializable {
 	private UserEntityStats userEntityStats;
 	
 	private String metaData;
+
+	private String commentString;
+	private String likeTextString;
+	private String linkString;
+	private String sharingImageFilePath;
 	
 	public String getKey() {
 		return key;
@@ -104,5 +110,40 @@ public class Entity extends SocializeObject implements Serializable {
 	@Override
 	public String toString() {
 		return getDisplayName();
+	}
+
+
+	public String getCommentString() {
+		return commentString;
+	}
+
+	public void setCommentString(String str) {
+		commentString = str;
+	}
+
+	public String getLikeString() {
+		return likeTextString;
+	}
+
+	public void setLikeString (String str) {
+		likeTextString = str;
+	}
+
+	public String getLinkString() {
+		return linkString;
+	}
+
+	public void setLinkString (String str) {
+		linkString = str;
+	}
+
+	public String getSharingImageFilePath() {
+		Log.v("Entity", "Entity.sharingImageFilePath setter = " + sharingImageFilePath);
+		return sharingImageFilePath;
+	}
+
+	public void setSharingImageFilePath (String str) {
+		sharingImageFilePath = str;
+		Log.v("Entity", "Entity.sharingImageFilePath setter = " + sharingImageFilePath);
 	}
 }
