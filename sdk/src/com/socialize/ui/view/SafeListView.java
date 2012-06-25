@@ -1,7 +1,9 @@
 package com.socialize.ui.view;
 
+import com.socialize.log.SocializeLogger;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ListView;
 
 
@@ -26,7 +28,7 @@ public class SafeListView extends ListView {
 		}
 		catch (Exception e) {
 			// Don't crash
-			e.printStackTrace();
+			Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 		}
 	}
 }

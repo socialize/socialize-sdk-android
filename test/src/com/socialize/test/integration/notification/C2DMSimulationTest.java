@@ -117,6 +117,9 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 
 				@Override
 				public void onInit(Context context, IOCContainer container) {
+					
+					addResult(10, "init");
+					
 					ProxyObject<Launcher> launcherProxy = container.getProxy(getLauncherBeanName());
 
 					launcherProxy.setDelegate(new BaseLauncher() {
@@ -130,7 +133,6 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 						
 						@Override
 						public boolean launch(Activity context, Bundle data) {
-							// TODO Add assertions
 							addResult(4, "launch");
 							launchLock.countDown();
 							return true;
@@ -138,6 +140,13 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 					});
 				}
 			});
+			
+			// Make sure the init listener is triggered.
+			Socialize.init(getContext());
+			
+			String init = getResult(10);
+			assertNotNull(init);
+			
 		}
 		
 		JSONObject json = getNotificationMessagePacket();

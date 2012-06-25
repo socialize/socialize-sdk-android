@@ -29,9 +29,9 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
 import com.socialize.annotations.Synchronous;
+import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.entity.Entity;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
 
 /**
@@ -56,7 +56,7 @@ public interface FacebookUtilsProxy {
 	@Synchronous
 	public String getAccessToken(Context context);
 	
-	public void postEntity(Activity context, Entity entity, String text, SocialNetworkListener listener);
+	public void postEntity(Activity context, Entity entity, String text, SocialNetworkShareListener listener);
 	
 	public void post(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener);
 	

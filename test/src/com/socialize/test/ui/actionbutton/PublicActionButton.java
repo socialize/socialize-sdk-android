@@ -23,7 +23,6 @@ package com.socialize.test.ui.actionbutton;
 
 import android.content.Context;
 import android.util.AttributeSet;
-
 import com.socialize.entity.SocializeAction;
 import com.socialize.ui.actionbutton.ActionButtonConfig;
 import com.socialize.ui.actionbutton.SocializeActionButton;

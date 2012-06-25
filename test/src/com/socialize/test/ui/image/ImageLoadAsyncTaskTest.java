@@ -23,9 +23,7 @@ package com.socialize.test.ui.image;
 
 import java.util.Map;
 import java.util.Queue;
-
 import android.graphics.Bitmap;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.test.ui.SocializeUIActivityTest;

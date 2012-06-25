@@ -22,7 +22,6 @@
 package com.socialize.test.ui.facebook;
 
 import android.view.View.OnClickListener;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.listener.SocializeAuthListener;

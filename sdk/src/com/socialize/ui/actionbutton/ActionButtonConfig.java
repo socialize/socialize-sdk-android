@@ -29,8 +29,10 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 
+import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.util.Colors;
 import com.socialize.util.StringUtils;
@@ -303,7 +305,7 @@ public class ActionButtonConfig {
 			} 
 			catch (Exception e) {
 				// No such resource
-				e.printStackTrace();
+				Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 			}
 		}
 		else {
@@ -319,7 +321,7 @@ public class ActionButtonConfig {
 			} 
 			catch (Exception e) {
 				// No such resource
-				e.printStackTrace();
+				Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 			}
 		}
 		
@@ -329,7 +331,7 @@ public class ActionButtonConfig {
 			} 
 			catch (Exception e) {
 				// No such resource
-				e.printStackTrace();
+				Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 			}
 		}
 		
@@ -339,7 +341,7 @@ public class ActionButtonConfig {
 			} 
 			catch (Exception e) {
 				// No such resource
-				e.printStackTrace();
+				Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 			}
 		}
 		
@@ -349,7 +351,7 @@ public class ActionButtonConfig {
 				try {
 					backgroundColor = Colors.parseColor(color);
 				} catch (Exception e) {
-					e.printStackTrace();
+					Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 				}
 			}
 		}
@@ -371,8 +373,8 @@ public class ActionButtonConfig {
 					SocialNetwork sn = SocialNetwork.valueOf(network.trim().toUpperCase());
 					networks.add(sn);
 				} 
-				catch (Exception ignore) {
-					ignore.printStackTrace();
+				catch (Exception error) {
+					Log.e(SocializeLogger.LOG_TAG, error.getMessage(), error);
 				}
 			}
 			

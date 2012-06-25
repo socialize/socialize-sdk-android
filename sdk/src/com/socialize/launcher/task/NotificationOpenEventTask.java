@@ -24,6 +24,7 @@ package com.socialize.launcher.task;
 import org.json.JSONObject;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.event.EventListener;
 import com.socialize.api.event.EventSystem;
@@ -110,7 +111,7 @@ public class NotificationOpenEventTask implements LaunchTask {
 			logger.error("Error recording notification open event", e);
 		}
 		else {
-			e.printStackTrace();
+			Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 		}
 	}
 	

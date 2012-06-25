@@ -6,12 +6,51 @@
     android:background="#000000"
     android:orientation="vertical"
     android:padding="8dip">
+    
+    <TextView 
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Manually Configured Like Button"
+		android:textSize="12dp"
+		android:textColor="#ffffff"
+		android:layout_margin="6dp"/>
+    
+	<View
+	    android:layout_width="fill_parent"
+	    android:layout_height="1dp"
+	    android:background="@android:color/darker_gray"
+	    android:layout_margin="6dp"/>     
 
     <Button 
         android:id="@+id/btnLike"
         android:layout_width="260dip"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:text="--"
+        android:layout_margin="6dp"/>
+    
+    
+    <TextView 
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Auto Configured from CheckBox with Custom Image"
+		android:textSize="12dp"
+		android:textColor="#ffffff"
+		android:layout_margin="6dp"/>    
+    
+	<View
+	    android:layout_width="fill_parent"
+	    android:layout_height="1dp"
+	    android:background="@android:color/darker_gray"
+	    android:layout_margin="6dp"/>  
+    
+    <CheckBox 
+        android:id="@+id/btnCustomCheckBoxLike"
+        android:layout_width="260dip"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|center_vertical" 
+        android:button="@drawable/like_button_state" 
+        android:layout_margin="6dp"
         android:text="--"/>
-      
+       
 </LinearLayout>

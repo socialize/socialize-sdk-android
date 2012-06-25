@@ -50,15 +50,14 @@
 		<antcall target="clean"/>
 		<antcall target="jar"/>
 		<antcall target="package"/>
-		
-		<!-- clean up -->
-		<delete dir="libs" includes="**/*.jar" verbose="true"/>
 	</target>
 	
 	<target name="jar" depends="compile-for-build, -jar"/>
 	<target name="jar-instrumented" depends="compile-instrumented">
 		<property name="build.path" value="build-instrumented"/>
 		<antcall target="-jar"/>
+		<!-- clean up -->
+		<delete dir="libs" includes="**/*.jar" verbose="true"/>
 	</target>
 
 	<target name="-jar">

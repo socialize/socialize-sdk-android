@@ -24,6 +24,8 @@ package com.socialize.notifications;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+import com.socialize.log.SocializeLogger;
 import com.socialize.util.StringUtils;
 
 /**
@@ -91,7 +93,7 @@ public abstract class BaseC2DMReceiver extends IntentService {
 			} 
 			catch (Exception e) {
 				// TODO: Handle error
-				e.printStackTrace();
+				Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 			}
 			finally {
 				// Release the power lock, so phone can get back to sleep.

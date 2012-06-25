@@ -24,6 +24,10 @@ package com.socialize.api.action.like;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.CompoundButton;
+import com.socialize.LikeUtils;
 import com.socialize.ShareUtils;
 import com.socialize.UserUtils;
 import com.socialize.api.SocializeSession;
@@ -33,11 +37,13 @@ import com.socialize.entity.Like;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.like.IsLikedListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.ui.actionbutton.LikeButtonListener;
 import com.socialize.ui.auth.AuthDialogListener;
 import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.auth.IAuthDialogFactory;
@@ -62,47 +68,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 	 */
 	@Override
 	public void like(Activity context, final Entity entity, final LikeAddListener listener) {
-		
 		like(context, entity, getUserLikeOptions(context), listener);
-//
-//		final SocializeSession session = getSocialize().getSession();
-//		final LikeOptions likeOptions = ;
-//
-//		if(isDisplayAuthDialog(context)) {
-//			authDialogFactory.show(context, new AuthDialogListener() {
-//				@Override
-//				public void onShow(Dialog dialog, AuthPanelView dialogView) {}
-//
-//				@Override
-//				public void onCancel(Dialog dialog) {
-//					if(listener != null) {
-//						listener.onCancel();
-//					}
-//				}
-//
-//				@Override
-//				public void onSkipAuth(Activity context, Dialog dialog) {
-//					dialog.dismiss();
-//					doLikeWithoutShare(context, session, entity, listener);
-//				}
-//
-//				@Override
-//				public void onError(Activity context, Dialog dialog, Exception error) {
-//					dialog.dismiss();
-//					if(listener != null) {
-//						listener.onError(SocializeException.wrap(error));
-//					}
-//				}
-//				@Override
-//				public void onAuthenticate(Activity context, Dialog dialog, SocialNetwork network) {
-//					dialog.dismiss();
-//					doLikeWithShare(context, session, entity, likeOptions, listener);
-//				}
-//			});
-//		}
-//		else {
-//			doLikeWithShare(context, session, entity, likeOptions, listener);
-//		}
 	}
 
 	@Override
@@ -342,6 +308,92 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 
 	public void setLikeSystem(LikeSystem likeSystem) {
 		this.likeSystem = likeSystem;
+	}
+
+	@Override
+	public void makeLikeButton(final Activity context, final CompoundButton button, final Entity entity, final LikeButtonListener listener) {
+		
+		if(listener != null) {
+			// Clear any current listener
+			button.setOnCheckedChangeListener(null);
+		}
+		
+		// Use onclick because we don't want to trigger the checked listener when we change state
+		button.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				if(listener != null) {
+					listener.onClick(button);
+				}
+				
+				if(button.isChecked()) {
+					LikeUtils.like(context, entity, new LikeAddListener() {
+						@Override
+						public void onError(SocializeException error) {
+							button.setChecked(false);
+							if(listener != null) {
+								listener.onError(button, error);
+							}
+						}
+						
+						@Override
+						public void onCreate(Like result) {
+							if(listener != null) {
+								listener.onCheckedChanged(button, true);
+							}
+						}
+
+						@Override
+						public void onCancel() {
+							button.setChecked(false);
+							if(listener != null) {
+								listener.onCheckedChanged(button, false);
+							}
+						}
+					});
+				}
+				else {
+					LikeUtils.unlike(context, entity.getKey(), new LikeDeleteListener() {
+						@Override
+						public void onError(SocializeException error) {
+							button.setChecked(true);
+							if(listener != null) {
+								listener.onError(button, error);
+							}
+						}
+						
+						@Override
+						public void onDelete() {
+							button.setChecked(false);
+							if(listener != null) {
+								listener.onCheckedChanged(button, false);
+							}
+						}
+					});
+				}
+			}
+		});
+		
+		// Get the initial state
+		LikeUtils.isLiked(context, entity.getKey(), new IsLikedListener() {
+			@Override
+			public void onNotLiked() {
+				button.setChecked(false);
+				if(listener != null) {
+					listener.onCheckedChanged(button, false);
+				}
+			}
+			
+			@Override
+			public void onLiked(Like like) {
+				button.setChecked(true);
+				if(listener != null) {
+					listener.onCheckedChanged(button, true);
+				}
+			}
+		});
 	}
 }
 

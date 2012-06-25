@@ -1633,15 +1633,16 @@
 	
 	<bean id="facebookUtils" class="com.socialize.networks.facebook.FacebookUtilsImpl">
 		<property name="userSystem" ref="userSystem"/>
-		<property name="shareSystem" ref="shareSystem"/>
 		<property name="facebookWallPoster" ref="facebookWallPoster"/>
-		<property name="facebookImageUtils" ref="facebookImageUtils"/>
+		<property name="imageUtils" ref="imageUtils"/>
 	</bean>
 	
 	<bean id="twitterUtils" class="com.socialize.networks.twitter.TwitterUtilsImpl">
 		<property name="userSystem" ref="userSystem"/>
-		<property name="shareSystem" ref="shareSystem"/>
 		<property name="config" ref="config"/>
+		<property name="httpRequestProvider" ref="httpRequestProvider"/>
+		<property name="requestSigner" ref="oauthSigner"/>
+		<property name="imageUtils" ref="imageUtils"/>
 	</bean>	
 
 	<bean id="locationUtils" class="com.socialize.location.SocializeLocationUtils">
@@ -1651,5 +1652,14 @@
 	<bean id="configUtils" class="com.socialize.config.SocializeConfigUtils">
 		<property name="config" ref="config"/>
 	</bean>
+	
+	<bean id="socializeTools" class="com.socialize.tools.SocializeToolsImpl">
+		<property name="imageLoader" ref="imageLoader"/>
+		<property name="geoUtils" ref="geoUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
+		<property name="keyboardUtils" ref="keyboardUtils"/>
+		<property name="ioUtils" ref="ioUtils"/>
+		<property name="appUtils" ref="appUtils"/>
+	</bean>	
 
 </beans>

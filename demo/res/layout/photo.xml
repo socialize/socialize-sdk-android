@@ -22,7 +22,7 @@
 	        android:id="@+id/btnPostPhoto"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="Post to Facebook"
+	        android:text="Post Photo..."
 	        android:visibility="gone"/>  
 	        
 	</LinearLayout>        

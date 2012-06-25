@@ -3,6 +3,7 @@ package com.socialize.ui.comment;
 import java.util.List;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -496,7 +497,7 @@ public class CommentListView extends BaseView {
 						logger.error("Error retrieving subscription info", error);
 					}
 					else {
-						error.printStackTrace();
+						Log.e(SocializeLogger.LOG_TAG, error.getMessage(), error);
 					}
 					
 					if(commentEntrySliderItem != null) {
@@ -544,7 +545,7 @@ public class CommentListView extends BaseView {
 					logger.error("Error retrieving comments", error);
 				}
 				else {
-					error.printStackTrace();
+					Log.e(SocializeLogger.LOG_TAG, error.getMessage(), error);
 				}
 
 				loading = false;

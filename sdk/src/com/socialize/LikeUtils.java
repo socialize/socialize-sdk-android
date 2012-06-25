@@ -24,6 +24,7 @@ package com.socialize;
 import java.lang.reflect.Proxy;
 import android.app.Activity;
 import android.content.Context;
+import android.widget.CompoundButton;
 import com.socialize.api.action.like.LikeOptions;
 import com.socialize.api.action.like.LikeUtilsProxy;
 import com.socialize.entity.Entity;
@@ -34,6 +35,7 @@ import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.ui.actionbutton.LikeButtonListener;
 
 
 /**
@@ -147,4 +149,15 @@ public class LikeUtils {
 	public static void getLikesByEntity (Activity context, String entityKey, int start, int end, LikeListListener listener) {
 		proxy.getLikesByEntity(context, entityKey, start, end, listener);
 	}	
+	
+	/**
+	 * Turns a regular CompoundButton (CheckBox, ToggleButton etc) into a Socialize Like button.
+	 * @param context The current context.
+	 * @param button The button to be converted.
+	 * @param entity The entity that is to be liked.
+	 * @param listener A Listener to handle changes in button state.
+	 */
+	public static  void makeLikeButton(Activity context, CompoundButton button, Entity entity, LikeButtonListener listener) {
+		proxy.makeLikeButton(context, button, entity, listener);
+	}
 }

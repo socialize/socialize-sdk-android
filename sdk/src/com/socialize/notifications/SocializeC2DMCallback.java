@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import android.app.Notification;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.user.UserSystem;
 import com.socialize.config.SocializeConfig;
@@ -211,10 +212,15 @@ public class SocializeC2DMCallback implements C2DMCallback {
 			}	
 		}
 		else {
-			if(logger != null && logger.isDebugEnabled()) {
-				logger.debug("Notification for user [" +
-						user.getId() +
-						"] ignored.  Notifications are disabled for this user");
+			if(settings == null) {
+				handleError("No user settings found in session!");
+			}
+			else {
+				if(logger != null && logger.isDebugEnabled()) {
+					logger.debug("Notification for user [" +
+							user.getId() +
+							"] ignored.  Notifications are disabled for this user");
+				}
 			}
 		}
 	}
@@ -277,8 +283,7 @@ public class SocializeC2DMCallback implements C2DMCallback {
 			logger.error(msg, e);
 		}
 		else {
-			System.err.println(msg);
-			e.printStackTrace();
+			Log.e(SocializeLogger.LOG_TAG, msg, e);
 		}	
 	}
 

@@ -23,6 +23,7 @@ package com.socialize.ui.actionbutton;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -193,7 +194,7 @@ public class ActionButtonLayoutView<A extends SocializeAction> extends BaseView 
 					"]", e);
 		}
 		else {
-			e.printStackTrace();
+			Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 		}
 	}
 	

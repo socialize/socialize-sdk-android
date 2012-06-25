@@ -21,8 +21,11 @@
  */
 package com.socialize.ui.actionbar;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.Gravity;
 import com.socialize.CommentUtils;
 import com.socialize.EntityUtils;
@@ -54,6 +57,8 @@ import com.socialize.view.BaseView;
  * @author Jason Polites
  */
 public class ActionBarLayoutView extends BaseView {
+	
+	static final NumberFormat countFormat = new DecimalFormat("##0.0K");
 
 	private ActionBarButton commentButton;
 	private ActionBarButton likeButton;
@@ -77,7 +82,6 @@ public class ActionBarLayoutView extends BaseView {
 	private IBeanFactory<ActionBarItem> itemFactory;
 	
 	private ProgressDialogFactory progressDialogFactory;
-//	private AuthDialogFactory authDialogFactory;
 	
 	private DisplayUtils displayUtils;
 	
@@ -290,7 +294,7 @@ public class ActionBarLayoutView extends BaseView {
 			ViewUtils.view(getActivity(), entity, new ViewAddListener() {
 				@Override
 				public void onError(SocializeException error) {
-					error.printStackTrace();
+					Log.e(SocializeLogger.LOG_TAG, error.getMessage(), error);
 					getLike(entity.getKey());
 				}
 				
@@ -494,14 +498,19 @@ public class ActionBarLayoutView extends BaseView {
 	}
 	
 	protected String getCountText(Integer value) {
-		String viewText = "";
-		int iVal = value.intValue();
-		if(iVal > 999) {
-			viewText = "999+";
+		String viewText = "0";
+		
+		if(value != null) {
+			int iVal = value.intValue();
+			if(iVal >= 1000) {
+				float fVal = (float) iVal / 1000.0f;
+				viewText = countFormat.format(fVal);
+			}
+			else {
+				viewText = value.toString();
+			}
 		}
-		else {
-			viewText = value.toString();
-		}
+
 		return viewText;
 	}
 	
@@ -510,7 +519,7 @@ public class ActionBarLayoutView extends BaseView {
 			logger.error(msg, error);
 		}
 		else {
-			error.printStackTrace();	
+			Log.e(SocializeLogger.LOG_TAG, msg, error);
 		}
 	}
 	

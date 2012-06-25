@@ -28,6 +28,7 @@ import com.socialize.auth.DefaultUserProviderCredentials;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.config.SocializeConfig;
+import com.socialize.ui.profile.UserSettings;
 
 /**
  * @author Jason Polites
@@ -62,6 +63,7 @@ public class DefaultSocializeSessionFactory implements SocializeSessionFactory {
 		SocializeSessionImpl session = SocializeSessionImpl.getInstance();
 		session.setConsumerKey(key);
 		session.setConsumerSecret(secret);
+		session.setUserSettings(new UserSettings());
 		
 		AuthProviderInfo authProviderInfo = userProviderCredentials.getAuthProviderInfo();
 		

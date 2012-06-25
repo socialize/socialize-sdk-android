@@ -25,6 +25,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import com.socialize.CommentUtils;
@@ -37,6 +38,7 @@ import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.user.UserGetListener;
+import com.socialize.log.SocializeLogger;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.image.ImageLoadListener;
 import com.socialize.ui.image.ImageLoadRequest;
@@ -206,7 +208,7 @@ public class ActionDetailLayoutView extends BaseView {
 			imageLoader.loadImageByUrl(profilePicData, new ImageLoadListener() {
 				@Override
 				public void onImageLoadFail(ImageLoadRequest request, Exception error) {
-					error.printStackTrace();
+					Log.e(SocializeLogger.LOG_TAG, error.getMessage(), error);
 					userIcon.post(new Runnable() {
 						public void run() {
 							userIcon.setImageDrawable(defaultProfilePicture);

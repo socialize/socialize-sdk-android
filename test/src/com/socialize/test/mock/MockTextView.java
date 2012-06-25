@@ -7,7 +7,6 @@ public class MockTextView extends TextView {
 
 	public MockTextView(Context context) {
 		super(context);
-		// TODO Auto-generated constructor stub
 	}
 
 }

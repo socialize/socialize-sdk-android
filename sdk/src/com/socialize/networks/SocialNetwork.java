@@ -30,7 +30,7 @@ import com.socialize.api.action.ShareType;
 public enum SocialNetwork {
 	
 	FACEBOOK (true),
-	TWITTER (false);
+	TWITTER (true);
 	
 	private final boolean localPropagation;   
 	

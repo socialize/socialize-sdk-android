@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
@@ -56,6 +57,7 @@ import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
+import com.socialize.util.ImageUtils;
 import com.socialize.util.StringUtils;
 
 /**
@@ -65,7 +67,7 @@ import com.socialize.util.StringUtils;
 public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	
 	private SocializeLogger logger;
-	private FacebookImageUtils facebookImageUtils;
+	private ImageUtils imageUtils;
 	private IBeanFactory<AsyncFacebookRunner> facebookRunnerFactory;
 	
 	@Override
@@ -151,13 +153,18 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		Set<Entry<String, Object>> entries = postData.getPostValues().entrySet();
 		
 		for (Entry<String, Object> entry : entries) {
-			Object value = entry.getValue();
-			
-			if(value instanceof byte[]) {
-				bundle.putByteArray(entry.getKey(), (byte[]) value);
-			}
-			else {
-				bundle.putString(entry.getKey(), value.toString());
+			if(entry != null) {
+				Object value = entry.getValue();
+				String key = entry.getKey();
+				
+				if(key != null && value != null) {
+					if(value instanceof byte[]) {
+						bundle.putByteArray(entry.getKey(), (byte[]) value);
+					}
+					else {
+						bundle.putString(entry.getKey(), value.toString());
+					}
+				}
 			}
 		}
 		
@@ -205,7 +212,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		try {
 			Bundle params = new Bundle();
 			params.putString("caption", caption + ": " + link);
-			params.putByteArray("photo", facebookImageUtils.scaleImage(parent, photoUri));
+			params.putByteArray("photo", imageUtils.scaleImage(parent, photoUri));
 			
 			Facebook fb = newFacebook(appId);
 			
@@ -228,7 +235,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 				logger.error("Unable to scale image for upload", e);
 			}
 			else {
-				e.printStackTrace();
+				Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 			}
 		}
 	}
@@ -381,14 +388,6 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		this.logger = logger;
 	}
 
-//	public void setShareMessageBuilder(ShareMessageBuilder shareMessageBuilder) {
-//		this.shareMessageBuilder = shareMessageBuilder;
-//	}
-
-//	public void setAppUtils(AppUtils appUtils) {
-//		this.appUtils = appUtils;
-//	}
-
 	protected void onError(final Activity parent, final String msg, final Throwable e, final SocialNetworkPostListener listener) {
 		
 		if(logger != null) {
@@ -400,9 +399,11 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			}
 		}
 		else {
-			System.err.println(msg);
 			if(e != null) {
-				e.printStackTrace();
+				Log.e(SocializeLogger.LOG_TAG, msg, e);
+			}
+			else {
+				System.err.println(msg);
 			}
 		}
 		
@@ -416,13 +417,11 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		}
 	}
 
-	public void setFacebookImageUtils(FacebookImageUtils facebookImageUtils) {
-		this.facebookImageUtils = facebookImageUtils;
+	public void setImageUtils(ImageUtils imageUtils) {
+		this.imageUtils = imageUtils;
 	}
 	
 	public void setFacebookRunnerFactory(IBeanFactory<AsyncFacebookRunner> facebookRunnerFactory) {
 		this.facebookRunnerFactory = facebookRunnerFactory;
 	}
-	
-	
 }

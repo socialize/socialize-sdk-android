@@ -23,17 +23,11 @@ package com.socialize.test;
 
 import java.util.List;
 import android.test.ActivityInstrumentationTestCase2;
-
-import com.socialize.Socialize;
-import com.socialize.SocializeAccess;
-import com.socialize.ioc.SocializeIOC;
 import com.socialize.sample.EmptyActivity;
-import com.socialize.test.ui.ResultHolder;
 import com.socialize.test.ui.util.TestUtils;
 
 public abstract class SocializeActivityTest extends ActivityInstrumentationTestCase2<EmptyActivity> {
 	
-	protected final ResultHolder holder = new ResultHolder();
 	
 	public SocializeActivityTest() {
 		super("com.socialize.sample", EmptyActivity.class);
@@ -42,41 +36,37 @@ public abstract class SocializeActivityTest extends ActivityInstrumentationTestC
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		Socialize.getSocialize().destroy(true);
-		SocializeIOC.clearStubs();
-		SocializeAccess.revertProxies();
-		holder.setUp();
+		TestUtils.setUp(this);
 	}
 	
 	@Override
 	protected void tearDown() throws Exception {
-		holder.clear();
-//		TestUtils.waitForIdleSync(this, 5000);
+		TestUtils.tearDown();
 		super.tearDown();
 	}
 	
 	protected void clearResults() {
-		holder.clear();
+		TestUtils.clear();
 	}
 
 	protected void addResult(Object obj) {
-		holder.addResult(obj);
+		TestUtils.addResult(obj);
 	}
 	
 	protected void addResult(int index, Object obj) {
-		holder.addResult(index, obj);
+		TestUtils.addResult(index, obj);
 	}
 	
 	protected <T extends Object> T getResult(int index) {
-		return holder.getResult(index);
+		return TestUtils.getResult(index);
 	}
 	
 	protected List<Object> getAllResults() {
-		return holder.getAllResults();
+		return TestUtils.getAllResults();
 	}
 	
 	protected <T extends Object> T getNextResult() {
-		return holder.getNextResult();
+		return TestUtils.getNextResult();
 	}
 	
 	protected void sleep(long time) {

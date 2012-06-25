@@ -22,9 +22,12 @@
 package com.socialize.demo.implementations.like;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import com.socialize.LikeUtils;
 import com.socialize.demo.DemoActivity;
 import com.socialize.demo.R;
@@ -33,6 +36,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.like.IsLikedListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
+import com.socialize.ui.actionbutton.LikeButtonListener;
 import com.socialize.ui.dialog.SafeProgressDialog;
 
 
@@ -49,8 +53,12 @@ public class LikeButtonsActivity extends DemoActivity {
 		
 		final Button btnLike = (Button) findViewById(R.id.btnLike);
 		
+		final CheckBox btnCustomCheckBoxLike = (CheckBox) findViewById(R.id.btnCustomCheckBoxLike);
+		
 		final SafeProgressDialog progress = SafeProgressDialog.show(this);
 		progress.setCancelable(false);
+		
+		makeLikeButton(btnCustomCheckBoxLike);
 		
 		// Check if we are liked
 		LikeUtils.isLiked(this, entity.getKey(), new IsLikedListener() {
@@ -109,6 +117,40 @@ public class LikeButtonsActivity extends DemoActivity {
 							btnLike.setText("Like");
 						}
 					});
+				}
+			}
+		});
+		
+		
+	}
+	
+	protected void makeLikeButton(CompoundButton button) {
+
+		LikeUtils.makeLikeButton(this, button, entity, new LikeButtonListener() {
+
+			@Override
+			public void onClick(CompoundButton button) {
+				button.setText("--");
+			}
+
+			@Override
+			public void onCheckedChanged(CompoundButton button, boolean isChecked) {
+				if(isChecked) {
+					button.setText("Unlike");
+				}
+				else {
+					button.setText("Like");
+				}
+			}
+
+			@Override
+			public void onError(CompoundButton button, Exception error) {
+				Log.e("Socialize", "Error on like button", error);
+				if(button.isChecked()) {
+					button.setText("Unlike");
+				}
+				else {
+					button.setText("Like");
 				}
 			}
 		});
