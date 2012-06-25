@@ -40,6 +40,16 @@ public class Entity extends SocializeObject implements Serializable {
 	
 	private String metaData;
 	
+	public Entity() {
+		super();
+	}
+	
+	public Entity(String key, String name) {
+		super();
+		this.key = key;
+		this.name = name;
+	}
+	
 	public String getKey() {
 		return key;
 	}
@@ -96,9 +106,7 @@ public class Entity extends SocializeObject implements Serializable {
 	}
 	
 	public static Entity newInstance(String key, String name) {
-		Entity e = new Entity();
-		e.setKey(key);
-		e.setName(name);
+		Entity e = new Entity(key, name);
 		return e;
 	}
 	@Override

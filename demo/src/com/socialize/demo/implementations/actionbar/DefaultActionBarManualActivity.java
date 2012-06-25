@@ -21,40 +21,44 @@
  */
 package com.socialize.demo.implementations.actionbar;
 
-import android.app.ListActivity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import com.socialize.ActionBarUtils;
+import com.socialize.demo.DemoActivity;
 import com.socialize.demo.R;
+import com.socialize.demo.snippets.ActionBarReload.MyActionBarListener;
+import com.socialize.ui.actionbar.ActionBarListener;
+import com.socialize.ui.actionbar.ActionBarOptions;
+import com.socialize.ui.actionbar.ActionBarView;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class ActionBarActivity extends ListActivity {
-	
-	final String[] values = new String[] { "Default Action Bar", "Default Action Bar w Options", "Custom Action Bar", "Multiple Action Bar"};
-	final Class<?>[] activities = new Class<?>[] { DefaultActionBarActivity.class, DefaultActionBarManualActivity.class, CustomActionBarActivity.class, MultiActionBarActivity.class};
+public class DefaultActionBarManualActivity extends DemoActivity {
+
+	private ActionBarView actionBar;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.demo_list);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
-		setListAdapter(adapter);
-	}
-	
+		
+		ActionBarListener listener = new ActionBarListener() {
+			
+			@Override
+			public void onCreate(ActionBarView view) {
+				actionBar = view;
+			}
+		}; 
 
-	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		Class<?> activityClass = activities[position];
-		if(activityClass != null) {
-			Intent intent = new Intent(this, activityClass);
-			startActivity(intent);
-		}
-	}	
-	
+		ActionBarOptions options = new ActionBarOptions(); 
+
+		options.setAddScrollView(true); 
+
+		View actionBar = ActionBarUtils.showActionBar(this, R.layout.actionbar, entity, options, listener); 		
+		
+		setContentView(actionBar);
+	}
+
 }

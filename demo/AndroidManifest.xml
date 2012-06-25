@@ -104,6 +104,7 @@
         <!-- ActionBar -->
         <activity android:name=".implementations.actionbar.ActionBarActivity"/>
         <activity android:name=".implementations.actionbar.DefaultActionBarActivity"/>
+        <activity android:name=".implementations.actionbar.DefaultActionBarManualActivity"/>
         <activity android:name=".implementations.actionbar.CustomActionBarActivity"/>
         <activity android:name=".implementations.actionbar.MultiActionBarActivity"/>
         

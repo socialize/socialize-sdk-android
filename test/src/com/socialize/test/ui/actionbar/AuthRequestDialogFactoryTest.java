@@ -23,6 +23,7 @@ package com.socialize.test.ui.actionbar;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,14 +33,21 @@ import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.entity.SocializeEntityUtils;
 import com.socialize.api.action.like.LikeOptions;
 import com.socialize.api.action.like.LikeSystem;
+import com.socialize.api.action.view.SocializeViewUtils;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
+import com.socialize.entity.EntityStatsImpl;
+import com.socialize.entity.View;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
+import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.like.LikeListener;
+import com.socialize.listener.view.ViewAddListener;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.test.PublicEntity;
 import com.socialize.test.mock.MockLikeSystem;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.actionbar.ActionBarLayoutView;
@@ -52,9 +60,30 @@ import com.socialize.ui.auth.AuthPanelView;
  *
  */
 public class AuthRequestDialogFactoryTest extends ActionBarAutoTest {
+	
+	
+	final EntityStatsImpl entityStats = new EntityStatsImpl();
+	final PublicEntity entity = new PublicEntity("http://entity1.com", "http://entity1.com");
+	
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		entityStats.setComments(0);
+		entityStats.setLikes(0);
+		entityStats.setShares(0);
+		entityStats.setViews(0);
+		entity.setEntityStats(entityStats);
+		
+		Intent intent = new Intent();
+		Bundle extras = new Bundle();
+		extras.putSerializable(Socialize.ENTITY_OBJECT, entity);
+		intent.putExtras(extras);
+		setActivityIntent(intent);		
+	}
 
 	public void testAuthRequestDialog() throws Throwable {
 		TestUtils.setupSocializeOverrides(true, true);
+		
 		
 		// Ensure there is no like
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
@@ -93,14 +122,27 @@ public class AuthRequestDialogFactoryTest extends ActionBarAutoTest {
 			}
 		});	
 		
-		Socialize.init(getActivity());
+		// Ensure there is no like
+		final View mockView = new View();
+		mockView.setEntity(entity);
 		
-		Intent intent = new Intent();
-		Bundle extras = new Bundle();
-		Entity entity = Entity.newInstance("http://entity1.com", "http://entity1.com");
-		extras.putSerializable(Socialize.ENTITY_OBJECT, entity);
-		intent.putExtras(extras);
-		setActivityIntent(intent);
+		// Don't record a view
+		SocializeViewUtils mockViewUtils = new SocializeViewUtils() {
+			@Override
+			public void view(Activity context, Entity e, ViewAddListener listener) {
+				listener.onCreate(mockView);
+			}
+		};
+		
+		SocializeEntityUtils mockEntityUtils = new SocializeEntityUtils() {
+			@Override
+			public void getEntity(Activity context, String key, EntityGetListener listener) {
+				listener.onGet(entity);
+			}
+		};
+		
+		SocializeAccess.setViewUtilsProxy(mockViewUtils);
+		SocializeAccess.setEntityUtilsProxy(mockEntityUtils);
 		
 		TestUtils.waitForIdle(this, 5000);
 		
@@ -123,7 +165,7 @@ public class AuthRequestDialogFactoryTest extends ActionBarAutoTest {
 		
 		latch.await(10, TimeUnit.SECONDS);
 		
-		AuthPanelView shareView = TestUtils.findViewInDialog(getActivity(), AuthPanelView.class, 10000);	
+		AuthPanelView shareView = TestUtils.findViewInDialog(getActivity(), AuthPanelView.class, 10000);
 		assertNotNull(shareView);
 		assertTrue(shareView.isShown());
 	}

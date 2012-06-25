@@ -19,42 +19,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo.implementations.actionbar;
+package com.socialize.test;
 
-import android.app.ListActivity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import com.socialize.demo.R;
+import com.socialize.entity.Entity;
+import com.socialize.entity.EntityStats;
+import com.socialize.entity.UserEntityStats;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class ActionBarActivity extends ListActivity {
+public class PublicEntity extends Entity {
+
+	private static final long serialVersionUID = 4524486978190984861L;
 	
-	final String[] values = new String[] { "Default Action Bar", "Default Action Bar w Options", "Custom Action Bar", "Multiple Action Bar"};
-	final Class<?>[] activities = new Class<?>[] { DefaultActionBarActivity.class, DefaultActionBarManualActivity.class, CustomActionBarActivity.class, MultiActionBarActivity.class};
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.demo_list);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
-		setListAdapter(adapter);
+	public PublicEntity() {
+		super();
 	}
-	
+
+	public PublicEntity(String key, String name) {
+		super(key, name);
+	}
 
 	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		Class<?> activityClass = activities[position];
-		if(activityClass != null) {
-			Intent intent = new Intent(this, activityClass);
-			startActivity(intent);
-		}
-	}	
-	
+	public void setUserEntityStats(UserEntityStats userEntityStats) {
+		super.setUserEntityStats(userEntityStats);
+	}
+
+	@Override
+	public void setEntityStats(EntityStats stats) {
+		super.setEntityStats(stats);
+	}
 }
