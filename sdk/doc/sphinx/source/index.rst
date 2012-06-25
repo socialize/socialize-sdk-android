@@ -11,7 +11,9 @@ Contents:
 	action_bar
 	like_button
 	facebook
-	twitter	
+	twitter
+	facebook_adv
+	twitter_adv
 	push_notifications
 	entity_loader
 	sdk_user_guide

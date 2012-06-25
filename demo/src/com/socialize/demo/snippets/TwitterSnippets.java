@@ -21,12 +21,15 @@
  */
 package com.socialize.demo.snippets;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import org.json.JSONObject;
 import android.app.Activity;
+import android.net.Uri;
 import com.socialize.ShareUtils;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ShareType;
 import com.socialize.api.action.share.ShareOptions;
 import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.entity.Entity;
@@ -40,6 +43,7 @@ import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
+import com.socialize.networks.twitter.PhotoTweet;
 import com.socialize.networks.twitter.Tweet;
 import com.socialize.networks.twitter.TwitterUtils;
 
@@ -304,5 +308,71 @@ ShareUtils.registerShare(this, entity, options, new ShareAddListener() {
 }, SocialNetwork.TWITTER);
 // end-snippet-8
 }
+public void postPhoto() throws IOException {
+// begin-snippet-9
+//The "this" argument refers to the current Activity
+final Activity context = this;
+	
+final Entity entity = Entity.newInstance("http://myentity.com", "My Name");	
+	
+// First create a Socialize share object so we get the correct URLs
+ShareOptions options = ShareUtils.getUserShareOptions(context);
 
+ShareUtils.registerShare(context, entity, options, new ShareAddListener() {
+	
+	@Override
+	public void onError(SocializeException error) {
+		// Handle error
+	}
+	
+	@Override
+	public void onCreate(Share result) {
+		
+		// We have the result, use the URLs to add to the post
+		PropagationInfo propagationInfo = result.getPropagationInfoResponse().getPropagationInfo(ShareType.TWITTER);
+		String link = propagationInfo.getEntityUrl();
+
+		// TODO: Get the URI of your image from the local device.
+		// TODO: ***** DON'T FORGET TO USE YOUR OWN IMAGE HERE (See the sample app for a working example) ****
+		Uri photoUri = null;
+
+		// Format the picture for Twitter
+		try {
+			byte[] imageData = TwitterUtils.getImageForPost(context, photoUri);
+			
+			// Create a photo tweet
+			PhotoTweet tweet = new PhotoTweet();
+			
+			// Add the photo to the post
+			tweet.setImageData(imageData);
+			
+			// Add the link returned from Socialize to use SmartDownloads
+			tweet.setText("A test photo of something " + link);
+			
+			// Post to twitter
+			TwitterUtils.tweetPhoto(context, tweet, new SocialNetworkPostListener() {
+				
+				@Override
+				public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+					// Handle error
+				}
+				
+				@Override
+				public void onCancel() {
+					// The user cancelled the auth process
+				}
+				
+				@Override
+				public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+					// The post was successful
+				}
+			});
+		}
+		catch (IOException e) {
+			// Handle error
+		}
+	}
+}, SocialNetwork.TWITTER);	
+//end-snippet-9
+}
 }
