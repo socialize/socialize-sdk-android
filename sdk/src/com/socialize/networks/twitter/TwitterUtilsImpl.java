@@ -63,6 +63,7 @@ import com.socialize.entity.Entity;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.net.HttpRequestListener;
 import com.socialize.net.HttpRequestProvider;
+import com.socialize.networks.DefaultPostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
@@ -190,15 +191,16 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 	@Override
 	public void tweetPhoto(Activity context, PhotoTweet tweet, SocialNetworkPostListener listener) {
 		try {
-			MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+			MultipartEntity multipart = newMultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 			
-			ByteArrayBody body = new ByteArrayBody(tweet.getImageData(), "");
+			ByteArrayBody body = new ByteArrayBody(tweet.getImageData(), "media");
 			StringBody status = new StringBody(tweet.getText());
 			StringBody possiblySensitive = new StringBody(String.valueOf(tweet.isPossiblySensitive()));
 			
 			multipart.addPart("media", body);
 			multipart.addPart("status", status);
 			multipart.addPart("possibly_sensitive", possiblySensitive);
+			
 			post(context, photoEndpoint + "statuses/update_with_media.json", multipart, listener);
 		}
 		catch (Exception e) {
@@ -207,24 +209,35 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 			}
 		}
 	}
+	
+	// Mockable
+	protected MultipartEntity newMultipartEntity(HttpMultipartMode mode) {
+		return new MultipartEntity(mode);
+	}
 
 	@Override
 	public void tweet(final Activity context, Tweet tweet, final SocialNetworkListener listener) {
 		
-		Map<String, Object> postData = new HashMap<String, Object>();
+		DefaultPostData postData = new DefaultPostData();
 		
-		postData.put("status", tweet.getText());
+		Map<String, Object> map = new HashMap<String, Object>();
 		
-		// TODO: This currently fails with a 400 from twitter
-		// https://dev.twitter.com/discussions/8685
+		map.put("status", tweet.getText());
 		
-//		if(tweet.isShareLocation() && tweet.getLocation() != null) {
-//			postData.put("lat", String.valueOf(tweet.getLocation().getLatitude()));
-//			postData.put("long", String.valueOf(tweet.getLocation().getLongitude()));
-//			postData.put("display_coordinates", "true");
-//		}
+		// Was failing: https://dev.twitter.com/discussions/8685
+		if(tweet.isShareLocation() && tweet.getLocation() != null) {
+			map.put("lat", String.valueOf(tweet.getLocation().getLatitude()));
+			map.put("long", String.valueOf(tweet.getLocation().getLongitude()));
+			map.put("display_coordinates", "true");
+		}
 		
-		post(context, "statuses/update.json", postData, listener);
+		postData.setPostValues(map);
+		
+		if(listener != null) {
+			listener.onBeforePost(context, SocialNetwork.TWITTER, postData);
+		}
+		
+		post(context, "statuses/update.json", postData.getPostValues(), listener);
 	}	
 	
 	@Override
