@@ -116,13 +116,23 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		String appId = ConfigUtils.getConfig(parent).getProperty(SocializeConfig.FACEBOOK_APP_ID);
 		String pictureURL = null;
 
+		if(entity != null) {
+			linkName = entity.getDisplayName();
+		}
+
+		String type = "feed";
+		if (!StringUtils.isEmpty(message)) {
+			type = "photos";
+		}
+
 		Properties prop = new Properties();
  
     	try {
     		prop.load(parent.getResources().getAssets().open("socialize.properties"));
  
  			if (prop.getProperty(FACEBOOK_MESSAGE) != null) {
-            	message = prop.getProperty(FACEBOOK_MESSAGE);
+ 				linkName = linkName + ": " + prop.getProperty(FACEBOOK_MESSAGE) + "\n" + message;
+            	message = message + ": " + prop.getProperty(FACEBOOK_MESSAGE);
         	}
 
         	prop.load(parent.openFileInput("socialize_sharing.properties"));
@@ -134,17 +144,14 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
     		ex.printStackTrace();
         }
 		
-		if(entity != null) {
-			linkName = entity.getDisplayName();
-		}
-		
 		if(!StringUtils.isEmpty(appId)) {
 			
 			final Map<String, Object> params = new HashMap<String, Object>();
 			params.put("name", linkName);
 			params.put("message", message);
 			params.put("link", link);
-			params.put("type", "link");
+			params.put("type", type);
+			Log.v("DefaultFacebookWallPoster", params.toString());
 
 			if (pictureURL != null) {
 				byte[] data = null;
@@ -202,7 +209,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		params.put("name", share.getEntityDisplayName());
 		params.put("link", propInfo.getEntityUrl());
 		params.put("message", share.getText());
-		// params.put("type", "feed");
+		params.put("type", "feed");
 
 		DefaultPostData postData = new DefaultPostData();
 		postData.setPostValues(params);
@@ -219,6 +226,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		
 		Bundle bundle = new Bundle();
 		
+		String type = "feed";
 		Set<Entry<String, Object>> entries = postData.getPostValues().entrySet();
 		
 		for (Entry<String, Object> entry : entries) {
@@ -229,6 +237,10 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			}
 			else {
 				bundle.putString(entry.getKey(), value.toString());
+			}
+
+			if (entry.getKey().equals("type") && value != null && !StringUtils.isEmpty((String) value)) {
+				type = value.toString();
 			}
 		}
 		
@@ -242,7 +254,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		
 		RequestListener requestListener = newRequestListener(parent, listener);
 		
-		runner.request("me/photos", bundle, "POST", requestListener, null);	
+		runner.request("me/" + type, bundle, "POST", requestListener, null);	
 	}
 	
 

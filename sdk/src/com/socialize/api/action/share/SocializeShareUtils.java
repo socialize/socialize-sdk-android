@@ -47,6 +47,11 @@ import com.socialize.ui.share.DialogFlowController;
 import com.socialize.ui.share.IShareDialogFactory;
 import com.socialize.ui.share.ShareDialogListener;
 import com.socialize.ui.share.SharePanelView;
+import java.util.Properties;
+import java.io.FileInputStream;
+import java.io.IOException;
+import android.util.Log;
+
 
 /**
  * @author Jason Polites
@@ -56,6 +61,10 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	private ShareSystem shareSystem;
 	private IShareDialogFactory shareDialogFactory;
 	private IAuthDialogFactory authDialogFactory;
+
+	private static final String TWITTER_MESSAGE = "socialize.twitter.message";
+	private static final String TWITTER_PICTURE = "socialize.sharing.picture";
+
 	
 	@Override
 	public ShareOptions getUserShareOptions(Context context) {
@@ -183,6 +192,33 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 				if(share != null && shareSystem != null && networks != null && networks.length > 0) {
 					for (int i = 0; i < networks.length; i++) {
 						final SocialNetwork network = networks[i];
+
+						String _text = fText;
+						if (ShareType.valueOf(network).equals(ShareType.TWITTER)) {
+							String pictureURL = "";
+
+							Properties prop = new Properties();
+					 
+					    	try {
+					    		prop.load(context.getResources().getAssets().open("socialize.properties"));
+					 
+					 			if (prop.getProperty(TWITTER_MESSAGE) != null) {
+					 				_text = prop.getProperty(TWITTER_MESSAGE) + "\n" + fText;
+					        	}
+
+					        	prop.load(context.openFileInput("socialize_sharing.properties"));
+								if (prop.getProperty(TWITTER_PICTURE) != null) {
+					            	pictureURL = prop.getProperty(TWITTER_PICTURE);
+					        	}        	
+					 
+					    	} catch (IOException ex) {
+					    		ex.printStackTrace();
+					        }
+						}
+
+						final String _fText = _text;
+						Log.v("SocializeShareUtils", "share text will be " + _fText);
+
 						shareSystem.share(context, getSocialize().getSession(), share, fText, null, ShareType.valueOf(network), socialNetworkListener);									
 					}
 				}
