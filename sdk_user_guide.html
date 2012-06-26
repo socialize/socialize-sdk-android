@@ -748,7 +748,7 @@ you can implement a <em>Flow Interrupt</em> to extract text from the user before
 	
 	<span class="nd">@Override</span>
 	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onFlowInterrupted</span><span class="o">(</span><span class="n">DialogFlowController</span> <span class="n">controller</span><span class="o">)</span> <span class="o">{</span>
-		<span class="c1">// This will only be called if onContinue returns false</span>
+		<span class="c1">// This will only be called if onContinue returns true</span>
 		
 		<span class="c1">// Obtain a comment from the user</span>
 		<span class="n">String</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&quot;...&quot;</span><span class="o">;</span>

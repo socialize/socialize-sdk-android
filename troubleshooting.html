@@ -136,6 +136,14 @@ ActionBar is &#8220;pushed up&#8221; by the soft keyboard like so:</p>
 </div>
 <p>Or just removed completely as <strong>false</strong> is the default value for newer (1.6+) Android versions.</p>
 </div>
+<div class="section" id="auth-failure-on-twitter">
+<h3>Auth Failure on Twitter<a class="headerlink" href="#auth-failure-on-twitter" title="Permalink to this headline">¶</a></h3>
+<p>If you encounter the following error when attempting to authenticate with Twitter:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Authentication</span> <span class="nl">error:</span> <span class="n">Unable</span> <span class="n">to</span> <span class="n">respond</span> <span class="n">to</span> <span class="n">any</span> <span class="n">of</span> <span class="n">these</span> <span class="nl">challenges:</span> <span class="o">{</span><span class="n">oauth</span><span class="o">=</span><span class="n">WWW</span><span class="o">-</span><span class="nl">Authenticate:</span> <span class="n">OAuth</span> <span class="n">realm</span><span class="o">=</span><span class="s">&quot;https://api.twitter.com&quot;</span><span class="o">}</span>
+</pre></div>
+</div>
+<p>This usually means you have not configured a <strong>Callback URL</strong> in your Twitter app.  Review the <a class="reference internal" href="twitter.html?v=v2.1"><em>Twitter Integration</em></a> section for details on adding a callback url.</p>
+</div>
 </div>
 <div class="section" id="support-and-feedback">
 <h2>Support and Feedback<a class="headerlink" href="#support-and-feedback" title="Permalink to this headline">¶</a></h2>

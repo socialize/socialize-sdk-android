@@ -146,7 +146,7 @@ Registering for Google C2DM
 Socialize provides a default quota of SmartAlerts that should satisfy the needs of most users, however if you are experiencing issues with SmartAlerts quota 
 you can always simply register your own C2DM token with Socialize.
 
-Google's Cloud To Device (C2DM) system allows any app developer to register and obtain a token. Configuring your application for SmartAlerts using your own C2DM token is a 3 step process:
+Google's Cloud To Device (C2DM) system allows any app developer to register and obtain a token. Configuring your application for SmartAlerts using your own C2DM token is a 4 step process:
 
 Step 1: Register with Google for C2DM
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
