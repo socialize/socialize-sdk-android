@@ -277,6 +277,14 @@ public class TestUtils {
 		return null;
 	}	
 	
+	public static Button findButtonInDialog(Dialog dialog, String text, long timeoutMs) {
+		return findViewWithText(dialog.getWindow().getDecorView(), Button.class, text, timeoutMs);
+	}	
+	
+	public static <V extends View> V findViewInDialog(Dialog dialog, Class<V> viewClass, long timeoutMs) {
+		return findView(dialog.getWindow().getDecorView(), viewClass, timeoutMs);
+	}		
+	
 	public static <V extends View> V findView(View view, Class<V> viewClass, long timeoutMs) {
 		if(view instanceof ViewGroup) {
 			return findView(((ViewGroup)view), viewClass, timeoutMs);
@@ -750,4 +758,5 @@ public class TestUtils {
 	public static List<Object> getAllResults() {
 		return holder.getAllResults();
 	}
+	
 }

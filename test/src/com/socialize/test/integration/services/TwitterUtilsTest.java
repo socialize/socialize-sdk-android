@@ -82,11 +82,11 @@ import com.socialize.test.ui.util.TestUtils;
 public class TwitterUtilsTest extends SocializeActivityTest {
 	
 	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
+	protected void tearDown() throws Exception {
 		TwitterAccess.revertTwitterUtilsProxy();
+		super.tearDown();
 	}
-	
+
 	public void test_link () throws Throwable {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
