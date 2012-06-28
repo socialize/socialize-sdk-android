@@ -63,9 +63,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import java.io.ByteArrayOutputStream;
 import android.util.Log;
-import java.net.HttpURLConnection;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.Properties;
 import java.io.FileInputStream;
 
@@ -83,21 +80,6 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	private static final String FACEBOOK_MESSAGE = "socialize.facebook.message";
 	private static final String FACEBOOK_PICTURE = "socialize.sharing.picture";
 	
-
-	protected Bitmap getBitmapFromURL(String src) {
-	    try {
-	        URL url = new URL(src);
-	        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-	        connection.setDoInput(true);
-	        connection.connect();
-	        InputStream input = connection.getInputStream();
-	        Bitmap myBitmap = BitmapFactory.decodeStream(input);
-	        return myBitmap;
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	        return null;
-	    }
-	}
 
 	@Override
 	public void postLike(Activity parent, Entity entity, PropagationInfo propInfo, SocialNetworkListener listener) {
@@ -160,7 +142,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 
 				try {
 					Log.v("DefaultFacebookWallPoster", "will get a bitmap for the " + pictureURL + " result file.");
-					Bitmap imgBitmap = getBitmapFromURL(pictureURL);
+					Bitmap imgBitmap = ImageUtils.getBitmapFromURL(pictureURL);
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					imgBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 					data = baos.toByteArray();
@@ -244,10 +226,10 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 						bundle.putString(entry.getKey(), value.toString());
 					}
 				}
-			}
 
-			if (entry.getKey().equals("type") && value != null && !StringUtils.isEmpty((String) value)) {
-				type = value.toString();
+				if (entry.getKey().equals("type") && value != null && !StringUtils.isEmpty((String) value)) {
+					type = value.toString();
+				}
 			}
 		}
 		

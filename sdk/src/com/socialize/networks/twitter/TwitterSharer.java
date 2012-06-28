@@ -32,6 +32,15 @@ import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.ui.profile.UserSettings;
 import com.socialize.util.StringUtils;
+import android.net.Uri;
+import java.util.Properties;
+import java.io.FileInputStream;
+import java.io.IOException;
+import android.util.Log;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import java.io.ByteArrayOutputStream;
+import com.socialize.util.ImageUtils;
 
 
 /**
@@ -40,6 +49,10 @@ import com.socialize.util.StringUtils;
  */
 public class TwitterSharer extends AbstractSocialNetworkSharer {
 	
+	private static final String TWITTER_MESSAGE = "socialize.twitter.message";
+	private static final String TWITTER_PICTURE = "socialize.sharing.picture";
+
+
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.AbstractSocialNetworkSharer#getNetwork()
 	 */
@@ -63,7 +76,7 @@ public class TwitterSharer extends AbstractSocialNetworkSharer {
 	@Override
 	protected void doShare(Activity context, Entity entity, PropagationInfo urlSet, String comment, SocialNetworkListener listener, ActionType type) {
 		
-		Tweet tweet = new Tweet();
+		PhotoTweet tweet = new PhotoTweet();
 		
 		switch(type) {
 		
@@ -77,13 +90,50 @@ public class TwitterSharer extends AbstractSocialNetworkSharer {
 				comment = "Viewed " + entity.getDisplayName();
 				break;
 		}
+
+		String preloaded_text = "";
+		String pictureURL = "";
+
+		Properties prop = new Properties();
+				 
+	   	try {
+			prop.load(context.getResources().getAssets().open("socialize.properties"));
+
+ 			if (prop.getProperty(TWITTER_MESSAGE) != null) {
+				preloaded_text = prop.getProperty(TWITTER_MESSAGE) + "\n";
+	    	}
+
+			prop.load(context.openFileInput("socialize_sharing.properties"));
+			if (prop.getProperty(TWITTER_PICTURE) != null) {
+				pictureURL = prop.getProperty(TWITTER_PICTURE);
+
+				if (pictureURL != null) {
+					Bitmap imgBitmap = ImageUtils.getBitmapFromURL(pictureURL);
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					imgBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+					byte[] data = baos.toByteArray();
+
+					tweet.setImageData(data);
+				} else {
+					Log.v("TwitterSharer", "pictureURL == null");
+				}
+			}        	
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} catch (NullPointerException ex) {
+			ex.printStackTrace();
+		} catch (Exception ex) {
+			Log.v("TwitterSharer", "Unknown exception catched:");
+			ex.printStackTrace();
+		}
 		
 		StringBuilder status = new StringBuilder();
-		
+
+		status.append(preloaded_text);
+
 		if(StringUtils.isEmpty(comment)) {
 			status.append(entity.getDisplayName());
-		}
-		else {
+		} else {
 			status.append(comment);
 		}
 		
@@ -99,7 +149,7 @@ public class TwitterSharer extends AbstractSocialNetworkSharer {
 			tweet.setShareLocation(true);
 		}
 		
-		TwitterUtils.tweet(context, tweet, listener);
+		TwitterUtils.tweetPhoto(context, tweet, listener);
 	}
 
 }
