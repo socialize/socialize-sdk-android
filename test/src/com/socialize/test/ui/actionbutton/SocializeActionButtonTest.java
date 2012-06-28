@@ -26,7 +26,6 @@ import android.content.res.XmlResourceParser;
 import android.test.mock.MockContext;
 import android.util.AttributeSet;
 import android.view.View;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.android.ioc.IOCContainer;

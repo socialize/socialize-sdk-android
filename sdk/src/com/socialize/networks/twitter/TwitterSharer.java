@@ -22,12 +22,16 @@
 package com.socialize.networks.twitter;
 
 import android.app.Activity;
+import com.socialize.LocationUtils;
+import com.socialize.UserUtils;
 import com.socialize.api.action.ActionType;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.networks.AbstractSocialNetworkSharer;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
+import com.socialize.ui.profile.UserSettings;
+import com.socialize.util.StringUtils;
 
 
 /**
@@ -58,10 +62,44 @@ public class TwitterSharer extends AbstractSocialNetworkSharer {
 	 */
 	@Override
 	protected void doShare(Activity context, Entity entity, PropagationInfo urlSet, String comment, SocialNetworkListener listener, ActionType type) {
-		// Sharing done on server
-		if(listener != null) {
-			listener.onAfterPost(context, getNetwork(), null);
+		
+		Tweet tweet = new Tweet();
+		
+		switch(type) {
+		
+			case SHARE:
+				if(StringUtils.isEmpty(comment))  comment = "Shared " + entity.getDisplayName();
+				break;
+			case LIKE:
+				comment = "\u2764 likes " + entity.getDisplayName();
+				break;
+			case VIEW:
+				comment = "Viewed " + entity.getDisplayName();
+				break;
 		}
+		
+		StringBuilder status = new StringBuilder();
+		
+		if(StringUtils.isEmpty(comment)) {
+			status.append(entity.getDisplayName());
+		}
+		else {
+			status.append(comment);
+		}
+		
+		status.append(", ");
+		status.append(urlSet.getEntityUrl());
+		
+		tweet.setText(status.toString());
+		
+		UserSettings settings = UserUtils.getUserSettings(context);
+		
+		if(settings != null && settings.isLocationEnabled()) {
+			tweet.setLocation(LocationUtils.getLastKnownLocation(context));
+			tweet.setShareLocation(true);
+		}
+		
+		TwitterUtils.tweet(context, tweet, listener);
 	}
 
 }

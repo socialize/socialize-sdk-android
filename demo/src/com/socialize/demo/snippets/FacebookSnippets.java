@@ -30,7 +30,9 @@ import android.net.Uri;
 import com.socialize.ConfigUtils;
 import com.socialize.ShareUtils;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ShareType;
 import com.socialize.api.action.share.ShareOptions;
+import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.PropagationInfoResponse;
@@ -129,7 +131,7 @@ public void postEntity() {
 Entity entity = Entity.newInstance("http://myentity.com", "My Name");
 	
 // The "this" argument refers to the current Activity
-FacebookUtils.postEntity(this, entity, "Text to be posted", new SocialNetworkListener() {
+FacebookUtils.postEntity(this, entity, "Text to be posted", new SocialNetworkShareListener() {
 	
 	@Override
 	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
@@ -172,7 +174,7 @@ postData.put("name", "Socialize SDK!");
 	
 // Execute a POST on facebook
 // The "this" argument refers to the current Activity
-FacebookUtils.post(this, graphPath, postData, new SocialNetworkListener() {
+FacebookUtils.post(this, graphPath, postData, new SocialNetworkPostListener() {
 	
 	@Override
 	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
@@ -188,11 +190,6 @@ FacebookUtils.post(this, graphPath, postData, new SocialNetworkListener() {
 	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
 		// Called after the post returned from Facebook.
 		// responseObject contains the raw JSON response from Facebook.
-	}
-	
-	@Override
-	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
-		// Called just prior to the post.
 	}
 });
 // end-snippet-5
@@ -205,7 +202,7 @@ String graphPath = "me/links";
 
 // Execute a GET on facebook
 // The "this" argument refers to the current Activity
-FacebookUtils.get(this, graphPath, null, new SocialNetworkListener() {
+FacebookUtils.get(this, graphPath, null, new SocialNetworkPostListener() {
 	
 	@Override
 	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
@@ -221,11 +218,6 @@ FacebookUtils.get(this, graphPath, null, new SocialNetworkListener() {
 	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
 		// Called after the post returned from Facebook.
 		// responseObject contains the raw JSON response from Facebook.
-	}
-	
-	@Override
-	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
-		// Called just prior to the post.
 	}
 });
 // end-snippet-6
@@ -332,30 +324,73 @@ ShareUtils.registerShare(this, entity, options, new ShareAddListener() {
 }
 
 public void postPhoto() throws IOException {
+// begin-snippet-9
+//The "this" argument refers to the current Activity
+final Activity context = this;
 	
-Map<String, Object> postData = new HashMap<String, Object>();
-Uri photoUri = null; // Get the URI of your image from the local device.
+final Entity entity = Entity.newInstance("http://myentity.com", "My Name");	
+	
+// First create a Socialize share object so we get the correct URLs
+ShareOptions options = ShareUtils.getUserShareOptions(context);
 
-postData.put("photo", FacebookUtils.getImageForPost(this, photoUri));
-// Add other fields to postData as necessary
-
-// The "this" argument refers to the current Activity
-FacebookUtils.post(this, "me/photos", postData, new SocialNetworkPostListener() {
+ShareUtils.registerShare(context, entity, options, new ShareAddListener() {
 	
 	@Override
-	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+	public void onError(SocializeException error) {
+		// Handle error
 	}
 	
 	@Override
-	public void onCancel() {
+	public void onCreate(Share result) {
 		
+		// We have the result, use the URLs to add to the post
+		PropagationInfo propagationInfo = result.getPropagationInfoResponse().getPropagationInfo(ShareType.FACEBOOK);
+		String link = propagationInfo.getEntityUrl();
+
+		// Now post to Facebook.
+		Map<String, Object> postData = new HashMap<String, Object>();
+		
+		// TODO: Get the URI of your image from the local device.
+		// TODO: ***** DON'T FORGET TO USE YOUR OWN IMAGE HERE (See the sample app for a working example) ****
+		Uri photoUri = null;
+
+		// Format the picture for Facebook
+		try {
+			byte[] imageData = FacebookUtils.getImageForPost(context, photoUri);
+			
+			// Add the photo to the post
+			postData.put("photo", imageData);
+			
+			// Add the link returned from Socialize to use SmartDownloads
+			postData.put("caption", "A test photo of something " + link);
+			
+			// Add other fields to postData as necessary
+			
+			// Post to me/photos
+			FacebookUtils.post(context, "me/photos", postData, new SocialNetworkPostListener() {
+				
+				@Override
+				public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+					// Handle error
+				}
+				
+				@Override
+				public void onCancel() {
+					// The user cancelled the auth process
+				}
+				
+				@Override
+				public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+					// The post was successful
+				}
+			});			
+		}
+		catch (IOException e) {
+			// Handle error
+		}
 	}
-	
-	@Override
-	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
-	}
-});
-	
+}, SocialNetwork.FACEBOOK);	
+//end-snippet-9
 }
 
 }

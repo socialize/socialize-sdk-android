@@ -26,6 +26,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -33,6 +34,7 @@ import android.widget.LinearLayout;
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.User;
+import com.socialize.log.SocializeLogger;
 import com.socialize.ui.image.ImageLoadListener;
 import com.socialize.ui.image.ImageLoadRequest;
 import com.socialize.ui.image.ImageLoader;
@@ -116,7 +118,7 @@ public class ProfilePictureEditView extends ClickableSectionCell {
 			imageLoader.loadImageByUrl(profilePicData, new ImageLoadListener() {
 				@Override
 				public void onImageLoadFail(ImageLoadRequest request, Exception error) {
-					error.printStackTrace();
+					Log.e(SocializeLogger.LOG_TAG,  error.getMessage(),  error);
 					profilePicture.post(new Runnable() {
 						public void run() {
 							profilePicture.setImageDrawable(defaultProfilePicture);

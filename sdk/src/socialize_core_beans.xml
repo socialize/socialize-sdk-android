@@ -560,8 +560,8 @@
 	</bean>
 	
 	<bean 
-		id="facebookImageUtils" 
-		class="com.socialize.networks.facebook.FacebookImageUtils">
+		id="imageUtils" 
+		class="com.socialize.util.ImageUtils">
 	</bean>	
 	
 	<bean 
@@ -575,7 +575,7 @@
 		id="facebookWallPoster" 
 		class="com.socialize.networks.facebook.DefaultFacebookWallPoster">
 		<property name="logger" ref="logger"/>
-		<property name="facebookImageUtils" ref="facebookImageUtils"/>
+		<property name="imageUtils" ref="imageUtils"/>
 		<property name="facebookRunnerFactory" ref="facebookRunnerFactory"/>
 	</bean>	
 	
@@ -756,5 +756,21 @@
 			</list>
 		</property>		
 	</bean>		
+	
+	<!-- Http Core -->
+	<bean id="httpRequestProcessor" class="com.socialize.net.AsyncHttpRequestProcessor" singleton="false">
+		<property name="clientFactory" ref="clientFactory"/>
+		<property name="httpUtils" ref="httpUtils"/>
+		<property name="ioUtils" ref="ioUtils"/>
+		<property name="logger" ref="logger"/>
+		
+	</bean>	
+	
+	<factory id="requestProcessorFactory" makes="httpRequestProcessor"/>
+	
+	<bean id="httpRequestProvider" class="com.socialize.net.AsyncHttpRequestProvider">
+		<property name="requestProcessorFactory" ref="requestProcessorFactory"/>
+	</bean>	
+	
 	
 </beans>

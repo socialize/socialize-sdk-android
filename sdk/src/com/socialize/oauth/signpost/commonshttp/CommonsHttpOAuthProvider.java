@@ -19,6 +19,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
+import android.util.Log;
+import com.socialize.log.SocializeLogger;
 import com.socialize.oauth.signpost.AbstractOAuthProvider;
 import com.socialize.oauth.signpost.http.HttpRequest;
 
@@ -76,7 +78,7 @@ public class CommonsHttpOAuthProvider extends AbstractOAuthProvider {
                     entity.consumeContent();
                 } catch (IOException e) {
                     // this means HTTP keep-alive is not possible
-                    e.printStackTrace();
+                	Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
                 }
             }
         }

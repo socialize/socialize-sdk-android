@@ -25,6 +25,13 @@
 	<taskdef name="findbugs" 
 		classname="edu.umd.cs.findbugs.anttask.FindBugsTask"
 		classpathref="findbugs.libs"/>
+	
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="libext/ant-contrib.jar"/>
+		</classpath>
+	</taskdef>	
+	
 
 	<target name="findbugs" depends="-setup">
 		<echo>Running Findbugs...</echo>
@@ -57,13 +64,28 @@
 		SOCIALIZE TARGETS
 		################################################################################################
 	-->		
-	
-		<target name="test" depends="build-all, install-all">
+		<target name="test" depends="build-all">
 			<property name="build.is.instrumented" value="true" />
 			<property name="build.target" value="instrument" />  
 			<property name="emma.enabled" value="true" />
-			<antcall target="-test" inheritall="true" inheritrefs="true"/>
-			<antcall target="pull-reports" inheritall="true" inheritrefs="true"/>
+			<for list="${test.suite}" param="test.package">
+				<sequential>
+			    	<echo></echo>
+			    	<echo>##################################################################################################</echo>
+			    	<echo>########################### EXECUTING TEST FOR PACKAGE @{test.package} ###########################</echo>
+			    	<echo>##################################################################################################</echo>
+			    	<echo></echo>    			
+					<antcall target="install-all" inheritall="true" inheritrefs="true"/>
+					<antcall target="-test" inheritall="true" inheritrefs="true">
+						 <param name="test.package" value="@{test.package}" />
+					</antcall>
+				</sequential>
+			</for>
+			<antcall target="generate-reports" inheritall="true" inheritrefs="true"/>
+		</target>
+	
+		<target name="install-and-test">
+			
 		</target>
 	
 		<target name="install-all">
@@ -77,13 +99,6 @@
 			<property name="build.target" value="instrument" />  
 			<property name="emma.enabled" value="true" />
 			<antcall target="instrument" inheritall="true" inheritrefs="true"/>
-			
-			<echo>Pushing required assets to device's card</echo>
-			<exec executable="${adb}" failonerror="true">
-				<arg line="push" />
-				<arg value="res/drawable-ldpi/icon.png" />
-				<arg value="/mnt/sdcard/" />
-			</exec>
 		</target>
 	
 		<target name="clean-all">
@@ -134,23 +149,28 @@
 			<mkdir dir="${test-output}"/>
 		</target>
 			
-		<target name="pull-reports">
-	
-			<echo>Downloading XML test results...</echo>
-			<exec executable="${adb}" failonerror="true" dir="${test-output}">
-				<arg line="${adb.device.arg}" />
-				<arg value="pull" />
-				<arg value="${junit.dump.path}" />
-			</exec>
+		<target name="generate-reports">
 			
-		<!--
-			<echo>Dumping logcat buffer</echo>
-			<exec executable="${adb}" failonerror="true">
-				<arg line="${adb.device.arg}" />
-				<arg value="logcat" />
-				<arg value="-d" />
-			</exec>
-		-->	
+        	<echo>Extracting code coverage report...</echo>
+        	
+    		<path id="emma.report.src.path">
+    			<pathelement path="${tested.project.absolute.dir}/${source.dir}" />
+    			<pathelement path="${library.project.src}" />
+    		</path>
+            
+        	<emma>
+                <report 
+                	sourcepathref="emma.report.src.path" 
+                	verbosity="${verbosity}">
+                	<infileset dir="${emma.report.dir}" includes="**/*.em, **/*.ec"/>
+    				<html outfile="${emma.report.dir}/coverage.html" />
+    				<xml outfile="${emma.report.dir}/coverage.xml" />
+               </report>
+            </emma>
+          	
+            <echo>Saving the coverage html report file in ${emma.report.dir}/coverage.html</echo>
+        	<echo>Saving the coverage xml report file in ${emma.report.dir}/coverage.html</echo>			
+			
 		</target>	
 	
 	<!-- 
@@ -298,21 +318,32 @@
             expression="/manifest/@package" 
         	output="manifest.package" />
 
-        <property name="emma.dump.file"
-                value="/data/data/${tested.manifest.package}/coverage.ec" />
+        <property name="emma.dump.path" value="/data/data/${tested.manifest.package}/" />
 
         <if condition="${emma.enabled}">
             <then>
-                <echo>Code Coverage enabled.  Saving EMMA report to device location ${emma.dump.file}</echo>
             	
-            	<echo>Running tests with coverage</echo>
+            	<property name="emma.coverage.file.raw" value="coverage-${test.package}"/>
+                	
+            	<propertyregex property="emma.coverage.file.replaced"
+            	               input="${emma.coverage.file.raw}"
+            	               regexp="\."
+            	               replace="_"
+            	               global="true" />
+            	
+            	<property name="emma.coverage.file" value="${emma.coverage.file.replaced}.ec"/>
+            	<property name="emma.coverage.path" value="${emma.dump.path}${emma.coverage.file}"/>
+            	
+                <echo>Code Coverage enabled.  Saving EMMA report to device location ${emma.coverage.path}</echo>
+            	
+            	<echo>Running tests with coverage for package ${test.package}</echo>
                 <run-tests-helper emma.enabled="true">
                     <extra-instrument-args>
         				<arg value="-e" />
 	        				<arg value="coverageFile" />
-	        				<arg value="${emma.dump.file}" />
-
-        				<arg value="-e" />
+	        				<arg value="${emma.coverage.path}" />
+                    	
+                    	<arg value="-e" />
 	        				<arg value="package" />
 	        				<arg value="${test.package}" />
                     	
@@ -326,40 +357,22 @@
                     </extra-instrument-args>
                 </run-tests-helper>
             	
-                <echo>Downloading coverage file into project directory...</echo>
+                <echo>Downloading coverage file ${emma.coverage.path} into project directory as ${emma.coverage.file}...</echo>
             	
                 <exec executable="${adb}" failonerror="true">
         			<arg line="${adb.device.arg}" />
         			<arg value="pull" />
-        			<arg value="${emma.dump.file}" />
-        			<arg value="${emma.report.dir}/coverage.ec" />
+        			<arg value="${emma.coverage.path}" />
+        			<arg value="${emma.report.dir}/${emma.coverage.file}" />
                 </exec>
-                
-            	<echo>Extracting coverage report...</echo>
             	
-        		<path id="emma.report.src.path">
-        			<pathelement path="${tested.project.absolute.dir}/${source.dir}" />
-        			<pathelement path="${library.project.src}" />
-        		</path>
-                
-            	<emma>
-                    <report 
-                    	sourcepathref="emma.report.src.path" 
-                    	verbosity="${verbosity}">
-                    	
-        				<infileset dir="${emma.report.dir}">
-        					<include name="coverage.ec" />
-        					<include name="coverage.em" />
-        				</infileset>
-                    	
-        				<html outfile="${emma.report.dir}/coverage.html" />
-        				<xml outfile="${emma.report.dir}/coverage.xml" />
-                    	
-                   </report>
-                </emma>
-              	
-                <echo>Saving the html report file in ${emma.report.dir}/coverage.html</echo>
-            	<echo>Saving the xml report file in ${emma.report.dir}/coverage.html</echo>
+            	<echo>Downloading junit file from ${junit.dump.path} into project directory ${test-output}...</echo>
+				<exec executable="${adb}" failonerror="true" dir="${test-output}">
+					<arg line="${adb.device.arg}" />
+					<arg value="pull" />
+					<arg value="${junit.dump.path}" />
+				</exec>	
+              
             </then>
             <else>
             	<echo>Code Coverage is NOT enabled</echo>
@@ -398,9 +411,6 @@
 	
     <!-- version-tag: custom -->
 	<import file="../sdk/ant/android_r15_build.xml" />
-	<!-- <import file="${sdk.dir}/tools/ant/build.xml" /> -->
-
-	
 
 	<!-- Overrides for http://code.google.com/p/android/issues/detail?id=21640-->
 		

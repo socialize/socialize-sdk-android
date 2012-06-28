@@ -48,7 +48,6 @@ public class MockActionBarSliderView extends ActionBarSliderView {
 
 	@Override
 	public boolean isMoving() {
-		// TODO Auto-generated method stub
 		return super.isMoving();
 	}
 

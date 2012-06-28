@@ -36,12 +36,12 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.facebook.FacebookAuthClickListener;
 import com.socialize.networks.facebook.FacebookUtilsProxy;
@@ -99,7 +99,7 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 			public void setAppId(Context context, String appId) {}
 			
 			@Override
-			public void postEntity(Activity context, Entity entity, String text, SocialNetworkListener listener) {}
+			public void postEntity(Activity context, Entity entity, String text, SocialNetworkShareListener listener) {}
 			
 			@Override
 			public void link(Activity context, String token, SocializeAuthListener listener) {}

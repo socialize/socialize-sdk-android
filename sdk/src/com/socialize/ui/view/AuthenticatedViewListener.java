@@ -54,7 +54,7 @@ public class AuthenticatedViewListener implements SocializeAuthListener {
 		view.onAfterAuthenticate(container);
 		view.removeAllViews();
 		view.showError(context, error);
-		error.printStackTrace();
+		Log.e(SocializeLogger.LOG_TAG, error.getMessage(), error);
 	}
 	
 	@Override
@@ -85,6 +85,6 @@ public class AuthenticatedViewListener implements SocializeAuthListener {
 	public void onAuthFail(SocializeException error) {
 		view.onAfterAuthenticate(container);
 		view.showError(context, error);
-		error.printStackTrace();
+		Log.e(SocializeLogger.LOG_TAG, error.getMessage(), error);
 	}
 }

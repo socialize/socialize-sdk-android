@@ -232,7 +232,7 @@ public class SocializeServiceImpl implements SocializeService {
 				logger.error(SocializeLogger.INITIALIZE_FAILED, e);
 			}
 			else {
-				e.printStackTrace();
+				Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 			}
 		}
 		
@@ -462,7 +462,7 @@ public class SocializeServiceImpl implements SocializeService {
 					logger.error(SocializeLogger.INITIALIZE_FAILED, e);
 				}
 				else {
-					e.printStackTrace();
+					Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 				}
 			}
 		}
@@ -650,8 +650,7 @@ public class SocializeServiceImpl implements SocializeService {
 			logger.error(message, error);
 		}
 		else {
-			System.err.println(message);
-			error.printStackTrace();
+			Log.e(SocializeLogger.LOG_TAG, message, error);
 		}
 	}
 	
@@ -1380,7 +1379,7 @@ public class SocializeServiceImpl implements SocializeService {
 					}
 					else {
 						if(error != null) {
-							error.printStackTrace();
+							Log.e(SocializeLogger.LOG_TAG, errorMessage, error);
 						}
 						else {
 							System.err.println(errorMessage);

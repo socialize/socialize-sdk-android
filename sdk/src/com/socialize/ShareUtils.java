@@ -179,8 +179,8 @@ public class ShareUtils {
 	 * @param shareOptions Options for the share.  If text is available for the share it can be specified here.
 	 * @param listener A listener to handle events.
 	 */	
-	public static void shareViaSocialNetworks(Activity context, Entity entity, ShareOptions shareOptions, SocialNetworkShareListener listener) {
-		proxy.shareViaSocialNetworks(context, entity, shareOptions, listener);
+	public static void shareViaSocialNetworks(Activity context, Entity entity, ShareOptions shareOptions, SocialNetworkShareListener listener, SocialNetwork...networks) {
+		proxy.shareViaSocialNetworks(context, entity, shareOptions, listener, networks);
 	}
 
 	/**

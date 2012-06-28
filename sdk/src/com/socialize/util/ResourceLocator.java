@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.socialize.log.SocializeLogger;
 
@@ -111,9 +112,10 @@ public class ResourceLocator {
 						"] in any location");
 			}
 			else {
-				new FileNotFoundException("Could not locate [" +
+				FileNotFoundException e = new FileNotFoundException("Could not locate [" +
 						name +
-						"] in any location").printStackTrace();
+						"] in any location");
+				Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 			}
 		}
 		

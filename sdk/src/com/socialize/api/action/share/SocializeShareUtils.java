@@ -66,6 +66,10 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	private static final String TWITTER_PICTURE = "socialize.sharing.picture";
 
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.share.ShareUtilsProxy#getUserShareOptions(android.content.Context)
+	 */
 	@Override
 	public ShareOptions getUserShareOptions(Context context) {
 		ShareOptions options = new ShareOptions();
@@ -73,11 +77,19 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 		return options;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.share.ShareUtilsProxy#showLinkDialog(android.app.Activity, com.socialize.ui.auth.AuthDialogListener)
+	 */
 	@Override
 	public void showLinkDialog(Activity context, AuthDialogListener listener) {
 		authDialogFactory.show(context, listener);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.share.ShareUtilsProxy#showShareDialog(android.app.Activity, com.socialize.entity.Entity, int, com.socialize.api.action.share.SocialNetworkShareListener, com.socialize.ui.share.ShareDialogListener)
+	 */
 	@Override
 	public void showShareDialog(final Activity context, final Entity entity, int options, final SocialNetworkShareListener socialNetworkListener, final ShareDialogListener dialogListener) {
 		shareDialogFactory.show(context, entity, socialNetworkListener, new ShareDialogListener() {
@@ -232,6 +244,10 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 		}, networks);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.share.ShareUtilsProxy#registerShare(android.app.Activity, com.socialize.entity.Entity, com.socialize.api.action.share.ShareOptions, com.socialize.listener.share.ShareAddListener, com.socialize.networks.SocialNetwork[])
+	 */
 	@Override
 	public void registerShare(Activity context, Entity entity, ShareOptions shareOptions, ShareAddListener listener, SocialNetwork...networks) {
 		
@@ -250,21 +266,34 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 		shareSystem.addShare(context, getSocialize().getSession(), entity, text, shareType, listener, networks);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.share.ShareUtilsProxy#shareViaEmail(android.app.Activity, com.socialize.entity.Entity, com.socialize.listener.share.ShareAddListener)
+	 */
 	@Override
 	public void shareViaEmail(Activity context, Entity entity, ShareAddListener listener) {
 		doShare(context, entity, ShareType.EMAIL, listener);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.share.ShareUtilsProxy#shareViaOther(android.app.Activity, com.socialize.entity.Entity, com.socialize.listener.share.ShareAddListener)
+	 */
 	@Override
 	public void shareViaOther(Activity context, Entity entity, ShareAddListener listener) {
 		doShare(context, entity, ShareType.OTHER, listener);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.share.ShareUtilsProxy#shareViaSMS(android.app.Activity, com.socialize.entity.Entity, com.socialize.listener.share.ShareAddListener)
+	 */
 	@Override
 	public void shareViaSMS(Activity context, Entity entity, ShareAddListener listener) {
 		doShare(context, entity, ShareType.SMS, listener);
 	}
 	
+	// Creates the socialize share object.
 	protected void doShare(final Activity context, final Entity entity, final ShareType shareType, final ShareAddListener shareAddListener) {
 		final SocializeSession session = getSocialize().getSession();
 		shareSystem.addShare(context, session, entity, "", shareType, null, new ShareAddListener() {
@@ -284,6 +313,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 		});	
 	}
 	
+	// Handles a non-network share like email or SMS.
 	protected void handleNonNetworkShare(Activity activity, final SocializeSession session, final ShareType shareType, final Share share, String shareText, Location location, final ShareAddListener shareAddListener) {
 		shareSystem.share(activity, session, share, shareText, location, shareType, new SocialNetworkListener() {
 			@Override
@@ -312,6 +342,10 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 		});	
 	}	
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.share.ShareUtilsProxy#shareViaSocialNetworks(android.app.Activity, com.socialize.entity.Entity, com.socialize.api.action.share.ShareOptions, com.socialize.api.action.share.SocialNetworkShareListener, com.socialize.networks.SocialNetwork[])
+	 */
 	@Override
 	public void shareViaSocialNetworks(Activity context, final Entity entity, final ShareOptions shareOptions, final SocialNetworkShareListener listener, final SocialNetwork...networks) {
 		if(isDisplayAuthDialog(context, shareOptions, networks)) {
@@ -354,31 +388,55 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 		}			
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.share.ShareUtilsProxy#getShare(android.app.Activity, com.socialize.listener.share.ShareGetListener, long)
+	 */
 	@Override
 	public void getShare(Activity context, ShareGetListener listener, long id) {
 		shareSystem.getShare(getSocialize().getSession(), id, listener);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.share.ShareUtilsProxy#getShares(android.app.Activity, com.socialize.listener.share.ShareListListener, long[])
+	 */
 	@Override
 	public void getShares(Activity context, ShareListListener listener, long... ids) {
 		shareSystem.getSharesById(getSocialize().getSession(), listener, ids);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.share.ShareUtilsProxy#getSharesByUser(android.app.Activity, long, int, int, com.socialize.listener.share.ShareListListener)
+	 */
 	@Override
 	public void getSharesByUser(Activity context, long userId, int start, int end, ShareListListener listener) {
 		shareSystem.getSharesByUser(getSocialize().getSession(), userId, start, end, listener);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.share.ShareUtilsProxy#getSharesByEntity(android.app.Activity, java.lang.String, int, int, com.socialize.listener.share.ShareListListener)
+	 */
 	@Override
 	public void getSharesByEntity(Activity context, String entityKey, int start, int end, ShareListListener listener) {
 		shareSystem.getSharesByEntity(getSocialize().getSession(), entityKey, start, end, listener);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.share.ShareUtilsProxy#canShareViaEmail(android.app.Activity)
+	 */
 	@Override
 	public boolean canShareViaEmail(Activity context) {
 		return getSocialize().canShare(context, ShareType.EMAIL);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.share.ShareUtilsProxy#canShareViaSMS(android.app.Activity)
+	 */
 	@Override
 	public boolean canShareViaSMS(Activity context) {
 		return getSocialize().canShare(context, ShareType.SMS);

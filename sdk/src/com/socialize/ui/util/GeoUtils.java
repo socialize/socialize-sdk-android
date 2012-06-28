@@ -31,6 +31,7 @@ import com.socialize.util.StringUtils;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
+import android.util.Log;
 
 /**
  * @author Jason Polites
@@ -61,7 +62,7 @@ public class GeoUtils {
 						"]", e);
 			}
 			else {
-				e.printStackTrace();
+				Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 			}
 		}
 

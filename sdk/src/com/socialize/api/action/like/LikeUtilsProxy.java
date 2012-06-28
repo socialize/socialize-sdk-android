@@ -23,6 +23,7 @@ package com.socialize.api.action.like;
 
 import android.app.Activity;
 import android.content.Context;
+import android.widget.CompoundButton;
 import com.socialize.annotations.Synchronous;
 import com.socialize.entity.Entity;
 import com.socialize.entity.User;
@@ -31,6 +32,7 @@ import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.ui.actionbutton.LikeButtonListener;
 
 
 /**
@@ -55,4 +57,6 @@ public interface LikeUtilsProxy {
 	public void getLikesByUser (Activity context, User user, int start, int end, LikeListListener listener);
 	
 	public void getLikesByEntity (Activity context, String entityKey, int start, int end, LikeListListener listener);
+	
+	public void makeLikeButton(Activity context, CompoundButton button, Entity entity, LikeButtonListener listener);
 }

@@ -21,8 +21,11 @@
  */
 package com.socialize.listener.like;
 
+import android.util.Log;
 import com.socialize.entity.Like;
+import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
+import com.socialize.log.SocializeLogger;
 
 /**
  * @author Jason Polites
@@ -47,7 +50,18 @@ public abstract class IsLikedListener extends LikeGetListener {
 	 */
 	@Override
 	public void onError(SocializeException error) {
-		error.printStackTrace();
+		
+		if(error instanceof SocializeApiError) {
+			SocializeApiError aError = (SocializeApiError) error;
+			
+			if(aError.getResultCode() != 404) {
+				Log.e(SocializeLogger.LOG_TAG, error.getMessage(), error);
+			}
+		}
+		else {
+			Log.e(SocializeLogger.LOG_TAG, error.getMessage(), error);
+		}
+		
 		onNotLiked();
 	}
 	

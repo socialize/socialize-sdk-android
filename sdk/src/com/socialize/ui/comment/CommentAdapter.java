@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -381,7 +382,7 @@ public class CommentAdapter extends BaseAdapter {
 			logger.error(msg, e);
 		}
 		else {
-			e.printStackTrace();
+			Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 		}
 	}
 }

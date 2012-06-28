@@ -25,6 +25,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
@@ -178,7 +179,7 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 			logger.error("Error during device registration", e);
 		}
 		else {
-			e.printStackTrace();
+			Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 		}
 	}
 	

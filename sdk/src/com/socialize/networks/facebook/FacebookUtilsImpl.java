@@ -29,11 +29,12 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
 import com.socialize.ConfigUtils;
+import com.socialize.ShareUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.ShareType;
-import com.socialize.api.action.share.ShareSystem;
+import com.socialize.api.action.share.ShareOptions;
+import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.api.action.user.UserSystem;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.DefaultUserProviderCredentials;
@@ -41,14 +42,11 @@ import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
-import com.socialize.entity.PropagationInfo;
-import com.socialize.entity.Share;
-import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.listener.share.ShareAddListener;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
+import com.socialize.ui.profile.UserSettings;
+import com.socialize.util.ImageUtils;
 
 
 /**
@@ -58,9 +56,8 @@ import com.socialize.networks.SocialNetworkPostListener;
 public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	
 	private UserSystem userSystem;
-	private ShareSystem shareSystem;
 	private FacebookWallPoster facebookWallPoster;
-	private FacebookImageUtils facebookImageUtils;
+	private ImageUtils imageUtils;
 
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#link(android.app.Activity, com.socialize.listener.SocializeAuthListener)
@@ -101,7 +98,13 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	public void unlink(Context context) {
 		SocializeSession session = getSocialize().getSession();
 		session.clear(AuthProviderType.FACEBOOK);
-		session.getUserSettings().setAutoPostFacebook(false);
+		
+		UserSettings userSettings = session.getUserSettings();
+		
+		if(userSettings != null) {
+			userSettings.setAutoPostFacebook(false);
+		}
+		
 		userSystem.saveSession(context, session);
 	}
 
@@ -143,21 +146,11 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	}
 
 	@Override
-	public void postEntity(final Activity context, final Entity entity, final String text, final SocialNetworkListener listener) {
-		shareSystem.addShare(context, getSocialize().getSession(), entity, ShareType.FACEBOOK, new ShareAddListener() {
-			@Override
-			public void onCreate(Share share) {
-				PropagationInfo propInfo = share.getPropagationInfoResponse().getPropagationInfo(ShareType.FACEBOOK);
-				facebookWallPoster.post(context, entity, text, propInfo, listener);
-			}
-
-			@Override
-			public void onError(SocializeException error) {
-				if(listener != null) {
-					listener.onNetworkError(context, SocialNetwork.FACEBOOK, error);
-				}
-			}
-		}, SocialNetwork.FACEBOOK);
+	public void postEntity(final Activity context, final Entity entity, final String text, final SocialNetworkShareListener listener) {
+		ShareOptions options = ShareUtils.getUserShareOptions(context);
+		options.setText(text);
+		options.setShowAuthDialog(false);
+		ShareUtils.shareViaSocialNetworks(context, entity, options, listener, SocialNetwork.FACEBOOK);		
 	}
 
 	@Override
@@ -180,28 +173,24 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 
 	@Override
 	public byte[] getImageForPost(Activity context, Uri imagePath) throws IOException {
-		return facebookImageUtils.scaleImage(context, imagePath);
+		return imageUtils.scaleImage(context, imagePath);
 	}
 	
 	@Override
 	public byte[] getImageForPost(Activity context, Bitmap image, CompressFormat format) throws IOException {
-		return facebookImageUtils.scaleImage(context, image, format);
+		return imageUtils.scaleImage(context, image, format);
 	}
 
 	public void setUserSystem(UserSystem userSystem) {
 		this.userSystem = userSystem;
 	}
 
-	public void setShareSystem(ShareSystem shareSystem) {
-		this.shareSystem = shareSystem;
-	}
-
 	public void setFacebookWallPoster(FacebookWallPoster facebookWallPoster) {
 		this.facebookWallPoster = facebookWallPoster;
 	}
 	
-	public void setFacebookImageUtils(FacebookImageUtils facebookImageUtils) {
-		this.facebookImageUtils = facebookImageUtils;
+	public void setImageUtils(ImageUtils imageUtils) {
+		this.imageUtils = imageUtils;
 	}
 
 	protected SocializeService getSocialize() {

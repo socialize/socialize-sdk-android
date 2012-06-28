@@ -24,8 +24,10 @@ package com.socialize.ui.actionbar;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import com.socialize.entity.Entity;
+import com.socialize.log.SocializeLogger;
 import com.socialize.ui.view.EntityView;
 
 /**
@@ -37,14 +39,11 @@ public class ActionBarView extends EntityView {
 	public static final int ACTION_BAR_BUTTON_WIDTH = 80;
 	
 	private ActionBarLayoutView actionBarLayoutView;
-//	private ActionBarSliderView slider;
-//	private ActionBarSliderFactory<ActionBarSliderView> sliderFactory;
 	private ActionBarListener actionBarListener;
 	
 	private Entity entity;
 	
 	private OnActionBarEventListener onActionBarEventListener;
-//	private SliderActionBarListener sliderActionBarEventListener;
 	
 	public ActionBarView(Context context) {
 		super(context);
@@ -70,10 +69,6 @@ public class ActionBarView extends EntityView {
 			actionBarLayoutView = container.getBean("actionBarLayoutView", this);
 		}
 		
-//		if(sliderActionBarEventListener == null) {
-//			sliderActionBarEventListener = container.getBean("sliderActionBarListener");
-//		}
-		
 		setListeners();
 		
 		if(actionBarListener != null) {
@@ -83,32 +78,11 @@ public class ActionBarView extends EntityView {
 		return actionBarLayoutView;
 	}
 	
-	
-//	@Override
-//	public void onAfterAuthenticate(IOCContainer container) {
-//		super.onAfterAuthenticate(container);
-//		sliderFactory = container.getBean("actionBarSliderFactory");
-//		if(sliderFactory != null) {
-//			slider = sliderFactory.wrap(this, ZOrder.BEHIND, 0);
-//		}
-//	}
-	
 	protected void setListeners() {
 		if(actionBarLayoutView != null) {
 			if(onActionBarEventListener != null) {
 				actionBarLayoutView.setOnActionBarEventListener(onActionBarEventListener);
-				
-//				if(sliderActionBarEventListener != null) {
-//					sliderActionBarEventListener.setDelegate(onActionBarEventListener);
-//					actionBarLayoutView.setOnActionBarEventListener(sliderActionBarEventListener);
-//				}
-//				else {
-//					actionBarLayoutView.setOnActionBarEventListener(onActionBarEventListener);
-//				}
 			}
-//			else if(sliderActionBarEventListener != null) {
-//				actionBarLayoutView.setOnActionBarEventListener(sliderActionBarEventListener);
-//			}
 		}
 	}
 	
@@ -125,10 +99,6 @@ public class ActionBarView extends EntityView {
 		this.entity = entity;
 	}
 
-//	protected ActionBarSliderView getSlider() {
-//		return slider;
-//	}
-	
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.view.EntityView#getEntityKeys()
 	 */
@@ -140,7 +110,7 @@ public class ActionBarView extends EntityView {
 	@Override
 	public void showError(Context context, Exception e) {
 		// Don't display popup
-		e.printStackTrace();
+		Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 	}
 
 	@Override

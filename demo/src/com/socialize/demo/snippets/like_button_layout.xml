@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<snippets>
+<!-- begin-snippet-0 -->
+
+<!-- 
+Create a state list drawable to represent the button states then
+add to res/drawable/like_button_state.xml 
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@drawable/like"
+        android:state_checked="true"/>
+    <item
+        android:drawable="@drawable/unlike"
+        android:state_checked="false"/>    
+</selector>
+<!-- end-snippet-0 -->
+<!-- begin-snippet-1 -->
+<!-- Set the android:button attribute to your state list drawable -->
+<CheckBox 
+    android:id="@+id/btnCustomCheckBoxLike"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_gravity="left|center_vertical" 
+    android:button="@drawable/like_button_state"/>
+<!-- end-snippet-1 -->    
+</snippets>
