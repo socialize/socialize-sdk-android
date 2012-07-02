@@ -79,6 +79,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 
 	private static final String FACEBOOK_MESSAGE = "socialize.facebook.message";
 	private static final String FACEBOOK_PICTURE = "socialize.sharing.picture";
+	private static final String FACEBOOK_PREVIEW = "socialize.sharing.preview";
 	
 
 	@Override
@@ -99,31 +100,33 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		String link = entityUrl;
 		String appId = ConfigUtils.getConfig(parent).getProperty(SocializeConfig.FACEBOOK_APP_ID);
 		String pictureURL = null;
+		String previewURL = null;
 
 		if(entity != null) {
 			linkName = entity.getDisplayName();
 		}
 
 		String type = "feed";
-		if (!StringUtils.isEmpty(message)) {
+		if (StringUtils.isEmpty(message)) {
 			type = "photos";
 		}
 
 		Properties prop = new Properties();
  
     	try {
+    		prop.load(parent.openFileInput("socialize_sharing.properties"));
+			if (prop.getProperty(FACEBOOK_PICTURE) != null) {
+            	pictureURL = prop.getProperty(FACEBOOK_PICTURE);
+            	if (!message.equals("")) {
+	            	previewURL = prop.getProperty(FACEBOOK_PREVIEW);
+	            }
+        	}
+
     		prop.load(parent.getResources().getAssets().open("socialize.properties"));
- 
  			if (prop.getProperty(FACEBOOK_MESSAGE) != null) {
  				linkName = linkName + ": " + prop.getProperty(FACEBOOK_MESSAGE) + "\n" + message;
             	message = message + ": " + prop.getProperty(FACEBOOK_MESSAGE);
         	}
-
-        	prop.load(parent.openFileInput("socialize_sharing.properties"));
-			if (prop.getProperty(FACEBOOK_PICTURE) != null) {
-            	pictureURL = prop.getProperty(FACEBOOK_PICTURE);
-        	}        	
- 
     	} catch (IOException ex) {
     		ex.printStackTrace();
         }
@@ -137,7 +140,9 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			params.put("type", type);
 			Log.v("DefaultFacebookWallPoster", params.toString());
 
-			if (pictureURL != null) {
+			if (previewURL != null) {
+				params.put("picture", previewURL);
+			} else if (pictureURL != null) {
 				byte[] data = null;
 
 				try {
@@ -156,7 +161,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 					params.put("picture", pictureURL);
 				}
 			} else {
-				Log.v("DefaultFacebookWallPoster", "pictureURL == null");
+				Log.v("DefaultFacebookWallPoster", "pictureURL == null and previewURL == null");
 			}
 			
 			DefaultPostData postData = new DefaultPostData();
