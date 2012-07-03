@@ -117,7 +117,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
     		prop.load(parent.openFileInput("socialize_sharing.properties"));
 			if (prop.getProperty(FACEBOOK_PICTURE) != null) {
             	pictureURL = prop.getProperty(FACEBOOK_PICTURE);
-            	if (!message.equals("")) {
+            	if (!StringUtils.isEmpty(message)) {
 	            	previewURL = prop.getProperty(FACEBOOK_PREVIEW);
 	            }
         	}
