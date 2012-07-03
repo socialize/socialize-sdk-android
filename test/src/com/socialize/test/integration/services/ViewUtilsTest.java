@@ -45,17 +45,6 @@ import com.socialize.test.SocializeActivityTest;
  */
 public class ViewUtilsTest extends SocializeActivityTest {
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		Socialize.getSocialize().clearSessionCache(getContext());
-		Socialize.getSocialize().destroy(true);
-	}
-
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
 
 	public void testAddView() throws InterruptedException {
 		

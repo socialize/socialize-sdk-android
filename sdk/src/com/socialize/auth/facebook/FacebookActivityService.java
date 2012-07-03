@@ -2,16 +2,17 @@ package com.socialize.auth.facebook;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import com.socialize.config.SocializeConfig;
 import com.socialize.facebook.Facebook;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.ListenerHolder;
+import com.socialize.networks.facebook.FacebookUtilsProxy;
 import com.socialize.util.DialogFactory;
 
 public class FacebookActivityService {
 
 	private Facebook facebook;
+	private FacebookUtilsProxy facebookUtils;
 	private FacebookSessionStore facebookSessionStore;
 	private ListenerHolder listenerHolder;
 	private FacebookActivity activity;
@@ -37,14 +38,15 @@ public class FacebookActivityService {
 			Bundle extras = intent.getExtras();
 			
 			if(extras != null) {
-				String appId = extras.getString("appId");
+//				String appId = extras.getString("appId");
 				String[] permissions = extras.getStringArray("permissions");
 				
 				facebookSessionStore = activity.getBean("facebookSessionStore");
 				listenerHolder = activity.getBean("listenerHolder");
 				dialogFactory = activity.getBean("dialogFactory");
 				config = activity.getBean("config");
-				facebook = new Facebook(appId);
+				facebookUtils = activity.getBean("facebookUtils");
+				facebook = facebookUtils.getFacebook(activity);
 				service = getFacebookService();
 				
 				boolean photos = config.getBooleanProperty(SocializeConfig.FACEBOOK_PHOTOS_ENABLED, false);

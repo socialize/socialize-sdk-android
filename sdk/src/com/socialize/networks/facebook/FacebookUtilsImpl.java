@@ -28,6 +28,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
+import android.os.Bundle;
 import com.socialize.ConfigUtils;
 import com.socialize.ShareUtils;
 import com.socialize.Socialize;
@@ -39,14 +40,20 @@ import com.socialize.api.action.user.UserSystem;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.DefaultUserProviderCredentials;
 import com.socialize.auth.UserProviderCredentials;
+import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
+import com.socialize.facebook.Facebook;
+import com.socialize.facebook.Facebook.ServiceListener;
+import com.socialize.facebook.FacebookError;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.ui.profile.UserSettings;
 import com.socialize.util.ImageUtils;
+import com.socialize.util.StringUtils;
 
 
 /**
@@ -58,6 +65,17 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	private UserSystem userSystem;
 	private FacebookWallPoster facebookWallPoster;
 	private ImageUtils imageUtils;
+	private Facebook facebook;
+	private SocializeLogger logger;
+	private SocializeConfig config;
+
+	@Override
+	public synchronized Facebook getFacebook(Context context) {
+		if(facebook == null) {
+			facebook = new Facebook(config.getProperty(SocializeConfig.FACEBOOK_APP_ID));
+		}
+		return facebook;
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#link(android.app.Activity, com.socialize.listener.SocializeAuthListener)
@@ -152,6 +170,76 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 		options.setShowAuthDialog(false);
 		ShareUtils.shareViaSocialNetworks(context, entity, options, listener, SocialNetwork.FACEBOOK);		
 	}
+	
+	@Override
+	public void extendAccessToken(final Context context) {
+		
+		if(isLinked(context)) {
+			getFacebook(context).extendAccessTokenIfNeeded(context, new ServiceListener() {
+				@Override
+				public void onFacebookError(FacebookError e) {
+					if(logger != null) {
+						logger.warn("An error occurred while attempting to extend a Facebook access token.  The local Facebook account will be cleared.", e);
+					}				
+					
+					// Clear the local session state
+					unlink(context);
+				}
+				
+				@Override
+				public void onError(Error e) {
+					if(logger != null) {
+						logger.warn("An error occurred while attempting to extend a Facebook access token.  The local Facebook account will be cleared.", e);
+					}
+					
+					// Clear the local session state
+					unlink(context);
+				}
+				
+				@Override
+				public void onComplete(Bundle values) {
+					// Update the local session state
+					SocializeSession session = getSocialize().getSession();
+					
+					if(session != null) {
+						
+						String newAccessToken = values.getString(Facebook.TOKEN);
+						
+						if(!StringUtils.isEmpty(newAccessToken)) {
+							
+							if(logger != null && logger.isDebugEnabled()) {
+								logger.debug("Got new Facebook access token [" +
+										newAccessToken +
+										"]");
+							}
+							
+							UserProviderCredentialsMap map = session.getUserProviderCredentials();
+							
+							UserProviderCredentials creds = map.get(AuthProviderType.FACEBOOK);
+							
+							DefaultUserProviderCredentials newCreds = new DefaultUserProviderCredentials();
+							
+							if(creds != null) {
+								newCreds.merge(creds);
+							}
+							
+							newCreds.setAccessToken(newAccessToken);
+							
+							map.put(AuthProviderType.FACEBOOK, newCreds);
+							
+							getSocialize().setSession(session);
+							getSocialize().saveSession(context);
+						}
+						else {
+							if(logger != null) {
+								logger.warn("Access token returned from Facebook was empty during request to extend");
+							}
+						}
+					}
+				}
+			});
+		}
+	}
 
 	@Override
 	public void post(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {
@@ -191,6 +279,14 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	
 	public void setImageUtils(ImageUtils imageUtils) {
 		this.imageUtils = imageUtils;
+	}
+	
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
+	}
+	
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
 	}
 
 	protected SocializeService getSocialize() {

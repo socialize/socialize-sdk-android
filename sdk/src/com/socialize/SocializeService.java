@@ -25,6 +25,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.os.Bundle;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
@@ -35,6 +36,7 @@ import com.socialize.auth.UserProviderCredentials;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.activity.ActionListListener;
@@ -621,6 +623,13 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	public boolean isSupported(AuthProviderType type);
 	
 	/**
+	 * Returns true if Socialize is supported on this device.
+	 * @param context
+	 * @throws SocializeException if Socialize it NOT supported
+	 */
+	public void isSocializeSupported(Context context) throws SocializeException;
+	
+	/**
 	 * Sets the entity loader object which allows Socialize to open entities when a user clicks on a user activity item.
 	 * @param entityLoader
 	 */
@@ -668,5 +677,14 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * Should be called in the onResume method of the containing activity
 	 */
 	public void onResume(Context context);
+	
+	/**
+	 * Should be called in the onCreate method of the containing activity
+	 */
+	public void onCreate(Context context, Bundle savedInstanceState);
 
+	/**
+	 * Should be called in the onDestroy method of the containing activity
+	 */
+	public void onDestroy(Context context);
 }

@@ -22,7 +22,6 @@
 package com.socialize.test.ui;
 
 import android.test.ActivityInstrumentationTestCase2;
-import com.socialize.Socialize;
 import com.socialize.sample.EmptyActivity;
 import com.socialize.test.ui.util.TestUtils;
 
@@ -33,15 +32,15 @@ public abstract class SocializeUIActivityTest extends ActivityInstrumentationTes
 	}
 
 	@Override
-	protected void setUp() throws Exception {
-		Socialize.getSocialize().clearSessionCache(getContext());
+	protected final void setUp() throws Exception {
+		super.setUp();
 		TestUtils.setUp(this);
 	}
 	
 	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
+	protected final void tearDown() throws Exception {
 		TestUtils.tearDown();
+		super.tearDown();
 	}
 	
 	protected void clearResults() {

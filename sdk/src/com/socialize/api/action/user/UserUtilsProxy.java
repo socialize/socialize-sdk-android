@@ -22,6 +22,7 @@
 package com.socialize.api.action.user;
 
 import android.content.Context;
+import com.socialize.annotations.NoAuth;
 import com.socialize.annotations.Synchronous;
 import com.socialize.entity.User;
 import com.socialize.listener.user.UserGetListener;
@@ -78,5 +79,7 @@ public interface UserUtilsProxy {
 	 */
 	public void saveUserSettings (Context context, UserSettings settings, UserSaveListener listener);
 	
+	@NoAuth
+	@Synchronous
 	public void clearSession(Context context);
 }

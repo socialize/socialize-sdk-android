@@ -21,7 +21,6 @@
  */
 package com.socialize.test.integration.sdk;
 
-import com.socialize.Socialize;
 import com.socialize.test.SocializeActivityTest;
 
 
@@ -33,16 +32,4 @@ public abstract class SDKIntegrationTest extends SocializeActivityTest {
 	public static final String DEFAULT_ENTITY_URL = "http://socialize.integration.tests.com?somekey=somevalue&anotherkey=anothervalue";
 	public static final String DEFAULT_GET_ENTITY = "http://entity1.com";
 	public static final int NUM_COMMENTS = 30;
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		Socialize.getSocialize().clearSessionCache(getContext());
-		Socialize.getSocialize().destroy(true);
-	}
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
-	
-	
 }

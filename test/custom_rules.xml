@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="socialize-sdk-test-custom">
+	
+	<!-- Setup for tests -->
+	<property name="test-output" value="test-output"/>
+	
+	<property 
+		name="test.runner" 
+		value="pl.polidea.instrumentation.PolideaInstrumentationTestRunner" /> 	
+	
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="libext/ant-contrib.jar"/>
+		</classpath>
+	</taskdef>		
+	
+	<target name="clean-all">
+		<ant dir="../sample" target="clean" inheritall="false" inheritrefs="false"/>
+		
+		<antcall target="clean"/>
+		
+    	<delete verbose="${verbose}" failonerror="false">
+			<fileset dir="bin/intermediate"/>
+		</delete>
+		
+		<delete dir="${test-output}" verbose="${verbose}" failonerror="false"/>
+	    	
+        <echo>Cleaning up local coverage files...</echo>
+		<delete file="${emma.report.dir}/coverage.ec" />
+		<delete file="${emma.report.dir}/coverage.em" />
+    	
+    	<echo>Removing coverage files from device</echo>
+    	<exec executable="${adb}" failonerror="false">
+            <arg line="${adb.device.arg}" />
+            <arg value="shell" />
+            <arg value="rm" />
+    		<arg value="-r" />
+            <arg value="${emma.dump.path}" />
+        </exec>   
+    	
+    	<echo>Removing junit files from device</echo>
+    	<exec executable="${adb}" failonerror="false">
+            <arg line="${adb.device.arg}" />
+            <arg value="shell" />
+            <arg value="rm" />
+    		<arg value="-r" />
+            <arg value="${junit.dump.path}" />
+        </exec>   
+		
+		<echo>Creating junit report path on device at ${junit.dump.path}</echo>
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="shell" />
+			<arg value="mkdir" />
+			<arg value="${junit.dump.path}" />
+		</exec>
+	
+		<echo>Creating coverage report path on device at ${emma.dump.path}</echo>
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="shell" />
+			<arg value="mkdir" />
+			<arg value="${emma.dump.path}" />
+		</exec>		
+		
+		<echo>Clearing logcat buffer</echo>
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="logcat" />
+			<arg value="-c" />
+		</exec>			
+		
+		<mkdir dir="${test-output}"/>
+	</target>
+	
+	<target name="build-all" depends="clean-all">
+		<ant dir="../sample" target="copy-library-src" inheritall="false" inheritrefs="false"/>
+		<property name="build.is.instrumented" value="true" />
+		<property name="build.target" value="instrument" />  
+		<property name="emma.enabled" value="true" />
+		<antcall target="instrument" inheritall="true" inheritrefs="true"/>
+	</target>	
+	
+	<target name="install-all">
+		<antcall target="uninstall" inheritall="true" inheritrefs="true"/>
+		<antcall target="installi" inheritall="true" inheritrefs="true"/>
+	</target>	
+	
+	<target name="test-all" depends="build-all">
+		<property name="build.is.instrumented" value="true" />
+		<property name="build.target" value="instrument" />  
+		<property name="emma.enabled" value="true" />
+		<for list="${test.suite}" param="test.package">
+			<sequential>
+		    	<echo></echo>
+		    	<echo>##################################################################################################</echo>
+		    	<echo>########################### EXECUTING TEST FOR PACKAGE @{test.package} ###########################</echo>
+		    	<echo>##################################################################################################</echo>
+		    	<echo></echo>    			
+				<antcall target="install-all" inheritall="true" inheritrefs="true"/>
+				<antcall target="-set-debug-mode" inheritall="true" inheritrefs="true"/>
+				<antcall target="test" inheritall="true" inheritrefs="true">
+					 <param name="test.package" value="@{test.package}" />
+				</antcall>
+			</sequential>
+		</for>
+	</target>	
+	
+	<!-- 
+		################################################################################################
+		OVERRIDE DEFAULT COMPILE TARGET FROM ANDROID TO ENABLE MOCKS 
+		################################################################################################
+	-->		
+	
+    <!-- Compiles this project's .java files into .class files. -->
+    <target name="-compile" depends="-build-setup, -pre-build, -code-gen, -pre-compile">
+        <do-only-if-manifest-hasCode elseText="hasCode = false. Skipping...">
+        	
+            <!-- merge the project's own classpath and the tested project's classpath -->
+            <path id="project.javac.classpath">
+                <path refid="project.all.jars.path" />
+                <path refid="tested.project.classpath" />
+            </path>
+        	
+        	<condition property="extensible.classpath"
+                    value="${tested.project.absolute.dir}/bin/classes"
+                    else=".">
+                <isset property="tested.project.absolute.dir" />
+            </condition>
+            
+        	<condition property="extensible.libs.classpath"
+                    value="${tested.project.absolute.dir}/${jar.libs.dir}"
+                    else="${jar.libs.dir}">
+                <isset property="tested.project.absolute.dir" />
+            </condition>
+        	
+         	<echo>Compiling without mocks</echo>
+            <echo>Compiling test project from ${source.absolute.dir}, ${tested.project.src} to bin/intermediate</echo>        	
+        	
+        	<mkdir dir="bin/intermediate"/>
+        	
+			<javac 
+				encoding="${java.encoding}"
+				source="${java.source}" 
+				target="${java.target}"
+				debug="true" 
+				extdirs="" 
+				includeantruntime="false"
+				destdir="bin/intermediate"
+				bootclasspathref="project.target.class.path"
+				verbose="${verbose}"
+				classpathref="project.javac.classpath"
+				fork="${need.javac.fork}">
+				
+					<src path="${source.absolute.dir}" />
+					<src path="${gen.absolute.dir}" />
+				
+			        <classpath>
+			            <fileset dir="${extensible.libs.classpath}" includes="*.jar" />
+			        </classpath>				
+				
+					<compilerarg value="-proc:none"/>
+			</javac>
+        	
+        	
+		   <echo>Recompiling with mocks</echo>
+		   <echo>Compiling test project from ${source.absolute.dir}, ${tested.project.src} to ${out.classes.absolute.dir}</echo>
+		        	            	
+            <javac 
+            	encoding="${java.encoding}"
+                source="${java.source}" 
+            	target="${java.target}"
+                debug="true" 
+            	extdirs=""
+                destdir="${out.classes.absolute.dir}"
+            	includeantruntime="false"
+				bootclasspathref="project.target.class.path"
+				verbose="${verbose}"
+				classpathref="project.javac.classpath"
+            	fork="${need.javac.fork}">
+            	
+		        <src path="${source.absolute.dir}" />
+		        <src path="${gen.absolute.dir}" />
+            	
+		        <classpath>
+		            <fileset dir="${extensible.libs.classpath}" includes="*.jar" />
+		        	<path location="${project.target.android.jar}"/>
+		        	<path location="bin/intermediate"/>
+		        </classpath>            	
+            	
+            	<compilerarg value="-ARegenerateFrameworkMocks=true"/>
+            </javac>  
+        	
+            <!-- if the project is instrumented, instrument the classes -->
+            <if condition="${build.is.instrumented}">
+                <then>
+                    <echo level="info">Instrumenting classes from ${out.absolute.dir}/classes...</echo>
+
+                    <!-- build the filter to remove R, Manifest, BuildConfig -->
+                    <getemmafilter
+                            appPackage="${project.app.package}"
+                            libraryPackagesRefId="project.library.packages"
+                            filterOut="emma.default.filter"/>
+
+                    <!-- define where the .em file is going. This may have been
+                         setup already if this is a library -->
+                    <property name="emma.coverage.absolute.file" location="${emma.report.dir}/coverage.em" />
+
+                    <!-- It only instruments class files, not any external libs -->
+                    <emma enabled="true">
+                        <instr verbosity="${verbosity}"
+                               mode="overwrite"
+                               instrpath="${out.absolute.dir}/classes"
+                               outdir="${out.absolute.dir}/classes"
+                               metadatafile="${emma.coverage.absolute.file}">
+                            <filter excludes="${emma.default.filter}" />
+                            <filter value="${emma.filter}" />
+                        </instr>
+                    </emma>
+                </then>
+            </if>
+
+        </do-only-if-manifest-hasCode>
+    </target>	
+	
+	<!-- Overrides for http://code.google.com/p/android/issues/detail?id=21640-->
+		
+	<!-- Converts this project's .class files into .dex files -->
+    <target name="-dex" depends="-compile, -post-compile, -obfuscate">
+        <do-only-if-manifest-hasCode elseText="hasCode = false. Skipping...">
+            <!-- only convert to dalvik bytecode is *not* a library -->
+            <do-only-if-not-library elseText="Library project: do not convert bytecode..." >
+                <!-- special case for instrumented builds: need to use no-locals and need
+                     to pass in the emma jar. -->
+                <if condition="${build.is.instrumented}">
+                    <then>
+                    	<if condition="${project.is.test}">
+                    		<then>
+                    			<dex-helper nolocals="true"/>
+                    		</then>
+                        	<else>
+    	                    	<echo>Adding emma_device.jar during DEX</echo>
+    	                        <dex-helper nolocals="true">
+    	                            <external-libs>
+    	                                <fileset file="${emma.dir}/emma_device.jar" />
+    	                            </external-libs>
+    	                        </dex-helper>                    		
+    	                    </else>                    		
+                    	</if>
+                    </then>
+                    <else>
+                        <dex-helper />
+                    </else>
+                </if>
+            </do-only-if-not-library>
+        </do-only-if-manifest-hasCode>
+    </target>
+	
+    <!-- Packages the application. -->
+    <target name="-package" depends="-dex, -package-resources">
+        <!-- only package apk if *not* a library project -->
+        <do-only-if-not-library elseText="Library project: do not package apk..." >
+            <if condition="${build.is.instrumented}">
+                <then>
+	            	<if condition="${project.is.test}">
+	            		<then>
+	            			<package-helper />
+	            		</then>
+    	            	<else>
+    	                  	<echo>Adding emma_device.jar during PACKAGE</echo>
+    	                    <package-helper>
+    	                        <extra-jars>
+    	                            <!-- Injected from external file -->
+    	                            <jarfile path="${emma.dir}/emma_device.jar" />
+    	                        </extra-jars>
+    	                    </package-helper>                		
+    	                </else>  	            		
+	            	</if>
+                </then>
+                <else>
+                    <package-helper />
+                </else>
+            </if>
+        </do-only-if-not-library>
+    </target>
+	
+</project>

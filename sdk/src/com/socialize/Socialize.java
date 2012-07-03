@@ -22,6 +22,7 @@
 package com.socialize;
 
 import android.content.Context;
+import android.os.Bundle;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.log.SocializeLogger.LogLevel;
 
@@ -122,4 +123,20 @@ public class Socialize {
 	public static void onResume(Context context) {
 		instance.onResume(context);
 	}
+	
+	/**
+	 * Called by containing Activities in their onCreate() method.
+	 * @param context
+	 */
+	public static void onCreate(Context context, Bundle savedInstanceState) {
+		instance.onCreate(context, savedInstanceState);
+	}
+
+	/**
+	 * Called by containing Activities in their onDestroy() method.
+	 * @param context
+	 */
+	public static void onDestroy(Context context) {
+		instance.onDestroy(context);
+	}	
 }

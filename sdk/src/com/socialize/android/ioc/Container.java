@@ -363,16 +363,18 @@ public class Container {
 		if(mapping != null) {
 			Collection<BeanRef> beanRefs = mapping.getBeanRefs();
 
-			if(beanRefs != null) {
-				for (BeanRef beanRef : beanRefs) {
-					Object bean = beans.get(beanRef.getName());
-					if(bean != null) {
-						builder.destroyBean(this, beanRef, bean);
+			try {
+				if(beanRefs != null) {
+					for (BeanRef beanRef : beanRefs) {
+						Object bean = beans.get(beanRef.getName());
+						if(bean != null) {
+							builder.destroyBean(this, beanRef, bean);
+						}
 					}
 				}
-				
-				beanRefs.clear();
-				beanRefs = null;
+			}
+			finally {
+				mapping.clear();
 			}
 		}
 		

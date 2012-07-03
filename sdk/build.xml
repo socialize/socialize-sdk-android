@@ -1,311 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="sdk" default="help">
+<project name="socialize-sdk" default="help">
 
-	<property file="local.properties" />
+    <!-- The local.properties file is created and updated by the 'android' tool.
+         It contains the path to the SDK. It should *NOT* be checked into
+         Version Control Systems. -->
+    <property file="local.properties" />
+
+    <!-- The ant.properties file can be created by you. It is only edited by the
+         'android' tool to add properties to it.
+         This is the place to change some Ant specific build properties.
+         Here are some properties you may want to change/update:
+
+         source.dir
+             The name of the source directory. Default is 'src'.
+         out.dir
+             The name of the output directory. Default is 'bin'.
+
+         For other overridable properties, look at the beginning of the rules
+         files in the SDK, at tools/ant/build.xml
+
+         Properties related to the SDK location or the project target should
+         be updated using the 'android' tool with the 'update' action.
+
+         This file is an integral part of the build system for your
+         application and should be checked into Version Control Systems.
+
+         -->
     <property file="ant.properties" />
+
+    <!-- if sdk.dir was not set from one of the property file, then
+         get it from the ANDROID_HOME env var.
+         This must be done before we load project.properties since
+         the proguard config can use sdk.dir -->
+    <property environment="env" />
+    <condition property="sdk.dir" value="${env.ANDROID_HOME}">
+        <isset property="env.ANDROID_HOME" />
+    </condition>
+
+    <!-- The project.properties file is created and updated by the 'android'
+         tool, as well as ADT.
+
+         This contains project specific properties such as project target, and library
+         dependencies. Lower level build properties are stored in ant.properties
+         (or in .classpath for Eclipse projects).
+
+         This file is an integral part of the build system for your
+         application and should be checked into Version Control Systems. -->
     <loadproperties srcFile="project.properties" />
-    <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project'" unless="sdk.dir"/>
 
-	<!-- 
-		################################################################################################
-		OVERRIDE TARGETS
-		################################################################################################
-	-->			
-	
-	<target name="-pre-compile">
-		<copy todir="libs" verbose="true" failonerror="false">
-			<fileset dir="libext" includes="**/*.jar"/>
-		</copy>
-		<!-- Set the version -->
-		<replaceregexp file="src/com/socialize/Socialize.java" match="public\s+static\s+final\s+String\s+VERSION\s*=\s*&quot;.*&quot;" replace="public static final String VERSION = &quot;${version}&quot;" />
-		
-	</target>
-	
-	<!-- version-tag: custom -->
-	<import file="${sdk.dir}/tools/ant/build.xml" />
-	
-	<!-- 
-		################################################################################################
-		SOCIALIZE TARGETS
-		################################################################################################
-	-->		
-	
+    <!-- quick check on sdk.dir -->
+    <fail
+            message="sdk.dir is missing. Make sure to generate local.properties using 'android update project' or to inject it through the ANDROID_HOME environment variable."
+            unless="sdk.dir"
+    />
 
-	
-	<target name="check-paths">
-	
-		<property environment="env"/> 
-		
-		<echo>${env.PATH}</echo>
-		
-		<condition property="sphinx.available"> 
-			<or> 
-				<available file="sphinx-build" filepath="${env.PATH}"/> 
-			</or> 
-		</condition> 
-		
-	</target>	
-	
-	<target name="build">
-		<antcall target="clean"/>
-		<antcall target="jar"/>
-		<antcall target="package"/>
-	</target>
-	
-	<target name="jar" depends="compile-for-build, -jar"/>
-	<target name="jar-instrumented" depends="compile-instrumented">
-		<property name="build.path" value="build-instrumented"/>
-		<antcall target="-jar"/>
-		<!-- clean up -->
-		<delete dir="libs" includes="**/*.jar" verbose="true"/>
-	</target>
+    <!--
+        Import per project custom build rules if present at the root of the project.
+        This is the place to put custom intermediary targets such as:
+            -pre-build
+            -pre-compile
+            -post-compile (This is typically used for code obfuscation.
+                           Compiled code location: ${out.classes.absolute.dir}
+                           If this is not done in place, override ${out.dex.input.absolute.dir})
+            -post-package
+            -post-build
+            -pre-clean
+    -->
+    <import file="custom_rules.xml" optional="true" />
 
-	<target name="-jar">
-		
-		<property name="build.path" value="build"/>
-		
-		<!-- Manually copy config files -->
-		<echo>Out dir is [${out.dir}]</echo>
+    <!-- Import the actual build file.
 
-		<copy todir="${out.dir}/classes" verbose="true" >
-			<fileset dir="src">
-				<include name="socialize_core_beans.xml"/>
-				<include name="socialize_notification_beans.xml"/>
-				<include name="socialize_ui_beans.xml"/>
-				<include name="socialize.errors.properties"/>
-				<include name="default.socialize.properties"/>
-			</fileset>
-		</copy>
-		
-		<copy todir="${out.dir}/classes/res/" verbose="true" >
-			<fileset dir="src/res" includes="**/**"/>
-		</copy>
-		
-		<delete dir="${build.path}"/>
-		<mkdir dir="${build.path}"/>
-		
-		<jar destfile="${build.path}/socialize-${version}.jar">
-			
-			<fileset dir="${out.dir}/classes" excludes="**/R.class **/R$*.class"/>
-			
-			<manifest>
-				<attribute name="Built-By" value="${vendor}" />
-				<attribute name="Implementation-Vendor" value="${vendor}" />
-				<attribute name="Implementation-Title" value="${title}" />
-				<attribute name="Implementation-Version" value="${version}" />
-			</manifest>
-		</jar>
-	</target>
-		
-	<target name="doc" description="Uses sphinx to generate SDK documentation" depends="sphinx"/>
-	
-	<!-- Python is required on target system for this to work!-->
-	<target name="sphinx" description="Uses sphinx to generate SDK documentation" if="sphinx.available" depends="check-paths">
-		
-		<echo>Setting version in docs to ${version}</echo>
-		
-		<copy file="doc/sphinx/source/conf_template.py" tofile="doc/sphinx/source/conf.py" overwrite="true"/>
-		
-		<replaceregexp file="doc/sphinx/source/conf.py" match="\@socialize.version" replace="v${version}" flags="g" />
-		
-		<delete dir="build/docs/static"/>
-		<delete dir="build/docs/user_guide" verbose="true"/>
-		<mkdir dir="build/docs/user_guide"/>
+         To customize existing targets, there are two options:
+         - Customize only one target:
+             - copy/paste the target into this file, *before* the
+               <import> task.
+             - customize it to your needs.
+         - Customize the whole content of build.xml
+             - copy/paste the content of the rules files (minus the top node)
+               into this file, replacing the <import> task.
+             - customize to your needs.
 
-		<exec executable="sphinx-build" failonerror="true" dir="${basedir}">
-	       	<arg value="-a"/>
-	        <arg value="-E"/>
-			<arg value="doc/sphinx/source"/>
-			<arg value="build/docs/user_guide"/>
-		</exec>
-		
-		<!-- Manually rename folders and references with underscore -->
-		<replaceregexp flags="g" match="_static" replace="static">
-			<fileset dir="build/docs/user_guide" includes="**/*.html **/*.js **/*.css"/>
-		</replaceregexp>
-		
-		<replaceregexp flags="g" match="_images" replace="images">
-			<fileset dir="build/docs/user_guide" includes="**/*.html **/*.js **/*.css"/>
-		</replaceregexp>
-		
-		<replaceregexp flags="g" match="_sources" replace="sources">
-			<fileset dir="build/docs/user_guide" includes="**/*.html **/*.js **/*.css"/>
-		</replaceregexp>
-
-		<move file="build/docs/user_guide/_static" tofile="build/docs/user_guide/static" verbose="true"/>
-		<move file="build/docs/user_guide/_images" tofile="build/docs/user_guide/images" verbose="true"/>
-		<move file="build/docs/user_guide/_sources" tofile="build/docs/user_guide/sources" verbose="true"/>
-
-		<copy 
-			file="doc/read_me_first.html" 
-			todir="build" 
-			verbose="true" 
-			failonerror="true" 
-			overwrite="true"/>
-		
-		<delete file="doc/sphinx/source/conf.py"/>
-	</target>
-
-	<target name="javadoc" depends="-setup">
-		<path id="javadoc.classpath">
-			<path refid="android.target.classpath" />
-			<pathelement path="libext/commons-codec-1.4.jar"/>
-		</path>
-		
-		<path id="javadoc.sourcepath">
-			<pathelement path="src"/>
-		</path>		
-		
-		<mkdir dir="build/docs/javadoc"/>
-		<tstamp>
-			<format property="year" pattern="yyyy" locale="en,UK" />
-		</tstamp>
-
-		<!-- add packagenames="com.socialize" to filter -->
-		<javadoc 
-			stylesheetfile="doc/javadoc/stylesheet.css"
-			sourcepathref="javadoc.sourcepath"
-			classpathref="javadoc.classpath"
-			destdir="build/docs/javadoc" 
-			doctitle="${vendor} SDK v${version} Documentation" 
-			excludepackagenames="com.google.*,com.socialize.oauth.signpost.*,com.socialize.google.*,com.socialize.facebook.*">
-			
-			<header>
-				<![CDATA[${vendor} SDK v${version} Documentation<br/>Copyright ${year} ${vendor}<br/><a href="${website}">${website}</a>]]>
-			</header>
-			
-			<footer>
-				<![CDATA[Copyright ${year} ${vendor}<br/>${website}]]>
-			</footer>
-			
-			<link 
-				href="http://developer.android.com/reference/" 
-				offline="true"
-				packagelistloc="${sdk.dir}/docs/reference"/>
-			
-			<link href="http://www.json.org/javadoc/"/>
-		</javadoc>
-	</target>
-	
-	<target name="package" depends="javadoc, sphinx">
-		
-		<!-- Copy sample to tmp -->
-		
-		<property name="sample_dir" value="/tmp/sdk-sample"/>
-			
-		<delete dir="${sample_dir}"/>
-		<mkdir dir="${sample_dir}"/>
-		<copy todir="${sample_dir}">
-			<fileset dir="../demo/" excludes="gen/**,bin/**,build/**,codetemplates.xml"/>
-		</copy>
-		<copy todir="${sample_dir}/libs">
-			<fileset dir="build" includes="*.jar"/>
-		</copy>
-		 
-		<!-- Clean up sample app for packaging -->
-		<replaceregexp file="${sample_dir}/.classpath" match="&lt;classpathentry kind=&quot;src&quot; path=&quot;socialize-sdk_src&quot;/&gt;" replace="&lt;classpathentry kind=&quot;lib&quot; path=&quot;libs/socialize-${version}.jar&quot;/&gt;" byline="true"/>
-		<replaceregexp file="${sample_dir}/.classpath" match="&lt;classpathentry kind=&quot;src&quot; path=&quot;android-ioc_src&quot;/&gt;" replace=""  byline="true"/>
-		<replaceregexp file="${sample_dir}/ant.properties" match="android.library.reference.1=../sdk" replace="" byline="true"/>
-		<replaceregexp file="${sample_dir}/.project" flags="s" match="&lt;linkedResources&gt;.*&lt;/linkedResources&gt;" replace="" />
-		 
-		<!-- Create the ZIP file for distribution -->
-		<zip destfile="build/socialize-sdk-android-${version}.zip">
-			<zipfileset dir="build" includes="**/*.jar" prefix="dist"/>
-			
-			<!-- Add the sample app as a raw eclipse project -->
-			<zipfileset dir="${sample_dir}" prefix="sample" excludes="gen/**,bin/**,build/**,codetemplates.xml,build-qa.xml,build-qa.properties,emma.properties,proguard.cfg,.DS_Store,assets/json/**,assets/socialize.sample.properties"/>
-			 
-			<!-- Add Docs -->
-			<zipfileset dir="build/docs" prefix="docs"/>
-			<zipfileset dir="build" includes="read_me_first.html"/>
-		</zip>
-		
-		<!-- clean up -->
-		<delete dir="${sample_dir}"/>
-		 
-		<delete dir="build/docs"/>
-		<delete file="build/read_me_first.html"/>
-	</target>	
-	
-	<target name="compile-instrumented">
-		<property name="build.is.instrumented" value="true" />
-		<antcall target="-compile" inheritall="true" inheritrefs="true"/>
-	</target>
-	
-	<target name="compile-for-build">
-		<property name="build.is.instrumented" value="false" />
-		<property name="emma.enabled" value="false" />
-		<antcall target="-compile" inheritall="true" inheritrefs="true"/>
-	</target>	
-	
-	<!-- 
-		################################################################################################
-		COMPILE OVERRIDE
-		################################################################################################
-	-->		
-    <!-- Compiles this project's .java files into .class files. -->
-    <target name="-compile" depends="-build-setup, -pre-build, -code-gen, -pre-compile">
-    	
-    	<echo></echo>
-    	<echo>##################################################################################################</echo>
-    	<echo>########################################## BUILDING SDK ##########################################</echo>
-    	<echo>##################################################################################################</echo>
-    	<echo></echo>
-    	
-        <do-only-if-manifest-hasCode elseText="hasCode = false. Skipping...">
-            <!-- If android rules are used for a test project, its classpath should include
-                 tested project's location -->
-            <condition property="extensible.classpath"
-                    value="${tested.project.absolute.dir}/bin/classes"
-                    else=".">
-                <isset property="tested.project.absolute.dir" />
-            </condition>
-            <condition property="extensible.libs.classpath"
-                    value="${tested.project.absolute.dir}/${jar.libs.dir}"
-                    else="${jar.libs.dir}">
-                <isset property="tested.project.absolute.dir" />
-            </condition>
-            <javac encoding="${java.encoding}"
-                    source="${java.source}" target="${java.target}"
-                    debug="true" extdirs=""
-                    destdir="${out.classes.absolute.dir}"
-                    bootclasspathref="android.target.classpath"
-                    verbose="${verbose}"
-                    classpath="${extensible.classpath};${jar.libs.dir}">
-                <src path="${source.absolute.dir}" />
-                <src path="${gen.absolute.dir}" />
-                <classpath>
-                    <fileset dir="${extensible.libs.classpath}" includes="*.jar" />
-                </classpath>
-            </javac>
-            
-            <!-- if the project is a library then we generate a jar file -->
-            <if condition="${project.is.library}">
-                <then>
-                    <echo>Creating library output jar file...</echo>
-                    <property name="out.library.jar.file" location="${out.absolute.dir}/classes.jar" />
-                    <if>
-                        <condition>
-                            <length string="${android.package.excludes}" trim="true" when="greater" length="0" />
-                        </condition>
-                        <then>
-                            <echo>Custom jar packaging exclusion: ${android.package.excludes}</echo>
-                        </then>
-                    </if>
-                    <jar destfile="${out.library.jar.file}">
-                        <fileset dir="${out.classes.absolute.dir}" excludes="**/R.class **/R$*.class"/>
-                        <fileset dir="${source.absolute.dir}" excludes="**/*.java ${android.package.excludes}" />
-                    </jar>
-                </then>
-            </if>            
-        </do-only-if-manifest-hasCode>
-    </target>	
-	
-	<!-- 
-		################################################################################################
-		END SOCIALIZE TARGETS
-		################################################################################################
-	-->		
-
+         ***********************
+         ****** IMPORTANT ******
+         ***********************
+         In all cases you must update the value of version-tag below to read 'custom' instead of an integer,
+         in order to avoid having your file be overridden by tools such as "android update project"
+    -->
+    <!-- version-tag: custom -->
+	<!--
+    <import file="${sdk.dir}/tools/ant/build.xml" />
+    -->
+	<import file="ant/android_r20_build.xml" />
 
 </project>

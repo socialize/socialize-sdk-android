@@ -8,6 +8,7 @@ Contents:
 	
 	whats_new
 	getting_started
+	lifecycle
 	action_bar
 	like_button
 	facebook

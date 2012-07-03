@@ -447,12 +447,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		AndroidMock.verify(entities);
 	}
 	
-	@Override
-	protected void tearDown() throws Exception {
-		SocializeAccess.revertCommentUtilsProxy();
-		super.tearDown();
-	}
-
 	@SuppressWarnings("unchecked")
 	@UsesMocks ({
 		SocializeException.class,

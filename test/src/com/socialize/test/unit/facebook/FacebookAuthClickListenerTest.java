@@ -40,6 +40,7 @@ import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
+import com.socialize.facebook.Facebook;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetworkPostListener;
@@ -146,6 +147,14 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 
 			@Override
 			public void delete(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {}
+
+			@Override
+			public void extendAccessToken(Context context) {}
+
+			@Override
+			public Facebook getFacebook(Context context) {
+				return null;
+			}
 		};
 		
 		// Stub in facebook utils

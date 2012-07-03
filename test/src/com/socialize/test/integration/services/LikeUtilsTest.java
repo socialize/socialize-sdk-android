@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import com.socialize.LikeUtils;
-import com.socialize.Socialize;
 import com.socialize.UserUtils;
 import com.socialize.api.action.like.LikeOptions;
 import com.socialize.entity.Entity;
@@ -45,18 +44,6 @@ import com.socialize.test.SocializeActivityTest;
  *
  */
 public class LikeUtilsTest extends SocializeActivityTest {
-	
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		Socialize.getSocialize().clearSessionCache(getContext());
-		Socialize.getSocialize().destroy(true);
-	}
-
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
 
 	public void testAddLike() throws InterruptedException {
 		final Entity entityKey = Entity.newInstance("testAddLike", "testAddLike");

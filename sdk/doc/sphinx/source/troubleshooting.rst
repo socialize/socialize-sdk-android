@@ -75,6 +75,15 @@ This will need to be changed to:
 	<supports-screens android:anyDensity="true"/>
 	
 Or just removed completely as **false** is the default value for newer (1.6+) Android versions.
+
+Auth Failure on Twitter
+~~~~~~~~~~~~~~~~~~~~~~~
+
+If you encounter the following error when attempting to authenticate with Twitter::
+
+	Authentication error: Unable to respond to any of these challenges: {oauth=WWW-Authenticate: OAuth realm="https://api.twitter.com"}
+	
+This usually means you have not configured a **Callback URL** in your Twitter app.  Review the :doc:`twitter` section for details on adding a callback url.
 	
 Support and Feedback
 --------------------

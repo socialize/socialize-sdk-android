@@ -28,6 +28,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import com.socialize.android.ioc.IOCContainer;
+import com.socialize.annotations.NoAuth;
 import com.socialize.annotations.Synchronous;
 import com.socialize.api.SocializeSession;
 import com.socialize.error.AuthCanceledException;
@@ -59,13 +60,14 @@ public class SocializeActionProxy implements InvocationHandler {
 			if(method.isAnnotationPresent(Synchronous.class) || !isVoidMethod(method)) {
 				
 				Context context = findContext(args);
-					
+				
 				if(context != null) {
 					synchronized (this) {
 						// Always init to set the context
-						Socialize.getSocialize().init(context);
-						if(!Socialize.getSocialize().isAuthenticated()) {
-							Socialize.getSocialize().authenticateSynchronous(context);
+						if(Socialize.getSocialize().init(context) != null) {
+							if(!Socialize.getSocialize().isAuthenticated() && !method.isAnnotationPresent(NoAuth.class)) {
+								Socialize.getSocialize().authenticateSynchronous(context);
+							}
 						}
 					}
 				}

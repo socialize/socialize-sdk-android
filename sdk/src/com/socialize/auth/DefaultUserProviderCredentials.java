@@ -81,4 +81,11 @@ public class DefaultUserProviderCredentials implements UserProviderCredentials {
 	public void setAuthProviderInfo(AuthProviderInfo authProviderInfo) {
 		this.authProviderInfo = authProviderInfo;
 	}
+	
+	public void merge(UserProviderCredentials other) {
+		setAccessToken(other.getAccessToken());
+		setTokenSecret(other.getTokenSecret());
+		setUserId(other.getUserId());
+		setAuthProviderInfo(other.getAuthProviderInfo());
+	}
 }

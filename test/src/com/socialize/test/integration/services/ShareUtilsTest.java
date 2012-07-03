@@ -27,7 +27,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import android.app.Dialog;
 import com.socialize.ShareUtils;
-import com.socialize.Socialize;
 import com.socialize.api.action.share.SocialNetworkDialogListener;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
@@ -51,18 +50,6 @@ import com.socialize.ui.share.SharePanelView;
  *
  */
 public class ShareUtilsTest extends SocializeActivityTest {
-	
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		Socialize.getSocialize().clearSessionCache(getContext());
-		Socialize.getSocialize().destroy(true);
-	}
-
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
 	
 	public void testGetShareExists() throws Exception {
 		

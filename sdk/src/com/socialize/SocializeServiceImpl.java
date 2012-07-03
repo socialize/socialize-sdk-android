@@ -101,6 +101,7 @@ import com.socialize.networks.PostData;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.facebook.FacebookUtils;
 import com.socialize.notifications.C2DMCallback;
 import com.socialize.notifications.NotificationChecker;
 import com.socialize.notifications.NotificationType;
@@ -120,6 +121,7 @@ import com.socialize.ui.profile.ProfileActivity;
 import com.socialize.ui.profile.UserSettings;
 import com.socialize.util.AppUtils;
 import com.socialize.util.ClassLoaderProvider;
+import com.socialize.util.DisplayUtils;
 import com.socialize.util.EntityLoaderUtils;
 import com.socialize.util.ResourceLocator;
 
@@ -211,6 +213,16 @@ public class SocializeServiceImpl implements SocializeService {
 		return authProviderInfoBuilder.isSupported(type);
 	}
 
+	@Override
+	public void isSocializeSupported(Context context) throws SocializeException {
+		// Check that we are not LDPI
+		DisplayUtils displayUtils = new DisplayUtils();
+		displayUtils.init(context);
+		if(displayUtils.isLDPI()) {
+			throw new SocializeException("Socialize is not supported on low resolution (LDPI) devices");
+		}
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#init(android.content.Context)
 	 */
@@ -264,6 +276,9 @@ public class SocializeServiceImpl implements SocializeService {
 	public synchronized IOCContainer initWithContainer(Context context, SocializeInitListener listener, String...paths) throws Exception {
 		boolean init = false;
 		
+		// Check socialize is supported on this device.
+		isSocializeSupported(context);
+		
 		String[] localPaths = getInitPaths();
 		
 		if(paths != null) {
@@ -283,7 +298,12 @@ public class SocializeServiceImpl implements SocializeService {
 							this.initCount = 0;
 							
 							// Destroy the container so we don't double up on caches etc.
-							destroy();
+							if(container != null) {
+								if(logger != null && logger.isDebugEnabled()) {
+									logger.debug("Destroying IOC container");
+								}
+								container.destroy();
+							}
 							
 							init = true;
 							
@@ -326,17 +346,21 @@ public class SocializeServiceImpl implements SocializeService {
 					
 					locator.setClassLoaderProvider(provider);
 					
-					if(logger != null && logger.isDebugEnabled()) {
+					if(logger != null) {
 						
-						for (String path : paths) {
-							logger.debug("Initializing Socialize with path [" +
-									path +
-									"]");
+						if(logger.isDebugEnabled()) {
+							for (String path : paths) {
+								logger.debug("Initializing Socialize with path [" +
+										path +
+										"]");
+							}
+							
+							Logger.logLevel = Log.DEBUG;
 						}
-						
-//						Logger.logLevel = Log.DEBUG;
+						else if(logger.isInfoEnabled()) {
+							Logger.logLevel = Log.INFO;
+						}
 					}	
-					
 					
 					container.init(context, locator, paths);
 					
@@ -1665,10 +1689,14 @@ public class SocializeServiceImpl implements SocializeService {
 
 	@Override
 	public void onResume(Context context) {
-		if(locationProvider != null) {
-			locationProvider.resume(context);
-		}
+		FacebookUtils.extendAccessToken(context);
 	}
+	
+	@Override
+	public void onCreate(Context context, Bundle savedInstanceState) {}
+
+	@Override
+	public void onDestroy(Context context) {}
 
 	protected void setCommentSystem(CommentSystem commentSystem) {
 		this.commentSystem = commentSystem;

@@ -68,8 +68,6 @@ public class AuthRequestDialogFactoryTest extends ActionBarAutoTest {
 	@Override
 	protected void setUp() throws Exception {
 		
-		super.setUp();
-		
 		entityStats.setComments(0);
 		entityStats.setLikes(0);
 		entityStats.setShares(0);
@@ -80,12 +78,14 @@ public class AuthRequestDialogFactoryTest extends ActionBarAutoTest {
 		Bundle extras = new Bundle();
 		extras.putSerializable(Socialize.ENTITY_OBJECT, entity);
 		intent.putExtras(extras);
-		setActivityIntent(intent);		
+		setActivityIntent(intent);	
+		
+		super.setUp();
 	}
 
 	public void testAuthRequestDialog() throws Throwable {
-		TestUtils.setupSocializeOverrides(true, true);
 		
+		TestUtils.setupSocializeOverrides(true, true);
 		
 		// Ensure there is no like
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {

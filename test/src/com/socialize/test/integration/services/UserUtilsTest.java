@@ -39,17 +39,6 @@ import com.socialize.ui.profile.UserSettings;
  *
  */
 public class UserUtilsTest extends SocializeActivityTest {
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		Socialize.getSocialize().clearSessionCache(getContext());
-		Socialize.getSocialize().destroy(true);
-	}
-
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
 	
 	public void testGetCurrentUser() throws Exception {
 		

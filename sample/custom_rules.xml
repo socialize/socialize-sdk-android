@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="socialize-sdk-sample-custom">
+	<target name="copy-library-src">
+		<!-- Copy source from library project -->
+		<antcall target="clean-library-src"/>
+		<mkdir dir="${source.dir}"/>
+		<copy todir="${source.dir}">
+			<fileset dir="../sdk/src"/>
+			<fileset dir="src"/>
+		</copy>	
+	</target>
+	
+	<target name="clean-library-src">
+		<!-- Don't use variable in case we accidentally delete src! -->
+		<delete dir="src_ext"/>
+	</target>	
+</project>

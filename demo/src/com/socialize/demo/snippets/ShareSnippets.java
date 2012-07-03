@@ -71,7 +71,7 @@ ShareUtils.showShareDialog(this, entity, new ShareDialogListener() {
 	
 	@Override
 	public void onFlowInterrupted(DialogFlowController controller) {
-		// This will only be called if onContinue returns false
+		// This will only be called if onContinue returns true
 		
 		// Obtain a comment from the user
 		String text = "...";

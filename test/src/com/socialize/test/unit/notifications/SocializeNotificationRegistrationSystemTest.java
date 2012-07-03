@@ -28,6 +28,7 @@ import android.test.mock.MockContext;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.api.DeviceRegistrationListener;
 import com.socialize.api.DeviceRegistrationSystem;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
@@ -66,7 +67,7 @@ public class SocializeNotificationRegistrationSystemTest extends SocializeUnitTe
 		AndroidMock.expect(session.getUser()).andReturn(user);
 		
 		registration.setRegistrationId(registrationId);
-		deviceRegistrationSystem.registerDevice(session, registration);
+		deviceRegistrationSystem.registerDevice(AndroidMock.eq( session ), AndroidMock.eq(registration), (DeviceRegistrationListener) AndroidMock.anyObject());
 		notificationRegistrationState.setC2DMRegistrationId(registrationId);
 		notificationRegistrationState.setRegisteredSocialize(user);
 		notificationRegistrationState.save(getContext());

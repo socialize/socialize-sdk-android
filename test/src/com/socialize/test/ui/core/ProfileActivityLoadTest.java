@@ -39,18 +39,6 @@ import com.socialize.ui.profile.ProfileActivity;
  */
 public class ProfileActivityLoadTest extends SocializeUIActivityTest {
 	
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		TestUtils.setUp(this);
-	}
-	
-	@Override
-	protected void tearDown() throws Exception {
-		TestUtils.tearDown();
-		super.tearDown();
-	}
-	
 	public void testProfileActivityLoadsCorrectData() throws Throwable {
 		
 		TestUtils.setupSocializeOverrides(true, true);

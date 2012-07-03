@@ -24,6 +24,7 @@ import android.app.Instrumentation;
 import android.app.Instrumentation.ActivityMonitor;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.test.ActivityInstrumentationTestCase2;
@@ -153,9 +154,13 @@ public class TestUtils {
 		SocializeAccess.clearBeanOverrides();
 		SocializeAccess.revertProxies();
 		SocializeIOC.clearStubs();
+		
+		SharedPreferences prefs = test.getActivity().getSharedPreferences("SocializeSession", Context.MODE_PRIVATE);
+		prefs.edit().clear().commit();
 	}
 	
 	public static void tearDown() {
+		SocializeAccess.revertProxies();
 		holder.clear();
 		
 		if(monitor != null) {
@@ -266,11 +271,19 @@ public class TestUtils {
 			Collection<Dialog> dialogs = dr.getDialogs();
 			
 			if(dialogs != null) {
+				
+				long start = System.currentTimeMillis();;
+				long consumed = 0;
+				
 				for (Dialog dialog : dialogs) {
-					V view = findView(dialog.getWindow().getDecorView(), viewClass, timeoutMs);
+					
+					V view = findView(dialog.getWindow().getDecorView(), viewClass, timeoutMs-consumed);
+					
 					if(view != null) {
 						return view;
 					}
+					
+					consumed += (System.currentTimeMillis() - start);
 				}
 			}
 		}

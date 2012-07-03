@@ -29,7 +29,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import com.socialize.ConfigUtils;
 import com.socialize.ShareUtils;
-import com.socialize.Socialize;
 import com.socialize.UserUtils;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.share.SocialNetworkShareListener;
@@ -66,8 +65,6 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		Socialize.getSocialize().clearSessionCache(getContext());
-		Socialize.getSocialize().destroy(true);
 	}
 
 	@Override
@@ -237,7 +234,6 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 	}
 	
 	public void test_post_not_authed() throws Exception {
-		Socialize.getSocialize().clearSessionCache(getContext());
 		do_test_post();
 	}
 	

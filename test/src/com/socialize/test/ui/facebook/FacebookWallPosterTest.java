@@ -269,8 +269,9 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		
 		DefaultFacebookWallPoster poster = new DefaultFacebookWallPoster() {
 
+
 			@Override
-			protected Facebook newFacebook(String appId) {
+			protected Facebook getFacebook(Context context) {
 				return fb;
 			}
 
@@ -419,7 +420,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		DefaultFacebookWallPoster poster = new DefaultFacebookWallPoster() {
 
 			@Override
-			protected Facebook newFacebook(String appId) {
+			protected Facebook getFacebook(Context context) {
 				return fb;
 			}
 

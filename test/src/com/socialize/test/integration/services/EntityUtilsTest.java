@@ -28,7 +28,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import com.socialize.ConfigUtils;
 import com.socialize.EntityUtils;
-import com.socialize.Socialize;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
@@ -46,17 +45,6 @@ import com.socialize.test.ui.util.TestUtils;
  */
 public class EntityUtilsTest extends SocializeActivityTest {
 	
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		Socialize.getSocialize().clearSessionCache(getContext());
-		Socialize.getSocialize().destroy(true);
-	}
-
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
 
 	public void testAddEntity() throws Exception {
 		final String entityKey = "testAddEntity" + Math.random();

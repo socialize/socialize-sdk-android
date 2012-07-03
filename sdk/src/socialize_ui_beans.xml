@@ -388,8 +388,7 @@
 	 
 	<bean 
 		id="authDialogFactory" 
-		class="com.socialize.ui.auth.AuthDialogFactory"		
-		singleton="false">
+		class="com.socialize.ui.auth.AuthDialogFactory">
 		<property name="logger" ref="logger"/>
 		<property name="panelViewFactory" ref="authPanelViewFactory"/>
 		<property name="displayUtils" ref="displayUtils"/>
@@ -420,8 +419,7 @@
 	
 	<bean 
 		id="shareDialogFactory" 
-		class="com.socialize.ui.share.ShareDialogFactory"		
-		singleton="false">
+		class="com.socialize.ui.share.ShareDialogFactory">
 		<property name="logger" ref="logger"/>
 		<property name="panelViewFactory" ref="sharePanelViewFactory"/>
 		<property name="displayUtils" ref="displayUtils"/>
@@ -1624,27 +1622,12 @@
 
 	<bean id="userUtils" class="com.socialize.api.action.user.SocializeUserUtils">
 		<property name="userSystem" ref="userSystem"/>
-		<property name="sessionPersister" ref="sessionPersister"/>
 	</bean>
 	
 	<bean id="actionUtils" class="com.socialize.api.action.activity.SocializeActionUtils">
 		<property name="activitySystem" ref="activitySystem"/>
 	</bean>	
 	
-	<bean id="facebookUtils" class="com.socialize.networks.facebook.FacebookUtilsImpl">
-		<property name="userSystem" ref="userSystem"/>
-		<property name="facebookWallPoster" ref="facebookWallPoster"/>
-		<property name="imageUtils" ref="imageUtils"/>
-	</bean>
-	
-	<bean id="twitterUtils" class="com.socialize.networks.twitter.TwitterUtilsImpl">
-		<property name="userSystem" ref="userSystem"/>
-		<property name="config" ref="config"/>
-		<property name="httpRequestProvider" ref="httpRequestProvider"/>
-		<property name="requestSigner" ref="oauthSigner"/>
-		<property name="imageUtils" ref="imageUtils"/>
-	</bean>	
-
 	<bean id="locationUtils" class="com.socialize.location.SocializeLocationUtils">
 		<property name="locationProvider" ref="locationProvider"/>
 	</bean>	

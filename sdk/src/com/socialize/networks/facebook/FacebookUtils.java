@@ -330,4 +330,13 @@ public class FacebookUtils {
 	public static byte[] getImageForPost(Activity context, Bitmap image, CompressFormat format) throws IOException {
 		return proxy.getImageForPost(context, image, format);
 	}
+	
+	/**
+	 * Extends the user's Facebook access token if needed.
+	 * @param context The current context
+	 */
+	public static void extendAccessToken(Context context) {
+		proxy.extendAccessToken(context);
+	}
+	
 }

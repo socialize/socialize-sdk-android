@@ -111,11 +111,4 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 		assertTrue((Boolean)getResult(2));
 		assertTrue((Boolean)getResult(3));
 	}
-	
-	@Override
-	protected void tearDown() throws Exception {
-		SocializeIOC.unregisterStub("facebookAuthClickListener");
-		SocializeIOC.unregisterStub("twitterAuthClickListener");
-		super.tearDown();
-	}
 }

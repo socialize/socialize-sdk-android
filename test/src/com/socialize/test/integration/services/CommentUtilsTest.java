@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import com.socialize.CommentUtils;
-import com.socialize.Socialize;
 import com.socialize.SubscriptionUtils;
 import com.socialize.UserUtils;
 import com.socialize.api.action.comment.CommentOptions;
@@ -47,13 +46,6 @@ import com.socialize.test.SocializeActivityTest;
  *
  */
 public class CommentUtilsTest extends SocializeActivityTest {
-
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		Socialize.getSocialize().clearSessionCache(getContext());
-		Socialize.getSocialize().destroy(true);
-	}
 
 	public void test_getComments() throws Exception {
 

@@ -31,6 +31,7 @@ import java.util.Set;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -68,6 +69,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	
 	private SocializeLogger logger;
 	private ImageUtils imageUtils;
+	private FacebookUtilsProxy facebookUtils;
 	private IBeanFactory<AsyncFacebookRunner> facebookRunnerFactory;
 	
 	@Override
@@ -168,7 +170,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			}
 		}
 		
-		Facebook fb = newFacebook(appId);
+		Facebook fb = getFacebook(parent);
 		
 		final FacebookSessionStore store = newFacebookSessionStore();
 		
@@ -214,7 +216,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			params.putString("caption", caption + ": " + link);
 			params.putByteArray("photo", imageUtils.scaleImage(parent, photoUri));
 			
-			Facebook fb = newFacebook(appId);
+			Facebook fb = getFacebook(parent);
 			
 			final FacebookSessionStore store = newFacebookSessionStore();
 			
@@ -277,7 +279,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	}
 	
 	protected void doFacebookCall(Activity parent, String appId, Bundle data, String graphPath, String method, SocialNetworkPostListener listener) {
-		Facebook fb = newFacebook(appId);
+		Facebook fb = getFacebook(parent);
 		FacebookSessionStore store = newFacebookSessionStore();
 		store.restore(fb, parent);
 		AsyncFacebookRunner runner = newAsyncFacebookRunner(fb);
@@ -286,8 +288,8 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	}
 
 	// So we can mock
-	protected Facebook newFacebook(String appId) {
-		return new Facebook(appId);
+	protected Facebook getFacebook(Context context) {
+		return facebookUtils.getFacebook(context);
 	}
 	
 	// So we can mock
@@ -424,4 +426,10 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	public void setFacebookRunnerFactory(IBeanFactory<AsyncFacebookRunner> facebookRunnerFactory) {
 		this.facebookRunnerFactory = facebookRunnerFactory;
 	}
+
+	public void setFacebookUtils(FacebookUtilsProxy facebookUtils) {
+		this.facebookUtils = facebookUtils;
+	}
+	
+	
 }
