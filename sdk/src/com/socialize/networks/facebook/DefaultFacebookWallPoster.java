@@ -77,9 +77,13 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	private ImageUtils imageUtils;
 	private IBeanFactory<AsyncFacebookRunner> facebookRunnerFactory;
 
-	private static final String FACEBOOK_MESSAGE = "socialize.facebook.message";
+	private static final String FACEBOOK_COMMENT_MESSAGE = "socialize.facebook.comment.message";
+	private static final String FACEBOOK_LIKE_MESSAGE = "socialize.facebook.like.message";
+	private static final String FACEBOOK_LINK_NAME = "socialize.facebook.like.link.name";
+	private static final String FACEBOOK_LINK_DESCRIPTION = "socialize.facebook.like.link.description";
 	private static final String FACEBOOK_PICTURE = "socialize.sharing.picture";
 	private static final String FACEBOOK_PREVIEW = "socialize.sharing.preview";
+	private static final String SHARING_EFFECT_NAME = "socialize.sharing.effect.name";
 	
 
 	@Override
@@ -101,6 +105,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		String appId = ConfigUtils.getConfig(parent).getProperty(SocializeConfig.FACEBOOK_APP_ID);
 		String pictureURL = null;
 		String previewURL = null;
+		String description = null;
 
 		if(entity != null) {
 			linkName = entity.getDisplayName();
@@ -121,14 +126,36 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	            	previewURL = prop.getProperty(FACEBOOK_PREVIEW);
 	            }
         	}
+    		String effect_name = prop.getProperty(SHARING_EFFECT_NAME);
 
     		prop.load(parent.getResources().getAssets().open("socialize.properties"));
- 			if (prop.getProperty(FACEBOOK_MESSAGE) != null) {
- 				linkName = linkName + ": " + prop.getProperty(FACEBOOK_MESSAGE) + "\n" + message;
-            	message = message + ": " + prop.getProperty(FACEBOOK_MESSAGE);
-        	}
+    		linkName = prop.getProperty(FACEBOOK_LINK_NAME);
+
+    		if (StringUtils.isEmpty(message)) { // it is a like post.
+
+	 			if (prop.getProperty(FACEBOOK_LIKE_MESSAGE) != null) {
+	            	linkName = prop.getProperty(FACEBOOK_LIKE_MESSAGE);
+	            	if (effect_name != null) {
+			    		// message = message.replace("%EFFECT_NAME%", effect_name);
+			    		linkName = linkName.replace("%EFFECT_NAME%", effect_name);
+			    	}
+	        	}
+
+	        } else { // comment post
+
+	        	if (prop.getProperty(FACEBOOK_COMMENT_MESSAGE) != null) {
+	        		message = prop.getProperty(FACEBOOK_COMMENT_MESSAGE) + "\n" + message;
+	        		message = message.replace("%EFFECT_NAME%", effect_name);
+
+	        		linkName = linkName.replace("%EFFECT_NAME%", effect_name);
+	        	}
+
+	        	description = prop.getProperty(FACEBOOK_LINK_DESCRIPTION);
+	        }
     	} catch (IOException ex) {
     		ex.printStackTrace();
+        } catch (NullPointerException ex) {
+        	ex.printStackTrace();
         }
 		
 		if(!StringUtils.isEmpty(appId)) {
@@ -138,6 +165,11 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			params.put("message", message);
 			params.put("link", link);
 			params.put("type", type);
+			
+			if (description != null) {
+				params.put("description", description);
+			}
+
 			Log.v("DefaultFacebookWallPoster", params.toString());
 
 			if (previewURL != null) {
