@@ -18,7 +18,7 @@ public class ActionBarLikeManualTest extends ActivityInstrumentationTestCase2<Ac
 
 	@Override
 	protected void tearDown() throws Exception {
-		TestUtils.tearDown();
+		TestUtils.tearDown(this);
 		super.tearDown();
 	}
 	

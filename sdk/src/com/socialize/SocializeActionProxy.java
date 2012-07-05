@@ -79,7 +79,9 @@ public class SocializeActionProxy implements InvocationHandler {
 				
 				if(context != null) {
 					SocializeListener listener = findListener(args);
-					invoke(context, listener, method, args);
+					
+					// Always init to set the context
+					invokeWithInit(context, listener, method, args);
 				}
 				else {
 					throw new MethodNotSupportedException("No activity found in method arguments for method [" +
@@ -102,13 +104,42 @@ public class SocializeActionProxy implements InvocationHandler {
 		return (returnType == null || returnType.equals(Void.TYPE));
 	}
 	
-	protected void invoke(Activity context, SocializeListener listener, Method method, Object[] args) throws Throwable {
+	protected void invokeWithInit(final Activity context, final SocializeListener listener, final Method method, final Object[] args) throws Throwable {
+		
 		SocializeService service = getSocialize();
 		
-		if(!service.isInitialized(context)) {
-			doInitAsync(context, listener, method, args);
-		}
-		else if(!service.isAuthenticated()) {
+		service.initAsync(context, new SocializeInitListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				if(listener != null) {
+					listener.onError(error);
+				}
+			}
+
+			@Override
+			public void onInit(Context ctx, IOCContainer container) {
+				// Recurse
+				try {
+					invoke(context, listener, method, args);
+				}
+				catch (Throwable e) {
+					if(listener != null) {
+						listener.onError(SocializeException.wrap(e));
+					}
+				}
+			}
+		});			
+	}
+	
+	protected void invoke(Activity context, SocializeListener listener, Method method, Object[] args) throws Throwable {
+
+		SocializeService service = getSocialize();
+		
+//		if(!service.isInitialized(context)) {
+//			doInitAsync(context, listener, method, args);
+//		}
+		if(!service.isAuthenticated()) {
 			doAuthAsync(context, listener, method, args);
 		}
 		else {
@@ -156,54 +187,54 @@ public class SocializeActionProxy implements InvocationHandler {
 		return null;
 	}
 
-	protected synchronized <L extends SocializeListener> void doInitAsync(final Activity context, final SocializeListener listener, final Method method, final Object[] args) throws Throwable {
-		
-		final SocializeService service = getSocialize();
-		
-		if(!service.isInitialized(context)) {
-			synchronized (this) {
-				if(!service.isInitialized(context)) {
-					context.runOnUiThread(new Runnable() {
-						
-						@Override
-						public void run() {
-
-							service.initAsync(context, new SocializeInitListener() {
-								
-								@Override
-								public void onError(SocializeException error) {
-									if(listener != null) {
-										listener.onError(error);
-									}
-								}
-
-								@Override
-								public void onInit(Context ctx, IOCContainer container) {
-									// Recurse
-									try {
-										invoke(context, listener, method, args);
-									}
-									catch (Throwable e) {
-										if(listener != null) {
-											listener.onError(SocializeException.wrap(e));
-										}
-									}
-								}
-							});					
-						}
-					});
-				}
-				else {
-					// Recurse
-					invoke(context, listener, method, args);
-				}
-			}
-		}
-		else {
-			// Recurse
-			invoke(context, listener, method, args);
-		}
-	}	
+//	protected synchronized <L extends SocializeListener> void doInitAsync(final Activity context, final SocializeListener listener, final Method method, final Object[] args) throws Throwable {
+//		
+//		final SocializeService service = getSocialize();
+//		
+////		if(!service.isInitialized(context)) {
+////			synchronized (this) {
+////				if(!service.isInitialized(context)) {
+//					context.runOnUiThread(new Runnable() {
+//						
+//						@Override
+//						public void run() {
+//
+//							service.initAsync(context, new SocializeInitListener() {
+//								
+//								@Override
+//								public void onError(SocializeException error) {
+//									if(listener != null) {
+//										listener.onError(error);
+//									}
+//								}
+//
+//								@Override
+//								public void onInit(Context ctx, IOCContainer container) {
+//									// Recurse
+//									try {
+//										invoke(context, listener, method, args);
+//									}
+//									catch (Throwable e) {
+//										if(listener != null) {
+//											listener.onError(SocializeException.wrap(e));
+//										}
+//									}
+//								}
+//							});					
+//						}
+//					});
+////				}
+////				else {
+////					// Recurse
+////					invoke(context, listener, method, args);
+////				}
+////			}
+////		}
+////		else {
+////			// Recurse
+////			invoke(context, listener, method, args);
+////		}
+//	}	
 	
 	protected synchronized <L extends SocializeListener> void doAuthAsync(final Activity context, final SocializeListener listener, final Method method, final Object[] args) throws Throwable {
 		final SocializeService service = getSocialize();

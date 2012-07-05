@@ -18,7 +18,7 @@ public abstract class ActionBarAutoTest extends ActivityInstrumentationTestCase2
 
 	@Override
 	protected void tearDown() throws Exception {
-		TestUtils.tearDown();
+		TestUtils.tearDown(this);
 		super.tearDown();
 	}
 	

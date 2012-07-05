@@ -30,6 +30,11 @@ import com.socialize.ui.dialog.AsyncDialogFactory;
  */
 public class AuthDialogFactory extends AsyncDialogFactory<AuthPanelView, AuthDialogListener> implements IAuthDialogFactory
 {
+	
+	public AuthDialogFactory() {
+		super();
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.auth.IAuthDialogFactory#show(android.content.Context, com.socialize.ui.auth.AuthDialogListener)
 	 */

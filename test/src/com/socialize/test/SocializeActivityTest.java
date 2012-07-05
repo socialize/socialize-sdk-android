@@ -41,7 +41,7 @@ public abstract class SocializeActivityTest extends ActivityInstrumentationTestC
 	
 	@Override
 	protected void tearDown() throws Exception {
-		TestUtils.tearDown();
+		TestUtils.tearDown(this);
 		super.tearDown();
 	}
 	

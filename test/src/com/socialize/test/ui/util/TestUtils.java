@@ -154,12 +154,14 @@ public class TestUtils {
 		SocializeAccess.clearBeanOverrides();
 		SocializeAccess.revertProxies();
 		SocializeIOC.clearStubs();
-		
-		SharedPreferences prefs = test.getActivity().getSharedPreferences("SocializeSession", Context.MODE_PRIVATE);
-		prefs.edit().clear().commit();
+
 	}
 	
-	public static void tearDown() {
+	public static void tearDown(ActivityInstrumentationTestCase2<?> test) {
+		
+		SharedPreferences prefs = test.getActivity().getSharedPreferences("SocializeSession", Context.MODE_PRIVATE);
+		prefs.edit().clear().commit();		
+		
 		SocializeAccess.revertProxies();
 		holder.clear();
 		

@@ -43,7 +43,7 @@ public class ActionBarLikeStateTest extends ActivityInstrumentationTestCase2<Act
 
 	@Override
 	protected void tearDown() throws Exception {
-		TestUtils.tearDown();
+		TestUtils.tearDown(this);
 		super.tearDown();
 	}
 

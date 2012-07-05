@@ -24,7 +24,7 @@ public class ActionBarCommentTest extends ActivityInstrumentationTestCase2<Actio
 
 	@Override
 	protected void tearDown() throws Exception {
-		TestUtils.tearDown();
+		TestUtils.tearDown(this);
 		super.tearDown();
 	}
 

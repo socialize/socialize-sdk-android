@@ -55,7 +55,7 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 	
 	@Override
 	protected void tearDown() throws Exception {
-		TestUtils.tearDown();
+		TestUtils.tearDown(this);
 		super.tearDown();
 	}
 

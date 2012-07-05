@@ -68,7 +68,7 @@ public class LikeButtonManualTest extends ActivityInstrumentationTestCase2<Empty
 
 	@Override
 	protected void tearDown() throws Exception {
-		TestUtils.tearDown();
+		TestUtils.tearDown(this);
 		super.tearDown();
 	}
 	
