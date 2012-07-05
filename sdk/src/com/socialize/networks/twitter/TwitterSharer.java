@@ -49,8 +49,9 @@ import com.socialize.util.ImageUtils;
  */
 public class TwitterSharer extends AbstractSocialNetworkSharer {
 	
-	private static final String TWITTER_MESSAGE = "socialize.twitter.message";
+	private static final String TWITTER_COMMENT_MESSAGE = "socialize.twitter.comment.message";
 	private static final String TWITTER_PICTURE = "socialize.sharing.picture";
+	private static final String SHARING_EFFECT_NAME = "socialize.sharing.effect.name";
 
 
 	/* (non-Javadoc)
@@ -99,9 +100,11 @@ public class TwitterSharer extends AbstractSocialNetworkSharer {
 	   	try {
 			prop.load(context.getResources().getAssets().open("socialize.properties"));
 
- 			if (prop.getProperty(TWITTER_MESSAGE) != null) {
-				preloaded_text = prop.getProperty(TWITTER_MESSAGE) + "\n";
-	    	}
+			if (!StringUtils.isEmpty(comment)) {
+	 			if (prop.getProperty(TWITTER_COMMENT_MESSAGE) != null) {
+					preloaded_text = prop.getProperty(TWITTER_COMMENT_MESSAGE);
+		    	}
+		    }
 
 			prop.load(context.openFileInput("socialize_sharing.properties"));
 			if (prop.getProperty(TWITTER_PICTURE) != null) {
@@ -117,7 +120,16 @@ public class TwitterSharer extends AbstractSocialNetworkSharer {
 				} else {
 					Log.v("TwitterSharer", "pictureURL == null");
 				}
-			}        	
+			}
+
+			String effect_name = prop.getProperty(SHARING_EFFECT_NAME);
+			if (effect_name != null && preloaded_text != null) {
+				preloaded_text = preloaded_text.replace("%EFFECT_NAME%", effect_name) + " ";
+			}
+
+			Log.v("TwitterSharer", "sharing effect name: " + effect_name);
+			Log.v("TwitterSharer", "preloaded_text string: " + preloaded_text);
+
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		} catch (NullPointerException ex) {
