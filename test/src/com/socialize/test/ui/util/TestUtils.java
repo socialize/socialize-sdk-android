@@ -36,6 +36,8 @@ import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.concurrent.AsyncTaskManager;
 import com.socialize.ioc.SocializeIOC;
+import com.socialize.networks.facebook.FacebookAccess;
+import com.socialize.networks.twitter.TwitterAccess;
 import com.socialize.test.SocializeManagedActivityTest;
 import com.socialize.test.ui.ResultHolder;
 import com.socialize.ui.dialog.DialogRegister;
@@ -158,6 +160,8 @@ public class TestUtils {
 		SocializeAccess.revertProxies();
 		SocializeIOC.clearStubs();
 		SocializeAccess.revertProxies();
+		TwitterAccess.revertTwitterUtilsProxy();
+		FacebookAccess.revertFacebookUtilsProxy();
 		
 		holder.clear();
 		

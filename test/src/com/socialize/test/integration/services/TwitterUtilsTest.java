@@ -36,6 +36,7 @@ import org.apache.http.message.BasicStatusLine;
 import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import com.socialize.ConfigUtils;
 import com.socialize.ShareUtils;
 import com.socialize.Socialize;
@@ -73,6 +74,7 @@ import com.socialize.networks.twitter.TwitterUtils;
 import com.socialize.networks.twitter.TwitterUtilsImpl;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
+import com.socialize.util.StringUtils;
 
 
 /**
@@ -81,12 +83,6 @@ import com.socialize.test.ui.util.TestUtils;
  */
 public class TwitterUtilsTest extends SocializeActivityTest {
 	
-	@Override
-	protected void tearDown() throws Exception {
-		TwitterAccess.revertTwitterUtilsProxy();
-		super.tearDown();
-	}
-
 	public void test_link () throws Throwable {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
@@ -144,19 +140,22 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		SocializeIOC.registerStub("twitterProvider", mockTwitterAuthProvider);
 		
 		// Set a mock key/secret
-		TwitterUtils.setCredentials(TestUtils.getActivity(this), "foo", "bar");
+		TwitterUtils.setCredentials(context, "foo", "bar");
 		
-		final String token = TestUtils.getDummyTwitterToken(getContext());
-		final String secret = TestUtils.getDummyTwitterSecret(getContext());
+		final String token = TestUtils.getDummyTwitterToken(context);
+		final String secret = TestUtils.getDummyTwitterSecret(context);
 		
 		assertNotNull(token);
 		assertNotNull(secret);
+		
+		assertFalse(StringUtils.isEmpty(token));
+		assertFalse(StringUtils.isEmpty(secret));
 		
 		TwitterUtils.link(context, token, secret, new SocializeAuthListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
-				error.printStackTrace();
+				Log.e("Socialize", error.getMessage(), error);
 				addResult(1, "fail");
 			}
 			
@@ -173,7 +172,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 			
 			@Override
 			public void onAuthFail(SocializeException error) {
-				error.printStackTrace();
+				Log.e("Socialize", error.getMessage(), error);
 				addResult(1, "fail");
 			}
 		});
