@@ -112,7 +112,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		}
 
 		String type = "feed";
-		if (StringUtils.isEmpty(message)) {
+		if (!StringUtils.isEmpty(message)) {
 			type = "photos";
 		}
 
@@ -122,7 +122,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
     		prop.load(parent.openFileInput("socialize_sharing.properties"));
 			if (prop.getProperty(FACEBOOK_PICTURE) != null) {
             	pictureURL = prop.getProperty(FACEBOOK_PICTURE);
-            	if (!StringUtils.isEmpty(message)) {
+            	if (StringUtils.isEmpty(message)) {
 	            	previewURL = prop.getProperty(FACEBOOK_PREVIEW);
 	            }
         	}
@@ -134,9 +134,9 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
     		if (StringUtils.isEmpty(message)) { // it is a like post.
 
 	 			if (prop.getProperty(FACEBOOK_LIKE_MESSAGE) != null) {
-	            	linkName = prop.getProperty(FACEBOOK_LIKE_MESSAGE);
+	            	message = prop.getProperty(FACEBOOK_LIKE_MESSAGE);
 	            	if (effect_name != null) {
-			    		// message = message.replace("%EFFECT_NAME%", effect_name);
+			    		message = message.replace("%EFFECT_NAME%", effect_name);
 			    		linkName = linkName.replace("%EFFECT_NAME%", effect_name);
 			    	}
 	        	}
@@ -147,11 +147,12 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	        		message = prop.getProperty(FACEBOOK_COMMENT_MESSAGE) + "\n" + message;
 	        		message = message.replace("%EFFECT_NAME%", effect_name);
 
-	        		linkName = linkName.replace("%EFFECT_NAME%", effect_name);
+	        		// linkName = linkName.replace("%EFFECT_NAME%", effect_name);
+	        		linkName = message;
 	        	}
-
-	        	description = prop.getProperty(FACEBOOK_LINK_DESCRIPTION);
 	        }
+
+	        description = prop.getProperty(FACEBOOK_LINK_DESCRIPTION);
     	} catch (IOException ex) {
     		ex.printStackTrace();
         } catch (NullPointerException ex) {
