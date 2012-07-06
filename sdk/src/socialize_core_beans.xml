@@ -71,6 +71,7 @@
 	<bean id="locationProvider" class="com.socialize.location.DefaultLocationProvider">
 		<property name="appUtils" ref="appUtils"/>
 		<property name="logger" ref="logger"/>
+		<property name="config" ref="config"/>
 		<property name="locationManager" ref="locationManager"/>
 		<property name="locationListenerFactory" ref="locationListenerFactory"/>
 		

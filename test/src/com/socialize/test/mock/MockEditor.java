@@ -93,4 +93,9 @@ public class MockEditor implements Editor {
 		return null;
 	}
 
+	@Override
+	public void apply() {
+		
+	}
+
 }

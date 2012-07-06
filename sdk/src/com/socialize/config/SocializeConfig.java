@@ -63,6 +63,8 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_ENTITY_LOADER = "socialize.entity.loader";
 	
+	public static final String SOCIALIZE_LOCATION_ENABLED = "socialize.location.enabled";
+	
 	public static final String SOCIALIZE_REQUIRE_AUTH = "socialize.require.auth";
 	
 	public static final String SOCIALIZE_ALLOW_ANON = "socialize.allow.anon";

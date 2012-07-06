@@ -86,7 +86,7 @@
 		<antcall target="installi" inheritall="true" inheritrefs="true"/>
 	</target>	
 	
-	<target name="test-all" depends="build-all">
+	<target name="test" depends="build-all">
 		<property name="build.is.instrumented" value="true" />
 		<property name="build.target" value="instrument" />  
 		<property name="emma.enabled" value="true" />
@@ -99,12 +99,109 @@
 		    	<echo></echo>    			
 				<antcall target="install-all" inheritall="true" inheritrefs="true"/>
 				<antcall target="-set-debug-mode" inheritall="true" inheritrefs="true"/>
-				<antcall target="test" inheritall="true" inheritrefs="true">
+				<antcall target="-test" inheritall="true" inheritrefs="true">
 					 <param name="test.package" value="@{test.package}" />
 				</antcall>
 			</sequential>
 		</for>
 	</target>	
+	
+
+	<!-- 
+		################################################################################################
+		OVERRIDE DEFAULT TEST TARGET FROM ANDROID TO ENABLE CREATION OF JUNIT OUTPUT 
+		################################################################################################
+	-->		
+	
+   	<target name="-test" depends="-test-project-check"
+                description="Runs tests from the package defined in test.package property">
+
+        <property name="tested.project.absolute.dir" location="${tested.project.dir}" />
+
+        <property name="test.runner" value="android.test.InstrumentationTestRunner" />
+
+        <!-- Application package of the tested project extracted from its manifest file -->
+        <xpath 
+        	input="${tested.project.absolute.dir}/AndroidManifest.xml"
+            expression="/manifest/@package" 
+        	output="tested.manifest.package" />
+   		
+        <xpath 
+        	input="AndroidManifest.xml"
+            expression="/manifest/@package" 
+        	output="manifest.package" />
+
+        <property name="emma.dump.path" value="/data/data/${tested.manifest.package}/" />
+
+        <if condition="${emma.enabled}">
+            <then>
+            	
+            	<property name="emma.coverage.file.raw" value="coverage-${test.package}"/>
+                	
+            	<propertyregex property="emma.coverage.file.replaced"
+            	               input="${emma.coverage.file.raw}"
+            	               regexp="\."
+            	               replace="_"
+            	               global="true" />
+            	
+            	<property name="emma.coverage.file" value="${emma.coverage.file.replaced}.ec"/>
+            	<property name="emma.coverage.path" value="${emma.dump.path}${emma.coverage.file}"/>
+            	
+                <echo>Code Coverage enabled.  Saving EMMA report to device location ${emma.coverage.path}</echo>
+            	
+            	<echo>Running tests with coverage for package ${test.package}</echo>
+                <run-tests-helper emma.enabled="true">
+                    <extra-instrument-args>
+        				<arg value="-e" />
+	        				<arg value="coverageFile" />
+	        				<arg value="${emma.coverage.path}" />
+                    	
+                    	<arg value="-e" />
+	        				<arg value="package" />
+	        				<arg value="${test.package}" />
+                    	
+        				<arg value="-e" />
+	        				<arg value="coverage" />
+	        				<arg value="true" />                       	
+
+        				<arg value="-e" />
+	        				<arg value="junitOutputDirectory" />
+	        				<arg value="${junit.dump.path}" />
+                    </extra-instrument-args>
+                </run-tests-helper>
+            	
+                <echo>Downloading coverage file ${emma.coverage.path} into project directory as ${emma.coverage.file}...</echo>
+            	
+                <exec executable="${adb}" failonerror="true">
+        			<arg line="${adb.device.arg}" />
+        			<arg value="pull" />
+        			<arg value="${emma.coverage.path}" />
+        			<arg value="${emma.report.dir}/${emma.coverage.file}" />
+                </exec>
+            	
+            	<echo>Downloading junit file from ${junit.dump.path} into project directory ${test-output}...</echo>
+				<exec executable="${adb}" failonerror="true" dir="${test-output}">
+					<arg line="${adb.device.arg}" />
+					<arg value="pull" />
+					<arg value="${junit.dump.path}" />
+				</exec>	
+              
+            </then>
+            <else>
+            	<echo>Code Coverage is NOT enabled</echo>
+                <run-tests-helper emma.enabled="false">
+                    <extra-instrument-args>
+        				<arg value="-e" />
+	        				<arg value="package" />
+	        				<arg value="${test.package}" />
+        				<arg value="-e" />
+	        				<arg value="junitOutputDirectory" />
+	        				<arg value="${junit.dump.path}" />
+                    </extra-instrument-args>
+                </run-tests-helper>
+            </else>
+        </if>
+    </target>		
 	
 	<!-- 
 		################################################################################################
