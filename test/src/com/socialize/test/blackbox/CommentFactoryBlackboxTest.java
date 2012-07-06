@@ -85,7 +85,7 @@ public class CommentFactoryBlackboxTest extends AbstractFactoryBlackBoxTest {
 	}
 	
 	@UsesMocks ({SocializeSession.class})
-	public void testCreateRequest() throws Exception {
+	public void testCreateRequest() throws Throwable {
 		
 		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
 		final String endPoint = "foobar";

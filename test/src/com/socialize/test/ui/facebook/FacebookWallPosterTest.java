@@ -86,7 +86,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 //		ShareMessageBuilder builder = AndroidMock.createMock(ShareMessageBuilder.class);
 		final PropagationInfo info = AndroidMock.createMock(PropagationInfo.class);
 		
-		Activity parent = getActivity();
+		Activity parent = TestUtils.getActivity(this);
 		final String entityKey = "foobar_key";
 		final String entityName = "foobar_name";
 //		final String entityLink = "foobar_link";
@@ -127,7 +127,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 	public void testPostComment(String expectedString) {
 		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
 		final PropagationInfo info = AndroidMock.createMock(PropagationInfo.class);
-		Activity parent = getActivity();
+		Activity parent = TestUtils.getActivity(this);
 		
 		final String entityKey = "foobar_key";
 		final String entityName = "foobar_name";
@@ -208,7 +208,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		
 		AndroidMock.replay(socialize, config, info);
 		
-		poster.post(getActivity(), entity, message, info, listener);
+		poster.post(TestUtils.getActivity(this), entity, message, info, listener);
 		
 		AndroidMock.verify(socialize, config, info);
 		
@@ -263,7 +263,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 			}
 		};
 		
-		AndroidMock.expect( store.restore(fb, getActivity()) ).andReturn(true);
+		AndroidMock.expect( store.restore(fb, TestUtils.getActivity(this)) ).andReturn(true);
 		
 		AndroidMock.replay(store);
 		
@@ -292,7 +292,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 			}
 		};	
 		
-		poster.post(getActivity(), fbId, linkName, message, link, caption, socialNetworkListener);
+		poster.post(TestUtils.getActivity(this), fbId, linkName, message, link, caption, socialNetworkListener);
 		
 		AndroidMock.verify(store);
 		
@@ -369,7 +369,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 			}
 		};
 		
-		poster.postPhoto(getActivity(), share, caption, photoUri, socialNetworkListener);
+		poster.postPhoto(TestUtils.getActivity(this), share, caption, photoUri, socialNetworkListener);
 		
 		AndroidMock.verify(share,propagationInfoResponse,propInfo,socializeService,config);
 		
@@ -412,8 +412,8 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 			}
 		};
 		
-		AndroidMock.expect( store.restore(fb, getActivity()) ).andReturn(true);
-		AndroidMock.expect(imageUtils.scaleImage(getActivity(), photoUri)).andReturn(image);
+		AndroidMock.expect( store.restore(fb, TestUtils.getActivity(this)) ).andReturn(true);
+		AndroidMock.expect(imageUtils.scaleImage(TestUtils.getActivity(this), photoUri)).andReturn(image);
 		
 		AndroidMock.replay(store, imageUtils);
 		
@@ -443,7 +443,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		
 		poster.setImageUtils(imageUtils);
 		
-		poster.postPhoto(getActivity(), fbId, link, caption, photoUri, socialNetworkListener);
+		poster.postPhoto(TestUtils.getActivity(this), fbId, link, caption, photoUri, socialNetworkListener);
 		
 		AndroidMock.verify(store, imageUtils);
 		
@@ -478,7 +478,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		
 		AndroidMock.expect(json.has("error")).andReturn(true);
 		
-		socialize.clear3rdPartySession(getActivity(), AuthProviderType.FACEBOOK);
+		socialize.clear3rdPartySession(TestUtils.getActivity(this), AuthProviderType.FACEBOOK);
 		
 		AndroidMock.expect(json.getJSONObject("error")).andReturn(error);
 		
@@ -512,7 +512,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		AndroidMock.replay(error);
 		AndroidMock.replay(listener);
 		
-		RequestListener newRequestListener = poster.newRequestListener(getActivity(), listener);
+		RequestListener newRequestListener = poster.newRequestListener(TestUtils.getActivity(this), listener);
 		
 		newRequestListener.onComplete(responseData, null);
 		
@@ -542,7 +542,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		final String responseData = "foobar_repsonse";
 		
 		AndroidMock.expect(json.has("error")).andReturn(false);
-		listener.onAfterPost(getActivity(), SocialNetwork.FACEBOOK, json);
+		listener.onAfterPost(TestUtils.getActivity(this), SocialNetwork.FACEBOOK, json);
 		
 		final PublicFacebookWallPoster poster = new PublicFacebookWallPoster() {
 			@Override
@@ -561,6 +561,8 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 			}
 		};
 		
+		final Activity activity = TestUtils.getActivity(this);
+		
 		// Must run on UI thread because listener is called on UI thread.
 		runTestOnUiThread(new Runnable() {
 			
@@ -569,7 +571,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 				AndroidMock.replay(json);
 				AndroidMock.replay(listener);
 				
-				RequestListener newRequestListener = poster.newRequestListener(getActivity(), listener);
+				RequestListener newRequestListener = poster.newRequestListener(activity, listener);
 				
 				newRequestListener.onComplete(responseData, null);
 				
@@ -590,7 +592,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 			}
 		};
 		
-		RequestListener newRequestListener = poster.newRequestListener(getActivity(), null);
+		RequestListener newRequestListener = poster.newRequestListener(TestUtils.getActivity(this), null);
 		
 		newRequestListener.onFileNotFoundException(new FileNotFoundException(), null);
 		newRequestListener.onIOException(new IOException(), null);

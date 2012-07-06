@@ -67,6 +67,10 @@ public class ActionBarView extends EntityView {
 	protected View getView(Bundle bundle, Object... entityKeys) {
 		if(actionBarLayoutView == null) {
 			actionBarLayoutView = container.getBean("actionBarLayoutView", this);
+			
+			if(actionBarLayoutView == null) {
+				Log.w(SocializeLogger.LOG_TAG, "Request for bean [actionBarLayoutView] returned null");
+			}
 		}
 		
 		setListeners();

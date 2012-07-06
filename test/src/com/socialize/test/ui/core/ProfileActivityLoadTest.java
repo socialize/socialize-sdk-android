@@ -85,7 +85,7 @@ public class ProfileActivityLoadTest extends SocializeUIActivityTest {
 		ConfigUtils.getConfig(getContext()).setFacebookAppId("1234567890");
 		ConfigUtils.getConfig(getContext()).setTwitterKeySecret("U18LUnVjULkkpGoJ6CoP3A", "RiIljnFq4RWV9LEaCM1ZLsAHf053vX2KyhJhmCOlBE");
 		
-		Socialize.getSocialize().showUserProfileView(getActivity(), 69L);
+		Socialize.getSocialize().showUserProfileView(TestUtils.getActivity(this), 69L);
 		
 		Activity waitForActivity = TestUtils.waitForActivity(5000);
 		

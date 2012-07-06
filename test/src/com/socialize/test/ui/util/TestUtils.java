@@ -34,7 +34,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
+import com.socialize.concurrent.AsyncTaskManager;
 import com.socialize.ioc.SocializeIOC;
+import com.socialize.test.SocializeManagedActivityTest;
 import com.socialize.test.ui.ResultHolder;
 import com.socialize.ui.dialog.DialogRegister;
 import com.socialize.ui.view.CustomCheckbox;
@@ -45,7 +47,7 @@ public class TestUtils {
 	static ResultHolder holder;
 	static ActivityMonitor monitor;
 	static Instrumentation instrumentation;
-	static ActivityInstrumentationTestCase2<?> testCase;
+	static SocializeManagedActivityTest<?> testCase;
 	static Map<String, JSONObject> jsons = new HashMap<String, JSONObject>();
 	
 	private static String fb_token = null;
@@ -138,31 +140,25 @@ public class TestUtils {
 		holder.clear();
 	}
 	
-	public static void setUp(ActivityInstrumentationTestCase2<?> test)  {
-		try {
-			TestUtils.waitForIdle(test, 5000);
-		}
-		catch (InterruptedException e) {
-			ActivityInstrumentationTestCase2.fail();
-		}
+	public static void setUp(SocializeManagedActivityTest<?> test)  {
+
+		AsyncTaskManager.setManaged(true);
 		
 		testCase = test;
 		holder = new ResultHolder();
 		holder.setUp();
 		instrumentation = testCase.getInstrumentation();
+	}
+	
+	public static void tearDown(SocializeManagedActivityTest<?> test) {
+
 		Socialize.getSocialize().destroy(true);
+		
 		SocializeAccess.clearBeanOverrides();
 		SocializeAccess.revertProxies();
 		SocializeIOC.clearStubs();
-
-	}
-	
-	public static void tearDown(ActivityInstrumentationTestCase2<?> test) {
-		
-		SharedPreferences prefs = test.getActivity().getSharedPreferences("SocializeSession", Context.MODE_PRIVATE);
-		prefs.edit().clear().commit();		
-		
 		SocializeAccess.revertProxies();
+		
 		holder.clear();
 		
 		if(monitor != null) {
@@ -171,6 +167,13 @@ public class TestUtils {
 				lastActivity.finish();
 			}
 			instrumentation.removeMonitor(monitor);
+		}
+		
+		Activity activity = getActivity(test);
+		
+		if(activity != null) {
+			SharedPreferences prefs = activity.getSharedPreferences("SocializeSession", Context.MODE_PRIVATE);
+			prefs.edit().clear().commit();					
 		}
 		
 		monitor = null;
@@ -214,7 +217,7 @@ public class TestUtils {
 		}
 	}
 	
-	public static final void sleep(int milliseconds) {
+	public static final void sleep(long milliseconds) {
 		try {
 			Thread.sleep(milliseconds);
 		}
@@ -276,6 +279,16 @@ public class TestUtils {
 				
 				long start = System.currentTimeMillis();;
 				long consumed = 0;
+				long waitForDialogsNum = timeoutMs / 10;
+				
+				while(dialogs.size() == 0) {
+					sleep(waitForDialogsNum);
+					consumed+=waitForDialogsNum;
+					
+					if(consumed >= timeoutMs) {
+						return null;
+					}
+				}
 				
 				for (Dialog dialog : dialogs) {
 					
@@ -733,6 +746,46 @@ public class TestUtils {
 		return json;
 	}
 	
+	public static <T extends Activity> T getActivity(final SocializeManagedActivityTest<T> test) {
+		T activity = null;
+		
+		final CountDownLatch latch = new CountDownLatch(1);
+		final Set<T> holder = new HashSet<T>();
+		
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					T activity = test.getActivity();
+					holder.add(activity);
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+				finally {
+					latch.countDown();
+				}
+			}
+		}).start();
+		
+		try {
+			if(!latch.await(20, TimeUnit.SECONDS)) {
+				ActivityInstrumentationTestCase2.fail("Timeout waiting for activity to start");
+			}
+			else if(holder.size() == 0) {
+				ActivityInstrumentationTestCase2.fail("Failed waiting for activity to start");
+			}
+			else {
+				activity = holder.iterator().next();
+			}
+		}
+		catch (InterruptedException e) {
+			e.printStackTrace();
+			ActivityInstrumentationTestCase2.fail("Error waiting for activity to start");
+		}
+		
+		return activity;
+	}
 	
 	public static Class<?> getActivityForIntent(Context context, Intent intent) throws ClassNotFoundException {
 		PackageManager packageManager = context.getPackageManager();
@@ -753,7 +806,7 @@ public class TestUtils {
 		
 	}
 	
-	public static boolean waitForIdle(final ActivityInstrumentationTestCase2<?> test, long timeout) throws InterruptedException {
+	public static boolean waitForIdle(final SocializeManagedActivityTest<?> test, long timeout) throws InterruptedException {
 		final CountDownLatch latch = new CountDownLatch(1);
 		test.getInstrumentation().waitForIdle(new Runnable() {
 			@Override

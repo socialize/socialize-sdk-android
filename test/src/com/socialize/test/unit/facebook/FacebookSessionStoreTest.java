@@ -24,7 +24,6 @@ package com.socialize.test.unit.facebook;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.facebook.FacebookSessionStore;

@@ -63,8 +63,8 @@ public class SocializeActionProxy implements InvocationHandler {
 				
 				if(context != null) {
 					synchronized (this) {
-						// Always init to set the context
-						if(Socialize.getSocialize().init(context) != null) {
+						if(!Socialize.getSocialize().isInitialized(context)) {
+							Socialize.getSocialize().init(context);
 							if(!Socialize.getSocialize().isAuthenticated() && !method.isAnnotationPresent(NoAuth.class)) {
 								Socialize.getSocialize().authenticateSynchronous(context);
 							}
@@ -106,30 +106,35 @@ public class SocializeActionProxy implements InvocationHandler {
 	
 	protected void invokeWithInit(final Activity context, final SocializeListener listener, final Method method, final Object[] args) throws Throwable {
 		
-		SocializeService service = getSocialize();
+		SocializeServiceImpl service = getSocialize();
 		
-		service.initAsync(context, new SocializeInitListener() {
-			
-			@Override
-			public void onError(SocializeException error) {
-				if(listener != null) {
-					listener.onError(error);
-				}
-			}
-
-			@Override
-			public void onInit(Context ctx, IOCContainer container) {
-				// Recurse
-				try {
-					invoke(context, listener, method, args);
-				}
-				catch (Throwable e) {
+		if(service.isInitialized(context)) {
+			service.setContext(context);
+			invoke(context, listener, method, args);
+		}
+		else {
+			service.initAsync(context, new SocializeInitListener() {
+				@Override
+				public void onError(SocializeException error) {
 					if(listener != null) {
-						listener.onError(SocializeException.wrap(e));
+						listener.onError(error);
 					}
 				}
-			}
-		});			
+
+				@Override
+				public void onInit(Context ctx, IOCContainer container) {
+					// Recurse
+					try {
+						invoke(context, listener, method, args);
+					}
+					catch (Throwable e) {
+						if(listener != null) {
+							listener.onError(SocializeException.wrap(e));
+						}
+					}
+				}
+			});	
+		}
 	}
 	
 	protected void invoke(Activity context, SocializeListener listener, Method method, Object[] args) throws Throwable {
@@ -299,7 +304,7 @@ public class SocializeActionProxy implements InvocationHandler {
 		}
 	}
 	
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
+	protected SocializeServiceImpl getSocialize() {
+		return (SocializeServiceImpl) Socialize.getSocialize();
 	}
 }

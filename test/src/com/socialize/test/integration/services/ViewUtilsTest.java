@@ -37,6 +37,7 @@ import com.socialize.listener.view.ViewAddListener;
 import com.socialize.listener.view.ViewGetListener;
 import com.socialize.listener.view.ViewListListener;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 
 
 /**
@@ -57,7 +58,7 @@ public class ViewUtilsTest extends SocializeActivityTest {
 		Socialize.getSocialize().init(getContext());
 		Socialize.getSocialize().authenticateSynchronous(getContext());
 		
-		EntityUtils.getEntity(getActivity(), randomKey, new EntityGetListener() {
+		EntityUtils.getEntity(TestUtils.getActivity(this), randomKey, new EntityGetListener() {
 			
 			@Override
 			public void onGet(Entity entity) {
@@ -83,7 +84,7 @@ public class ViewUtilsTest extends SocializeActivityTest {
 		
 		clearResults();
 		
-		ViewUtils.view(getActivity(), entity, new ViewAddListener() {
+		ViewUtils.view(TestUtils.getActivity(this), entity, new ViewAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -123,7 +124,7 @@ public class ViewUtilsTest extends SocializeActivityTest {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
-		ViewUtils.view(getActivity(), entity, new ViewAddListener() {
+		ViewUtils.view(TestUtils.getActivity(this), entity, new ViewAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -133,7 +134,7 @@ public class ViewUtilsTest extends SocializeActivityTest {
 			
 			@Override
 			public void onCreate(View view) {
-				ViewUtils.getView(getActivity(), entity, new ViewGetListener() {
+				ViewUtils.getView(TestUtils.getActivity(ViewUtilsTest.this), entity, new ViewGetListener() {
 					
 					@Override
 					public void onGet(View entity) {
@@ -158,13 +159,13 @@ public class ViewUtilsTest extends SocializeActivityTest {
 	}
 	
 	public void testGetViewsByUser() throws SocializeException, InterruptedException {
-		final User user = UserUtils.getCurrentUser(getActivity());
+		final User user = UserUtils.getCurrentUser(TestUtils.getActivity(this));
 		
 		final Entity entity = Entity.newInstance("testGetViewsByUser", "testGetViewsByUser");
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
-		ViewUtils.view(getActivity(), entity, new ViewAddListener() {
+		ViewUtils.view(TestUtils.getActivity(this), entity, new ViewAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -175,7 +176,7 @@ public class ViewUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(View view) {
 				
-				ViewUtils.getViewsByUser(getActivity(), user, 0, 100, new ViewListListener() {
+				ViewUtils.getViewsByUser(TestUtils.getActivity(ViewUtilsTest.this), user, 0, 100, new ViewListListener() {
 					
 					@Override
 					public void onList(List<View> items, int totalSize) {
@@ -205,7 +206,7 @@ public class ViewUtilsTest extends SocializeActivityTest {
 //		
 //		final CountDownLatch latch = new CountDownLatch(1);
 //		
-//		ViewUtils.view(getActivity(), entity, new ViewAddListener() {
+//		ViewUtils.view(TestUtils.getActivity(this), entity, new ViewAddListener() {
 //			
 //			@Override
 //			public void onError(SocializeException error) {
@@ -216,7 +217,7 @@ public class ViewUtilsTest extends SocializeActivityTest {
 //			@Override
 //			public void onCreate(View view) {
 //				
-//				ViewUtils.getViewsByEntity(getActivity(), entity, 0, 100, new ViewListListener() {
+//				ViewUtils.getViewsByEntity(TestUtils.getActivity(this), entity, 0, 100, new ViewListListener() {
 //					
 //					@Override
 //					public void onList(List<View> items, int totalSize) {

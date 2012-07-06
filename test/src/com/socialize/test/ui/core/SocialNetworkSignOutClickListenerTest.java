@@ -34,6 +34,7 @@ import com.socialize.networks.twitter.TwitterAccess;
 import com.socialize.networks.twitter.TwitterUtilsImpl;
 import com.socialize.test.PublicSocialNetworkSignOutClickListener;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 
 
 /**
@@ -63,11 +64,11 @@ public class SocialNetworkSignOutClickListenerTest extends SocializeActivityTest
 		
 		TwitterAccess.setTwitterUtilsProxy(mockTwitterUtils);
 		
-		Socialize.init(getActivity());
+		Socialize.init(TestUtils.getActivity(this));
 		
 		PublicSocialNetworkSignOutClickListener listener = new PublicSocialNetworkSignOutClickListener();
 		listener.setSignOutTaskFactory((IBeanFactory<SocialNetworkSignOutTask>) SocializeAccess.getBean("twitterSignOutTaskFactory"));
-		listener.doSignOut(getActivity());
+		listener.doSignOut(TestUtils.getActivity(this));
 		assertTrue(latch.await(10, TimeUnit.SECONDS));
 	}
 	
@@ -85,11 +86,11 @@ public class SocialNetworkSignOutClickListenerTest extends SocializeActivityTest
 		
 		FacebookAccess.setFacebookUtilsProxy(mockFacebookUtils);
 		
-		Socialize.init(getActivity());
+		Socialize.init(TestUtils.getActivity(this));
 		
 		PublicSocialNetworkSignOutClickListener listener = new PublicSocialNetworkSignOutClickListener();
 		listener.setSignOutTaskFactory((IBeanFactory<SocialNetworkSignOutTask>) SocializeAccess.getBean("facebookSignOutTaskFactory"));
-		listener.doSignOut(getActivity());
+		listener.doSignOut(TestUtils.getActivity(this));
 		assertTrue(latch.await(10, TimeUnit.SECONDS));
 	}	
 	

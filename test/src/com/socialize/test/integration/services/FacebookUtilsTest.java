@@ -75,7 +75,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 	public void test_link () throws Throwable {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
-		final Activity context = getActivity();
+		final Activity context = TestUtils.getActivity(this);
 		
 		// Stub in the FacebookAuthProvider
 		FacebookAuthProvider mockFacebookAuthProvider = new FacebookAuthProvider() {
@@ -89,10 +89,10 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		SocializeIOC.registerStub("facebookProvider", mockFacebookAuthProvider);
 		
 		// Set a mock FB ID
-		FacebookUtils.setAppId(getActivity(), "foobar");
+		FacebookUtils.setAppId(TestUtils.getActivity(this), "foobar");
 		
 		// Ensure we don't have a session
-		FacebookUtils.unlink(getActivity());
+		FacebookUtils.unlink(TestUtils.getActivity(this));
 		
 		// Validate
 		assertFalse(FacebookUtils.isLinked(getContext()));
@@ -114,7 +114,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 	public void test_link_with_token () throws Exception {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
-		final Activity context = getActivity();
+		final Activity context = TestUtils.getActivity(this);
 		
 		// Stub in the FacebookAuthProvider to ensure we DON'T auth with FB
 		FacebookAuthProvider mockFacebookAuthProvider = new FacebookAuthProvider() {
@@ -127,7 +127,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		SocializeIOC.registerStub("facebookProvider", mockFacebookAuthProvider);
 		
 		// Set a mock FB ID
-		FacebookUtils.setAppId(getActivity(), "foobar");
+		FacebookUtils.setAppId(TestUtils.getActivity(this), "foobar");
 		
 		FacebookUtils.link(context, TestUtils.getDummyFBToken(getContext()), new SocializeAuthListener() {
 			
@@ -276,7 +276,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		SocializeIOC.registerStub("facebookRunner", mockRunner);
 		SocializeIOC.registerStub("facebookProvider", mockFacebookAuthProvider);
 
-		FacebookUtils.postEntity(getActivity(), entity, "test", new SocialNetworkShareListener() {
+		FacebookUtils.postEntity(TestUtils.getActivity(this), entity, "test", new SocialNetworkShareListener() {
 			
 			@Override
 			public void onNetworkError(Activity context, SocialNetwork network, Exception error) {

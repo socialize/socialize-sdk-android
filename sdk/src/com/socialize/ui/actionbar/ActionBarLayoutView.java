@@ -582,4 +582,8 @@ public class ActionBarLayoutView extends BaseView {
 	public void setOnActionBarEventListener(OnActionBarEventListener onActionBarEventListener) {
 		this.onActionBarEventListener = onActionBarEventListener;
 	}
+	
+	public OnActionBarEventListener getOnActionBarEventListener() {
+		return onActionBarEventListener;
+	}
 }

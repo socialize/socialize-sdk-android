@@ -26,7 +26,6 @@ import java.util.concurrent.TimeUnit;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.test.ActivityInstrumentationTestCase2;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeAccess;
@@ -42,6 +41,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.sample.EmptyActivity;
 import com.socialize.sample.ui.ActionButtonActivity;
+import com.socialize.test.SocializeManagedActivityTest;
 import com.socialize.test.mock.MockEntitySystem;
 import com.socialize.test.mock.MockLikeSystem;
 import com.socialize.test.ui.util.TestUtils;
@@ -55,7 +55,7 @@ import com.socialize.ui.actionbutton.SocializeActionButtonAccess;
  * @author Jason Polites
  *
  */
-public class LikeButtonManualTest extends ActivityInstrumentationTestCase2<EmptyActivity> {
+public class LikeButtonManualTest extends SocializeManagedActivityTest<EmptyActivity> {
 	public LikeButtonManualTest() {
 		super("com.socialize.sample.ui", EmptyActivity.class);
 	}
@@ -128,10 +128,10 @@ public class LikeButtonManualTest extends ActivityInstrumentationTestCase2<Empty
 			}
 		});		
 		
-		Intent intent = new Intent(getActivity(), ActionButtonActivity.class);
+		Intent intent = new Intent(TestUtils.getActivity(this), ActionButtonActivity.class);
 		intent.putExtra("manual", true);
 		
-		getActivity().startActivity(intent);
+		TestUtils.getActivity(this).startActivity(intent);
 		
 		Activity activity = TestUtils.waitForActivity(5000);
 		

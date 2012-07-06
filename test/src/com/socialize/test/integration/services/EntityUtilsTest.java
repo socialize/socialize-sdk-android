@@ -55,7 +55,7 @@ public class EntityUtilsTest extends SocializeActivityTest {
 		// Force no config
 		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
-		EntityUtils.saveEntity(getActivity(), entity, new EntityAddListener() {
+		EntityUtils.saveEntity(TestUtils.getActivity(this), entity, new EntityAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -86,7 +86,7 @@ public class EntityUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		
 		
-		EntityUtils.getEntity(getActivity(), entityAfter.getId(), new EntityGetListener() {
+		EntityUtils.getEntity(TestUtils.getActivity(this), entityAfter.getId(), new EntityGetListener() {
 			
 			@Override
 			public void onGet(Entity entity) {

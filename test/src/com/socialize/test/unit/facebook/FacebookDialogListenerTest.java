@@ -24,10 +24,8 @@ package com.socialize.test.unit.facebook;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
 import android.app.Activity;
 import android.os.Bundle;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.AuthProviderResponse;

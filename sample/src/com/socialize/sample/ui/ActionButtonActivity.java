@@ -1,6 +1,5 @@
 package com.socialize.sample.ui;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.ViewGroup;
@@ -15,7 +14,7 @@ import com.socialize.ui.util.Colors;
  * @author jasonpolites
  *
  */
-public class ActionButtonActivity extends Activity {
+public class ActionButtonActivity extends BaseActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

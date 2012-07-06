@@ -22,9 +22,7 @@
 package com.socialize.api;
 
 import java.util.Collection;
-
 import org.apache.http.client.methods.HttpUriRequest;
-
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.UserProviderCredentials;

@@ -24,7 +24,6 @@ package com.socialize.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.RelativeLayout;
@@ -35,6 +34,7 @@ import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.event.EventSystem;
+import com.socialize.concurrent.ManagedAsyncTask;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.error.SocializeException;
 import com.socialize.launcher.AsyncLauncher;
@@ -263,7 +263,7 @@ public class SocializeLaunchActivity extends Activity {
 		return Socialize.getSocialize();
 	}
 	
-	protected class Initializer extends AsyncTask<Void, Void, Void>  {
+	protected class Initializer extends ManagedAsyncTask<Void, Void, Void>  {
 
 		@Override
 		protected Void doInBackground(Void... arg0) {
@@ -272,7 +272,7 @@ public class SocializeLaunchActivity extends Activity {
 		}
 
 		@Override
-		protected void onPostExecute(Void result) {
+		protected void onPostExecuteManaged(Void result) {
 			doAuthenticate();
 		}
 	}

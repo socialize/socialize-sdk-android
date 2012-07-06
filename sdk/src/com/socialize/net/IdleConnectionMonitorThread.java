@@ -22,7 +22,6 @@
 package com.socialize.net;
 
 import java.util.concurrent.TimeUnit;
-
 import org.apache.http.conn.ClientConnectionManager;
 
 /**

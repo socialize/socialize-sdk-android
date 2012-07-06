@@ -24,7 +24,6 @@ package com.socialize.api;
 import java.util.List;
 import android.content.Context;
 import android.location.Location;
-import android.os.AsyncTask;
 import com.socialize.Socialize;
 import com.socialize.api.action.ActionOptions;
 import com.socialize.api.action.ActionType;
@@ -35,6 +34,7 @@ import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderResponse;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
+import com.socialize.concurrent.ManagedAsyncTask;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.ActionError;
 import com.socialize.entity.ListResult;
@@ -645,7 +645,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		this.locationProvider = locationProvider;
 	}
 
-	abstract class AbstractAsyncProcess<Params extends SocializeRequest, Progress, Result extends SocializeResponse> extends AsyncTask<Params, Progress, Result> {
+	abstract class AbstractAsyncProcess<Params extends SocializeRequest, Progress, Result extends SocializeResponse> extends ManagedAsyncTask<Params, Progress, Result> {
 
 		RequestType requestType;
 		SocializeSession session;
@@ -681,7 +681,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		}
 		
 		@Override
-		protected void onPostExecute(Result result) {
+		protected void onPostExecuteManaged(Result result) {
 			if(listener != null) {
 				if(error != null) {
 					listener.onError(SocializeException.wrap(error));
@@ -812,7 +812,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		}
 
 		@Override
-		protected void onPostExecute(SocializeEntityResponse<T> result) {
+		protected void onPostExecuteManaged(SocializeEntityResponse<T> result) {
 			if(listener != null) {
 				if(error != null) {
 					listener.onError(SocializeException.wrap(error));

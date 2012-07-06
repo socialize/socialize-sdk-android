@@ -37,6 +37,7 @@ import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 
 
 /**
@@ -53,7 +54,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		options.setShowAuthDialog(false);
 		options.setShowShareDialog(false);
 		
-		LikeUtils.like(getActivity(), entityKey, options, new LikeAddListener() {
+		LikeUtils.like(TestUtils.getActivity(this), entityKey, options, new LikeAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -83,7 +84,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		clearResults();
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		
-		LikeUtils.getLike(getActivity(), like.getId(), new LikeGetListener() {
+		LikeUtils.getLike(TestUtils.getActivity(this), like.getId(), new LikeGetListener() {
 			
 			@Override
 			public void onGet(Like entity) {
@@ -117,7 +118,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		options.setShowAuthDialog(false);
 		options.setShowShareDialog(false);
 		
-		LikeUtils.like(getActivity(), entityKey, options, new LikeAddListener() {
+		LikeUtils.like(TestUtils.getActivity(this), entityKey, options, new LikeAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -127,7 +128,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 			
 			@Override
 			public void onCreate(Like like) {
-				LikeUtils.getLike(getActivity(), entityKey.getKey(), new LikeGetListener() {
+				LikeUtils.getLike(TestUtils.getActivity(LikeUtilsTest.this), entityKey.getKey(), new LikeGetListener() {
 					
 					@Override
 					public void onGet(Like entity) {
@@ -155,7 +156,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final String entityKey = "testGetLikeDoesNotExist";
 		
-		LikeUtils.isLiked(getActivity(), entityKey, new IsLikedListener() {
+		LikeUtils.isLiked(TestUtils.getActivity(this), entityKey, new IsLikedListener() {
 			
 			@Override
 			public void onLiked(Like like) {
@@ -186,7 +187,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		options.setShowAuthDialog(false);
 		options.setShowShareDialog(false);
 		
-		LikeUtils.like(getActivity(), entityKey, options, new LikeAddListener() {
+		LikeUtils.like(TestUtils.getActivity(this), entityKey, options, new LikeAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -197,7 +198,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(Like like) {
 				
-				LikeUtils.unlike(getActivity(), entityKey.getKey(), new LikeDeleteListener() {
+				LikeUtils.unlike(TestUtils.getActivity(LikeUtilsTest.this), entityKey.getKey(), new LikeDeleteListener() {
 					
 					@Override
 					public void onError(SocializeException error) {
@@ -222,7 +223,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 	}
 	
 	public void testGetLikesByUser() throws SocializeException, InterruptedException {
-		final User user = UserUtils.getCurrentUser(getActivity());
+		final User user = UserUtils.getCurrentUser(TestUtils.getActivity(this));
 		final Entity entityKey = Entity.newInstance("testGetLikesByUser", "testGetLikesByUser");
 		final CountDownLatch latch = new CountDownLatch(1);
 		
@@ -231,7 +232,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		options.setShowAuthDialog(false);
 		options.setShowShareDialog(false);
 		
-		LikeUtils.like(getActivity(), entityKey, options, new LikeAddListener() {
+		LikeUtils.like(TestUtils.getActivity(this), entityKey, options, new LikeAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -242,7 +243,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(Like like) {
 				
-				LikeUtils.getLikesByUser(getActivity(), user, 0, 100, new LikeListListener() {
+				LikeUtils.getLikesByUser(TestUtils.getActivity(LikeUtilsTest.this), user, 0, 100, new LikeListListener() {
 					
 					@Override
 					public void onList(List<Like> items, int totalSize) {
@@ -276,7 +277,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		options.setShowAuthDialog(false);
 		options.setShowShareDialog(false);
 		
-		LikeUtils.like(getActivity(), entityKey, options, new LikeAddListener() {
+		LikeUtils.like(TestUtils.getActivity(this), entityKey, options, new LikeAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -287,7 +288,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(Like like) {
 				
-				LikeUtils.getLikesByEntity(getActivity(), entityKey.getKey(), 0, 100, new LikeListListener() {
+				LikeUtils.getLikesByEntity(TestUtils.getActivity(LikeUtilsTest.this), entityKey.getKey(), 0, 100, new LikeListListener() {
 					
 					@Override
 					public void onList(List<Like> items, int totalSize) {

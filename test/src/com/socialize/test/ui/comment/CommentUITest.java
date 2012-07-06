@@ -287,7 +287,7 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		
 		TestUtils.setUpActivityMonitor(CommentDetailActivity.class);
 		
-		ConfigUtils.getConfig(getActivity()).setProperty("comment.page.size", String.valueOf(pageSize));
+		ConfigUtils.getConfig(TestUtils.getActivity(this)).setProperty("comment.page.size", String.valueOf(pageSize));
 		
 		startWithoutFacebook();
 		

@@ -24,6 +24,7 @@ package com.socialize.test.blackbox;
 import java.io.IOException;
 import java.io.InputStream;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 import com.socialize.util.IOUtils;
 
 /**
@@ -47,14 +48,15 @@ public abstract class AbstractFactoryBlackBoxTest extends SocializeActivityTest 
 	 * @return
 	 * @throws IOException 
 	 */
-	protected String getSampleJSON(String filename) throws IOException {
+	protected String getSampleJSON(String filename) throws Throwable {
+		
 		
 		String json = null;
 		
 		InputStream in = null;
 		IOUtils utils = new IOUtils();
 		try {
-			in = getActivity().getAssets().open(filename);
+			in = TestUtils.getActivity(this).getAssets().open(filename);
 			json = utils.read(in);
 		}
 		finally {

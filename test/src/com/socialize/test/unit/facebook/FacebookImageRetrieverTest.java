@@ -23,7 +23,6 @@ package com.socialize.test.unit.facebook;
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.facebook.FacebookUrlBuilder;
 import com.socialize.test.SocializeUnitTest;

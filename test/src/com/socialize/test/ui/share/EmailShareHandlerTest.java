@@ -33,6 +33,7 @@ import com.socialize.entity.SocializeAction;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.share.EmailShareHandler;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 
 
 /**
@@ -58,7 +59,7 @@ public class EmailShareHandlerTest extends SocializeActivityTest {
 		final String subject = "foo_subject";
 		final String body = "foo_body";
 		final String title = "Share";
-		final Activity context = getActivity();
+		final Activity context = TestUtils.getActivity(this);
 		
 		PublicEmailShareHandler handler = new PublicEmailShareHandler() {
 			@Override

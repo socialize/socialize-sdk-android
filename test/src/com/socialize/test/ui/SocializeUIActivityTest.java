@@ -21,11 +21,11 @@
  */
 package com.socialize.test.ui;
 
-import android.test.ActivityInstrumentationTestCase2;
 import com.socialize.sample.EmptyActivity;
+import com.socialize.test.SocializeManagedActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 
-public abstract class SocializeUIActivityTest extends ActivityInstrumentationTestCase2<EmptyActivity> {
+public abstract class SocializeUIActivityTest extends SocializeManagedActivityTest<EmptyActivity> {
 	
 	public SocializeUIActivityTest() {
 		super("com.socialize.sample", EmptyActivity.class);
@@ -71,6 +71,6 @@ public abstract class SocializeUIActivityTest extends ActivityInstrumentationTes
 	}
 
 	public EmptyActivity getContext() {
-		return super.getActivity();
+		return TestUtils.getActivity(this);
 	}
 }

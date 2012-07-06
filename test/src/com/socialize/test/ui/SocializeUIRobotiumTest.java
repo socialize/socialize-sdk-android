@@ -23,7 +23,6 @@ package com.socialize.test.ui;
 
 import java.util.ArrayList;
 import android.content.Context;
-import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -31,12 +30,13 @@ import com.jayway.android.robotium.solo.Solo;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.sample.ui.SampleActivity2;
+import com.socialize.test.SocializeManagedActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 
 /**
  * @author Jason Polites
  */
-public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTestCase2<SampleActivity2> {
+public abstract class SocializeUIRobotiumTest extends SocializeManagedActivityTest<SampleActivity2> {
 
 	public static final int DEFAULT_TIMEOUT_SECONDS = 100;
 	public static final String DEFAULT_ENTITY_URL = "http://socialize.integration.tests.com?somekey=somevalue&anotherkey=anothervalue";
@@ -74,8 +74,8 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	}
 
 	public void setUp() throws Exception {
-		imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-		robotium = new Solo(getInstrumentation(), getActivity());
+		imm = (InputMethodManager)TestUtils.getActivity(this).getSystemService(Context.INPUT_METHOD_SERVICE);
+		robotium = new Solo(getInstrumentation(), TestUtils.getActivity(this));
 		robotium.waitForActivity("SampleActivity", 5000);
 		TestUtils.setUp(this);
 		hideKeyboard();
@@ -122,7 +122,7 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	
 	protected void clearAuthCache() {
 		SocializeService socialize = Socialize.getSocialize();
-		socialize.clearSessionCache(getActivity());
+		socialize.clearSessionCache(TestUtils.getActivity(this));
 		assertNull(socialize.getSession());
 	}
 	
@@ -218,7 +218,7 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 			}
 		}
 		return null;		
-//		return TestUtils.findView(getActivity(), viewClass, 20000);
+//		return TestUtils.findView(TestUtils.getActivity(this), viewClass, 20000);
 	}
 
 }

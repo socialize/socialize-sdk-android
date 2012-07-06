@@ -30,6 +30,7 @@ import android.util.DisplayMetrics;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 import com.socialize.util.BitmapBuilder;
 import com.socialize.util.BitmapUtils;
 import com.socialize.util.CacheableDrawable;
@@ -91,7 +92,7 @@ public class DrawablesTest extends SocializeActivityTest {
 			}
 		};
 
-		drawables.init(getActivity());
+		drawables.init(TestUtils.getActivity(this));
 		drawables.setClassLoaderProvider(provider);
 		drawables.setCache(cache);
 

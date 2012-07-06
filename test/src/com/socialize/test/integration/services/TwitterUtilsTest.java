@@ -90,7 +90,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 	public void test_link () throws Throwable {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
-		final Activity context = getActivity();
+		final Activity context = TestUtils.getActivity(this);
 		
 		// Stub in the TwitterAuthProvider
 		TwitterAuthProvider mockTwitterAuthProvider = new TwitterAuthProvider() {
@@ -104,10 +104,10 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		SocializeIOC.registerStub("twitterProvider", mockTwitterAuthProvider);
 		
 		// Set a mock key/secret
-		TwitterUtils.setCredentials(getActivity(), "foo", "bar");
+		TwitterUtils.setCredentials(TestUtils.getActivity(this), "foo", "bar");
 		
 		// Ensure we don't have a session
-		TwitterUtils.unlink(getActivity());
+		TwitterUtils.unlink(TestUtils.getActivity(this));
 		
 		// Validate
 		assertFalse(TwitterUtils.isLinked(getContext()));
@@ -131,7 +131,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 	public void test_link_with_token () throws Exception {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
-		final Activity context = getActivity();
+		final Activity context = TestUtils.getActivity(this);
 		
 		// Stub in the TwitterAuthProvider to ensure we DON'T auth with TW
 		TwitterAuthProvider mockTwitterAuthProvider = new TwitterAuthProvider() {
@@ -144,7 +144,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		SocializeIOC.registerStub("twitterProvider", mockTwitterAuthProvider);
 		
 		// Set a mock key/secret
-		TwitterUtils.setCredentials(getActivity(), "foo", "bar");
+		TwitterUtils.setCredentials(TestUtils.getActivity(this), "foo", "bar");
 		
 		final String token = TestUtils.getDummyTwitterToken(getContext());
 		final String secret = TestUtils.getDummyTwitterSecret(getContext());
@@ -308,7 +308,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 			public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {}
 		};
 		
-		utils.tweetPhoto(getActivity(), tweet, listener);
+		utils.tweetPhoto(TestUtils.getActivity(this), tweet, listener);
 		
 		String resource = getResult(0);
 		HttpEntity entityAfter = getResult(1);
@@ -360,7 +360,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		tweet.setImageData(new byte[] {1,2,3});
 		tweet.setText("foobar");
 		
-		TwitterUtils.tweetPhoto(getActivity(), tweet, null);
+		TwitterUtils.tweetPhoto(TestUtils.getActivity(this), tweet, null);
 		
 		String tweetPhoto = getResult(0);
 		assertNotNull(tweetPhoto);
@@ -417,7 +417,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		tweet.setImageData(new byte[] {1,2,3});
 		tweet.setText("foobar");
 		
-		TwitterUtils.tweetPhoto(getActivity(), tweet, new SocialNetworkPostListener() {
+		TwitterUtils.tweetPhoto(TestUtils.getActivity(this), tweet, new SocialNetworkPostListener() {
 			
 			@Override
 			public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
@@ -508,7 +508,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		Tweet tweet = new Tweet();
 		tweet.setText("foobar");
 		
-		TwitterUtils.tweet(getActivity(), tweet, new SocialNetworkListener() {
+		TwitterUtils.tweet(TestUtils.getActivity(this), tweet, new SocialNetworkListener() {
 			
 			@Override
 			public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
@@ -609,7 +609,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		String resource = "foobar";
 		Map<String, Object> postData = new HashMap<String, Object>();
 		
-		TwitterUtils.post(getActivity(), resource, postData, new SocialNetworkPostListener() {
+		TwitterUtils.post(TestUtils.getActivity(this), resource, postData, new SocialNetworkPostListener() {
 			
 			@Override
 			public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
@@ -694,7 +694,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		SocializeIOC.registerStub("twitterProvider", mockTwitterAuthProvider);
 		SocializeIOC.registerStub("httpRequestProvider", mockProvider);
 
-		TwitterUtils.tweetEntity(getActivity(), entity, "AndroidSDK Test", new SocialNetworkShareListener() {
+		TwitterUtils.tweetEntity(TestUtils.getActivity(this), entity, "AndroidSDK Test", new SocialNetworkShareListener() {
 			
 			@Override
 			public void onNetworkError(Activity context, SocialNetwork network, Exception error) {

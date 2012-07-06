@@ -29,7 +29,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
-
 import com.socialize.Socialize;
 import com.socialize.SocializeSystem;
 import com.socialize.android.ioc.IOCContainer;

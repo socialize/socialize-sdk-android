@@ -29,6 +29,7 @@ import com.socialize.android.ioc.ContainerBuilder;
 import com.socialize.error.SocializeApiError;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 import com.socialize.util.HttpUtils;
 
 /**
@@ -44,7 +45,7 @@ public class SocializeErrorTest extends SocializeActivityTest {
 
 		HttpUtils utils = AndroidMock.createMock(HttpUtils.class);
 		Container container = AndroidMock.createMock(Container.class);
-		ContainerBuilder builder = AndroidMock.createMock(ContainerBuilder.class, getActivity());
+		ContainerBuilder builder = AndroidMock.createMock(ContainerBuilder.class, TestUtils.getActivity(this));
 
 		SocializeApiError error = new SocializeApiError(utils, resultCode, message);
 
@@ -57,7 +58,7 @@ public class SocializeErrorTest extends SocializeActivityTest {
 		AndroidMock.replay(container);
 
 		SocializeIOC ioc = new SocializeIOC();
-		ioc.init(getActivity(), builder, (InputStream[]) null);
+		ioc.init(TestUtils.getActivity(this), builder, (InputStream[]) null);
 
 		// Get the result we expect:
 		String expected = utils.getMessageFor(resultCode) + " (" + resultCode + "), " + message;

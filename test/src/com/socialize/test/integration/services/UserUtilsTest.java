@@ -42,13 +42,13 @@ public class UserUtilsTest extends SocializeActivityTest {
 	
 	public void testGetCurrentUser() throws Exception {
 		
-		User user = UserUtils.getCurrentUser(getActivity());
+		User user = UserUtils.getCurrentUser(TestUtils.getActivity(this));
 		
 		assertNotNull(user);
 		
 		Socialize.getSocialize().destroy(true);
 		
-		User user2 = UserUtils.getCurrentUser(getActivity());
+		User user2 = UserUtils.getCurrentUser(TestUtils.getActivity(this));
 		
 		assertEquals(user, user2);
 		
@@ -59,13 +59,13 @@ public class UserUtilsTest extends SocializeActivityTest {
 		
 		TestUtils.setUpActivityMonitor(ProfileActivity.class);
 		
-		UserUtils.showUserSettings(getActivity());
+		UserUtils.showUserSettings(TestUtils.getActivity(this));
 		
 		ProfileActivity profile = TestUtils.waitForActivity(20000);
 		
 		assertNotNull(profile);
 		
-		User currentUser = UserUtils.getCurrentUser(getActivity());
+		User currentUser = UserUtils.getCurrentUser(TestUtils.getActivity(this));
 		
 		// Look for the ID
 		assertTrue(TestUtils.findText(profile, String.valueOf(currentUser.getId()), 20000));
@@ -75,8 +75,8 @@ public class UserUtilsTest extends SocializeActivityTest {
 	
 	public void testSaveUserSettings() throws InterruptedException  {
 		
-		UserSettings userSettings = UserUtils.getUserSettings(getActivity());
-		User user = UserUtils.getCurrentUser(getActivity());
+		UserSettings userSettings = UserUtils.getUserSettings(TestUtils.getActivity(this));
+		User user = UserUtils.getCurrentUser(TestUtils.getActivity(this));
 		
 		String name = "foobar" + Math.random();
 		userSettings.setFirstName(name);
@@ -104,7 +104,7 @@ public class UserUtilsTest extends SocializeActivityTest {
 		
 		Socialize.getSocialize().destroy(true);
 		
-		User after = UserUtils.getCurrentUser(getActivity());
+		User after = UserUtils.getCurrentUser(TestUtils.getActivity(this));
 		
 		long idAfter = after.getId();
 		

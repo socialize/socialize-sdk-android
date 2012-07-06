@@ -19,59 +19,73 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.launcher;
+package com.socialize.sample.ui;
 
-import java.util.Map;
-import android.util.Log;
-import com.socialize.log.SocializeLogger;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import com.socialize.Socialize;
+import com.socialize.ui.dialog.DialogRegister;
+import android.app.Activity;
+import android.app.Dialog;
+import android.os.Bundle;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class SocializeLaunchManager implements LaunchManager {
+public class BaseActivity extends Activity implements DialogRegister {
 
-	private Map<String, Launcher> launchers;
-	private SocializeLogger logger;
+	private Set<Dialog> dialogs = new HashSet<Dialog>();
 	
-	/* (non-Javadoc)
-	 * @see com.socialize.launcher.LaunchManager#getLaucher(java.lang.String)
-	 */
 	@Override
-	public Launcher getLaucher(String action) {
+	protected void onCreate(Bundle savedInstanceState) {
+		
+		// Force async tasks static handler to be created on the main UI thread
 		try {
-			return getLaucher(LaunchAction.valueOf(action));
-		} catch (Exception e) {
-			
-			if(logger != null) {
-				logger.error("Launch action [" +
-						action +
-						"] provided is not a known action", e);
-			}
-			else {
-				Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
-			}
-			return null;
+			Class.forName("android.os.AsyncTask");
 		}
+		catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}		
+		
+		super.onCreate(savedInstanceState);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.launcher.LaunchManager#getLaucher(com.socialize.launcher.LaunchAction)
-	 */
 	@Override
-	public Launcher getLaucher(LaunchAction action) {
-		if(launchers != null) {
-			return launchers.get(action.name());
+	public void register(Dialog dialog) {
+		dialogs.add(dialog);
+	}
+
+	@Override
+	public Collection<Dialog> getDialogs() {
+		return dialogs;
+	}
+	
+	@Override
+	protected void onDestroy() {
+		if(dialogs != null) {
+			for (Dialog dialog : dialogs) {
+				try {
+					dialog.dismiss();
+				}
+				catch (Throwable ignore) {}
+			}
+			dialogs.clear();
 		}
-		return null;
+		super.onDestroy();
+	}
+	
+	@Override
+	protected void onPause() {
+		Socialize.onPause(this);
+		super.onPause();
 	}
 
-	public void setLaunchers(Map<String, Launcher> launchers) {
-		this.launchers = launchers;
-	}
-
-	public void setLogger(SocializeLogger logger) {
-		this.logger = logger;
+	@Override
+	protected void onResume() {
+		Socialize.onResume(this);
+		super.onResume();
 	}
 }

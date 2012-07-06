@@ -1,45 +1,27 @@
 package com.socialize.sample.ui;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import android.app.Activity;
-import android.app.Dialog;
 import android.os.Bundle;
-
 import com.socialize.Socialize;
 import com.socialize.entity.Entity;
-import com.socialize.ui.dialog.DialogRegister;
 
-public abstract class ActionBarActivity2 extends Activity implements DialogRegister {
-
-	private Set<Dialog> dialogs = new HashSet<Dialog>();	
-	
-	@Override
-	public void register(Dialog dialog) {
-		dialogs.add(dialog);
-	}
-
-	@Override
-	public Collection<Dialog> getDialogs() {
-		return dialogs;
-	}
+public abstract class ActionBarActivity2 extends BaseActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		Entity entity = null;
-		
+		boolean manual = false;
 		Bundle extras = this.getIntent().getExtras();
 		
 		if(extras != null) {
 			entity = (Entity)extras.get(Socialize.ENTITY_OBJECT);
+			manual = extras.getBoolean("manual");
 		}
 		
-		onCreate(savedInstanceState, entity);
+		onCreate(savedInstanceState, entity, manual);
 	}
 
-	protected abstract void onCreate(Bundle savedInstanceState, Entity entity);
+	protected abstract void onCreate(Bundle savedInstanceState, Entity entity, boolean manual);
 	
 }

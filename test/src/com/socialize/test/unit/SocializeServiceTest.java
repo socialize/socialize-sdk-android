@@ -94,6 +94,7 @@ import com.socialize.provider.SocializeProvider;
 import com.socialize.test.PublicSocialize;
 import com.socialize.test.PublicUserSystem;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarOptions;
 import com.socialize.ui.profile.UserProfile;
@@ -403,7 +404,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		assertTrue(socialize.isInitialized());
 
-		socialize.addComment(getActivity(), entity, comment, listener);
+		socialize.addComment(TestUtils.getActivity(this), entity, comment, listener);
 
 		verifyDefaultMocks();
 
@@ -428,7 +429,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		assertTrue(socialize.isInitialized());
 
-		socialize.like(getActivity(), Entity.newInstance(key, null), listener);
+		socialize.like(TestUtils.getActivity(this), Entity.newInstance(key, null), listener);
 
 		verifyDefaultMocks();
 	}
@@ -544,7 +545,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		assertTrue(socialize.isInitialized());
 
-		socialize.addShare(getActivity(), Entity.newInstance(key, null), text, ShareType.OTHER, location, listener);
+		socialize.addShare(TestUtils.getActivity(this), Entity.newInstance(key, null), text, ShareType.OTHER, location, listener);
 
 		verifyDefaultMocks();
 	}
@@ -567,7 +568,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		socialize.init(getContext(), container);
 		socialize.setSession(session);
 
-		socialize.addShare(getActivity(), Entity.newInstance(key, null), text, ShareType.OTHER, listener);
+		socialize.addShare(TestUtils.getActivity(this), Entity.newInstance(key, null), text, ShareType.OTHER, listener);
 
 		verifyDefaultMocks();
 	}
@@ -592,7 +593,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		assertTrue(socialize.isInitialized());
 
-		socialize.view(getActivity(), Entity.newInstance(key, null), listener);
+		socialize.view(TestUtils.getActivity(this), Entity.newInstance(key, null), listener);
 
 		AndroidMock.verify(container);
 	}
@@ -615,7 +616,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		assertTrue(socialize.isInitialized());
 
-		socialize.addEntity(getActivity(), Entity.newInstance(key, name), listener);
+		socialize.addEntity(TestUtils.getActivity(this), Entity.newInstance(key, name), listener);
 
 		verifyDefaultMocks();
 	}
@@ -932,7 +933,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		SocializeServiceImpl socialize = new SocializeServiceImpl() ;
 
-		userSystem.authenticate(getActivity(), key, secret, listener, socialize);
+		userSystem.authenticate(TestUtils.getActivity(this), key, secret, listener, socialize);
 		
 		replayDefaultMocks();
 
@@ -940,7 +941,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		assertTrue(socialize.isInitialized());
 
-		socialize.authenticate(getActivity(), key, secret, listener);
+		socialize.authenticate(TestUtils.getActivity(this), key, secret, listener);
 
 		verifyDefaultMocks();
 	}
@@ -1070,7 +1071,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		SocializeServiceImpl socialize = new SocializeServiceImpl() ;
 
-		userSystem.authenticate(getActivity(), listener, socialize);
+		userSystem.authenticate(TestUtils.getActivity(this), listener, socialize);
 		
 		replayDefaultMocks();
 
@@ -1078,7 +1079,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		assertTrue(socialize.isInitialized());
 
-		socialize.authenticate(getActivity(), listener);
+		socialize.authenticate(TestUtils.getActivity(this), listener);
 
 		verifyDefaultMocks();		
 		
@@ -1149,7 +1150,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		SocializeServiceImpl socialize = new SocializeServiceImpl() ;
 
-		userSystem.authenticate(getActivity(), key, secret, fb, listener, socialize);
+		userSystem.authenticate(TestUtils.getActivity(this), key, secret, fb, listener, socialize);
 		
 		replayDefaultMocks();
 
@@ -1157,7 +1158,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		assertTrue(socialize.isInitialized());
 
-		socialize.authenticate(getActivity(), key, secret, fb, listener);
+		socialize.authenticate(TestUtils.getActivity(this), key, secret, fb, listener);
 
 		verifyDefaultMocks();			
 		
@@ -1182,7 +1183,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		SocializeServiceImpl socialize = new SocializeServiceImpl();
 		
-		userSystem.authenticateKnownUser(getActivity(), creds, authListener, socialize);
+		userSystem.authenticateKnownUser(TestUtils.getActivity(this), creds, authListener, socialize);
 
 		replayDefaultMocks();
 
@@ -1190,7 +1191,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		assertTrue(socialize.isInitialized());
 		
-		socialize.authenticateKnownUser(getActivity(), consumerKey, consumerSecret, fb, creds, authListener);
+		socialize.authenticateKnownUser(TestUtils.getActivity(this), consumerKey, consumerSecret, fb, creds, authListener);
 
 		verifyDefaultMocks();
 	}
@@ -1262,7 +1263,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		assertFalse(socialize.isInitialized());
 
-		socialize.addComment(getActivity(), Entity.newInstance(key, null), comment, listener);
+		socialize.addComment(TestUtils.getActivity(this), Entity.newInstance(key, null), comment, listener);
 
 		Exception error = getNextResult();
 
@@ -1295,7 +1296,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		assertTrue(socialize.isInitialized());
 		assertFalse(socialize.isAuthenticated());
 
-		socialize.addComment(getActivity(), Entity.newInstance(key, null), comment, listener);
+		socialize.addComment(TestUtils.getActivity(this), Entity.newInstance(key, null), comment, listener);
 
 		Exception error = getNextResult();
 
@@ -1428,7 +1429,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		InitTask task = new InitTask(socialize, context, paths, listener, logger);
 
-		task.onPostExecute(container);
+		task.onPostExecuteManaged(container);
 
 		AndroidMock.verify(listener);
 
@@ -1454,7 +1455,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		task.doInBackground((Void[]) null);
 
-		task.onPostExecute(null);
+		task.onPostExecuteManaged(null);
 
 		AndroidMock.verify(socialize);
 		AndroidMock.verify(listener);

@@ -23,7 +23,6 @@ package com.socialize.ui;
 
 import android.app.Activity;
 import android.content.Context;
-
 import com.socialize.entity.Entity;
 
 /**

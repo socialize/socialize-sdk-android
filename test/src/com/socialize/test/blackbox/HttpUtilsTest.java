@@ -32,6 +32,7 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeApiError;
 import com.socialize.log.SocializeLogger;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.HttpUtils;
 import com.socialize.util.ResourceLocator;
@@ -43,7 +44,7 @@ import com.socialize.util.ResourceLocator;
  */
 public class HttpUtilsTest extends SocializeActivityTest {
 
-	public void testHttpStatusCodes() throws Exception {
+	public void testHttpStatusCodes() throws Throwable {
 		
 		HttpUtils utils = new HttpUtils();
 		ResourceLocator resourceLocator = new ResourceLocator();
@@ -51,7 +52,7 @@ public class HttpUtilsTest extends SocializeActivityTest {
 		resourceLocator.setClassLoaderProvider(provider);
 		utils.setResourceLocator(resourceLocator);
 		utils.setLogger(new SocializeLogger());
-		utils.init(getActivity());
+		utils.init(TestUtils.getActivity(this));
 		
 		// Just test that the codes are loaded.  We assume the messages are correct
 		int[] codes = {

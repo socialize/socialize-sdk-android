@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.config.SocializeConfig;
@@ -22,7 +21,7 @@ import com.socialize.sample.R;
 import com.socialize.ui.SocializeEntityLoader;
 import com.socialize.ui.dialog.SafeProgressDialog;
 
-public class SampleActivity2 extends Activity {
+public class SampleActivity2 extends BaseActivity {
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -127,13 +126,14 @@ public class SampleActivity2 extends Activity {
 			@Override
 			public void onClick(View v) {
 				setupOverrides();
-				Intent intent = new Intent(SampleActivity2.this, ActionBarManualActivity2.class);
+				Intent intent = new Intent(SampleActivity2.this, ActionBarAutoActivity2.class);
 				
 				Entity entity = new Entity();
 				entity.setKey(txtEntity.getText().toString());
 				entity.setName(txtEntityName.getText().toString());	
 				
 				intent.putExtra(Socialize.ENTITY_OBJECT, entity);
+				intent.putExtra("manual", true);
 				
 				Socialize.getSocialize().setEntityLoader(loader);
 				Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));

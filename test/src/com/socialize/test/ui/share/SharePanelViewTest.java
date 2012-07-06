@@ -85,10 +85,12 @@ public class SharePanelViewTest extends SocializeUIActivityTest {
 		
 		final CountDownLatch latch0 = new CountDownLatch(1);
 		
+		final Activity activity = TestUtils.getActivity(this);
+		
 		runTestOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				getActivity().setContentView(view);
+				activity.setContentView(view);
 				latch0.countDown();
 			}
 		});
@@ -152,10 +154,12 @@ public class SharePanelViewTest extends SocializeUIActivityTest {
 		
 		final CountDownLatch latch0 = new CountDownLatch(1);
 		
+		final Activity activity = TestUtils.getActivity(this);
+		
 		runTestOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				getActivity().setContentView(view);
+				activity.setContentView(view);
 				latch0.countDown();
 			}
 		});

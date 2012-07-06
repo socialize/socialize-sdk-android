@@ -44,6 +44,7 @@ import com.socialize.networks.facebook.FacebookSharer;
 import com.socialize.networks.facebook.FacebookWallPoster;
 import com.socialize.test.PublicSocialize;
 import com.socialize.test.ui.SocializeActivityTestCase;
+import com.socialize.test.ui.util.TestUtils;
 
 /**
  * @author Jason Polites
@@ -204,7 +205,7 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		PublicFacebookSharer sharer = new PublicFacebookSharer();
 		sharer.setLogger(logger);
 		
-		sharer.doError(error, getActivity(), listener);
+		sharer.doError(error, TestUtils.getActivity(this), listener);
 		
 		AndroidMock.verify(logger);
 		AndroidMock.verify(listener);
@@ -222,11 +223,11 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		final String comment = "foobar";
 		final Entity entity = Entity.newInstance("blah", null);
 		
-		facebookWallPoster.postComment(getActivity(), entity, comment, info, listener);
+		facebookWallPoster.postComment(TestUtils.getActivity(this), entity, comment, info, listener);
 		
 		AndroidMock.replay(facebookWallPoster, listener, info);
 		
-		sharer.doShare(getActivity(), entity, info, comment, listener, ActionType.COMMENT);
+		sharer.doShare(TestUtils.getActivity(this), entity, info, comment, listener, ActionType.COMMENT);
 		
 		AndroidMock.verify(facebookWallPoster, listener, info);
 	}
@@ -243,11 +244,11 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		final String comment = "foobar";
 		final Entity entity = Entity.newInstance("blah", null);
 		
-		facebookWallPoster.post(getActivity(), entity, comment, info, listener);
+		facebookWallPoster.post(TestUtils.getActivity(this), entity, comment, info, listener);
 		
 		AndroidMock.replay(facebookWallPoster, listener, info);
 
-		sharer.doShare(getActivity(), entity, info, comment, listener, ActionType.SHARE);
+		sharer.doShare(TestUtils.getActivity(this), entity, info, comment, listener, ActionType.SHARE);
 		
 		AndroidMock.verify(facebookWallPoster, listener, info);
 	}
@@ -264,11 +265,11 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		final String comment = "foobar";
 		final Entity entity = Entity.newInstance("blah", null);
 		
-		facebookWallPoster.postLike(getActivity(), entity, info, listener);
+		facebookWallPoster.postLike(TestUtils.getActivity(this), entity, info, listener);
 		
 		AndroidMock.replay(facebookWallPoster, listener, info);
 		
-		sharer.doShare(getActivity(), entity, info, comment, listener, ActionType.LIKE);
+		sharer.doShare(TestUtils.getActivity(this), entity, info, comment, listener, ActionType.LIKE);
 		
 		AndroidMock.verify(facebookWallPoster, listener, info);
 	}	

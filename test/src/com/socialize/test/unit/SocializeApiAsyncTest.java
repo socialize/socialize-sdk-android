@@ -46,6 +46,7 @@ import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 
 public class SocializeApiAsyncTest extends SocializeActivityTest {
 
@@ -98,7 +99,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		AndroidMock.expect(provider.authenticate("/authenticate/", "test_key", "test_secret", "test_uuid")).andThrow(new SocializeException("TEST ERROR IGNORE ME!"));
 		AndroidMock.replay(provider);
 
-		final ProgressDialog authProgress = ProgressDialog.show(getActivity(), "Authenticating", "Please wait...");
+		final ProgressDialog authProgress = ProgressDialog.show(TestUtils.getActivity(this), "Authenticating", "Please wait...");
 
 		final SocializeAuthListener alistener = new SocializeAuthListener() {
 

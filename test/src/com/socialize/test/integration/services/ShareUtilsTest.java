@@ -62,7 +62,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
-		ShareUtils.getShare(getActivity(), new ShareGetListener() {
+		ShareUtils.getShare(TestUtils.getActivity(this), new ShareGetListener() {
 			
 			@Override
 			public void onGet(Share entity) {
@@ -90,7 +90,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
-		ShareUtils.getShare(getActivity(), new ShareGetListener() {
+		ShareUtils.getShare(TestUtils.getActivity(this), new ShareGetListener() {
 			
 			@Override
 			public void onGet(Share entity) {
@@ -126,7 +126,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		
 		user.setId(Long.parseLong(userId));
 		
-		ShareUtils.getSharesByUser(getActivity(), user.getId(), 0, 100, new ShareListListener() {
+		ShareUtils.getSharesByUser(TestUtils.getActivity(this), user.getId(), 0, 100, new ShareListListener() {
 			@Override
 			public void onList(ListResult<Share> entities) {
 				addResult(entities);
@@ -150,7 +150,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		final String entityKey = "http://entity1.com";
 		final CountDownLatch latch = new CountDownLatch(1);
 		
-		ShareUtils.getSharesByEntity(getActivity(), entityKey, 0, 100, new ShareListListener() {
+		ShareUtils.getSharesByEntity(TestUtils.getActivity(this), entityKey, 0, 100, new ShareListListener() {
 			@Override
 			public void onList(ListResult<Share> entities) {
 				addResult(entities);

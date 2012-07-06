@@ -23,6 +23,7 @@ package com.socialize;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.concurrent.TimeUnit;
 import org.json.JSONObject;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -30,7 +31,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -62,6 +62,8 @@ import com.socialize.auth.AuthProviders;
 import com.socialize.auth.SocializeAuthProviderInfo;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
+import com.socialize.concurrent.AsyncTaskManager;
+import com.socialize.concurrent.ManagedAsyncTask;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
@@ -160,6 +162,8 @@ public class SocializeServiceImpl implements SocializeService {
 	
 	private String[] initPaths = null;
 	private int initCount = 0;
+	
+	private boolean paused = false;
 	
 	public SocializeServiceImpl() {
 		super();
@@ -297,7 +301,7 @@ public class SocializeServiceImpl implements SocializeService {
 							
 							this.initCount = 0;
 							
-							// Destroy the container so we don't double up on caches etc.
+							// Destroy the container so we recreate bean references
 							if(container != null) {
 								if(logger != null && logger.isDebugEnabled()) {
 									logger.debug("Destroying IOC container");
@@ -337,7 +341,10 @@ public class SocializeServiceImpl implements SocializeService {
 					
 					sort(this.initPaths);
 					
-					SocializeIOC container = newSocializeIOC();
+					if(container == null) {
+						container = newSocializeIOC();
+					}
+					
 					ResourceLocator locator = newResourceLocator();
 					
 					locator.setLogger(newLogger());
@@ -362,7 +369,7 @@ public class SocializeServiceImpl implements SocializeService {
 						}
 					}	
 					
-					container.init(context, locator, paths);
+					((SocializeIOC) container).init(context, locator, paths);
 					
 					init(context, container, listener); // initCount incremented here
 				}
@@ -375,9 +382,7 @@ public class SocializeServiceImpl implements SocializeService {
 			}
 			
 			// Always set the context on the container
-			if(container != null) {
-				container.setContext(context);
-			}
+			setContext(context);
 		}
 		else {
 			String msg = "Attempt to initialize Socialize with null bean config paths";
@@ -390,6 +395,12 @@ public class SocializeServiceImpl implements SocializeService {
 		}
 		
 		return container;
+	}
+	
+	void setContext(Context context) {
+		if(container != null) {
+			container.setContext(context);
+		}
 	}
 
 	// So we can mock
@@ -593,6 +604,11 @@ public class SocializeServiceImpl implements SocializeService {
 	@Override
 	public synchronized void destroy(boolean force) {
 		if(force) {
+			
+			if(AsyncTaskManager.isManaged()) {
+				AsyncTaskManager.terminateAll(10, TimeUnit.SECONDS);
+			}
+			
 			if(container != null) {
 				if(logger != null && logger.isDebugEnabled()) {
 					logger.debug("Destroying IOC container");
@@ -1345,7 +1361,7 @@ public class SocializeServiceImpl implements SocializeService {
 		return config;
 	}
 	
-	public static class InitTask extends AsyncTask<Void, Void, IOCContainer> {
+	public static class InitTask extends ManagedAsyncTask<Void, Void, IOCContainer> {
 		private Context context;
 		private String[] paths;
 		private Exception error;
@@ -1380,7 +1396,7 @@ public class SocializeServiceImpl implements SocializeService {
 		}
 
 		@Override
-		public void onPostExecute(IOCContainer result) {
+		public void onPostExecuteManaged(IOCContainer result) {
 			if(result == null) {
 				final String errorMessage = "Failed to initialize Socialize instance";
 				
@@ -1682,6 +1698,7 @@ public class SocializeServiceImpl implements SocializeService {
 
 	@Override
 	public void onPause(Context context) {
+		paused = true;
 		if(locationProvider != null) {
 			locationProvider.pause(context);	
 		}
@@ -1689,7 +1706,10 @@ public class SocializeServiceImpl implements SocializeService {
 
 	@Override
 	public void onResume(Context context) {
-		FacebookUtils.extendAccessToken(context);
+		if(paused) {
+			FacebookUtils.extendAccessToken(context);
+			paused = false;
+		}
 	}
 	
 	@Override

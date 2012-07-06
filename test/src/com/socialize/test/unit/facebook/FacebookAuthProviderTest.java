@@ -23,11 +23,9 @@ package com.socialize.test.unit.facebook;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.AuthProviderResponse;

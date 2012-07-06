@@ -19,59 +19,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.launcher;
+package com.socialize.test;
 
-import java.util.Map;
-import android.util.Log;
-import com.socialize.log.SocializeLogger;
+import android.app.Activity;
+import android.test.ActivityInstrumentationTestCase2;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class SocializeLaunchManager implements LaunchManager {
+public class SocializeManagedActivityTest<T extends Activity> extends ActivityInstrumentationTestCase2<T> {
 
-	private Map<String, Launcher> launchers;
-	private SocializeLogger logger;
+	private T activity;
+	private Class<T> activityClass;
 	
-	/* (non-Javadoc)
-	 * @see com.socialize.launcher.LaunchManager#getLaucher(java.lang.String)
-	 */
+	public SocializeManagedActivityTest(String pkg, Class<T> activityClass) {
+		super(pkg, activityClass);
+		this.activityClass = activityClass;
+	}
+	
+	public Class<T> getActivityClass() {
+		return activityClass;
+	}
+
 	@Override
-	public Launcher getLaucher(String action) {
-		try {
-			return getLaucher(LaunchAction.valueOf(action));
-		} catch (Exception e) {
-			
-			if(logger != null) {
-				logger.error("Launch action [" +
-						action +
-						"] provided is not a known action", e);
-			}
-			else {
-				Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
-			}
-			return null;
+	public T getActivity() {
+		if(activity == null) {
+			activity = super.getActivity();
 		}
+		return activity;
 	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.launcher.LaunchManager#getLaucher(com.socialize.launcher.LaunchAction)
-	 */
-	@Override
-	public Launcher getLaucher(LaunchAction action) {
-		if(launchers != null) {
-			return launchers.get(action.name());
-		}
-		return null;
-	}
-
-	public void setLaunchers(Map<String, Launcher> launchers) {
-		this.launchers = launchers;
-	}
-
-	public void setLogger(SocializeLogger logger) {
-		this.logger = logger;
-	}
+	
+	
 }

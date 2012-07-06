@@ -24,6 +24,7 @@ package com.socialize.test.ui.dialog;
 import android.app.AlertDialog;
 import android.test.UiThreadTest;
 import com.socialize.test.ui.SocializeUIActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.dialog.AlertDialogFactory;
 
 
@@ -36,7 +37,7 @@ public class AlertDialogFactoryTest extends SocializeUIActivityTest {
 	@UiThreadTest
 	public void testShow() throws Throwable {
 		final AlertDialogFactory factory = new AlertDialogFactory();
-		final AlertDialog dialog = factory.show(getActivity(), "foobar_title", "foobar_message");
+		final AlertDialog dialog = factory.show(TestUtils.getActivity(this), "foobar_title", "foobar_message");
 		assertTrue(dialog.isShowing());
 	}
 

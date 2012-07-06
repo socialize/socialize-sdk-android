@@ -19,59 +19,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.launcher;
+package com.socialize.concurrent;
 
-import java.util.Map;
-import android.util.Log;
-import com.socialize.log.SocializeLogger;
+import android.os.AsyncTask;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class SocializeLaunchManager implements LaunchManager {
+public abstract class ManagedAsyncTask<Params, Progress, Result> extends AsyncTask<Params, Progress, Result> {
 
-	private Map<String, Launcher> launchers;
-	private SocializeLogger logger;
+	int id;
 	
-	/* (non-Javadoc)
-	 * @see com.socialize.launcher.LaunchManager#getLaucher(java.lang.String)
-	 */
-	@Override
-	public Launcher getLaucher(String action) {
-		try {
-			return getLaucher(LaunchAction.valueOf(action));
-		} catch (Exception e) {
-			
-			if(logger != null) {
-				logger.error("Launch action [" +
-						action +
-						"] provided is not a known action", e);
-			}
-			else {
-				Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
-			}
-			return null;
+	public ManagedAsyncTask() {
+		super();
+		if(AsyncTaskManager.isManaged()) {
+			id = AsyncTaskManager.register(this);
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.launcher.LaunchManager#getLaucher(com.socialize.launcher.LaunchAction)
-	 */
 	@Override
-	public Launcher getLaucher(LaunchAction action) {
-		if(launchers != null) {
-			return launchers.get(action.name());
+	protected final void onPostExecute(Result result) {
+		onPostExecuteManaged(result);
+		if(AsyncTaskManager.isManaged()) {
+			AsyncTaskManager.unregister(id);
 		}
-		return null;
 	}
+	
+	protected abstract void onPostExecuteManaged(Result result);
 
-	public void setLaunchers(Map<String, Launcher> launchers) {
-		this.launchers = launchers;
-	}
-
-	public void setLogger(SocializeLogger logger) {
-		this.logger = logger;
-	}
 }

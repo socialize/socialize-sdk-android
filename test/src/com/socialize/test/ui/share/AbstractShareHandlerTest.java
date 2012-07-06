@@ -32,6 +32,7 @@ import com.socialize.entity.SocializeAction;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.share.AbstractShareHandler;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 
 
 /**
@@ -48,7 +49,7 @@ public class AbstractShareHandlerTest extends SocializeActivityTest {
 		SocializeAction action = AndroidMock.createMock(SocializeAction.class);
 		
 		final ShareType shareType = ShareType.FACEBOOK;
-		final Activity context = getActivity();
+		final Activity context = TestUtils.getActivity(this);
 		final String text = "foobar";
 		
 		AndroidMock.expect(action.getPropagationInfoResponse()).andReturn(response);

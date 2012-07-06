@@ -26,6 +26,7 @@ import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.test.ui.SocializeUIActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.comment.CommentAdapter;
 import com.socialize.ui.comment.CommentAddButtonListener;
 import com.socialize.ui.comment.CommentListView;
@@ -132,7 +133,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		boolean shareLocation = true;
 		
 		final Comment comment = AndroidMock.createMock(Comment.class);
-		final ProgressDialog dialog = AndroidMock.createMock(ProgressDialog.class, getActivity());
+		final ProgressDialog dialog = AndroidMock.createMock(ProgressDialog.class, TestUtils.getActivity(this));
 		final SimpleDialogFactory<ProgressDialog> progressDialogFactory = AndroidMock.createMock(SimpleDialogFactory.class);
 		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class);
 		final List<Comment> comments = AndroidMock.createMock(List.class);
@@ -174,7 +175,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		SocializeAccess.setCommentUtilsProxy(mockCommentUtilsProxy);			
 		
-		PublicCommentListView view = new PublicCommentListView(getActivity()) {
+		PublicCommentListView view = new PublicCommentListView(TestUtils.getActivity(this)) {
 
 			@Override
 			public Comment newComment() {
