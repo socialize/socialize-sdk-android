@@ -1510,13 +1510,8 @@ public class SocializeServiceTest extends SocializeActivityTest {
 			}
 
 			@Override
-			public void destroy() {
-				addResult(3, "destroy");
-			}
-
-			@Override
 			protected void sort(Object[] array) {
-				addResult(4, "sort");
+				addResult(3, "sort");
 			}
 
 			@Override
@@ -1534,6 +1529,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		resourceLocator.setLogger(logger);
 
 		socializeIOC.init(context, resourceLocator, mockPaths);
+		socializeIOC.setContext(context);
 
 		AndroidMock.replay(socializeIOC);
 		AndroidMock.replay(resourceLocator);
@@ -1546,17 +1542,14 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		Context foundContext = getResult(0);
 		IOCContainer foundContainer = getResult(1);
 		String binarySearch = getResult(2);
-		String destroy = getResult(3);
-		String sort = getResult(4);
+		String sort = getResult(3);
 
 		assertNotNull(binarySearch);
-		assertNotNull(destroy);
 		assertNotNull(sort);
 		assertNotNull(foundContext);
 		assertNotNull(foundContainer);
 
 		assertEquals("binarySearch_foobar", binarySearch);
-		assertEquals("destroy", destroy);
 		assertEquals("sort", sort);
 		assertSame(context, foundContext);
 		assertSame(socializeIOC, foundContainer);

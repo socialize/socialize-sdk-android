@@ -38,7 +38,6 @@ public class FacebookActivityService {
 			Bundle extras = intent.getExtras();
 			
 			if(extras != null) {
-//				String appId = extras.getString("appId");
 				String[] permissions = extras.getStringArray("permissions");
 				
 				facebookSessionStore = activity.getBean("facebookSessionStore");

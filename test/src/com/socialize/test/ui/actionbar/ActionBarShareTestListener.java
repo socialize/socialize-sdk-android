@@ -38,13 +38,10 @@ public class ActionBarShareTestListener extends ActionBarTest {
 		mockLike.setEntity(entity);
 		mockLike.setId(0L);
 		
-		final CountDownLatch loadLatch = new CountDownLatch(1);
-		
 		SocializeLikeUtils likeUtils = new SocializeLikeUtils() {
 			@Override
 			public void getLike(Activity context, String entityKey, LikeGetListener listener) {
 				listener.onGet(mockLike);
-				loadLatch.countDown();
 			}
 		};
 		
@@ -60,8 +57,6 @@ public class ActionBarShareTestListener extends ActionBarTest {
 		
 		final ActionBarLayoutView actionBar = TestUtils.findView(activity, ActionBarLayoutView.class, 10000);	
 		final ActionBarView actionBarView = TestUtils.findView(activity, ActionBarView.class, 10000);	
-		
-		assertTrue(loadLatch.await(10, TimeUnit.SECONDS));
 		
 		assertNotNull(actionBar);
 		assertNotNull(actionBarView);

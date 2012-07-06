@@ -86,8 +86,7 @@ public class DefaultLocationProvider implements SocializeLocationProvider {
 
 	@Override
 	public Location getLocation(Context context) {
-		
-		if(config.getBooleanProperty(SocializeConfig.SOCIALIZE_LOCATION_ENABLED, true)) {
+		if(config != null && config.getBooleanProperty(SocializeConfig.SOCIALIZE_LOCATION_ENABLED, true)) {
 			if(location == null) {
 				if(appUtils.hasPermission(context, "android.permission.ACCESS_FINE_LOCATION")) {
 					requestLocation(context, Criteria.ACCURACY_FINE);

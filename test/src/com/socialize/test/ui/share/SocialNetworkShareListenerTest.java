@@ -75,6 +75,10 @@ public class SocialNetworkShareListenerTest extends SocializeActivityTest {
 		
 		final String dummyResponse = "{foo:bar}";
 		
+		final Facebook mockFacebook = new Facebook("foobar") {
+			
+		};
+		
 		// We don't know, and shouldn't care WHICH method is called on Facebook's code so mock them all.
 		final AsyncFacebookRunner mockRunner = new AsyncFacebookRunner(null) {
 
@@ -140,6 +144,11 @@ public class SocialNetworkShareListenerTest extends SocializeActivityTest {
 			@Override
 			protected FacebookSessionStore newFacebookSessionStore() {
 				return mockStore;
+			}
+
+			@Override
+			protected Facebook getFacebook(Context context) {
+				return mockFacebook;
 			}
 		};
 		
