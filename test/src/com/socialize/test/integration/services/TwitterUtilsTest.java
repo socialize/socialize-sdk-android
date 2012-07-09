@@ -716,7 +716,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 			public void onCancel() {}
 		});
 		
-		assertTrue(latch.await(10, TimeUnit.SECONDS));
+		assertTrue(latch.await(20, TimeUnit.SECONDS));
 		
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		

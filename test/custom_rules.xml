@@ -3,6 +3,7 @@
 	
 	<!-- Setup for tests -->
 	<property name="test-output" value="test-output"/>
+	<property file="${library.project.dir}/ant.properties" prefix="socialize.sdk."/>
 	
 	<property 
 		name="test.runner" 
@@ -13,6 +14,41 @@
 			<pathelement location="libext/ant-contrib.jar"/>
 		</classpath>
 	</taskdef>		
+	
+	<!-- 
+		################################################################################################
+		FIND BUGS
+		################################################################################################
+	-->		
+	
+	<path id="findbugs.libs">
+		<pathelement path="${findbugs.home}/lib/findbugs-ant.jar" />
+	</path>	
+	
+	<taskdef name="findbugs" 
+		classname="edu.umd.cs.findbugs.anttask.FindBugsTask"
+		classpathref="findbugs.libs"/>
+	
+	<target name="findbugs" depends="-setup">
+		
+        <gettarget
+                androidJarFileOut="project.target.android.jar"
+                androidAidlFileOut="project.target.framework.aidl"
+                bootClassPathOut="project.target.class.path"
+                targetApiOut="project.target.apilevel"
+                minSdkVersionOut="project.minSdkVersion" />		
+		
+		<echo>Running Findbugs...</echo>
+		<mkdir dir="findbugs-output"/>
+		<property name="sdkdir" refid="project.target.class.path"/>
+		<echo>Findbugs using SDK Dir ${sdkdir} </echo>
+		<findbugs home="${findbugs.home}" output="xml" outputFile="findbugs-output/bcel-fb.xml">
+			<sourcePath path="${library.project.src}" />
+			<auxClasspath path="${sdkdir}"/>
+			<class location="${library.project.build}/socialize-${socialize.sdk.version}.jar" />
+		</findbugs>
+		<echo>Findbugs complete.</echo>
+	</target>	
 	
 	<target name="clean-all">
 		<ant dir="../sample" target="clean" inheritall="false" inheritrefs="false"/>
