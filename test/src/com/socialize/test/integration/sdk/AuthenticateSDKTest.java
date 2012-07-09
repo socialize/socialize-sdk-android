@@ -49,19 +49,26 @@ public class AuthenticateSDKTest extends SDKIntegrationTest {
 
 			@Override
 			public void run() {
-				Socialize.getSocialize().init(context);
 				
-				Socialize.getSocialize().clearSessionCache(context);
-				
-				SocializeSession session = Socialize.getSocialize().authenticateSynchronous(context);
-				
-				addResult(0, session.getUser());
-				
-				SocializeSession session2 = Socialize.getSocialize().authenticateSynchronous(context);
-				
-				addResult(1, session2.getUser());
-				
-				latch.countDown();
+				try {
+					Socialize.getSocialize().init(context);
+					
+					Socialize.getSocialize().clearSessionCache(context);
+					
+					SocializeSession session = Socialize.getSocialize().authenticateSynchronous(context);
+					
+					addResult(0, session.getUser());
+					
+					SocializeSession session2 = Socialize.getSocialize().authenticateSynchronous(context);
+					
+					addResult(1, session2.getUser());
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+				finally {
+					latch.countDown();
+				}
 			}
 			
 		}.start();

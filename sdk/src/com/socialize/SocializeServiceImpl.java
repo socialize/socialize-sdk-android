@@ -645,10 +645,14 @@ public class SocializeServiceImpl implements SocializeService {
 		}
 	}
 	
-	public synchronized SocializeSession authenticateSynchronous(Context context) {
-		SocializeSession session = userSystem.authenticateSynchronous(context);
-		this.session = session;
-		return session;
+	public synchronized SocializeSession authenticateSynchronous(Context context) throws SocializeException {
+		if(userSystem != null) {
+			SocializeSession session = userSystem.authenticateSynchronous(context);
+			this.session = session;
+			return session;
+		}
+		
+		throw new SocializeException("Socialize not initialized");
 	}
 	
 	@Override
@@ -1707,7 +1711,12 @@ public class SocializeServiceImpl implements SocializeService {
 	@Override
 	public void onResume(Context context) {
 		if(paused) {
-			FacebookUtils.extendAccessToken(context);
+			try {
+				FacebookUtils.extendAccessToken(context);
+			}
+			catch (Exception e) {
+				Log.e(SocializeLogger.LOG_TAG, "Error occurred on resume", e);
+			}
 			paused = false;
 		}
 	}

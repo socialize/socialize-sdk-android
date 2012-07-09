@@ -47,7 +47,7 @@ import com.socialize.test.ui.util.TestUtils;
 public class ViewUtilsTest extends SocializeActivityTest {
 
 
-	public void testAddView() throws InterruptedException {
+	public void testAddView() throws InterruptedException, SocializeException {
 		
 		String randomKey = "testAddView";
 		Entity entity = Entity.newInstance(randomKey, "testAddView");

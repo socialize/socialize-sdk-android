@@ -125,7 +125,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * NOTE:  This assumes the consumer key/secret have been specified in assets/socialize.properties
 	 * @param context The current context.
 	 */
-	public SocializeSession authenticateSynchronous(Context context);
+	public SocializeSession authenticateSynchronous(Context context) throws SocializeException;
 	
 	/**
 	 * Authenticates the application against the API as an anonymous user.
