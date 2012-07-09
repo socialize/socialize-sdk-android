@@ -55,15 +55,16 @@
 		
 		<antcall target="clean"/>
 		
+        <echo>Cleaning up local coverage files...</echo>
+    	<delete verbose="${verbose}" failonerror="false">
+			<fileset dir="coverage"/>
+		</delete>		
+		
     	<delete verbose="${verbose}" failonerror="false">
 			<fileset dir="bin/intermediate"/>
 		</delete>
 		
 		<delete dir="${test-output}" verbose="${verbose}" failonerror="false"/>
-	    	
-        <echo>Cleaning up local coverage files...</echo>
-		<delete file="${emma.report.dir}/coverage.ec" />
-		<delete file="${emma.report.dir}/coverage.em" />
     	
     	<echo>Removing coverage files from device</echo>
     	<exec executable="${adb}" failonerror="false">
@@ -206,7 +207,7 @@
             	               global="true" />
             	
             	<property name="emma.coverage.file" value="${emma.coverage.file.replaced}.ec"/>
-            	<property name="emma.coverage.path" value="${emma.dump.path}${emma.coverage.file}"/>
+            	<property name="emma.coverage.path" value="${emma.dump.path}/${emma.coverage.file}"/>
             	
                 <echo>Code Coverage enabled.  Saving EMMA report to device location ${emma.coverage.path}</echo>
             	
@@ -349,22 +350,23 @@
             	<compilerarg value="-ARegenerateFrameworkMocks=true"/>
             </javac>  
         	
-            <!-- if the project is instrumented, instrument the classes -->
+        	
+        	<!-- 
+        		################################################################################################
+        		DO NOT GENERATE EMMA METADATA OTHERWISE WE WILL REPORT COVERAGE ON TEST CLASSES! 
+        		################################################################################################
+        	
             <if condition="${build.is.instrumented}">
                 <then>
                     <echo level="info">Instrumenting classes from ${out.absolute.dir}/classes...</echo>
 
-                    <!-- build the filter to remove R, Manifest, BuildConfig -->
                     <getemmafilter
                             appPackage="${project.app.package}"
                             libraryPackagesRefId="project.library.packages"
                             filterOut="emma.default.filter"/>
 
-                    <!-- define where the .em file is going. This may have been
-                         setup already if this is a library -->
                     <property name="emma.coverage.absolute.file" location="${emma.report.dir}/coverage.em" />
 
-                    <!-- It only instruments class files, not any external libs -->
                     <emma enabled="true">
                         <instr verbosity="${verbosity}"
                                mode="overwrite"
@@ -377,6 +379,7 @@
                     </emma>
                 </then>
             </if>
+             -->
 
         </do-only-if-manifest-hasCode>
     </target>	
