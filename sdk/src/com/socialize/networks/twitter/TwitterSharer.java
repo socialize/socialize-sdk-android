@@ -85,7 +85,7 @@ public class TwitterSharer extends AbstractSocialNetworkSharer {
 				if(StringUtils.isEmpty(comment))  comment = "Shared " + entity.getDisplayName();
 				break;
 			case LIKE:
-				comment = "\u2764 likes " + entity.getDisplayName();
+				comment = "<3 likes " + entity.getDisplayName();
 				break;
 			case VIEW:
 				comment = "Viewed " + entity.getDisplayName();
@@ -100,7 +100,7 @@ public class TwitterSharer extends AbstractSocialNetworkSharer {
 	   	try {
 			prop.load(context.getResources().getAssets().open("socialize.properties"));
 
-			if (!StringUtils.isEmpty(comment)) {
+			if (!StringUtils.isEmpty(comment) && type != ActionType.LIKE) {
 	 			if (prop.getProperty(TWITTER_COMMENT_MESSAGE) != null) {
 					preloaded_text = prop.getProperty(TWITTER_COMMENT_MESSAGE);
 		    	}
