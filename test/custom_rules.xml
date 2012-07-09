@@ -140,6 +140,31 @@
 				</antcall>
 			</sequential>
 		</for>
+		<antcall target="generate-reports" inheritall="true" inheritrefs="true"/>
+	</target>	
+	
+	<target name="generate-reports">
+		
+    	<echo>Extracting code coverage report...</echo>
+    	
+		<path id="emma.report.src.path">
+			<pathelement path="${tested.project.absolute.dir}/${source.dir}" />
+			<pathelement path="${library.project.src}" />
+		</path>
+        
+    	<emma>
+            <report 
+            	sourcepathref="emma.report.src.path" 
+            	verbosity="${verbosity}">
+            	<infileset dir="${emma.report.dir}" includes="**/*.em, **/*.ec"/>
+				<html outfile="${emma.report.dir}/coverage.html" />
+				<xml outfile="${emma.report.dir}/coverage.xml" />
+           </report>
+        </emma>
+      	
+        <echo>Saving the coverage html report file in ${emma.report.dir}/coverage.html</echo>
+    	<echo>Saving the coverage xml report file in ${emma.report.dir}/coverage.html</echo>			
+		
 	</target>	
 	
 
