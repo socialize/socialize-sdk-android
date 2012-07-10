@@ -21,12 +21,17 @@
  */
 package com.socialize.test.integration.services;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.json.JSONObject;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import com.google.android.testing.mocking.AndroidMock;
+import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.ConfigUtils;
 import com.socialize.ShareUtils;
 import com.socialize.UserUtils;
@@ -51,7 +56,10 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.share.ShareListListener;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.networks.SocialNetworkPostListener;
+import com.socialize.networks.facebook.FacebookAccess;
 import com.socialize.networks.facebook.FacebookUtils;
+import com.socialize.networks.facebook.FacebookUtilsImpl;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 
@@ -353,5 +361,196 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		
 		assertNotNull(match);
 	}
+	
+	
+	@UsesMocks ({SocialNetworkShareListener.class})
+	public void testFlowPostEntityNotAuthed() {
+		
+		final Entity entity = Entity.newInstance("foo", "bar");
+		final Activity context = TestUtils.getActivity(this);
+		final SocialNetworkShareListener mockSocialNetworkShareListener = AndroidMock.createMock(SocialNetworkShareListener.class);
+		final SocializeException mockError = new SocializeException("TEST ERROR - IGNORE ME");
+		final String text = "foobar";
+		
+		mockSocialNetworkShareListener.onNetworkError(context, SocialNetwork.FACEBOOK, mockError);
+		mockSocialNetworkShareListener.onNetworkError(context, SocialNetwork.FACEBOOK, mockError);
+		mockSocialNetworkShareListener.onCancel();
+		
+		FacebookUtilsImpl mockFacebookUtils = new FacebookUtilsImpl() {
+
+			@Override
+			public void postEntity(Activity context, Entity entity, String text, SocialNetworkShareListener listener) {
+				addResult(0, text);
+			}
+
+			@Override
+			public boolean isLinked(Context context) {
+				return false;
+			}
+
+			@Override
+			public void link(Activity context, SocializeAuthListener listener) {
+				listener.onError(mockError);
+				listener.onAuthFail(mockError);
+				listener.onCancel();
+				listener.onAuthSuccess(null);
+			}
+		};
+		
+		FacebookAccess.setFacebookUtilsProxy(mockFacebookUtils);
+		
+		AndroidMock.replay(mockSocialNetworkShareListener);
+		
+		FacebookUtils.postEntity(context, entity, text, mockSocialNetworkShareListener);
+		
+		AndroidMock.verify(mockSocialNetworkShareListener);
+		
+		assertEquals(text, getResult(0));
+	}
+	
+	
+	@UsesMocks ({SocialNetworkShareListener.class})
+	public void testFlowPostNotAuthed() {
+		
+		final Map<String, Object> params = new HashMap<String, Object>();
+		final Activity context = TestUtils.getActivity(this);
+		final SocialNetworkShareListener mockSocialNetworkShareListener = AndroidMock.createMock(SocialNetworkShareListener.class);
+		final SocializeException mockError = new SocializeException("TEST ERROR - IGNORE ME");
+		final String graphPath = "foobarPath";
+		
+		mockSocialNetworkShareListener.onNetworkError(context, SocialNetwork.FACEBOOK, mockError);
+		mockSocialNetworkShareListener.onNetworkError(context, SocialNetwork.FACEBOOK, mockError);
+		mockSocialNetworkShareListener.onCancel();
+		
+		FacebookUtilsImpl mockFacebookUtils = new FacebookUtilsImpl() {
+
+			@Override
+			public void post(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {
+				addResult(0, graphPath);
+				addResult(1, postData);
+			}
+
+			@Override
+			public boolean isLinked(Context context) {
+				return false;
+			}
+
+			@Override
+			public void link(Activity context, SocializeAuthListener listener) {
+				listener.onError(mockError);
+				listener.onAuthFail(mockError);
+				listener.onCancel();
+				listener.onAuthSuccess(null);
+			}
+		};
+		
+		FacebookAccess.setFacebookUtilsProxy(mockFacebookUtils);
+		
+		AndroidMock.replay(mockSocialNetworkShareListener);
+		
+		FacebookUtils.post(context, graphPath, params, mockSocialNetworkShareListener);
+		
+		AndroidMock.verify(mockSocialNetworkShareListener);
+		
+		assertEquals(graphPath, getResult(0));
+		assertSame(params, getResult(1));
+	}
+	
+	
+	@UsesMocks ({SocialNetworkShareListener.class})
+	public void testFlowGetNotAuthed() {
+		
+		final Map<String, Object> params = new HashMap<String, Object>();
+		final Activity context = TestUtils.getActivity(this);
+		final SocialNetworkShareListener mockSocialNetworkShareListener = AndroidMock.createMock(SocialNetworkShareListener.class);
+		final SocializeException mockError = new SocializeException("TEST ERROR - IGNORE ME");
+		final String graphPath = "foobarPath";
+		
+		mockSocialNetworkShareListener.onNetworkError(context, SocialNetwork.FACEBOOK, mockError);
+		mockSocialNetworkShareListener.onNetworkError(context, SocialNetwork.FACEBOOK, mockError);
+		mockSocialNetworkShareListener.onCancel();
+		
+		FacebookUtilsImpl mockFacebookUtils = new FacebookUtilsImpl() {
+
+			@Override
+			public void get(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {
+				addResult(0, graphPath);
+				addResult(1, postData);
+			}
+
+			@Override
+			public boolean isLinked(Context context) {
+				return false;
+			}
+
+			@Override
+			public void link(Activity context, SocializeAuthListener listener) {
+				listener.onError(mockError);
+				listener.onAuthFail(mockError);
+				listener.onCancel();
+				listener.onAuthSuccess(null);
+			}
+		};
+		
+		FacebookAccess.setFacebookUtilsProxy(mockFacebookUtils);
+		
+		AndroidMock.replay(mockSocialNetworkShareListener);
+		
+		FacebookUtils.get(context, graphPath, params, mockSocialNetworkShareListener);
+		
+		AndroidMock.verify(mockSocialNetworkShareListener);
+		
+		assertEquals(graphPath, getResult(0));
+		assertSame(params, getResult(1));
+	}	
+	
+	
+	@UsesMocks ({SocialNetworkShareListener.class})
+	public void testFlowDeleteNotAuthed() {
+		
+		final Map<String, Object> params = new HashMap<String, Object>();
+		final Activity context = TestUtils.getActivity(this);
+		final SocialNetworkShareListener mockSocialNetworkShareListener = AndroidMock.createMock(SocialNetworkShareListener.class);
+		final SocializeException mockError = new SocializeException("TEST ERROR - IGNORE ME");
+		final String graphPath = "foobarPath";
+		
+		mockSocialNetworkShareListener.onNetworkError(context, SocialNetwork.FACEBOOK, mockError);
+		mockSocialNetworkShareListener.onNetworkError(context, SocialNetwork.FACEBOOK, mockError);
+		mockSocialNetworkShareListener.onCancel();
+		
+		FacebookUtilsImpl mockFacebookUtils = new FacebookUtilsImpl() {
+
+			@Override
+			public void delete(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {
+				addResult(0, graphPath);
+				addResult(1, postData);
+			}
+
+			@Override
+			public boolean isLinked(Context context) {
+				return false;
+			}
+
+			@Override
+			public void link(Activity context, SocializeAuthListener listener) {
+				listener.onError(mockError);
+				listener.onAuthFail(mockError);
+				listener.onCancel();
+				listener.onAuthSuccess(null);
+			}
+		};
+		
+		FacebookAccess.setFacebookUtilsProxy(mockFacebookUtils);
+		
+		AndroidMock.replay(mockSocialNetworkShareListener);
+		
+		FacebookUtils.delete(context, graphPath, params, mockSocialNetworkShareListener);
+		
+		AndroidMock.verify(mockSocialNetworkShareListener);
+		
+		assertEquals(graphPath, getResult(0));
+		assertSame(params, getResult(1));
+	}		
+	
 	
 }
