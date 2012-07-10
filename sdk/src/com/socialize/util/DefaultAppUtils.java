@@ -193,7 +193,7 @@ public class DefaultAppUtils implements AppUtils {
 	@Override
 	public boolean isLocationAvaiable(Context context) {
 		if(!locationAssessed) {
-			locationAvailable = hasPermission(context, "android.permission.ACCESS_FINE_LOCATION") || hasPermission(context, "android.permission.ACCESS_COARSE_LOCATION");
+			locationAvailable = config.getBooleanProperty(SocializeConfig.SOCIALIZE_LOCATION_ENABLED, true) && (hasPermission(context, "android.permission.ACCESS_FINE_LOCATION") || hasPermission(context, "android.permission.ACCESS_COARSE_LOCATION"));
 			locationAssessed = true;
 		}
 		return locationAvailable;
