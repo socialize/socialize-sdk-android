@@ -29,6 +29,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.socialize.EntityUtils;
 import com.socialize.Socialize;
 import com.socialize.entity.Entity;
 import com.socialize.entity.EntityStats;
@@ -76,7 +77,7 @@ public class EntityActivity extends SocializeActivity {
 					Entity entity = Entity.newInstance(key, name);
 					entity.setMetaData(txtMeta.getText().toString());
 					
-					Socialize.getSocialize().addEntity(EntityActivity.this, entity, new EntityAddListener() {
+					EntityUtils.saveEntity(EntityActivity.this, entity, new EntityAddListener() {
 						
 						@Override
 						public void onError(SocializeException error) {
@@ -111,7 +112,7 @@ public class EntityActivity extends SocializeActivity {
 					if(!StringUtils.isEmpty(key)) {
 						final ProgressDialog progress = SafeProgressDialog.show(v.getContext(), "Retrieving", "Please wait...");
 						
-						Socialize.getSocialize().getEntity(key, new EntityGetListener() {
+						EntityUtils.getEntity(EntityActivity.this, key, new EntityGetListener() {
 							
 							@Override
 							public void onError(SocializeException error) {

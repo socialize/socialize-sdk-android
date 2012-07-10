@@ -21,13 +21,13 @@
  */
 package com.socialize.sample;
 
-import com.socialize.Socialize;
+import com.socialize.CommentUtils;
 import com.socialize.entity.SocializeObject;
 import com.socialize.listener.comment.CommentListListener;
 
 public class CommentListActivity<T extends SocializeObject> extends CommentBaseListActivity {
 	@Override
 	protected void doList(String key, int iStart, int iEnd, CommentListListener listener) {
-		Socialize.getSocialize().listCommentsByEntity(key, iStart, iEnd, listener);
+		CommentUtils.getCommentsByEntity(this, key, iStart, iEnd, listener);
 	}
 }

@@ -21,21 +21,14 @@
  */
 package com.socialize.sample;
 
+import com.socialize.CommentUtils;
 import com.socialize.Socialize;
 import com.socialize.entity.SocializeObject;
 import com.socialize.listener.comment.CommentListListener;
-import com.socialize.util.StringUtils;
 
 public class CommentUserListActivity<T extends SocializeObject> extends CommentBaseListActivity {
 	@Override
 	protected void doList(String key, int iStart, int iEnd, CommentListListener listener) {
-		
-		Long userId = Socialize.getSocialize().getSession().getUser().getId();
-		
-		if(!StringUtils.isEmpty(key)) {
-			userId = Long.valueOf(key);
-		}
-		
-		Socialize.getSocialize().listCommentsByUser(userId, iStart, iEnd, listener);
+		CommentUtils.getCommentsByUser(this, Socialize.getSocialize().getSession().getUser(), iStart, iEnd, listener);
 	}
 }

@@ -29,6 +29,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.socialize.CommentUtils;
 import com.socialize.Socialize;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
@@ -68,7 +69,7 @@ public class CommentCreateActivity extends CommentBaseActivity {
 					
 					Entity entity = Entity.newInstance(key, "Test Entity");
 					
-					Socialize.getSocialize().addComment(CommentCreateActivity.this, entity, name, new CommentAddListener() {
+					CommentUtils.addComment(CommentCreateActivity.this, entity, name, new CommentAddListener() {
 						@Override
 						public void onError(SocializeException error) {
 							btnCommentCreate.setEnabled(true);

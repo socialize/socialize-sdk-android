@@ -226,25 +226,6 @@ public class DefaultAppUtils implements AppUtils {
 					ok = false;
 				}
 				
-//				if(!isReceiverAvailable(context, SocializeBroadcastReceiver.class)) {
-//					
-//					lastNotificationWarning = "Notifications not available. Receiver [" +
-//							SocializeBroadcastReceiver.class +
-//							"] not configured in AndroidManifest.xml";
-//					
-//					if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
-//					ok = false;
-//				}
-//				if(!isServiceAvailable(context, SocializeC2DMReceiver.class)) {
-//					
-//					lastNotificationWarning = "Notifications not available. Service [" +
-//							SocializeC2DMReceiver.class +
-//							"] not configured in AndroidManifest.xml";
-//					
-//					if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
-//					ok = false;
-//				}			
-				
 				if(config.isEntityLoaderCheckEnabled() && Socialize.getSocialize().getEntityLoader() == null) {
 					lastNotificationWarning = "Notifications not available. Entity loader not found.";
 					if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);

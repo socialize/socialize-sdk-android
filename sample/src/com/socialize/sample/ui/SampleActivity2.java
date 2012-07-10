@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.config.SocializeConfig;
@@ -39,18 +40,17 @@ public class SampleActivity2 extends BaseActivity {
 		final CheckBox chkSSO = (CheckBox) findViewById(R.id.chkFacebook);
 		final CheckBox chkNotifications = (CheckBox) findViewById(R.id.chkNotifications);
 		
-		Socialize.getSocialize().init(this);
-		txtFB.setText(Socialize.getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID));
+		final SocializeConfig config = ConfigUtils.getConfig(this);
 		
-		txtTW_Key.setText(Socialize.getSocialize().getConfig().getProperty(SocializeConfig.TWITTER_CONSUMER_KEY));
-		txtTW_Sec.setText(Socialize.getSocialize().getConfig().getProperty(SocializeConfig.TWITTER_CONSUMER_SECRET));
+		txtFB.setText(config.getProperty(SocializeConfig.FACEBOOK_APP_ID));
+		
+		txtTW_Key.setText(config.getProperty(SocializeConfig.TWITTER_CONSUMER_KEY));
+		txtTW_Sec.setText(config.getProperty(SocializeConfig.TWITTER_CONSUMER_SECRET));
 
 		final Button btnCommentView = (Button) findViewById(R.id.btnCommentView);
 		final Button btnClearCache = (Button) findViewById(R.id.btnClearCache);
 		final Button btnActionViewAuto = (Button) findViewById(R.id.btnActionViewAuto);
 		final Button btnActionViewManual = (Button) findViewById(R.id.btnActionViewManual);
-		final Button btnActionButton = (Button) findViewById(R.id.btnActionButton);
-		final Button btnActionButtonManual = (Button) findViewById(R.id.btnActionButtonManual);
 		
 		final SocializeEntityLoader loader = new SocializeEntityLoader() {
 			@Override
@@ -72,10 +72,10 @@ public class SampleActivity2 extends BaseActivity {
 				entity.setKey(txtEntity.getText().toString());
 				entity.setName(txtEntityName.getText().toString());				
 				Socialize.getSocialize().setEntityLoader(loader);
-				Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
-				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
-				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
-				Socialize.getSocialize().getConfig().setTwitterKeySecret(txtTW_Key.getText().toString(), txtTW_Sec.getText().toString());
+				config.setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
+				config.setFacebookAppId(txtFB.getText().toString());
+				config.setFacebookSingleSignOnEnabled(chkSSO.isChecked());
+				config.setTwitterKeySecret(txtTW_Key.getText().toString(), txtTW_Sec.getText().toString());
 				Socialize.getSocialize().showCommentView(SampleActivity2.this, entity);
 			}
 		});
@@ -114,10 +114,10 @@ public class SampleActivity2 extends BaseActivity {
 				
 				intent.putExtra(Socialize.ENTITY_OBJECT, entity);
 				Socialize.getSocialize().setEntityLoader(loader);
-				Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
-				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
-				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
-				Socialize.getSocialize().getConfig().setTwitterKeySecret(txtTW_Key.getText().toString(), txtTW_Sec.getText().toString());
+				config.setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
+				config.setFacebookAppId(txtFB.getText().toString());
+				config.setFacebookSingleSignOnEnabled(chkSSO.isChecked());
+				config.setTwitterKeySecret(txtTW_Key.getText().toString(), txtTW_Sec.getText().toString());
 				startActivity(intent);
 			}
 		});
@@ -136,33 +136,13 @@ public class SampleActivity2 extends BaseActivity {
 				intent.putExtra("manual", true);
 				
 				Socialize.getSocialize().setEntityLoader(loader);
-				Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
-				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
-				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
-				Socialize.getSocialize().getConfig().setTwitterKeySecret(txtTW_Key.getText().toString(), txtTW_Sec.getText().toString());
+				config.setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
+				config.setFacebookAppId(txtFB.getText().toString());
+				config.setFacebookSingleSignOnEnabled(chkSSO.isChecked());
+				config.setTwitterKeySecret(txtTW_Key.getText().toString(), txtTW_Sec.getText().toString());
 				startActivity(intent);
 			}
 		});
-
-		
-		btnActionButtonManual.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent i = new Intent(SampleActivity2.this, ActionButtonActivity.class);
-				i.putExtra("manual", true);
-				startActivity(i);
-			}
-		}); 
-		
-		btnActionButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent i = new Intent(SampleActivity2.this, ActionButtonActivity.class);
-				i.putExtra("manual", false);
-				startActivity(i);
-			}
-		}); 
-				
 		
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow( txtEntity.getWindowToken(), 0);

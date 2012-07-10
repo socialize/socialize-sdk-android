@@ -1,17 +1,16 @@
 package com.socialize.sample;
 
 import java.util.ArrayList;
-
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-
+import com.socialize.ActionUtils;
 import com.socialize.Socialize;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeAction;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.activity.UserActivityListListener;
+import com.socialize.listener.activity.ActionListListener;
 import com.socialize.sample.util.ErrorHandler;
 import com.socialize.ui.dialog.SafeProgressDialog;
 
@@ -32,14 +31,8 @@ public class UserActivityListActivity extends ListActivity {
 				
 				final ProgressDialog progress = SafeProgressDialog.show(this, "Retrieving", "Please wait...");
 				
-				Socialize.getSocialize().listActivityByUser(key, new UserActivityListListener() {
-
-					@Override
-					public void onError(SocializeException error) {
-						progress.dismiss();
-						new AlertDialog.Builder(UserActivityListActivity.this).setMessage("Error " + ErrorHandler.handleApiError(UserActivityListActivity.this, error)).create().show();
-					}
-
+				ActionUtils.getActionsByUser(this, key, 0, 10, new ActionListListener() {
+					
 					@Override
 					public void onList(ListResult<SocializeAction> result) {
 
@@ -86,7 +79,13 @@ public class UserActivityListActivity extends ListActivity {
 						
 						progress.dismiss();
 					}
-				});	
+					
+					@Override
+					public void onError(SocializeException error) {
+						progress.dismiss();
+						new AlertDialog.Builder(UserActivityListActivity.this).setMessage("Error " + ErrorHandler.handleApiError(UserActivityListActivity.this, error)).create().show();
+					}
+				});
 			}
 		}
 	}

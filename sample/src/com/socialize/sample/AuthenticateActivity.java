@@ -32,6 +32,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
@@ -87,7 +88,7 @@ public class AuthenticateActivity extends SocializeActivity {
 			txtAuthResult =  (TextView) findViewById(R.id.txtAuthResult);
 			txtAuthUserID =  (TextView) findViewById(R.id.txtAuthUserID);
 			txtAuthUser3rdPartyID =  (TextView) findViewById(R.id.txtAuthUser3rdPartyID);
-			config = Socialize.getSocialize().getConfig();
+			config = ConfigUtils.getConfig(this);
 
 			txtHost.setText(url);
 			txtConsumerKey.setText(consumerKey);
@@ -196,7 +197,7 @@ public class AuthenticateActivity extends SocializeActivity {
 			
 			
 			
-			SocializeConfig cfg = Socialize.getSocialize().getConfig();
+			SocializeConfig cfg = ConfigUtils.getConfig(this);
 			
 			consumerKey =  cfg.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 			consumerSecret =  cfg.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
@@ -230,7 +231,7 @@ public class AuthenticateActivity extends SocializeActivity {
 //	private String getConfigValue(String key, Properties properties) {
 //		String value = properties.getProperty(key);
 //		if(StringUtils.isEmpty(value)) {
-//			value = Socialize.getSocialize().getConfig().getProperty(key);
+//			value = ConfigUtils.getConfig(this).getProperty(key);
 //		}
 //		return value;
 //	}

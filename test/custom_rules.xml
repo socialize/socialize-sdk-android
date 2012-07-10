@@ -107,6 +107,13 @@
 			<arg value="-c" />
 		</exec>			
 		
+		<echo>Pushing required assets to device's card</echo>
+		<exec executable="${adb}" failonerror="true">
+			<arg line="push" />
+			<arg value="res/drawable-ldpi/icon.png" />
+			<arg value="/mnt/sdcard/" />
+		</exec>				
+		
 		<mkdir dir="${test-output}"/>
 	</target>
 	

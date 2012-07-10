@@ -64,24 +64,29 @@ public class AsyncTaskManager {
 		
 		if(!entrySet.isEmpty()) {
 			int count = entrySet.size();
-			int cancelled = 0;
-			long incrementalTime = timeout / count;
 			
-			for (Entry<Integer, AsyncTask<?, ?, ?>> entry : entrySet) {
-				AsyncTask<?, ?, ?> task = entry.getValue();
+			int cancelled = 0;
+			
+			if(count > 0) {
 				
-				try {
-					task.get(incrementalTime, unit);
-					cancelled++;
-				}
-				catch (Exception e) {
-					if(task.cancel(true)) {
+				long incrementalTime = timeout / count;
+				
+				for (Entry<Integer, AsyncTask<?, ?, ?>> entry : entrySet) {
+					AsyncTask<?, ?, ?> task = entry.getValue();
+					
+					try {
+						task.get(incrementalTime, unit);
 						cancelled++;
 					}
+					catch (Exception e) {
+						if(task.cancel(true)) {
+							cancelled++;
+						}
+					}
 				}
+				
+				tasks.clear();
 			}
-			
-			tasks.clear();
 			
 			return cancelled == count;
 		}
