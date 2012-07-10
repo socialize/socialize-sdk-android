@@ -24,9 +24,14 @@ package com.socialize.test.integration.services;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import android.app.Activity;
+import android.widget.CompoundButton;
+import android.widget.ToggleButton;
 import com.socialize.LikeUtils;
+import com.socialize.SocializeAccess;
 import com.socialize.UserUtils;
 import com.socialize.api.action.like.LikeOptions;
+import com.socialize.api.action.like.SocializeLikeUtils;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.User;
@@ -36,8 +41,10 @@ import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
+import com.socialize.ui.actionbutton.LikeButtonListener;
 
 
 /**
@@ -311,5 +318,147 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		List<Like> items = getResult(0);
 		assertNotNull(items);
 		assertTrue(items.size() >= 1);
+	}	
+	
+	public void testMakeLikeButtonDoLike() throws Throwable {
+		
+		final Activity context = TestUtils.getActivity(this);
+		final Entity entity = Entity.newInstance("testMakeLikeButton", "testMakeLikeButton");
+		final Like like = new Like();
+		
+		like.setId(0L);
+		like.setEntity(entity);
+		
+		SocializeLikeUtils mockLikeUtils = new SocializeLikeUtils() {
+			public void like (Activity context, Entity entity, LikeOptions likeOptions, LikeAddListener listener, SocialNetwork...shareTo){
+				addResult(0, "like");
+				listener.onCreate(like);
+			}
+			
+			public void unlike (Activity context, String entityKey, LikeDeleteListener listener) {
+				addResult(1, "unlike");
+				listener.onDelete();
+			}
+			
+			public void getLike (Activity context, String entityKey, LikeGetListener listener) {
+				listener.onGet(null);
+			}
+		};
+		
+		final LikeButtonListener listener = new LikeButtonListener(){
+			public void onClick(CompoundButton button) {
+				addResult(4, "onClick");
+			}
+			
+			public void onError(CompoundButton button, Exception error) {
+			}
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				addResult(5, isChecked);
+			}
+		};
+		
+		SocializeAccess.setLikeUtilsProxy(mockLikeUtils);
+		
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		runTestOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				ToggleButton button = new ToggleButton(context);
+				LikeUtils.makeLikeButton(context, button, entity, listener);
+				button.performClick();
+				
+				addResult(3, button);
+				
+				latch.countDown();
+			}
+		});
+		
+		assertTrue(latch.await(10, TimeUnit.SECONDS));
+		
+		ToggleButton button = getResult(3);
+		String result = getResult(0);
+		assertTrue(button.isChecked());
+		assertNotNull(result);
+		assertEquals("like", result);
+		
+		assertNotNull(getResult(4));
+		assertTrue((Boolean) getResult(5));
+	}
+	
+
+	public void testMakeLikeButtonDoUnLike() throws Throwable {
+		
+		final Activity context = TestUtils.getActivity(this);
+		final Entity entity = Entity.newInstance("testMakeLikeButton", "testMakeLikeButton");
+		final Like like = new Like();
+		
+		like.setId(0L);
+		like.setEntity(entity);
+		
+		SocializeLikeUtils mockLikeUtils = new SocializeLikeUtils() {
+			public void like (Activity context, Entity entity, LikeOptions likeOptions, LikeAddListener listener, SocialNetwork...shareTo){
+				addResult(0, "like");
+				listener.onCreate(like);
+			}
+			
+			public void unlike (Activity context, String entityKey, LikeDeleteListener listener) {
+				addResult(1, "unlike");
+				listener.onDelete();
+			}
+			
+			public void getLike (Activity context, String entityKey, LikeGetListener listener) {
+				listener.onGet(like);
+			}
+		};
+		
+		final LikeButtonListener listener = new LikeButtonListener(){
+			public void onClick(CompoundButton button) {
+				addResult(4, "onClick");
+			}
+			
+			public void onError(CompoundButton button, Exception error) {
+			}
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				addResult(5, isChecked);
+			}
+		};
+		
+		SocializeAccess.setLikeUtilsProxy(mockLikeUtils);
+		
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		runTestOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				ToggleButton button = new ToggleButton(context);
+				button.setChecked(true);
+				LikeUtils.makeLikeButton(context, button, entity, listener);
+				button.performClick();
+				
+				addResult(3, button);
+				
+				latch.countDown();
+				
+			
+			}
+		});
+		
+		assertTrue(latch.await(10, TimeUnit.SECONDS));
+		
+		ToggleButton button = getResult(3);
+		String result = getResult(1);
+		assertFalse(button.isChecked());
+		assertNotNull(result);
+		assertEquals("unlike", result);
+		
+		assertNotNull(getResult(4));
+		assertFalse((Boolean) getResult(5));
 	}	
 }
