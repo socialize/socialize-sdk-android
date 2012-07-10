@@ -972,6 +972,7 @@ public class SocializeServiceImpl implements SocializeService {
 		}
 	}
 
+	@Deprecated
 	@Override
 	public void addShare(Activity activity, Entity entity, String text, ShareType shareType, ShareAddListener shareAddListener) {
 		addShare(activity, entity, text, shareType, null, shareAddListener);

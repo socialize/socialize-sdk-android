@@ -24,6 +24,7 @@ package com.socialize.test.ui.facebook;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.HashMap;
 import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -83,17 +84,13 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 	public void doTestPostLike(String expectedString) {
 		
 		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
-//		ShareMessageBuilder builder = AndroidMock.createMock(ShareMessageBuilder.class);
 		final PropagationInfo info = AndroidMock.createMock(PropagationInfo.class);
 		
 		Activity parent = TestUtils.getActivity(this);
 		final String entityKey = "foobar_key";
 		final String entityName = "foobar_name";
-//		final String entityLink = "foobar_link";
 		
 		final Entity entity = Entity.newInstance(entityKey, entityName);
-		
-//		AndroidMock.expect(builder.getEntityLink(entity, info, false)).andReturn(entityLink);
 		
 		DefaultFacebookWallPoster poster = new DefaultFacebookWallPoster() {
 			
@@ -106,17 +103,12 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 			}
 		};
 		
-//		AndroidMock.replay(builder);
-		
-//		poster.setShareMessageBuilder(builder);
 		poster.postLike(parent, entity, info, listener);
 		
 		SocialNetworkListener listenerAfter = getResult(2);
 		String messageAfter = getResult(1);
 		Activity parentAfter = getResult(0);
 		PropagationInfo infoAfter = getResult(3);
-		
-//		AndroidMock.verify(builder);
 		
 		assertSame(listener, listenerAfter);
 		assertSame(info, infoAfter);
@@ -602,11 +594,92 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		assertEquals(4, poster.count);
 	}		
 	
+	
+	@UsesMocks ({Facebook.class, AsyncFacebookRunner.class, FacebookSessionStore.class, RequestListener.class})
+	public void testFacebookCall() {
+		
+		final String appId = "foobar";
+		final Activity context = TestUtils.getActivity(this);
+		final Facebook mockFacebook = AndroidMock.createMock(Facebook.class, appId);
+		final AsyncFacebookRunner mockAsyncFacebookRunner = AndroidMock.createMock(AsyncFacebookRunner.class, mockFacebook);
+		final FacebookSessionStore mockFacebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
+		final RequestListener mockRequestListener = AndroidMock.createMock(RequestListener.class);
+		final String method = "GET";
+		final String graphPath = "foobarPath";
+		
+		Map<String, Object> postData = new HashMap<String, Object>();
+		
+		postData.put("foo", "bar");
+		
+		AndroidMock.expect(mockFacebookSessionStore.restore(mockFacebook, context)).andReturn(true);
+		
+		mockAsyncFacebookRunner.request(AndroidMock.eq(graphPath), (Bundle)AndroidMock.anyObject(), AndroidMock.eq(method), AndroidMock.eq(mockRequestListener), AndroidMock.isNull());	
+		
+		AndroidMock.replay(mockFacebookSessionStore, mockAsyncFacebookRunner);
+		
+		final PublicFacebookWallPoster poster = new PublicFacebookWallPoster() {
+
+			@Override
+			public RequestListener newRequestListener(Activity parent, SocialNetworkPostListener listener) {
+				return mockRequestListener;
+			}
+
+			@Override
+			public AsyncFacebookRunner newAsyncFacebookRunner(Facebook fb) {
+				return mockAsyncFacebookRunner;
+			}
+
+			@Override
+			public FacebookSessionStore newFacebookSessionStore() {
+				return mockFacebookSessionStore;
+			}
+
+			@Override
+			public Facebook getFacebook(Context context) {
+				return mockFacebook;
+			}
+
+			@Override
+			public void doFacebookCall(Activity parent, String appId, Bundle data, String graphPath, String method, SocialNetworkPostListener listener) {
+				// Inspect the bundle
+				addResult(0, data.getString("foo"));
+				
+				// Call super
+				super.doFacebookCall(parent, appId, data, graphPath, method, listener);
+			}
+		};
+		
+		poster.doFacebookCall(context, appId, postData, graphPath, method, null);
+		
+		AndroidMock.verify(mockFacebookSessionStore, mockAsyncFacebookRunner);
+	}
+	
 	public class PublicFacebookWallPoster extends DefaultFacebookWallPoster {
 		public int count = 0;
 		@Override
 		public RequestListener newRequestListener(Activity parent, SocialNetworkPostListener listener) {
 			return super.newRequestListener(parent, listener);
+		}
+		@Override
+		public void doFacebookCall(Activity parent, String appId, Map<String, Object> postData, String graphPath, String method, SocialNetworkPostListener listener) {
+			super.doFacebookCall(parent, appId, postData, graphPath, method, listener);
+		}
+		@Override
+		public void doFacebookCall(Activity parent, String appId, Bundle data, String graphPath, String method, SocialNetworkPostListener listener) {
+			super.doFacebookCall(parent, appId, data, graphPath, method, listener);
+		}
+		
+		@Override
+		public Facebook getFacebook(Context context) {
+			return super.getFacebook(context);
+		}
+		@Override
+		public AsyncFacebookRunner newAsyncFacebookRunner(Facebook fb) {
+			return super.newAsyncFacebookRunner(fb);
+		}
+		@Override
+		public FacebookSessionStore newFacebookSessionStore() {
+			return super.newFacebookSessionStore();
 		}
 	}
 }

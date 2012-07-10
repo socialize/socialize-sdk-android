@@ -27,6 +27,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import com.socialize.Socialize;
+import com.socialize.SocializeService;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
@@ -108,11 +109,11 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 		
 		if(network != null) {
 			AuthProviderType authType = AuthProviderType.valueOf(network);
-			if(Socialize.getSocialize().isAuthenticated(authType)) {
+			if(getSocialize().isAuthenticated(authType)) {
 				addShare(session, entity, text, shareType, location, listener, network);
 			}
 			else {
-				Socialize.getSocialize().authenticate(context, authType, new SocializeAuthListener() {
+				getSocialize().authenticate(context, authType, new SocializeAuthListener() {
 					@Override
 					public void onError(SocializeException error) {
 						if(listener != null) {
@@ -283,7 +284,11 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 		}	
 		return sharer;
 	}
-
+	
+	// Mockable
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
+	}
 	
 	public void setShareHandlers(ShareHandlers shareHandlers) {
 		this.shareHandlers = shareHandlers;

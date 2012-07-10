@@ -37,6 +37,7 @@ import com.socialize.networks.SocialNetworkPostListener;
  */
 public interface FacebookWallPoster {
 
+	@Deprecated
 	public void postShare(final Activity parent, Share share, SocialNetworkListener listener);
 	
 	public void postLike(final Activity parent, Entity entity, PropagationInfo propInfo, SocialNetworkListener listener);
