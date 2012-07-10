@@ -182,7 +182,10 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 
 						@Override
 						public void onError(SocializeException error) {
-							dialog.dismiss();
+							if(dialog != null) {
+								dialog.dismiss();
+							}
+							
 							if(listener != null) {
 								listener.onError(error);
 							}
@@ -197,7 +200,9 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 							
 							doActionShare(context, like, null, listener, networks);
 							
-							dialog.dismiss();
+							if(dialog != null) {
+								dialog.dismiss();
+							}
 						}
 					};
 

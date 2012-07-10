@@ -25,15 +25,26 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import android.app.Activity;
+import android.content.Context;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
+import com.google.android.testing.mocking.AndroidMock;
+import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.LikeUtils;
 import com.socialize.SocializeAccess;
+import com.socialize.SocializeService;
 import com.socialize.UserUtils;
+import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ActionOptions;
+import com.socialize.api.action.ShareableActionOptions;
 import com.socialize.api.action.like.LikeOptions;
+import com.socialize.api.action.like.LikeSystem;
+import com.socialize.api.action.like.SocializeLikeSystem;
 import com.socialize.api.action.like.SocializeLikeUtils;
+import com.socialize.api.action.user.SocializeUserUtils;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
+import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.like.IsLikedListener;
@@ -41,10 +52,16 @@ import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
+import com.socialize.listener.like.LikeListener;
+import com.socialize.listener.user.UserSaveListener;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.networks.SocialNetworkListener;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.actionbutton.LikeButtonListener;
+import com.socialize.ui.profile.UserSettings;
+import com.socialize.ui.share.IShareDialogFactory;
+import com.socialize.ui.share.ShareDialogListener;
 
 
 /**
@@ -461,4 +478,104 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		assertNotNull(getResult(4));
 		assertFalse((Boolean) getResult(5));
 	}	
+	
+	@UsesMocks ({SocializeService.class, SocializeSession.class, UserSettings.class, LikeSystem.class})
+	public void testDoLikeWithShare() {
+		
+		final Activity context = TestUtils.getActivity(this);
+		final Entity entity = Entity.newInstance("testMakeLikeButton", "testMakeLikeButton");
+		final Like like = new Like();
+		
+		like.setId(0L);
+		like.setEntity(entity);
+		
+		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
+		final SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		final UserSettings settings = AndroidMock.createMock(UserSettings.class);
+		
+		final SocialNetwork[] network = new SocialNetwork[]{SocialNetwork.TWITTER};
+		
+		AndroidMock.expect(socialize.getSession()).andReturn(session);
+		AndroidMock.expect(session.getUserSettings()).andReturn(settings);
+		AndroidMock.expect(settings.setAutoPostPreferences(network)).andReturn(true);
+		
+		final SocializeUserUtils mockUserUtils = new SocializeUserUtils() {
+			@Override
+			public void saveUserSettings(Context context, UserSettings userSettings, UserSaveListener listener) {
+				addResult(0, userSettings);
+			}
+		};
+		
+		final IShareDialogFactory mockShareDialogFactory = new IShareDialogFactory() {
+			@Override
+			public void show(Context context, Entity entity, SocialNetworkListener socialNetworkListener, ShareDialogListener shareDialoglistener, int displayOptions) {
+				shareDialoglistener.onContinue(null, true, network);
+			}
+		};
+		
+		final SocializeLikeSystem mockLikeSystem = new SocializeLikeSystem(null) {
+			public void addLike(SocializeSession session, Entity entity, LikeOptions shareOptions, LikeListener listener, SocialNetwork... networks) {
+				listener.onCreate(like);
+			}
+		};
+		
+		final LikeAddListener listener = new LikeAddListener() {
+			
+			@Override
+			public void onError(SocializeException error) {}
+			
+			@Override
+			public void onCreate(Like result) {
+				addResult(2, result);
+			}
+		};
+		
+		SocializeLikeUtils mockLikeUtils = new SocializeLikeUtils() {
+
+			@Override
+			protected boolean isDisplayAuthDialog(Context context, ActionOptions options, SocialNetwork... networks) {
+				return false;
+			}
+
+			@Override
+			protected boolean isDisplayShareDialog(Context context, ShareableActionOptions options) {
+				return true;
+			}
+
+			@Override
+			protected void doActionShare(Activity context, SocializeAction action, String text, SocialNetworkListener listener, SocialNetwork... networks) {
+				addResult(1, action);
+			}
+
+			@Override
+			protected SocializeService getSocialize() {
+				return socialize;
+			}
+		};
+		
+		
+		mockLikeUtils.setLikeSystem(mockLikeSystem);
+		mockLikeUtils.setShareDialogFactory(mockShareDialogFactory);
+		
+		SocializeAccess.setLikeUtilsProxy(mockLikeUtils);
+		SocializeAccess.setUserUtilsProxy(mockUserUtils);
+		
+		AndroidMock.replay(socialize, session, settings);
+		
+		LikeUtils.like(context, entity, null, listener, network);
+		
+		AndroidMock.verify(socialize, session, settings);
+		
+		UserSettings settingsAfter = getResult(0);
+		Like likeAfter0 = getResult(1);
+		Like likeAfter1 = getResult(2);
+		
+		assertNotNull(settingsAfter);
+		assertNotNull(likeAfter0);
+		assertNotNull(likeAfter1);
+		
+		assertSame(settings, settingsAfter);
+		assertSame(like, likeAfter0);
+		assertSame(like, likeAfter1);
+	}
 }
