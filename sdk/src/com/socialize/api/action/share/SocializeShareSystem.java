@@ -196,6 +196,15 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 		listAsync(session, ENDPOINT, key, null, startIndex, endIndex, listener);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.share.ShareSystem#getSharesByApplication(com.socialize.api.SocializeSession, int, int, com.socialize.listener.share.ShareListener)
+	 */
+	@Override
+	public void getSharesByApplication(SocializeSession session, int startIndex, int endIndex, ShareListener listener) {
+		listAsync(session, ENDPOINT, null, null, startIndex, endIndex, listener);
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.api.action.ShareSystem#getSharesByUser(com.socialize.api.SocializeSession, long, com.socialize.listener.share.ShareListener)
 	 */

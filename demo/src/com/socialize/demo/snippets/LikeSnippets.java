@@ -171,4 +171,23 @@ LikeUtils.getLikesByUser(this, user, 0, 10, new LikeListListener() {
 //end-snippet-5
 }
 	
+
+public void getLikesByApplication() {
+// begin-snippet-7
+// Get first 10 likes
+// The "this" argument refers to the current Activity
+LikeUtils.getLikesByApplication(this, 0, 10, new LikeListListener() {
+	
+	@Override
+	public void onList(List<Like> likes, int totalCount) {
+		// Found likes
+	}
+	
+	@Override
+	public void onError(SocializeException error) {
+		// Handle error
+	}
+});
+//end-snippet-7
+}
 }

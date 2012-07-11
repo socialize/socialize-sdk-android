@@ -42,12 +42,8 @@ public interface LikeSystem {
 
 	public void getLikesByEntity(SocializeSession session, String entityKey, int startIndex, int endIndex, LikeListener listener);
 
-	/**
-	 * Retrieves a like for the current user based on the entity URL provided.
-	 * @param session
-	 * @param entityKey
-	 * @param listener
-	 */
+	public void getLikesByApplication(SocializeSession session, int startIndex, int endIndex, LikeListener listener);
+
 	public void getLike(SocializeSession session, String entityKey, LikeListener listener);
 
 	public void getLikesById(SocializeSession session, LikeListener listener, long... ids);

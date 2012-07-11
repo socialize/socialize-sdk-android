@@ -32,6 +32,7 @@ import com.socialize.api.action.ShareType;
 import com.socialize.api.action.SocializeActionUtilsBase;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
+import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.share.ShareGetListener;
@@ -375,8 +376,8 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	 * @see com.socialize.api.action.share.ShareUtilsProxy#getSharesByUser(android.app.Activity, long, int, int, com.socialize.listener.share.ShareListListener)
 	 */
 	@Override
-	public void getSharesByUser(Activity context, long userId, int start, int end, ShareListListener listener) {
-		shareSystem.getSharesByUser(getSocialize().getSession(), userId, start, end, listener);
+	public void getSharesByUser(Activity context, User user, int start, int end, ShareListListener listener) {
+		shareSystem.getSharesByUser(getSocialize().getSession(), user.getId(), start, end, listener);
 	}
 
 	/*
@@ -386,6 +387,15 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	@Override
 	public void getSharesByEntity(Activity context, String entityKey, int start, int end, ShareListListener listener) {
 		shareSystem.getSharesByEntity(getSocialize().getSession(), entityKey, start, end, listener);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.share.ShareUtilsProxy#getSharesByApplication(android.app.Activity, int, int, com.socialize.listener.share.ShareListListener)
+	 */
+	@Override
+	public void getSharesByApplication(Activity context, int start, int end, ShareListListener listener) {
+		shareSystem.getSharesByApplication(getSocialize().getSession(), start, end, listener);
 	}
 
 	/*

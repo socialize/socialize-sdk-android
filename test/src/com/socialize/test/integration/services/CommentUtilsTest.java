@@ -127,9 +127,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 
 		assertTrue(items.contains(result0));
 		assertTrue(items.contains(result1));
-
 	}
-
 
 	public void test_getCommentsByEntity() throws Exception {
 		// Create two comments.
@@ -191,7 +189,6 @@ public class CommentUtilsTest extends SocializeActivityTest {
 			public void onError(SocializeException error) {
 				error.printStackTrace();
 				latch2.countDown();
-
 			}
 		});
 
@@ -209,6 +206,8 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		assertTrue(items.contains(result0));
 		assertTrue(items.contains(result1));
 	}
+	
+	
 
 	public void test_getCommentsByUser() throws Exception {
 		// Create two comments.
@@ -288,6 +287,87 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		assertTrue(items.contains(result0));
 		assertTrue(items.contains(result1));
 	}
+	
+	public void test_getCommentsByApplication() throws Exception {
+		// Create two comments.
+		final Entity entityKey = Entity.newInstance("test_getCommentsByApplication" + Math.random(), "test_getCommentsByApplication");
+		final CountDownLatch latch = new CountDownLatch(1);
+
+		// Set auto auth off
+		final CommentOptions options = CommentUtils.getUserCommentOptions(getContext());
+		options.setShowAuthDialog(false);
+		options.setShowShareDialog(false);
+		
+		CommentUtils.addComment(TestUtils.getActivity(this), entityKey, "foobar0", options, new CommentAddListener() {
+
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				latch.countDown();
+			}
+
+			@Override
+			public void onCreate(Comment entity) {
+				addResult(0, entity);
+				CommentUtils.addComment(TestUtils.getActivity(CommentUtilsTest.this), entityKey, "foobar1", options, new CommentAddListener() {
+
+					@Override
+					public void onError(SocializeException error) {
+						error.printStackTrace();
+						latch.countDown();
+					}
+
+					@Override
+					public void onCreate(Comment entity) {
+						addResult(1, entity);
+						latch.countDown();
+					}
+				});	
+			}
+		});	
+
+		latch.await(20, TimeUnit.SECONDS);
+
+		Comment result0 = getResult(0);
+		Comment result1 = getResult(1);
+
+		assertNotNull(result0);
+		assertNotNull(result1);
+
+		final CountDownLatch latch2 = new CountDownLatch(1);
+
+		CommentUtils.getCommentsByApplication(TestUtils.getActivity(this), 0, 2, new CommentListListener() {
+
+			@Override
+			public void onList(ListResult<Comment> entities) {
+				addResult(3, entities);
+				latch2.countDown();
+			}
+
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				latch2.countDown();
+
+			}
+		});
+
+
+		latch2.await(20, TimeUnit.SECONDS);
+
+		ListResult<Comment> entities = getResult(3);
+
+		assertNotNull(entities);
+		assertEquals(entities.size(), 2);
+		assertTrue(entities.getTotalCount() >= 2);
+
+		List<Comment> items = entities.getItems();
+		assertNotNull(items);
+
+		assertTrue(items.contains(result0));
+		assertTrue(items.contains(result1));
+	}	
+	
 
 	public void test_subscribe_unsubscribe() throws Exception {
 		final Entity e = Entity.newInstance("test_unsubscribe" + Math.random(),"test_unsubscribe");

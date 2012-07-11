@@ -74,4 +74,8 @@ public class MockShareSystem extends MockSystem<Share> implements ShareSystem {
 		if(listener != null) listener.onCreate(action);
 	}
 
+	@Override
+	public void getSharesByApplication(SocializeSession session, int startIndex, int endIndex, ShareListener listener) {
+		if(listener != null) listener.onList(actionList);
+	}
 }

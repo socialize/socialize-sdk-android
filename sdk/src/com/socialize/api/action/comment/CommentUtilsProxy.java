@@ -52,4 +52,6 @@ public interface CommentUtilsProxy {
 	public void getCommentsByUser (Activity context, User user, int start, int end, CommentListListener listener);
 	
 	public void getCommentsByEntity (Activity context, String entityKey, int start, int end, CommentListListener listener);
+	
+	public void getCommentsByApplication (Activity context, int start, int end, CommentListListener listener);
 }

@@ -285,5 +285,23 @@ CommentUtils.getCommentsByUser(this, user, 0, 10, new CommentListListener() {
 //end-snippet-5
 }
 
+public void getCommentsByApplication() {
+// begin-snippet-9
+// Get first 10 comments
+// The "this" argument refers to the current Activity
+CommentUtils.getCommentsByApplication(this, 0, 10, new CommentListListener() {
+	
+	@Override
+	public void onList(ListResult<Comment> result) {
+		// Found comments
+	}
+	
+	@Override
+	public void onError(SocializeException error) {
+		// Handle error
+	}
+});
+//end-snippet-9
+}
 
 }

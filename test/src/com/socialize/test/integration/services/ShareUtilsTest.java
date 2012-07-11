@@ -181,6 +181,29 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		assertTrue(items.size() >= 1);
 	}	
 	
+	public void testGetSharesByApplication() throws SocializeException, InterruptedException {
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		ShareUtils.getSharesByApplication(TestUtils.getActivity(this), 0, 100, new ShareListListener() {
+			@Override
+			public void onList(ListResult<Share> entities) {
+				addResult(entities);
+				latch.countDown();
+			}
+			
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+			}
+		});
+		
+		latch.await(20, TimeUnit.SECONDS);
+		
+		ListResult<Share> items = getResult(0);
+		assertNotNull(items);
+		assertTrue(items.size() >= 1);
+	}		
+	
 	public void testShowShareDialogDefault() throws Exception {
 		final Entity entityKey = Entity.newInstance("http://entity1.com", "http://entity1.com");
 		final CountDownLatch latch0 = new CountDownLatch(1);

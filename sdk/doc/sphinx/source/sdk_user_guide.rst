@@ -255,6 +255,35 @@ implement the **onBeforePost** method of the listener you pass to the ShareUtils
 	:start-after: begin-snippet-3
 	:end-before: end-snippet-3	
 
+Retrieving Shares
+~~~~~~~~~~~~~~~~~
+
+You can retrieve existing share events by User, Entity, Application or directly using an ID
+
+List shares by User
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ShareSnippets.java
+	:start-after: begin-snippet-5
+	:end-before: end-snippet-5
+	
+List shares by Entity
+	
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ShareSnippets.java
+	:start-after: begin-snippet-6
+	:end-before: end-snippet-6
+	
+List shares by ID	
+	
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ShareSnippets.java
+	:start-after: begin-snippet-7
+	:end-before: end-snippet-7
+
+List shares by Application
+	
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ShareSnippets.java
+	:start-after: begin-snippet-8
+	:end-before: end-snippet-8
+
 Comments
 --------
 .. raw:: html
@@ -300,10 +329,10 @@ If you want to explicity disable sharing of comments you can do this using the *
 	:start-after: begin-snippet-8
 	:end-before: end-snippet-8
 
-Retreiving Comments
+Retrieving Comments
 ~~~~~~~~~~~~~~~~~~~
 
-You can retrieve existing comments by User, Entity or directly using an ID
+You can retrieve existing comments by User, Entity, Application or directly using an ID
 
 List comments by User
 
@@ -323,6 +352,11 @@ List comments by ID
 	:start-after: begin-snippet-7
 	:end-before: end-snippet-7
 
+List comments by Application
+	
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/CommentSnippets.java
+	:start-after: begin-snippet-9
+	:end-before: end-snippet-9
 
 Likes
 -----
@@ -353,10 +387,10 @@ You can also remove a previous like from an entity
 	:start-after: begin-snippet-1
 	:end-before: end-snippet-1
 
-Retreiving Likes
+Retrieving Likes
 ~~~~~~~~~~~~~~~~
 
-You can retrieve existing likes by User or Entity
+You can retrieve existing likes by User, Entity or Application wide
 
 List likes by User
 
@@ -369,6 +403,12 @@ List likes by Entity
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/LikeSnippets.java
 	:start-after: begin-snippet-6
 	:end-before: end-snippet-6
+	
+List likes by Application
+	
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/LikeSnippets.java
+	:start-after: begin-snippet-7
+	:end-before: end-snippet-7
 	
 Views
 -----

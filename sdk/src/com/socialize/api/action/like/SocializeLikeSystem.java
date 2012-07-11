@@ -97,6 +97,15 @@ public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Li
 		listAsync(session, ENDPOINT, key, null, startIndex, endIndex, listener);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.like.LikeSystem#getLikesByApplication(com.socialize.api.SocializeSession, int, int, com.socialize.listener.like.LikeListener)
+	 */
+	@Override
+	public void getLikesByApplication(SocializeSession session, int startIndex, int endIndex, LikeListener listener) {
+		listAsync(session, ENDPOINT, null, null, startIndex, endIndex, listener);
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.api.action.LikeSystem#getLike(com.socialize.api.SocializeSession, java.lang.String, com.socialize.listener.like.LikeListener)
 	 */

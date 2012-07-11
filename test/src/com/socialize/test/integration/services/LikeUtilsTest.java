@@ -337,6 +337,52 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		assertTrue(items.size() >= 1);
 	}	
 	
+	public void testGetLikesByApplication() throws SocializeException, InterruptedException {
+		final Activity context = TestUtils.getActivity(this);
+		final Entity entityKey = Entity.newInstance("testGetLikesByApplication", "testGetLikesByApplication");
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		// Force no config
+		final LikeOptions options = LikeUtils.getUserLikeOptions(getContext());
+		options.setShowAuthDialog(false);
+		options.setShowShareDialog(false);
+		
+		LikeUtils.like(context, entityKey, options, new LikeAddListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				latch.countDown();
+			}
+			
+			@Override
+			public void onCreate(Like like) {
+				
+				LikeUtils.getLikesByApplication(context, 0, 100, new LikeListListener() {
+					
+					@Override
+					public void onList(List<Like> items, int totalSize) {
+						addResult(items);
+						latch.countDown();
+					}
+					
+					@Override
+					public void onError(SocializeException error) {
+						error.printStackTrace();
+						fail();
+					}
+				});
+				
+			}
+		});		
+		
+		latch.await(20, TimeUnit.SECONDS);
+		
+		List<Like> items = getResult(0);
+		assertNotNull(items);
+		assertTrue(items.size() >= 1);
+	}	
+	
 	public void testMakeLikeButtonDoLike() throws Throwable {
 		
 		final Activity context = TestUtils.getActivity(this);

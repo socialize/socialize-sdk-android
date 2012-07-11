@@ -86,6 +86,15 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 		listAsync(session, ENDPOINT, key, null, startIndex, endIndex, listener);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.comment.CommentSystem#getCommentsByApplication(com.socialize.api.SocializeSession, int, int, com.socialize.listener.comment.CommentListener)
+	 */
+	@Override
+	public void getCommentsByApplication(SocializeSession session, int startIndex, int endIndex, CommentListener listener) {
+		listAsync(session, ENDPOINT, null, null, startIndex, endIndex, listener);
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.api.action.CommentSystem#getCommentsByUser(com.socialize.api.SocializeSession, long, com.socialize.listener.comment.CommentListener)
 	 */
