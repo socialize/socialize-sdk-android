@@ -95,43 +95,30 @@ To create an entity, simply call the **saveEntity** method:
 	
 Retrieving Entity Data
 ~~~~~~~~~~~~~~~~~~~~~~
-An existing entity can be retrieved via the **getEntity** method.  Entities obtained in this way will also 
-provide aggregate data on comments, likes, shares and views.  Refer to the `Entity object structure in the API Docs <http://api.getsocialize.com/docs/v1/#entity-object>`_.
-for more detail on these aggregate values.
+.. include:: entity_retrieve.inc		
 
-.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/EntitySnippets.java
-	:start-after: begin-snippet-3
-	:end-before: end-snippet-3
-	
-You can also retrieve several entities in one call:
+.. _entity_stats:	
 
-.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/EntitySnippets.java
-	:start-after: begin-snippet-4
-	:end-before: end-snippet-4
-
-Entity Stats
-~~~~~~~~~~~~
+Entity Stats (Global)
+~~~~~~~~~~~~~~~~~~~~~
 Each entity object retrieved from the server contains aggregate statistics about the number of comments,likes,views and shares:
 
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/EntitySnippets.java
 	:start-after: begin-snippet-5
 	:end-before: end-snippet-5
 	
+Entity Stats (User)
+~~~~~~~~~~~~~~~~~~~~~	
+You can also retrieve information about the current user's actions on the entity:
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/EntitySnippets.java
+	:start-after: begin-snippet-9
+	:end-before: end-snippet-9
+
+	
 Entity Meta Data
 ~~~~~~~~~~~~~~~~
-Entities stored in Socialize can optionally include *meta data*.  This is for any additional information you want to store about the entity.
-
-Meta data is stored with the entity and returned then the entity is requested.
-
-.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/EntitySnippets.java
-	:start-after: begin-snippet-6
-	:end-before: end-snippet-6
-
-If you want a more complex data structure, we recommend using JSON as an object notation
-
-.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/EntitySnippets.java
-	:start-after: begin-snippet-7
-	:end-before: end-snippet-7
+.. include:: entity_meta_data.inc	
 	
 Entity Activity
 ~~~~~~~~~~~~~~~

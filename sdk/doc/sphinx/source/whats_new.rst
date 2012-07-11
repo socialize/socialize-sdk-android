@@ -12,12 +12,11 @@ In This Version
 .. raw:: html
    :file: snippets/important_notice.html
 
-v2.2 adds support for the deprecation of the *offline_access* permission of Facebook applications (https://developers.facebook.com/roadmap/offline-access-removal). 
+v2.1.1 adds support for the deprecation of the *offline_access* permission of Facebook applications (https://developers.facebook.com/roadmap/offline-access-removal). 
 
 This means developers upgrading to Socialize v2.2+ **MUST IMPLEMENT THE SOCIALIZE LIFECYCLE** correctly in their app.
 
 Refer to the :doc:`lifecycle` section for more details.
-
 
 v2.1
 ----

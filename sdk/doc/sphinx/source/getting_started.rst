@@ -99,7 +99,7 @@ Checkout the :doc:`action_bar` section for more details on the default Socialize
 	It is not necessary to explicitly create an Entity object when rendering the Action bar as this will be done for you, 
 	however entities *can* be created manually.  
 
-	Refer to the :ref:`entities` section for details on creating entities directly using the SDK.
+	Refer to the :doc:`entities` section for details on creating entities directly using the SDK.
 
 .. raw:: html
    :file: snippets/setup_complete.html

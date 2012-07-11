@@ -29,6 +29,8 @@ The following table lists the configuration options that can be specified in you
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | socialize.c2dm.sender.id        | String  | None     | ``yoursender@gmail.com``               | Optional.  Use if you have your own C2DM sender ID               |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
+| socialize.location.enabled      | Boolean | true     |                                        | Enable/Disable app-wide location services                        |
++---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | facebook.app.id                 | Integer | None     | 1234567890                             | Your facebook app ID                                             |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | facebook.sso.enabled            | Boolean | true     |                                        | Enable/Disable Single Sign on for Facebook                       |

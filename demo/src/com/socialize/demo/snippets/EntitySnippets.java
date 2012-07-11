@@ -31,6 +31,7 @@ import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.EntityStats;
 import com.socialize.entity.ListResult;
+import com.socialize.entity.UserEntityStats;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.entity.EntityAddListener;
@@ -278,4 +279,65 @@ EntityUtils.getEntity(this, "key", new EntityGetListener() {
 //end-snippet-6
 }
 
+
+public void entityMetaDataWithSmartDownloadJSON() throws JSONException {
+// begin-snippet-8
+	
+Entity entity = Entity.newInstance("key", "name");
+
+// Store a custom dictionary as a JSON object
+JSONObject metaData = new JSONObject();
+
+metaData.put("szsd_title", "Some title for the page, if you don't want to use the entity name");
+metaData.put("szsd_description", "Description text on the page if there is no URL to parse");
+
+//Optionally add a thumbnail URL to be rendered on the entity page
+metaData.put("szsd_thumb", "http://the_url_to_your_thumbnail_image");
+
+entity.setMetaData(metaData.toString());
+
+// The "this" argument refers to the current Activity
+EntityUtils.saveEntity(this, entity, new EntityAddListener() {
+	
+	@Override
+	public void onError(SocializeException error) {
+		// Handle error
+	}
+	
+	@Override
+	public void onCreate(Entity result) {
+		// Entity was created
+	}
+});
+//end-snippet-8
+}
+
+
+public void getEntityUserStats() {
+// begin-snippet-9
+// The "this" argument refers to the current Activity	
+EntityUtils.getEntity(this, "key", new EntityGetListener() {
+	
+	@Override
+	public void onGet(Entity result) {
+		// Get the stats
+		UserEntityStats userEntityStats = result.getUserEntityStats();
+		
+		userEntityStats.isLiked();
+		userEntityStats.getComments();
+		userEntityStats.getShares();
+	}
+	
+	@Override
+	public void onError(SocializeException error) {
+		if(isNotFoundError(error)) {
+			// No entity found
+		}
+		else {
+			// Handle error
+		}
+	}
+});
+//end-snippet-9
+}
 }
