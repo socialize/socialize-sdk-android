@@ -83,7 +83,7 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 	 */
 	@Override
 	public void getCommentsByEntity(SocializeSession session, String key, int startIndex, int endIndex, CommentListener listener) {
-		listAsync(session, ENDPOINT, key, null, startIndex, endIndex, listener);
+		listAsync(session, ENDPOINT, key, null, null, startIndex, endIndex, listener);
 	}
 	
 	/*
@@ -92,7 +92,7 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 	 */
 	@Override
 	public void getCommentsByApplication(SocializeSession session, int startIndex, int endIndex, CommentListener listener) {
-		listAsync(session, ENDPOINT, null, null, startIndex, endIndex, listener);
+		listAsync(session, ENDPOINT, null, null, null, startIndex, endIndex, listener);
 	}
 
 	/* (non-Javadoc)

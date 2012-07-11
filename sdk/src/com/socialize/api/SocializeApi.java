@@ -22,6 +22,7 @@
 package com.socialize.api;
 
 import java.util.List;
+import java.util.Map;
 import android.content.Context;
 import android.location.Location;
 import com.socialize.Socialize;
@@ -189,8 +190,8 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		return provider.list(session, endpoint, key, ids, 0, SocializeConfig.MAX_LIST_RESULTS);
 	}
 	
-	public ListResult<T> list(SocializeSession session, String endpoint, String key, String idKey, int startIndex, int endIndex, String...ids) throws SocializeException {
-		return provider.list(session, endpoint, key, ids, idKey, startIndex, endIndex);
+	public ListResult<T> list(SocializeSession session, String endpoint, String key, String idKey, Map<String, String> extraParams, int startIndex, int endIndex, String...ids) throws SocializeException {
+		return provider.list(session, endpoint, key, ids, idKey, extraParams, startIndex, endIndex);
 	}
 	
 	public ListResult<T> list(SocializeSession session, String endpoint, String key, int startIndex, int endIndex, String...ids) throws SocializeException {
@@ -242,14 +243,15 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	}
 	
 	public void listAsync(SocializeSession session, String endpoint, String key, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
-		listAsync(session, endpoint, key,  "id", startIndex, endIndex, listener, ids);
+		listAsync(session, endpoint, key,  "id", null, startIndex, endIndex, listener, ids);
 	}
 	
-	public void listAsync(SocializeSession session, String endpoint, String key, String idKey, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
+	public void listAsync(SocializeSession session, String endpoint, String key, String idKey, Map<String, String> extraParams, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
 		AsyncGetter getter = new AsyncGetter(session, listener);
 		SocializeGetRequest request = new SocializeGetRequest();
 		request.setEndpoint(endpoint);
 		request.setRequestType(RequestType.LIST);
+		request.setExtraParams(extraParams);
 		request.setKey(key);
 		request.setIds(ids);
 		request.setIdKey(idKey);
@@ -882,12 +884,12 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 				break;
 
 			case LIST:
-				results = SocializeApi.this.list(session, request.getEndpoint(), request.getKey(), request.getIdKey(), request.getStartIndex(), request.getEndIndex(), request.getIds());
+				results = SocializeApi.this.list(session, request.getEndpoint(), request.getKey(), request.getIdKey(), request.getExtraParams(), request.getStartIndex(), request.getEndIndex(), request.getIds());
 				response.setResults(results);
 				break;
 				
 			case LIST_AS_GET:
-				results = SocializeApi.this.list(session, request.getEndpoint(), request.getKey(), request.getIdKey(), request.getStartIndex(), request.getEndIndex(), request.getIds());
+				results = SocializeApi.this.list(session, request.getEndpoint(), request.getKey(), request.getIdKey(), request.getExtraParams(), request.getStartIndex(), request.getEndIndex(), request.getIds());
 				response.setResults(results);
 				break;				
 				

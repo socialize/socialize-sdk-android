@@ -22,6 +22,7 @@
 package com.socialize.api.action.entity;
 
 import android.app.Activity;
+import com.socialize.EntityUtils.SortOrder;
 import com.socialize.entity.Entity;
 import com.socialize.listener.entity.EntityAddListener;
 import com.socialize.listener.entity.EntityGetListener;
@@ -35,6 +36,6 @@ public interface EntityUtilsProxy {
 	public void saveEntity (Activity context, Entity e, EntityAddListener listener);
 	public void getEntity (Activity context, long id, EntityGetListener listener);
 	public void getEntity (Activity context, String key, EntityGetListener listener);
-	public void getEntities (Activity context, int start, int end, EntityListListener listener);
-	public void getEntities (Activity context, EntityListListener listener, String...key);
+	public void getEntities (Activity context, int start, int end, SortOrder sortOrder, EntityListListener listener);
+	public void getEntities (Activity context, SortOrder sortOrder, EntityListListener listener, String...key);
 }

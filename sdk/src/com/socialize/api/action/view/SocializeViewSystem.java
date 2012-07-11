@@ -64,7 +64,7 @@ public class SocializeViewSystem extends SocializeApi<View, SocializeProvider<Vi
 	 */
 	@Override
 	public void getViewsByEntity(SocializeSession session, String key, int startIndex, int endIndex, ViewListener listener) {
-		listAsync(session, ENDPOINT, key, null, startIndex, endIndex, listener);
+		listAsync(session, ENDPOINT, key, null, null, startIndex, endIndex, listener);
 	}
 	
 	/* (non-Javadoc)
@@ -84,7 +84,7 @@ public class SocializeViewSystem extends SocializeApi<View, SocializeProvider<Vi
 			final Long userId = user.getId();
 			
 			String endpoint = "/user/" + userId.toString() + ENDPOINT;
-			listAsync(session, endpoint, entity.getKey(), null, 0, 1, new ViewListListener() {
+			listAsync(session, endpoint, entity.getKey(), null, null, 0, 1, new ViewListListener() {
 				
 				@Override
 				public void onError(SocializeException error) {

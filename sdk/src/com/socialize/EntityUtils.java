@@ -36,6 +36,8 @@ import com.socialize.listener.entity.EntityListListener;
  */
 public class EntityUtils {
 	
+	public static enum SortOrder {CREATION_DATE, TOTAL_ACTIVITY};
+	
 	static EntityUtilsProxy proxy;
 	
 	static {
@@ -83,7 +85,7 @@ public class EntityUtils {
 	 * @param listener A listener to handle the result.
 	 */
 	public static void getEntities (Activity context, int start, int end, EntityListListener listener) {
-		proxy.getEntities(context, start, end, listener);
+		proxy.getEntities(context, start, end, SortOrder.CREATION_DATE, listener);
 	}
 	
 	/**
@@ -93,6 +95,29 @@ public class EntityUtils {
 	 * @param keys One or more entity keys.
 	 */
 	public static void getEntities (Activity context, EntityListListener listener, String...keys) {
-		proxy.getEntities(context, listener, keys);	
+		proxy.getEntities(context, SortOrder.CREATION_DATE, listener, keys);	
 	}
+	
+	/**
+	 * Retrieves all entities sorted by creation date.
+	 * @param context The current context.
+	 * @param start The start index for pagination (0 based).
+	 * @param end The end index for pagination (0 based).
+	 * @param sortOrder The sorting to be used (default is CREATION_DATE)
+	 * @param listener A listener to handle the result.
+	 */
+	public static void getEntities (Activity context, int start, int end, SortOrder sortOrder, EntityListListener listener) {
+		proxy.getEntities(context, start, end, sortOrder, listener);
+	}
+	
+	/**
+	 * Retrieves the entities designated by the given keys.
+	 * @param context The current context.
+	 * @param listener A listener to handle the result.
+	 * @param sortOrder The sorting to be used (default is CREATION_DATE)
+	 * @param keys One or more entity keys.
+	 */
+	public static void getEntities (Activity context, SortOrder sortOrder, EntityListListener listener, String...keys) {
+		proxy.getEntities(context, sortOrder, listener, keys);	
+	}	
 }

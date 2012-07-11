@@ -94,7 +94,7 @@ public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Li
 	 */
 	@Override
 	public void getLikesByEntity(SocializeSession session, String key, int startIndex, int endIndex, LikeListener listener) {
-		listAsync(session, ENDPOINT, key, null, startIndex, endIndex, listener);
+		listAsync(session, ENDPOINT, key, null, null, startIndex, endIndex, listener);
 	}
 	
 	/*
@@ -103,7 +103,7 @@ public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Li
 	 */
 	@Override
 	public void getLikesByApplication(SocializeSession session, int startIndex, int endIndex, LikeListener listener) {
-		listAsync(session, ENDPOINT, null, null, startIndex, endIndex, listener);
+		listAsync(session, ENDPOINT, null, null, null, startIndex, endIndex, listener);
 	}
 
 	/* (non-Javadoc)
@@ -117,7 +117,7 @@ public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Li
 			final Long userId = user.getId();
 			
 			String endpoint = "/user/" + userId.toString() + ENDPOINT;
-			listAsync(session, endpoint, entityUrl, null, 0, 1, new LikeListListener() {
+			listAsync(session, endpoint, entityUrl, null, null, 0, 1, new LikeListListener() {
 				
 				@Override
 				public void onList(List<Like> items, int totalSize) {

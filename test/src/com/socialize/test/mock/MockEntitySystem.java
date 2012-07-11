@@ -1,5 +1,6 @@
 package com.socialize.test.mock;
 
+import com.socialize.EntityUtils.SortOrder;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.entity.EntitySystem;
 import com.socialize.entity.Entity;
@@ -30,20 +31,14 @@ public class MockEntitySystem implements EntitySystem {
 	}
 
 	@Override
-	public void getEntities(SocializeSession session, int start, int end, EntityListener listener, String... entityKeys) {
+	public void getEntities(SocializeSession session, int start, int end, SortOrder sortOrder, EntityListener listener) {
 		if(listener != null) listener.onList(entityList);
 	}
-
+	
 	@Override
-	public void getAllEntities(SocializeSession session, int start, int end, EntityListener listener) {
+	public void getEntities(SocializeSession session, SortOrder sortOrder, EntityListener listener, String... entityKeys) {
 		if(listener != null) listener.onList(entityList);
 	}
-
-	@Override
-	public void getEntities(SocializeSession session, EntityListener listener, String... entityKeys) {
-		if(listener != null) listener.onList(entityList);
-	}
-
 
 	@Override
 	public void addEntity(SocializeSession session, Entity entity, EntityListener listener) {

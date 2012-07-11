@@ -193,7 +193,7 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 	 */
 	@Override
 	public void getSharesByEntity(SocializeSession session, String key, int startIndex, int endIndex, ShareListener listener) {
-		listAsync(session, ENDPOINT, key, null, startIndex, endIndex, listener);
+		listAsync(session, ENDPOINT, key, null, null, startIndex, endIndex, listener);
 	}
 	
 	/*
@@ -202,7 +202,7 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 	 */
 	@Override
 	public void getSharesByApplication(SocializeSession session, int startIndex, int endIndex, ShareListener listener) {
-		listAsync(session, ENDPOINT, null, null, startIndex, endIndex, listener);
+		listAsync(session, ENDPOINT, null, null, null, startIndex, endIndex, listener);
 	}
 
 	/* (non-Javadoc)

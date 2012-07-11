@@ -22,6 +22,7 @@
 package com.socialize.api;
 
 import java.util.Collection;
+import java.util.Map;
 import org.apache.http.client.methods.HttpUriRequest;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
@@ -49,7 +50,7 @@ public interface SocializeRequestFactory<T extends SocializeObject> {
 
 	public HttpUriRequest getListRequest(SocializeSession session, String endpoint, String key, String[] ids, String idKey) throws SocializeException;
 	
-	public HttpUriRequest getListRequest(SocializeSession session, String endpoint,String key, String[] ids, String idKey, int startIndex, int endIndex) throws SocializeException;
+	public HttpUriRequest getListRequest(SocializeSession session, String endpoint,String key, String[] ids, String idKey, Map<String, String> extraParams, int startIndex, int endIndex) throws SocializeException;
 	
 	public HttpUriRequest getListRequest(SocializeSession session, String endpoint,String key, String[] ids) throws SocializeException;
 
