@@ -1069,6 +1069,7 @@
 		<property name="profileHeaderFactory" ref="profileHeaderFactory"/>
 		<property name="profileContentViewFactory" ref="profileContentViewFactory"/>
 		<property name="bitmapUtils" ref="bitmapUtils"/><!-- Defined in socialize_beans.xml -->
+		<property name="displayUtils" ref="displayUtils"/>
 		
 		<init-method name="init"/>
 	</bean>
@@ -1365,7 +1366,6 @@
 		singleton="false">
 		<constructor-arg type="activity"/>
 		<property name="displayUtils" ref="displayUtils"/>
-		<property name="drawables" ref="drawables"/>
 	</bean>
 	
 	<factory id="actionBarButtonFactory" makes="actionBarButton"/>

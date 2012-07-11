@@ -208,18 +208,25 @@ public class Drawables {
 	}
 	
 	protected String getPath(String name, int density) {
-		String densityPath = "mdpi";
-
-		if (density == DisplayMetrics.DENSITY_HIGH) {
-			densityPath = "hdpi";
+		String densityPath = null;
+		
+		if (density > DisplayMetrics.DENSITY_LOW) {
+			if (density > DisplayMetrics.DENSITY_MEDIUM) {
+				if (density > DisplayMetrics.DENSITY_HIGH) {
+					densityPath = "xhdpi";
+				}
+				else {
+					densityPath = "hdpi";
+				}
+			}
+			else {
+				densityPath = "mdpi";
+			}
 		}
-		else if (density == DisplayMetrics.DENSITY_LOW) {
+		else {
 			densityPath = "ldpi";
 		}
-		else if (density > DisplayMetrics.DENSITY_HIGH) {
-			densityPath = "xhdpi";
-		}
-		
+
 		int indexOf = name.indexOf('#');
 		
 		if(indexOf >= 0) {

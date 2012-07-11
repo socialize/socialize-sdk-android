@@ -58,7 +58,6 @@ public class CommentListView extends BaseView {
 	
 	private SocializeLogger logger;
 	private SimpleDialogFactory<ProgressDialog> progressDialogFactory;
-//	private SimpleDialogFactory<AlertDialog> alertDialogFactory;
 	private Drawables drawables;
 	private AppUtils appUtils;
 	private DisplayUtils displayUtils;
@@ -102,6 +101,8 @@ public class CommentListView extends BaseView {
 		setBackgroundDrawable(drawables.getDrawable("crosshatch.png", true, true, true));
 		setPadding(0, 0, 0, 0);
 		
+		boolean landscape = displayUtils.isLandscape();
+		
 		iconSize = displayUtils.getDIP(iconSize);
 		
 		layoutAnchor = new RelativeLayout(getContext());
@@ -144,7 +145,10 @@ public class CommentListView extends BaseView {
 		middle.setLayoutParams(middleParams);
 		sliderAnchor.setLayoutParams(bottomParams);
 
-		header = commentHeaderFactory.getBean();
+		if(!landscape) {
+			header = commentHeaderFactory.getBean();
+		}
+		
 		commentEntryField = commentEditFieldFactory.getBean();
 		content = commentContentViewFactory.getBean();
 		
@@ -179,7 +183,10 @@ public class CommentListView extends BaseView {
 		content.setListAdapter(commentAdapter);
 		content.setScrollListener(getCommentScrollListener());
 
-		top.addView(header);
+		if(header != null) {
+			top.addView(header);
+		}
+		
 		middle.addView(content);
 		
 		sliderAnchor.addView(commentEntryField);
@@ -291,7 +298,7 @@ public class CommentListView extends BaseView {
 				commentAdapter.setTotalCount(commentAdapter.getTotalCount() + 1);
 				commentAdapter.notifyDataSetChanged();
 				
-				header.setText(commentAdapter.getTotalCount() + " Comments");
+				setHeaderText();
 				
 				content.scrollToTop();
 				
@@ -368,11 +375,13 @@ public class CommentListView extends BaseView {
 					
 					if(entities != null) {
 						int totalCount = entities.getTotalCount();
-						header.setText(totalCount + " Comments");
+						
 						List<Comment> items = entities.getItems();
 						preLoadImages(items);
 						commentAdapter.setComments(items);
 						commentAdapter.setTotalCount(totalCount);
+						
+						setHeaderText();
 
 						if(totalCount <= endIndex) {
 							commentAdapter.setLast(true);
@@ -398,7 +407,7 @@ public class CommentListView extends BaseView {
 		}
 		else {
 			content.showList();
-			header.setText(commentAdapter.getTotalCount() + " Comments");
+			setHeaderText();
 			commentAdapter.notifyDataSetChanged();
 			if(dialog != null) {
 				dialog.dismiss();
@@ -415,6 +424,18 @@ public class CommentListView extends BaseView {
 	// SO we can mock
 	protected Comment newComment() {
 		return new Comment();
+	}
+	
+	protected void setHeaderText() {
+		if(header != null) {
+			String name = entity.getName();
+			if(StringUtils.isEmpty(name)) {
+				header.setText(commentAdapter.getTotalCount() + " Comments");
+			}
+			else {
+				header.setText(name + " (" + commentAdapter.getTotalCount() + ")");
+			}
+		}	
 	}
 
 	protected void doNotificationStatusSave() {

@@ -97,8 +97,8 @@ public abstract class AsyncDialogFactory<V extends DialogPanelView, L extends So
 				
 				WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
 			    lp.copyFrom(dialog.getWindow().getAttributes());
-			    lp.width = WindowManager.LayoutParams.FILL_PARENT;
-		    	lp.height = WindowManager.LayoutParams.FILL_PARENT;
+			    lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+		    	lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
 			    lp.horizontalMargin = 0.0f;
 			    lp.verticalMargin = 0.0f;
 			    dialog.getWindow().setAttributes(lp);				

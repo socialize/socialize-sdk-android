@@ -101,7 +101,7 @@ public class AuthPanelView extends DialogPanelView {
 			lowRes = displayUtils.isLowRes();
 		}
 		
-		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		masterParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 		
 		setLayoutParams(masterParams);
@@ -117,8 +117,7 @@ public class AuthPanelView extends DialogPanelView {
 		
 		View header = makeHeaderView(headerHeight, headerRadius);
 		
-		RelativeLayout.LayoutParams contentParams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		contentParams.setMargins(padding, padding, padding, 0);
+		RelativeLayout.LayoutParams contentParams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		contentParams.addRule(RelativeLayout.CENTER_IN_PARENT);
 		
 		LinearLayout contentLayout = new LinearLayout(getContext());
@@ -152,17 +151,18 @@ public class AuthPanelView extends DialogPanelView {
 		contentLayout.addView(anonymousCell);
 		
 		if(ConfigUtils.getConfig(getContext()).isAllowAnonymousUser()) {
+			
+			LayoutParams skipAuthParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+			skipAuthParams.gravity = Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
+			skipAuthParams.weight = 1.0f;
+			skipAuthParams.setMargins(0, displayUtils.getDIP(50), 0, 0);
+			
 			skipAuth = new TextView(getContext());
 			skipAuth.setText("I'd rather not...");
 			skipAuth.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
 			skipAuth.setTextColor(colors.getColor(Colors.ANON_CELL_TITLE));
 			skipAuth.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL);
 			skipAuth.setPadding(0, 0, 0, padding);
-			
-			LayoutParams skipAuthParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-			skipAuthParams.gravity = Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
-			skipAuthParams.weight = 1.0f;
-			
 			skipAuth.setLayoutParams(skipAuthParams);
 			
 			skipAuth.setOnClickListener(new OnClickListener() {

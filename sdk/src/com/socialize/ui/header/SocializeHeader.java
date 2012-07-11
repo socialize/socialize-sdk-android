@@ -26,6 +26,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.text.TextUtils.TruncateAt;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.ImageView;
@@ -109,6 +110,8 @@ public class SocializeHeader extends LinearLayout {
 		titleText.setTextColor(colors.getColor(Colors.HEADER));
 		titleText.setText(getHeaderText());
 		titleText.setPadding(0, 0, 0, displayUtils.getDIP(2));
+		titleText.setSingleLine(true);
+		titleText.setEllipsize(TruncateAt.END);
 
 		LayoutParams titleTextLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		titleTextLayoutParams.gravity = Gravity.CENTER_VERTICAL;

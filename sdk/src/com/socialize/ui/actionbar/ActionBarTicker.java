@@ -24,13 +24,13 @@ package com.socialize.ui.actionbar;
 import java.util.ArrayList;
 import java.util.List;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import com.socialize.ui.animation.RotatingFadeViewAnimator;
 import com.socialize.util.DisplayUtils;
-import com.socialize.util.Drawables;
 
 /**
  * The ticker shows a rolling display of stats for an entity.
@@ -42,7 +42,6 @@ public class ActionBarTicker extends LinearLayout {
 	private List<View> views;
 	private RotatingFadeViewAnimator rotator;
 	private DisplayUtils displayUtils;
-	private Drawables drawables;
 	private boolean initialized = false;
 	
 	public ActionBarTicker(Context context) {
@@ -62,7 +61,7 @@ public class ActionBarTicker extends LinearLayout {
 			
 			setLayoutParams(masterParams);
 			
-			Drawable viewBg = drawables.getDrawable("action_bar_button.png", true, false, true);
+			ColorDrawable viewBg = new ColorDrawable(Color.parseColor("#222222"));
 			
 			setBackgroundDrawable(viewBg);
 			
@@ -117,9 +116,5 @@ public class ActionBarTicker extends LinearLayout {
 
 	public void setDisplayUtils(DisplayUtils deviceUtils) {
 		this.displayUtils = deviceUtils;
-	}
-
-	public void setDrawables(Drawables drawables) {
-		this.drawables = drawables;
 	}
 }
