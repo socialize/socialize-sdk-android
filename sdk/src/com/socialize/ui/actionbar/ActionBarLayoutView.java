@@ -122,10 +122,6 @@ public class ActionBarLayoutView extends BaseView {
 		
 		bg.setLayerInset(1, 0, 0, 0, accentHeight);
 		bg.setLayerInset(2, 0, highlightInset, 0, accentHeight);
-	
-//		Drawable commentBg = drawables.getDrawable("action_bar_button_hi.png#comment", true, false, true);
-//		Drawable shareBg = drawables.getDrawable("action_bar_button_hi.png#share", true, false, true);
-//		Drawable likeBg = drawables.getDrawable("action_bar_button_hi.png#like", true, false, true);
 		
 		int width = ActionBarView.ACTION_BAR_BUTTON_WIDTH;
 		
@@ -155,15 +151,12 @@ public class ActionBarLayoutView extends BaseView {
 		shareButton = buttonFactory.getBean();
 		
 		commentButton.setIcon(commentIcon);
-//		commentButton.setBackground(commentBg);
 		commentButton.setBackground(bg);
 		
 		likeButton.setIcon(likeIcon);
-//		likeButton.setBackground(likeBg);
 		likeButton.setBackground(bg);
 		
 		shareButton.setIcon(shareIcon);
-//		shareButton.setBackground(shareBg);
 		shareButton.setBackground(bg);
 		
 		commentButton.setListener(new ActionBarButtonListener() {
