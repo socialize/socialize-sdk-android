@@ -27,6 +27,7 @@ import android.location.Criteria;
 import android.location.Location;
 
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.config.SocializeConfig;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.AppUtils;
 import com.socialize.util.StringUtils;
@@ -42,6 +43,7 @@ public class DefaultLocationProvider implements SocializeLocationProvider {
 	private IBeanFactory<SocializeLocationListener> locationListenerFactory;
 	private SocializeLocationListener listener = null;
 	private SocializeLogger logger;
+	private SocializeConfig config;
 	
 	public DefaultLocationProvider() {
 		super();
@@ -84,16 +86,18 @@ public class DefaultLocationProvider implements SocializeLocationProvider {
 
 	@Override
 	public Location getLocation(Context context) {
-		if(location == null) {
-			if(appUtils.hasPermission(context, "android.permission.ACCESS_FINE_LOCATION")) {
-				requestLocation(context, Criteria.ACCURACY_FINE);
+		if(config != null && config.getBooleanProperty(SocializeConfig.SOCIALIZE_LOCATION_ENABLED, true)) {
+			if(location == null) {
+				if(appUtils.hasPermission(context, "android.permission.ACCESS_FINE_LOCATION")) {
+					requestLocation(context, Criteria.ACCURACY_FINE);
+				}
+				else if(appUtils.hasPermission(context, "android.permission.ACCESS_COARSE_LOCATION")) {
+					requestLocation(context, Criteria.ACCURACY_COARSE);
+				}
 			}
-			else if(appUtils.hasPermission(context, "android.permission.ACCESS_COARSE_LOCATION")) {
-				requestLocation(context, Criteria.ACCURACY_COARSE);
+			else if(logger != null && logger.isDebugEnabled()) {
+				logger.debug("LocationProvider got location");
 			}
-		}
-		else if(logger != null && logger.isDebugEnabled()) {
-			logger.debug("LocationProvider got location");
 		}
 
 		return location;
@@ -183,5 +187,9 @@ public class DefaultLocationProvider implements SocializeLocationProvider {
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
+	}
+	
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
 	}
 }

@@ -23,8 +23,8 @@ package com.socialize.networks;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.os.AsyncTask;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.concurrent.ManagedAsyncTask;
 import com.socialize.networks.facebook.FacebookUtils;
 import com.socialize.networks.twitter.TwitterUtils;
 import com.socialize.ui.dialog.ProgressDialogFactory;
@@ -34,7 +34,7 @@ import com.socialize.util.IAsyncTask;
  * @author Jason Polites
  *
  */
-public class SocialNetworkSignOutTask extends AsyncTask<Void, Void, Void> implements IAsyncTask<Void, Void, Void> {
+public class SocialNetworkSignOutTask extends ManagedAsyncTask<Void, Void, Void> implements IAsyncTask<Void, Void, Void> {
 
 	private Context context;
 	private ProgressDialogFactory dialogFactory;
@@ -76,7 +76,7 @@ public class SocialNetworkSignOutTask extends AsyncTask<Void, Void, Void> implem
 	}
 
 	@Override
-	protected void onPostExecute(Void result) {
+	protected void onPostExecuteManaged(Void result) {
 		dialog.dismiss();
 		
 		if(signOutListener != null) {

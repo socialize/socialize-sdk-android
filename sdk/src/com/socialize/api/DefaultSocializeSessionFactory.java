@@ -52,6 +52,7 @@ public class DefaultSocializeSessionFactory implements SocializeSessionFactory {
 		
 		DefaultUserProviderCredentials userProviderCredentials = new DefaultUserProviderCredentials();
 		userProviderCredentials.setAccessToken(data.getToken3rdParty());
+		userProviderCredentials.setTokenSecret(data.getSecret3rdParty());
 		userProviderCredentials.setUserId(data.getUserId3rdParty());
 		userProviderCredentials.setAuthProviderInfo(data.getAuthProviderInfo());
 		

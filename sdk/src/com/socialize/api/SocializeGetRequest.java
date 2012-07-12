@@ -22,6 +22,7 @@
 package com.socialize.api;
 
 import java.util.Arrays;
+import java.util.Map;
 
 /**
  * @author Jason Polites
@@ -32,6 +33,8 @@ public class SocializeGetRequest extends SocializeRequest {
 	private String[] ids;
 	private String key;
 	private String idKey;
+	
+	private Map<String, String> extraParams;
 
 	private int startIndex = 0;
 	private int endIndex = 100;
@@ -74,6 +77,14 @@ public class SocializeGetRequest extends SocializeRequest {
 
 	public void setIdKey(String idKey) {
 		this.idKey = idKey;
+	}
+	
+	public Map<String, String> getExtraParams() {
+		return extraParams;
+	}
+	
+	public void setExtraParams(Map<String, String> extraParams) {
+		this.extraParams = extraParams;
 	}
 
 	@Override

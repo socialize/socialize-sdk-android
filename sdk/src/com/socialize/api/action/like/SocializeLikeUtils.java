@@ -182,7 +182,10 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 
 						@Override
 						public void onError(SocializeException error) {
-							dialog.dismiss();
+							if(dialog != null) {
+								dialog.dismiss();
+							}
+							
 							if(listener != null) {
 								listener.onError(error);
 							}
@@ -197,7 +200,9 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 							
 							doActionShare(context, like, null, listener, networks);
 							
-							dialog.dismiss();
+							if(dialog != null) {
+								dialog.dismiss();
+							}
 						}
 					};
 
@@ -294,8 +299,16 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 	 */
 	@Override
 	public void getLikesByEntity(Activity context, String entityKey, int start, int end, LikeListListener listener) {
-		final SocializeSession session = getSocialize().getSession();
-		likeSystem.getLikesByEntity(session, entityKey, start, end, listener);
+		likeSystem.getLikesByEntity(getSocialize().getSession(), entityKey, start, end, listener);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.like.LikeUtilsProxy#getLikesByApplication(android.app.Activity, int, int, com.socialize.listener.like.LikeListListener)
+	 */
+	@Override
+	public void getLikesByApplication(Activity context, int start, int end, LikeListListener listener) {
+		likeSystem.getLikesByApplication(getSocialize().getSession(), start, end, listener);
 	}
 
 	public void setAuthDialogFactory(IAuthDialogFactory authDialogFactory) {

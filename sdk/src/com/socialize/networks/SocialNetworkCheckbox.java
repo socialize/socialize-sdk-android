@@ -2,12 +2,10 @@ package com.socialize.networks;
 
 import android.content.Context;
 import android.view.View;
-
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.networks.SocialNetworkSignOutListener;
 import com.socialize.ui.view.CustomCheckbox;
 
 public class SocialNetworkCheckbox extends CustomCheckbox {

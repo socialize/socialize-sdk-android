@@ -10,6 +10,7 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.test.mock.MockAlertDialog;
 import com.socialize.test.mock.MockDialogBuilder;
 import com.socialize.test.ui.SocializeUIActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.error.DialogErrorHandler;
 import com.socialize.util.Drawables;
 
@@ -27,8 +28,8 @@ public class DialogErrorHandlerTest extends SocializeUIActivityTest {
 		final String message = "An unexpected error occurred.  Please try again";
 		final Exception error = new Exception(message);
 		
-		final MockDialogBuilder builder = AndroidMock.createMock(MockDialogBuilder.class, getActivity());
-		MockAlertDialog dialog = AndroidMock.createMock(MockAlertDialog.class, getActivity());
+		final MockDialogBuilder builder = AndroidMock.createMock(MockDialogBuilder.class, TestUtils.getActivity(this));
+		MockAlertDialog dialog = AndroidMock.createMock(MockAlertDialog.class, TestUtils.getActivity(this));
 		Drawables drawables = AndroidMock.createMock(Drawables.class);
 		Drawable drawable = AndroidMock.createMock(Drawable.class);
 		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
@@ -57,7 +58,7 @@ public class DialogErrorHandlerTest extends SocializeUIActivityTest {
 		AndroidMock.replay(config);
 		
 		handler.setDrawables(drawables);
-		handler.handleError(getActivity(), error);
+		handler.handleError(TestUtils.getActivity(this), error);
 		
 		AndroidMock.verify(builder);
 		AndroidMock.verify(dialog);

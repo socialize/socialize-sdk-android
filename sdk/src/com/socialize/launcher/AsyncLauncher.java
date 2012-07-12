@@ -22,15 +22,15 @@
 package com.socialize.launcher;
 
 import android.app.Activity;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import com.socialize.concurrent.ManagedAsyncTask;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class AsyncLauncher extends AsyncTask<Void, Void, Boolean> {
+public class AsyncLauncher extends ManagedAsyncTask<Void, Void, Boolean> {
 	
 	private Bundle extras;
 	private LaunchListener listener;
@@ -64,7 +64,7 @@ public class AsyncLauncher extends AsyncTask<Void, Void, Boolean> {
 	}
 
 	@Override
-	protected void onPostExecute(Boolean result) {
+	protected void onPostExecuteManaged(Boolean result) {
 		if(listener != null) {
 			if(error != null) {
 				listener.onError(error);

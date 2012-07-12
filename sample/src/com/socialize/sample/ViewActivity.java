@@ -30,6 +30,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.socialize.Socialize;
+import com.socialize.ViewUtils;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.view.ViewAddListener;
@@ -70,7 +71,8 @@ public class ViewActivity extends SocializeActivity {
 					Entity entity = Entity.newInstance(key, "test entity");
 					
 					if(!StringUtils.isEmpty(key)) {
-						Socialize.getSocialize().view(ViewActivity.this, entity, new ViewAddListener() {
+						
+						ViewUtils.view(ViewActivity.this, entity, new ViewAddListener() {
 							
 							@Override
 							public void onError(SocializeException error) {

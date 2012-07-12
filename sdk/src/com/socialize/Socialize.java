@@ -22,6 +22,7 @@
 package com.socialize;
 
 import android.content.Context;
+import android.os.Bundle;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.log.SocializeLogger.LogLevel;
 
@@ -32,7 +33,7 @@ import com.socialize.log.SocializeLogger.LogLevel;
 public class Socialize {
 	
 	// This will be set during the build process
-	public static final String VERSION = "2.1";
+	public static final String VERSION = "2.1.1";
 	
 	public static final String ENTITY_OBJECT = "socialize.entity";
 	public static final String ENTITY_ID = "socialize.entity.id";
@@ -49,7 +50,7 @@ public class Socialize {
 	
 	public static LogLevel DEFAULT_LOG_LEVEL = LogLevel.WARN;
 	
-	static SocializeServiceImpl instance = new SocializeServiceImpl();
+	static final SocializeServiceImpl instance = new SocializeServiceImpl();
 
 	private Socialize() {
 		super();
@@ -122,4 +123,20 @@ public class Socialize {
 	public static void onResume(Context context) {
 		instance.onResume(context);
 	}
+	
+	/**
+	 * Called by containing Activities in their onCreate() method.
+	 * @param context
+	 */
+	public static void onCreate(Context context, Bundle savedInstanceState) {
+		instance.onCreate(context, savedInstanceState);
+	}
+
+	/**
+	 * Called by containing Activities in their onDestroy() method.
+	 * @param context
+	 */
+	public static void onDestroy(Context context) {
+		instance.onDestroy(context);
+	}	
 }

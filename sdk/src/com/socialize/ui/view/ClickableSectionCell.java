@@ -89,6 +89,8 @@ public abstract class ClickableSectionCell extends LinearLayout {
 	
 	private ImageView arrowIcon;
 	
+	private int cellWidth = -1;
+	
 	public ClickableSectionCell(Context context) {
 		super(context);
 	}
@@ -129,9 +131,13 @@ public abstract class ClickableSectionCell extends LinearLayout {
 			txtColor = colors.getColor(Colors.BODY);
 		}
 		
+		if(cellWidth < 0) {
+			cellWidth = LayoutParams.FILL_PARENT;
+		}
+		
 		LinearLayout master = new LinearLayout(getContext());
 		
-		LinearLayout.LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		LinearLayout.LayoutParams masterParams = new LayoutParams(cellWidth, LayoutParams.WRAP_CONTENT);
 		LinearLayout.LayoutParams textParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		LinearLayout.LayoutParams iconParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		
@@ -346,5 +352,13 @@ public abstract class ClickableSectionCell extends LinearLayout {
 		if(onToggleListener != null) {
 			onToggleListener.onToggle(toggled);
 		}
+	}
+	
+	public int getCellWidth() {
+		return cellWidth;
+	}
+	
+	public void setCellWidth(int cellWidth) {
+		this.cellWidth = cellWidth;
 	}	
 }

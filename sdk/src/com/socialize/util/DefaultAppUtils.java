@@ -193,7 +193,7 @@ public class DefaultAppUtils implements AppUtils {
 	@Override
 	public boolean isLocationAvaiable(Context context) {
 		if(!locationAssessed) {
-			locationAvailable = hasPermission(context, "android.permission.ACCESS_FINE_LOCATION") || hasPermission(context, "android.permission.ACCESS_COARSE_LOCATION");
+			locationAvailable = config.getBooleanProperty(SocializeConfig.SOCIALIZE_LOCATION_ENABLED, true) && (hasPermission(context, "android.permission.ACCESS_FINE_LOCATION") || hasPermission(context, "android.permission.ACCESS_COARSE_LOCATION"));
 			locationAssessed = true;
 		}
 		return locationAvailable;
@@ -225,25 +225,6 @@ public class DefaultAppUtils implements AppUtils {
 					if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
 					ok = false;
 				}
-				
-//				if(!isReceiverAvailable(context, SocializeBroadcastReceiver.class)) {
-//					
-//					lastNotificationWarning = "Notifications not available. Receiver [" +
-//							SocializeBroadcastReceiver.class +
-//							"] not configured in AndroidManifest.xml";
-//					
-//					if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
-//					ok = false;
-//				}
-//				if(!isServiceAvailable(context, SocializeC2DMReceiver.class)) {
-//					
-//					lastNotificationWarning = "Notifications not available. Service [" +
-//							SocializeC2DMReceiver.class +
-//							"] not configured in AndroidManifest.xml";
-//					
-//					if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
-//					ok = false;
-//				}			
 				
 				if(config.isEntityLoaderCheckEnabled() && Socialize.getSocialize().getEntityLoader() == null) {
 					lastNotificationWarning = "Notifications not available. Entity loader not found.";

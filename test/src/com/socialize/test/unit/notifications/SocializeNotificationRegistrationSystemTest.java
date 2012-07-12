@@ -28,6 +28,7 @@ import android.test.mock.MockContext;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.api.DeviceRegistrationListener;
 import com.socialize.api.DeviceRegistrationSystem;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
@@ -58,7 +59,14 @@ public class SocializeNotificationRegistrationSystemTest extends SocializeUnitTe
 		
 		DeviceRegistration registration = AndroidMock.createMock(DeviceRegistration.class);
 		NotificationRegistrationState notificationRegistrationState = AndroidMock.createMock(NotificationRegistrationState.class);
-		DeviceRegistrationSystem deviceRegistrationSystem = AndroidMock.createMock(DeviceRegistrationSystem.class);
+		
+		DeviceRegistrationSystem deviceRegistrationSystem = new DeviceRegistrationSystem() {
+			@Override
+			public void registerDevice(SocializeSession session, DeviceRegistration registration, DeviceRegistrationListener listener) {
+				listener.onSuccess();
+			}
+		};
+		
 		IBeanFactory<DeviceRegistration> deviceRegistrationFactory = AndroidMock.createMock(IBeanFactory.class);
 		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
 		
@@ -66,12 +74,11 @@ public class SocializeNotificationRegistrationSystemTest extends SocializeUnitTe
 		AndroidMock.expect(session.getUser()).andReturn(user);
 		
 		registration.setRegistrationId(registrationId);
-		deviceRegistrationSystem.registerDevice(session, registration);
 		notificationRegistrationState.setC2DMRegistrationId(registrationId);
 		notificationRegistrationState.setRegisteredSocialize(user);
 		notificationRegistrationState.save(getContext());
 		
-		AndroidMock.replay(deviceRegistrationFactory, registration, deviceRegistrationSystem, notificationRegistrationState, session);
+		AndroidMock.replay(deviceRegistrationFactory, registration, notificationRegistrationState, session);
 		
 		PublicSocializeNotificationRegistrationSystem system = new PublicSocializeNotificationRegistrationSystem();
 		
@@ -81,7 +88,7 @@ public class SocializeNotificationRegistrationSystemTest extends SocializeUnitTe
 		
 		system.doRegistrationSocialize(getContext(), session, registrationId);
 		
-		AndroidMock.verify(deviceRegistrationFactory, registration, deviceRegistrationSystem, notificationRegistrationState, session);
+		AndroidMock.verify(deviceRegistrationFactory, registration, notificationRegistrationState, session);
 	}
 	
 	@UsesMocks ({SocializeConfig.class, MockContext.class, Intent.class})

@@ -23,6 +23,7 @@ package com.socialize.test.ui.auth;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import android.app.Activity;
 import android.view.View;
 import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
@@ -78,10 +79,12 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 		final CountDownLatch latch0 = new CountDownLatch(1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		
+		final Activity activity = TestUtils.getActivity(this);
+		
 		runTestOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				getActivity().setContentView(view);
+				activity.setContentView(view);
 				latch0.countDown();
 			}
 		});
@@ -110,12 +113,5 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 		assertTrue((Boolean)getResult(1));
 		assertTrue((Boolean)getResult(2));
 		assertTrue((Boolean)getResult(3));
-	}
-	
-	@Override
-	protected void tearDown() throws Exception {
-		SocializeIOC.unregisterStub("facebookAuthClickListener");
-		SocializeIOC.unregisterStub("twitterAuthClickListener");
-		super.tearDown();
 	}
 }

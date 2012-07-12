@@ -22,10 +22,7 @@
 package com.socialize.ui.actionbar;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -42,7 +39,6 @@ public class ActionBarButton extends LinearLayout {
 	private String text;
 
 	private ActionBarButtonListener listener;
-	private Drawable background;
 	private DisplayUtils displayUtils;
 	private ActionBarItem actionBarItem;
 
@@ -70,12 +66,6 @@ public class ActionBarButton extends LinearLayout {
 		actionBarItem.setIcon(icon);
 		actionBarItem.setText(text);
 		actionBarItem.init();
-
-		ColorDrawable bottomLeft = new ColorDrawable(Color.BLACK);
-		LayerDrawable bg = new LayerDrawable(new Drawable[] { bottomLeft, background });
-		bg.setLayerInset(1, 1, 0, 0, 1);
-
-		setBackgroundDrawable(bg);
 		
 		addView(actionBarItem);
 
@@ -99,10 +89,6 @@ public class ActionBarButton extends LinearLayout {
 
 	public void setListener(ActionBarButtonListener listener) {
 		this.listener = listener;
-	}
-
-	public void setBackground(Drawable background) {
-		this.background = background;
 	}
 
 	public void setText(String text) {

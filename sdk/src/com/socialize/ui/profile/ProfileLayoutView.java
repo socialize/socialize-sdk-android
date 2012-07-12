@@ -13,6 +13,7 @@ import com.socialize.listener.user.UserGetListener;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.header.SocializeHeader;
 import com.socialize.util.BitmapUtils;
+import com.socialize.util.DisplayUtils;
 import com.socialize.view.BaseView;
 
 public class ProfileLayoutView extends BaseView {
@@ -27,6 +28,7 @@ public class ProfileLayoutView extends BaseView {
 	private ProgressDialog dialog = null;
 	private ProgressDialogFactory progressDialogFactory;
 	private BitmapUtils bitmapUtils;
+	private DisplayUtils displayUtils;
 	
 	public ProfileLayoutView(Activity context, String userId) {
 		this(context);
@@ -48,11 +50,20 @@ public class ProfileLayoutView extends BaseView {
 		setOrientation(LinearLayout.VERTICAL);
 		setLayoutParams(fill);
 		setPadding(0, 0, 0, 0);
-
-		header = profileHeaderFactory.getBean();
+		
+		boolean landscape = false;
+		
+		if(displayUtils != null) {
+			landscape = displayUtils.isLandscape();
+		}
+		       
+		
+		if(!landscape) {
+			header = profileHeaderFactory.getBean();
+			addView(header);
+		}
+		
 		content = profileContentViewFactory.getBean(this);
-
-		addView(header);
 		addView(content);
 	}
 	
@@ -137,5 +148,9 @@ public class ProfileLayoutView extends BaseView {
 
 	public void setBitmapUtils(BitmapUtils bitmapUtils) {
 		this.bitmapUtils = bitmapUtils;
+	}
+
+	public void setDisplayUtils(DisplayUtils displayUtils) {
+		this.displayUtils = displayUtils;
 	}
 }

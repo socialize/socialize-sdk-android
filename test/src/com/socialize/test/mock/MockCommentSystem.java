@@ -60,6 +60,11 @@ public class MockCommentSystem extends MockSystem<Comment> implements CommentSys
 	public void getCommentsById(SocializeSession session, CommentListener listener, long... ids) {
 		if(listener != null) listener.onList(actionList);
 	}
+	
+	@Override
+	public void getCommentsByApplication(SocializeSession session, int startIndex, int endIndex, CommentListener listener) {
+		if(listener != null) listener.onList(actionList);
+	}
 
 	@Override
 	public void getComment(SocializeSession session, long id, CommentListener listener) {

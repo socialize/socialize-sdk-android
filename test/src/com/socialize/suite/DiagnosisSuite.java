@@ -9,12 +9,9 @@ public class DiagnosisSuite extends TestSuite {
 
 		TestSuite suite = new TestSuite(DiagnosisSuite.class.getName());
 
-		suite.addTestSuite(com.socialize.test.ui.actionbar.ActionBarCommentTest.class);	
-		suite.addTestSuite(com.socialize.test.ui.actionbar.ActionBarLikeAutoTest.class);
-		suite.addTestSuite(com.socialize.test.ui.actionbar.ActionBarLikeManualTest.class);
-		suite.addTestSuite(com.socialize.test.ui.actionbar.ActionBarLikeStateTest.class);	
-		suite.addTestSuite(com.socialize.test.ui.actionbar.ActionBarListenerTest.class);
-		suite.addTestSuite(com.socialize.test.ui.auth.AuthRequestDialogFactoryTest.class);
+		suite.addTestSuite(com.socialize.test.ui.actionbar.ActionBarShareTestListener.class);
+		suite.addTestSuite(com.socialize.test.ui.actionbar.ActionBarShareTest.class);
+
 
 		return suite;
 	}

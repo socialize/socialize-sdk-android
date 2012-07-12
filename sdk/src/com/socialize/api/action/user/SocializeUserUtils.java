@@ -24,7 +24,6 @@ package com.socialize.api.action.user;
 import android.content.Context;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
-import com.socialize.api.SocializeSessionPersister;
 import com.socialize.api.action.SocializeActionUtilsBase;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
@@ -41,7 +40,6 @@ import com.socialize.ui.profile.UserSettings;
 public class SocializeUserUtils extends SocializeActionUtilsBase implements UserUtilsProxy {
 
 	private UserSystem userSystem;
-	private SocializeSessionPersister sessionPersister;
 	
 
 	@Override
@@ -89,15 +87,8 @@ public class SocializeUserUtils extends SocializeActionUtilsBase implements User
 		this.userSystem = userSystem;
 	}
 	
-	public void setSessionPersister(SocializeSessionPersister sessionPersister) {
-		this.sessionPersister = sessionPersister;
-	}
-
 	@Override
 	public void clearSession(Context context) {
 		getSocialize().clearSessionCache(context);
-		sessionPersister.delete(context);
 	}
-	
-	
 }

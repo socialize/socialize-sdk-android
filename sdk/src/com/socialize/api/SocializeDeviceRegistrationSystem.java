@@ -23,9 +23,7 @@ package com.socialize.api;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.socialize.entity.DeviceRegistration;
-import com.socialize.error.SocializeException;
 import com.socialize.provider.SocializeProvider;
 
 /**
@@ -42,9 +40,10 @@ public class SocializeDeviceRegistrationSystem extends SocializeApi<DeviceRegist
 	 * @see com.socialize.api.DeviceRegistrationSystem#registerDevice(com.socialize.api.SocializeSession, com.socialize.entity.DeviceRegistration)
 	 */
 	@Override
-	public void registerDevice(SocializeSession session, DeviceRegistration registration) throws SocializeException {
+	public void registerDevice(SocializeSession session, DeviceRegistration registration, DeviceRegistrationListener listener) {
 		List<DeviceRegistration> registrations = new ArrayList<DeviceRegistration>(1);
 		registrations.add(registration);
-		postAsync(session, ENDPOINT, registrations, null);
+		postAsync(session, ENDPOINT, registrations,listener);
 	}
+	
 }

@@ -22,7 +22,6 @@
 package com.socialize.net;
 
 import java.security.KeyStore;
-
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ClientConnectionManager;
@@ -37,7 +36,6 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
-
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;

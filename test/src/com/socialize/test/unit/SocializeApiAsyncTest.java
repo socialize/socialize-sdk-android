@@ -46,6 +46,7 @@ import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 
 public class SocializeApiAsyncTest extends SocializeActivityTest {
 
@@ -98,7 +99,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		AndroidMock.expect(provider.authenticate("/authenticate/", "test_key", "test_secret", "test_uuid")).andThrow(new SocializeException("TEST ERROR IGNORE ME!"));
 		AndroidMock.replay(provider);
 
-		final ProgressDialog authProgress = ProgressDialog.show(getActivity(), "Authenticating", "Please wait...");
+		final ProgressDialog authProgress = ProgressDialog.show(TestUtils.getActivity(this), "Authenticating", "Please wait...");
 
 		final SocializeAuthListener alistener = new SocializeAuthListener() {
 
@@ -260,7 +261,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		api.setResponseFactory(responseFactory);
 
 		AndroidMock.expect(responseFactory.newEntityResponse()).andReturn(mockEntityResponse);
-		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, "id", 0, SocializeConfig.MAX_LIST_RESULTS)).andReturn(returned);
+		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, "id", null, 0, SocializeConfig.MAX_LIST_RESULTS)).andReturn(returned);
 		mockEntityResponse.setResults(returned);
 
 		AndroidMock.replay(responseFactory);
@@ -294,7 +295,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		api.setResponseFactory(responseFactory);
 
 		AndroidMock.expect(responseFactory.newEntityResponse()).andReturn(mockEntityResponse);
-		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, "id", start, end)).andReturn(returned);
+		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, "id", null, start, end)).andReturn(returned);
 		mockEntityResponse.setResults(returned);
 
 		AndroidMock.replay(responseFactory);
@@ -323,7 +324,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 
 		final ListResult<SocializeObject> returned = new ListResult<SocializeObject>(new LinkedList<SocializeObject>());
 
-		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, "id", 0, SocializeConfig.MAX_LIST_RESULTS)).andReturn(returned);
+		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, "id", null, 0, SocializeConfig.MAX_LIST_RESULTS)).andReturn(returned);
 		AndroidMock.replay(provider);
 
 		runTestOnUiThread(new Runnable() {
@@ -348,7 +349,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 
 		final ListResult<SocializeObject> returned = new ListResult<SocializeObject>(new LinkedList<SocializeObject>());
 
-		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, "id", start, end)).andReturn(returned);
+		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, "id", null, start, end)).andReturn(returned);
 		AndroidMock.replay(provider);
 
 		runTestOnUiThread(new Runnable() {

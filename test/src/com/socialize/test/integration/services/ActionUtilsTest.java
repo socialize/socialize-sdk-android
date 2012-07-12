@@ -32,7 +32,6 @@ import org.json.JSONObject;
 import com.socialize.ActionUtils;
 import com.socialize.CommentUtils;
 import com.socialize.LikeUtils;
-import com.socialize.Socialize;
 import com.socialize.UserUtils;
 import com.socialize.api.action.comment.CommentOptions;
 import com.socialize.api.action.like.LikeOptions;
@@ -56,18 +55,6 @@ import com.socialize.test.ui.util.TestUtils;
  *
  */
 public class ActionUtilsTest extends SocializeActivityTest {
-	
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		Socialize.getSocialize().clearSessionCache(getContext());
-		Socialize.getSocialize().destroy(true);
-	}
-
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
 	
 	public void testGetActionsByApplication() throws Exception {
 		final CountDownLatch latch = new CountDownLatch(1);

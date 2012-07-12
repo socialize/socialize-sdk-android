@@ -35,6 +35,8 @@ public interface SocializeView {
 	public void onViewUpdate();
 
 	public void onViewLoad();
+	
+	public void onViewError(Exception e);
 
 	public void onViewRendered(int width, int height);
 	

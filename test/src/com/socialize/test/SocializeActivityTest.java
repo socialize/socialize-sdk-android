@@ -22,11 +22,10 @@
 package com.socialize.test;
 
 import java.util.List;
-import android.test.ActivityInstrumentationTestCase2;
 import com.socialize.sample.EmptyActivity;
 import com.socialize.test.ui.util.TestUtils;
 
-public abstract class SocializeActivityTest extends ActivityInstrumentationTestCase2<EmptyActivity> {
+public abstract class SocializeActivityTest extends SocializeManagedActivityTest<EmptyActivity> {
 	
 	
 	public SocializeActivityTest() {
@@ -41,7 +40,7 @@ public abstract class SocializeActivityTest extends ActivityInstrumentationTestC
 	
 	@Override
 	protected void tearDown() throws Exception {
-		TestUtils.tearDown();
+		TestUtils.tearDown(this);
 		super.tearDown();
 	}
 	
@@ -77,6 +76,6 @@ public abstract class SocializeActivityTest extends ActivityInstrumentationTestC
 	}
 
 	public EmptyActivity getContext() {
-		return getActivity();
+		return TestUtils.getActivity(this);
 	}
 }

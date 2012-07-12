@@ -27,6 +27,7 @@ import java.util.List;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
+import com.socialize.Socialize;
 import com.socialize.entity.Entity;
 import com.socialize.ui.dialog.DialogRegister;
 
@@ -43,6 +44,8 @@ public abstract class DemoActivity extends Activity implements DialogRegister {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		entity = Entity.newInstance("http://getsocialize.com", "Socialize");
+		
+		Socialize.onCreate(this, savedInstanceState);
 	}
 	
 	/* (non-Javadoc)
@@ -65,8 +68,19 @@ public abstract class DemoActivity extends Activity implements DialogRegister {
 		error.printStackTrace();
 		DemoUtils.showErrorDialog(context, error);
 	}
-
 	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Socialize.onPause(this);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Socialize.onResume(this);
+	}
+
 	@Override
 	protected void onDestroy() {
 		if(dialogs != null) {
@@ -75,6 +89,9 @@ public abstract class DemoActivity extends Activity implements DialogRegister {
 			}
 			dialogs.clear();
 		}		
+		
+		Socialize.onDestroy(this);
+		
 		super.onDestroy();
 	}
 }

@@ -27,6 +27,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import com.socialize.ActionBarUtils;
+import com.socialize.Socialize;
 import com.socialize.entity.Entity;
 
 public class ActionBarSample extends Activity {
@@ -35,6 +36,9 @@ public class ActionBarSample extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
+		
+		// Call Socialize in onCreate
+		Socialize.onCreate(this, savedInstanceState);
 		
 		// Your entity key. May be passed as a Bundle parameter to your activity
 		String entityKey = "http://www.getsocialize.com";
@@ -50,6 +54,31 @@ public class ActionBarSample extends Activity {
 		// Now set the view for your activity to be the wrapped view.
 		setContentView(actionBarWrapped);
 	}
+	
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		
+		// Call Socialize in onPause
+		Socialize.onPause(this);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		// Call Socialize in onResume
+		Socialize.onResume(this);
+	}
+
+	@Override
+	protected void onDestroy() {
+		// Call Socialize in onDestroy before the activity is destroyed
+		Socialize.onDestroy(this);
+		
+		super.onDestroy();
+	}	
 }
 //end-snippet-0
 

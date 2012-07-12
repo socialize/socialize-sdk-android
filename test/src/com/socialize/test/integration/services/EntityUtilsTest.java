@@ -28,7 +28,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import com.socialize.ConfigUtils;
 import com.socialize.EntityUtils;
-import com.socialize.Socialize;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
@@ -46,17 +45,6 @@ import com.socialize.test.ui.util.TestUtils;
  */
 public class EntityUtilsTest extends SocializeActivityTest {
 	
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		Socialize.getSocialize().clearSessionCache(getContext());
-		Socialize.getSocialize().destroy(true);
-	}
-
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
 
 	public void testAddEntity() throws Exception {
 		final String entityKey = "testAddEntity" + Math.random();
@@ -67,7 +55,7 @@ public class EntityUtilsTest extends SocializeActivityTest {
 		// Force no config
 		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
-		EntityUtils.saveEntity(getActivity(), entity, new EntityAddListener() {
+		EntityUtils.saveEntity(TestUtils.getActivity(this), entity, new EntityAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -98,7 +86,7 @@ public class EntityUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		
 		
-		EntityUtils.getEntity(getActivity(), entityAfter.getId(), new EntityGetListener() {
+		EntityUtils.getEntity(TestUtils.getActivity(this), entityAfter.getId(), new EntityGetListener() {
 			
 			@Override
 			public void onGet(Entity entity) {
@@ -257,5 +245,172 @@ public class EntityUtilsTest extends SocializeActivityTest {
 		
 		assertEquals(2, found);
 	}
+	
+//	public void testGetEntitiesWithSort() throws Exception {
+//		
+//		final Activity context = getContext();
+//		
+//		// 3 entities
+//		String[] keys = {"sortEntityA-" + Math.random(), "sortEntityB-" + Math.random(), "sortEntityC-" + Math.random()};
+//
+//		// Create a latch for each item so we guarantee order
+//		final CountDownLatch[] createLatches = new CountDownLatch[] {
+//			new CountDownLatch(1),
+//			new CountDownLatch(1),
+//			new CountDownLatch(1),
+//		};
+//		
+//		final List<Entity> entities = new ArrayList<Entity>(keys.length);
+//		
+//		for (int i = 0; i < createLatches.length; i++) {
+//			
+//			final int count = i;
+//	
+//			EntityUtils.saveEntity(context, Entity.newInstance(keys[i], keys[i]), new EntityAddListener() {
+//				@Override
+//				public void onError(SocializeException error) {
+//					error.printStackTrace();
+//					createLatches[count].countDown();
+//				}
+//				
+//				@Override
+//				public void onCreate(Entity result) {
+//					
+//					Log.e("Socialize", "created entity [" +
+//							result.getKey() +
+//							"] at " + System.currentTimeMillis());
+//					
+//					entities.add(result);
+//					createLatches[count].countDown();
+//				}
+//			});
+//			
+//			assertTrue(createLatches[i].await(10, TimeUnit.SECONDS));
+//		}
+//		
+//		assertEquals(3, entities.size());
+//		
+//		// Get by normal means
+//		final CountDownLatch getLatch = new CountDownLatch(1);
+//		
+//		EntityUtils.getEntities(context, SortOrder.CREATION_DATE, new EntityListListener() {
+//			
+//			@Override
+//			public void onList(ListResult<Entity> entities) {
+//				addResult(0, entities);
+//				getLatch.countDown();
+//			}
+//			
+//			@Override
+//			public void onError(SocializeException error) {
+//				error.printStackTrace();
+//				getLatch.countDown();
+//			}
+//		}, keys);
+//		
+//		assertTrue(getLatch.await(20, TimeUnit.SECONDS));
+//		
+//		ListResult<Entity> after = getResult(0);
+//		
+//		assertNotNull(after);
+//		assertEquals(3, after.size());
+//		
+//		// Check the order.. should be C/B/A
+//		List<Entity> items = after.getItems();
+//		
+//		assertEquals(keys[2], items.get(0).getKey());
+//		assertEquals(keys[1], items.get(1).getKey());
+//		assertEquals(keys[0], items.get(2).getKey());
+//		
+//		// Now make comments/likes
+//		final CountDownLatch actionLatch = new CountDownLatch(3);
+//		
+//		// Make sure we're not interrupted
+//		CommentOptions commentOptions = CommentUtils.getUserCommentOptions(context);
+//		commentOptions.setShowAuthDialog(false);
+//		commentOptions.setShowShareDialog(false);		
+//		
+//		LikeOptions likeOptions = LikeUtils.getUserLikeOptions(context);
+//		likeOptions.setShowAuthDialog(false);
+//		likeOptions.setShowShareDialog(false);		
+//		
+//		// A
+//		CommentUtils.addComment(context, entities.get(0), "sortEntityA comment", commentOptions, new CommentAddListener() {
+//			
+//			@Override
+//			public void onError(SocializeException error) {
+//				error.printStackTrace();
+//				actionLatch.countDown();
+//			}
+//			
+//			@Override
+//			public void onCreate(Comment result) {
+//				actionLatch.countDown();
+//			}
+//		});
+//		
+//		LikeUtils.like(context, entities.get(0), likeOptions, new LikeAddListener() {
+//			
+//			@Override
+//			public void onError(SocializeException error) {
+//				error.printStackTrace();
+//				actionLatch.countDown();
+//			}
+//			
+//			@Override
+//			public void onCreate(Like result) {
+//				actionLatch.countDown();
+//			}
+//		});
+//		
+//		// B
+//		CommentUtils.addComment(context, entities.get(1), "sortEntityB comment", commentOptions, new CommentAddListener() {
+//			
+//			@Override
+//			public void onError(SocializeException error) {
+//				error.printStackTrace();
+//				actionLatch.countDown();
+//			}
+//			
+//			@Override
+//			public void onCreate(Comment result) {
+//				actionLatch.countDown();
+//			}
+//		});		
+//		
+//		assertTrue(actionLatch.await(20, TimeUnit.SECONDS));
+//		
+//		// Now get by activity
+//		final CountDownLatch activityLatch = new CountDownLatch(1);
+//		
+//		EntityUtils.getEntities(context, SortOrder.TOTAL_ACTIVITY, new EntityListListener() {
+//			
+//			@Override
+//			public void onList(ListResult<Entity> entities) {
+//				addResult(1, entities);
+//				activityLatch.countDown();
+//			}
+//			
+//			@Override
+//			public void onError(SocializeException error) {
+//				error.printStackTrace();
+//				activityLatch.countDown();
+//			}
+//		}, keys);
+//		
+//		assertTrue(activityLatch.await(20, TimeUnit.SECONDS));
+//		
+//		ListResult<Entity> sorted = getResult(1);
+//		
+//		assertNotNull(after);
+//		assertEquals(3, sorted.size());
+//		
+//		// Check the order.. should be A/B/C
+//		List<Entity> sortedItems = after.getItems();
+//		
+//		assertEquals(keys[0], sortedItems.get(0).getKey());
+//		assertEquals(keys[1], sortedItems.get(1).getKey());
+//		assertEquals(keys[2], sortedItems.get(2).getKey());
+//	}	
 	
 }

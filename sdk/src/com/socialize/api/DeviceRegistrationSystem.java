@@ -37,5 +37,5 @@ public interface DeviceRegistrationSystem {
 	 * @param registration
 	 * @throws SocializeException
 	 */
-	public void registerDevice(SocializeSession session, DeviceRegistration registration) throws SocializeException;
+	public void registerDevice(SocializeSession session, DeviceRegistration registration, DeviceRegistrationListener listener);
 }

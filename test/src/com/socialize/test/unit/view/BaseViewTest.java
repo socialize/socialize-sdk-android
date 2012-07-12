@@ -25,12 +25,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 import com.socialize.view.BaseView;
 
 /**
@@ -44,28 +44,29 @@ public class BaseViewTest extends SocializeActivityTest {
 		SocializeErrorHandler handler = AndroidMock.createMock(SocializeErrorHandler.class);
 		Exception error = AndroidMock.createMock(Exception.class);
 		
-		handler.handleError(getActivity(), error);
+		handler.handleError(TestUtils.getActivity(this), error);
 		
 		AndroidMock.replay(handler);
 		
-		BaseView view = new BaseView(getActivity()) {};
+		BaseView view = new BaseView(TestUtils.getActivity(this)) {};
 		view.setErrorHandler(handler);
 		
-		view.showError(getActivity(), error);
+		view.showError(TestUtils.getActivity(this), error);
 		
 		AndroidMock.verify(handler);
 	}
 	
 	public void test_getActivity() {
-		PublicBaseView view = new PublicBaseView(getActivity());
-		assertSame(getActivity(), view.getActivity());
+		Activity activity = TestUtils.getActivity(this);
+		PublicBaseView view = new PublicBaseView(activity);
+		assertSame(activity, view.getActivity());
 	}
 	
 	public void test_onWindowVisibilityChangedVisibleFirstLoad() {
 		
 		final String success = "onViewLoad";
 		
-		PublicBaseView view = new PublicBaseView(getActivity()) {
+		PublicBaseView view = new PublicBaseView(TestUtils.getActivity(this)) {
 			@Override
 			public boolean isInEditMode() {
 				return false;
@@ -94,7 +95,7 @@ public class BaseViewTest extends SocializeActivityTest {
 		
 		final String success = "onViewUpdate";
 		
-		PublicBaseView view = new PublicBaseView(getActivity()) {
+		PublicBaseView view = new PublicBaseView(TestUtils.getActivity(this)) {
 			@Override
 			public boolean isInEditMode() {
 				return false;
@@ -123,7 +124,7 @@ public class BaseViewTest extends SocializeActivityTest {
 //		
 //		final String success = "decrementLoaded";
 //		
-//		PublicBaseView view = new PublicBaseView(getActivity()) {
+//		PublicBaseView view = new PublicBaseView(TestUtils.getActivity(this)) {
 //			@Override
 //			public boolean isInEditMode() {
 //				return false;
@@ -152,7 +153,7 @@ public class BaseViewTest extends SocializeActivityTest {
 //		
 //		final String success = "decrementLoaded";
 //		
-//		PublicBaseView view = new PublicBaseView(getActivity()) {
+//		PublicBaseView view = new PublicBaseView(TestUtils.getActivity(this)) {
 //			@Override
 //			public boolean isInEditMode() {
 //				return false;
@@ -178,7 +179,7 @@ public class BaseViewTest extends SocializeActivityTest {
 //	}		
 	
 	public void test_checkLoaded() {
-		PublicBaseView view = new PublicBaseView(getActivity());
+		PublicBaseView view = new PublicBaseView(TestUtils.getActivity(this));
 		
 		assertFalse(view.checkLoaded());
 		assertTrue(view.checkLoaded());
@@ -187,9 +188,9 @@ public class BaseViewTest extends SocializeActivityTest {
 	@UsesMocks(LinearLayout.class)
 	public void test_assignId() {
 		
-		LinearLayout parent = AndroidMock.createMock(LinearLayout.class, getActivity());
+		LinearLayout parent = AndroidMock.createMock(LinearLayout.class, TestUtils.getActivity(this));
 		
-		PublicBaseView view = new PublicBaseView(getActivity()) {
+		PublicBaseView view = new PublicBaseView(TestUtils.getActivity(this)) {
 			@Override
 			public int getNextViewId(View parent) {
 				addResult(parent);
@@ -207,9 +208,9 @@ public class BaseViewTest extends SocializeActivityTest {
 	
 	@UsesMocks({LinearLayout.class, View.class})
 	public void test_getNextViewId() {
-		LinearLayout group = AndroidMock.createMock(LinearLayout.class, getActivity());
-		View child0 = AndroidMock.createMock(View.class, getActivity());
-		View child1 = AndroidMock.createMock(View.class, getActivity());
+		LinearLayout group = AndroidMock.createMock(LinearLayout.class, TestUtils.getActivity(this));
+		View child0 = AndroidMock.createMock(View.class, TestUtils.getActivity(this));
+		View child1 = AndroidMock.createMock(View.class, TestUtils.getActivity(this));
 		
 		AndroidMock.expect(group.getChildCount()).andReturn(2);
 		AndroidMock.expect(group.getChildAt(0)).andReturn(child0);
@@ -222,7 +223,7 @@ public class BaseViewTest extends SocializeActivityTest {
 		AndroidMock.replay(child0);
 		AndroidMock.replay(child1);
 		
-		PublicBaseView view = new PublicBaseView(getActivity());
+		PublicBaseView view = new PublicBaseView(TestUtils.getActivity(this));
 		
 		int id = view.getNextViewId(group);
 		

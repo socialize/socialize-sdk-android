@@ -31,6 +31,7 @@ import android.net.Uri;
 import com.socialize.annotations.Synchronous;
 import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.entity.Entity;
+import com.socialize.facebook.Facebook;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetworkPostListener;
 
@@ -56,6 +57,8 @@ public interface FacebookUtilsProxy {
 	@Synchronous
 	public String getAccessToken(Context context);
 	
+	public void extendAccessToken(Context context);
+	
 	public void postEntity(Activity context, Entity entity, String text, SocialNetworkShareListener listener);
 	
 	public void post(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener);
@@ -67,5 +70,8 @@ public interface FacebookUtilsProxy {
 	public byte[] getImageForPost(Activity context, Uri imagePath) throws IOException;
 	
 	public byte[] getImageForPost(Activity context, Bitmap image, CompressFormat format) throws IOException;
+	
+	@Synchronous
+	public Facebook getFacebook(Context context);
 	
 }

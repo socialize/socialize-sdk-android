@@ -31,6 +31,7 @@ import com.socialize.facebook.Facebook;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.ListenerHolder;
 import com.socialize.log.SocializeLogger;
+import com.socialize.networks.facebook.FacebookUtilsProxy;
 
 /**
  * @author Jason Polites
@@ -42,6 +43,7 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 	private ListenerHolder holder; // This is a singleton
 	private SocializeLogger logger;
 	private FacebookSessionStore facebookSessionStore;
+	private FacebookUtilsProxy facebookUtils;
 	
 	public FacebookAuthProvider() {
 		super();
@@ -96,10 +98,12 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 
 	@Override
 	public void clearCache(Context context, FacebookAuthProviderInfo info) {
-		Facebook mFacebook = getFacebook(info.getAppId());
+		Facebook mFacebook = getFacebook(context);
 		
 		try {
-			mFacebook.logout(context);
+			if(mFacebook != null) {
+				mFacebook.logout(context);
+			}
 		}
 		catch (Exception e) {
 			if(logger != null) {
@@ -116,8 +120,12 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 		}
 	}
 	
-	protected Facebook getFacebook(String appId) {
-		return new Facebook(appId);
+	protected Facebook getFacebook(Context context) {
+		return facebookUtils.getFacebook(context);
+	}
+	
+	public void setFacebookUtils(FacebookUtilsProxy facebookUtils) {
+		this.facebookUtils = facebookUtils;
 	}
 
 	public SocializeLogger getLogger() {

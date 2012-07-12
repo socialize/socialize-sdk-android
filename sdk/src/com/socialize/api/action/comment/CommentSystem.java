@@ -40,6 +40,8 @@ public interface CommentSystem {
 
 	public void addComment(SocializeSession session, Entity entity, String comment, CommentOptions commentOptions, CommentListener listener, SocialNetwork... networks);
 	
+	public void getCommentsByApplication(SocializeSession session, int startIndex, int endIndex, CommentListener listener);
+	
 	public void getCommentsByEntity(SocializeSession session, String entityKey, CommentListener listener);
 	
 	public void getCommentsByEntity(SocializeSession session, String entityKey, int startIndex, int endIndex, CommentListener listener);

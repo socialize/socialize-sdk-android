@@ -22,6 +22,7 @@
 package com.socialize.api.action.entity;
 
 import android.app.Activity;
+import com.socialize.EntityUtils.SortOrder;
 import com.socialize.Socialize;
 import com.socialize.entity.Entity;
 import com.socialize.listener.entity.EntityAddListener;
@@ -62,16 +63,16 @@ public class SocializeEntityUtils implements EntityUtilsProxy {
 	 * @see com.socialize.api.action.entity.EntityUtilsProxy#getEntities(android.app.Activity, int, int, com.socialize.listener.entity.EntityListListener)
 	 */
 	@Override
-	public void getEntities(Activity context, int start, int end, EntityListListener listener) {
-		entitySystem.getAllEntities(Socialize.getSocialize().getSession(), start, end, listener);
+	public void getEntities(Activity context, int start, int end, SortOrder sortOrder, EntityListListener listener) {
+		entitySystem.getEntities(Socialize.getSocialize().getSession(), start, end, sortOrder, listener);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.api.action.entity.EntityUtilsProxy#getEntities(android.app.Activity, int, int, com.socialize.listener.entity.EntityListListener, java.lang.String[])
 	 */
 	@Override
-	public void getEntities(Activity context, EntityListListener listener, String... keys) {
-		entitySystem.getEntities(Socialize.getSocialize().getSession(), listener, keys);
+	public void getEntities(Activity context, SortOrder sortOrder, EntityListListener listener, String... keys) {
+		entitySystem.getEntities(Socialize.getSocialize().getSession(), sortOrder, listener, keys);
 	}
 
 	public void setEntitySystem(EntitySystem entitySystem) {

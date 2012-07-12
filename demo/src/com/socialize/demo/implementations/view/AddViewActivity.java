@@ -23,7 +23,6 @@ package com.socialize.demo.implementations.view;
 
 import com.socialize.ViewUtils;
 import com.socialize.demo.SDKDemoActivity;
-import com.socialize.entity.Entity;
 import com.socialize.entity.View;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.view.ViewAddListener;
@@ -42,9 +41,7 @@ public class AddViewActivity extends SDKDemoActivity {
 	public void executeDemo(String text) {
 		
 		// usually the name parameter would be a human readable name (i.e. not the same as the key).
-		Entity e = Entity.newInstance(text, text);
-		
-		ViewUtils.view(this, e, new ViewAddListener() {
+		ViewUtils.view(this, entity, new ViewAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -53,7 +50,7 @@ public class AddViewActivity extends SDKDemoActivity {
 			
 			@Override
 			public void onCreate(View entity) {
-				handleBasicSocializeResult(entity);
+				handleSocializeResult(entity);
 			}
 		});
 	}

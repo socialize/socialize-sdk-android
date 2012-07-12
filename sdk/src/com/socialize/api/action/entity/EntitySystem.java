@@ -21,6 +21,7 @@
  */
 package com.socialize.api.action.entity;
 
+import com.socialize.EntityUtils.SortOrder;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
@@ -36,25 +37,15 @@ public interface EntitySystem {
 	public static final String ENDPOINT = "/entity/";
 
 	public void addEntity(SocializeSession session, Entity entity, EntityListener listener);
-	
-	/**
-	 * Gets a socialize entity.  This call is SYNCHRONOUS!  Do not call from the main UI thread.
-	 * @param session
-	 * @param id
-	 * @throws SocializeException
-	 * @return
-	 */
+
 	public Entity getEntitySynchronous(SocializeSession session, long id) throws SocializeException;		
 	
 	public void getEntity(SocializeSession session, long id, EntityListener listener);
-
 	
 	public void getEntity(SocializeSession session, String entityKey, EntityListener listener);
-
-	public void getEntities(SocializeSession session, int start, int end, EntityListener listener, String... entityKeys);
 	
-	public void getAllEntities(SocializeSession session, int start, int end, EntityListener listener);
+	public void getEntities(SocializeSession session, int start, int end, SortOrder sortOrder, EntityListener listener);
 	
-	public void getEntities(SocializeSession session, EntityListener listener, String... entityKeys);
+	public void getEntities(SocializeSession session, SortOrder sortOrder, EntityListener listener, String... entityKeys);
 
 }

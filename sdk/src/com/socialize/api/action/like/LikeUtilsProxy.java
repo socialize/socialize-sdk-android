@@ -58,5 +58,7 @@ public interface LikeUtilsProxy {
 	
 	public void getLikesByEntity (Activity context, String entityKey, int start, int end, LikeListListener listener);
 	
+	public void getLikesByApplication (Activity context, int start, int end, LikeListListener listener);
+	
 	public void makeLikeButton(Activity context, CompoundButton button, Entity entity, LikeButtonListener listener);
 }

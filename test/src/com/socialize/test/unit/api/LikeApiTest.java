@@ -22,6 +22,7 @@
 package com.socialize.test.unit.api;
 
 import java.util.List;
+import java.util.Map;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
@@ -112,7 +113,7 @@ public class LikeApiTest extends SocializeUnitTest {
 		
 		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String idKey, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
+			public void listAsync(SocializeSession session, String endpoint, String key, String idKey, Map<String, String> extraParams, int startIndex, int endIndex, SocializeActionListener listener, String... ids) {
 				addResult(key);
 				addResult(startIndex);
 				addResult(endIndex);
@@ -239,7 +240,7 @@ public class LikeApiTest extends SocializeUnitTest {
 		
 		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String idKey, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
+			public void listAsync(SocializeSession session, String endpoint, String key, String idKey, Map<String, String> extraParams, int startIndex, int endIndex, SocializeActionListener listener, String... ids) {
 				LikeListener ll = (LikeListener) listener;
 				ll.onList(listResult);
 			}
@@ -306,7 +307,7 @@ public class LikeApiTest extends SocializeUnitTest {
 		
 		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String idKey, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
+			public void listAsync(SocializeSession session, String endpoint, String key, String idKey, Map<String, String> extraParams, int startIndex, int endIndex, SocializeActionListener listener, String... ids) {
 				LikeListener ll = (LikeListener) listener;
 				ll.onList(listResult);
 			}
@@ -409,7 +410,7 @@ public class LikeApiTest extends SocializeUnitTest {
 		
 		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String idKey, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
+			public void listAsync(SocializeSession session, String endpoint, String key, String idKey, Map<String, String> extraParams, int startIndex, int endIndex, SocializeActionListener listener, String... ids) {
 				addResult(key);
 				addResult(endpoint);
 			}

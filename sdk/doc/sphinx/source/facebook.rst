@@ -63,10 +63,16 @@ Once you have a facebook application, simply add your Facebook app Id your **soc
 
 .. literalinclude:: snippets/props_facebook.txt
    :language: properties
+   
+.. note::
+	Make sure you have correctly implemented the :doc:`lifecycle` to ensure Facebook auth tokens are maintained correctly.   
 
 .. raw:: html
    :file: snippets/facebook_complete.html  
 
 .. _propagate_fb:
+
+
+
 
 .. include:: footer.inc	

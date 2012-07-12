@@ -30,6 +30,7 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.location.SocializeLocationManager;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 import com.socialize.util.AppUtils;
 
 /**
@@ -50,7 +51,7 @@ public class SocializeLocationManagerTest extends SocializeActivityTest {
 		AndroidMock.replay(appUtils);
 		
 		SocializeLocationManager manager = new SocializeLocationManager(appUtils);
-		manager.init(getActivity());
+		manager.init(TestUtils.getActivity(this));
 		
 		Criteria criteria = new Criteria();
 		criteria.setAccuracy(Criteria.ACCURACY_COARSE);
@@ -79,7 +80,7 @@ public class SocializeLocationManagerTest extends SocializeActivityTest {
 			public void onLocationChanged(Location location) {}
 		};
 		
-		manager.requestLocationUpdates(getActivity(), bestProvider, 0, 0, listener);
+		manager.requestLocationUpdates(TestUtils.getActivity(this), bestProvider, 0, 0, listener);
 		manager.removeUpdates(listener);
 		
 		AndroidMock.verify(appUtils);

@@ -78,11 +78,17 @@ public abstract class BaseView extends LinearLayout implements SocializeView {
 		
 		if(!isInEditMode()) {
 			if(visibility == VISIBLE) {
-				if(!checkLoaded()) {
-					onViewLoad();
+				
+				try {
+					if(!checkLoaded()) {
+						onViewLoad();
+					}
+					else {
+						onViewUpdate();
+					}
 				}
-				else {
-					onViewUpdate();
+				catch (Exception e) {
+					onViewError(e);
 				}
 			}
 			else {
@@ -107,7 +113,12 @@ public abstract class BaseView extends LinearLayout implements SocializeView {
 	protected void onRender(int w, int h) {
 		if(!rendered) {
 			rendered = true;
-			onViewRendered(w, h);
+			try {
+				onViewRendered(w, h);
+			}
+			catch (Exception e) {
+				onViewError(e);
+			}
 		}
 	}
 
@@ -142,6 +153,11 @@ public abstract class BaseView extends LinearLayout implements SocializeView {
 	@Override
 	public void onViewLoad() {};
 	
+	@Override
+	public void onViewError(Exception e) {
+		setVisibility(View.GONE);
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.view.SocializeView#onViewRendered(int, int)
 	 */

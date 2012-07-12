@@ -27,7 +27,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpUriRequest;
-import android.os.AsyncTask;
+import com.socialize.concurrent.ManagedAsyncTask;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
@@ -39,7 +39,7 @@ import com.socialize.util.IOUtils;
  * @author Jason Polites
  *
  */
-public class AsyncHttpRequestProcessor extends AsyncTask<AsyncHttpRequest, Void, AsyncHttpResponse> {
+public class AsyncHttpRequestProcessor extends ManagedAsyncTask<AsyncHttpRequest, Void, AsyncHttpResponse> {
 
 	private HttpClientFactory clientFactory;
 	private HttpUtils httpUtils;
@@ -123,7 +123,7 @@ public class AsyncHttpRequestProcessor extends AsyncTask<AsyncHttpRequest, Void,
 	}
 	
 	@Override
-	protected void onPostExecute(AsyncHttpResponse result) {
+	protected void onPostExecuteManaged(AsyncHttpResponse result) {
 		AsyncHttpRequest request = result.getRequest();
 		HttpRequestListener listener = request.getListener();
 

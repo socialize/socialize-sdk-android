@@ -34,7 +34,7 @@ public class ImageUtilsTest extends SocializeActivityTest {
 		// Bitmap real = null;
 		// Bitmap decoded = null;
 		// try {
-		// real = BitmapFactory.decodeResource(getActivity().getResources(),
+		// real = BitmapFactory.decodeResource(TestUtils.getActivity(this).getResources(),
 		// R.drawable.android);
 		//
 		// ImageUtils utils = new ImageUtils();

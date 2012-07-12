@@ -11,7 +11,8 @@ import com.socialize.ui.util.Colors;
 import com.socialize.ui.view.ClickableSectionCell;
 
 public class AnonymousCell extends ClickableSectionCell {
-
+	
+	
 	public AnonymousCell(Context context) {
 		super(context);
 	}

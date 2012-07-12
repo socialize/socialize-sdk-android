@@ -29,6 +29,7 @@ import com.socialize.api.action.share.ShareUtilsProxy;
 import com.socialize.api.action.share.SocialNetworkDialogListener;
 import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.entity.Entity;
+import com.socialize.entity.User;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.share.ShareGetListener;
 import com.socialize.listener.share.ShareListListener;
@@ -206,12 +207,12 @@ public class ShareUtils {
 	/**
 	 * Retrieves all share events performed by the given user.
 	 * @param context The current context.
-	 * @param userId The ID of the user who performed the share(s).
+	 * @param user The user who performed the share(s).
 	 * @param start The start index for the result set (0 indexed).
 	 * @param end The end index for the result set.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void getSharesByUser (Activity context, long userId, int start, int end, ShareListListener listener) {
+	public static void getSharesByUser (Activity context, User userId, int start, int end, ShareListListener listener) {
 		proxy.getSharesByUser(context, userId, start, end, listener);
 	};
 	
@@ -226,6 +227,17 @@ public class ShareUtils {
 	public static void getSharesByEntity (Activity context, String entityKey, int start, int end, ShareListListener listener) {
 		proxy.getSharesByEntity(context, entityKey, start, end, listener);
 	};
+	
+	/**
+	 * Retrieves all share events across all entities.
+	 * @param context The current context.
+	 * @param start The start index for the result set (0 indexed).
+	 * @param end The end index for the result set.
+	 * @param listener A listener to handle the result.
+	 */
+	public static void getSharesByApplication (Activity context, int start, int end, ShareListListener listener) {
+		proxy.getSharesByApplication(context, start, end, listener);
+	};	
 	
 	/**
 	 * Creates a simple Socialize Share object.  

@@ -50,7 +50,7 @@ public class UserActivityApiTest extends SocializeUnitTest {
 		listener = AndroidMock.createMock(UserActivityListener.class);
 	}
 
-	public void testGetActivitysByUser() {
+	public void getActivitysByUser() {
 		
 		final int key = 69;
 		
@@ -69,7 +69,7 @@ public class UserActivityApiTest extends SocializeUnitTest {
 		assertEquals(key, after.intValue());
 	}
 	
-	public void testGetActivitysByUserPaginated() {
+	public void getActivitysByUserPaginated() {
 		
 		final int key = 69;
 		int startIndex = 0, endIndex = 10;

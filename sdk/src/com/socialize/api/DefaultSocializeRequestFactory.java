@@ -26,6 +26,9 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
@@ -217,11 +220,11 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 
 	@Override
 	public HttpUriRequest getListRequest(SocializeSession session, String endpoint, String key, String[] ids, String idKey) throws SocializeException {
-		return getListRequest(session, endpoint, key, ids, idKey, 0, SocializeConfig.MAX_LIST_RESULTS);
+		return getListRequest(session, endpoint, key, ids, idKey, null, 0, SocializeConfig.MAX_LIST_RESULTS);
 	}
 
 	@Override
-	public HttpUriRequest getListRequest(SocializeSession session, String endpoint, String key, String[] ids, String idKey, int startIndex, int endIndex) throws SocializeException {
+	public HttpUriRequest getListRequest(SocializeSession session, String endpoint, String key, String[] ids, String idKey, Map<String, String> extraParams, int startIndex, int endIndex) throws SocializeException {
 
 		// A List is a GET request with params
 		// See: http://en.wikipedia.org/wiki/Representational_State_Transfer
@@ -245,6 +248,13 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 		builder.addParam("first", String.valueOf(startIndex));
 		builder.addParam("last", String.valueOf(endIndex));
 		
+		if(extraParams != null) {
+			Set<Entry<String, String>> entrySet = extraParams.entrySet();
+			for (Entry<String, String> entry : entrySet) {
+				builder.addParam(entry.getKey(), entry.getValue());
+			}
+		}
+		
 		HttpGet get = new HttpGet(builder.toString());
 
 		sign(session, get);
@@ -262,7 +272,7 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 
 	@Override
 	public HttpUriRequest getListRequest(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex) throws SocializeException {
-		return getListRequest(session, endpoint, key, ids, "id", startIndex, endIndex);
+		return getListRequest(session, endpoint, key, ids, "id", null, startIndex, endIndex);
 	}
 	
 	@Override

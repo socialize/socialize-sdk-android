@@ -109,10 +109,19 @@ public class ActionBarLayoutView extends BaseView {
 		Drawable viewIcon = drawables.getDrawable("icon_view.png");
 		Drawable shareIcon = drawables.getDrawable("icon_share.png");
 		
-		Drawable commentBg = drawables.getDrawable("action_bar_button_hi.png#comment", true, false, true);
-		Drawable shareBg = drawables.getDrawable("action_bar_button_hi.png#share", true, false, true);
-		Drawable likeBg = drawables.getDrawable("action_bar_button_hi.png#like", true, false, true);
-		
+//		ColorDrawable background = new ColorDrawable(Color.parseColor("#454545"));
+//		ColorDrawable highlight = new ColorDrawable(Color.parseColor("#666666"));
+//		ColorDrawable accent = new ColorDrawable(Color.parseColor("#03a6dc"));
+//		ColorDrawable bottomLeft = new ColorDrawable(Color.BLACK);
+//		
+		int accentHeight = displayUtils.getDIP(4);
+		int strokeWidth = displayUtils.getDIP(1);
+//		
+//		LayerDrawable bg = new LayerDrawable(new Drawable[] { bottomLeft, accent, highlight, background });
+//		bg.setLayerInset(1, 1, 0, 0, 1);
+//		bg.setLayerInset(2, 1, 0, 0, 1);
+//		bg.setLayerInset(3, 1, highlightInset, 0, accentHeight+1);
+
 		int width = ActionBarView.ACTION_BAR_BUTTON_WIDTH;
 		
 		int likeWidth = width - 5;
@@ -141,13 +150,13 @@ public class ActionBarLayoutView extends BaseView {
 		shareButton = buttonFactory.getBean();
 		
 		commentButton.setIcon(commentIcon);
-		commentButton.setBackground(commentBg);
+		commentButton.setBackgroundDrawable(new ActionBarButtonBackground(accentHeight, strokeWidth));
 		
 		likeButton.setIcon(likeIcon);
-		likeButton.setBackground(likeBg);
+		likeButton.setBackgroundDrawable(new ActionBarButtonBackground(accentHeight, strokeWidth));
 		
 		shareButton.setIcon(shareIcon);
-		shareButton.setBackground(shareBg);
+		shareButton.setBackgroundDrawable(new ActionBarButtonBackground(accentHeight, strokeWidth));
 		
 		commentButton.setListener(new ActionBarButtonListener() {
 			@Override
@@ -255,10 +264,9 @@ public class ActionBarLayoutView extends BaseView {
 	
 	protected void doLoadSequence(boolean reload) {
 		final Entity userProvidedEntity = actionBarView.getEntity();
-		
+		ticker.resetTicker();
 		if(userProvidedEntity != null) {
 			if(reload) {
-				ticker.resetTicker();
 				viewsItem.setText(loadingText);
 				commentsItem.setText(loadingText);
 				likesItem.setText(loadingText);
@@ -581,5 +589,9 @@ public class ActionBarLayoutView extends BaseView {
 
 	public void setOnActionBarEventListener(OnActionBarEventListener onActionBarEventListener) {
 		this.onActionBarEventListener = onActionBarEventListener;
+	}
+	
+	public OnActionBarEventListener getOnActionBarEventListener() {
+		return onActionBarEventListener;
 	}
 }

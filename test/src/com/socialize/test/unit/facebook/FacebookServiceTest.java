@@ -24,13 +24,11 @@ package com.socialize.test.unit.facebook;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.AuthProviderResponse;
@@ -43,6 +41,7 @@ import com.socialize.listener.AuthProviderListener;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.mock.MockAlertDialog;
 import com.socialize.test.mock.MockBuilder;
+import com.socialize.test.ui.util.TestUtils;
 import com.socialize.util.DialogFactory;
 
 /**
@@ -205,7 +204,7 @@ import com.socialize.util.DialogFactory;
 		final String appId = "foobar";
 
 		Activity context = AndroidMock.createMock(Activity.class);
-		MockAlertDialog dialog = AndroidMock.createMock(MockAlertDialog.class,getActivity());
+		MockAlertDialog dialog = AndroidMock.createMock(MockAlertDialog.class,TestUtils.getActivity(this));
 		Facebook facebook = AndroidMock.createMock(Facebook.class, appId);
 		FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
 		AuthProviderListener authProviderListener = AndroidMock.createMock(AuthProviderListener.class);
@@ -242,7 +241,7 @@ import com.socialize.util.DialogFactory;
 
 		final CountDownLatch lock = new CountDownLatch(1);
 
-		final FacebookService service = new FacebookService(getActivity(), null, null, null, null) {
+		final FacebookService service = new FacebookService(TestUtils.getActivity(this), null, null, null, null) {
 			@Override
 			public void doErrorUI(String error, String[] permissions, boolean sso) {
 				addResult(error);
@@ -269,11 +268,11 @@ import com.socialize.util.DialogFactory;
 	public void testDoErrorUI() {
 
 		final String error = "foobar";
-		final AlertDialog mockDialog = AndroidMock.createMock(AlertDialog.class, getActivity());
+		final AlertDialog mockDialog = AndroidMock.createMock(AlertDialog.class, TestUtils.getActivity(this));
 
 		mockDialog.show();
 
-		final FacebookService service = new FacebookService(getActivity(), null, null, null, null) {
+		final FacebookService service = new FacebookService(TestUtils.getActivity(this), null, null, null, null) {
 			@Override
 			public AlertDialog makeErrorDialog(String error, String[] permissions, boolean sso) {
 				addResult(error);

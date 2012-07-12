@@ -119,10 +119,7 @@ public class UserUtils {
 	 * WARNING: This will wipe any locally saved preferences for this user.
 	 * @param context
 	 */
-	public static void clearCache(Context context) {
-		if(!Socialize.getSocialize().isInitialized(context)) {
-			Socialize.getSocialize().init(context);
-		}
-		Socialize.getSocialize().clearSessionCache(context);
+	public static void clearLocalSessionData(Context context) {
+		proxy.clearSession(context);
 	}
 }

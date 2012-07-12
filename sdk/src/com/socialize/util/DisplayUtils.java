@@ -73,7 +73,7 @@ public class DisplayUtils {
 			}
 		}
 	}
-
+	
 	public int getDIP(float pixels) {
 		return getDIP(Math.round(pixels));
 	}
@@ -87,6 +87,10 @@ public class DisplayUtils {
 	
 	public boolean isLowRes() {
 		return density <= 1.0f;
+	}
+	
+	public boolean isLDPI() {
+		return density <= 0.75f;
 	}
 
 	public void setLogger(SocializeLogger logger) {

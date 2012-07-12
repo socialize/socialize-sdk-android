@@ -42,7 +42,7 @@ public class GetSharesByUserActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(String text) {
 		
-		ShareUtils.getSharesByUser(this, UserUtils.getCurrentUser(this).getId(), 0, 50, new ShareListListener() {
+		ShareUtils.getSharesByUser(this, UserUtils.getCurrentUser(this), 0, 50, new ShareListListener() {
 			
 			@Override
 			public void onList(ListResult<Share> shares) {

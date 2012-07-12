@@ -6,6 +6,29 @@
 What's New
 ==========
 
+In This Version
+---------------
+
+.. raw:: html
+   :file: snippets/important_notice.html
+
+v2.1.1 adds support for the deprecation of the *offline_access* permission of Facebook applications (https://developers.facebook.com/roadmap/offline-access-removal). 
+
+This means developers upgrading to Socialize v2.2+ **MUST IMPLEMENT THE SOCIALIZE LIFECYCLE** correctly in their app.
+
+Refer to the :doc:`lifecycle` section for more details.
+
+v2.1
+----
+In v2.1 we introduced a range of new features around the **sharing of photos**.
+
+You can now share photos directly to a user's Facebook wall, or to their Twitter feed
+
+Check out :doc:`facebook_adv` or :doc:`twitter_adv` for more details.
+
+v2.0
+----
+
 v2.0 of the Socialize SDK represents a major improvement over previous releases in both easy of use and stability.
 
 In this new release we are introducing several new features and bug fixes as well as a complete reworking of the core interfaces needed to 
@@ -23,7 +46,7 @@ access the entire range of Socialize services.
 
 
 Looking Good!
--------------
+~~~~~~~~~~~~~
 
 We have re-designed the Share Dialog to bring it more in line with end user expectations and to make the job of the developer (you) easier
 
@@ -36,7 +59,7 @@ This new dialog is also completely customizable
 Take a look at the :ref:`custom_share` section for more details on customizing the share dialog.
 
 Complete Control
-----------------
+~~~~~~~~~~~~~~~~
 
 In this new version we have completely rewritten the top level interfaces exposed to the developer to make them simpler and more powerful.
 
@@ -77,7 +100,7 @@ The SDK also includes several helper classes to make life easier.
 	- Programmatic access to the gloabl Socialize config (socialize.properties)
 
 New Sample App!
----------------
+~~~~~~~~~~~~~~~
 
 To showcase these new features and to provide developers with concrete examples of how to use the new library we have created a completely 
 new sample app.  

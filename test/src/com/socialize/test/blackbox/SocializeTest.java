@@ -30,8 +30,8 @@ import com.socialize.test.SocializeActivityTest;
  */
 public class SocializeTest extends SocializeActivityTest {
 //	public void testSocialize() {
-//		Socialize.init(getActivity());
+//		Socialize.init(TestUtils.getActivity(this));
 //		assertNotNull(Socialize.getSocialize());
-//		Socialize.destroy(getActivity());
+//		Socialize.destroy(TestUtils.getActivity(this));
 //	}
 }

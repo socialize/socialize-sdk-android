@@ -6,6 +6,7 @@ import android.content.Context;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.test.ui.SocializeUIActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 
 public class ProgressDialogFactoryTest extends SocializeUIActivityTest {
@@ -16,7 +17,7 @@ public class ProgressDialogFactoryTest extends SocializeUIActivityTest {
 		final String title = "foo";
 		final String message = "bar";
 		
-		final ProgressDialog dialog = AndroidMock.createMock(ProgressDialog.class, getActivity());
+		final ProgressDialog dialog = AndroidMock.createMock(ProgressDialog.class, TestUtils.getActivity(this));
 		
 		dialog.setTitle(title);
 		dialog.setMessage(message);
@@ -31,7 +32,7 @@ public class ProgressDialogFactoryTest extends SocializeUIActivityTest {
 			}
 		};
 		
-		factory.show(getActivity(), title, message);
+		factory.show(TestUtils.getActivity(this), title, message);
 		
 		AndroidMock.verify(dialog);
 	}

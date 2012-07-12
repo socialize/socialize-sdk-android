@@ -27,6 +27,7 @@ import com.socialize.android.ioc.IOCContainer;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 
 /**
  * @author Jason Polites
@@ -42,7 +43,7 @@ public class SocializeBlackboxTest extends SocializeActivityTest {
 			}
 		};
 		
-		socialize.init(getActivity());
+		socialize.init(TestUtils.getActivity(this));
 		
 		IOCContainer container = getNextResult();
 		

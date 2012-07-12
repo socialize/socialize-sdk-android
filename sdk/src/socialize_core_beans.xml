@@ -71,6 +71,7 @@
 	<bean id="locationProvider" class="com.socialize.location.DefaultLocationProvider">
 		<property name="appUtils" ref="appUtils"/>
 		<property name="logger" ref="logger"/>
+		<property name="config" ref="config"/>
 		<property name="locationManager" ref="locationManager"/>
 		<property name="locationListenerFactory" ref="locationListenerFactory"/>
 		
@@ -547,6 +548,7 @@
 	<bean id="facebookProvider" class="com.socialize.auth.facebook.FacebookAuthProvider">
 		<property name="logger" ref="logger"/>
 		<property name="facebookSessionStore" ref="facebookSessionStore"/>
+		<property name="facebookUtils" ref="facebookUtils"/>
 		<init-method name="init">
 			<arg type="context"/>
 			<arg ref="listenerHolder"/>
@@ -557,6 +559,14 @@
 		id="facebook" 
 		class="com.socialize.facebook.Facebook"
 		singleton="false">
+	</bean>
+	
+	<bean id="facebookUtils" class="com.socialize.networks.facebook.FacebookUtilsImpl">
+		<property name="userSystem" ref="userSystem"/>
+		<property name="facebookWallPoster" ref="facebookWallPoster"/>
+		<property name="imageUtils" ref="imageUtils"/>
+		<property name="logger" ref="logger"/>
+		<property name="config" ref="config"/>
 	</bean>
 	
 	<bean 
@@ -576,6 +586,7 @@
 		class="com.socialize.networks.facebook.DefaultFacebookWallPoster">
 		<property name="logger" ref="logger"/>
 		<property name="imageUtils" ref="imageUtils"/>
+		<property name="facebookUtils" ref="facebookUtils"/>
 		<property name="facebookRunnerFactory" ref="facebookRunnerFactory"/>
 	</bean>	
 	
@@ -647,6 +658,14 @@
 			<arg type="context"/>
 		</init-method>
 	</bean>
+	
+	<bean id="twitterUtils" class="com.socialize.networks.twitter.TwitterUtilsImpl">
+		<property name="userSystem" ref="userSystem"/>
+		<property name="config" ref="config"/>
+		<property name="httpRequestProvider" ref="httpRequestProvider"/>
+		<property name="requestSigner" ref="oauthSigner"/>
+		<property name="imageUtils" ref="imageUtils"/>
+	</bean>		
 
 <!-- End Twitter -->
 	

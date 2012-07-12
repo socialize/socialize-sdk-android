@@ -127,6 +127,17 @@ public class CommentUtils {
 	}
 	
 	/**
+	 * Retrieves all comments across all entities.
+	 * @param context The current context.
+	 * @param start The start index for pagination (from 0).
+	 * @param end The end index for pagination.
+	 * @param listener A listener to handle the result.
+	 */
+	public static void getCommentsByApplication (Activity context, int start, int end, CommentListListener listener) {
+		proxy.getCommentsByApplication(context, start, end, listener);
+	}
+	
+	/**
 	 * Shows the comments for an entity.
 	 * @param context
 	 * @param entity

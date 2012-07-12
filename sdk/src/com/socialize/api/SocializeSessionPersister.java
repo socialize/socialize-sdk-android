@@ -22,7 +22,6 @@
 package com.socialize.api;
 
 import android.content.Context;
-
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
 import com.socialize.ui.profile.UserSettings;

@@ -70,9 +70,9 @@ public class SocializeAccess {
 		Socialize.getSocialize().getSystem().setSystemInitListener(listener);
 	}
 	
-	public static void setSocialize(SocializeServiceImpl service) {
-		Socialize.instance = service;
-	}
+//	public static void setSocialize(SocializeServiceImpl service) {
+//		Socialize.instance = service;
+//	}
 	
 	public static void init(Context context, String...paths) {
 		Socialize.instance.init(context, paths);

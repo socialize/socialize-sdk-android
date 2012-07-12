@@ -28,7 +28,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import com.socialize.CommentUtils;
 import com.socialize.Socialize;
 import com.socialize.entity.Comment;
 import com.socialize.error.SocializeException;
@@ -93,7 +93,7 @@ public class CommentGetActivity extends CommentBaseActivity {
 			
 			try {
 				
-				Socialize.getSocialize().getCommentById(Integer.parseInt(id), new CommentGetListener() {
+				CommentUtils.getComment(this, new CommentGetListener() {
 					
 					@Override
 					public void onError(SocializeException error) {
@@ -117,7 +117,7 @@ public class CommentGetActivity extends CommentBaseActivity {
 						
 						progress.dismiss();
 					}
-				});
+				}, Integer.parseInt(id));
 			}
 			catch (NumberFormatException e) {
 				txtCommentGetResult.setText("FAIL: ID is not a number");

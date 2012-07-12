@@ -55,7 +55,7 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 	
 	@Override
 	protected void tearDown() throws Exception {
-		TestUtils.tearDown();
+		TestUtils.tearDown(this);
 		super.tearDown();
 	}
 
@@ -116,7 +116,7 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 		
 		SocializeAccess.setCommentUtilsProxy(mockCommentUtils);
 		
-		Socialize.getSocialize().showCommentView(getActivity(), entity1, new OnCommentViewActionListener() {
+		Socialize.getSocialize().showCommentView(TestUtils.getActivity(this), entity1, new OnCommentViewActionListener() {
 			public void onError(SocializeException error) {
 				error.printStackTrace();
 				lock.countDown();
@@ -149,7 +149,7 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 		
 		lr.setItems(dummyResults2);
 		
-		Socialize.getSocialize().showCommentView(getActivity(), entity2, new OnCommentViewActionListener() {
+		Socialize.getSocialize().showCommentView(TestUtils.getActivity(this), entity2, new OnCommentViewActionListener() {
 			public void onError(SocializeException error) {
 				error.printStackTrace();
 				lock2.countDown();

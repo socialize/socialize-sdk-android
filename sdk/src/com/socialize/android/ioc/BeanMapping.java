@@ -111,6 +111,18 @@ public class BeanMapping {
 		return beanRefs.isEmpty() && factoryRefs.isEmpty() && proxyRefs.isEmpty();
 	}
 	
+	public void clear() {
+		if(beanRefs != null) {
+			beanRefs.clear();
+		}
+		if(factoryRefs != null) {
+			factoryRefs.clear();
+		}
+		if(proxyRefs != null) {
+			proxyRefs.clear();
+		}	
+	}
+	
 	/**
 	 * Replaces any beans matching those in the provided map
 	 * @param mapping

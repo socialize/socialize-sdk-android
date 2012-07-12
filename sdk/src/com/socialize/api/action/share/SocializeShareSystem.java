@@ -27,6 +27,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import com.socialize.Socialize;
+import com.socialize.SocializeService;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
@@ -108,11 +109,11 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 		
 		if(network != null) {
 			AuthProviderType authType = AuthProviderType.valueOf(network);
-			if(Socialize.getSocialize().isAuthenticated(authType)) {
+			if(getSocialize().isAuthenticated(authType)) {
 				addShare(session, entity, text, shareType, location, listener, network);
 			}
 			else {
-				Socialize.getSocialize().authenticate(context, authType, new SocializeAuthListener() {
+				getSocialize().authenticate(context, authType, new SocializeAuthListener() {
 					@Override
 					public void onError(SocializeException error) {
 						if(listener != null) {
@@ -192,9 +193,18 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 	 */
 	@Override
 	public void getSharesByEntity(SocializeSession session, String key, int startIndex, int endIndex, ShareListener listener) {
-		listAsync(session, ENDPOINT, key, null, startIndex, endIndex, listener);
+		listAsync(session, ENDPOINT, key, null, null, startIndex, endIndex, listener);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.share.ShareSystem#getSharesByApplication(com.socialize.api.SocializeSession, int, int, com.socialize.listener.share.ShareListener)
+	 */
+	@Override
+	public void getSharesByApplication(SocializeSession session, int startIndex, int endIndex, ShareListener listener) {
+		listAsync(session, ENDPOINT, null, null, null, startIndex, endIndex, listener);
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.api.action.ShareSystem#getSharesByUser(com.socialize.api.SocializeSession, long, com.socialize.listener.share.ShareListener)
 	 */
@@ -283,7 +293,11 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 		}	
 		return sharer;
 	}
-
+	
+	// Mockable
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
+	}
 	
 	public void setShareHandlers(ShareHandlers shareHandlers) {
 		this.shareHandlers = shareHandlers;

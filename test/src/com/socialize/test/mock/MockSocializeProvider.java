@@ -24,6 +24,7 @@ package com.socialize.test.mock;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import android.content.Context;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.WritableSession;
@@ -81,7 +82,7 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 	}
 	
 	@Override
-	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids, String idKey, int startIndex, int endIndex) throws SocializeException {
+	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids, String idKey, Map<String, String> extraParams, int startIndex, int endIndex) throws SocializeException {
 		return makeMockListResult(new String[5]);
 	}
 

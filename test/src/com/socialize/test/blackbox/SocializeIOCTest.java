@@ -44,6 +44,7 @@ import com.socialize.oauth.DefaultOauthRequestSigner;
 import com.socialize.oauth.signpost.signature.AuthorizationHeaderSigningStrategy;
 import com.socialize.provider.DefaultSocializeProvider;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.IOUtils;
@@ -67,7 +68,7 @@ public class SocializeIOCTest extends SocializeActivityTest {
 		ResourceLocator locator = new ResourceLocator();
 		locator.setLogger(new SocializeLogger());
 		locator.setClassLoaderProvider(new ClassLoaderProvider());
-		ioc.init(getActivity(), locator);
+		ioc.init(TestUtils.getActivity(this), locator);
 
 		// Now make sure all our beans are there
 		checkBeanType(ioc, "deviceUtils", DeviceUtils.class);

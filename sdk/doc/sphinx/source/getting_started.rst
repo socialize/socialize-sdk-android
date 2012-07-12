@@ -70,36 +70,36 @@ Once you have your facebook app ID, you can add it to the **socialize.properties
 
 .. literalinclude:: snippets/props_fb.txt
    :language: properties
-	
-5. Include Socialize in your App!
+   
+5. Include Socialize in your App
 =================================
-Now that you have your environment all setup, it's time to include Socialize.  
+Now that you have your environment all setup, it's time to include Socialize.
+
+You can either install the pre-packaged Socialize Action Bar which includes the entire suite of Socialize features in a matter of minutes
 
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ActionBarSample.java
 	:start-after: begin-snippet-0
 	:end-before: end-snippet-0
 
-You can either install the pre-packaged Socialize Action Bar which includes the entire suite of Socialize features in a matter of minutes
-
-Checkout the :doc:`action_bar` section for more details on the default Socialize Action Bar...
-
 .. image:: images/action_bar_std.png
 
 Or if you prefer a more customized approach use our simple SDK interfaces to "roll your own"
 
-Head over to the :doc:`sdk_user_guide` section to start customizing Socialize to suit your needs...
-
 .. image:: images/action_bar_mockup.jpg
 
-Each Action Bar instance in your app is bound to an *Entity*.  An Entity is simply an item of content in your app.
-Each Socialize action (comment, share, like etc.) is associated with an Entity.  
+Checkout the :doc:`action_bar` section for more details on the default Socialize Action Bar, or head over to the :doc:`sdk_user_guide` section to start customizing Socialize to suit your needs.
 
-An entity can be any item of content like a website, photo or person but MUST be given a unique key within your app.
+.. note:: 
 
-It is not necessary to explicitly create an Entity object when rendering the Action bar as this will be done for you, 
-however entities *can* be created manually.  
+	Each Action Bar instance in your app is bound to an *Entity*.  An Entity is simply an item of content in your app.
+	Each Socialize action (comment, share, like etc.) is associated with an Entity.  
+	
+	An entity can be any item of content like a website, photo or person but MUST be given a unique key within your app.
+	
+	It is not necessary to explicitly create an Entity object when rendering the Action bar as this will be done for you, 
+	however entities *can* be created manually.  
 
-.. note:: Refer to the :ref:`entities` section for details on creating entities directly using the SDK.
+	Refer to the :doc:`entities` section for details on creating entities directly using the SDK.
 
 .. raw:: html
    :file: snippets/setup_complete.html

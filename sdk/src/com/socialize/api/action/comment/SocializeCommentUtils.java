@@ -227,6 +227,11 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 		commentSystem.getCommentsByEntity(getSocialize().getSession(), entityKey, start, end, listener);
 	}
 	
+	@Override
+	public void getCommentsByApplication(Activity context, int start, int end, CommentListListener listener) {
+		commentSystem.getCommentsByApplication(getSocialize().getSession(), start, end, listener);
+	}
+
 	public void setCommentSystem(CommentSystem commentSystem) {
 		this.commentSystem = commentSystem;
 	}

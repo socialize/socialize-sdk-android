@@ -22,7 +22,10 @@
 package com.socialize.api.action.entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import com.socialize.EntityUtils.SortOrder;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
@@ -108,24 +111,22 @@ public class SocializeEntitySystem extends SocializeApi<Entity, SocializeProvide
 	 */
 	@Override
 	public void getEntity(SocializeSession session, final String key, final EntityListener listener) {
-		listAsync(session, ENDPOINT, key, null, 0, 1, getListenerForGet(listener, "No entity found with key [" + key + "]"));
+		listAsync(session, ENDPOINT, key, null, null, 0, 1, getListenerForGet(listener, "No entity found with key [" + key + "]"));
 	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.api.action.EnitySystem#listEntities(com.socialize.api.SocializeSession, com.socialize.listener.entity.EntityListener, java.lang.String)
 	 */
 	@Override
-	public void getEntities(SocializeSession session, EntityListener listener, String...keys) {
-		listAsync(session, ENDPOINT, null, "entity_key", 0, SocializeConfig.MAX_LIST_RESULTS, listener, keys);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.api.action.entity.EntitySystem#getEntities(com.socialize.api.SocializeSession, int, int, com.socialize.listener.entity.EntityListener, java.lang.String[])
-	 */
-	@Override
-	public void getEntities(SocializeSession session, int start, int end, EntityListener listener, String... entityKeys) {
-		listAsync(session, ENDPOINT, null, "entity_key", start, end, listener, entityKeys);
+	public void getEntities(SocializeSession session, SortOrder sortOrder, EntityListener listener, String...keys) {
+		Map<String, String> extraParams = null;
+		
+		if(!sortOrder.equals(SortOrder.CREATION_DATE)) {
+			extraParams = new HashMap<String, String>();
+			extraParams.put("sort", sortOrder.name().toLowerCase() );
+		}
+		
+		listAsync(session, ENDPOINT, null, "entity_key", extraParams, 0, SocializeConfig.MAX_LIST_RESULTS, listener, keys);
 	}
 
 	/*
@@ -133,7 +134,7 @@ public class SocializeEntitySystem extends SocializeApi<Entity, SocializeProvide
 	 * @see com.socialize.api.action.entity.EntitySystem#getEntities(com.socialize.api.SocializeSession, int, int, com.socialize.listener.entity.EntityListener)
 	 */
 	@Override
-	public void getAllEntities(SocializeSession session, int start, int end, EntityListener listener) {
+	public void getEntities(SocializeSession session, int start, int end, SortOrder sortOrder, EntityListener listener) {
 		listAsync(session, ENDPOINT, start, end, listener);
 	}
 }

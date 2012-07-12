@@ -25,10 +25,15 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import com.socialize.ShareUtils;
-import com.socialize.Socialize;
+import com.socialize.SocializeAccess;
+import com.socialize.api.action.share.ShareOptions;
 import com.socialize.api.action.share.SocialNetworkDialogListener;
+import com.socialize.api.action.share.SocialNetworkShareListener;
+import com.socialize.api.action.share.SocializeShareUtils;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.Share;
@@ -37,12 +42,17 @@ import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.share.ShareGetListener;
 import com.socialize.listener.share.ShareListListener;
+import com.socialize.networks.SocialNetwork;
+import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.FacebookShareCell;
 import com.socialize.networks.twitter.TwitterShareCell;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
+import com.socialize.ui.share.DialogFlowController;
 import com.socialize.ui.share.EmailCell;
+import com.socialize.ui.share.IShareDialogFactory;
 import com.socialize.ui.share.SMSCell;
+import com.socialize.ui.share.ShareDialogListener;
 import com.socialize.ui.share.SharePanelView;
 
 
@@ -51,18 +61,6 @@ import com.socialize.ui.share.SharePanelView;
  *
  */
 public class ShareUtilsTest extends SocializeActivityTest {
-	
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		Socialize.getSocialize().clearSessionCache(getContext());
-		Socialize.getSocialize().destroy(true);
-	}
-
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
 	
 	public void testGetShareExists() throws Exception {
 		
@@ -75,7 +73,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
-		ShareUtils.getShare(getActivity(), new ShareGetListener() {
+		ShareUtils.getShare(TestUtils.getActivity(this), new ShareGetListener() {
 			
 			@Override
 			public void onGet(Share entity) {
@@ -103,7 +101,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
-		ShareUtils.getShare(getActivity(), new ShareGetListener() {
+		ShareUtils.getShare(TestUtils.getActivity(this), new ShareGetListener() {
 			
 			@Override
 			public void onGet(Share entity) {
@@ -139,7 +137,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		
 		user.setId(Long.parseLong(userId));
 		
-		ShareUtils.getSharesByUser(getActivity(), user.getId(), 0, 100, new ShareListListener() {
+		ShareUtils.getSharesByUser(TestUtils.getActivity(this), user, 0, 100, new ShareListListener() {
 			@Override
 			public void onList(ListResult<Share> entities) {
 				addResult(entities);
@@ -163,7 +161,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		final String entityKey = "http://entity1.com";
 		final CountDownLatch latch = new CountDownLatch(1);
 		
-		ShareUtils.getSharesByEntity(getActivity(), entityKey, 0, 100, new ShareListListener() {
+		ShareUtils.getSharesByEntity(TestUtils.getActivity(this), entityKey, 0, 100, new ShareListListener() {
 			@Override
 			public void onList(ListResult<Share> entities) {
 				addResult(entities);
@@ -182,6 +180,29 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		assertNotNull(items);
 		assertTrue(items.size() >= 1);
 	}	
+	
+	public void testGetSharesByApplication() throws SocializeException, InterruptedException {
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		ShareUtils.getSharesByApplication(TestUtils.getActivity(this), 0, 100, new ShareListListener() {
+			@Override
+			public void onList(ListResult<Share> entities) {
+				addResult(entities);
+				latch.countDown();
+			}
+			
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+			}
+		});
+		
+		latch.await(20, TimeUnit.SECONDS);
+		
+		ListResult<Share> items = getResult(0);
+		assertNotNull(items);
+		assertTrue(items.size() >= 1);
+	}		
 	
 	public void testShowShareDialogDefault() throws Exception {
 		final Entity entityKey = Entity.newInstance("http://entity1.com", "http://entity1.com");
@@ -248,4 +269,183 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		assertNull(emailCell);
 		assertNull(smsCell);
 	}	
+	
+	public void testShowShareDialogAndContinueWithoutFlowControl() throws Exception {
+		final Activity context = TestUtils.getActivity(this);
+		final SocialNetwork network = SocialNetwork.TWITTER;
+		final Entity entity = Entity.newInstance("http://entity1.com", "http://entity1.com");
+		
+		IShareDialogFactory mockShareDialogFactory = new IShareDialogFactory() {
+			@Override
+			public void show(Context context, Entity entity, SocialNetworkListener socialNetworkListener, ShareDialogListener shareDialoglistener, int displayOptions) {
+				// Immediately call onContinue
+				shareDialoglistener.onContinue(null, true, network);
+			}
+		};
+		
+		
+		final SocializeShareUtils mockShareUtils = new SocializeShareUtils() {
+			
+			@Override
+			protected void doShare(Dialog dialog, Activity context, Entity entity, SocialNetworkShareListener socialNetworkListener, ShareOptions shareOptions, SocialNetwork... networks) {
+				addResult(0, entity);
+				addResult(1, networks);
+			}
+			
+		};
+		
+		mockShareUtils.setShareDialogFactory(mockShareDialogFactory);
+		
+		SocializeAccess.setShareUtilsProxy(mockShareUtils);
+		
+		final ShareDialogListener mockListener = new ShareDialogListener() {
+
+			@Override
+			public void onShow(Dialog dialog, SharePanelView dialogView) {}
+
+			@Override
+			public void onCancel(Dialog dialog) {}
+
+			@Override
+			public boolean onContinue(Dialog dialog, boolean remember, SocialNetwork... networks) {
+				// Don't consume
+				return false;
+			}
+
+			@Override
+			public void onFlowInterrupted(DialogFlowController controller) {}
+		};
+		
+		ShareUtils.showShareDialog(context, entity, mockListener);
+		
+		Entity entityAfter = getResult(0);
+		SocialNetwork[] networkAfter = getResult(1);
+		
+		assertNotNull(entityAfter);
+		assertNotNull(networkAfter);
+		
+		assertEquals(network, networkAfter[0]);
+		assertEquals(entity.getKey(), entityAfter.getKey());
+	}
+	
+	public void testShowShareDialogAndContinueWithFlowControl() throws Exception {
+		final Activity context = TestUtils.getActivity(this);
+		final SocialNetwork network = SocialNetwork.TWITTER;
+		final Entity entity = Entity.newInstance("http://entity1.com", "http://entity1.com");
+		final String text = "foobar";
+		
+		IShareDialogFactory mockShareDialogFactory = new IShareDialogFactory() {
+			@Override
+			public void show(Context context, Entity entity, SocialNetworkListener socialNetworkListener, ShareDialogListener shareDialoglistener, int displayOptions) {
+				// Immediately call onContinue
+				shareDialoglistener.onContinue(null, true, network);
+			}
+		};
+		
+		final SocializeShareUtils mockShareUtils = new SocializeShareUtils() {
+			
+			@Override
+			protected void doShare(Dialog dialog, Activity context, Entity entity, SocialNetworkShareListener socialNetworkListener, ShareOptions shareOptions, SocialNetwork... networks) {
+				addResult(0, entity);
+				addResult(1, networks);
+				addResult(2, shareOptions);
+			}
+		};
+		
+		mockShareUtils.setShareDialogFactory(mockShareDialogFactory);
+		
+		SocializeAccess.setShareUtilsProxy(mockShareUtils);
+		
+		final ShareDialogListener mockListener = new ShareDialogListener() {
+
+			@Override
+			public void onShow(Dialog dialog, SharePanelView dialogView) {}
+
+			@Override
+			public void onCancel(Dialog dialog) {}
+
+			@Override
+			public boolean onContinue(Dialog dialog, boolean remember, SocialNetwork... networks) {
+				// consume
+				return true;
+			}
+
+			@Override
+			public void onFlowInterrupted(DialogFlowController controller) {
+				// Immediately call continue
+				controller.onContinue(text);
+			}
+		};
+		
+		ShareUtils.showShareDialog(context, entity, mockListener);
+		
+		Entity entityAfter = getResult(0);
+		SocialNetwork[] networkAfter = getResult(1);
+		ShareOptions shareOptions = getResult(2);
+		
+		assertNotNull(entityAfter);
+		assertNotNull(networkAfter);
+		assertNotNull(shareOptions);
+		
+		assertEquals(network, networkAfter[0]);
+		assertEquals(entity.getKey(), entityAfter.getKey());
+		assertEquals(text, shareOptions.getText());
+	}	
+	
+	
+	public void testShowShareDialogAndCancel() throws Exception {
+		final Activity context = TestUtils.getActivity(this);
+		final Entity entity = Entity.newInstance("http://entity1.com", "http://entity1.com");
+		
+		IShareDialogFactory mockShareDialogFactory = new IShareDialogFactory() {
+			@Override
+			public void show(Context context, Entity entity, SocialNetworkListener socialNetworkListener, ShareDialogListener shareDialoglistener, int displayOptions) {
+				// Immediately call cancel
+				shareDialoglistener.onCancel(null);
+			}
+		};
+		
+		
+		final SocializeShareUtils mockShareUtils = new SocializeShareUtils() {
+			
+			@Override
+			protected void doShare(Dialog dialog, Activity context, Entity entity, SocialNetworkShareListener socialNetworkListener, ShareOptions shareOptions, SocialNetwork... networks) {
+				addResult(0, "fail");
+			}
+			
+		};
+		
+		mockShareUtils.setShareDialogFactory(mockShareDialogFactory);
+		
+		SocializeAccess.setShareUtilsProxy(mockShareUtils);
+		
+		final ShareDialogListener mockListener = new ShareDialogListener() {
+
+			@Override
+			public void onShow(Dialog dialog, SharePanelView dialogView) {}
+
+			@Override
+			public void onCancel(Dialog dialog) {
+				addResult(0, "success");
+			}
+
+			@Override
+			public boolean onContinue(Dialog dialog, boolean remember, SocialNetwork... networks) {
+				// Don't consume
+				return false;
+			}
+
+			@Override
+			public void onFlowInterrupted(DialogFlowController controller) {}
+		};
+		
+		ShareUtils.showShareDialog(context, entity, mockListener);
+		
+		String result = getResult(0);
+		
+		assertNotNull(result);
+		
+		assertEquals("success", result);
+	}	
+	
 }

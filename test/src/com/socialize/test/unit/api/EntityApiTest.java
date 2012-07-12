@@ -22,6 +22,7 @@
 package com.socialize.test.unit.api;
 
 import java.util.List;
+import java.util.Map;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
@@ -89,7 +90,7 @@ public class EntityApiTest extends SocializeUnitTest {
 		
 		SocializeEntitySystem api = new SocializeEntitySystem(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String idKey, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
+			public void listAsync(SocializeSession session, String endpoint, String key, String idKey, Map<String, String> extraParams, int startIndex, int endIndex, SocializeActionListener listener, String... ids) {
 				addResult(key);
 			}
 		};
@@ -102,29 +103,6 @@ public class EntityApiTest extends SocializeUnitTest {
 		assertEquals(key, strId);
 	}
 	
-	public void testListEntities() {
-		
-		String[] keys = {"A", "B", "C"};
-		
-		SocializeEntitySystem api = new SocializeEntitySystem(provider) {
-			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String idKey, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
-				addResult(ids);
-				assertNull(key);
-			}
-		};
-		
-		api.getEntities(session, listener, keys);
-		
-		String[] after = getNextResult();
-		
-		assertNotNull(after);
-		
-		for (int i = 0; i < after.length; i++) {
-			assertEquals(keys[i], after[i]);
-		}
-	}
-	
 	@SuppressWarnings("unchecked")
 	@UsesMocks ({SocializeException.class, Entity.class, ListResult.class, List.class})
 	public void testGetEntityListenerSuccess() {
@@ -133,7 +111,7 @@ public class EntityApiTest extends SocializeUnitTest {
 		
 		SocializeEntitySystem api = new SocializeEntitySystem(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String idKey, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
+			public void listAsync(SocializeSession session, String endpoint, String key, String idKey, Map<String, String> extraParams, int startIndex, int endIndex, SocializeActionListener listener, String... ids) {
 				addResult(listener);
 			}
 		};
@@ -179,7 +157,7 @@ public class EntityApiTest extends SocializeUnitTest {
 		
 		SocializeEntitySystem api = new SocializeEntitySystem(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String idKey, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
+			public void listAsync(SocializeSession session, String endpoint, String key, String idKey, Map<String, String> extraParams, int startIndex, int endIndex, SocializeActionListener listener, String... ids) {
 				addResult(listener);
 			}
 		};

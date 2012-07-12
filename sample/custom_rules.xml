@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="socialize-sdk-sample-custom">
+	
+	<property file="emma.properties" />
+	
+	<target name="copy-library-src">
+		<!-- Copy source from library project -->
+		<antcall target="clean-library-src"/>
+		<mkdir dir="${source.dir}"/>
+		<copy todir="${source.dir}">
+			<fileset dir="../sdk/src"/>
+			<fileset dir="src"/>
+		</copy>	
+	</target>
+	
+	<target name="clean-library-src">
+		<!-- Don't use variable in case we accidentally delete src! -->
+		<delete dir="src_ext"/>
+	</target>	
+	
+	
+	<!-- 
+		################################################################################################
+		OVERRIDE DEFAULT COMPILE TARGET FROM ANDROID TO REMOVE COVERAGE CREATION
+		################################################################################################
+	-->	
+
+    <target name="-compile" depends="-build-setup, -pre-build, -code-gen, -pre-compile">
+       
+    	<echo></echo>
+    	<echo>##################################################################################################</echo>
+    	<echo>######################################## BUILDING SAMPLE #########################################</echo>
+    	<echo>##################################################################################################</echo>
+    	<echo></echo>    	
+    	
+    	<!-- Overwrite jar libs ref -->
+    	<path id="jar.libs.ref">
+    		<fileset dir="../sdk/libext"/>
+    	</path>
+    	
+		<do-only-if-manifest-hasCode elseText="hasCode = false. Skipping...">
+
+        	<condition property="extensible.classpath"
+                    value="${tested.project.absolute.dir}/bin/classes"
+                    else=".">
+                <isset property="tested.project.absolute.dir" />
+            </condition>
+			
+            <condition property="extensible.libs.classpath"
+                    value="${tested.project.absolute.dir}/${jar.libs.dir}"
+                    else="${jar.libs.dir}">
+                <isset property="tested.project.absolute.dir" />
+            </condition>
+			
+			<echo>Compiling sample project from src ${source.absolute.dir} to ${out.classes.absolute.dir}</echo>
+			
+            <javac encoding="${java.encoding}"
+                    source="${java.source}" 
+            		target="${java.target}"
+                    debug="true" 
+            		extdirs=""
+            		includeantruntime="false"
+                    destdir="${out.classes.absolute.dir}"
+                    bootclasspathref="project.target.class.path"
+                    verbose="${verbose}"
+                    classpath="${extensible.classpath}"
+                    classpathref="jar.libs.ref">
+            	
+                <src path="${source.absolute.dir}" />
+                <src path="${gen.absolute.dir}" />
+            	
+            	 <classpath>
+                    <fileset dir="${extensible.libs.classpath}" includes="*.jar" />
+                </classpath>
+            </javac>	
+			
+            <!-- if the project is instrumented, instrument the classes -->
+            <if condition="${build.is.instrumented}">
+                <then>
+                    <echo level="info">Instrumenting classes from ${out.absolute.dir}/classes...</echo>
+
+                    <!-- build the filter to remove R, Manifest, BuildConfig -->
+                    <getemmafilter
+                            appPackage="${project.app.package}"
+                            libraryPackagesRefId="project.library.packages"
+                            filterOut="emma.default.filter"/>
+
+                    <!-- define where the .em file is going. This may have been
+                         setup already if this is a library -->
+                    <property name="emma.coverage.absolute.file" location="${emma.report.dir}/coverage.em" />
+
+                    <!-- It only instruments class files, not any external libs -->
+                    <emma enabled="true">
+                        <instr verbosity="${verbosity}"
+                               mode="overwrite"
+                               instrpath="${out.absolute.dir}/classes"
+                               outdir="${out.absolute.dir}/classes"
+                        	   metadatafile="${emma.report.dir}/coverage.em">
+                            <filter excludes="${emma.default.filter}" />
+                            <filter value="${emma.filter}" />
+                        </instr>
+                    </emma>
+                </then>
+            </if>			
+        </do-only-if-manifest-hasCode>
+    	
+    </target>	
+	
+</project>

@@ -50,14 +50,13 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 
 	@Override
 	protected void tearDown() throws Exception {
-//		TestUtils.destroyActivity();
-		TestUtils.tearDown();
+		TestUtils.tearDown(this);
 		super.tearDown();
 	}
 	
 	public void testListenerOnCreateCalled() {
 		
-		Intent intent = new Intent(getActivity(), ActionBarListenerActivity.class);
+		Intent intent = new Intent(TestUtils.getActivity(this), ActionBarListenerActivity.class);
 		
 		Entity entity = new Entity();
 		entity.setKey("foobar");
@@ -65,14 +64,14 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 		
 		intent.putExtra(Socialize.ENTITY_OBJECT, entity);
 		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, "false");
-		getActivity().startActivity(intent);		
+		TestUtils.getActivity(this).startActivity(intent);		
 		
 		assertNotNull(waitForActionBar(10000));
 	}
 	
 	public void testActionBarReload() throws Throwable {
 		
-		Intent intent = new Intent(getActivity(), ActionBarListenerActivity.class);
+		Intent intent = new Intent(TestUtils.getActivity(this), ActionBarListenerActivity.class);
 		
 		Entity entity = new Entity();
 		entity.setKey("1");
@@ -84,7 +83,7 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 		
 		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, "false");
 		
-		getActivity().startActivity(intent);		
+		TestUtils.getActivity(this).startActivity(intent);		
 		
 		final ActionBarView actionBar = waitForActionBar(20000);
 		

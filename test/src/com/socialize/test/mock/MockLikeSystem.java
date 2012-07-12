@@ -36,11 +36,6 @@ public class MockLikeSystem extends MockSystem<Like> implements LikeSystem {
 
 	@Override
 	public void getLike(SocializeSession session, String entityKey, LikeListener listener) {
-		
-//		if(action.getEntity() != null) {
-//			action.getEntity().setKey(entityKey);
-//		}
-		
 		if(listener != null) listener.onGet(action);
 	}
 
@@ -62,5 +57,10 @@ public class MockLikeSystem extends MockSystem<Like> implements LikeSystem {
 	@Override
 	public void getLikesByUser(SocializeSession session, long userId, int startIndex, int endIndex, LikeListener listener) {
 		if(listener != null) listener.onList(actionList);
+	}
+
+	@Override
+	public void getLikesByApplication(SocializeSession session, int startIndex, int endIndex, LikeListener listener) {
+		if(listener != null) listener.onList(actionList);	
 	}
 }

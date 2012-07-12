@@ -1,5 +1,6 @@
 package com.socialize.test.ui.core;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import com.google.android.testing.mocking.AndroidMock;
@@ -10,6 +11,7 @@ import com.socialize.android.ioc.IOCContainer;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.test.ui.SocializeUIActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.SocializeBaseView;
 
 public class SocializeViewTest extends SocializeUIActivityTest {
@@ -26,7 +28,7 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 		
 //		ActivityIOCProvider.getInstance().setContainer(container);
 		
-		final SocializeBaseView view = new SocializeBaseView(getActivity()) {
+		final SocializeBaseView view = new SocializeBaseView(TestUtils.getActivity(this)) {
 			
 //			@Override
 //			protected void onBeforeSocializeInit() {
@@ -49,10 +51,12 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 			}
 		};
 		
+		final Activity activity = TestUtils.getActivity(this);
+		
 		runTestOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				getActivity().setContentView(view);
+				activity.setContentView(view);
 			}
 		});
 		
@@ -74,7 +78,7 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 	}
 	
 	public void test_onViewLoad() {
-		PublicView view = new PublicView(getActivity()) {
+		PublicView view = new PublicView(TestUtils.getActivity(this)) {
 			
 			@Override
 			public View getLoadingView() {
@@ -117,7 +121,7 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 	}
 	
 	public void test_onViewUpdate() {
-		PublicView view = new PublicView(getActivity()) {
+		PublicView view = new PublicView(TestUtils.getActivity(this)) {
 			
 			@Override
 			public View getLoadingView() {
@@ -153,13 +157,13 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 	public void test_getInitLoadListener() {
 		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
 		
-		PublicView view = new PublicView(getActivity()) {
+		PublicView view = new PublicView(TestUtils.getActivity(this)) {
 			@Override
 			public void onViewLoad(IOCContainer container) {
 				addResult(container);
 			}
 		};
-		view.getInitLoadListener().onInit(getActivity(), container);
+		view.getInitLoadListener().onInit(TestUtils.getActivity(this), container);
 		assertSame(container, getNextResult());
 	}
 	
@@ -167,13 +171,13 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 	public void test_getInitUpdateListener() {
 		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
 		
-		PublicView view = new PublicView(getActivity()) {
+		PublicView view = new PublicView(TestUtils.getActivity(this)) {
 			@Override
 			public void onViewUpdate(IOCContainer container) {
 				addResult(container);
 			}
 		};
-		view.getInitUpdateListener().onInit(getActivity(), container);
+		view.getInitUpdateListener().onInit(TestUtils.getActivity(this), container);
 		assertSame(container, getNextResult());
 	}
 	
@@ -182,7 +186,7 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 		
 		SocializeInitListener listener = AndroidMock.createMock(SocializeInitListener.class);
 		
-		PublicView view = new PublicView(getActivity()) {
+		PublicView view = new PublicView(TestUtils.getActivity(this)) {
 			@Override
 			public boolean isInEditMode() {
 				addResult("isInEditMode");
@@ -233,7 +237,7 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 		AndroidMock.replay(system);
 		AndroidMock.replay(socialize);
 		
-		PublicView activity = new PublicView(getActivity()) {
+		PublicView activity = new PublicView(TestUtils.getActivity(this)) {
 			@Override
 			public SocializeService getSocialize() {
 				return socialize;
@@ -256,7 +260,7 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 		
 		AndroidMock.replay(container);
 		
-		PublicView activity = new PublicView(getActivity());
+		PublicView activity = new PublicView(TestUtils.getActivity(this));
 		activity.setContainer(container);
 		
 		activity.getBean(name);

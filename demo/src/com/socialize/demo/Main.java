@@ -77,6 +77,8 @@ public class Main extends Activity {
 			public void onError(SocializeException error) {
 				error.printStackTrace();
 				DemoUtils.showErrorDialog(Main.this, error);
+				version.setText("Socialize v" + Socialize.VERSION);
+				viewContainer.startAnimation(fadeOut);
 			}
 			
 			@Override

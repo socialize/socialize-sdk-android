@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import com.socialize.CommentUtils;
-import com.socialize.Socialize;
 import com.socialize.SubscriptionUtils;
 import com.socialize.UserUtils;
 import com.socialize.api.action.comment.CommentOptions;
@@ -40,6 +39,7 @@ import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.notifications.SubscriptionType;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 
 
 /**
@@ -47,13 +47,6 @@ import com.socialize.test.SocializeActivityTest;
  *
  */
 public class CommentUtilsTest extends SocializeActivityTest {
-
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		Socialize.getSocialize().clearSessionCache(getContext());
-		Socialize.getSocialize().destroy(true);
-	}
 
 	public void test_getComments() throws Exception {
 
@@ -66,7 +59,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		options.setShowAuthDialog(false);
 		options.setShowShareDialog(false);
 		
-		CommentUtils.addComment(getActivity(), entityKey, "foobar0", options, new CommentAddListener() {
+		CommentUtils.addComment(TestUtils.getActivity(this), entityKey, "foobar0", options, new CommentAddListener() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -77,7 +70,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(Comment entity) {
 				addResult(0, entity);
-				CommentUtils.addComment(getActivity(), entityKey, "foobar1", options, new CommentAddListener() {
+				CommentUtils.addComment(TestUtils.getActivity(CommentUtilsTest.this), entityKey, "foobar1", options, new CommentAddListener() {
 
 					@Override
 					public void onError(SocializeException error) {
@@ -104,7 +97,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 
 		final CountDownLatch latch2 = new CountDownLatch(1);
 
-		CommentUtils.getComments(getActivity(), new CommentListListener() {
+		CommentUtils.getComments(TestUtils.getActivity(this), new CommentListListener() {
 
 			@Override
 			public void onList(ListResult<Comment> entities) {
@@ -134,9 +127,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 
 		assertTrue(items.contains(result0));
 		assertTrue(items.contains(result1));
-
 	}
-
 
 	public void test_getCommentsByEntity() throws Exception {
 		// Create two comments.
@@ -148,7 +139,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		options.setShowAuthDialog(false);
 		options.setShowShareDialog(false);
 		
-		CommentUtils.addComment(getActivity(), entityKey, "foobar0", options, new CommentAddListener() {
+		CommentUtils.addComment(TestUtils.getActivity(this), entityKey, "foobar0", options, new CommentAddListener() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -159,7 +150,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(Comment entity) {
 				addResult(0, entity);
-				CommentUtils.addComment(getActivity(), entityKey, "foobar1", options, new CommentAddListener() {
+				CommentUtils.addComment(TestUtils.getActivity(CommentUtilsTest.this), entityKey, "foobar1", options, new CommentAddListener() {
 
 					@Override
 					public void onError(SocializeException error) {
@@ -186,7 +177,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 
 		final CountDownLatch latch2 = new CountDownLatch(1);
 
-		CommentUtils.getCommentsByEntity(getActivity(), entityKey.getKey(), 0, 2, new CommentListListener() {
+		CommentUtils.getCommentsByEntity(TestUtils.getActivity(this), entityKey.getKey(), 0, 2, new CommentListListener() {
 
 			@Override
 			public void onList(ListResult<Comment> entities) {
@@ -198,7 +189,6 @@ public class CommentUtilsTest extends SocializeActivityTest {
 			public void onError(SocializeException error) {
 				error.printStackTrace();
 				latch2.countDown();
-
 			}
 		});
 
@@ -216,6 +206,8 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		assertTrue(items.contains(result0));
 		assertTrue(items.contains(result1));
 	}
+	
+	
 
 	public void test_getCommentsByUser() throws Exception {
 		// Create two comments.
@@ -227,7 +219,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		options.setShowAuthDialog(false);
 		options.setShowShareDialog(false);
 		
-		CommentUtils.addComment(getActivity(), entityKey, "foobar0", options, new CommentAddListener() {
+		CommentUtils.addComment(TestUtils.getActivity(this), entityKey, "foobar0", options, new CommentAddListener() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -238,7 +230,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(Comment entity) {
 				addResult(0, entity);
-				CommentUtils.addComment(getActivity(), entityKey, "foobar1", options, new CommentAddListener() {
+				CommentUtils.addComment(TestUtils.getActivity(CommentUtilsTest.this), entityKey, "foobar1", options, new CommentAddListener() {
 
 					@Override
 					public void onError(SocializeException error) {
@@ -265,7 +257,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 
 		final CountDownLatch latch2 = new CountDownLatch(1);
 
-		CommentUtils.getCommentsByUser(getActivity(), UserUtils.getCurrentUser(getActivity()), 0, 2, new CommentListListener() {
+		CommentUtils.getCommentsByUser(TestUtils.getActivity(this), UserUtils.getCurrentUser(TestUtils.getActivity(this)), 0, 2, new CommentListListener() {
 
 			@Override
 			public void onList(ListResult<Comment> entities) {
@@ -295,11 +287,92 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		assertTrue(items.contains(result0));
 		assertTrue(items.contains(result1));
 	}
+	
+	public void test_getCommentsByApplication() throws Exception {
+		// Create two comments.
+		final Entity entityKey = Entity.newInstance("test_getCommentsByApplication" + Math.random(), "test_getCommentsByApplication");
+		final CountDownLatch latch = new CountDownLatch(1);
+
+		// Set auto auth off
+		final CommentOptions options = CommentUtils.getUserCommentOptions(getContext());
+		options.setShowAuthDialog(false);
+		options.setShowShareDialog(false);
+		
+		CommentUtils.addComment(TestUtils.getActivity(this), entityKey, "foobar0", options, new CommentAddListener() {
+
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				latch.countDown();
+			}
+
+			@Override
+			public void onCreate(Comment entity) {
+				addResult(0, entity);
+				CommentUtils.addComment(TestUtils.getActivity(CommentUtilsTest.this), entityKey, "foobar1", options, new CommentAddListener() {
+
+					@Override
+					public void onError(SocializeException error) {
+						error.printStackTrace();
+						latch.countDown();
+					}
+
+					@Override
+					public void onCreate(Comment entity) {
+						addResult(1, entity);
+						latch.countDown();
+					}
+				});	
+			}
+		});	
+
+		latch.await(20, TimeUnit.SECONDS);
+
+		Comment result0 = getResult(0);
+		Comment result1 = getResult(1);
+
+		assertNotNull(result0);
+		assertNotNull(result1);
+
+		final CountDownLatch latch2 = new CountDownLatch(1);
+
+		CommentUtils.getCommentsByApplication(TestUtils.getActivity(this), 0, 2, new CommentListListener() {
+
+			@Override
+			public void onList(ListResult<Comment> entities) {
+				addResult(3, entities);
+				latch2.countDown();
+			}
+
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				latch2.countDown();
+
+			}
+		});
+
+
+		latch2.await(20, TimeUnit.SECONDS);
+
+		ListResult<Comment> entities = getResult(3);
+
+		assertNotNull(entities);
+		assertEquals(entities.size(), 2);
+		assertTrue(entities.getTotalCount() >= 2);
+
+		List<Comment> items = entities.getItems();
+		assertNotNull(items);
+
+		assertTrue(items.contains(result0));
+		assertTrue(items.contains(result1));
+	}	
+	
 
 	public void test_subscribe_unsubscribe() throws Exception {
 		final Entity e = Entity.newInstance("test_unsubscribe" + Math.random(),"test_unsubscribe");
 		final CountDownLatch latch = new CountDownLatch(1);
-		SubscriptionUtils.subscribe(getActivity(), e, SubscriptionType.NEW_COMMENTS, new SubscriptionResultListener() {
+		SubscriptionUtils.subscribe(TestUtils.getActivity(this), e, SubscriptionType.NEW_COMMENTS, new SubscriptionResultListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -323,7 +396,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		assertTrue(subscription.isSubscribed());
 		
 		final CountDownLatch latch2 = new CountDownLatch(1);
-		SubscriptionUtils.isSubscribed(getActivity(), e, SubscriptionType.NEW_COMMENTS, new SubscriptionGetListener() {
+		SubscriptionUtils.isSubscribed(TestUtils.getActivity(this), e, SubscriptionType.NEW_COMMENTS, new SubscriptionGetListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -347,7 +420,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		assertTrue(subscription.isSubscribed());			
 		
 		final CountDownLatch latch3 = new CountDownLatch(1);
-		SubscriptionUtils.unsubscribe(getActivity(), e, SubscriptionType.NEW_COMMENTS, new SubscriptionResultListener() {
+		SubscriptionUtils.unsubscribe(TestUtils.getActivity(this), e, SubscriptionType.NEW_COMMENTS, new SubscriptionResultListener() {
 			
 			@Override
 			public void onError(SocializeException error) {

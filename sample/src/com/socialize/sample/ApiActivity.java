@@ -26,11 +26,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-
-import com.socialize.ui.SocializeActivity;
+import com.socialize.sample.ui.BaseActivity;
 
 @Deprecated
-public class ApiActivity extends SocializeActivity {
+public class ApiActivity extends BaseActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

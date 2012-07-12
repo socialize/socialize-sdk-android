@@ -473,9 +473,9 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	}
 
 	@Override
-	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids, String idKey, int startIndex, int endIndex) throws SocializeException {
+	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids, String idKey, Map<String, String> extraParams, int startIndex, int endIndex) throws SocializeException {
 		endpoint = prepareEndpoint(session, endpoint);
-		HttpUriRequest request = requestFactory.getListRequest(session, endpoint, key, ids, idKey, startIndex, endIndex);
+		HttpUriRequest request = requestFactory.getListRequest(session, endpoint, key, ids, idKey, extraParams, startIndex, endIndex);
 		return doListTypeRequest(request, ActionType.UNKNOWN);
 	}
 

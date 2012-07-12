@@ -30,6 +30,7 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.Socialize;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 import com.socialize.util.AppUtils;
 import com.socialize.util.DefaultAppUtils;
 
@@ -65,7 +66,7 @@ public class DeviceUtilsTest extends SocializeActivityTest {
 
 	public void testDeviceUtilsUserAgentString() {
 		DefaultAppUtils appUtils = new DefaultAppUtils();
-		appUtils.init(getActivity());
+		appUtils.init(TestUtils.getActivity(this));
 		String userAgentString = appUtils.getUserAgentString();
 		String expected = "Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + "; " + Locale.getDefault().getLanguage() + "_" + Locale.getDefault().getCountry() + "; BundleID/com.socialize.sample;";
 		assertEquals(expected, userAgentString);

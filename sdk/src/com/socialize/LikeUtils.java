@@ -151,6 +151,17 @@ public class LikeUtils {
 	}	
 	
 	/**
+	 * Lists all likes for all entities/
+	 * @param context The current context.
+	 * @param start The first index (for pagination), starting at 0
+	 * @param end The last index (for pagination)
+	 * @param listener A listener to handle the result.
+	 */
+	public static void getLikesByApplication (Activity context, int start, int end, LikeListListener listener) {
+		proxy.getLikesByApplication(context, start, end, listener);
+	}		
+	
+	/**
 	 * Turns a regular CompoundButton (CheckBox, ToggleButton etc) into a Socialize Like button.
 	 * @param context The current context.
 	 * @param button The button to be converted.

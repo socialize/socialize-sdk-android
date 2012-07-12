@@ -29,6 +29,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.socialize.LikeUtils;
 import com.socialize.Socialize;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
@@ -85,7 +86,9 @@ public class LikeActivity extends SocializeActivity {
 					Entity entity = Entity.newInstance(key, "test entity");
 					
 					if(!StringUtils.isEmpty(key)) {
-						Socialize.getSocialize().like(LikeActivity.this, entity, new LikeAddListener() {
+						
+						
+						LikeUtils.like(LikeActivity.this, entity, new LikeAddListener() {
 							
 							@Override
 							public void onError(SocializeException error) {
@@ -139,7 +142,8 @@ public class LikeActivity extends SocializeActivity {
 					String key = txtKey.getText().toString();
 					
 					if(!StringUtils.isEmpty(key)) {
-						Socialize.getSocialize().getLike(key, new LikeGetListener() {
+						
+						LikeUtils.getLike(LikeActivity.this, key, new LikeGetListener() {
 							
 							@Override
 							public void onError(SocializeException error) {
@@ -182,7 +186,8 @@ public class LikeActivity extends SocializeActivity {
 					clearLikeData();
 					
 					if(!StringUtils.isEmpty(id)) {
-						Socialize.getSocialize().unlike(Integer.parseInt(id), new LikeDeleteListener() {
+						
+						LikeUtils.unlike(LikeActivity.this, id, new LikeDeleteListener() {
 							
 							@Override
 							public void onError(SocializeException error) {
@@ -216,9 +221,7 @@ public class LikeActivity extends SocializeActivity {
 					
 					clearLikeData();
 					
-					long userId = Socialize.getSocialize().getSession().getUser().getId();
-					
-					Socialize.getSocialize().listLikesByUser(userId, new LikeListListener() {
+					LikeUtils.getLikesByUser(LikeActivity.this, Socialize.getSocialize().getSession().getUser(), 0, 10, new LikeListListener() {
 						
 						@Override
 						public void onList(List<Like> items, int totalSize) {

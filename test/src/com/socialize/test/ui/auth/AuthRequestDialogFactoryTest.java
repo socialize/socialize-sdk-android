@@ -47,9 +47,10 @@ import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.like.LikeListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.sample.ui.ActionBarAutoActivity2;
+import com.socialize.test.SocializeManagedActivityTest;
 import com.socialize.test.PublicEntity;
 import com.socialize.test.mock.MockLikeSystem;
-import com.socialize.test.ui.actionbar.ActionBarAutoTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.actionbar.ActionBarLayoutView;
 import com.socialize.ui.actionbar.ActionBarView;
@@ -60,14 +61,18 @@ import com.socialize.ui.auth.AuthPanelView;
  * @author Jason Polites
  *
  */
-public class AuthRequestDialogFactoryTest extends ActionBarAutoTest {
+public class AuthRequestDialogFactoryTest extends SocializeManagedActivityTest<ActionBarAutoActivity2> {
 	
 	final EntityStatsImpl entityStats = new EntityStatsImpl();
 	final PublicEntity entity = new PublicEntity("http://entity1.com", "http://entity1.com");
 	
+	
+	public AuthRequestDialogFactoryTest() {
+		super("com.socialize.sample.ui", ActionBarAutoActivity2.class);
+	}
+
 	@Override
 	protected void setUp() throws Exception {
-		
 		super.setUp();
 		
 		entityStats.setComments(0);
@@ -80,12 +85,16 @@ public class AuthRequestDialogFactoryTest extends ActionBarAutoTest {
 		Bundle extras = new Bundle();
 		extras.putSerializable(Socialize.ENTITY_OBJECT, entity);
 		intent.putExtras(extras);
-		setActivityIntent(intent);		
+		setActivityIntent(intent);	
 	}
 
 	public void testAuthRequestDialog() throws Throwable {
-		TestUtils.setupSocializeOverrides(true, true);
 		
+		final ActionBarAutoActivity2 context = TestUtils.getActivity(this);
+		
+		assertTrue(context.launchLock.await(10, TimeUnit.SECONDS));
+		
+		TestUtils.setupSocializeOverrides(true, true);
 		
 		// Ensure there is no like
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
@@ -148,8 +157,8 @@ public class AuthRequestDialogFactoryTest extends ActionBarAutoTest {
 		
 		TestUtils.waitForIdle(this, 5000);
 		
-		final ActionBarLayoutView actionBar = TestUtils.findView(getActivity(), ActionBarLayoutView.class, 20000);	
-		final ActionBarView actionBarView = TestUtils.findView(getActivity(), ActionBarView.class, 20000);	
+		final ActionBarLayoutView actionBar = TestUtils.findView(context, ActionBarLayoutView.class, 20000);	
+		final ActionBarView actionBarView = TestUtils.findView(context, ActionBarView.class, 20000);	
 		
 		assertNotNull(actionBar);
 		assertNotNull(actionBarView);
@@ -167,7 +176,7 @@ public class AuthRequestDialogFactoryTest extends ActionBarAutoTest {
 		
 		latch.await(10, TimeUnit.SECONDS);
 		
-		AuthPanelView shareView = TestUtils.findViewInDialog(getActivity(), AuthPanelView.class, 10000);
+		AuthPanelView shareView = TestUtils.findViewInDialog(context, AuthPanelView.class, 10000);
 		assertNotNull(shareView);
 		assertTrue(shareView.isShown());
 	}

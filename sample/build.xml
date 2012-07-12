@@ -1,108 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="socialize-sdk-sample" default="help">
 
-	<property file="local.properties" />
+    <!-- The local.properties file is created and updated by the 'android' tool.
+         It contains the path to the SDK. It should *NOT* be checked into
+         Version Control Systems. -->
+    <property file="local.properties" />
+
+    <!-- The ant.properties file can be created by you. It is only edited by the
+         'android' tool to add properties to it.
+         This is the place to change some Ant specific build properties.
+         Here are some properties you may want to change/update:
+
+         source.dir
+             The name of the source directory. Default is 'src'.
+         out.dir
+             The name of the output directory. Default is 'bin'.
+
+         For other overridable properties, look at the beginning of the rules
+         files in the SDK, at tools/ant/build.xml
+
+         Properties related to the SDK location or the project target should
+         be updated using the 'android' tool with the 'update' action.
+
+         This file is an integral part of the build system for your
+         application and should be checked into Version Control Systems.
+
+         -->
     <property file="ant.properties" />
-    <property file="emma.properties" />
+
+    <!-- if sdk.dir was not set from one of the property file, then
+         get it from the ANDROID_HOME env var.
+         This must be done before we load project.properties since
+         the proguard config can use sdk.dir -->
+    <property environment="env" />
+    <condition property="sdk.dir" value="${env.ANDROID_HOME}">
+        <isset property="env.ANDROID_HOME" />
+    </condition>
+
+    <!-- The project.properties file is created and updated by the 'android'
+         tool, as well as ADT.
+
+         This contains project specific properties such as project target, and library
+         dependencies. Lower level build properties are stored in ant.properties
+         (or in .classpath for Eclipse projects).
+
+         This file is an integral part of the build system for your
+         application and should be checked into Version Control Systems. -->
     <loadproperties srcFile="project.properties" />
-	
-	<target name="copy-library-src">
-		<!-- Copy source from library project -->
-		<antcall target="clean-library-src"/>
-		<mkdir dir="${source.dir}"/>
-		<copy todir="${source.dir}">
-			<fileset dir="../sdk/src"/>
-			<fileset dir="src"/>
-		</copy>	
-	</target>
-	
-	<target name="clean-library-src">
-		<!-- Don't use variable in case we accidentally delete src! -->
-		<delete dir="src_ext"/>
-	</target>
 
-    <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project'"
-            unless="sdk.dir"/>
+    <!-- quick check on sdk.dir -->
+    <fail
+            message="sdk.dir is missing. Make sure to generate local.properties using 'android update project' or to inject it through the ANDROID_HOME environment variable."
+            unless="sdk.dir"
+    />
 
-	<!-- 
-		################################################################################################
-		OVERRIDE DEFAULT COMPILE TARGET FROM ANDROID TO REMOVE COVERAGE CREATION
-		################################################################################################
-	-->	
+    <!--
+        Import per project custom build rules if present at the root of the project.
+        This is the place to put custom intermediary targets such as:
+            -pre-build
+            -pre-compile
+            -post-compile (This is typically used for code obfuscation.
+                           Compiled code location: ${out.classes.absolute.dir}
+                           If this is not done in place, override ${out.dex.input.absolute.dir})
+            -post-package
+            -post-build
+            -pre-clean
+    -->
+    <import file="custom_rules.xml" optional="true" />
 
-    <target name="-compile" depends="-build-setup, -pre-build, -code-gen, -pre-compile">
-       
-    	<echo></echo>
-    	<echo>##################################################################################################</echo>
-    	<echo>######################################## BUILDING SAMPLE #########################################</echo>
-    	<echo>##################################################################################################</echo>
-    	<echo></echo>    	
-    	
-    	<!-- Overwrite jar libs ref -->
-    	<path id="jar.libs.ref">
-    		<fileset dir="../sdk/libext"/>
-    	</path>
-    	
-		<do-only-if-manifest-hasCode elseText="hasCode = false. Skipping...">
-
-        	<condition property="extensible.classpath"
-                    value="${tested.project.absolute.dir}/bin/classes"
-                    else=".">
-                <isset property="tested.project.absolute.dir" />
-            </condition>
-			
-            <condition property="extensible.libs.classpath"
-                    value="${tested.project.absolute.dir}/${jar.libs.dir}"
-                    else="${jar.libs.dir}">
-                <isset property="tested.project.absolute.dir" />
-            </condition>
-			
-			<echo>Compiling sample project from src ${source.absolute.dir} to ${out.classes.absolute.dir}</echo>
-			
-			
-            <javac encoding="${java.encoding}"
-                    source="${java.source}" 
-            		target="${java.target}"
-                    debug="true" 
-            		extdirs=""
-                    destdir="${out.classes.absolute.dir}"
-                    bootclasspathref="android.target.classpath"
-                    verbose="${verbose}"
-                    classpath="${extensible.classpath}"
-                    classpathref="jar.libs.ref">
-            	
-                <src path="${source.absolute.dir}" />
-                <src path="${gen.absolute.dir}" />
-            	
-            	 <classpath>
-                    <fileset dir="${extensible.libs.classpath}" includes="*.jar" />
-                </classpath>
-            </javac>	
-			
-            <!-- if the project is instrumented, intrument the classes -->
-            <if condition="${build.is.instrumented}">
-                <then>
-                    <echo>Instrumenting classes from ${out.absolute.dir}/classes...</echo>
-                    <echo>[OVERRIDE] Instrumenting classes from ${out.absolute.dir}/classes to ${out.absolute.dir}/classes</echo>
-                	<echo>EMMA will create meta data file in ${emma.report.dir}/coverage.em</echo>
-                	
-                    <!-- It only instruments class files, not any external libs -->
-                    <emma enabled="true">
-                        <instr 
-							verbosity="${verbosity}"
-							mode="overwrite"
-							instrpath="${out.absolute.dir}/classes"
-							outdir="${out.absolute.dir}/classes"
-							metadatafile="${emma.report.dir}/coverage.em"
-							filter="${emma.excluded}">
-                        </instr>
-                    </emma>
-                </then>
-            </if>			
-        </do-only-if-manifest-hasCode>
-    	
-    </target>	
-	
     <!-- Import the actual build file.
 
          To customize existing targets, there are two options:
@@ -122,8 +87,9 @@
          in order to avoid having your file be overridden by tools such as "android update project"
     -->
     <!-- version-tag: custom -->
-	
-	<import file="../sdk/ant/android_r15_build.xml" />
-	<!-- <import file="${sdk.dir}/tools/ant/build.xml" /> -->
+	<!--
+    <import file="${sdk.dir}/tools/ant/build.xml" />
+    -->
+	<import file="../sdk/ant/android_r20_build.xml" />
 
 </project>

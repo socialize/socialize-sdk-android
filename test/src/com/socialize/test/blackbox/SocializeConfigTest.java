@@ -31,6 +31,7 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.config.SocializeConfig;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.ResourceLocator;
 
@@ -69,7 +70,7 @@ public class SocializeConfigTest extends SocializeActivityTest {
 			
 			props.load(in);
 			
-			config.init(getActivity(), false); // Don't override
+			config.init(TestUtils.getActivity(this), false); // Don't override
 			
 			Properties confProps = config.getProperties();
 			
@@ -97,7 +98,7 @@ public class SocializeConfigTest extends SocializeActivityTest {
 	}
 	
 	public void testConfigLoadWithOverride() throws IOException {
-		config.init(getActivity());
+		config.init(TestUtils.getActivity(this));
 		Assert.assertNotNull(config.getProperties());
 		Assert.assertNotNull(config.getProperties().getProperty("test_value"));
 		Assert.assertEquals("sample", config.getProperties().getProperty("test_value"));
@@ -113,14 +114,14 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		final String noFile = "does.not.exist";
 		ResourceLocator mockProvider = AndroidMock.createMock(ResourceLocator.class);
 		
-		AndroidMock.expect(mockProvider.locateInClassPath(getActivity(), SocializeConfig.DEFAULT_PROPERTIES_PATH)).andReturn(null);
-		AndroidMock.expect(mockProvider.locateInAssets(getActivity(), noFile)).andReturn(null);
+		AndroidMock.expect(mockProvider.locateInClassPath(TestUtils.getActivity(this), SocializeConfig.DEFAULT_PROPERTIES_PATH)).andReturn(null);
+		AndroidMock.expect(mockProvider.locateInAssets(TestUtils.getActivity(this), noFile)).andReturn(null);
 		
 		AndroidMock.replay(mockProvider);
 		
 		SocializeConfig config = new SocializeConfig(noFile);
 		config.setResourceLocator(mockProvider);
-		config.init(getActivity());
+		config.init(TestUtils.getActivity(this));
 		
 		AndroidMock.verify(mockProvider);
 		
@@ -166,8 +167,8 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		
 		ResourceLocator mockProvider = AndroidMock.createMock(ResourceLocator.class);
 		
-		AndroidMock.expect(mockProvider.locateInClassPath(getActivity(), SocializeConfig.DEFAULT_PROPERTIES_PATH)).andReturn(primary);
-		AndroidMock.expect(mockProvider.locateInAssets(getActivity(), noFile)).andReturn(secondary);
+		AndroidMock.expect(mockProvider.locateInClassPath(TestUtils.getActivity(this), SocializeConfig.DEFAULT_PROPERTIES_PATH)).andReturn(primary);
+		AndroidMock.expect(mockProvider.locateInAssets(TestUtils.getActivity(this), noFile)).andReturn(secondary);
 		
 		AndroidMock.replay(primary);
 		AndroidMock.replay(secondary);
@@ -181,7 +182,7 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		};
 		
 		config.setResourceLocator(mockProvider);
-		config.init(getActivity());
+		config.init(TestUtils.getActivity(this));
 		
 		AndroidMock.verify(mockProvider);
 		
@@ -212,7 +213,7 @@ public class SocializeConfigTest extends SocializeActivityTest {
 	}
 	
 	public void testConfigValueTrimOnInit() {
-		config.init(getActivity());
+		config.init(TestUtils.getActivity(this));
 		Assert.assertNotNull(config.getProperties());
 		Assert.assertNotNull(config.getProperties().getProperty("untrimmed"));
 		Assert.assertEquals("value", config.getProperties().getProperty("untrimmed"));

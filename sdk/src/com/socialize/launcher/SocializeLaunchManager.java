@@ -22,7 +22,6 @@
 package com.socialize.launcher;
 
 import java.util.Map;
-
 import android.util.Log;
 import com.socialize.log.SocializeLogger;
 

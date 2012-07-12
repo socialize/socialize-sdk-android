@@ -23,7 +23,6 @@ package com.socialize.api;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import com.socialize.entity.ListResult;
 
 /**
