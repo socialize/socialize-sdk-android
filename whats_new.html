@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>What’s New &mdash; Socialize Android SDK v2.1 documentation</title>
+    <title>What’s New &mdash; Socialize Android SDK v2.2 documentation</title>
     
     <link rel="stylesheet" href="static/nature.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     'v2.1',
+        VERSION:     'v2.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,21 +25,21 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v2.1 documentation" href="index.html?v=v2.1" />
-    <link rel="next" title="Getting Started" href="getting_started.html?v=v2.1" />
-    <link rel="prev" title="Socialize Android SDK" href="index.html?v=v2.1" /> 
+    <link rel="top" title="Socialize Android SDK v2.2 documentation" href="index.html?v=v2.2" />
+    <link rel="next" title="Getting Started" href="getting_started.html?v=v2.2" />
+    <link rel="prev" title="Socialize Android SDK" href="index.html?v=v2.2" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="getting_started.html?v=v2.1" title="Getting Started"
+          <a href="getting_started.html?v=v2.2" title="Getting Started"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="index.html?v=v2.1" title="Socialize Android SDK"
+          <a href="index.html?v=v2.2" title="Socialize Android SDK"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html?v=v2.1">Socialize Android SDK v2.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html?v=v2.2">Socialize Android SDK v2.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -84,6 +84,39 @@
       var feedback_widget = new GSFN.feedback_widget(feedback_widget_options);
     </script><div class="section" id="what-s-new">
 <span id="whats-new"></span><h1>What&#8217;s New<a class="headerlink" href="#what-s-new" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="in-this-version">
+<h2>In This Version<a class="headerlink" href="#in-this-version" title="Permalink to this headline">¶</a></h2>
+<div style="background-color:#cce3ff;border-style:solid;border-color:#0051b6;border-width:1px;">
+
+<table border="0">
+	<tr>
+		<td>
+			<img src="static/info.png"/>
+		</td>
+		<td>
+			<div style="font-size:1.2em;font-weight:bold;padding:8px;color:#0051b6;padding-left:0px;">
+			&nbsp;Important Information!
+			</div>
+		</td>
+	</tr>
+</table>
+
+
+<div style="font-size:0.9em;font-weight:normal;padding:8px;color:#0051b6;">
+<b>Important Information</b> for existing users of the Socialize SDK
+</div>
+</div><p>v2.1.1 adds support for the deprecation of the <em>offline_access</em> permission of Facebook applications (<a class="reference external" href="https://developers.facebook.com/roadmap/offline-access-removal">https://developers.facebook.com/roadmap/offline-access-removal</a>).</p>
+<p>This means developers upgrading to Socialize v2.2+ <strong>MUST IMPLEMENT THE SOCIALIZE LIFECYCLE</strong> correctly in their app.</p>
+<p>Refer to the <a class="reference internal" href="lifecycle.html?v=v2.2"><em>Socialize Lifecycle</em></a> section for more details.</p>
+</div>
+<div class="section" id="v2-1">
+<h2>v2.1<a class="headerlink" href="#v2-1" title="Permalink to this headline">¶</a></h2>
+<p>In v2.1 we introduced a range of new features around the <strong>sharing of photos</strong>.</p>
+<p>You can now share photos directly to a user&#8217;s Facebook wall, or to their Twitter feed</p>
+<p>Check out <a class="reference internal" href="facebook_adv.html?v=v2.2"><em>Advanced Facebook</em></a> or <a class="reference internal" href="twitter_adv.html?v=v2.2"><em>Advanced Twitter</em></a> for more details.</p>
+</div>
+<div class="section" id="v2-0">
+<h2>v2.0<a class="headerlink" href="#v2-0" title="Permalink to this headline">¶</a></h2>
 <p>v2.0 of the Socialize SDK represents a major improvement over previous releases in both easy of use and stability.</p>
 <p>In this new release we are introducing several new features and bug fixes as well as a complete reworking of the core interfaces needed to
 access the entire range of Socialize services.</p>
@@ -96,7 +129,7 @@ best to ensure backwards compatibility with older versions some incompatibilitie
 their non-deprecated counterparts.</p>
 </div>
 <div class="section" id="looking-good">
-<h2>Looking Good!<a class="headerlink" href="#looking-good" title="Permalink to this headline">¶</a></h2>
+<h3>Looking Good!<a class="headerlink" href="#looking-good" title="Permalink to this headline">¶</a></h3>
 <p>We have re-designed the Share Dialog to bring it more in line with end user expectations and to make the job of the developer (you) easier</p>
 <p>This new dialog is also completely customizable</p>
 <table border="1" class="docutils">
@@ -112,13 +145,13 @@ their non-deprecated counterparts.</p>
 </tr>
 </tbody>
 </table>
-<p>Take a look at the <a class="reference internal" href="sdk_user_guide.html?v=v2.1#custom-share"><em>Custom Share Dialog</em></a> section for more details on customizing the share dialog.</p>
+<p>Take a look at the <a class="reference internal" href="sdk_user_guide.html?v=v2.2#custom-share"><em>Custom Share Dialog</em></a> section for more details on customizing the share dialog.</p>
 </div>
 <div class="section" id="complete-control">
-<h2>Complete Control<a class="headerlink" href="#complete-control" title="Permalink to this headline">¶</a></h2>
+<h3>Complete Control<a class="headerlink" href="#complete-control" title="Permalink to this headline">¶</a></h3>
 <p>In this new version we have completely rewritten the top level interfaces exposed to the developer to make them simpler and more powerful.</p>
 <p>Developers can now access a set of <em>utility</em> classes that provide access to the entire suite of Socialize features.</p>
-<p>Head over to the <a class="reference internal" href="sdk_user_guide.html?v=v2.1"><em>Socialize Android Developer Guide</em></a> section for detailed descriptions and code samples</p>
+<p>Head over to the <a class="reference internal" href="sdk_user_guide.html?v=v2.2"><em>Socialize Android Developer Guide</em></a> section for detailed descriptions and code samples</p>
 <ul>
 <li><dl class="first docutils">
 <dt>ShareUtils</dt>
@@ -206,12 +239,13 @@ their non-deprecated counterparts.</p>
 </ul>
 </div>
 <div class="section" id="new-sample-app">
-<h2>New Sample App!<a class="headerlink" href="#new-sample-app" title="Permalink to this headline">¶</a></h2>
+<h3>New Sample App!<a class="headerlink" href="#new-sample-app" title="Permalink to this headline">¶</a></h3>
 <p>To showcase these new features and to provide developers with concrete examples of how to use the new library we have created a completely
 new sample app.</p>
 <p>The new sample app is located in the same place as always, the <strong>/sample</strong> directory of the SDK download.</p>
 <script type="text/javascript">
 </script></div>
+</div>
 </div>
 
 
@@ -222,7 +256,7 @@ new sample app.</p>
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="search.html?v=v2.1" method="get">
+    <form class="search" action="search.html?v=v2.2" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -233,29 +267,31 @@ new sample app.</p>
     </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-<h3><a href="index.html?v=v2.1">Table Of Contents</a></h3>
+<h3><a href="index.html?v=v2.2">Table Of Contents</a></h3>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="">What&#8217;s New</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#looking-good">Looking Good!</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#complete-control">Complete Control</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#new-sample-app">New Sample App!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#in-this-version">In This Version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-1">v2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-0">v2.0</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v2.1">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v2.1">Socialize Action Bar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v2.1">Custom Like Buttons</a></li>
-<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v2.1">Facebook Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v2.1">Twitter Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="facebook_adv.html?v=v2.1">Advanced Facebook</a></li>
-<li class="toctree-l1"><a class="reference internal" href="twitter_adv.html?v=v2.1">Advanced Twitter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v2.1">SmartAlerts (Push Notifications)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v2.1">Entity Loaders</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v2.1">Socialize Android Developer Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html?v=v2.1">Configuration Settings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v2.1">Amazon AppStore URLs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v2.1">ProGuard Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v2.1">Troubleshooting &amp; Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v2.1">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v2.2">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lifecycle.html?v=v2.2">Socialize Lifecycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v2.2">Socialize Action Bar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entities.html?v=v2.2">Socialize Entities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v2.2">Custom Like Buttons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v2.2">Facebook Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v2.2">Twitter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook_adv.html?v=v2.2">Advanced Facebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter_adv.html?v=v2.2">Advanced Twitter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v2.2">SmartAlerts (Push Notifications)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v2.2">Entity Loaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v2.2">Socialize Android Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html?v=v2.2">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v2.2">Amazon AppStore URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v2.2">ProGuard Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v2.2">Troubleshooting &amp; Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v2.2">Change Log</a></li>
 </ul>
 
         </div>
@@ -266,12 +302,12 @@ new sample app.</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="getting_started.html?v=v2.1" title="Getting Started"
+          <a href="getting_started.html?v=v2.2" title="Getting Started"
              >next</a></li>
         <li class="right" >
-          <a href="index.html?v=v2.1" title="Socialize Android SDK"
+          <a href="index.html?v=v2.2" title="Socialize Android SDK"
              >previous</a> |</li>
-        <li><a href="index.html?v=v2.1">Socialize Android SDK v2.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html?v=v2.2">Socialize Android SDK v2.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

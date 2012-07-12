@@ -8,7 +8,9 @@ Contents:
 	
 	whats_new
 	getting_started
+	lifecycle
 	action_bar
+	entities
 	like_button
 	facebook
 	twitter
