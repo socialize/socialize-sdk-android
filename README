@@ -12,6 +12,23 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v2.2
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Add Entities That Are Not URLs section in documentation
+[feature] Developer can retrieve app-wide actions based on a type (Comment/Share/Like)
+[feature] Socialize UIs should render correctly on tablet (Nexus 7) devices
+[bug] Facebook token reset does not behave correctly on ICS/JB devices
+[feature] ActionBar uses Socialize 2.0 interfaces
+
+v2.1.1
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] SDK should handle failure case for C2DM registration with Socialize API
+[feature] Update FB auth to match offline_access deprecation
+[feature] UI Components gracefully fail on LDPI
+[feature] Developer can enable/disable location sharing at an app level in config
+[bug] Comment view displays unexpected divider when location is not enabled on device
+[bug] User settings screen does not honor app level disabling of location
+
 v2.1
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [feature] Socialize internal staff can access pre-built APK for SDK Demo App
