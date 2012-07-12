@@ -12,6 +12,23 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v2.1
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Socialize internal staff can access pre-built APK for SDK Demo App
+[feature] Documentation has updated screenshots for Facebook app configuration
+[bug] shareViaSocialNetworks does not expose the social networks as a parameter
+[feature] Developer can access internal tools classes used in Socialize
+[feature] Developer can override global settings for allow anonymous and require auth on a per call basis
+[feature] Developers can tweet from client SDK
+[feature] Developer can drop in new like button based on 2.0
+[feature] Developer can learn about like button in docs
+[feature] Developers can learn how to post direct tweets in documentation 
+[feature] ActionBar shows numbers higher than 999 in stats ticker
+[feature] Developer can tweet photo from the SDK
+[feature] Developers can learn how to extract the C2DM token from Google in docs
+[feature] Developers can learn how to post photos to Facebook in docs
+[feature] Developers can learn how to post photos to Twitter in docs
+
 v2.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [feature] Developer can access Socialize 2.0 using User interfaces
