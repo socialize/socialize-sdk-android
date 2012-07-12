@@ -155,7 +155,7 @@ public class AuthPanelView extends DialogPanelView {
 			LayoutParams skipAuthParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 			skipAuthParams.gravity = Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
 			skipAuthParams.weight = 1.0f;
-			skipAuthParams.setMargins(0, displayUtils.getDIP(50), 0, 0);
+			skipAuthParams.setMargins(0, displayUtils.getDIP(30), 0, 0);
 			
 			skipAuth = new TextView(getContext());
 			skipAuth.setText("I'd rather not...");

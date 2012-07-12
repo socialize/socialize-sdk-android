@@ -255,7 +255,7 @@ public class SharePanelView extends DialogPanelView {
 			LayoutParams skipAuthParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 			skipAuthParams.gravity = Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
 			skipAuthParams.weight = 1.0f;
-			skipAuthParams.setMargins(0, displayUtils.getDIP(30), 0, 0);
+			skipAuthParams.setMargins(0, displayUtils.getDIP(10), 0, 0);
 			
 			otherOptions = new TextView(getContext());
 			otherOptions.setText("More options...");
