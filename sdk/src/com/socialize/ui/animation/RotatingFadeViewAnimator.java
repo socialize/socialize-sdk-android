@@ -91,8 +91,7 @@ public class RotatingFadeViewAnimator {
 	}
 	
 	public void skipToNext() {
-		doNext();
-//		restartAt((currentView + 1) % size);
+		restartAt((currentView + 1) % size);
 	}
 	
 	protected void restartAt(int index) {
@@ -148,16 +147,14 @@ public class RotatingFadeViewAnimator {
 			
 			@Override
 			public void onAnimationEnd(Animation animation) {
-				doNext();
+				View current = getCurrentView();
+				View next = getNextView();
+				
+				current.setVisibility(View.GONE);
+				next.setVisibility(View.VISIBLE);
+				
+				next.startAnimation(fadeIn);
 			}
 		});
-	}
-	
-	protected void doNext() {
-		View current = getCurrentView();
-		current.clearAnimation();
-		View next = getNextView();
-		current.setVisibility(View.GONE);
-		next.startAnimation(fadeIn);
 	}
 }

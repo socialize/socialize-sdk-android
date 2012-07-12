@@ -24,10 +24,7 @@ package com.socialize.ui.actionbar;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import android.app.Activity;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.util.Log;
 import android.view.Gravity;
 import com.socialize.CommentUtils;
@@ -112,17 +109,19 @@ public class ActionBarLayoutView extends BaseView {
 		Drawable viewIcon = drawables.getDrawable("icon_view.png");
 		Drawable shareIcon = drawables.getDrawable("icon_share.png");
 		
-		ColorDrawable background = new ColorDrawable(Color.parseColor("#454545"));
-		ColorDrawable highlight = new ColorDrawable(Color.parseColor("#666666"));
-		ColorDrawable accent = new ColorDrawable(Color.parseColor("#03a6dc"));
-		LayerDrawable bg = new LayerDrawable(new Drawable[] { accent, highlight, background });
-		
+//		ColorDrawable background = new ColorDrawable(Color.parseColor("#454545"));
+//		ColorDrawable highlight = new ColorDrawable(Color.parseColor("#666666"));
+//		ColorDrawable accent = new ColorDrawable(Color.parseColor("#03a6dc"));
+//		ColorDrawable bottomLeft = new ColorDrawable(Color.BLACK);
+//		
 		int accentHeight = displayUtils.getDIP(4);
-		int highlightInset = displayUtils.getDIP(1);
-		
-		bg.setLayerInset(1, 0, 0, 0, accentHeight);
-		bg.setLayerInset(2, 0, highlightInset, 0, accentHeight);
-		
+		int strokeWidth = displayUtils.getDIP(1);
+//		
+//		LayerDrawable bg = new LayerDrawable(new Drawable[] { bottomLeft, accent, highlight, background });
+//		bg.setLayerInset(1, 1, 0, 0, 1);
+//		bg.setLayerInset(2, 1, 0, 0, 1);
+//		bg.setLayerInset(3, 1, highlightInset, 0, accentHeight+1);
+
 		int width = ActionBarView.ACTION_BAR_BUTTON_WIDTH;
 		
 		int likeWidth = width - 5;
@@ -151,13 +150,13 @@ public class ActionBarLayoutView extends BaseView {
 		shareButton = buttonFactory.getBean();
 		
 		commentButton.setIcon(commentIcon);
-		commentButton.setBackground(bg);
+		commentButton.setBackgroundDrawable(new ActionBarButtonBackground(accentHeight, strokeWidth));
 		
 		likeButton.setIcon(likeIcon);
-		likeButton.setBackground(bg);
+		likeButton.setBackgroundDrawable(new ActionBarButtonBackground(accentHeight, strokeWidth));
 		
 		shareButton.setIcon(shareIcon);
-		shareButton.setBackground(bg);
+		shareButton.setBackgroundDrawable(new ActionBarButtonBackground(accentHeight, strokeWidth));
 		
 		commentButton.setListener(new ActionBarButtonListener() {
 			@Override
