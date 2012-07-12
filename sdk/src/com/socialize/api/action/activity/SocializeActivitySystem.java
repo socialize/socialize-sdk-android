@@ -68,8 +68,9 @@ public class SocializeActivitySystem extends SocializeApi<SocializeAction, Socia
 		return get(session, endpoint, String.valueOf(id), type);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.api.action.ActivitySystem#getActivityByUser(com.socialize.api.SocializeSession, long, com.socialize.listener.activity.UserActivityListener)
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.activity.ActivitySystem#getActivityByUser(com.socialize.api.SocializeSession, long, com.socialize.listener.activity.ActionListener)
 	 */
 	@Override
 	public void getActivityByUser(SocializeSession session, long id, ActionListener listener) {
@@ -78,8 +79,9 @@ public class SocializeActivitySystem extends SocializeApi<SocializeAction, Socia
 		listAsync(session, endpoint, listener);
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.socialize.api.action.ActivitySystem#getActivityByUser(com.socialize.api.SocializeSession, long, int, int, com.socialize.listener.activity.UserActivityListener)
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.activity.ActivitySystem#getActivityByUser(com.socialize.api.SocializeSession, long, int, int, com.socialize.listener.activity.ActionListener)
 	 */
 	@Override
 	public void getActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, ActionListener listener) {

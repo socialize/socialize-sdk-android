@@ -55,12 +55,6 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_C2DM_SENDER_ID = "socialize.c2dm.sender.id";
 	
-	@Deprecated
-	public static final String SOCIALIZE_USE_ACTION_WEBVIEW = "socialize.use.action.webview";
-	
-	@Deprecated
-	public static final String SOCIALIZE_BRANDING_ENABLED = "socialize.branding.enabled";
-	
 	public static final String SOCIALIZE_ENTITY_LOADER = "socialize.entity.loader";
 	
 	public static final String SOCIALIZE_LOCATION_ENABLED = "socialize.location.enabled";
@@ -271,11 +265,6 @@ public class SocializeConfig {
 			return Boolean.parseBoolean(val);
 		}
 		return defaultValue;
-	}
-	
-	@Deprecated
-	public boolean isBrandingEnabled() {
-		return getBooleanProperty(SOCIALIZE_BRANDING_ENABLED, true);
 	}
 	
 	/**

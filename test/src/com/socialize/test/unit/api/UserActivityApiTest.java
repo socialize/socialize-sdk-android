@@ -27,19 +27,19 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.action.activity.SocializeActivitySystem;
 import com.socialize.entity.SocializeAction;
 import com.socialize.listener.SocializeActionListener;
-import com.socialize.listener.activity.UserActivityListener;
+import com.socialize.listener.activity.ActionListener;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeUnitTest;
 
 /**
  * @author Jason Polites
  */
-@UsesMocks ({SocializeSession.class, UserActivityListener.class, SocializeProvider.class})
+@UsesMocks ({SocializeSession.class, ActionListener.class, SocializeProvider.class})
 public class UserActivityApiTest extends SocializeUnitTest {
 
 	SocializeProvider<SocializeAction> provider;
 	SocializeSession session;
-	UserActivityListener listener;
+	ActionListener listener;
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -47,7 +47,7 @@ public class UserActivityApiTest extends SocializeUnitTest {
 		super.setUp();
 		provider = AndroidMock.createMock(SocializeProvider.class);
 		session = AndroidMock.createMock(SocializeSession.class);
-		listener = AndroidMock.createMock(UserActivityListener.class);
+		listener = AndroidMock.createMock(ActionListener.class);
 	}
 
 	public void getActivitysByUser() {
