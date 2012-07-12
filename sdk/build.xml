@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="sdk" default="help">
+<project name="sdk" default="do_build">
 
 	<property file="local.properties" />
     <property file="ant.properties" />
@@ -30,6 +30,7 @@
 		################################################################################################
 	-->		
 	
+	<target name="do_build" depends="clean, release" />
 
 	
 	<target name="check-paths">

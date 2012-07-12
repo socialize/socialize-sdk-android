@@ -59,6 +59,13 @@ import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.util.ImageUtils;
 import com.socialize.util.StringUtils;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import java.io.ByteArrayOutputStream;
+import android.util.Log;
+import java.util.Properties;
+import java.io.FileInputStream;
+
 
 /**
  * Posts to the Facebook wall.
@@ -69,7 +76,16 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	private SocializeLogger logger;
 	private ImageUtils imageUtils;
 	private IBeanFactory<AsyncFacebookRunner> facebookRunnerFactory;
+
+	private static final String FACEBOOK_COMMENT_MESSAGE = "socialize.facebook.comment.message";
+	private static final String FACEBOOK_LIKE_MESSAGE = "socialize.facebook.like.message";
+	private static final String FACEBOOK_LINK_NAME = "socialize.facebook.like.link.name";
+	private static final String FACEBOOK_LINK_DESCRIPTION = "socialize.facebook.like.link.description";
+	private static final String FACEBOOK_PICTURE = "socialize.sharing.picture";
+	private static final String FACEBOOK_PREVIEW = "socialize.sharing.preview";
+	private static final String SHARING_EFFECT_NAME = "socialize.sharing.effect.name";
 	
+
 	@Override
 	public void postLike(Activity parent, Entity entity, PropagationInfo propInfo, SocialNetworkListener listener) {
 		post(parent, entity, "", propInfo, listener);		
@@ -87,10 +103,61 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		String linkName = entityUrl;
 		String link = entityUrl;
 		String appId = ConfigUtils.getConfig(parent).getProperty(SocializeConfig.FACEBOOK_APP_ID);
-		
+		String pictureURL = null;
+		String previewURL = null;
+		String description = null;
+
 		if(entity != null) {
 			linkName = entity.getDisplayName();
 		}
+
+		String type = "feed";
+		if (!StringUtils.isEmpty(message)) {
+			type = "photos";
+		}
+
+		Properties prop = new Properties();
+ 
+    	try {
+    		prop.load(parent.openFileInput("socialize_sharing.properties"));
+			if (prop.getProperty(FACEBOOK_PICTURE) != null) {
+            	pictureURL = prop.getProperty(FACEBOOK_PICTURE);
+            	if (StringUtils.isEmpty(message)) {
+	            	previewURL = prop.getProperty(FACEBOOK_PREVIEW);
+	            }
+        	}
+    		String effect_name = prop.getProperty(SHARING_EFFECT_NAME);
+
+    		prop.load(parent.getResources().getAssets().open("socialize.properties"));
+    		linkName = prop.getProperty(FACEBOOK_LINK_NAME);
+
+    		if (StringUtils.isEmpty(message)) { // it is a like post.
+
+	 			if (prop.getProperty(FACEBOOK_LIKE_MESSAGE) != null) {
+	            	message = prop.getProperty(FACEBOOK_LIKE_MESSAGE);
+	            	if (effect_name != null) {
+			    		message = message.replace("%EFFECT_NAME%", effect_name);
+			    		linkName = linkName.replace("%EFFECT_NAME%", effect_name);
+			    	}
+	        	}
+
+	        } else { // comment post
+
+	        	if (prop.getProperty(FACEBOOK_COMMENT_MESSAGE) != null) {
+	        		message = prop.getProperty(FACEBOOK_COMMENT_MESSAGE) + "\n" + message;
+	        		message = message.replace("%EFFECT_NAME%", effect_name);
+
+	        		// linkName = linkName.replace("%EFFECT_NAME%", effect_name);
+	        		linkName = message;
+	        	}
+	        }
+
+	        description = prop.getProperty(FACEBOOK_LINK_DESCRIPTION);
+    	} catch (IOException ex) {
+    		ex.printStackTrace();
+        } catch (NullPointerException ex) {
+        	ex.printStackTrace();
+        }
 		
 		if(!StringUtils.isEmpty(appId)) {
 			
@@ -98,7 +165,37 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			params.put("name", linkName);
 			params.put("message", message);
 			params.put("link", link);
-			params.put("type", "link");
+			params.put("type", type);
+			
+			if (description != null) {
+				params.put("description", description);
+			}
+
+			Log.v("DefaultFacebookWallPoster", params.toString());
+
+			if (previewURL != null) {
+				params.put("picture", previewURL);
+			} else if (pictureURL != null) {
+				byte[] data = null;
+
+				try {
+					Log.v("DefaultFacebookWallPoster", "will get a bitmap for the " + pictureURL + " result file.");
+					Bitmap imgBitmap = ImageUtils.getBitmapFromURL(pictureURL);
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					imgBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+					data = baos.toByteArray();
+				} catch (Exception ignore) {
+					Log.v("DefaultFacebookWallPoster", "can not get bitmap for filename " + pictureURL);
+				}
+
+				if (data != null) {
+					params.put("image", data);
+				} else {
+					params.put("picture", pictureURL);
+				}
+			} else {
+				Log.v("DefaultFacebookWallPoster", "pictureURL == null and previewURL == null");
+			}
 			
 			DefaultPostData postData = new DefaultPostData();
 			postData.setPostValues(params);
@@ -111,6 +208,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			onError(parent, msg, new SocializeException(msg), listener);
 		}		
 	}
+
 
 	@Deprecated
 	@Override
@@ -133,8 +231,8 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		params.put("name", share.getEntityDisplayName());
 		params.put("link", propInfo.getEntityUrl());
 		params.put("message", share.getText());
-		params.put("type", "link");
-		
+		params.put("type", "feed");
+
 		DefaultPostData postData = new DefaultPostData();
 		postData.setPostValues(params);
 		postData.setPropagationInfo(propInfo);
@@ -150,6 +248,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		
 		Bundle bundle = new Bundle();
 		
+		String type = "feed";
 		Set<Entry<String, Object>> entries = postData.getPostValues().entrySet();
 		
 		for (Entry<String, Object> entry : entries) {
@@ -165,6 +264,10 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 						bundle.putString(entry.getKey(), value.toString());
 					}
 				}
+
+				if (entry.getKey().equals("type") && value != null && !StringUtils.isEmpty((String) value)) {
+					type = value.toString();
+				}
 			}
 		}
 		
@@ -178,7 +281,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		
 		RequestListener requestListener = newRequestListener(parent, listener);
 		
-		runner.request("me/links", bundle, "POST", requestListener, null);	
+		runner.request("me/" + type, bundle, "POST", requestListener, null);	
 	}
 	
 

@@ -110,6 +110,15 @@ public class SocializeConfig {
 	public static final String SOCIALIZE_SHARE_LISTENER_KEY = "socialize.share.listener.key";
 	
 	private static boolean ENTITY_LOADER_CHECK_ENABLED = true;
+
+	/**
+	* Configuring Socialize UI properties.
+	*/
+	public static final String SOCIALIZE_SHARING_ENABLED = "socialize.buttons.sharing.enabled";
+	public static final String SOCIALIZE_LIKE_ENABLED = "socialize.buttons.like.enabled";
+	public static final String SOCIALIZE_COMMENTS_ENABLED = "socialize.buttons.comments.enabled";
+	public static final String SOCIALIZE_ALREADY_LIKED_ENABLED = "socialize.buttons.already_liked.enabled";
+
 	
 	public SocializeConfig() {
 		super();

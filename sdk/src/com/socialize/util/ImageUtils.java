@@ -31,6 +31,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.provider.MediaStore;
+import java.net.HttpURLConnection;
+import java.io.InputStream;
+import java.net.URL;
 
 
 /**
@@ -128,5 +131,28 @@ public class ImageUtils {
 
 		cursor.moveToFirst();
 		return cursor.getInt(0);
+	}
+
+	public static Bitmap getBitmapFromURL(String src) {
+		Bitmap myBitmap = null;
+		HttpURLConnection connection = null;
+
+	    try {
+	        URL url = new URL(src);
+	        connection = (HttpURLConnection) url.openConnection();
+	        connection.setDoInput(true);
+	        connection.connect();
+	        InputStream input = connection.getInputStream();
+	        myBitmap = BitmapFactory.decodeStream(input);
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        myBitmap = null;
+	    } finally {
+	    	try {
+	    		connection.disconnect();
+	    	} catch (Exception ignored) {}
+	    }
+
+	    return myBitmap;
 	}
 }
