@@ -9,6 +9,7 @@ Contents:
 	whats_new
 	getting_started
 	lifecycle
+	demo
 	action_bar
 	entities
 	like_button
