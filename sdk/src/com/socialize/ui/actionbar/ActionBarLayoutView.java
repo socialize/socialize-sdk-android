@@ -24,6 +24,7 @@ package com.socialize.ui.actionbar;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import android.app.Activity;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.Gravity;
@@ -76,6 +77,9 @@ public class ActionBarLayoutView extends BaseView {
 	
 	private Drawable likeIcon;
 	private Drawable likeIconHi;
+	private Drawable commentIcon;
+	private Drawable viewIcon;
+	private Drawable shareIcon;
 	
 	private IBeanFactory<ActionBarButton> buttonFactory;
 	private IBeanFactory<ActionBarTicker> tickerFactory;
@@ -87,6 +91,8 @@ public class ActionBarLayoutView extends BaseView {
 	
 	private ActionBarView actionBarView;
 	
+	private ActionBarOptions options;
+	
 	final String loadingText = "...";
 	
 	private OnActionBarEventListener onActionBarEventListener;
@@ -96,44 +102,65 @@ public class ActionBarLayoutView extends BaseView {
 		this.actionBarView = actionBarView;
 	}
 	
+	public ActionBarLayoutView(Activity context, ActionBarView actionBarView, ActionBarOptions options) {
+		this(context, actionBarView);
+		this.options = options;
+	}
+	
+	private void initDefaultIcons() {
+		likeIcon = drawables.getDrawable("icon_like.png");
+		likeIconHi = drawables.getDrawable("icon_like_hi.png");
+		commentIcon = drawables.getDrawable("icon_comment.png");
+		viewIcon = drawables.getDrawable("icon_view.png");
+		shareIcon = drawables.getDrawable("icon_share.png");
+	}
+	
+	private Drawable getIcon(Integer resourceId, String defaultName) {
+		return (resourceId == null) ? drawables.getDrawable(defaultName) : getContext().getResources().getDrawable(resourceId);
+	}
+	
 	public void init() {
 		
 		if(logger != null && logger.isDebugEnabled()) {
 			logger.debug("init called on " + getClass().getSimpleName());
 		}
 		
-		likeIcon = drawables.getDrawable("icon_like.png");
-		likeIconHi = drawables.getDrawable("icon_like_hi.png");
-
-		Drawable commentIcon = drawables.getDrawable("icon_comment.png");
-		Drawable viewIcon = drawables.getDrawable("icon_view.png");
-		Drawable shareIcon = drawables.getDrawable("icon_share.png");
+		if(options != null) {
+			likeIcon = getIcon(options.getLikeIconResourceId(), "icon_like.png");
+			likeIconHi = getIcon(options.getLikeIconActiveResourceId(), "icon_like_hi.png");
+			commentIcon = getIcon(options.getCommentIconResourceId(), "icon_comment.png");
+			viewIcon = getIcon(options.getViewIconResourceId(), "icon_view.png");
+			shareIcon = getIcon(options.getShareIconResourceId(), "icon_share.png");
+		}
+		else {
+			initDefaultIcons();
+		}
 		
-//		ColorDrawable background = new ColorDrawable(Color.parseColor("#454545"));
-//		ColorDrawable highlight = new ColorDrawable(Color.parseColor("#666666"));
-//		ColorDrawable accent = new ColorDrawable(Color.parseColor("#03a6dc"));
-//		ColorDrawable bottomLeft = new ColorDrawable(Color.BLACK);
-//		
 		int accentHeight = displayUtils.getDIP(4);
 		int strokeWidth = displayUtils.getDIP(1);
-//		
-//		LayerDrawable bg = new LayerDrawable(new Drawable[] { bottomLeft, accent, highlight, background });
-//		bg.setLayerInset(1, 1, 0, 0, 1);
-//		bg.setLayerInset(2, 1, 0, 0, 1);
-//		bg.setLayerInset(3, 1, highlightInset, 0, accentHeight+1);
-
 		int width = ActionBarView.ACTION_BAR_BUTTON_WIDTH;
 		
 		int likeWidth = width - 5;
 		int commentWidth = width + 15;
 		int shareWidth = width- 5;
 		
-		ticker = tickerFactory.getBean();
+		if(options != null) {
+			ticker = tickerFactory.getBean(options.getBackgroundColor());
+		}
+		else {
+			ticker = tickerFactory.getBean();
+		}
 		
-		viewsItem = itemFactory.getBean();
-		commentsItem = itemFactory.getBean();
-		likesItem = itemFactory.getBean();
-		sharesItem = itemFactory.getBean();
+		int textColor = Color.WHITE;
+		
+		if(options != null && options.getTextColor() != null) {
+			textColor = options.getTextColor();
+		}
+		
+		viewsItem = itemFactory.getBean(textColor);
+		commentsItem = itemFactory.getBean(textColor);
+		likesItem = itemFactory.getBean(textColor);
+		sharesItem = itemFactory.getBean(textColor);
 		
 		viewsItem.setIcon(viewIcon);
 		commentsItem.setIcon(commentIcon);
@@ -149,14 +176,23 @@ public class ActionBarLayoutView extends BaseView {
 		commentButton = buttonFactory.getBean();
 		shareButton = buttonFactory.getBean();
 		
+		ActionBarButtonBackground bg = null;
+		
+		if(options != null) {
+			bg = new ActionBarButtonBackground(accentHeight, strokeWidth, options.getStrokeColor(), options.getAccentColor(), options.getFillColor(), options.getHighlightColor());
+		}
+		else {
+			bg = new ActionBarButtonBackground(accentHeight, strokeWidth);
+		}
+		
 		commentButton.setIcon(commentIcon);
-		commentButton.setBackgroundDrawable(new ActionBarButtonBackground(accentHeight, strokeWidth));
+		commentButton.setBackgroundDrawable(bg);
 		
 		likeButton.setIcon(likeIcon);
-		likeButton.setBackgroundDrawable(new ActionBarButtonBackground(accentHeight, strokeWidth));
+		likeButton.setBackgroundDrawable(bg);
 		
 		shareButton.setIcon(shareIcon);
-		shareButton.setBackgroundDrawable(new ActionBarButtonBackground(accentHeight, strokeWidth));
+		shareButton.setBackgroundDrawable(bg);
 		
 		commentButton.setListener(new ActionBarButtonListener() {
 			@Override
@@ -231,9 +267,9 @@ public class ActionBarLayoutView extends BaseView {
 		sharesItem.init();
 		
 		ticker.init(LayoutParams.FILL_PARENT, 1.0f);
-		likeButton.init(likeWidth, 0.0f);
-		commentButton.init(commentWidth, 0.0f);
-		shareButton.init(shareWidth, 0.0f);
+		likeButton.init(likeWidth, 0.0f, textColor);
+		commentButton.init(commentWidth, 0.0f, textColor);
+		shareButton.init(shareWidth, 0.0f, textColor);
 		
 		viewsItem.setText(loadingText);
 		commentsItem.setText(loadingText);

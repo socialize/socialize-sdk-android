@@ -48,14 +48,13 @@ public class FacebookActivityService {
 				facebook = facebookUtils.getFacebook(activity);
 				service = getFacebookService();
 				
-				boolean photos = config.getBooleanProperty(SocializeConfig.FACEBOOK_PHOTOS_ENABLED, false);
 				boolean sso = config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true);
 				
 				if(permissions != null && permissions.length > 0) {
-					service.authenticate(sso, photos, permissions);
+					service.authenticate(sso, permissions);
 				}
 				else {
-					service.authenticate(sso, photos);
+					service.authenticate(sso);
 				}
 			}
 			else {

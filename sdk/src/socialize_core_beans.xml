@@ -549,6 +549,7 @@
 		<property name="logger" ref="logger"/>
 		<property name="facebookSessionStore" ref="facebookSessionStore"/>
 		<property name="facebookUtils" ref="facebookUtils"/>
+		<property name="authProviderInfoBuilder" ref="authProviderInfoBuilder"/>
 		<init-method name="init">
 			<arg type="context"/>
 			<arg ref="listenerHolder"/>
@@ -585,6 +586,7 @@
 		id="facebookWallPoster" 
 		class="com.socialize.networks.facebook.DefaultFacebookWallPoster">
 		<property name="logger" ref="logger"/>
+		<property name="config" ref="config"/>
 		<property name="imageUtils" ref="imageUtils"/>
 		<property name="facebookUtils" ref="facebookUtils"/>
 		<property name="facebookRunnerFactory" ref="facebookRunnerFactory"/>
@@ -654,6 +656,7 @@
 
 	<bean id="twitterProvider" class="com.socialize.auth.twitter.TwitterAuthProvider">
 		<property name="twitterAuthUtils" ref="twitterAuthUtils"/>
+		<property name="authProviderInfoBuilder" ref="authProviderInfoBuilder"/>
 		<init-method name="init">
 			<arg type="context"/>
 		</init-method>

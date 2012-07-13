@@ -28,6 +28,7 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -699,7 +700,15 @@ public class SocializeServiceImpl implements SocializeService {
 				return isAuthenticatedLegacy(providerType);
 			}
 			else {
-				return true;
+				// Validate the credentials
+				AuthProviderInfo authProviderInfo = userProviderCredentials.getAuthProviderInfo();
+				
+				if(authProviderInfo != null) {
+					AuthProvider<AuthProviderInfo> provider = authProviders.getProvider(providerType);
+					return provider.validate(authProviderInfo);
+				}
+				
+				return false;
 			}
 		}
 		return false;
@@ -959,6 +968,7 @@ public class SocializeServiceImpl implements SocializeService {
 		socializeActionBar.setActionBarListener(listener);
 		socializeActionBar.assignId(original);
 		socializeActionBar.setEntity(entity);
+		socializeActionBar.setActionBarOptions(options);
 		
 		LayoutParams socializeActionBarParams = newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		socializeActionBarParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
@@ -980,6 +990,7 @@ public class SocializeServiceImpl implements SocializeService {
 			
 			ScrollView scrollView = newScrollView(parent);
 			scrollView.setFillViewport(true);
+			scrollView.setBackgroundColor(Color.parseColor("#00000000"));
 			scrollView.setScrollContainer(false);
 			scrollView.setLayoutParams(scrollViewParams);
 			scrollView.addView(original);

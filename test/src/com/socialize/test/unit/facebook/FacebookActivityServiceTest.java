@@ -153,9 +153,8 @@ public class FacebookActivityServiceTest extends SocializeActivityTest {
 		AndroidMock.expect(facebookUtils.getFacebook(context)).andReturn(facebook);
 		
 		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true)).andReturn(true);
-		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.FACEBOOK_PHOTOS_ENABLED, false)).andReturn(false);
 		
-		service.authenticate(AndroidMock.eq(true), AndroidMock.eq(false), (String[]) AndroidMock.anyObject());
+		service.authenticate(AndroidMock.eq(true), (String[]) AndroidMock.anyObject());
 		
 		AndroidMock.replay(config);
 		AndroidMock.replay(context);

@@ -38,14 +38,22 @@ import com.socialize.util.DisplayUtils;
  *
  */
 public class ActionBarTicker extends LinearLayout {
+	
+	public static final int DEFAULT_BACKGROUND_COLOR = Color.parseColor("#222222");
 
 	private List<View> views;
 	private RotatingFadeViewAnimator rotator;
 	private DisplayUtils displayUtils;
 	private boolean initialized = false;
+	private int backgroundColor = 0;
 	
 	public ActionBarTicker(Context context) {
 		super(context);
+	}
+	
+	public ActionBarTicker(Context context, int backgroundColor) {
+		super(context);
+		this.backgroundColor = backgroundColor;
 	}
 	
 	public void init(int width, float weight) {
@@ -61,7 +69,7 @@ public class ActionBarTicker extends LinearLayout {
 			
 			setLayoutParams(masterParams);
 			
-			ColorDrawable viewBg = new ColorDrawable(Color.parseColor("#222222"));
+			ColorDrawable viewBg = new ColorDrawable((backgroundColor == 0) ? DEFAULT_BACKGROUND_COLOR : backgroundColor);
 			
 			setBackgroundDrawable(viewBg);
 			

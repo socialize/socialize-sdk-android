@@ -230,6 +230,10 @@ public class SocializeApiTest extends SocializeActivityTest {
 				fail();
 			}
 
+			@Override
+			public boolean validate(AuthProviderInfo info) {
+				return true;
+			}
 		};
 
 		
@@ -319,6 +323,11 @@ public class SocializeApiTest extends SocializeActivityTest {
 			@Override
 			public void clearCache(Context context, AuthProviderInfo info) {
 				fail();
+			}
+			
+			@Override
+			public boolean validate(AuthProviderInfo info) {
+				return true;
 			}
 		};
 

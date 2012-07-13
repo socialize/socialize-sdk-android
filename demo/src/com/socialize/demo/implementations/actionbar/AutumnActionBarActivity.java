@@ -21,40 +21,41 @@
  */
 package com.socialize.demo.implementations.actionbar;
 
-import android.app.ListActivity;
-import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import com.socialize.ActionBarUtils;
+import com.socialize.demo.DemoActivity;
 import com.socialize.demo.R;
+import com.socialize.ui.actionbar.ActionBarOptions;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class ActionBarActivity extends ListActivity {
-	
-	final String[] values = new String[] { "Default Action Bar", "Custom Action Bar", "Multiple Action Bar", "Red Action Bar",  "Autumn Action Bar"};
-	final Class<?>[] activities = new Class<?>[] { DefaultActionBarActivity.class, CustomActionBarActivity.class, MultiActionBarActivity.class, RedActionBarActivity.class, AutumnActionBarActivity.class};
-	
+public class AutumnActionBarActivity extends DemoActivity {
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.demo_list);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
-		setListAdapter(adapter);
+		ActionBarOptions options = new ActionBarOptions();
+		
+		options.setStrokeColor(Color.parseColor("#591100"));
+		options.setAccentColor(Color.parseColor("#ffa229"));
+		options.setFillColor(Color.parseColor("#831400"));
+		options.setBackgroundColor(Color.parseColor("#591100"));
+		options.setHighlightColor(Color.parseColor("#b05e08"));
+		options.setTextColor(Color.parseColor("#ffba00"));
+		
+		options.setLikeIconResourceId(R.drawable.autumn_like);
+		options.setLikeIconActiveResourceId(R.drawable.autumn_like_hi);
+		options.setCommentIconResourceId(R.drawable.autumn_comment);
+		options.setShareIconResourceId(R.drawable.autumn_share);
+		options.setViewIconResourceId(R.drawable.autumn_view);
+		
+		View actionBar = ActionBarUtils.showActionBar(this, R.layout.autumn, entity, options);
+		setContentView(actionBar);
 	}
-	
 
-	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		Class<?> activityClass = activities[position];
-		if(activityClass != null) {
-			Intent intent = new Intent(this, activityClass);
-			startActivity(intent);
-		}
-	}	
-	
 }

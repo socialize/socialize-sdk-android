@@ -35,7 +35,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
@@ -71,10 +70,22 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	private ImageUtils imageUtils;
 	private FacebookUtilsProxy facebookUtils;
 	private IBeanFactory<AsyncFacebookRunner> facebookRunnerFactory;
+	private SocializeConfig config;
 	
 	@Override
 	public void postLike(Activity parent, Entity entity, PropagationInfo propInfo, SocialNetworkListener listener) {
-		post(parent, entity, "", propInfo, listener);		
+		
+		boolean og = config.getBooleanProperty(SocializeConfig.FACEBOOK_USE_OG_LIKE, true);
+		
+		if(og) {
+			String appId = config.getProperty(SocializeConfig.FACEBOOK_APP_ID);
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("object", propInfo.getEntityUrl());
+			post(parent, "me/og.likes",  appId, params, listener);			
+		}
+		else {
+			post(parent, entity, "", propInfo, listener);
+		}
 	}
 
 	@Override
@@ -88,7 +99,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		String entityUrl = propInfo.getEntityUrl();
 		String linkName = entityUrl;
 		String link = entityUrl;
-		String appId = ConfigUtils.getConfig(parent).getProperty(SocializeConfig.FACEBOOK_APP_ID);
+		String appId = config.getProperty(SocializeConfig.FACEBOOK_APP_ID);
 		
 		if(entity != null) {
 			linkName = entity.getDisplayName();
@@ -181,7 +192,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		
 		if(propInfo != null) {
 			String link = propInfo.getAppUrl();
-			String appId = ConfigUtils.getConfig(parent).getProperty(SocializeConfig.FACEBOOK_APP_ID);
+			String appId = config.getProperty(SocializeConfig.FACEBOOK_APP_ID);
 			
 			if(!StringUtils.isEmpty(appId)) {
 				postPhoto(parent, appId, link, comment, photoUri, listener);
@@ -421,5 +432,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		this.facebookUtils = facebookUtils;
 	}
 	
-	
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
+	}
 }

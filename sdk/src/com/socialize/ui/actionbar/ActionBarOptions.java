@@ -26,11 +26,117 @@ package com.socialize.ui.actionbar;
  *
  */
 public class ActionBarOptions {
+	
 	private boolean addScrollView = true;
+	
+	private Integer accentColor;
+	private Integer fillColor;
+	private Integer highlightColor;
+	private Integer backgroundColor;
+	private Integer strokeColor;
+	private Integer textColor;
+	
+	private Integer likeIconResourceId;
+	private Integer likeIconActiveResourceId;
+	private Integer commentIconResourceId;
+	private Integer shareIconResourceId;
+	private Integer viewIconResourceId;
+	
 	public boolean isAddScrollView() {
 		return addScrollView;
 	}
+	
 	public void setAddScrollView(boolean addScrollView) {
 		this.addScrollView = addScrollView;
 	}
+	
+	public Integer getAccentColor() {
+		return accentColor;
+	}
+	
+	public void setAccentColor(Integer accentColor) {
+		this.accentColor = accentColor;
+	}
+	
+	public Integer getFillColor() {
+		return fillColor;
+	}
+	
+	public void setFillColor(Integer fillColor) {
+		this.fillColor = fillColor;
+	}
+	
+	public Integer getHighlightColor() {
+		return highlightColor;
+	}
+	
+	public void setHighlightColor(Integer highlightColor) {
+		this.highlightColor = highlightColor;
+	}
+	
+	public Integer getBackgroundColor() {
+		return backgroundColor;
+	}
+	
+	public void setBackgroundColor(Integer backgroundColor) {
+		this.backgroundColor = backgroundColor;
+	}
+	
+	public Integer getStrokeColor() {
+		return strokeColor;
+	}
+	
+	public void setStrokeColor(Integer strokeColor) {
+		this.strokeColor = strokeColor;
+	}
+	
+	public Integer getTextColor() {
+		return textColor;
+	}
+	
+	public void setTextColor(Integer textColor) {
+		this.textColor = textColor;
+	}
+	
+	public Integer getLikeIconResourceId() {
+		return likeIconResourceId;
+	}
+	
+	public void setLikeIconResourceId(Integer likeIconResourceId) {
+		this.likeIconResourceId = likeIconResourceId;
+	}
+	
+	public Integer getLikeIconActiveResourceId() {
+		return likeIconActiveResourceId;
+	}
+	
+	public void setLikeIconActiveResourceId(Integer likeIconActiveResourceId) {
+		this.likeIconActiveResourceId = likeIconActiveResourceId;
+	}
+	
+	public Integer getCommentIconResourceId() {
+		return commentIconResourceId;
+	}
+	
+	public void setCommentIconResourceId(Integer commentIconResourceId) {
+		this.commentIconResourceId = commentIconResourceId;
+	}
+	
+	public Integer getShareIconResourceId() {
+		return shareIconResourceId;
+	}
+	
+	public void setShareIconResourceId(Integer shareIconResourceId) {
+		this.shareIconResourceId = shareIconResourceId;
+	}
+	
+	public Integer getViewIconResourceId() {
+		return viewIconResourceId;
+	}
+	
+	public void setViewIconResourceId(Integer viewIconResourceId) {
+		this.viewIconResourceId = viewIconResourceId;
+	}
+	
+	
 }

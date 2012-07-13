@@ -106,6 +106,8 @@
         <activity android:name=".implementations.actionbar.DefaultActionBarActivity"/>
         <activity android:name=".implementations.actionbar.CustomActionBarActivity"/>
         <activity android:name=".implementations.actionbar.MultiActionBarActivity"/>
+        <activity android:name=".implementations.actionbar.AutumnActionBarActivity"/>
+        <activity android:name=".implementations.actionbar.RedActionBarActivity"/>
         
         <!-- User Activity -->
         <activity android:name=".implementations.action.ActionActivity"/>

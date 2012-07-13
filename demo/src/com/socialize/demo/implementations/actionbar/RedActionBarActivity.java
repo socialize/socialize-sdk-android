@@ -19,30 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.auth;
+package com.socialize.demo.implementations.actionbar;
 
-import android.content.Context;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.AuthProviderListener;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.View;
+import com.socialize.ActionBarUtils;
+import com.socialize.demo.DemoActivity;
+import com.socialize.demo.R;
+import com.socialize.ui.actionbar.ActionBarOptions;
+
 
 /**
- * An empty provider to replace a real one when we don't want the dependency.
  * @author Jason Polites
  *
  */
-public class EmptyAuthProvider implements AuthProvider<AuthProviderInfo> {
-
+public class RedActionBarActivity extends DemoActivity {
 
 	@Override
-	public void authenticate(AuthProviderInfo info, AuthProviderListener listener) {
-		listener.onAuthFail(new SocializeException("Empty auth provider used!"));
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		ActionBarOptions options = new ActionBarOptions();
+		
+		options.setAccentColor(Color.parseColor("#cc0000"));
+		
+		View actionBar = ActionBarUtils.showActionBar(this, R.layout.actionbar, entity, options);
+		setContentView(actionBar);
 	}
 
-	@Override
-	public void clearCache(Context context, AuthProviderInfo info) {}
-
-	@Override
-	public boolean validate(AuthProviderInfo info) {
-		return true;
-	}
 }

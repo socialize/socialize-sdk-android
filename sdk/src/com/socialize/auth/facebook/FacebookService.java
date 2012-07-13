@@ -45,8 +45,8 @@ public class FacebookService {
 	private AuthProviderListener listener;
 	private DialogFactory dialogFactory;
 	
-	protected static final String[] DEFAULT_PERMISSIONS = {"offline_access", "publish_stream"};
-	protected static final String[] PHOTO_PERMISSIONS = {"offline_access", "publish_stream", "photo_upload"};
+	public static final String[] DEFAULT_PERMISSIONS = {"offline_access", "publish_stream", "publish_actions", "photo_upload"};
+//	public static final String[] PHOTO_PERMISSIONS = {"offline_access", "publish_stream", "publish_actions", "photo_upload"};
 	
 	public FacebookService() {
 		super();
@@ -78,12 +78,9 @@ public class FacebookService {
 		authenticate(DEFAULT_PERMISSIONS, sso);
 	}
 	
-	public void authenticate(boolean sso, boolean photos, String...permissions) {
+	public void authenticate(boolean sso, String...permissions) {
 		if(permissions != null && permissions.length > 0) {
 			authenticate(permissions, sso);
-		}
-		else if(photos) {
-			authenticate(PHOTO_PERMISSIONS, sso);
 		}
 		else {
 			authenticate(DEFAULT_PERMISSIONS, sso);

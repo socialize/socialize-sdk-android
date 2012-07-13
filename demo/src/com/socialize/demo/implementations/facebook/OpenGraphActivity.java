@@ -63,9 +63,9 @@ public class OpenGraphActivity extends SDKDemoActivity {
 			public void onAuthSuccess(SocializeSession session) {
 				
 				Map<String, Object> postData = new HashMap<String, Object>();
-				postData.put("dish", "http://samples.ogp.me/228268990626132"); // <-- Entity URL, expects OG tag of socializeandroidtest:dish
+				postData.put("object", "http://samples.ogp.me/245211918931839"); // <-- Entity URL, expects og:type tag of socializeandroidtest:dish
 				
-				String graphPath = "me/socializeandroidtest:eat";
+				String graphPath = "me/og.likes";
 				
 				FacebookUtils.post(OpenGraphActivity.this, graphPath, postData, new SocialNetworkPostListener() {
 					

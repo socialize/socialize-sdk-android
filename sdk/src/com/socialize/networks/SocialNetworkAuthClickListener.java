@@ -54,12 +54,12 @@ public abstract class SocialNetworkAuthClickListener implements OnClickListener 
 		SocialNetwork network = getSocialNetwork();
 		
 		switch (network) {
-		case FACEBOOK:
-			FacebookUtils.link((Activity) view.getContext(), getAuthListener(view));
-			break;
-		case TWITTER:
-			TwitterUtils.link((Activity) view.getContext(), getAuthListener(view));
-			break;
+			case FACEBOOK:
+				FacebookUtils.link((Activity) view.getContext(), getAuthListener(view));
+				break;
+			case TWITTER:
+				TwitterUtils.link((Activity) view.getContext(), getAuthListener(view));
+				break;
 		}
 	}
 	
