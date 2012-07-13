@@ -116,7 +116,9 @@ public class TwitterSharer extends AbstractSocialNetworkSharer {
 					imgBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 					byte[] data = baos.toByteArray();
 
-					tweet.setImageData(data);
+					if (data != null) {
+						tweet.setImageData(data);
+					}
 				} else {
 					Log.v("TwitterSharer", "pictureURL == null");
 				}
