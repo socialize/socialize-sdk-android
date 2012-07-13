@@ -54,12 +54,12 @@ public class ActionBarCustom extends Activity {
 		ActionBarOptions options = new ActionBarOptions();
 		
 		// Set the colors for the Action Bar
-		options.setStrokeColor(Color.parseColor("#591100"));
-		options.setAccentColor(Color.parseColor("#ffa229"));
-		options.setFillColor(Color.parseColor("#831400"));
-		options.setBackgroundColor(Color.parseColor("#591100"));
-		options.setHighlightColor(Color.parseColor("#b05e08"));
-		options.setTextColor(Color.parseColor("#ffba00"));
+		options.setStrokeColor(Color.parseColor("#591100")); // The line between the buttons
+		options.setAccentColor(Color.parseColor("#ffa229")); // The accent line below the buttons
+		options.setFillColor(Color.parseColor("#831400")); // The main color of the buttons
+		options.setBackgroundColor(Color.parseColor("#591100")); // The background color seen on the left
+		options.setHighlightColor(Color.parseColor("#b05e08")); // The thin highlight line above the buttons
+		options.setTextColor(Color.parseColor("#ffba00")); // The text color for all buttons
 		
 		// Optionally alter the images
 		options.setLikeIconResourceId(R.drawable.autumn_like);
