@@ -45,7 +45,8 @@ public class FacebookService {
 	private AuthProviderListener listener;
 	private DialogFactory dialogFactory;
 	
-	public static final String[] DEFAULT_PERMISSIONS = {"offline_access", "publish_stream", "publish_actions", "photo_upload"};
+	public static final String[] DEFAULT_PERMISSIONS = {"publish_stream", "publish_actions", "photo_upload"};
+//	public static final String[] DEFAULT_PERMISSIONS = {"offline_access", "publish_stream", "publish_actions", "photo_upload"};
 //	public static final String[] PHOTO_PERMISSIONS = {"offline_access", "publish_stream", "publish_actions", "photo_upload"};
 	
 	public FacebookService() {

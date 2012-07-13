@@ -42,6 +42,7 @@ import com.socialize.auth.DefaultUserProviderCredentials;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.auth.facebook.FacebookAuthProviderInfo;
+import com.socialize.auth.facebook.FacebookService;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.facebook.Facebook;
@@ -82,7 +83,7 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	 */
 	@Override
 	public void link(Activity context, SocializeAuthListener listener) {
-		getSocialize().authenticate(context, AuthProviderType.FACEBOOK, listener);
+		getSocialize().authenticate(context, AuthProviderType.FACEBOOK, listener, FacebookService.DEFAULT_PERMISSIONS);
 	}
 	
 	@Override
