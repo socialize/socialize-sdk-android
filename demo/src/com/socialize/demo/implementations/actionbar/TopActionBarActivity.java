@@ -21,40 +21,39 @@
  */
 package com.socialize.demo.implementations.actionbar;
 
-import android.app.ListActivity;
-import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.view.Gravity;
+import com.socialize.demo.DemoActivity;
 import com.socialize.demo.R;
+import com.socialize.ui.actionbar.ActionBarOptions;
+import com.socialize.ui.actionbar.ActionBarView;
 
 
 /**
  * @author Jason Polites
- *
  */
-public class ActionBarActivity extends ListActivity {
-	
-	final String[] values = new String[] { "Default Action Bar", "Custom Action Bar", "Multiple Action Bar", "Red Action Bar",  "Autumn Action Bar",  "Action Bar Top"};
-	final Class<?>[] activities = new Class<?>[] { DefaultActionBarActivity.class, CustomActionBarActivity.class, MultiActionBarActivity.class, RedActionBarActivity.class, AutumnActionBarActivity.class, TopActionBarActivity.class};
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.demo_list);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
-		setListAdapter(adapter);
-	}
-	
+public class TopActionBarActivity extends DemoActivity {
 
 	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		Class<?> activityClass = activities[position];
-		if(activityClass != null) {
-			Intent intent = new Intent(this, activityClass);
-			startActivity(intent);
-		}
-	}	
-	
+	protected void onCreate(Bundle savedInstanceState) {
+		
+		super.onCreate(savedInstanceState);
+		
+		setContentView(R.layout.actionbar_top);
+		
+		ActionBarOptions options = new ActionBarOptions();
+		options.setBackgroundColor(Color.BLACK);
+		options.setAccentColor(Color.BLACK);
+		options.setHighlightColor(Color.BLACK);
+		options.setFillColor(Color.BLACK);
+		options.setStrokeColor(Color.BLACK);
+		options.setHideTicker(true);
+		options.setHideComment(true);
+		options.setGravity(Gravity.RIGHT);
+		
+		ActionBarView socializeActionBarView = (ActionBarView) findViewById(R.id.socializeActionBar);
+		socializeActionBarView.setEntity(entity);
+		socializeActionBarView.setActionBarOptions(options);
+	}
 }

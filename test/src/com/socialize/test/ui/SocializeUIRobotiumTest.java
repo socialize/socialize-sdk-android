@@ -47,8 +47,6 @@ public abstract class SocializeUIRobotiumTest extends SocializeManagedActivityTe
 	public static final int BTN_FACEBOOK_SSO = 0;
 	public static final int BTN_MOCK_FACEBOOK = 1;
 	public static final int BTN_MOCK_SOCIALIZE = 2;
-//	public static final int BTN_NOTIFICATIONS_ENABLED = 3;
-	
 	
 	public static final String BTN_CLEAR_CACHE = "Clear Auth Cache";
 	public static final String BTN_SHOW_COMMENTS = "Show Comments";

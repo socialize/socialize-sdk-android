@@ -15,6 +15,7 @@ import com.socialize.android.ioc.ProxyObject;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.comment.CommentSystem;
 import com.socialize.api.action.comment.SubscriptionSystem;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
@@ -51,6 +52,8 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 	@Override
 	protected void startWithoutFacebook() {
 		super.startWithoutFacebook();
+		toggleNotificationsEnabled(true);
+		ConfigUtils.getConfig(getActivity()).setProperty(SocializeConfig.SOCIALIZE_LOCATION_ENABLED, "true");
 		showComments();
 		robotium.waitForActivity("CommentActivity", 5000);
 		robotium.waitForView(ListView.class, 1, 5000);

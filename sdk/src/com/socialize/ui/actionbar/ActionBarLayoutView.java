@@ -98,21 +98,13 @@ public class ActionBarLayoutView extends BaseView {
 	private OnActionBarEventListener onActionBarEventListener;
 	
 	public ActionBarLayoutView(Activity context, ActionBarView actionBarView) {
-		super(context);
-		this.actionBarView = actionBarView;
+		this(context, actionBarView, new ActionBarOptions());
 	}
 	
 	public ActionBarLayoutView(Activity context, ActionBarView actionBarView, ActionBarOptions options) {
-		this(context, actionBarView);
+		super(context);
+		this.actionBarView = actionBarView;
 		this.options = options;
-	}
-	
-	private void initDefaultIcons() {
-		likeIcon = drawables.getDrawable("icon_like.png");
-		likeIconHi = drawables.getDrawable("icon_like_hi.png");
-		commentIcon = drawables.getDrawable("icon_comment.png");
-		viewIcon = drawables.getDrawable("icon_view.png");
-		shareIcon = drawables.getDrawable("icon_share.png");
 	}
 	
 	private Drawable getIcon(Integer resourceId, String defaultName) {
@@ -125,15 +117,26 @@ public class ActionBarLayoutView extends BaseView {
 			logger.debug("init called on " + getClass().getSimpleName());
 		}
 		
-		if(options != null) {
+		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, displayUtils.getDIP(ActionBarView.ACTION_BAR_HEIGHT));
+		masterParams.gravity = options.getGravity() | Gravity.CENTER_VERTICAL;
+		setLayoutParams(masterParams);
+		setGravity(options.getGravity());
+			
+		if(!options.isHideLike() || !options.isHideTicker()) {
 			likeIcon = getIcon(options.getLikeIconResourceId(), "icon_like.png");
 			likeIconHi = getIcon(options.getLikeIconActiveResourceId(), "icon_like_hi.png");
+		}
+		
+		if(!options.isHideComment() || !options.isHideTicker()) {
 			commentIcon = getIcon(options.getCommentIconResourceId(), "icon_comment.png");
-			viewIcon = getIcon(options.getViewIconResourceId(), "icon_view.png");
+		}
+		
+		if(!options.isHideShare() || !options.isHideTicker()) {
 			shareIcon = getIcon(options.getShareIconResourceId(), "icon_share.png");
 		}
-		else {
-			initDefaultIcons();
+	
+		if(!options.isHideTicker()) {
+			viewIcon = getIcon(options.getViewIconResourceId(), "icon_view.png");
 		}
 		
 		int accentHeight = displayUtils.getDIP(4);
@@ -144,146 +147,171 @@ public class ActionBarLayoutView extends BaseView {
 		int commentWidth = width + 15;
 		int shareWidth = width- 5;
 		
-		if(options != null) {
+		if(!options.isHideTicker()) {
 			ticker = tickerFactory.getBean(options.getBackgroundColor());
-		}
-		else {
-			ticker = tickerFactory.getBean();
 		}
 		
 		int textColor = Color.WHITE;
 		
-		if(options != null && options.getTextColor() != null) {
+		if(options.getTextColor() != null) {
 			textColor = options.getTextColor();
 		}
 		
-		viewsItem = itemFactory.getBean(textColor);
-		commentsItem = itemFactory.getBean(textColor);
-		likesItem = itemFactory.getBean(textColor);
-		sharesItem = itemFactory.getBean(textColor);
-		
-		viewsItem.setIcon(viewIcon);
-		commentsItem.setIcon(commentIcon);
-		likesItem.setIcon(likeIcon);
-		sharesItem.setIcon(shareIcon);
-		
-		ticker.addTickerView(viewsItem);
-		ticker.addTickerView(commentsItem);
-		ticker.addTickerView(likesItem);
-		ticker.addTickerView(sharesItem);
-		
-		likeButton = buttonFactory.getBean();
-		commentButton = buttonFactory.getBean();
-		shareButton = buttonFactory.getBean();
-		
-		ActionBarButtonBackground bg = null;
-		
-		if(options != null) {
-			bg = new ActionBarButtonBackground(accentHeight, strokeWidth, options.getStrokeColor(), options.getAccentColor(), options.getFillColor(), options.getHighlightColor());
-		}
-		else {
-			bg = new ActionBarButtonBackground(accentHeight, strokeWidth);
+		if(!options.isHideComment() || !options.isHideTicker()) {
+			commentsItem = itemFactory.getBean(textColor);
+			commentsItem.setIcon(commentIcon);
+			if(!options.isHideComment()) commentButton = buttonFactory.getBean();
 		}
 		
-		commentButton.setIcon(commentIcon);
-		commentButton.setBackgroundDrawable(bg);
+		if(!options.isHideLike() || !options.isHideTicker()) {
+			likesItem = itemFactory.getBean(textColor);
+			likesItem.setIcon(likeIcon);
+			if(!options.isHideLike()) likeButton = buttonFactory.getBean();
+		}
 		
-		likeButton.setIcon(likeIcon);
-		likeButton.setBackgroundDrawable(bg);
+		if(!options.isHideShare() || !options.isHideTicker()) {
+			sharesItem = itemFactory.getBean(textColor);
+			sharesItem.setIcon(shareIcon);
+			if(!options.isHideShare()) shareButton = buttonFactory.getBean();
+		}
 		
-		shareButton.setIcon(shareIcon);
-		shareButton.setBackgroundDrawable(bg);
+		if(!options.isHideTicker())  {
+			viewsItem = itemFactory.getBean(textColor);
+			viewsItem.setIcon(viewIcon);
+			
+			ticker.addTickerView(viewsItem);
+			ticker.addTickerView(commentsItem);
+			ticker.addTickerView(likesItem);
+			ticker.addTickerView(sharesItem);
+		}
 		
-		commentButton.setListener(new ActionBarButtonListener() {
-			@Override
-			public void onClick(ActionBarButton button) {
-				boolean consumed = false;
-				
-				if(onActionBarEventListener != null) {
-					consumed = onActionBarEventListener.onClick(actionBarView, ActionBarEvent.COMMENT);
+		ActionBarButtonBackground bg = new ActionBarButtonBackground(
+				accentHeight, 
+				strokeWidth, 
+				options.getStrokeColor(), 
+				options.getAccentColor(), 
+				options.getFillColor(), 
+				options.getHighlightColor(), 
+				options.getColorLayout());
+		
+		if(commentButton != null) {
+			commentButton.setIcon(commentIcon);
+			commentButton.setBackgroundDrawable(bg);
+			
+			commentButton.setListener(new ActionBarButtonListener() {
+				@Override
+				public void onClick(ActionBarButton button) {
+					boolean consumed = false;
+					
+					if(onActionBarEventListener != null) {
+						consumed = onActionBarEventListener.onClick(actionBarView, ActionBarEvent.COMMENT);
+					}
+					
+					if(!consumed) {
+						CommentUtils.showCommentView(getActivity(), actionBarView.getEntity());
+					}
 				}
-				
-				if(!consumed) {
-					CommentUtils.showCommentView(getActivity(), actionBarView.getEntity());
+			});			
+		}
+		
+		if(likeButton != null) {
+			likeButton.setIcon(likeIcon);
+			likeButton.setBackgroundDrawable(bg);
+			
+			likeButton.setListener(new ActionBarButtonListener() {
+				@Override
+				public void onClick(ActionBarButton button) {
+					
+					boolean consumed = false;
+					
+					if(onActionBarEventListener != null) {
+						consumed = onActionBarEventListener.onClick(actionBarView, ActionBarEvent.LIKE);
+					}
+					
+					if(!consumed) {
+						doLike(likeButton);
+					}
 				}
-			}
-		});
+			});			
+		}
+	
 		
-		likeButton.setListener(new ActionBarButtonListener() {
-			@Override
-			public void onClick(ActionBarButton button) {
-				
-				boolean consumed = false;
-				
-				if(onActionBarEventListener != null) {
-					consumed = onActionBarEventListener.onClick(actionBarView, ActionBarEvent.LIKE);
+		if(shareButton != null) {
+			shareButton.setIcon(shareIcon);
+			shareButton.setBackgroundDrawable(bg);
+			
+			shareButton.setListener(new ActionBarButtonListener() {
+				@Override
+				public void onClick(ActionBarButton button) {
+					
+					boolean consumed = false;
+					
+					if(onActionBarEventListener != null) {
+						consumed = onActionBarEventListener.onClick(actionBarView, ActionBarEvent.SHARE);
+					}
+					
+					if(!consumed) {
+						ShareUtils.showShareDialog(getActivity(), actionBarView.getEntity());
+					}
 				}
-				
-				if(!consumed) {
-					doLike(likeButton);
+			});
+		}
+		
+		if(ticker != null) {
+			ticker.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(android.view.View v) {
+					
+					boolean consumed = false;
+					
+					if(onActionBarEventListener != null) {
+						consumed = onActionBarEventListener.onClick(actionBarView, ActionBarEvent.VIEW);
+					}	
+					
+					if(!consumed) {
+						ticker.skipToNext();
+					}
 				}
-			}
-		});
+			});
+		}
+
+		if(viewsItem != null) {
+			viewsItem.init();
+			viewsItem.setText(loadingText);
+		}
 		
-		shareButton.setListener(new ActionBarButtonListener() {
-			@Override
-			public void onClick(ActionBarButton button) {
-				
-				boolean consumed = false;
-				
-				if(onActionBarEventListener != null) {
-					consumed = onActionBarEventListener.onClick(actionBarView, ActionBarEvent.SHARE);
-				}
-				
-				if(!consumed) {
-					ShareUtils.showShareDialog(getActivity(), actionBarView.getEntity());
-				}
-			}
-		});
+		if(commentsItem != null) {
+			commentsItem.init();
+			commentsItem.setText(loadingText);
+			
+			commentButton.init(commentWidth, 0.0f, textColor);
+			commentButton.setText("Comment");
+		}
 		
-		ticker.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(android.view.View v) {
-				
-				boolean consumed = false;
-				
-				if(onActionBarEventListener != null) {
-					consumed = onActionBarEventListener.onClick(actionBarView, ActionBarEvent.VIEW);
-				}	
-				
-				if(!consumed) {
-					ticker.skipToNext();
-				}
-			}
-		});
+		if(likesItem != null) {
+			likesItem.init();
+			likesItem.setText(loadingText);
+			
+			likeButton.init(likeWidth, 0.0f, textColor);
+			likeButton.setText(loadingText);
+		}
 		
-		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, displayUtils.getDIP(ActionBarView.ACTION_BAR_HEIGHT));
-		masterParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
-		setLayoutParams(masterParams);
+		if(sharesItem != null) {
+			sharesItem.init();
+			sharesItem.setText(loadingText);
+			
+			shareButton.init(shareWidth, 0.0f, textColor);
+			shareButton.setText("Share");
+		}
 		
-		viewsItem.init();
-		commentsItem.init();
-		likesItem.init();
-		sharesItem.init();
+		if(ticker != null) {
+			ticker.init(LayoutParams.FILL_PARENT, 1.0f);
+		}
 		
-		ticker.init(LayoutParams.FILL_PARENT, 1.0f);
-		likeButton.init(likeWidth, 0.0f, textColor);
-		commentButton.init(commentWidth, 0.0f, textColor);
-		shareButton.init(shareWidth, 0.0f, textColor);
-		
-		viewsItem.setText(loadingText);
-		commentsItem.setText(loadingText);
-		likesItem.setText(loadingText);
-		sharesItem.setText(loadingText);
-		
-		likeButton.setText(loadingText);
-		shareButton.setText("Share");
-		commentButton.setText("Comment");
-		
-		addView(ticker);
-		addView(likeButton);
-		addView(shareButton);
-		addView(commentButton);
+		if(ticker != null) addView(ticker);
+		if(likeButton != null) addView(likeButton);
+		if(shareButton != null) addView(shareButton);
+		if(commentButton != null) addView(commentButton);
 	}
 	
 	@Override
@@ -300,21 +328,21 @@ public class ActionBarLayoutView extends BaseView {
 	
 	protected void doLoadSequence(boolean reload) {
 		final Entity userProvidedEntity = actionBarView.getEntity();
-		ticker.resetTicker();
+		if(ticker != null) ticker.resetTicker();
 		if(userProvidedEntity != null) {
 			if(reload) {
-				viewsItem.setText(loadingText);
-				commentsItem.setText(loadingText);
-				likesItem.setText(loadingText);
-				sharesItem.setText(loadingText);
-				likeButton.setText(loadingText);
+				if(viewsItem != null) viewsItem.setText(loadingText);
+				if(commentsItem != null) commentsItem.setText(loadingText);
+				if(likesItem != null) likesItem.setText(loadingText);
+				if(sharesItem != null) sharesItem.setText(loadingText);
+				if(likeButton != null) likeButton.setText(loadingText);
 				
 				if(onActionBarEventListener != null) {
 					onActionBarEventListener.onUpdate(actionBarView);
 				}	
 			}
 			else {
-				ticker.startTicker();
+				if(ticker != null) ticker.startTicker();
 				
 				if(onActionBarEventListener != null) {
 					onActionBarEventListener.onLoad(actionBarView);
@@ -525,19 +553,21 @@ public class ActionBarLayoutView extends BaseView {
 		EntityStats stats = entity.getEntityStats();
 		
 		if(stats != null) {
-			viewsItem.setText(getCountText(stats.getViews()));
-			commentsItem.setText(getCountText(stats.getComments()));
-			likesItem.setText(getCountText(stats.getLikes() + ((ce.isLiked()) ? 1 : 0)));
-			sharesItem.setText(getCountText(stats.getShares()));
+			if(viewsItem != null) viewsItem.setText(getCountText(stats.getViews()));
+			if(commentsItem != null) commentsItem.setText(getCountText(stats.getComments()));
+			if(likesItem != null) likesItem.setText(getCountText(stats.getLikes() + ((ce.isLiked()) ? 1 : 0)));
+			if(sharesItem != null) sharesItem.setText(getCountText(stats.getShares()));
 		}
 		
-		if(ce.isLiked()) {
-			likeButton.setText("Unlike");
-			likeButton.setIcon(likeIconHi);
-		}
-		else {
-			likeButton.setText("Like");
-			likeButton.setIcon(likeIcon);
+		if(likeButton != null) {
+			if(ce.isLiked()) {
+				likeButton.setText("Unlike");
+				likeButton.setIcon(likeIconHi);
+			}
+			else {
+				likeButton.setText("Like");
+				likeButton.setIcon(likeIcon);
+			}
 		}
 	}
 	
@@ -616,11 +646,16 @@ public class ActionBarLayoutView extends BaseView {
 	}
 
 	public void stopTicker() {
-		ticker.stopTicker();
+		if(ticker != null) {
+			ticker.stopTicker();
+		}
+		
 	}
 
 	public void startTicker() {
-		ticker.startTicker();
+		if(ticker != null) {
+			ticker.startTicker();
+		}
 	}
 
 	public void setOnActionBarEventListener(OnActionBarEventListener onActionBarEventListener) {

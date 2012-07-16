@@ -93,11 +93,6 @@ public class ActionBarView extends EntityView {
 		}
 	}
 	
-	@Override
-	public void onViewRendered(int width, int height) {
-		super.onViewRendered(width, height);
-	}
-
 	public Entity getEntity() {
 		return entity;
 	}

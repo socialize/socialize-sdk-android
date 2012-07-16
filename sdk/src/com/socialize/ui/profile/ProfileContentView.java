@@ -170,7 +170,7 @@ public class ProfileContentView extends BaseView {
 		master.addView(firstNameEdit);
 		master.addView(lastNameEdit);
 		
-		if(appUtils.isLocationAvaiable(getContext())) {
+		if(appUtils.isLocationAvailable(getContext())) {
 			locationEnabledCheckbox = locationEnabledCheckboxFactory.getBean();
 			locationEnabledCheckbox.setLayoutParams(commonParams);
 			master.addView(locationEnabledCheckbox);

@@ -21,11 +21,15 @@
  */
 package com.socialize.ui.actionbar;
 
+import android.view.Gravity;
+
 /**
  * @author Jason Polites
  *
  */
 public class ActionBarOptions {
+	
+	public static enum ColorLayout {TOP, BOTTOM}
 	
 	private boolean addScrollView = true;
 	
@@ -41,6 +45,15 @@ public class ActionBarOptions {
 	private Integer commentIconResourceId;
 	private Integer shareIconResourceId;
 	private Integer viewIconResourceId;
+	
+	private boolean hideLike;
+	private boolean hideComment;
+	private boolean hideShare;
+	private boolean hideTicker;
+	
+	private int gravity = Gravity.LEFT;
+	
+	private ColorLayout colorLayout = ColorLayout.BOTTOM;
 	
 	public boolean isAddScrollView() {
 		return addScrollView;
@@ -138,5 +151,51 @@ public class ActionBarOptions {
 		this.viewIconResourceId = viewIconResourceId;
 	}
 	
+	public ColorLayout getColorLayout() {
+		return colorLayout;
+	}
 	
+	public void setColorLayout(ColorLayout colorLayout) {
+		this.colorLayout = colorLayout;
+	}
+	
+	public boolean isHideLike() {
+		return hideLike;
+	}
+
+	public void setHideLike(boolean hideLike) {
+		this.hideLike = hideLike;
+	}
+
+	public boolean isHideComment() {
+		return hideComment;
+	}
+	
+	public void setHideComment(boolean hideComment) {
+		this.hideComment = hideComment;
+	}
+
+	public boolean isHideShare() {
+		return hideShare;
+	}
+	
+	public void setHideShare(boolean hideShare) {
+		this.hideShare = hideShare;
+	}
+	
+	public boolean isHideTicker() {
+		return hideTicker;
+	}
+	
+	public void setHideTicker(boolean hideTicker) {
+		this.hideTicker = hideTicker;
+	}
+	
+	public int getGravity() {
+		return gravity;
+	}
+	
+	public void setGravity(int gravity) {
+		this.gravity = gravity;
+	}
 }
