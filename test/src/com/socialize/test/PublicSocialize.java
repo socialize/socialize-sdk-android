@@ -36,12 +36,9 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
 import com.socialize.auth.SocializeAuthProviderInfo;
 import com.socialize.entity.Comment;
-import com.socialize.entity.SocializeAction;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeListener;
 import com.socialize.log.SocializeLogger;
-import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkListener;
 import com.socialize.notifications.WakeLock;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.util.ClassLoaderProvider;
@@ -142,11 +139,6 @@ public class PublicSocialize extends SocializeServiceImpl {
 	@Override
 	public Comment newComment() {
 		return super.newComment();
-	}
-
-	@Override
-	public void handleActionShare(Activity activity, SocialNetwork socialNetwork, SocializeAction action, String shareText, SocialNetworkListener listener) {
-		super.handleActionShare(activity, socialNetwork, action, shareText, listener);
 	}
 
 	@Override

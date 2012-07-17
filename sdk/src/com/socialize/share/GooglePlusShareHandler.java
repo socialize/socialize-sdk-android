@@ -35,40 +35,40 @@ import com.socialize.networks.SocialNetworkListener;
  * @author Jason Polites
  *
  */
-public class GooglePlusShareHandler {// extends AbstractShareHandler {
-//
-//	/* (non-Javadoc)
-//	 * @see com.socialize.share.ShareHandler#isAvailableOnDevice(android.content.Context)
-//	 */
-//	@Override
-//	public boolean isAvailableOnDevice(Context context) {
-//		try {
-//			context.getPackageManager().getPackageInfo("com.google.android.apps.plus", 0);
-//			return true;
-//		}
-//		catch (NameNotFoundException e) {
-//			return false;
-//		}
-//	}
-//
-//	/* (non-Javadoc)
-//	 * @see com.socialize.share.AbstractShareHandler#handle(android.app.Activity, com.socialize.entity.SocializeAction, java.lang.String, com.socialize.entity.PropagationInfo, com.socialize.networks.SocialNetworkListener)
-//	 */
-//	@Override
-//	protected void handle(Activity context, SocializeAction action, String text, PropagationInfo info, SocialNetworkListener listener) throws Exception {
-//		Intent shareIntent = new Intent().setAction(Intent.ACTION_SEND);
-//		shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);	
-//		shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, text);
-//		shareIntent.setType("text/plain");
-//		shareIntent.setPackage("com.google.android.apps.plus");
-//		context.startActivity(shareIntent);
-//	}
-//
-//	/* (non-Javadoc)
-//	 * @see com.socialize.share.AbstractShareHandler#getShareType()
-//	 */
-//	@Override
-//	protected ShareType getShareType() {
-//		return ShareType.OTHER;
-//	}
+public class GooglePlusShareHandler extends AbstractShareHandler {
+
+	/* (non-Javadoc)
+	 * @see com.socialize.share.ShareHandler#isAvailableOnDevice(android.content.Context)
+	 */
+	@Override
+	public boolean isAvailableOnDevice(Context context) {
+		try {
+			context.getPackageManager().getPackageInfo("com.google.android.apps.plus", 0);
+			return true;
+		}
+		catch (NameNotFoundException e) {
+			return false;
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.share.AbstractShareHandler#handle(android.app.Activity, com.socialize.entity.SocializeAction, java.lang.String, com.socialize.entity.PropagationInfo, com.socialize.networks.SocialNetworkListener)
+	 */
+	@Override
+	protected void handle(Activity context, SocializeAction action, String text, PropagationInfo info, SocialNetworkListener listener) throws Exception {
+		Intent shareIntent = new Intent().setAction(Intent.ACTION_SEND);
+		shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);	
+		shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, text);
+		shareIntent.setType("text/plain");
+		shareIntent.setPackage("com.google.android.apps.plus");
+		context.startActivity(shareIntent);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.share.AbstractShareHandler#getShareType()
+	 */
+	@Override
+	protected ShareType getShareType() {
+		return ShareType.GOOGLE_PLUS;
+	}
 }

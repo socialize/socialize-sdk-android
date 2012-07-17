@@ -53,6 +53,7 @@ public abstract class SocializeUIRobotiumTest extends SocializeManagedActivityTe
 	
 	
 	public static final String BTN_NOTIFICATIONS_ENABLED = "Notifications Enabled";
+	public static final String BTN_LOCATION_ENABLED = "Location Enabled";
 	
 	public static final String BTN_SHOW_ACTION_BAR_AUTO = "Show Action Bar (auto)";
 	public static final String BTN_SHOW_ACTION_BAR_MANUAL = "Show Action Bar (manual)";
@@ -116,7 +117,13 @@ public abstract class SocializeUIRobotiumTest extends SocializeManagedActivityTe
 		if(on) {
 			TestUtils.clickOnButton(BTN_NOTIFICATIONS_ENABLED);
 		}
-	}		
+	}	
+	
+	protected void toggleLocationEnabled(boolean on) {
+		if(on) {
+			TestUtils.clickOnButton(BTN_LOCATION_ENABLED);
+		}
+	}			
 	
 	protected void clearAuthCache() {
 		SocializeService socialize = Socialize.getSocialize();

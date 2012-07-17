@@ -75,14 +75,19 @@ public class ShareUtils {
 	public static final int MORE_OPTIONS = 1<<5;
 	
 	/**
+	 * Used to instruct the dialog to display the Google Plus option. 
+	 */
+	public static final int GOOGLE_PLUS = 1<<6;
+	
+	/**
 	 * Displays only Social Network options.
 	 */
-	public static final int SOCIAL = FACEBOOK|TWITTER;
+	public static final int SOCIAL = FACEBOOK|TWITTER|GOOGLE_PLUS;
 	
 	/**
 	 * The default display settings for the share dialog.
 	 */
-	public static final int DEFAULT = EMAIL|SMS|FACEBOOK|TWITTER|MORE_OPTIONS;
+	public static final int DEFAULT = EMAIL|SMS|FACEBOOK|TWITTER|GOOGLE_PLUS|MORE_OPTIONS;
 	
 	static ShareUtilsProxy proxy;
 	
@@ -151,6 +156,17 @@ public class ShareUtils {
 	 */
 	public static void shareViaEmail(Activity context, Entity entity, ShareAddListener listener) {
 		proxy.shareViaEmail(context, entity, listener);
+	};
+	
+	
+	/**
+	 * Shares the given entity via email.  This method with launch the Google+ application on the device.
+	 * @param context The current context.
+	 * @param entity The entity being shared.
+	 * @param listener A listener to handle events.
+	 */
+	public static void shareViaGooglePlus(Activity context, Entity entity, ShareAddListener listener) {
+		proxy.shareViaGooglePlus(context, entity, listener);
 	};
 	
 	/**

@@ -65,6 +65,8 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_SHOW_COMMENT_LIST_ON_NOTIFY = "socialize.comments.on.notify";
 	
+	public static final String GOOGLE_PLUS_ENABLED = "googleplus.enabled";
+	
 	/**
 	 * true if Single Sign On is enabled.  Default is true.
 	 */
@@ -316,6 +318,10 @@ public class SocializeConfig {
 	
 	public boolean isOGLike() {
 		return getBooleanProperty(FACEBOOK_USE_OG_LIKE, false);
+	}
+	
+	public boolean isGooglePlusEnabled() {
+		return getBooleanProperty(GOOGLE_PLUS_ENABLED, true);
 	}
 	
 	public boolean isNotificationsEnabled() {

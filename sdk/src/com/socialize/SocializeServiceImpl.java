@@ -69,8 +69,6 @@ import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.SocializeListener;
 import com.socialize.location.SocializeLocationProvider;
 import com.socialize.log.SocializeLogger;
-import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.FacebookUtils;
 import com.socialize.notifications.C2DMCallback;
 import com.socialize.notifications.NotificationChecker;
@@ -660,10 +658,6 @@ public class SocializeServiceImpl implements SocializeService {
 		return new Comment();
 	}
 	
-	protected void handleActionShare(final Activity activity, final SocialNetwork socialNetwork, SocializeAction action, String shareText, final SocialNetworkListener listener) {
-		shareSystem.share(activity, session, action, shareText, null, ShareType.valueOf(socialNetwork), listener);	
-	}
-
 	public boolean isInitialized() {
 		return this.initCount > 0;
 	}

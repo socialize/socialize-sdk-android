@@ -19,68 +19,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.action;
+package com.socialize.ui.share;
 
-import com.socialize.networks.SocialNetwork;
+import android.content.Context;
+import android.widget.ImageView;
+import com.socialize.ui.view.ClickableSectionCell;
 
 
 /**
  * @author Jason Polites
+ *
  */
-public enum ShareType {
-	TWITTER ("twitter", "Twitter", 1),
-	FACEBOOK ("facebook", "Facebook", 2),
-	EMAIL ("email", "Email", 3),
-	SMS ("sms", "SMS", 4),
-	GOOGLE_PLUS ("google_plus", "Google+", 101),
-	OTHER ("other", "Other",  101);
-	
-	private final String name; 
-	private final String displayName;
-    private final int id; 
-	
-	ShareType(String name, String displayName, int id) {
-		this.name = name;
-		this.displayName = displayName;
-		this.id = id;
+public class GooglePlusCell extends ClickableSectionCell {
+
+	public GooglePlusCell(Context context) {
+		super(context);
 	}
 
-	public String getName() {
-		return name;
-	}
-	
-	public String getDisplayName() {
-		return displayName;
-	}
-
-	public int getId() {
-		return id;
-	}
-
+	/* (non-Javadoc)
+	 * @see com.socialize.ui.view.ClickableSectionCell#makeImage()
+	 */
 	@Override
-	public String toString() {
-		return name;
+	protected ImageView makeImage() {
+		setImageOn(drawables.getDrawable("icon_googleplus.png"));
+		return  new ImageView(getContext());
 	}
-	
-	public static ShareType valueOf(SocialNetwork socialNetwork) {
-		if(socialNetwork == null) {
-			return OTHER;
-		}
-		return valueOf(socialNetwork.name().toUpperCase());
-	}
-	
-	public static ShareType valueOf(int id) {
-		switch(id) {
-		case 1 : 
-			return TWITTER;
-		case 2 : 
-			return FACEBOOK;	
-		case 3 : 
-			return EMAIL;	
-		case 4 : 
-			return SMS;				
-		default :
-			return OTHER;
-		}
-	}
+
 }

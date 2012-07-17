@@ -383,8 +383,13 @@
 		<property name="logger" ref="logger"/>
 	</bean>
 	
+	<bean id="googlePlusShareHandler" class="com.socialize.share.GooglePlusShareHandler">
+		<property name="logger" ref="logger"/>
+	</bean>
+
 	<bean id="twitterShareHandler" class="com.socialize.share.TwitterShareHandler">
 		<property name="twitterSharer" ref="twitterSharer"/>
+		<property name="logger" ref="logger"/>
 	</bean>
 	
 	<bean id="otherShareHandler" class="com.socialize.share.OtherShareHandler" extends="emailShareHandler"/>
@@ -399,10 +404,14 @@
 				<entry>
 					<key value="SMS"/>
 					<value ref="smsShareHandler"/>
-				</entry>				
+				</entry>
 				<entry>
 					<key value="FACEBOOK"/>
 					<value ref="facebookShareHandler"/>
+				</entry>
+				<entry>
+					<key value="GOOGLE_PLUS"/>
+					<value ref="googlePlusShareHandler"/>
 				</entry>
 				<entry>
 					<key value="TWITTER"/>
