@@ -100,6 +100,13 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 			}
 			
 			@Override
+			public void onSimpleShare(ShareType type) {
+				if(dialogListener != null) {
+					dialogListener.onSimpleShare(type);
+				}	
+			}
+
+			@Override
 			public void onFlowInterrupted(DialogFlowController controller) {
 				// Will not be called.
 			}

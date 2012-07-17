@@ -492,6 +492,11 @@ public class SharePanelView extends DialogPanelView {
 			emailCell.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(final View v) {
+					
+					if(shareDialogListener != null) {
+						shareDialogListener.onSimpleShare(ShareType.EMAIL);
+					}
+					
 					final ProgressDialog progress = SafeProgressDialog.show(v.getContext());
 					ShareUtils.shareViaEmail(getActivity(), entity, new ShareAddListener() {
 						
@@ -514,6 +519,11 @@ public class SharePanelView extends DialogPanelView {
 			smsCell.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(final View v) {
+					
+					if(shareDialogListener != null) {
+						shareDialogListener.onSimpleShare(ShareType.SMS);
+					}
+					
 					final ProgressDialog progress = SafeProgressDialog.show(v.getContext());
 					ShareUtils.shareViaSMS(getActivity(), entity, new ShareAddListener() {
 						
@@ -536,6 +546,11 @@ public class SharePanelView extends DialogPanelView {
 			googlePlusCell.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(final View v) {
+					
+					if(shareDialogListener != null) {
+						shareDialogListener.onSimpleShare(ShareType.GOOGLE_PLUS);
+					}
+					
 					final ProgressDialog progress = SafeProgressDialog.show(v.getContext());
 					ShareUtils.shareViaGooglePlus(getActivity(), entity, new ShareAddListener() {
 						

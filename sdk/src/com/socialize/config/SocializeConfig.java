@@ -26,9 +26,7 @@ import java.io.InputStream;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
-
 import android.content.Context;
-
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.ResourceLocator;
 import com.socialize.util.StringUtils;
@@ -62,6 +60,10 @@ public class SocializeConfig {
 	public static final String SOCIALIZE_REQUIRE_AUTH = "socialize.require.auth";
 	
 	public static final String SOCIALIZE_ALLOW_ANON = "socialize.allow.anon";
+	
+	public static final String SOCIALIZE_EVENTS_AUTH_ENABLED = "socialize.events.auth.enabled";
+	
+	public static final String SOCIALIZE_EVENTS_SHARE_ENABLED = "socialize.events.share.enabled";
 	
 	public static final String SOCIALIZE_SHOW_COMMENT_LIST_ON_NOTIFY = "socialize.comments.on.notify";
 	
@@ -317,7 +319,7 @@ public class SocializeConfig {
 	}
 	
 	public boolean isOGLike() {
-		return getBooleanProperty(FACEBOOK_USE_OG_LIKE, false);
+		return getBooleanProperty(FACEBOOK_USE_OG_LIKE, true);
 	}
 	
 	public boolean isGooglePlusEnabled() {

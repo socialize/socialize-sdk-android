@@ -25,6 +25,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import com.socialize.ShareUtils;
 import com.socialize.UserUtils;
+import com.socialize.api.action.ShareType;
 import com.socialize.api.action.share.SocialNetworkDialogListener;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
@@ -73,6 +74,11 @@ ShareUtils.showShareDialog(this, entity, new ShareDialogListener() {
 	@Override
 	public void onCancel(Dialog dialog) {
 		// User cancelled.
+	}
+	
+	@Override
+	public void onSimpleShare(ShareType type) {
+		// User performed a simple share operation (e.g. Email or SMS)
 	}
 	
 	@Override

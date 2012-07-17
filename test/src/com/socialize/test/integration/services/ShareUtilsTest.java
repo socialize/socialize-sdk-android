@@ -30,6 +30,7 @@ import android.app.Dialog;
 import android.content.Context;
 import com.socialize.ShareUtils;
 import com.socialize.SocializeAccess;
+import com.socialize.api.action.ShareType;
 import com.socialize.api.action.share.ShareOptions;
 import com.socialize.api.action.share.SocialNetworkDialogListener;
 import com.socialize.api.action.share.SocialNetworkShareListener;
@@ -305,6 +306,9 @@ public class ShareUtilsTest extends SocializeActivityTest {
 
 			@Override
 			public void onCancel(Dialog dialog) {}
+			
+			@Override
+			public void onSimpleShare(ShareType type) {}
 
 			@Override
 			public boolean onContinue(Dialog dialog, boolean remember, SocialNetwork... networks) {
@@ -363,6 +367,9 @@ public class ShareUtilsTest extends SocializeActivityTest {
 
 			@Override
 			public void onCancel(Dialog dialog) {}
+			
+			@Override
+			public void onSimpleShare(ShareType type) {}
 
 			@Override
 			public boolean onContinue(Dialog dialog, boolean remember, SocialNetwork... networks) {
@@ -423,6 +430,9 @@ public class ShareUtilsTest extends SocializeActivityTest {
 
 			@Override
 			public void onShow(Dialog dialog, SharePanelView dialogView) {}
+			
+			@Override
+			public void onSimpleShare(ShareType type) {}
 
 			@Override
 			public void onCancel(Dialog dialog) {

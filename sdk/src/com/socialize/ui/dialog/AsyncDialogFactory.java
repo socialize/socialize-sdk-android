@@ -47,7 +47,7 @@ public abstract class AsyncDialogFactory<V extends DialogPanelView, L extends So
 	private IBeanFactory<V> panelViewFactory;
 	private DisplayUtils displayUtils;
 	private Colors colors;
-	private SocializeLogger logger;
+	protected SocializeLogger logger;
 	
 	protected void makeDialog(final Context context, final L listener, Object...args) {
 		

@@ -394,6 +394,8 @@
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
 		<property name="logger" ref="logger"/>
+		<property name="eventSystem" ref="eventSystem"/>
+		<property name="config" ref="config"/>
 	</bean>
 	
 	<bean 
@@ -426,6 +428,8 @@
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
 		<property name="logger" ref="logger"/>
+		<property name="eventSystem" ref="eventSystem"/>
+		<property name="config" ref="config"/>
 	</bean>	
 	
 	<bean 

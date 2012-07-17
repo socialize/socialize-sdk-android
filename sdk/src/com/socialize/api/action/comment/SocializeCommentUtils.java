@@ -27,6 +27,7 @@ import android.content.Context;
 import com.socialize.ShareUtils;
 import com.socialize.UserUtils;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ShareType;
 import com.socialize.api.action.SocializeActionUtilsBase;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
@@ -126,13 +127,16 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 	protected void doCommentWithShareDialog(final Activity context, final SocializeSession session, final Entity entity, final String text, final CommentOptions commentOptions, final CommentAddListener listener) {
 		
 		if(isDisplayShareDialog(context, commentOptions)) {
-			shareDialogFactory.show(context, entity, null,  new ShareDialogListener() {
+			shareDialogFactory.show(context, entity, null, new ShareDialogListener() {
 				@Override
 				public void onShow(Dialog dialog, SharePanelView dialogView) {}
 				
 				@Override
 				public void onFlowInterrupted(DialogFlowController controller) {}
 				
+				@Override
+				public void onSimpleShare(ShareType type) {}
+
 				@Override
 				public boolean onContinue(final Dialog dialog, boolean remember, final SocialNetwork...networks) {
 					
