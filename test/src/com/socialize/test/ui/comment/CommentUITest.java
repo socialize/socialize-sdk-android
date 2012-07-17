@@ -183,15 +183,6 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 			}
 		};
 		
-//		final SimpleDialogFactory<AlertDialog> dialogFactory = new AlertDialogFactory() {
-//			@Override
-//			public AlertDialog show(Context context, String title, String message) {
-//				addResult(0, title);
-//				addResult(1, message);
-//				return null;
-//			}
-//		};
-		
 		final CommentSystem commentSystem = new MockCommentSystem() {
 
 			@Override
@@ -230,14 +221,6 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 					System.err.println("AppUtils Proxy is null!!");
 				}	
 				
-//				ProxyObject<SimpleDialogFactory<AlertDialog>> alertDialogFactoryProxy = container.getProxy("alertDialogFactory");
-//				if(proxy != null) {
-//					alertDialogFactoryProxy.setDelegate(dialogFactory);
-//				}
-//				else {
-//					System.err.println("DialogFactory Proxy is null!!");
-//				}	
-				
 				ProxyObject<CommentSystem> commentSystemProxy = container.getProxy("commentSystem");
 				if(proxy != null) {
 					commentSystemProxy.setDelegate(commentSystem);
@@ -275,13 +258,8 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		latch.await(10, TimeUnit.SECONDS);
 		
 		String valueAfter = getResult(0);
-//		String bodyAfter = getResult(1);
-		
 		assertNotNull(valueAfter);
-//		assertNotNull(bodyAfter);
-		
 		assertEquals("success", valueAfter);
-//		assertEquals(dialogBody, bodyAfter);
 	}	
 	
 	public void testCommentListAndView() {
