@@ -53,6 +53,8 @@ If you **do not** already have a Facebook app just follow these simple steps:
 		
 		Paste your key into the "key hash" section of your Facebook app.
 		
+		.. note:: Ensure **Android Native Deep Linking is DISABLED** otherwise Facebook will bypass the Socialize SmartDownload process.
+		
 		.. image:: images/fb_hash.png
 		
 		Generally it makes sense to add BOTH your **debug** and your **release** keys to Facebook to avoid problems during development and testing.
@@ -69,10 +71,5 @@ Once you have a facebook application, simply add your Facebook app Id your **soc
 
 .. raw:: html
    :file: snippets/facebook_complete.html  
-
-.. _propagate_fb:
-
-
-
 
 .. include:: footer.inc	

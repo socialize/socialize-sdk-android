@@ -14,6 +14,6 @@ To do this, simply add a configuration entry to your **socialize.properties** fi
 .. literalinclude:: snippets/props_amazon.txt
    :language: properties
    
-The value for the Amazon AppStore is "amazon" (lowercase)
+The value for the Amazon AppStore is "amazon" (lower case)
 
 .. include:: footer.inc

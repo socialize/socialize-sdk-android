@@ -20,7 +20,7 @@ The Action Bar provides immediate access to all Socialize features including
 
 Displaying the Action Bar
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-The Action Bar is designed to automatically "pin" iteself to the bottom of your view.
+The Action Bar is designed to automatically "pin" itself to the bottom of your view.
   
 Adding the Action Bar to your app is done with a simple call to **showActionBar** from ActionBarUtils
 
@@ -66,6 +66,8 @@ to instruct the ActionBar to reload after you change the entity key.
 	:start-after: begin-snippet-1
 	:end-before: end-snippet-1
 	
+.. _custom_actionbar:	
+	
 Customizing the Action Bar
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 The Action Bar can be customized to suite the look-and-feel of your app.  You can alter colors, font colors and images on the ActionBar to give it a unique appearance
@@ -99,7 +101,7 @@ you can always just add the view manually.
 
 1. It MUST be included inside a RelativeLayout.  This is because several of the UI features need to be able to slide "over" your existing content.
 2. It MUST be positioned at the bottom of your view. 
-3. It MUST be included as the LAST element in your XML layout, otherwise you may get some strange behaviour with layers sliding over/under content.
+3. It MUST be included as the LAST element in your XML layout, otherwise you may get some strange behavior with layers sliding over/under content.
 
 Here is the recommended way to include the Action Bar in your XML layout:
 
