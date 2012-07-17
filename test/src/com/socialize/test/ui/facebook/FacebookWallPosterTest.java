@@ -73,24 +73,24 @@ import com.socialize.util.ImageUtils;
 })
 public class FacebookWallPosterTest extends SocializeActivityTest {
 
-	public void testPostLike() {
-		doTestPostLike("");
-	}
 	
 	public void testPostComment() {
 		testPostComment("foobar_comment");
 	}
 	
-	public void doTestPostLike(String expectedString) {
+	public void testPostLikeNoOG() {
 		
 		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
 		final PropagationInfo info = AndroidMock.createMock(PropagationInfo.class);
+		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
 		
 		Activity parent = TestUtils.getActivity(this);
 		final String entityKey = "foobar_key";
 		final String entityName = "foobar_name";
 		
 		final Entity entity = Entity.newInstance(entityKey, entityName);
+		
+		AndroidMock.expect(config.isOGLike()).andReturn(false);
 		
 		DefaultFacebookWallPoster poster = new DefaultFacebookWallPoster() {
 			
@@ -103,7 +103,12 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 			}
 		};
 		
+		AndroidMock.replay(config);
+		
+		poster.setConfig(config);
 		poster.postLike(parent, entity, info, listener);
+		
+		AndroidMock.verify(config);
 		
 		SocialNetworkListener listenerAfter = getResult(2);
 		String messageAfter = getResult(1);
@@ -112,9 +117,64 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		
 		assertSame(listener, listenerAfter);
 		assertSame(info, infoAfter);
-		assertEquals(expectedString, messageAfter);
+		assertEquals("", messageAfter);
 		assertSame(parent, parentAfter);
 	}	
+	
+	public void testPostLikeWithOG() {
+		
+		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
+		final PropagationInfo info = AndroidMock.createMock(PropagationInfo.class);
+		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+		
+		Activity parent = TestUtils.getActivity(this);
+		final String entityKey = "foobar_key";
+		final String entityName = "foobar_name";
+		final String entityUrl = "foobar_url";
+		
+		final Entity entity = Entity.newInstance(entityKey, entityName);
+		
+		AndroidMock.expect(config.getProperty(SocializeConfig.FACEBOOK_APP_ID)).andReturn("foobar");
+		AndroidMock.expect(config.isOGLike()).andReturn(true);
+		AndroidMock.expect(info.getEntityUrl()).andReturn(entityUrl);
+		
+		DefaultFacebookWallPoster poster = new DefaultFacebookWallPoster() {
+			
+			@Override
+			public void post(Activity parent, String graphPath, String appId, Map<String, Object> postData, SocialNetworkPostListener listener) {
+				addResult(0, parent);
+				addResult(1, graphPath);
+				addResult(2, listener);
+				addResult(3, postData);
+			}
+		};
+		
+		AndroidMock.replay(config, info);
+		
+		poster.setConfig(config);
+		poster.postLike(parent, entity, info, listener);
+		
+		AndroidMock.verify(config, info);
+		
+		Activity parentAfter = getResult(0);
+		String graphPathAfter = getResult(1);
+		SocialNetworkListener listenerAfter = getResult(2);
+		Map<String, Object> postDataAfter = getResult(3);
+		
+		assertNotNull(parentAfter);
+		assertNotNull(graphPathAfter);
+		assertNotNull(listenerAfter);
+		assertNotNull(postDataAfter);
+		
+		assertSame(listener, listenerAfter);
+		assertSame(parent, parentAfter);
+		assertEquals("me/og.likes", graphPathAfter);
+		
+		Object object = postDataAfter.get("object");
+		assertNotNull(object);
+		assertEquals(entityUrl, object);
+		
+	}		
 	
 	public void testPostComment(String expectedString) {
 		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
@@ -197,6 +257,8 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 				return socialize;
 			}
 		};		
+		
+		poster.setConfig(config);
 		
 		AndroidMock.replay(socialize, config, info);
 		
@@ -361,6 +423,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 			}
 		};
 		
+		poster.setConfig(config);
 		poster.postPhoto(TestUtils.getActivity(this), share, caption, photoUri, socialNetworkListener);
 		
 		AndroidMock.verify(share,propagationInfoResponse,propInfo,socializeService,config);

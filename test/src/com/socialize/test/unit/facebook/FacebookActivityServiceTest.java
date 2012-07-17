@@ -154,7 +154,7 @@ public class FacebookActivityServiceTest extends SocializeActivityTest {
 		
 		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true)).andReturn(true);
 		
-		service.authenticate(AndroidMock.eq(true), (String[]) AndroidMock.anyObject());
+		service.authenticate(true);
 		
 		AndroidMock.replay(config);
 		AndroidMock.replay(context);

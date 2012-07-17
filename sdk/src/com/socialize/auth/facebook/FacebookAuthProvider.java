@@ -60,8 +60,12 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 	
 	@Override
 	public boolean validate(FacebookAuthProviderInfo info) {
-		AuthProviderInfo expected = authProviderInfoBuilder.getFactory(AuthProviderType.FACEBOOK).getInstance(FacebookService.DEFAULT_PERMISSIONS);
-		return expected.matches(info);
+		if(authProviderInfoBuilder != null) {
+			AuthProviderInfo expected = authProviderInfoBuilder.getFactory(AuthProviderType.FACEBOOK).getInstance(FacebookService.DEFAULT_PERMISSIONS);
+			return expected.matches(info);
+		}
+		// Default to true
+		return true;
 	}
 
 	@Override

@@ -314,6 +314,10 @@ public class SocializeConfig {
 		return getBooleanProperty(SOCIALIZE_ALLOW_ANON, false);
 	}
 	
+	public boolean isOGLike() {
+		return getBooleanProperty(FACEBOOK_USE_OG_LIKE, false);
+	}
+	
 	public boolean isNotificationsEnabled() {
 		return getBooleanProperty(SOCIALIZE_NOTIFICATIONS_ENABLED, true);
 	}

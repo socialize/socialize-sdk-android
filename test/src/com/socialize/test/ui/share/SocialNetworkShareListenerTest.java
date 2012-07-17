@@ -150,6 +150,11 @@ public class SocialNetworkShareListenerTest extends SocializeActivityTest {
 			protected Facebook getFacebook(Context context) {
 				return mockFacebook;
 			}
+
+			@Override
+			protected String getFacebookAppId() {
+				return "foobar";
+			}
 		};
 		
 		final CountDownLatch latch = new CountDownLatch(2);

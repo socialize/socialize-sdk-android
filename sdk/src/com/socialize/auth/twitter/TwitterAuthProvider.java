@@ -54,8 +54,11 @@ public class TwitterAuthProvider implements AuthProvider<TwitterAuthProviderInfo
 	
 	@Override
 	public boolean validate(TwitterAuthProviderInfo info) {
-		AuthProviderInfo expected = authProviderInfoBuilder.getFactory(AuthProviderType.TWITTER).getInstance();
-		return expected.matches(info);
+		if(authProviderInfoBuilder != null) {
+			AuthProviderInfo expected = authProviderInfoBuilder.getFactory(AuthProviderType.TWITTER).getInstance();
+			return expected.matches(info);
+		}
+		return true;
 	}
 
 	protected TwitterAuthListener newTwitterAuthListener(final AuthProviderListener listener) {

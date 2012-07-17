@@ -1170,17 +1170,25 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		AndroidMock.verify(session);
 	}
 	
-	@UsesMocks ({UserProviderCredentials.class})
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({UserProviderCredentials.class, AuthProviderInfo.class, AuthProviders.class, AuthProvider.class})
 	public void testIsAuthenticatedWithProvider() {
 
 		UserProviderCredentials data = AndroidMock.createMock(UserProviderCredentials.class);
+		AuthProviderInfo info = AndroidMock.createMock(AuthProviderInfo.class);
+		AuthProviders providers = AndroidMock.createMock(AuthProviders.class);
+		AuthProvider<AuthProviderInfo> provider = AndroidMock.createMock(AuthProvider.class);
+		
 		session = AndroidMock.createMock(SocializeSession.class);
 
 		AndroidMock.expect(session.getUserProviderCredentials(AuthProviderType.FACEBOOK)).andReturn(data);
+		AndroidMock.expect(data.getAuthProviderInfo()).andReturn(info);
+		AndroidMock.expect(providers.getProvider(AuthProviderType.FACEBOOK)).andReturn(provider);
+		AndroidMock.expect(provider.validate(info)).andReturn(true);
+		
+		AndroidMock.replay(session, data, providers, provider);
 
-		AndroidMock.replay(session);
-
-		SocializeServiceImpl socialize = new SocializeServiceImpl() {
+		PublicSocialize socialize = new PublicSocialize() {
 			@Override
 			public boolean isAuthenticated() {
 				return true;
@@ -1188,10 +1196,11 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		};
 
 		socialize.setSession(session);
+		socialize.setAuthProviders(providers);
 
 		assertTrue(socialize.isAuthenticated(AuthProviderType.FACEBOOK));
 
-		AndroidMock.verify(session);
+		AndroidMock.verify(session, data, providers, provider);
 	}	
 
 //	public void testAddCommentFail() {

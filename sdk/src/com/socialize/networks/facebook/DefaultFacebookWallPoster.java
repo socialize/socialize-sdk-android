@@ -75,10 +75,8 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	@Override
 	public void postLike(Activity parent, Entity entity, PropagationInfo propInfo, SocialNetworkListener listener) {
 		
-		boolean og = config.getBooleanProperty(SocializeConfig.FACEBOOK_USE_OG_LIKE, true);
-		
-		if(og) {
-			String appId = config.getProperty(SocializeConfig.FACEBOOK_APP_ID);
+		if(config.isOGLike()) {
+			String appId = getFacebookAppId();
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("object", propInfo.getEntityUrl());
 			post(parent, "me/og.likes",  appId, params, listener);			
@@ -99,7 +97,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		String entityUrl = propInfo.getEntityUrl();
 		String linkName = entityUrl;
 		String link = entityUrl;
-		String appId = config.getProperty(SocializeConfig.FACEBOOK_APP_ID);
+		String appId = getFacebookAppId();
 		
 		if(entity != null) {
 			linkName = entity.getDisplayName();
@@ -192,7 +190,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		
 		if(propInfo != null) {
 			String link = propInfo.getAppUrl();
-			String appId = config.getProperty(SocializeConfig.FACEBOOK_APP_ID);
+			String appId = getFacebookAppId();
 			
 			if(!StringUtils.isEmpty(appId)) {
 				postPhoto(parent, appId, link, comment, photoUri, listener);
@@ -385,6 +383,11 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	// So we can mock
 	protected SocializeService getSocialize() {
 		return Socialize.getSocialize();
+	}
+	
+	// So we can mock
+	protected String getFacebookAppId() {
+		return config.getProperty(SocializeConfig.FACEBOOK_APP_ID);
 	}
 	
 	public void setLogger(SocializeLogger logger) {

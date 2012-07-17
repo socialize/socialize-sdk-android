@@ -182,9 +182,10 @@ import com.socialize.util.DialogFactory;
 			@Override
 			public void authenticate(String[] permissions) {
 				assertNotNull(permissions);
-				assertTrue(permissions.length == 2);
+				assertTrue(permissions.length == 3);
 				assertEquals(FacebookService.DEFAULT_PERMISSIONS[0], permissions[0]);
 				assertEquals(FacebookService.DEFAULT_PERMISSIONS[1], permissions[1]);
+				assertEquals(FacebookService.DEFAULT_PERMISSIONS[2], permissions[2]);
 				addResult(true);
 			}
 		};
