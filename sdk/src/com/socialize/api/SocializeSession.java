@@ -92,5 +92,16 @@ public interface SocializeSession extends Serializable, OAuthAuthorizer {
 	 * @return
 	 */
 	public boolean isRestored();
+	
+//	/**
+//	 * Returns true if this session was invalidated.
+//	 * @return
+//	 */
+//	public boolean isInvalidated();
+//	
+//	/**
+//	 * Invalidates this session. This will cause any subsequent authentications to hit the server.
+//	 */
+//	public void invalidate();
 
 }

@@ -51,10 +51,10 @@ public class FacebookActivityService {
 				boolean sso = config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true);
 				
 				if(permissions != null && permissions.length > 0) {
-					service.authenticate(sso, permissions);
+					service.authenticate(activity, sso, permissions);
 				}
 				else {
-					service.authenticate(sso);
+					service.authenticate(activity, sso);
 				}
 			}
 			else {
@@ -68,12 +68,12 @@ public class FacebookActivityService {
 	
 	public void onCancel() {
 		if(service != null) {
-			service.cancel();
+			service.cancel(activity);
 		}
 	}
     
     public FacebookService getFacebookService() {
-    	service = new FacebookService(activity, facebook, facebookSessionStore, (AuthProviderListener) listenerHolder.pop("auth"), dialogFactory);
+    	service = new FacebookService(facebook, facebookSessionStore, (AuthProviderListener) listenerHolder.pop("auth"), dialogFactory);
     	return service;
     }
 	

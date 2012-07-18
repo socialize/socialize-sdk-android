@@ -40,7 +40,7 @@ import com.socialize.networks.SocialNetworkPostListener;
  */
 public interface FacebookUtilsProxy {
 	public void link (Activity context, SocializeAuthListener listener);
-	public void link (Activity context, String token, SocializeAuthListener listener);
+	public void link (Context context, String token, boolean verifyPermissions, SocializeAuthListener listener);
 	public void link(Activity context, SocializeAuthListener listener, String...permissions);
 	
 	public void unlink (Context context);
@@ -57,7 +57,7 @@ public interface FacebookUtilsProxy {
 	@Synchronous
 	public String getAccessToken(Context context);
 	
-	public void extendAccessToken(Context context);
+	public void extendAccessToken(Context context, SocializeAuthListener listener);
 	
 	public void postEntity(Activity context, Entity entity, String text, SocialNetworkShareListener listener);
 	
@@ -66,6 +66,8 @@ public interface FacebookUtilsProxy {
 	public void get(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener);
 	
 	public void delete(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener);
+	
+	public void getCurrentPermissions(Context parent, String token, FacebookPermissionCallback callback);
 
 	public byte[] getImageForPost(Activity context, Uri imagePath) throws IOException;
 	

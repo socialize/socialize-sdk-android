@@ -241,6 +241,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		final String host = "snafu";
 		final String uuid = "uuid";
 		final String endpoint = "foobar/";
+		final String token = "foobar_token";
 
 		AuthProviderInfo info = AndroidMock.createMock(AuthProviderInfo.class);
 		UserProviderCredentials userAuthData = AndroidMock.createMock(UserProviderCredentials.class);
@@ -260,6 +261,8 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.expect(userAuthDataMap.get(AuthProviderType.FACEBOOK)).andReturn(userAuthData);
 		AndroidMock.expect(userAuthData.getAuthProviderInfo()).andReturn(authProviderInfo).anyTimes();
 		AndroidMock.expect(authProviderInfo.matches(info)).andReturn(true); 
+		AndroidMock.expect(userAuthData.getAccessToken()).andReturn(token); 
+		AndroidMock.expect(authProviderData.getToken3rdParty()).andReturn(token); 
 
 		AndroidMock.replay(info, config, session, sessionPersister, authProviderDataFactory, authProviderData, authProviderInfoBuilder, authProviderInfoFactory, authProviderInfo, userAuthDataMap, userAuthData);
 

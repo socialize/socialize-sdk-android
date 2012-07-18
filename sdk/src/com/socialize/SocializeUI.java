@@ -22,7 +22,6 @@
 package com.socialize;
 
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeAction;
@@ -33,23 +32,20 @@ import com.socialize.ui.comment.OnCommentViewActionListener;
 
 /**
  * @author Jason Polites
- *
+ * @deprecated All UI methods are accessible from ActionBarUtils or UserUtils
  */
+@Deprecated
 public interface SocializeUI {
 
 	public View showActionBar(Activity parent, View original, Entity entity);
 	
 	public View showActionBar(Activity parent, View original, Entity entity, ActionBarOptions options);
 	
-	public View showActionBar(Activity parent, View original, Entity entity, ActionBarListener listener);
-	
 	public View showActionBar(Activity parent, View original, Entity entity, ActionBarOptions options, ActionBarListener listener);
 
 	public View showActionBar(Activity parent, int resId, Entity entity, ActionBarOptions options, ActionBarListener listener);
 
 	public View showActionBar(Activity parent, int resId, Entity entity, ActionBarOptions options);
-
-	public View showActionBar(Activity parent, int resId, Entity entity, ActionBarListener listener);
 
 	public View showActionBar(Activity parent, int resId, Entity entity);
 
@@ -62,13 +58,5 @@ public interface SocializeUI {
 	public void showCommentView(Activity context, Entity entity);
 
 	public void showActionDetailView(Activity context, User user, SocializeAction action);
-	
-	@Deprecated
-	public void showActionDetailViewForResult(Activity context, User user, SocializeAction action, int requestCode);
-	
-	@Deprecated
-	public Drawable getDrawable(String name);
-	
-	@Deprecated
-	public Drawable getDrawable(String name, boolean eternal);
+
 }

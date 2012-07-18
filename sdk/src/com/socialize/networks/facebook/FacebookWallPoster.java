@@ -23,6 +23,7 @@ package com.socialize.networks.facebook;
 
 import java.util.Map;
 import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
@@ -46,18 +47,20 @@ public interface FacebookWallPoster {
 		
 	public void postPhoto(final Activity parent, Share share, String comment, Uri photoUri, SocialNetworkListener listener);
 	
-	public void postPhoto(final Activity parent, String appId, String link, String caption, Uri photoUri, SocialNetworkListener listener);
+	public void postPhoto(final Activity parent, String link, String caption, Uri photoUri, SocialNetworkListener listener);
 	
 	@Deprecated
 	public void post(final Activity parent, String appId, String linkName, String message, String link, String caption, final SocialNetworkListener listener);
 	
 	public void post(final Activity parent, Entity entity, String message, PropagationInfo propInfo, SocialNetworkListener listener);
 	
-	public void post(final Activity parent, String appId, SocialNetworkListener listener, PostData postData);
+	public void post(final Activity parent, SocialNetworkListener listener, PostData postData);
 	
-	public void post(final Activity parent, String graphPath, String appId, Map<String, Object> postData, SocialNetworkPostListener listener);
+	public void post(final Activity parent, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener);
 
-	public void get(final Activity parent, String graphPath, String appId, Map<String, Object> postData, SocialNetworkPostListener listener);
+	public void get(final Activity parent, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener);
 	
-	public void delete(final Activity parent, String graphPath, String appId, Map<String, Object> postData, SocialNetworkPostListener listener);
+	public void delete(final Activity parent, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener);
+	
+	public void getCurrentPermissions(Context parent, String token, FacebookPermissionCallback callback);
 }

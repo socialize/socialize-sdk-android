@@ -40,6 +40,7 @@ import com.socialize.log.SocializeLogger;
 
 
 /**
+ * Proxies all requests to top level Socialize interfaces to ensure that clients are both initialized and authenticated.
  * @author Jason Polites
  */
 public class SocializeActionProxy implements InvocationHandler {
@@ -141,10 +142,7 @@ public class SocializeActionProxy implements InvocationHandler {
 
 		SocializeService service = getSocialize();
 		
-//		if(!service.isInitialized(context)) {
-//			doInitAsync(context, listener, method, args);
-//		}
-		if(!service.isAuthenticated()) {
+		if(!service.isAuthenticated() && !method.isAnnotationPresent(NoAuth.class)) {
 			doAuthAsync(context, listener, method, args);
 		}
 		else {
@@ -192,55 +190,6 @@ public class SocializeActionProxy implements InvocationHandler {
 		return null;
 	}
 
-//	protected synchronized <L extends SocializeListener> void doInitAsync(final Activity context, final SocializeListener listener, final Method method, final Object[] args) throws Throwable {
-//		
-//		final SocializeService service = getSocialize();
-//		
-////		if(!service.isInitialized(context)) {
-////			synchronized (this) {
-////				if(!service.isInitialized(context)) {
-//					context.runOnUiThread(new Runnable() {
-//						
-//						@Override
-//						public void run() {
-//
-//							service.initAsync(context, new SocializeInitListener() {
-//								
-//								@Override
-//								public void onError(SocializeException error) {
-//									if(listener != null) {
-//										listener.onError(error);
-//									}
-//								}
-//
-//								@Override
-//								public void onInit(Context ctx, IOCContainer container) {
-//									// Recurse
-//									try {
-//										invoke(context, listener, method, args);
-//									}
-//									catch (Throwable e) {
-//										if(listener != null) {
-//											listener.onError(SocializeException.wrap(e));
-//										}
-//									}
-//								}
-//							});					
-//						}
-//					});
-////				}
-////				else {
-////					// Recurse
-////					invoke(context, listener, method, args);
-////				}
-////			}
-////		}
-////		else {
-////			// Recurse
-////			invoke(context, listener, method, args);
-////		}
-//	}	
-	
 	protected synchronized <L extends SocializeListener> void doAuthAsync(final Activity context, final SocializeListener listener, final Method method, final Object[] args) throws Throwable {
 		final SocializeService service = getSocialize();
 		

@@ -21,6 +21,9 @@
  */
 package com.socialize.networks.facebook;
 
+import com.socialize.SocializeAccess;
+import com.socialize.facebook.Facebook;
+
 
 
 
@@ -39,4 +42,7 @@ public class FacebookAccess {
 		FacebookUtils.proxy = proxy;
 	}
 	
+	public static void setFacebook(Facebook proxy) {
+		((FacebookUtilsImpl)SocializeAccess.getBean("facebookUtils")).setFacebook(proxy);
+	}
 }

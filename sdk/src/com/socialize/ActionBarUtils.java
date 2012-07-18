@@ -26,6 +26,7 @@ import android.view.View;
 import com.socialize.entity.Entity;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarOptions;
+import com.socialize.ui.actionbar.ActionBarUtilsImpl;
 
 
 /**
@@ -33,75 +34,78 @@ import com.socialize.ui.actionbar.ActionBarOptions;
  */
 public class ActionBarUtils {
 	
+	static ActionBarUtilsImpl proxy = new ActionBarUtilsImpl();
+	
 	/**
 	 * Attaches the Socialize action bar to an existing view.  The ActionBar will be pinned to the bottom of the view.
 	 * @param parent The activity containing the view.
 	 * @param original The original View to which the ActionBar will be pinned.
-	 * @param entity The entity asssociated with the ActionBar.
+	 * @param entity The entity associated with the ActionBar.
 	 * @return The final view including the ActionBar which can then be attached to your layout.
 	 */
 	public static View showActionBar(Activity parent, View original, Entity entity) {
-		return Socialize.getSocialize().showActionBar(parent, original, entity);
+		return proxy.showActionBar(parent, original, entity);
 	}
 	
 	/**
 	 * Attaches the Socialize action bar to an existing view.  The ActionBar will be pinned to the bottom of the view.
 	 * @param parent The activity containing the view.
 	 * @param resId The resource ID of the original View (layout) to which the ActionBar will be pinned.
-	 * @param entity The entity asssociated with the ActionBar.
+	 * @param entity The entity associated with the ActionBar.
 	 * @return The final view including the ActionBar which can then be attached to your layout.
 	 */
 	public static View showActionBar(Activity parent, int resId, Entity entity) {
-		return Socialize.getSocialize().showActionBar(parent, resId, entity);
+		return proxy.showActionBar(parent, resId, entity);
 	}
+	
 	
 	/**
 	 * Attaches the Socialize action bar to an existing view.  The ActionBar will be pinned to the bottom of the view.
 	 * @param parent The activity containing the view.
-	 * @param original The original View to which the ActionBar will be pinned.
-	 * @param entity The entity asssociated with the ActionBar.
-	 * @param options Display option for the action bar (may be null)
-	 * @param listener A listener to handle ActionBar events (may be null)
-	 * @return The final view including the ActionBar which can then be attached to your layout.
-	 */
-	public static View showActionBar(Activity parent, View original, Entity entity, ActionBarOptions options, ActionBarListener listener) {
-		return Socialize.getSocialize().showActionBar(parent, original, entity, options, listener);
-	}
-
-	/**
-	 * Attaches the Socialize action bar to an existing view.  The ActionBar will be pinned to the bottom of the view.
-	 * @param parent The activity containing the view.
 	 * @param resId The resource ID of the original View (layout) to which the ActionBar will be pinned.
-	 * @param entity The entity asssociated with the ActionBar.
+	 * @param entity The entity associated with the ActionBar.
 	 * @param options Display option for the action bar (may be null)
 	 * @param listener A listener to handle ActionBar events (may be null)
 	 * @return The final view including the ActionBar which can then be attached to your layout.
 	 */
 	public static View showActionBar(Activity parent, int resId, Entity entity, ActionBarOptions options, ActionBarListener listener) {
-		return Socialize.getSocialize().showActionBar(parent, resId, entity, options, listener);
+		return proxy.showActionBar(parent, resId, entity, options, listener);
 	}
 	
 	/**
 	 * Attaches the Socialize action bar to an existing view.  The ActionBar will be pinned to the bottom of the view.
 	 * @param parent The activity containing the view.
 	 * @param original The original View to which the ActionBar will be pinned.
-	 * @param entity The entity asssociated with the ActionBar.
+	 * @param entity The entity associated with the ActionBar.
 	 * @param options Display option for the action bar (may be null)
 	 * @return The final view including the ActionBar which can then be attached to your layout.
 	 */
 	public static View showActionBar(Activity parent, View original, Entity entity, ActionBarOptions options) {
-		return Socialize.getSocialize().showActionBar(parent, original, entity, options);
+		return proxy.showActionBar(parent, original, entity, options);
 	}
 
 	/**
 	 * Attaches the Socialize action bar to an existing view.  The ActionBar will be pinned to the bottom of the view.
 	 * @param parent The activity containing the view.
 	 * @param resId The resource ID of the original View (layout) to which the ActionBar will be pinned.
-	 * @param entity The entity asssociated with the ActionBar.
+	 * @param entity The entity associated with the ActionBar.
 	 * @param options Display option for the action bar (may be null)
 	 * @return The final view including the ActionBar which can then be attached to your layout.
 	 */
 	public static View showActionBar(Activity parent, int resId, Entity entity, ActionBarOptions options) {
-		return Socialize.getSocialize().showActionBar(parent, resId, entity, options);
+		return proxy.showActionBar(parent, resId, entity, options);
+	}	
+	
+	/**
+	 * Attaches the Socialize action bar to an existing view.  The ActionBar will be pinned to the bottom of the view.
+	 * @param parent The activity containing the view.
+	 * @param original The original View to which the ActionBar will be pinned.
+	 * @param entity The entity associated with the ActionBar.
+	 * @param options Display option for the action bar (may be null)
+	 * @param listener A listener to handle ActionBar events (may be null)
+	 * @return The final view including the ActionBar which can then be attached to your layout.
+	 */
+	public static View showActionBar(Activity parent, View original, Entity entity, ActionBarOptions options, ActionBarListener listener) {
+		return proxy.showActionBar(parent, original, entity, options, listener);
 	}	
 }

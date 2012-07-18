@@ -141,7 +141,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		DefaultFacebookWallPoster poster = new DefaultFacebookWallPoster() {
 			
 			@Override
-			public void post(Activity parent, String graphPath, String appId, Map<String, Object> postData, SocialNetworkPostListener listener) {
+			public void post(Activity parent, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {
 				addResult(0, parent);
 				addResult(1, graphPath);
 				addResult(2, listener);
@@ -246,10 +246,9 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		DefaultFacebookWallPoster poster = new DefaultFacebookWallPoster() {
 			
 			@Override
-			public void post(Activity parent, String appId, SocialNetworkListener listener, PostData postData) {
-				addResult(0, appId);
-				addResult(1, postData);
-				addResult(2, listener);
+			public void post(Activity parent, SocialNetworkListener listener, PostData postData) {
+				addResult(0, postData);
+				addResult(1, listener);
 			}
 			
 			@Override
@@ -266,9 +265,8 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		
 		AndroidMock.verify(socialize, config, info);
 		
-		String fbIdAfter = getResult(0);
-		PostData data = getResult(1);
-		SocialNetworkListener listenerAfter = getResult(2);
+		PostData data = getResult(0);
+		SocialNetworkListener listenerAfter = getResult(1);
 		
 		assertNotNull(data);
 		Map<String, Object> postValues = data.getPostValues();
@@ -279,7 +277,6 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		String messageAfter = postValues.get("message").toString();
 		String linkAfter = postValues.get("link").toString();
 		
-		assertEquals(fbId, fbIdAfter);
 		assertEquals(linkName, linkNameAfter);
 		assertEquals(message, messageAfter);
 		assertEquals(link, linkAfter);
@@ -414,7 +411,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 			}
 
 			@Override
-			public void postPhoto(Activity parent, String appId, String link, String caption, Uri photoUri, SocialNetworkListener listener) {
+			public void postPhoto(Activity parent, String link, String caption, Uri photoUri, SocialNetworkListener listener) {
 				addResult(0, appId);
 				addResult(1, link);
 				addResult(2, caption);
@@ -498,7 +495,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		
 		poster.setImageUtils(imageUtils);
 		
-		poster.postPhoto(TestUtils.getActivity(this), fbId, link, caption, photoUri, socialNetworkListener);
+		poster.postPhoto(TestUtils.getActivity(this), link, caption, photoUri, socialNetworkListener);
 		
 		AndroidMock.verify(store, imageUtils);
 		
@@ -703,16 +700,16 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 			}
 
 			@Override
-			public void doFacebookCall(Activity parent, String appId, Bundle data, String graphPath, String method, SocialNetworkPostListener listener) {
+			public void doFacebookCall(Activity parent, Bundle data, String graphPath, String method, SocialNetworkPostListener listener) {
 				// Inspect the bundle
 				addResult(0, data.getString("foo"));
 				
 				// Call super
-				super.doFacebookCall(parent, appId, data, graphPath, method, listener);
+				super.doFacebookCall(parent, data, graphPath, method, listener);
 			}
 		};
 		
-		poster.doFacebookCall(context, appId, postData, graphPath, method, null);
+		poster.doFacebookCall(context, postData, graphPath, method, null);
 		
 		AndroidMock.verify(mockFacebookSessionStore, mockAsyncFacebookRunner);
 	}
@@ -724,12 +721,12 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 			return super.newRequestListener(parent, listener);
 		}
 		@Override
-		public void doFacebookCall(Activity parent, String appId, Map<String, Object> postData, String graphPath, String method, SocialNetworkPostListener listener) {
-			super.doFacebookCall(parent, appId, postData, graphPath, method, listener);
+		public void doFacebookCall(Activity parent, Map<String, Object> postData, String graphPath, String method, SocialNetworkPostListener listener) {
+			super.doFacebookCall(parent, postData, graphPath, method, listener);
 		}
 		@Override
-		public void doFacebookCall(Activity parent, String appId, Bundle data, String graphPath, String method, SocialNetworkPostListener listener) {
-			super.doFacebookCall(parent, appId, data, graphPath, method, listener);
+		public void doFacebookCall(Activity parent, Bundle data, String graphPath, String method, SocialNetworkPostListener listener) {
+			super.doFacebookCall(parent, data, graphPath, method, listener);
 		}
 		
 		@Override

@@ -31,6 +31,7 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import com.socialize.Socialize;
 import com.socialize.SocializeSystem;
+import com.socialize.UserUtils;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
@@ -174,8 +175,7 @@ public abstract class SocializeBaseView extends BaseView {
 			add.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 				@Override
 				public boolean onMenuItemClick(MenuItem item) {
-					final Long userId = Socialize.getSocialize().getSession().getUser().getId();
-					Socialize.getSocialize().showUserProfileViewForResult(source, userId, CommentActivity.PROFILE_UPDATE);
+					UserUtils.showUserSettingsForResult(source, CommentActivity.PROFILE_UPDATE);
 					return true;
 				}
 			});

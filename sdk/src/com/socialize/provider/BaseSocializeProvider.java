@@ -194,18 +194,18 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 			if(info.getType().equals(AuthProviderType.SOCIALIZE)) {
 				return true;
 			}
-			return validateSessionAuthData(session, info);
+			return validateSessionAuthData(session, data, info);
 		}
 		else {	
 			return validateSessionAuthDataLegacy(session, data);
 		}		
 	}
 
-	public boolean validateSessionAuthData(SocializeSession loaded, AuthProviderInfo info) {
+	public boolean validateSessionAuthData(SocializeSession loaded, AuthProviderData data, AuthProviderInfo info) {
 		UserProviderCredentialsMap userProviderCredentialsMap = loaded.getUserProviderCredentials();
 		if(userProviderCredentialsMap != null) {
 			UserProviderCredentials userProviderCredentials = userProviderCredentialsMap.get(info.getType());
-			if(userProviderCredentials != null && userProviderCredentials.getAuthProviderInfo().matches(info)) {
+			if(userProviderCredentials != null && userProviderCredentials.getAccessToken().equals(data.getToken3rdParty()) && userProviderCredentials.getAuthProviderInfo().matches(info)) {
 				return true;
 			}
 		}

@@ -74,8 +74,8 @@ import com.socialize.util.DialogFactory;
 		AndroidMock.replay(facebookSessionStore);
 		AndroidMock.replay(facebook);
 
-		FacebookService service = new FacebookService(context, facebook, facebookSessionStore, authProviderListener, dialogFactory);
-		service.authenticate(permissions);
+		FacebookService service = new FacebookService(facebook, facebookSessionStore, authProviderListener, dialogFactory);
+		service.authenticate(context, permissions);
 
 		AndroidMock.verify(facebookSessionStore);
 		AndroidMock.verify(facebook);
@@ -97,8 +97,8 @@ import com.socialize.util.DialogFactory;
 
 		AndroidMock.replay(context);
 
-		FacebookService service = new FacebookService(context, facebook, facebookSessionStore, authProviderListener, dialogFactory);
-		service.finish();
+		FacebookService service = new FacebookService(facebook, facebookSessionStore, authProviderListener, dialogFactory);
+		service.finish(context);
 
 		AndroidMock.verify(context);
 	}
@@ -119,8 +119,8 @@ import com.socialize.util.DialogFactory;
 
 		AndroidMock.replay(facebook);
 
-		FacebookService service = new FacebookService(context, facebook, facebookSessionStore, authProviderListener, dialogFactory);
-		service.logout();
+		FacebookService service =  new FacebookService(facebook, facebookSessionStore, authProviderListener, dialogFactory);
+		service.logout(context);
 
 		AndroidMock.verify(facebook);
 	}
@@ -164,8 +164,8 @@ import com.socialize.util.DialogFactory;
 		AndroidMock.expect(facebook.logout(context)).andThrow(new IOException(errorMessage));
 		AndroidMock.replay(facebook);
 
-		FacebookService service = new FacebookService(context, facebook, facebookSessionStore, authProviderListener, dialogFactory);
-		service.logout();
+		FacebookService service =  new FacebookService(facebook, facebookSessionStore, authProviderListener, dialogFactory);
+		service.logout(context);
 
 		AndroidMock.verify(facebook);
 
@@ -178,9 +178,9 @@ import com.socialize.util.DialogFactory;
 	}
 
 	public void testAuthenticateCallsAuthenticateWithCorrectPermissions() {
-		FacebookService service = new FacebookService(null, null, null, null, null) {
+		FacebookService service = new FacebookService(null, null, null, null) {
 			@Override
-			public void authenticate(String[] permissions) {
+			public void authenticate(Activity context, String[] permissions) {
 				assertNotNull(permissions);
 				assertTrue(permissions.length == 3);
 				assertEquals(FacebookService.DEFAULT_PERMISSIONS[0], permissions[0]);
@@ -190,7 +190,7 @@ import com.socialize.util.DialogFactory;
 			}
 		};
 
-		service.authenticate();
+		service.authenticate(null);
 
 		Boolean result = getNextResult();
 
@@ -228,8 +228,8 @@ import com.socialize.util.DialogFactory;
 		AndroidMock.replay(builder);
 		AndroidMock.replay(dialog);
 
-		FacebookService service = new FacebookService(context, facebook, facebookSessionStore, authProviderListener, dialogFactory);
-		service.doErrorUI(errorMessage, null, false);
+		FacebookService service =  new FacebookService(facebook, facebookSessionStore, authProviderListener, dialogFactory);
+		service.doErrorUI(context, errorMessage, null, false);
 
 		AndroidMock.verify(dialogFactory);
 		AndroidMock.verify(builder);
@@ -237,14 +237,16 @@ import com.socialize.util.DialogFactory;
 	}
 
 	public void testDoError() throws Throwable {
+		
+		final Activity context = TestUtils.getActivity(this);
 
 		final String errorMessage = "foobar_error - IGNORE ME";
 
 		final CountDownLatch lock = new CountDownLatch(1);
 
-		final FacebookService service = new FacebookService(TestUtils.getActivity(this), null, null, null, null) {
+		final FacebookService service = new FacebookService(null, null, null, null) {
 			@Override
-			public void doErrorUI(String error, String[] permissions, boolean sso) {
+			public void doErrorUI(Activity context, String error, String[] permissions, boolean sso) {
 				addResult(error);
 				lock.countDown();
 			}
@@ -253,7 +255,7 @@ import com.socialize.util.DialogFactory;
 		runTestOnUiThread(new Runnable() { 
 			@Override 
 			public void run() { 
-				service.doError(new Throwable(errorMessage), null, false);
+				service.doError(context, new Throwable(errorMessage), null, false);
 			} 
 		});
 
@@ -273,9 +275,9 @@ import com.socialize.util.DialogFactory;
 
 		mockDialog.show();
 
-		final FacebookService service = new FacebookService(TestUtils.getActivity(this), null, null, null, null) {
+		final FacebookService service = new FacebookService(null, null, null, null) {
 			@Override
-			public AlertDialog makeErrorDialog(String error, String[] permissions, boolean sso) {
+			public AlertDialog makeErrorDialog(Activity context, String error, String[] permissions, boolean sso) {
 				addResult(error);
 				return mockDialog;
 			}
@@ -284,7 +286,7 @@ import com.socialize.util.DialogFactory;
 
 		AndroidMock.replay(mockDialog);
 
-		service.doErrorUI(error, null, false);
+		service.doErrorUI(TestUtils.getActivity(this), error, null, false);
 
 		String result = getNextResult();
 
@@ -338,20 +340,20 @@ import com.socialize.util.DialogFactory;
 		AndroidMock.replay(dialogFactory);
 		AndroidMock.replay(dialog);
 		
-		FacebookService service = new FacebookService(context, facebook, facebookSessionStore, authProviderListener, dialogFactory) {
+		FacebookService service =  new FacebookService(facebook, facebookSessionStore, authProviderListener, dialogFactory) {
 			
 			@Override
-			public void authenticate(String[] permissions, boolean sso) {
+			public void authenticate(Activity context, String[] permissions, boolean sso) {
 				addResult(3, "auth_called");
 			}
 
 			@Override
-			public void finish() {
+			public void finish(Activity context) {
 				addResult(4, "finish_called");
 			}
 		};
 		
-		service.makeErrorDialog(error, null, false);
+		service.makeErrorDialog(context, error, null, false);
 		
 		Boolean created = getResult(2);
 		OnClickListener negative = getResult(1);

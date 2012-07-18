@@ -575,6 +575,7 @@
 	<bean id="facebookUtils" class="com.socialize.networks.facebook.FacebookUtilsImpl">
 		<property name="userSystem" ref="userSystem"/>
 		<property name="facebookWallPoster" ref="facebookWallPoster"/>
+		<property name="facebookAuthProvider" ref="facebookProvider"/>
 		<property name="imageUtils" ref="imageUtils"/>
 		<property name="logger" ref="logger"/>
 		<property name="config" ref="config"/>

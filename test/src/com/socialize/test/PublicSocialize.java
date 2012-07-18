@@ -24,10 +24,6 @@ package com.socialize.test;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.view.View;
-import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
-import android.widget.ScrollView;
 import com.socialize.SocializeServiceImpl;
 import com.socialize.api.action.share.ShareSystem;
 import com.socialize.api.action.user.UserSystem;
@@ -40,7 +36,6 @@ import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.notifications.WakeLock;
-import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.ResourceLocator;
 
@@ -157,42 +152,8 @@ public class PublicSocialize extends SocializeServiceImpl {
 	}
 
 	@Override
-	public ActionBarView newActionBarView(Activity parent) {
-		return super.newActionBarView(parent);
-	}
-
-	@Override
 	public Intent newIntent(Activity context, Class<?> cls) {
 		return super.newIntent(context, cls);
-	}
-
-	@Override
-	public LayoutParams newLayoutParams(int width, int height) {
-		return super.newLayoutParams(width, height);
-	}
-
-	@Override
-	public LayoutParams newLayoutParams(android.view.ViewGroup.LayoutParams source) {
-
-		return super.newLayoutParams(source);
-	}
-
-	@Override
-	public RelativeLayout newRelativeLayout(Activity parent) {
-
-		return super.newRelativeLayout(parent);
-	}
-
-	@Override
-	public ScrollView newScrollView(Activity parent) {
-
-		return super.newScrollView(parent);
-	}
-
-	@Override
-	public View inflateView(Activity parent, int resId) {
-
-		return super.inflateView(parent, resId);
 	}
 
 	@Override

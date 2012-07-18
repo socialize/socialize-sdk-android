@@ -65,7 +65,7 @@ public class Socialize {
 	}
 	
 	/**
-	 * Initialize Socialize asynnchronously.  Can be called from the main UI thread.
+	 * Initialize Socialize asynchronously.  Can be called from the main UI thread.
 	 * @param context
 	 */
 	public static final void initAsync(Context context) {
@@ -73,7 +73,7 @@ public class Socialize {
 	}
 	
 	/**
-	 * Initialize Socialize asynnchronously.  Can be called from the main UI thread.
+	 * Initialize Socialize asynchronously.  Can be called from the main UI thread.
 	 * @param context
 	 * @param listener A listener which will be called after init.
 	 */

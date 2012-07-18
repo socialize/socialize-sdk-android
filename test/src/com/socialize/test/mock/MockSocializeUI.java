@@ -1,7 +1,6 @@
 package com.socialize.test.mock;
 
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import com.socialize.SocializeUI;
 import com.socialize.entity.Entity;
@@ -24,11 +23,6 @@ public class MockSocializeUI implements SocializeUI {
 	}
 
 	@Override
-	public View showActionBar(Activity parent, View original, Entity entity, ActionBarListener listener) {
-		return null;
-	}
-
-	@Override
 	public View showActionBar(Activity parent, View original, Entity entity, ActionBarOptions options, ActionBarListener listener) {
 		return null;
 	}
@@ -40,11 +34,6 @@ public class MockSocializeUI implements SocializeUI {
 
 	@Override
 	public View showActionBar(Activity parent, int resId, Entity entity, ActionBarOptions options) {
-		return null;
-	}
-
-	@Override
-	public View showActionBar(Activity parent, int resId, Entity entity, ActionBarListener listener) {
 		return null;
 	}
 
@@ -66,18 +55,5 @@ public class MockSocializeUI implements SocializeUI {
 	public void showCommentView(Activity context, Entity entity) {}
 
 	@Override
-	public void showActionDetailViewForResult(Activity context, User user, SocializeAction action, int requestCode) {}
-	
-	@Override
 	public void showActionDetailView(Activity context, User user, SocializeAction action) {}
-
-	@Override
-	public Drawable getDrawable(String name, boolean eternal) {
-		return null;
-	}
-
-	@Override
-	public Drawable getDrawable(String name) {
-		return null;
-	}
 }

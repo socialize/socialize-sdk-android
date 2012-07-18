@@ -22,7 +22,10 @@
 package com.socialize.networks.facebook;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -37,17 +40,22 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.action.share.ShareOptions;
 import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.api.action.user.UserSystem;
+import com.socialize.auth.AuthProviderInfo;
+import com.socialize.auth.AuthProviderResponse;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.DefaultUserProviderCredentials;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
+import com.socialize.auth.facebook.FacebookAuthProvider;
 import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.auth.facebook.FacebookService;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
+import com.socialize.error.SocializeException;
 import com.socialize.facebook.Facebook;
 import com.socialize.facebook.Facebook.ServiceListener;
 import com.socialize.facebook.FacebookError;
+import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetwork;
@@ -65,6 +73,7 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	
 	private UserSystem userSystem;
 	private FacebookWallPoster facebookWallPoster;
+	private FacebookAuthProvider facebookAuthProvider;
 	private ImageUtils imageUtils;
 	private Facebook facebook;
 	private SocializeLogger logger;
@@ -95,19 +104,106 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#link(android.app.Activity, java.lang.String, com.socialize.listener.SocializeAuthListener)
 	 */
 	@Override
-	public void link(Activity context, String token, SocializeAuthListener listener) {
+	public void link(final Context context, final String token, final boolean verifyPermissions, final SocializeAuthListener listener) {
 		SocializeConfig config = ConfigUtils.getConfig(context);
-		FacebookAuthProviderInfo fbInfo = new FacebookAuthProviderInfo();
+		final FacebookAuthProviderInfo fbInfo = new FacebookAuthProviderInfo();
 		fbInfo.setAppId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID));
 		
+		if(verifyPermissions) {
+			// Get the permissions for this token
+			FacebookUtils.getCurrentPermissions(context, token, new FacebookPermissionCallback() {
+				
+				@Override
+				public void onError(SocializeException error) {
+					if(listener != null) {
+						listener.onError(error);
+					}
+				}
+				
+				@Override
+				public void onSuccess(String[] current) {
+					
+					// Set the permissions on the session to the REAL permissions.
+					fbInfo.setPermissions(current);
+					
+					// Ensure the user has the required permissions
+					String[] required = FacebookService.DEFAULT_PERMISSIONS;
+					
+					boolean authRequired = false;
+					
+					for (String permission : required) {
+						if(Arrays.binarySearch(current, permission) < 0) {
+							// Does NOT have permission, we need to auth
+							authRequired = true;
+							break;
+						}
+					}
+					
+					if(authRequired) {
+						
+
+						// We need to merge in the default permissions...
+						// Just add to a set
+						Set<String> allPermissions = new HashSet<String>();
+						allPermissions.addAll(Arrays.asList(current));
+						allPermissions.addAll(Arrays.asList(required));
+						
+						// Now set the merged permissions.  This is the final set
+						fbInfo.setPermissions(allPermissions.toArray(new String[allPermissions.size()]));
+						
+						// Now try to auth
+						facebookAuthProvider.authenticate(fbInfo, new AuthProviderListener() {
+							
+							@Override
+							public void onError(SocializeException error) {
+								if(listener != null) {
+									listener.onError(error);
+								}
+							}
+							
+							@Override
+							public void onCancel() {
+								if(listener != null) {
+									listener.onCancel();
+								}
+							}
+							
+							@Override
+							public void onAuthSuccess(AuthProviderResponse response) {
+								// Now to the actual auth!
+								doSocializeAuthKnownUser(context, fbInfo, token, listener);
+							}
+							
+							@Override
+							public void onAuthFail(SocializeException error) {
+								if(listener != null) {
+									listener.onAuthFail(error);
+								}
+							}
+						});
+						
+					}
+					else {
+						doSocializeAuthKnownUser(context, fbInfo, token, listener);
+					}
+				}
+			});
+		}
+		else {
+			// Assume default permissions
+			fbInfo.setPermissions(FacebookService.DEFAULT_PERMISSIONS);
+			doSocializeAuthKnownUser(context, fbInfo, token, listener);
+		}
+	}
+	
+	protected void doSocializeAuthKnownUser(Context context, AuthProviderInfo fbInfo, String token, SocializeAuthListener listener) {
 		DefaultUserProviderCredentials credentials = new DefaultUserProviderCredentials();
 		credentials.setAuthProviderInfo(fbInfo);
 		credentials.setAccessToken(token);
-		
 		getSocialize().authenticateKnownUser(
 				context, 
 				credentials, 
-				listener);
+				listener);	
 	}
 
 	/* (non-Javadoc)
@@ -173,10 +269,11 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	}
 	
 	@Override
-	public void extendAccessToken(final Context context) {
+	public void extendAccessToken(final Context context, final SocializeAuthListener listener) {
 		
 		if(isLinked(context)) {
-			getFacebook(context).extendAccessTokenIfNeeded(context, new ServiceListener() {
+			
+			if(!getFacebook(context).extendAccessTokenIfNeeded(context, new ServiceListener() {
 				@Override
 				public void onFacebookError(FacebookError e) {
 					if(logger != null) {
@@ -204,32 +301,73 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 					
 					if(session != null) {
 						
-						String newAccessToken = values.getString(Facebook.TOKEN);
+						final String newAccessToken = values.getString(Facebook.TOKEN);
 						
 						if(!StringUtils.isEmpty(newAccessToken)) {
-							
+						
 							if(logger != null && logger.isDebugEnabled()) {
 								logger.debug("Got new Facebook access token [" +
 										newAccessToken +
 										"]");
 							}
 							
-							UserProviderCredentialsMap map = session.getUserProviderCredentials();
-							
-							UserProviderCredentials creds = map.get(AuthProviderType.FACEBOOK);
-							
-							DefaultUserProviderCredentials newCreds = new DefaultUserProviderCredentials();
-							
-							if(creds != null) {
-								newCreds.merge(creds);
-							}
-							
-							newCreds.setAccessToken(newAccessToken);
-							
-							map.put(AuthProviderType.FACEBOOK, newCreds);
-							
-							getSocialize().setSession(session);
-							getSocialize().saveSession(context);
+							// Link the user again
+							link(context, newAccessToken, false, new SocializeAuthListener() {
+								
+								@Override
+								public void onError(SocializeException error) {
+									if(logger != null) {
+										logger.error("An error occurred while attempting to update authentication details", error);
+									}
+									
+									if(listener != null) {
+										listener.onError(error);
+									}
+								}
+								
+								@Override
+								public void onCancel() {
+									if(listener != null) {
+										listener.onCancel();
+									}
+								}
+								
+								@Override
+								public void onAuthSuccess(SocializeSession session) {
+									
+									UserProviderCredentialsMap map = session.getUserProviderCredentials();
+									
+									UserProviderCredentials creds = map.get(AuthProviderType.FACEBOOK);
+									
+									DefaultUserProviderCredentials newCreds = new DefaultUserProviderCredentials();
+									
+									if(creds != null) {
+										newCreds.merge(creds);
+									}
+									
+									newCreds.setAccessToken(newAccessToken);
+									
+									map.put(AuthProviderType.FACEBOOK, newCreds);
+									
+									getSocialize().setSession(session);
+									getSocialize().saveSession(context);		
+									
+									if(listener != null) {
+										listener.onAuthSuccess(session);
+									}
+								}
+								
+								@Override
+								public void onAuthFail(SocializeException error) {
+									if(logger != null) {
+										logger.error("An error occurred while attempting to update authentication details", error);
+									}
+									
+									if(listener != null) {
+										listener.onAuthFail(error);
+									}
+								}
+							});								
 						}
 						else {
 							if(logger != null) {
@@ -238,26 +376,33 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 						}
 					}
 				}
-			});
+			})) {
+				if(logger != null) {
+					logger.warn("Failed to bind to the Facebook RefreshToken Service");
+				}	
+			}
 		}
+	}
+	
+	
+	@Override
+	public void getCurrentPermissions(Context parent, String token, FacebookPermissionCallback callback) {
+		facebookWallPoster.getCurrentPermissions(parent, token, callback);
 	}
 
 	@Override
 	public void post(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {
-		SocializeConfig config = ConfigUtils.getConfig(context);
-		facebookWallPoster.post(context, graphPath, config.getProperty(SocializeConfig.FACEBOOK_APP_ID), postData, listener);
+		facebookWallPoster.post(context, graphPath, postData, listener);
 	}
 
 	@Override
 	public void get(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {
-		SocializeConfig config = ConfigUtils.getConfig(context);
-		facebookWallPoster.get(context, graphPath, config.getProperty(SocializeConfig.FACEBOOK_APP_ID), postData, listener);
+		facebookWallPoster.get(context, graphPath, postData, listener);
 	}
 
 	@Override
 	public void delete(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {
-		SocializeConfig config = ConfigUtils.getConfig(context);
-		facebookWallPoster.delete(context, graphPath, config.getProperty(SocializeConfig.FACEBOOK_APP_ID), postData, listener);
+		facebookWallPoster.delete(context, graphPath, postData, listener);
 	}
 
 	@Override
@@ -289,9 +434,16 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	public void setConfig(SocializeConfig config) {
 		this.config = config;
 	}
+	
+	public void setFacebookAuthProvider(FacebookAuthProvider facebookAuthProvider) {
+		this.facebookAuthProvider = facebookAuthProvider;
+	}
 
 	protected SocializeService getSocialize() {
 		return Socialize.getSocialize();
 	}
-
+	
+	void setFacebook(Facebook facebook) {
+		this.facebook = facebook;
+	}
 }

@@ -76,10 +76,9 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	public void postLike(Activity parent, Entity entity, PropagationInfo propInfo, SocialNetworkListener listener) {
 		
 		if(config.isOGLike()) {
-			String appId = getFacebookAppId();
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("object", propInfo.getEntityUrl());
-			post(parent, "me/og.likes",  appId, params, listener);			
+			post(parent, "me/og.likes",  params, listener);			
 		}
 		else {
 			post(parent, entity, "", propInfo, listener);
@@ -115,7 +114,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			postData.setPostValues(params);
 			postData.setPropagationInfo(propInfo);			
 			
-			post(parent, appId, listener, postData);
+			post(parent, listener, postData);
 		}
 		else {
 			String msg = "Cannot post message to Facebook.  No app id found.  Make sure you specify facebook.app.id in socialize.properties";
@@ -134,7 +133,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		params.put("caption", caption);
 		DefaultPostData postData = new DefaultPostData();
 		postData.setPostValues(params);
-		post(parent, appId, listener, postData);
+		post(parent, listener, postData);
 	}
 	
 	@Deprecated
@@ -144,7 +143,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	}
 
 	@Override
-	public void post(Activity parent, String appId, SocialNetworkListener listener, PostData postData) {
+	public void post(Activity parent, SocialNetworkListener listener, PostData postData) {
 		if(listener != null) {
 			listener.onBeforePost(parent, SocialNetwork.FACEBOOK , postData);
 		}
@@ -193,7 +192,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			String appId = getFacebookAppId();
 			
 			if(!StringUtils.isEmpty(appId)) {
-				postPhoto(parent, appId, link, comment, photoUri, listener);
+				postPhoto(parent, link, comment, photoUri, listener);
 			}
 			else {
 				String msg = "Cannot post message to Facebook.  No app id found.  Make sure you specify facebook.app.id in socialize.properties";
@@ -208,7 +207,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	}
 	
 	@Override
-	public void postPhoto(Activity parent, String appId, String link, String caption, Uri photoUri, SocialNetworkListener listener) {
+	public void postPhoto(Activity parent, String link, String caption, Uri photoUri, SocialNetworkListener listener) {
 
 		try {
 			Bundle params = new Bundle();
@@ -242,21 +241,21 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	}
 
 	@Override
-	public void post(Activity parent, String graphPath, String appId, Map<String, Object> postData, SocialNetworkPostListener listener) {
-		doFacebookCall(parent, appId, postData, graphPath, "POST", listener);
+	public void post(Activity parent, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {
+		doFacebookCall(parent, postData, graphPath, "POST", listener);
 	}
 
 	@Override
-	public void get(Activity parent, String graphPath, String appId, Map<String, Object> postData, SocialNetworkPostListener listener) {
-		doFacebookCall(parent, appId, postData, graphPath, "GET", listener);
+	public void get(Activity parent, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {
+		doFacebookCall(parent, postData, graphPath, "GET", listener);
 	}
 
 	@Override
-	public void delete(Activity parent, String graphPath, String appId, Map<String, Object> postData, SocialNetworkPostListener listener) {
-		doFacebookCall(parent, appId, postData, graphPath, "DELETE", listener);
+	public void delete(Activity parent, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {
+		doFacebookCall(parent, postData, graphPath, "DELETE", listener);
 	}
 	
-	protected void doFacebookCall(Activity parent, String appId, Map<String, Object> postData, String graphPath, String method, SocialNetworkPostListener listener) {
+	protected void doFacebookCall(Activity parent, Map<String, Object> postData, String graphPath, String method, SocialNetworkPostListener listener) {
 		Bundle bundle = new Bundle();
 		
 		if(postData != null) {
@@ -274,10 +273,17 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			}	
 		}
 
-		doFacebookCall(parent, appId, bundle, graphPath, method, listener);
+		doFacebookCall(parent, bundle, graphPath, method, listener);
 	}
 	
-	protected void doFacebookCall(Activity parent, String appId, Bundle data, String graphPath, String method, SocialNetworkPostListener listener) {
+	public void getCurrentPermissions(Context parent, String token, FacebookPermissionCallback callback) {
+		Facebook fb = new Facebook(getFacebookAppId());
+		fb.setAccessToken(token);
+		AsyncFacebookRunner runner = newAsyncFacebookRunner(fb);
+		runner.request("me/permissions", callback);		
+	}	
+	
+	protected void doFacebookCall(Activity parent, Bundle data, String graphPath, String method, SocialNetworkPostListener listener) {
 		Facebook fb = getFacebook(parent);
 		FacebookSessionStore store = newFacebookSessionStore();
 		store.restore(fb, parent);

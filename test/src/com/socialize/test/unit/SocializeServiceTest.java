@@ -74,6 +74,7 @@ import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarOptions;
+import com.socialize.ui.actionbar.ActionBarUtilsImpl;
 import com.socialize.util.AppUtils;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.Drawables;
@@ -1527,8 +1528,8 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		assertEquals(consumerSecret, socializeUI.getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET));
 	}
 
-	public PublicSocialize newSocializeServiceForActionBarTests() {
-		PublicSocialize publicSocialize = new PublicSocialize() {
+	public ActionBarUtilsImpl newSocializeServiceForActionBarTests() {
+		ActionBarUtilsImpl publicSocialize = new ActionBarUtilsImpl() {
 			@Override
 			public View showActionBar(Activity parent, View original, Entity entity, ActionBarOptions options, ActionBarListener listener) {
 				addResult(0, parent);
@@ -1558,7 +1559,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		Activity mockParent = AndroidMock.createMock(Activity.class);
 		Entity mockEntity = AndroidMock.createMock(Entity.class);
 		ActionBarOptions options = AndroidMock.createMock(ActionBarOptions.class);
-		PublicSocialize publicSocialize = newSocializeServiceForActionBarTests();
+		ActionBarUtilsImpl publicSocialize = newSocializeServiceForActionBarTests();
 		publicSocialize.showActionBar(mockParent, 1, mockEntity, options);
 
 		assertEquals(mockParent, getResult(0));
@@ -1574,7 +1575,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		Entity mockEntity = AndroidMock.createMock(Entity.class);
 		int mockViewId = 3;
 
-		PublicSocialize publicSocialize = newSocializeServiceForActionBarTests();
+		ActionBarUtilsImpl publicSocialize = newSocializeServiceForActionBarTests();
 
 		publicSocialize.showActionBar(mockParent, mockViewId, mockEntity);
 
@@ -1592,7 +1593,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		Entity mockEntity = AndroidMock.createMock(Entity.class);
 		ActionBarOptions mockOptions = AndroidMock.createMock(ActionBarOptions.class);
 
-		PublicSocialize publicSocialize = newSocializeServiceForActionBarTests();
+		ActionBarUtilsImpl publicSocialize = newSocializeServiceForActionBarTests();
 		publicSocialize.showActionBar(mockParent, mockView, mockEntity, mockOptions);
 
 		assertEquals(mockParent, getResult(0));
@@ -1608,7 +1609,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		View mockView = AndroidMock.createMock(View.class, getContext());
 		Entity mockEntity = AndroidMock.createMock(Entity.class);
 
-		PublicSocialize publicSocialize = newSocializeServiceForActionBarTests();
+		ActionBarUtilsImpl publicSocialize = newSocializeServiceForActionBarTests();
 		publicSocialize.showActionBar(mockParent, mockView, mockEntity);
 
 		assertEquals(mockParent, getResult(0));
@@ -1616,22 +1617,6 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		assertEquals(mockEntity, getResult(2));
 		assertNull(getResult(3));
 		assertNull(getResult(4));
-	}
-
-	@UsesMocks({ Activity.class, ActionBarListener.class, Entity.class })
-	public void testShowActionBarWithParentResIdAndListener() {
-
-		Activity mockParent = AndroidMock.createMock(Activity.class);
-		Entity mockEntity = AndroidMock.createMock(Entity.class);
-		ActionBarListener mockListener = AndroidMock.createMock(ActionBarListener.class);
-		PublicSocialize publicSocialize = newSocializeServiceForActionBarTests();
-
-		publicSocialize.showActionBar(mockParent, 1, mockEntity, mockListener);
-
-		assertEquals(mockParent, getResult(0));
-		assertEquals(mockEntity, getResult(2));
-		assertNull(getResult(3));
-		assertEquals(mockListener, getResult(4));
 	}
 
 	public void testSetFacebookUserCredentials() {

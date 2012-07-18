@@ -86,7 +86,8 @@ public void linkFBWithToken() {
 String fbToken = "ABCDEF...GHIJKL";
 
 // The "this" argument refers to the current Activity
-FacebookUtils.link(this, fbToken, new SocializeAuthListener() {
+// Specify "true" to verify that the permissions on this token are correct
+FacebookUtils.link(this, fbToken, true, new SocializeAuthListener() {
 
 	@Override
 	public void onCancel() {
