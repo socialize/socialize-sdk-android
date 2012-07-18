@@ -25,7 +25,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.text.Html;
+import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ShareType;
+import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.SocializeAction;
 import com.socialize.networks.SocialNetworkListener;
@@ -36,6 +39,8 @@ import com.socialize.networks.SocialNetworkListener;
  *
  */
 public class GooglePlusShareHandler extends AbstractShareHandler {
+	
+	private ShareMessageBuilder shareMessageBuilder;
 
 	/* (non-Javadoc)
 	 * @see com.socialize.share.ShareHandler#isAvailableOnDevice(android.content.Context)
@@ -58,10 +63,21 @@ public class GooglePlusShareHandler extends AbstractShareHandler {
 	protected void handle(Activity context, SocializeAction action, String text, PropagationInfo info, SocialNetworkListener listener) throws Exception {
 		Intent shareIntent = new Intent().setAction(Intent.ACTION_SEND);
 		shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);	
-		shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, text);
-		shareIntent.setType("text/plain");
+		
+		Entity entity = action.getEntity();
+		
+		String subject = shareMessageBuilder.buildShareSubject(entity);
+		String body = shareMessageBuilder.buildShareMessage(entity, info, text, true, true);
+		
+		shareIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(body));
+		shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+		shareIntent.setType("text/html");
 		shareIntent.setPackage("com.google.android.apps.plus");
 		context.startActivity(shareIntent);
+		
+		if(listener != null) {
+			listener.onAfterPost(context, null, null);
+		}		
 	}
 
 	/* (non-Javadoc)
@@ -70,5 +86,9 @@ public class GooglePlusShareHandler extends AbstractShareHandler {
 	@Override
 	protected ShareType getShareType() {
 		return ShareType.GOOGLE_PLUS;
+	}
+	
+	public void setShareMessageBuilder(ShareMessageBuilder shareMessageBuilder) {
+		this.shareMessageBuilder = shareMessageBuilder;
 	}
 }

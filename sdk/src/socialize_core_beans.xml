@@ -384,6 +384,7 @@
 	</bean>
 	
 	<bean id="googlePlusShareHandler" class="com.socialize.share.GooglePlusShareHandler">
+		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
 		<property name="logger" ref="logger"/>
 	</bean>
 
