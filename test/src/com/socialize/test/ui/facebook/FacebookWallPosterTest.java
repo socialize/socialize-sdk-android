@@ -134,7 +134,6 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		
 		final Entity entity = Entity.newInstance(entityKey, entityName);
 		
-		AndroidMock.expect(config.getProperty(SocializeConfig.FACEBOOK_APP_ID)).andReturn("foobar");
 		AndroidMock.expect(config.isOGLike()).andReturn(true);
 		AndroidMock.expect(info.getEntityUrl()).andReturn(entityUrl);
 		
