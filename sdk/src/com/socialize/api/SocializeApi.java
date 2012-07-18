@@ -158,7 +158,14 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 				
 				// TODO: add for more actions
 				if(action.getActionType().equals(ActionType.LIKE) && config.isOGLike()) {
-					propagation.addExtraParam("og_action", "like");
+					
+					if(propagation != null) {
+						propagation.addExtraParam("og_action", "like");
+					}
+					
+					if(localPropagation != null) {
+						localPropagation.addExtraParam("og_action", "like");
+					}
 				}
 			}
 			
