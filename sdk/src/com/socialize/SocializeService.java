@@ -82,7 +82,8 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	public void init(Context context, final IOCContainer container);
 
 	/**
-	 * Destroys the SocializeService instance.  Should be called during the onDestroy() method of your Activity.
+	 * Destroys the SocializeService instance.
+	 * Should NOT be called in general use.
 	 */
 	public void destroy();
 	

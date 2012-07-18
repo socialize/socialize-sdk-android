@@ -573,6 +573,7 @@ public class SocializeServiceImpl implements SocializeService {
 			initCount = 0;
 			initPaths = null;
 			entityLoader = null;
+			session = null;
 		}
 		else {
 			destroy();
