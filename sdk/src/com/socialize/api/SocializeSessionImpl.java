@@ -21,7 +21,6 @@
  */
 package com.socialize.api;
 
-import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.DefaultUserProviderCredentialsMap;
 import com.socialize.auth.UserProviderCredentials;
@@ -48,17 +47,6 @@ public class SocializeSessionImpl implements WritableSession {
 	
 	private UserProviderCredentialsMap userProviderCredentials;
 	
-	private String appId3rdParty;
-	
-	private String userId3rdParty;
-	
-	private String token3rdParty;
-	
-	private AuthProviderType authProviderType;
-	
-	@SuppressWarnings("rawtypes")
-	private AuthProvider authProvider;
-	
 	private static final SocializeSessionImpl instance = new SocializeSessionImpl();
 	
 	public static final SocializeSessionImpl getInstance() {
@@ -72,27 +60,9 @@ public class SocializeSessionImpl implements WritableSession {
 	
 	@Override
 	public void clear(AuthProviderType type) {
-		
 		userProviderCredentials.remove(type);
-		
-		token3rdParty = null;
-		userId3rdParty = null;
-		authProviderType = AuthProviderType.SOCIALIZE;
-		authProvider = null;
 	}
 
-	@Deprecated
-	@Override
-	public String get3rdPartyUserId() {
-		return userId3rdParty;
-	}
-	
-	@Deprecated
-	@Override
-	public String get3rdPartyToken() {
-		return token3rdParty;
-	}
-	
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.api.SocializeSession#getUserSettings()
@@ -187,25 +157,6 @@ public class SocializeSessionImpl implements WritableSession {
 	@Override
 	public void setHost(String host) {
 		this.host = host;
-	}
-
-	@Deprecated
-	@Override
-	public AuthProviderType getAuthProviderType() {
-		return authProviderType;
-	}
-
-	@Deprecated
-	@Override
-	public String get3rdPartyAppId() {
-		return appId3rdParty;
-	}
-
-	@Deprecated
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
-	public AuthProvider getAuthProvider() {
-		return authProvider;
 	}
 
 	public UserProviderCredentialsMap getUserProviderCredentials() {

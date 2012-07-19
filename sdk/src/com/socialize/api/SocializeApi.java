@@ -484,7 +484,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			return AuthProviderType.SOCIALIZE;
 		}
 		
-		AuthProviderType authProviderType = data.getAuthProviderType();
+		AuthProviderType authProviderType = null;
 		
 		AuthProviderInfo authProviderInfo = data.getAuthProviderInfo();
 		
@@ -495,26 +495,14 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		return authProviderType;
 	}
 	
-	protected void validate(AuthProviderData data) throws SocializeException{
+	protected void validate(AuthProviderData data) throws SocializeException {
 		AuthProviderInfo authProviderInfo = data.getAuthProviderInfo();
 		
 		if(authProviderInfo != null) {
 			authProviderInfo.validate();
 		}
 		else {
-			// Legacy
-			validateLegacy(data);
-		}
-	}
-	
-	protected void validateLegacy(AuthProviderData data) throws SocializeException {
-		AuthProviderType authProviderType = getAuthProviderType(data);
-		
-		String appId3rdParty = data.getAppId3rdParty();
-		if(authProviderType != null && 
-				authProviderType.equals(AuthProviderType.FACEBOOK) && 
-				StringUtils.isEmpty(appId3rdParty)) {
-			throw new SocializeException("No app ID found for auth type FACEBOOK");
+			throw new SocializeException("Empty auth provider info");
 		}
 	}
 	

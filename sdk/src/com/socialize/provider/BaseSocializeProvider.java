@@ -197,7 +197,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 			return validateSessionAuthData(session, data, info);
 		}
 		else {	
-			return validateSessionAuthDataLegacy(session, data);
+			return false;
 		}		
 	}
 
@@ -209,28 +209,6 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 				return true;
 			}
 		}
-		return false;
-	}
-	
-	@SuppressWarnings("deprecation")
-	public boolean validateSessionAuthDataLegacy(SocializeSession loaded, AuthProviderData data) {
-		
-		if(data.getAuthProviderType().equals(AuthProviderType.SOCIALIZE)) {
-			return true;
-		}
-		
-		if(data.getAuthProviderType() != null && !StringUtils.isEmpty(data.getAppId3rdParty())) {
-			AuthProviderType loadedAuthProviderType = loaded.getAuthProviderType();
-			String loadedAppId3rdParty = loaded.get3rdPartyAppId();
-			
-			if(loadedAuthProviderType != null && 
-					!StringUtils.isEmpty(loadedAppId3rdParty) && 
-					loadedAuthProviderType.equals(data.getAuthProviderType()) && 
-					loadedAppId3rdParty.equals(data.getAppId3rdParty())) {
-				return true;
-			}
-		}
-		
 		return false;
 	}
 	

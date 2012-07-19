@@ -22,7 +22,6 @@
 package com.socialize.test.blackbox;
 
 import com.socialize.auth.AuthProviderData;
-import com.socialize.auth.AuthProviderType;
 import com.socialize.test.SocializeUnitTest;
 
 /**
@@ -32,23 +31,16 @@ import com.socialize.test.SocializeUnitTest;
 public class AuthProviderDataTest extends SocializeUnitTest {
 
 	// No value in mocking a data bean.. so just assert in/out
-	@SuppressWarnings("deprecation")
 	public void testAuthProviderData() {
 	
 		AuthProviderData data = new AuthProviderData();
 		
-		String appId3rdParty = "foobar_appId3rdParty";
 		String token3rdParty = "foobar_token3rdParty";
 		String userId3rdParty = "foobar_userId3rdParty";
-		AuthProviderType authProviderType = AuthProviderType.FACEBOOK;
 		
-		data.setAppId3rdParty(appId3rdParty);
-		data.setAuthProviderType(authProviderType);
 		data.setToken3rdParty(token3rdParty);
 		data.setUserId3rdParty(userId3rdParty);
 		
-		assertEquals(appId3rdParty, data.getAppId3rdParty());
-		assertEquals(authProviderType, data.getAuthProviderType());
 		assertEquals(token3rdParty, data.getToken3rdParty());
 		assertEquals(userId3rdParty, data.getUserId3rdParty());
 	}

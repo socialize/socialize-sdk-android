@@ -33,10 +33,6 @@ public class AuthProviderData {
 	
 	private AuthProviderInfo authProviderInfo;
 	
-	private String appId3rdParty;
-	
-	private AuthProviderType authProviderType = AuthProviderType.SOCIALIZE;
-	
 	public AuthProviderData() {
 		super();
 	}
@@ -61,24 +57,6 @@ public class AuthProviderData {
 		this.secret3rdParty = secret3rdParty;
 	}
 
-	public String getAppId3rdParty() {
-		return appId3rdParty;
-	}
-	
-	@Deprecated
-	public void setAppId3rdParty(String appId3rdParty) {
-		this.appId3rdParty = appId3rdParty;
-	}
-	
-	public AuthProviderType getAuthProviderType() {
-		return authProviderType;
-	}
-	
-	@Deprecated
-	public void setAuthProviderType(AuthProviderType authProviderType) {
-		this.authProviderType = authProviderType;
-	}
-
 	public AuthProviderInfo getAuthProviderInfo() {
 		return authProviderInfo;
 	}
@@ -91,9 +69,7 @@ public class AuthProviderData {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((appId3rdParty == null) ? 0 : appId3rdParty.hashCode());
 		result = prime * result + ((authProviderInfo == null) ? 0 : authProviderInfo.hashCode());
-		result = prime * result + ((authProviderType == null) ? 0 : authProviderType.hashCode());
 		result = prime * result + ((secret3rdParty == null) ? 0 : secret3rdParty.hashCode());
 		result = prime * result + ((token3rdParty == null) ? 0 : token3rdParty.hashCode());
 		result = prime * result + ((userId3rdParty == null) ? 0 : userId3rdParty.hashCode());
@@ -109,19 +85,11 @@ public class AuthProviderData {
 		if (getClass() != obj.getClass())
 			return false;
 		AuthProviderData other = (AuthProviderData) obj;
-		if (appId3rdParty == null) {
-			if (other.appId3rdParty != null)
-				return false;
-		}
-		else if (!appId3rdParty.equals(other.appId3rdParty))
-			return false;
 		if (authProviderInfo == null) {
 			if (other.authProviderInfo != null)
 				return false;
 		}
 		else if (!authProviderInfo.equals(other.authProviderInfo))
-			return false;
-		if (authProviderType != other.authProviderType)
 			return false;
 		if (secret3rdParty == null) {
 			if (other.secret3rdParty != null)

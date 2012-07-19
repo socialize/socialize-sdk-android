@@ -75,20 +75,6 @@ public class MockFacebookWallPoster implements FacebookWallPoster {
 	}
 
 	@Override
-	public void post(Activity parent, String appId, String linkName, String message, String link, String caption, SocialNetworkListener listener) {
-		if(listener != null) {
-			listener.onAfterPost(parent, SocialNetwork.FACEBOOK, null);
-		}
-	}
-
-	@Override
-	public void postShare(Activity parent, Share share, SocialNetworkListener listener) {
-		if(listener != null) {
-			listener.onAfterPost(parent, SocialNetwork.FACEBOOK, null);
-		}
-	}
-
-	@Override
 	public void post(Activity parent, SocialNetworkListener listener, PostData postData) {
 		if(listener != null) {
 			listener.onAfterPost(parent, SocialNetwork.FACEBOOK, null);

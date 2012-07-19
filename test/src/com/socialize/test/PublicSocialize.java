@@ -28,7 +28,6 @@ import com.socialize.SocializeServiceImpl;
 import com.socialize.api.action.share.ShareSystem;
 import com.socialize.api.action.user.UserSystem;
 import com.socialize.auth.AuthProviderInfoBuilder;
-import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
 import com.socialize.auth.SocializeAuthProviderInfo;
 import com.socialize.entity.Comment;
@@ -134,11 +133,6 @@ public class PublicSocialize extends SocializeServiceImpl {
 	@Override
 	public Comment newComment() {
 		return super.newComment();
-	}
-
-	@Override
-	public boolean isAuthenticatedLegacy(AuthProviderType providerType) {
-		return super.isAuthenticatedLegacy(providerType);
 	}
 
 	@Override

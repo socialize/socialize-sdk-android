@@ -122,26 +122,6 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		}		
 	}
 
-	@Deprecated
-	@Override
-	public void post(final Activity parent, String appId, String linkName, String message, String link, String caption, final SocialNetworkListener listener) {
-		final Map<String, Object> params = new HashMap<String, Object>();
-		params.put("name", linkName);
-		params.put("message", message);
-		params.put("link", link);
-		params.put("type", "link");
-		params.put("caption", caption);
-		DefaultPostData postData = new DefaultPostData();
-		postData.setPostValues(params);
-		post(parent, listener, postData);
-	}
-	
-	@Deprecated
-	@Override
-	public void postShare(Activity parent, Share share, SocialNetworkListener listener) {
-		post(parent, share.getEntity(), share.getText(), share.getPropagationInfoResponse().getPropagationInfo(ShareType.FACEBOOK), listener);	
-	}
-
 	@Override
 	public void post(Activity parent, SocialNetworkListener listener, PostData postData) {
 		if(listener != null) {

@@ -23,7 +23,6 @@ package com.socialize.api;
 
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderInfo;
-import com.socialize.auth.AuthProviders;
 import com.socialize.auth.DefaultUserProviderCredentials;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
@@ -36,11 +35,6 @@ import com.socialize.ui.profile.UserSettings;
 public class DefaultSocializeSessionFactory implements SocializeSessionFactory {
 
 	private SocializeConfig config;
-	
-	@Deprecated
-	public DefaultSocializeSessionFactory(SocializeConfig config, AuthProviders authProviders) {
-		this(config);
-	}
 	
 	public DefaultSocializeSessionFactory(SocializeConfig config) {
 		super();

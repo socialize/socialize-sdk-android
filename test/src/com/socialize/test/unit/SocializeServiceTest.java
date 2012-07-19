@@ -1113,62 +1113,6 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		socialize.authenticate(TestUtils.getActivity(this), key, secret, fb, listener);
 
 		verifyDefaultMocks();			
-		
-	}
-
-//	public void testAuthenticateKnownUser() throws SocializeException {
-//		SocializeAuthListener authListener = AndroidMock.createMock(SocializeAuthListener.class);
-//
-//		final String consumerKey = "foo", consumerSecret = "bar";
-//		final String authProviderId = "foobar", authUserId3rdParty = "foobar_user", authToken3rdParty = "foobar_token", secret3rdParty = "foobar_secret";
-//
-//		setupDefaultMocks();
-//		
-//		FacebookAuthProviderInfo fb = new FacebookAuthProviderInfo();
-//		fb.setAppId(authProviderId);
-//
-//		DefaultUserProviderCredentials creds = new DefaultUserProviderCredentials();
-//		creds.setAccessToken(authToken3rdParty);
-//		creds.setUserId(authUserId3rdParty);
-//		creds.setTokenSecret(secret3rdParty);
-//		creds.setAuthProviderInfo(fb);
-//
-//		SocializeServiceImpl socialize = new SocializeServiceImpl();
-//		
-//		userSystem.authenticateKnownUser(TestUtils.getActivity(this), creds, authListener, socialize);
-//
-//		replayDefaultMocks();
-//
-//		socialize.init(getContext(), container);
-//
-//		assertTrue(socialize.isInitialized());
-//		
-//		socialize.authenticateKnownUser(TestUtils.getActivity(this), consumerKey, consumerSecret, fb, creds, authListener);
-//
-//		verifyDefaultMocks();
-//	}
-
-	public void testIsAuthenticatedWithProviderLegacy() {
-
-		session = AndroidMock.createMock(SocializeSession.class);
-
-		AndroidMock.expect(session.getUserProviderCredentials(AuthProviderType.FACEBOOK)).andReturn(null);
-		AndroidMock.expect(session.getAuthProviderType()).andReturn(AuthProviderType.FACEBOOK);
-
-		AndroidMock.replay(session);
-
-		SocializeServiceImpl socialize = new SocializeServiceImpl() {
-			@Override
-			public boolean isAuthenticated() {
-				return true;
-			}
-		};
-
-		socialize.setSession(session);
-
-		assertTrue(socialize.isAuthenticated(AuthProviderType.FACEBOOK));
-
-		AndroidMock.verify(session);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -1619,6 +1563,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		assertNull(getResult(4));
 	}
 
+	@Deprecated
 	public void testSetFacebookUserCredentials() {
 		PublicSocialize socializeUI = new PublicSocialize();
 

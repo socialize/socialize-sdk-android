@@ -297,7 +297,6 @@ public class SocializeApiTest extends SocializeActivityTest {
 
 		
 		AndroidMock.expect(request.getEndpoint()).andReturn(endpoint);
-		AndroidMock.expect(authProviderData.getAuthProviderType()).andReturn(authProviderType);
 		AndroidMock.expect(authProviders.getProvider(authProviderType)).andReturn(authProvider);
 		AndroidMock.expect(request.getAuthProviderData()).andReturn(authProviderData);
 		AndroidMock.expect(authProviderData.getAuthProviderInfo()).andReturn(authProviderInfo).anyTimes();
@@ -392,7 +391,6 @@ public class SocializeApiTest extends SocializeActivityTest {
 		listener.onError(error);
 
 		AndroidMock.expect(request.getEndpoint()).andReturn(endpoint);
-		AndroidMock.expect(authProviderData.getAuthProviderType()).andReturn(authProviderType);
 		AndroidMock.expect(authProviders.getProvider(authProviderType)).andReturn(authProvider);
 		AndroidMock.expect(request.getAuthProviderData()).andReturn(authProviderData);
 		AndroidMock.expect(authProviderData.getAuthProviderInfo()).andReturn(authProviderInfo).anyTimes();

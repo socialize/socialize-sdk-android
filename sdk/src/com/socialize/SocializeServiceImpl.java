@@ -82,7 +82,6 @@ import com.socialize.util.ResourceLocator;
 /**
  * @author Jason Polites
  */
-@SuppressWarnings("deprecation")
 public class SocializeServiceImpl implements SocializeService {
 	
 	static final String receiver = SocializeC2DMReceiver.class.getName();
@@ -678,11 +677,7 @@ public class SocializeServiceImpl implements SocializeService {
 			
 			UserProviderCredentials userProviderCredentials = session.getUserProviderCredentials(providerType);
 			
-			if(userProviderCredentials == null) {
-				// Legacy
-				return isAuthenticatedLegacy(providerType);
-			}
-			else {
+			if(userProviderCredentials != null) {
 				// Validate the credentials
 				AuthProviderInfo authProviderInfo = userProviderCredentials.getAuthProviderInfo();
 				
@@ -695,16 +690,6 @@ public class SocializeServiceImpl implements SocializeService {
 			}
 		}
 		return false;
-	}
-	
-	protected boolean isAuthenticatedLegacy(AuthProviderType providerType) {
-		AuthProviderType authProviderType = session.getAuthProviderType();
-		if(authProviderType == null) {
-			return false;
-		}
-		else {
-			return (authProviderType.equals(providerType));
-		}
 	}
 
 	protected boolean assertAuthenticated(SocializeListener listener) {
@@ -954,6 +939,7 @@ public class SocializeServiceImpl implements SocializeService {
 	 * @param context
 	 * @param entity
 	 */
+	@Deprecated
 	@Override
 	public void showCommentView(Activity context, Entity entity) {
 		showCommentView(context, entity, null);
@@ -965,11 +951,11 @@ public class SocializeServiceImpl implements SocializeService {
 	 * @param entity
 	 * @param listener
 	 */
+	@Deprecated
 	@Override
 	public void showCommentView(Activity context, Entity entity, OnCommentViewActionListener listener) {
 		if(listener != null) {
 			listenerHolder.push(CommentView.COMMENT_LISTENER, listener);
-//			Socialize.STATIC_LISTENERS.put(CommentView.COMMENT_LISTENER, listener);
 		}
 
 		try {
@@ -1042,10 +1028,7 @@ public class SocializeServiceImpl implements SocializeService {
 		this.authProviderInfoBuilder = authProviderInfoBuilder;
 	}
 	
-
 	protected Intent newIntent(Activity context, Class<?> cls) {
 		return new Intent(context, cls);
 	}
-	
-	
 }

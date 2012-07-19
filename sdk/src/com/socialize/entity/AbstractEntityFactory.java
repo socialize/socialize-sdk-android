@@ -48,6 +48,7 @@ public abstract class AbstractEntityFactory<T extends Entity> extends SocializeO
 		entry.setName(getString(object, "name"));
 		entry.setKey(getString(object, "key"));
 		entry.setMetaData(getString(object, "meta"));
+		entry.setType(getString(object, "type"));
 		
 		EntityStatsImpl stats = newEntityStatsImpl();
 		
@@ -78,6 +79,7 @@ public abstract class AbstractEntityFactory<T extends Entity> extends SocializeO
 		String name = entry.getName();
 		String key = entry.getKey();
 		String meta = entry.getMetaData();
+		String type = entry.getType();
 		
 		if(!StringUtils.isEmpty(name)) {
 			object.put("name", name);
@@ -86,6 +88,10 @@ public abstract class AbstractEntityFactory<T extends Entity> extends SocializeO
 		if(!StringUtils.isEmpty(key)) {
 			object.put("key", key);
 		}
+		
+		if(!StringUtils.isEmpty(type)) {
+			object.put("type", type);
+		}			
 		
 		if(!StringUtils.isEmpty(meta)) {
 			object.put("meta", meta);

@@ -38,9 +38,6 @@ import com.socialize.networks.SocialNetworkPostListener;
  */
 public interface FacebookWallPoster {
 
-	@Deprecated
-	public void postShare(final Activity parent, Share share, SocialNetworkListener listener);
-	
 	public void postLike(final Activity parent, Entity entity, PropagationInfo propInfo, SocialNetworkListener listener);
 
 	public void postComment(final Activity parent, Entity entity, String comment, PropagationInfo propInfo, SocialNetworkListener listener);	
@@ -48,9 +45,6 @@ public interface FacebookWallPoster {
 	public void postPhoto(final Activity parent, Share share, String comment, Uri photoUri, SocialNetworkListener listener);
 	
 	public void postPhoto(final Activity parent, String link, String caption, Uri photoUri, SocialNetworkListener listener);
-	
-	@Deprecated
-	public void post(final Activity parent, String appId, String linkName, String message, String link, String caption, final SocialNetworkListener listener);
 	
 	public void post(final Activity parent, Entity entity, String message, PropagationInfo propInfo, SocialNetworkListener listener);
 	

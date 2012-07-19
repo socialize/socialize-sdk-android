@@ -99,11 +99,6 @@ public class Socialize {
 		return instance;
 	}
 	
-	@Deprecated
-	public static final SocializeUI getSocializeUI() {
-		return instance;
-	}
-	
 	static Object getBean(String name) {
 		return instance.getContainer().getBean(name);
 	}

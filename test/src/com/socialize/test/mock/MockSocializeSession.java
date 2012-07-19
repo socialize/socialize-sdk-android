@@ -22,7 +22,6 @@
 package com.socialize.test.mock;
 
 import com.socialize.api.WritableSession;
-import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.DefaultUserProviderCredentialsMap;
 import com.socialize.auth.UserProviderCredentials;
@@ -110,36 +109,6 @@ public class MockSocializeSession implements WritableSession {
 	@Override
 	public String getHost() {
 		return host;
-	}
-
-	@Deprecated
-	@Override
-	public String get3rdPartyUserId() {
-		return null;
-	}
-
-	@Deprecated
-	@Override
-	public String get3rdPartyToken() {
-		return null;
-	}
-
-	@Deprecated
-	@Override
-	public String get3rdPartyAppId() {
-		return null;
-	}
-
-	@Deprecated
-	@Override
-	public AuthProviderType getAuthProviderType() {
-		return AuthProviderType.SOCIALIZE;
-	}
-
-	@Deprecated
-	@Override
-	public AuthProvider<?> getAuthProvider() {
-		return null;
 	}
 
 	@Override
