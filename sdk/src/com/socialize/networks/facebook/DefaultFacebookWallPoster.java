@@ -338,16 +338,16 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		
 		return new RequestListener() {
 			public void onMalformedURLException(MalformedURLException e, Object state) {
-				handleFacebookError(parent, defaultErrorMessage, e, listener);
+				handleFacebookError(parent, 0, defaultErrorMessage, e, listener);
 			}
 			public void onIOException(IOException e, Object state) {
-				handleFacebookError(parent, defaultErrorMessage, e, listener);
+				handleFacebookError(parent, 0, defaultErrorMessage, e, listener);
 			}
 			public void onFileNotFoundException(final FileNotFoundException e, Object state) {
-				handleFacebookError(parent, defaultErrorMessage, e, listener);
+				handleFacebookError(parent, 0, defaultErrorMessage, e, listener);
 			}
 			public void onFacebookError(FacebookError e, Object state) {
-				handleFacebookError(parent, defaultErrorMessage, e, listener);
+				handleFacebookError(parent, 0, defaultErrorMessage, e, listener);
 			}
 			public void onComplete(final String response, Object state) {
 				
@@ -360,6 +360,13 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 							
 							JSONObject error = responseObject.getJSONObject("error");
 							
+							int code = 0;
+							
+							if(error.has("code") && !error.isNull("code")) {
+								code = error.getInt("code");
+							}
+							
+							
 							if(error.has("message") && !error.isNull("message")) {
 								String msg = error.getString("message");
 								if(logger != null) {
@@ -369,10 +376,10 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 									System.err.println(msg);
 								}
 								
-								handleFacebookError(parent, msg, new SocializeException(msg), listener);
+								handleFacebookError(parent, code, msg, new SocializeException(msg), listener);
 							}
 							else {
-								handleFacebookError(parent, defaultErrorMessage, new SocializeException("Facebook Error (Unknown)"), listener);
+								handleFacebookError(parent, code, defaultErrorMessage, new SocializeException("Facebook Error (Unknown)"), listener);
 							}
 							
 							return;
@@ -397,9 +404,15 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		};
 	}
 	
-	protected void handleFacebookError(final Activity parent, String msg, Throwable e, SocialNetworkPostListener listener) {
-		// Clear the session cache
-		getSocialize().clear3rdPartySession(parent, AuthProviderType.FACEBOOK);
+	protected void handleFacebookError(final Activity parent, int code, String msg, Throwable e, SocialNetworkPostListener listener) {
+	
+		// Check for token error:
+		// http://fbdevwiki.com/wiki/Error_codes
+		if(code == 190) {
+			// Clear the session cache
+			getSocialize().clear3rdPartySession(parent, AuthProviderType.FACEBOOK);
+		}
+		
 		onError(parent, msg, e, listener);
 	}
 	

@@ -205,8 +205,18 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 		UserProviderCredentialsMap userProviderCredentialsMap = loaded.getUserProviderCredentials();
 		if(userProviderCredentialsMap != null) {
 			UserProviderCredentials userProviderCredentials = userProviderCredentialsMap.get(info.getType());
-			if(userProviderCredentials != null && userProviderCredentials.getAccessToken().equals(data.getToken3rdParty()) && userProviderCredentials.getAuthProviderInfo().matches(info)) {
-				return true;
+			if(userProviderCredentials != null && userProviderCredentials.getAuthProviderInfo().matches(info)) {
+				boolean ok = true;
+				
+				if(!StringUtils.isEmpty(data.getToken3rdParty())) {
+					ok = userProviderCredentials.getAccessToken().equals(data.getToken3rdParty());
+				}
+				
+				if(ok && !StringUtils.isEmpty(data.getSecret3rdParty())) {
+					ok = userProviderCredentials.getTokenSecret().equals(data.getSecret3rdParty());
+				}
+				
+				return ok;
 			}
 		}
 		return false;
