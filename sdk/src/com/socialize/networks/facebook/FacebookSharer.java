@@ -23,7 +23,6 @@ package com.socialize.networks.facebook;
 
 import android.app.Activity;
 import com.socialize.api.action.ActionType;
-import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.networks.AbstractSocialNetworkSharer;
@@ -36,7 +35,6 @@ import com.socialize.networks.SocialNetworkListener;
 public class FacebookSharer extends AbstractSocialNetworkSharer {
 	
 	private FacebookWallPoster facebookWallPoster;
-	private SocializeConfig config;
 	
 	@Override
 	protected SocialNetwork getNetwork() {
@@ -51,8 +49,9 @@ public class FacebookSharer extends AbstractSocialNetworkSharer {
 				break;
 				
 			case SHARE:		
-				String action = config.getProperty(SocializeConfig.FACEBOOK_OG_SHARE_ACTION, null);
-				facebookWallPoster.postOG(context, entity, comment, action, urlSet, listener);
+//				String action = config.getProperty(SocializeConfig.FACEBOOK_OG_SHARE_ACTION, null);
+//				facebookWallPoster.postOG(context, entity, comment, action, urlSet, listener);
+				facebookWallPoster.post(context, entity, comment, urlSet, listener);
 				break;
 				
 			case LIKE:
@@ -63,8 +62,5 @@ public class FacebookSharer extends AbstractSocialNetworkSharer {
 
 	public void setFacebookWallPoster(FacebookWallPoster facebookWallPoster) {
 		this.facebookWallPoster = facebookWallPoster;
-	}
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
 	}
 }

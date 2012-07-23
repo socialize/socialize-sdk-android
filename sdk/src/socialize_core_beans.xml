@@ -614,7 +614,6 @@
 		id="facebookSharer" 
 		class="com.socialize.networks.facebook.FacebookSharer"
 		extends="socialNetworkSharer">
-		<property name="config" ref="config"/>
 		<property name="facebookWallPoster" ref="facebookWallPoster"/>
 		<property name="authProviderInfoFactory" ref="facebookAuthProviderInfoFactory"/>
 	</bean>		

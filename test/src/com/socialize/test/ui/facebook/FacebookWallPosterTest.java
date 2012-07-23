@@ -217,7 +217,6 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 	})
 	public void testPost() {
 		
-		final String fbId = "foobar";
 		final String linkName = "foobar_linkname";
 		final String link = "foobar_url";
 		final String message = "foobar_message";
@@ -227,7 +226,6 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
 		final PropagationInfo info = AndroidMock.createMock(PropagationInfo.class);
 		
-		AndroidMock.expect(config.getProperty(SocializeConfig.FACEBOOK_APP_ID)).andReturn(fbId);
 		AndroidMock.expect(info.getEntityUrl()).andReturn(link);
 		
 		SocializeConfigUtils mockConfigUtils = new SocializeConfigUtils() {

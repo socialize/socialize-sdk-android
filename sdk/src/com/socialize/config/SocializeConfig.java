@@ -74,10 +74,10 @@ public class SocializeConfig {
 	 */
 	public static final String FACEBOOK_SSO_ENABLED = "facebook.sso.enabled";
 	
-	public static final String FACEBOOK_OG_SHARE_ACTION = "facebook.og.share.action";
-	public static final String FACEBOOK_OG_LIKE_ACTION = "facebook.og.like.action";
-	public static final String FACEBOOK_OG_COMMENT_ACTION = "facebook.og.comment.action";
-	public static final String FACEBOOK_OG_NAMESPACE = "facebook.og.namespace";
+//	public static final String FACEBOOK_OG_SHARE_ACTION = "facebook.og.share.action";
+//	public static final String FACEBOOK_OG_LIKE_ACTION = "facebook.og.like.action";
+//	public static final String FACEBOOK_OG_COMMENT_ACTION = "facebook.og.comment.action";
+//	public static final String FACEBOOK_OG_NAMESPACE = "facebook.og.namespace";
 	public static final String FACEBOOK_OG_USE_INBUILT_LIKE = "facebook.og.like.enabled";
 	
 	@Deprecated

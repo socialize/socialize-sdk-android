@@ -161,26 +161,20 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 				switch(action.getActionType()) {
 					case LIKE:
 						if(config.isOGLike()) {
-							if(propagation != null) {
-								propagation.addExtraParam("og_action", "like");
-							}
-							
-							if(localPropagation != null) {
-								localPropagation.addExtraParam("og_action", "like");
-							}
+							ogAction = "like";
 						}
-						else {
-							ogAction = config.getProperty(SocializeConfig.FACEBOOK_OG_LIKE_ACTION, null);
-						}
+//						else {
+//							ogAction = config.getProperty(SocializeConfig.FACEBOOK_OG_LIKE_ACTION, null);
+//						}
 						break;
 						
-					case COMMENT:
-							ogAction = config.getProperty(SocializeConfig.FACEBOOK_OG_COMMENT_ACTION, null);
-						break;
-						
-					case SHARE:
-							ogAction = config.getProperty(SocializeConfig.FACEBOOK_OG_SHARE_ACTION, null);
-						break;					
+//					case COMMENT:
+//							ogAction = config.getProperty(SocializeConfig.FACEBOOK_OG_COMMENT_ACTION, null);
+//						break;
+//						
+//					case SHARE:
+//							ogAction = config.getProperty(SocializeConfig.FACEBOOK_OG_SHARE_ACTION, null);
+//						break;					
 				}
 				
 				if(ogAction != null) {
