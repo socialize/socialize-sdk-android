@@ -614,6 +614,7 @@
 		id="facebookSharer" 
 		class="com.socialize.networks.facebook.FacebookSharer"
 		extends="socialNetworkSharer">
+		<property name="config" ref="config"/>
 		<property name="facebookWallPoster" ref="facebookWallPoster"/>
 		<property name="authProviderInfoFactory" ref="facebookAuthProviderInfoFactory"/>
 	</bean>		
@@ -626,6 +627,7 @@
 		id="twitterSharer" 
 		class="com.socialize.networks.twitter.TwitterSharer"
 		extends="socialNetworkSharer">
+		<property name="twitterUtils" ref="twitterUtils"/>
 	</bean>		
 	
 	<bean 

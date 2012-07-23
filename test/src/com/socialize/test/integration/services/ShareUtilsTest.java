@@ -299,7 +299,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		
 		SocializeAccess.setShareUtilsProxy(mockShareUtils);
 		
-		final ShareDialogListener mockListener = new ShareDialogListener() {
+		final SocialNetworkDialogListener mockListener = new SocialNetworkDialogListener() {
 
 			@Override
 			public void onShow(Dialog dialog, SharePanelView dialogView) {}
@@ -360,7 +360,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		
 		SocializeAccess.setShareUtilsProxy(mockShareUtils);
 		
-		final ShareDialogListener mockListener = new ShareDialogListener() {
+		final SocialNetworkDialogListener mockListener = new SocialNetworkDialogListener() {
 
 			@Override
 			public void onShow(Dialog dialog, SharePanelView dialogView) {}
@@ -426,7 +426,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		
 		SocializeAccess.setShareUtilsProxy(mockShareUtils);
 		
-		final ShareDialogListener mockListener = new ShareDialogListener() {
+		final SocialNetworkDialogListener mockListener = new SocialNetworkDialogListener() {
 
 			@Override
 			public void onShow(Dialog dialog, SharePanelView dialogView) {}

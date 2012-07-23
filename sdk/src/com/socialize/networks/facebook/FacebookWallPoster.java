@@ -46,6 +46,8 @@ public interface FacebookWallPoster {
 	
 	public void postPhoto(final Activity parent, String link, String caption, Uri photoUri, SocialNetworkListener listener);
 	
+	public void postOG(final Activity parent, Entity entity, String message, String action, PropagationInfo propInfo, SocialNetworkListener listener);
+	
 	public void post(final Activity parent, Entity entity, String message, PropagationInfo propInfo, SocialNetworkListener listener);
 	
 	public void post(final Activity parent, SocialNetworkListener listener, PostData postData);

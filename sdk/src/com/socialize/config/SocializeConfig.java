@@ -74,12 +74,17 @@ public class SocializeConfig {
 	 */
 	public static final String FACEBOOK_SSO_ENABLED = "facebook.sso.enabled";
 	
+	public static final String FACEBOOK_OG_SHARE_ACTION = "facebook.og.share.action";
+	public static final String FACEBOOK_OG_LIKE_ACTION = "facebook.og.like.action";
+	public static final String FACEBOOK_OG_COMMENT_ACTION = "facebook.og.comment.action";
+	public static final String FACEBOOK_OG_NAMESPACE = "facebook.og.namespace";
+	public static final String FACEBOOK_OG_USE_INBUILT_LIKE = "facebook.og.like.enabled";
+	
 	@Deprecated
 	public static final String FACEBOOK_PHOTOS_ENABLED = "facebook.photos.enabled";
 	
 	public static final String FACEBOOK_APP_ID = "facebook.app.id";
-	public static final String FACEBOOK_USE_OG_LIKE = "facebook.use.og.like";
-	
+
 	@Deprecated
 	public static final String FACEBOOK_USER_ID = "facebook.user.id";
 	
@@ -251,6 +256,20 @@ public class SocializeConfig {
 	 */
 	public String getProperty(String key) {
 		return (properties == null) ? null : properties.getProperty(key);
+	}
+	
+	public String getProperty(String key, String defaultValue) {
+		if(properties == null) {
+			return defaultValue;
+		}
+		
+		String value = properties.getProperty(key);
+		
+		if(StringUtils.isEmpty(value)) {
+			return defaultValue;
+		}
+		
+		return value;
 	}	
 	
 	public void destroy() {
@@ -319,7 +338,7 @@ public class SocializeConfig {
 	}
 	
 	public boolean isOGLike() {
-		return getBooleanProperty(FACEBOOK_USE_OG_LIKE, true);
+		return getBooleanProperty(FACEBOOK_OG_USE_INBUILT_LIKE, true);
 	}
 	
 	public boolean isGooglePlusEnabled() {

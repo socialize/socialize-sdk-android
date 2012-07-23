@@ -69,6 +69,7 @@ import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.oauth.OAuthRequestSigner;
 import com.socialize.util.ImageUtils;
+import com.socialize.util.StringUtils;
 import com.socialize.util.UrlBuilder;
 
 
@@ -214,9 +215,14 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 	protected MultipartEntity newMultipartEntity(HttpMultipartMode mode) {
 		return new MultipartEntity(mode);
 	}
-
+	
 	@Override
 	public void tweet(final Activity context, Tweet tweet, final SocialNetworkListener listener) {
+		tweet(context, null, tweet, listener);
+	}
+
+	@Override
+	public void tweet(final Activity context, Entity entity, Tweet tweet, final SocialNetworkListener listener) {
 		
 		DefaultPostData postData = new DefaultPostData();
 		
@@ -232,12 +238,19 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 		}
 		
 		postData.setPostValues(map);
+		postData.setEntity(entity);
 		
 		if(listener != null) {
 			listener.onBeforePost(context, SocialNetwork.TWITTER, postData);
 		}
 		
-		post(context, "statuses/update.json", postData.getPostValues(), listener);
+		String path = postData.getPath();
+		
+		if(StringUtils.isEmpty(path)) {
+			path = "statuses/update.json";
+		}
+		
+		post(context, path, postData.getPostValues(), listener);
 	}	
 	
 	@Override

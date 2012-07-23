@@ -39,7 +39,6 @@ import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.auth.AuthDialogListener;
 import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.share.DialogFlowController;
-import com.socialize.ui.share.ShareDialogListener;
 import com.socialize.ui.share.SharePanelView;
 
 
@@ -64,7 +63,7 @@ public void showShareDialogWithInterrupt() {
 Entity entity = Entity.newInstance("http://myentity.com", "My Name");	
 
 // The "this" argument refers to the current Activity
-ShareUtils.showShareDialog(this, entity, new ShareDialogListener() {
+ShareUtils.showShareDialog(this, entity, new SocialNetworkDialogListener() {
 	
 	@Override
 	public void onShow(Dialog dialog, SharePanelView dialogView) {

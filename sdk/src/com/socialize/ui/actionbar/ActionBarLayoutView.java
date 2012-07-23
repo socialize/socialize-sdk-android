@@ -23,17 +23,20 @@ package com.socialize.ui.actionbar;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import org.json.JSONObject;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.Gravity;
+import android.widget.Toast;
 import com.socialize.CommentUtils;
 import com.socialize.EntityUtils;
 import com.socialize.LikeUtils;
 import com.socialize.ShareUtils;
 import com.socialize.ViewUtils;
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.api.action.share.SocialNetworkDialogListener;
 import com.socialize.entity.Entity;
 import com.socialize.entity.EntityStats;
 import com.socialize.entity.Like;
@@ -46,6 +49,7 @@ import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.actionbar.OnActionBarEventListener.ActionBarEvent;
 import com.socialize.ui.cache.CacheableEntity;
 import com.socialize.ui.cache.EntityCache;
@@ -249,9 +253,24 @@ public class ActionBarLayoutView extends BaseView {
 					if(onActionBarEventListener != null) {
 						consumed = onActionBarEventListener.onClick(actionBarView, ActionBarEvent.SHARE);
 					}
-					
 					if(!consumed) {
-						ShareUtils.showShareDialog(getActivity(), actionBarView.getEntity());
+						ShareUtils.showShareDialog(getActivity(), actionBarView.getEntity(), new SocialNetworkDialogListener() {
+
+							@Override
+							public void onError(SocializeException error) {
+								Toast.makeText(getActivity(), "Share Failed!  Please try again", Toast.LENGTH_SHORT).show();
+							}
+
+							@Override
+							public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+								Toast.makeText(context, "Share Failed!  Please try again", Toast.LENGTH_SHORT).show();
+							}
+
+							@Override
+							public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+								Toast.makeText(parent, "Share Successful", Toast.LENGTH_SHORT).show();
+							}
+						});
 					}
 				}
 			});

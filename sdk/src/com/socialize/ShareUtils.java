@@ -35,7 +35,6 @@ import com.socialize.listener.share.ShareGetListener;
 import com.socialize.listener.share.ShareListListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.auth.AuthDialogListener;
-import com.socialize.ui.share.ShareDialogListener;
 
 
 /**
@@ -131,8 +130,8 @@ public class ShareUtils {
 	 * @param entity The entity being shared.
 	 * @param listener A listener to handle events on the dialog.
 	 */
-	public static void showShareDialog (Activity context, Entity entity, ShareDialogListener listener) {
-		proxy.showShareDialog(context, entity, DEFAULT, null, listener);
+	public static void showShareDialog (Activity context, Entity entity, SocialNetworkDialogListener listener) {
+		proxy.showShareDialog(context, entity, DEFAULT, listener, listener);
 	};	
 	
 	/**

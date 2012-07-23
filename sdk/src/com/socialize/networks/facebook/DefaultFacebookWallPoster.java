@@ -81,45 +81,86 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			post(parent, "me/og.likes",  params, listener);			
 		}
 		else {
-			post(parent, entity, "", propInfo, listener);
+			String action = config.getProperty(SocializeConfig.FACEBOOK_OG_LIKE_ACTION, null);
+			postOG(parent, entity, "", action, propInfo, listener);	
 		}
 	}
 
 	@Override
 	public void postComment(Activity parent, Entity entity, String comment, PropagationInfo propInfo, SocialNetworkListener listener) {
-		post(parent, entity, comment, propInfo, listener);		
+		String action = config.getProperty(SocializeConfig.FACEBOOK_OG_COMMENT_ACTION, null);
+		postOG(parent, entity, comment, action, propInfo, listener);		
 	}
 
 	@Override
-	public void post(Activity parent, Entity entity, String message, PropagationInfo propInfo, SocialNetworkListener listener) {
-		
+	public void postOG(Activity parent, Entity entity, String message, String action, PropagationInfo propInfo, SocialNetworkListener listener) {
+
 		String entityUrl = propInfo.getEntityUrl();
 		String linkName = entityUrl;
 		String link = entityUrl;
-		String appId = getFacebookAppId();
 		
 		if(entity != null) {
 			linkName = entity.getDisplayName();
 		}
+			
+		final Map<String, Object> params = new HashMap<String, Object>();
+		params.put("name", linkName);
+		params.put("message", message);
+		params.put("link", link);
+		params.put("type", "link");
 		
-		if(!StringUtils.isEmpty(appId)) {
+		DefaultPostData postData = new DefaultPostData();
+		postData.setPostValues(params);
+		postData.setEntity(entity);
+		postData.setPropagationInfo(propInfo);
+		
+		if(!StringUtils.isEmpty(action)) {
+			// Setup the OG path
+			String namespace = config.getProperty(SocializeConfig.FACEBOOK_OG_NAMESPACE);
 			
-			final Map<String, Object> params = new HashMap<String, Object>();
-			params.put("name", linkName);
-			params.put("message", message);
-			params.put("link", link);
-			params.put("type", "link");
-			
-			DefaultPostData postData = new DefaultPostData();
-			postData.setPostValues(params);
-			postData.setPropagationInfo(propInfo);			
-			
-			post(parent, listener, postData);
+			if(!StringUtils.isEmpty(namespace)) {
+				
+				// Check the type
+				String type = entity.getType();
+				
+				if(!StringUtils.isEmpty(type)) {
+					
+					params.put(type, link);
+					
+					String path = "me/" + namespace + ":" + action;
+					
+					postData.setPath(path);
+				}
+				else {
+					if(logger != null) {
+						logger.warn("Open Graph action [" +
+								action +
+								"] specified but no type found in entity with key [" +
+								entity.getKey() +
+								"]");
+					}
+				}
+			}
+			else {
+				if(logger != null) {
+					logger.warn("Open Graph action [" +
+							action +
+							"] specified but no namespace found in config under key [" +
+							SocializeConfig.FACEBOOK_OG_NAMESPACE +
+							"]");
+				}
+			}
 		}
-		else {
-			String msg = "Cannot post message to Facebook.  No app id found.  Make sure you specify facebook.app.id in socialize.properties";
-			onError(parent, msg, new SocializeException(msg), listener);
-		}		
+		
+
+		
+
+		post(parent, listener, postData);
+	}
+
+	@Override
+	public void post(Activity parent, Entity entity, String message, PropagationInfo propInfo, SocialNetworkListener listener) {
+		postOG(parent, entity, message, null, propInfo, listener);
 	}
 
 	@Override
@@ -158,7 +199,13 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		
 		RequestListener requestListener = newRequestListener(parent, listener);
 		
-		runner.request("me/links", bundle, "POST", requestListener, null);	
+		String path = postData.getPath();
+		
+		if(StringUtils.isEmpty(path)) {
+			path = "me/links";
+		}
+		
+		runner.request(path, bundle, "POST", requestListener, null);	
 	}
 	
 

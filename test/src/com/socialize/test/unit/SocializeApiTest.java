@@ -199,7 +199,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 		
 		Like action = new Like();
 		SocializeConfig config = new SocializeConfig();
-		config.setProperty(SocializeConfig.FACEBOOK_USE_OG_LIKE, "true");
+		config.setProperty(SocializeConfig.FACEBOOK_OG_USE_INBUILT_LIKE, "true");
 		
 		api.setConfig(config);
 		api.setPropagationData(action, options, SocialNetwork.TWITTER);

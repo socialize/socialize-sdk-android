@@ -44,6 +44,7 @@ import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderResponse;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.DefaultUserProviderCredentials;
+import com.socialize.auth.EmptyAuthProvider;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.auth.facebook.FacebookAuthProvider;
@@ -437,6 +438,10 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	
 	public void setFacebookAuthProvider(FacebookAuthProvider facebookAuthProvider) {
 		this.facebookAuthProvider = facebookAuthProvider;
+	}
+	
+	public void setFacebookAuthProvider(EmptyAuthProvider p) {
+		// This is just here so we don't get console warnings when we want to load the notifications context.
 	}
 
 	protected SocializeService getSocialize() {

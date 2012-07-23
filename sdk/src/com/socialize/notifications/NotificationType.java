@@ -28,13 +28,17 @@ package com.socialize.notifications;
 public enum NotificationType {
 	
 	NEW_COMMENTS,
+	ENTITY_NOTIFICATION,
 	DEVELOPER_NOTIFICATION,
 	DEVELOPER_DIRECT_ENTITY,
 	DEVELOPER_DIRECT_URL;
 	
 	public static NotificationType valueOf(SubscriptionType type) {
 		switch (type) {
-			case NEW_COMMENTS: return NEW_COMMENTS;
+			case NEW_COMMENTS: 
+				return NEW_COMMENTS;
+			case ENTITY_NOTIFICATION: 
+				return ENTITY_NOTIFICATION;
 		}
 		return null;
 	}

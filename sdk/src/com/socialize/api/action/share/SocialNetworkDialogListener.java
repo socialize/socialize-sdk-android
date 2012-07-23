@@ -43,7 +43,7 @@ public abstract class SocialNetworkDialogListener extends SocialNetworkShareList
 	public void onShow(Dialog dialog, SharePanelView dialogView) {}
 	
 	@Override
-	public final void onSimpleShare(ShareType type) {}	
+	public void onSimpleShare(ShareType type) {}	
 
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.auth.ShareDialogListener#onContinue(android.app.Dialog, com.socialize.networks.SocialNetwork[])

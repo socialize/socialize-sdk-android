@@ -39,20 +39,14 @@ import com.socialize.util.StringUtils;
  */
 public class TwitterSharer extends AbstractSocialNetworkSharer {
 	
+	private TwitterUtilsProxy twitterUtils;
+	
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.AbstractSocialNetworkSharer#getNetwork()
 	 */
 	@Override
 	protected SocialNetwork getNetwork() {
 		return SocialNetwork.TWITTER;
-	}
-
-	@Override
-	public void share(Activity context, Entity entity, PropagationInfo urlSet, String comment, boolean autoAuth, ActionType type, SocialNetworkListener listener) {
-		if(listener != null) {
-			listener.onBeforePost(context, getNetwork(), null);
-		}
-		super.share(context, entity, urlSet, comment, autoAuth, type, listener);
 	}
 
 	/*
@@ -98,7 +92,10 @@ public class TwitterSharer extends AbstractSocialNetworkSharer {
 			tweet.setShareLocation(true);
 		}
 		
-		TwitterUtils.tweet(context, tweet, listener);
+		twitterUtils.tweet(context, tweet, listener);
 	}
 
+	public void setTwitterUtils(TwitterUtilsProxy twitterUtils) {
+		this.twitterUtils = twitterUtils;
+	}
 }

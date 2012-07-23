@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
+import com.socialize.CommentUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
@@ -97,7 +98,7 @@ public class ActionDetailActivity extends SocializeUIActivity {
 			if(isTaskRoot() && view != null) {
 				SocializeAction currentAction = view.getCurrentAction();
 				if(currentAction != null) {
-					Socialize.getSocialize().showCommentView(this, currentAction.getEntity());
+					CommentUtils.showCommentView(this, currentAction.getEntity());
 					finish();
 					return true;
 				}
