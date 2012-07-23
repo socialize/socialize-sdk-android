@@ -52,6 +52,7 @@ import com.socialize.facebook.AsyncFacebookRunner;
 import com.socialize.facebook.Facebook;
 import com.socialize.facebook.FacebookError;
 import com.socialize.facebook.RequestListener;
+import com.socialize.networks.DefaultPostData;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
@@ -567,6 +568,71 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		
 		assertEquals(4, poster.count);
 	}		
+	
+	public void testPostUsesCustomPath() {
+		
+		final String path = "foobar_path";
+		
+		final DefaultPostData postData = new DefaultPostData();
+		
+		final Facebook mockFacebook = new Facebook("foobar");
+		final FacebookSessionStore mockFacebookSessionStore = new FacebookSessionStore() {
+			@Override
+			public boolean restore(Facebook session, Context context) {
+				return true;
+			}
+		};
+		final AsyncFacebookRunner mockRunner = new AsyncFacebookRunner(null) {
+			@Override
+		    public void request(final String graphPath,
+                    final Bundle parameters,
+                    final String httpMethod,
+                    final RequestListener listener,
+                    final Object state) {
+		    	addResult(0, graphPath);
+		    }
+		};
+		
+		DefaultFacebookWallPoster poster = new DefaultFacebookWallPoster() {
+			@Override
+			protected AsyncFacebookRunner newAsyncFacebookRunner(Facebook fb) {
+				return mockRunner;
+			}
+
+			@Override
+			protected Facebook getFacebook(Context context) {
+				return mockFacebook;
+			}
+
+			@Override
+			protected FacebookSessionStore newFacebookSessionStore() {
+				return mockFacebookSessionStore;
+			}
+		};
+		
+		SocialNetworkListener listener = new SocialNetworkListener() {
+			
+			@Override
+			public void onNetworkError(Activity context, SocialNetwork network, Exception error) {}
+			
+			@Override
+			public void onCancel() {}
+			
+			@Override
+			public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {}
+			
+			@Override
+			public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+				postData.setPath(path);
+			}
+		};
+		
+		poster.post(getActivity(), listener, postData);
+		
+		String result = getResult(0);
+		
+		assertEquals(path, result);
+	}
 	
 	
 	@UsesMocks ({Facebook.class, AsyncFacebookRunner.class, FacebookSessionStore.class, RequestListener.class})
