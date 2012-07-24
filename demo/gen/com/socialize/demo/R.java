@@ -56,6 +56,7 @@ public final class R {
         public static final int btnShareTwitter=0x7f050028;
         public static final int btnShareWithComment=0x7f050025;
         public static final int btnSubscription=0x7f05002a;
+        public static final int btnSubscriptionEntity=0x7f05002b;
         public static final int btnTwitter=0x7f05000d;
         public static final int chkAllowAnon=0x7f050010;
         public static final int chkFB=0x7f050011;

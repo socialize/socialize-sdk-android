@@ -35,7 +35,7 @@ import com.socialize.entity.Subscription;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
-import com.socialize.listener.subscription.SubscriptionGetListener;
+import com.socialize.listener.subscription.SubscriptionCheckListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.notifications.SubscriptionType;
 import com.socialize.test.SocializeActivityTest;
@@ -396,7 +396,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		assertTrue(subscription.isSubscribed());
 		
 		final CountDownLatch latch2 = new CountDownLatch(1);
-		SubscriptionUtils.isSubscribed(TestUtils.getActivity(this), e, SubscriptionType.NEW_COMMENTS, new SubscriptionGetListener() {
+		SubscriptionUtils.isSubscribed(TestUtils.getActivity(this), e, SubscriptionType.NEW_COMMENTS, new SubscriptionCheckListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -405,10 +405,14 @@ public class CommentUtilsTest extends SocializeActivityTest {
 			}
 			
 			@Override
-			public void onGet(Subscription entity) {
-				addResult(0, entity);
+			public void onSubscribed(Subscription subscription) {
+				addResult(0, subscription);
 				latch2.countDown();
 			}
+
+			@Override
+			public void onNotSubscribed() {}
+
 		});
 		
 		latch2.await(20, TimeUnit.SECONDS);

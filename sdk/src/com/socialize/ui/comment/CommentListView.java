@@ -23,7 +23,7 @@ import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
-import com.socialize.listener.subscription.SubscriptionGetListener;
+import com.socialize.listener.subscription.SubscriptionCheckListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.notifications.SubscriptionType;
@@ -487,29 +487,30 @@ public class CommentListView extends BaseView {
 			notifyBox.showLoading();
 			
 			// Now load the subscription status for the user
-			SubscriptionUtils.isSubscribed(getActivity(), entity, SubscriptionType.NEW_COMMENTS, new SubscriptionGetListener() {
+			SubscriptionUtils.isSubscribed(getActivity(), entity, SubscriptionType.NEW_COMMENTS, new SubscriptionCheckListener() {
 				
 				@Override
-				public void onGet(Subscription subscription) {
+				public void onSubscribed(Subscription subscription) {
+					notifyBox.setChecked(subscription.isSubscribed());
 					
-					if(subscription == null) {
-						notifyBox.setChecked(false);
-						
-						if(commentEntrySliderItem != null) {
-							commentEntrySliderItem.getCommentEntryView().setNotifySubscribeState(true); // Default to true
-						}
-					}
-					else {
-						notifyBox.setChecked(subscription.isSubscribed());
-						
-						if(commentEntrySliderItem != null) {
-							commentEntrySliderItem.getCommentEntryView().setNotifySubscribeState(subscription.isSubscribed());
-						}
+					if(commentEntrySliderItem != null) {
+						commentEntrySliderItem.getCommentEntryView().setNotifySubscribeState(subscription.isSubscribed());
 					}
 					
 					notifyBox.hideLoading();
 				}
-				
+
+				@Override
+				public void onNotSubscribed() {
+					notifyBox.setChecked(false);
+					
+					if(commentEntrySliderItem != null) {
+						commentEntrySliderItem.getCommentEntryView().setNotifySubscribeState(true); // Default to true
+					}
+					
+					notifyBox.hideLoading();
+				}
+
 				@Override
 				public void onError(SocializeException error) {
 					notifyBox.setChecked(false);

@@ -45,7 +45,7 @@ public abstract class DemoActivity extends Activity implements DialogRegister {
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		entity = Entity.newInstance("http://getsocialize.com/sdk", "Socialize SDK");
+		entity = Entity.newInstance("http://getsocialize.com", "Socialize");
 		entity.setType("article");
 		
 		Socialize.onCreate(this, savedInstanceState);

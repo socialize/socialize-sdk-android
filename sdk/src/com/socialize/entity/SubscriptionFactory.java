@@ -115,6 +115,9 @@ public class SubscriptionFactory extends SocializeObjectFactory<Subscription> {
 					JSONObject entity = entityFactory.toJSON(entityObject);
 					to.put("entity", entity);
 				}
+				else if(!StringUtils.isEmpty(entityObject.getKey())) {
+					to.put("entity_key", entityObject.getKey());
+				}
 			}
 			
 			if(userObject != null) {

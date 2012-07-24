@@ -19,24 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.action.comment;
+package com.socialize.listener.subscription;
 
-import android.app.Activity;
-import com.socialize.entity.Entity;
-import com.socialize.listener.subscription.SubscriptionCheckListener;
-import com.socialize.listener.subscription.SubscriptionResultListener;
-import com.socialize.notifications.SubscriptionType;
+import com.socialize.entity.Subscription;
+import com.socialize.listener.SocializeListener;
 
 
 /**
  * @author Jason Polites
  *
  */
-public interface SubscriptionUtilsProxy {
+public interface SubscriptionCheckListener extends SocializeListener  {
 
-	public void subscribe (Activity context, Entity e, SubscriptionType type, SubscriptionResultListener listener);
+	public void onSubscribed(Subscription subscription);
 	
-	public void unsubscribe (Activity context, Entity e, SubscriptionType type, SubscriptionResultListener listener);
+	public void onNotSubscribed();
 
-	public void isSubscribed (Activity context, Entity e, SubscriptionType type, SubscriptionCheckListener listener);
 }

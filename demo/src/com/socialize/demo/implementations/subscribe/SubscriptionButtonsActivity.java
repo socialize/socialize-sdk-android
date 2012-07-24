@@ -30,7 +30,7 @@ import com.socialize.demo.DemoActivity;
 import com.socialize.demo.R;
 import com.socialize.entity.Subscription;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.subscription.SubscriptionGetListener;
+import com.socialize.listener.subscription.SubscriptionCheckListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.notifications.SubscriptionType;
 import com.socialize.ui.dialog.SafeProgressDialog;
@@ -42,34 +42,25 @@ import com.socialize.ui.dialog.SafeProgressDialog;
  */
 public class SubscriptionButtonsActivity extends DemoActivity {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.subscription_buttons_activity);
-		
-		final Button btnSubscription = (Button) findViewById(R.id.btnSubscription);
-		
-		final SafeProgressDialog progress = SafeProgressDialog.show(this);
-		progress.setCancelable(false);
-		
-		// Check if we are liked
-		SubscriptionUtils.isSubscribed(this, entity, SubscriptionType.NEW_COMMENTS, new SubscriptionGetListener() {
+	protected void setupButton(final Button btnSubscription, final String subscribe, final String unsubscribe, final SubscriptionType type) {
+
+		// Check if we are subscribed
+		SubscriptionUtils.isSubscribed(this, entity, type, new SubscriptionCheckListener() {
 			
 			@Override
-			public void onGet(Subscription result) {
-				if(result.isSubscribed()) {
-					btnSubscription.setText("Unsubscribe");
-				}
-				else {
-					btnSubscription.setText("Subscribe");
-				}
-				
-				progress.dismiss();
+			public void onSubscribed(Subscription subscription) {
+				btnSubscription.setText(unsubscribe);
+				btnSubscription.setEnabled(true);
 			}
-			
+
+			@Override
+			public void onNotSubscribed() {
+				btnSubscription.setText(subscribe);
+				btnSubscription.setEnabled(true);
+			}
+
 			@Override
 			public void onError(SocializeException error) {
-				progress.dismiss();
 				handleError(SubscriptionButtonsActivity.this, error);
 			}
 		});
@@ -81,10 +72,9 @@ public class SubscriptionButtonsActivity extends DemoActivity {
 				final SafeProgressDialog progress = SafeProgressDialog.show(SubscriptionButtonsActivity.this);
 				progress.setCancelable(false);
 				
-				if(btnSubscription.getText().equals("Subscribe")) {
+				if(btnSubscription.getText().equals(subscribe)) {
 					
-					
-					SubscriptionUtils.subscribe(SubscriptionButtonsActivity.this, entity, SubscriptionType.NEW_COMMENTS, new SubscriptionResultListener() {
+					SubscriptionUtils.subscribe(SubscriptionButtonsActivity.this, entity, type, new SubscriptionResultListener() {
 						
 						@Override
 						public void onError(SocializeException error) {
@@ -95,15 +85,13 @@ public class SubscriptionButtonsActivity extends DemoActivity {
 						@Override
 						public void onCreate(Subscription result) {
 							progress.dismiss();
-							btnSubscription.setText("Unsubscribe");
+							btnSubscription.setText(unsubscribe);
 						}
 					});
 					
 				}
 				else {
-					
-					
-					SubscriptionUtils.unsubscribe(SubscriptionButtonsActivity.this, entity, SubscriptionType.NEW_COMMENTS, new SubscriptionResultListener() {
+					SubscriptionUtils.unsubscribe(SubscriptionButtonsActivity.this, entity, type, new SubscriptionResultListener() {
 						
 						@Override
 						public void onError(SocializeException error) {
@@ -114,11 +102,30 @@ public class SubscriptionButtonsActivity extends DemoActivity {
 						@Override
 						public void onCreate(Subscription result) {
 							progress.dismiss();
-							btnSubscription.setText("Subscribe");
+							btnSubscription.setText(subscribe);
 						}
 					});					
 				}
 			}
-		});
+		});		
+	}
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.subscription_buttons_activity);
+		
+		final Button btnSubscription = (Button) findViewById(R.id.btnSubscription);
+		final Button btnSubscriptionEntity = (Button) findViewById(R.id.btnSubscriptionEntity);
+		
+		btnSubscription.setText("Checking...");
+		btnSubscriptionEntity.setText("Checking...");
+		
+		btnSubscription.setEnabled(false);
+		btnSubscriptionEntity.setEnabled(false);
+		
+		setupButton(btnSubscription, "Subscribe NEW_COMMENTS", "Unsubscribe NEW_COMMENTS", SubscriptionType.NEW_COMMENTS);
+		setupButton(btnSubscriptionEntity, "Subscribe ENTITY_NOTIFICATION", "Unsubscribe ENTITY_NOTIFICATION", SubscriptionType.ENTITY_NOTIFICATION);
+		
 	}
 }

@@ -312,7 +312,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	public void getByEntityAsync(SocializeSession session, String endpoint, String key, SocializeActionListener listener) {
 		AsyncGetter getter = new AsyncGetter(session, listener);
 		SocializeGetRequest request = new SocializeGetRequest();
-		request.setRequestType(RequestType.LIST_AS_GET);
+		request.setRequestType(RequestType.LIST);
 		request.setEndpoint(endpoint);
 		request.setKey(key);
 		getter.execute(request);

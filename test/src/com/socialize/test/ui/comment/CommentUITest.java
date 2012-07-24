@@ -1,5 +1,6 @@
 package com.socialize.test.ui.comment;
 
+import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import android.content.Context;
@@ -142,8 +143,13 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 			@Override
 			public void getSubscription(SocializeSession session, Entity entity, NotificationType type, SubscriptionListener listener) {
 				Subscription sub = new Subscription();
+				sub.setNotificationType(NotificationType.NEW_COMMENTS);
 				sub.setSubscribed(isSubscribed);
-				listener.onGet(sub);
+				
+				ListResult<Subscription> subs = new ListResult<Subscription>();
+				subs.setItems(Arrays.asList(new Subscription[]{sub}));
+				
+				listener.onList(subs);
 			}
 			
 			@Override
