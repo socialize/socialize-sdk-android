@@ -1,0 +1,3 @@
+# Enable/Disable Single Sign On for Facebook
+# Disable ONLY if you experience problems
+facebook.sso.enabled=false

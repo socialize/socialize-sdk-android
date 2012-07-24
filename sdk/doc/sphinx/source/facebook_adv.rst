@@ -96,16 +96,9 @@ This default behavior can be disabled via configuration in your **socialize.prop
 .. literalinclude:: snippets/props_fb_like.txt
    :language: properties
 
-Custom Open Graph Actions
-~~~~~~~~~~~~~~~~~~~~~~~~~
-The Facebook Open Graph allows developers to create custom actions which can more closely represent the activity within your app.  
-
-For example an app that shows movie clips may want to post the fact that a user "watched" a "movie" rather than simply saying a user "shared" a "link".
-
 In order to leverage the Facebook Open Graph (OG) it is first important to understand the distinction between "Default" OG actions and custom OG actions.
 
 .. note:: If you are not already familiar with the Facebook Open Graph we recommend reviewing the `Facebook Documentation <https://developers.facebook.com/docs/opengraph/>`_ first
-
 
 Default Open Graph Actions
 ###########################
@@ -168,7 +161,8 @@ The corresponding entity page on Socialize will automatically populate the requi
 	<meta property="og:type" content="video.movie" />
 	<meta property="og:url" content="...the URL of this page..." />
 	
-.. note:: If you elect to bypass the Socialize entity page you **MUST** add the correct OG meta tags to your own web page
+.. raw:: html
+   :file: snippets/open_graph_notice.html
 
 If you don't have an actual URL for your entity you can setup the correct description, image etc by changing the meta data on your entity.
 
@@ -176,8 +170,11 @@ Refer to :ref:`entity_no_url` for more details on customizing the entity page.
 
 Custom Open Graph Actions
 #########################
-In addition to the default OG actions supported by Facebook you can also create custom actions and objects.  There is however a fairly lengthy setup 
-process to correctly configure your application to handle custom OG actions.
+The Facebook Open Graph allows developers to create custom actions which can more closely represent the activity within your app.  
+
+For example an app that shows movie clips may want to post the fact that a user "watched" a "movie" rather than simply saying a user "shared" a "link".
+
+There is however a fairly lengthy setup process to correctly configure your application to handle custom OG actions.
 
 We recommend reviewing the `Open Graph Tutorial <http://developers.facebook.com/docs/opengraph/tutorial/>`_ to understand how to configure your app for custom Open Graph actions.
 
@@ -190,7 +187,7 @@ Once you have configured your application to accept custom Open Graph actions yo
 Posting Photos to Facebook
 --------------------------
 
-You can easily post photo's to a user's Facebook Photo Album using the **post** method on **FacebookUtils**
+You can easily post photos to a user's Facebook Photo Album using the **post** method on **FacebookUtils**
 	
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/FacebookSnippets.java
 	:start-after: begin-snippet-9
@@ -201,7 +198,12 @@ Facebook Single Sign On (SSO)
 
 Some users have reported having problems with the Single Sign On implementation in the Facebook SDK.
 
-If you have experienced problems with this (e.g. the "invalid_key" error), you can easily disable this feature:
+If you have experienced problems with this (e.g. the "invalid_key" error), you can easily disable this feature in your **socialize.properties** file
+
+.. literalinclude:: snippets/props_fb_sso.txt
+   :language: properties
+   
+Or in code at runtime:
 
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/FacebookSnippets.java
 	:start-after: begin-snippet-2

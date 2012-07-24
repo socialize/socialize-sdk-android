@@ -51,7 +51,9 @@ Entity Meta Data
 
 Entities Without URLs
 ---------------------
-
+.. raw:: html
+   :file: snippets/entity_page_notice.html
+   
 .. _SmartDownload: http://go.getsocialize.com/SmartDownloads
 
 All entities in Socialize will be given an automatically generated entity page which forms part of the Socialize SmartDownload_ process.  

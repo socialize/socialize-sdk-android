@@ -354,9 +354,10 @@ ShareUtils.registerShare(context, entity, options, new ShareAddListener() {
 		// TODO: Get the URI of your image from the local device.
 		// TODO: ***** DON'T FORGET TO USE YOUR OWN IMAGE HERE (See the sample app for a working example) ****
 		Uri photoUri = null;
-
-		// Format the picture for Facebook
+		
 		try {
+			
+			// Format the picture for Facebook
 			byte[] imageData = FacebookUtils.getImageForPost(context, photoUri);
 			
 			// Add the photo to the post
@@ -390,7 +391,7 @@ ShareUtils.registerShare(context, entity, options, new ShareAddListener() {
 			// Handle error
 		}
 	}
-}, SocialNetwork.FACEBOOK);	
+}, SocialNetwork.FACEBOOK); // This is a Facebook-only share	
 //end-snippet-9
 }
 
@@ -407,7 +408,7 @@ public void postOG() {
 // begin-snippet-11
 Entity entity = Entity.newInstance("http://myentity.com", "My Entity Name");
 
-//MUST be a valid OG type
+// MUST be a valid OG type
 entity.setType("video.movie");
 	
 // The "this" argument refers to the current Activity
@@ -486,13 +487,13 @@ public void postOGShare() {
 // begin-snippet-13
 Entity entity = Entity.newInstance("http://myentity.com", "My Entity Name");
 
-//MUST be a valid OG type
+// MUST be a valid OG type
 entity.setType("video.movie");
 
 ShareOptions options = ShareUtils.getUserShareOptions(this);
 options.setText("Text to be posted");
 
-//The "this" argument refers to the current Activity
+// The "this" argument refers to the current Activity
 ShareUtils.shareViaSocialNetworks(this, entity, options, new SocialNetworkShareListener() {
 	
 	@Override
