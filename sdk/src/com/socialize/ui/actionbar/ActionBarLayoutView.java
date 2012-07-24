@@ -407,6 +407,9 @@ public class ActionBarLayoutView extends BaseView {
 			}
 			else {
 				// Just set everything from the cached version
+				if(onActionBarEventListener != null) {
+					onActionBarEventListener.onGetEntity(actionBarView, localEntity.getEntity());
+				}					
 				setEntityData(localEntity);
 			}
 		}

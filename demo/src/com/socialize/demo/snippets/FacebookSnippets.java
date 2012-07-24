@@ -451,16 +451,23 @@ Entity entity = Entity.newInstance("http://myentity.com", "My Entity Name");
 // Set the type of the entity to include the namespace.
 entity.setType("yournamespace:yourtype");
 	
+ShareOptions options = ShareUtils.getUserShareOptions(this);
+options.setText("Text to be posted");
+
 // The "this" argument refers to the current Activity
-FacebookUtils.postEntity(this, entity, "Text to be posted", new SocialNetworkShareListener() {
+ShareUtils.shareViaSocialNetworks(this, entity, options, new SocialNetworkShareListener() {
 	
 	@Override
 	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
-		// Change the post data to force an Open Graph call
-		postData.setPath("me/yournamespace:youraction");
 		
-		// Set the type to be the entity URL
-		postData.getPostValues().put("yourtype", postData.getPropagationInfo().getEntityUrl());
+		if(socialNetwork.equals(SocialNetwork.FACEBOOK)) {
+			// Change the post data to force an Open Graph call
+			postData.setPath("me/yournamespace:youraction");
+			
+			// Set the type to be the entity URL
+			postData.getPostValues().put("yourtype", postData.getPropagationInfo().getEntityUrl());
+		}
+	
 	}	
 	
 	@Override
@@ -479,7 +486,7 @@ FacebookUtils.postEntity(this, entity, "Text to be posted", new SocialNetworkSha
 		// responseObject contains the raw JSON response from Facebook.
 	}
 
-});
+}, SocialNetwork.FACEBOOK);
 // end-snippet-12
 }
 

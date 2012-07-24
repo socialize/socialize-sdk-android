@@ -101,7 +101,7 @@ In order to leverage the Facebook Open Graph (OG) it is first important to under
 .. note:: If you are not already familiar with the Facebook Open Graph we recommend reviewing the `Facebook Documentation <https://developers.facebook.com/docs/opengraph/>`_ first
 
 Default Open Graph Actions
-###########################
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The default OG actions provided by Facebook **do not require any configuration in your Facebook App** and are supported by default, however there is a limited
 set of actions available and a corresponding limited set of object types.
@@ -144,12 +144,6 @@ Once you have setup your Entity with the correct type you can force an Open Grap
 Here's a complete example
 
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/FacebookSnippets.java
-	:start-after: begin-snippet-11
-	:end-before: end-snippet-11
-	
-You can also force an OG Facbook post in a Share
-
-.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/FacebookSnippets.java
 	:start-after: begin-snippet-13
 	:end-before: end-snippet-13	
 	
@@ -169,7 +163,7 @@ If you don't have an actual URL for your entity you can setup the correct descri
 Refer to :ref:`entity_no_url` for more details on customizing the entity page.
 
 Custom Open Graph Actions
-#########################
+"""""""""""""""""""""""""
 The Facebook Open Graph allows developers to create custom actions which can more closely represent the activity within your app.  
 
 For example an app that shows movie clips may want to post the fact that a user "watched" a "movie" rather than simply saying a user "shared" a "link".
@@ -177,6 +171,25 @@ For example an app that shows movie clips may want to post the fact that a user 
 There is however a fairly lengthy setup process to correctly configure your application to handle custom OG actions.
 
 We recommend reviewing the `Open Graph Tutorial <http://developers.facebook.com/docs/opengraph/tutorial/>`_ to understand how to configure your app for custom Open Graph actions.
+
+Configuring Custom Open Graph Actions
++++++++++++++++++++++++++++++++++++++
+Facebook Open Graph implements several security systems to ensure that owners of content are verified.  One such security measure ensures that websites housing information about custom OG types are registered 
+against the Facebook App to guarantee that 3rd party users cannot fraudulently represent custom types on external pages.
+
+If you want to utilize custom open graph actions in your Socialize enabled app you must first configure your Facebook application to expect posts that refer to websites hosted by Socialize.
+
+This consists of 3 simple steps:
+
+#. Obtain your Socialize App Url from your dashboard at www.getsocialize.com
+#. Nominate the Socialize App Url as your "Site URL" on Facebook
+#. Add the **getsocialize.com** domain to your list of App Domains on Facebook.
+
+.. image:: images/fb_og_config.png
+
+You can obtain your Socialize App Url from the "SmartDownloads" section accessed from your dashboard at www.getsocialize.com
+
+.. image:: images/app_url.png
 
 Once you have configured your application to accept custom Open Graph actions you can post these actions to Facebook by changing the PostData in the SocialNetworkListener.  
 

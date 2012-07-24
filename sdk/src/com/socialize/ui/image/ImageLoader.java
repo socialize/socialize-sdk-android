@@ -70,11 +70,9 @@ public class ImageLoader {
 	 * @param encodedData The encoded image data.
 	 * @param listener A listener to handle the callback.
 	 */
-//	public void loadImageByData(final long id, final String name, final String encodedData, int width, int height, final ImageLoadListener listener) {
 	public void loadImageByData(final String name, final String encodedData, int width, int height, final ImageLoadListener listener) {		
 		ImageLoadRequest request = makeRequest();
 		request.setUrl(name);
-//		request.setItemId(id);
 		request.setEncodedImageData(encodedData);
 		request.setType(ImageLoadType.ENCODED);
 		loadImage(request, listener);
@@ -85,7 +83,7 @@ public class ImageLoader {
 	}
 	
 	/**
-	 * Asynchrnously loads the image at the given url and calls the listener when it is loaded.
+	 * Asynchronously loads the image at the given url and calls the listener when it is loaded.
 	 * @param id The id to give the request
 	 * @param url The url to be loaded
 	 * @param listener A listener to handle the callback.
@@ -129,30 +127,6 @@ public class ImageLoader {
 			if(listener != null) {
 				request.addListener(listener);
 			}
-			
-//			request.addListener(new ImageLoadListener() {
-//				
-//				@Override
-//				public void onImageLoadFail(ImageLoadRequest request, Exception error) {
-//					listener.onImageLoadFail(request, error);
-//				}
-//				
-//				@Override
-//				public void onImageLoad(ImageLoadRequest request, SafeBitmapDrawable drawable, boolean async) {
-//					if(drawable instanceof CacheableDrawable) {
-//						if(!drawables.getCache().exists(url)) {
-//							if(logger != null && logger.isDebugEnabled()) {
-//								logger.debug("ImageLoader adding image [" +
-//										url +
-//										"] to cache with drawable " + drawable);
-//							}
-//							drawables.getCache().put(url, (CacheableDrawable) drawable, false);
-//						}
-//					}
-//					
-//					listener.onImageLoad(request, drawable, true);
-//				}
-//			});
 			
 			imageLoadAsyncTask.enqueue(request);
 		}
