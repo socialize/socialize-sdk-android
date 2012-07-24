@@ -552,6 +552,7 @@ public class SharePanelView extends DialogPanelView {
 					}
 					
 					final ProgressDialog progress = SafeProgressDialog.show(v.getContext());
+					
 					ShareUtils.shareViaGooglePlus(getActivity(), entity, new ShareAddListener() {
 						
 						@Override
