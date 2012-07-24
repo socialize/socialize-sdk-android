@@ -6,7 +6,7 @@
 What's New
 ==========
 
-In This version (v2.3)
+In this version (v2.3)
 ----------------------
 
 Facebook Open Graph Likes
@@ -16,6 +16,8 @@ automatically post this to the user's activity stream on Facebook as a Facebook 
 
 Open Graph can significantly improve the visibility of posts made to Facebook and through the Socialize SmartDownload system can in-turn greatly
 improve visibility and downloads of your app.
+
+Refer to :ref:`open_graph` for more information.
 
 IMPORTANT NOTE FOR FACEBOOK INTEGRATION
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -33,6 +35,13 @@ We have added a bunch of additional configuration options for the ActionBar that
 You now have complete control over colors and positioning of the ActionBar within your app.
 
 Refer to the :ref:`custom_actionbar` section for more details.
+
+Google+ Sharing
+~~~~~~~~~~~~~~~
+
+.. image:: images/icon_googleplus.png
+	
+In this release we are introducing support for sharing to Google+ from the default Share Dialog
 
 v2.2
 ----

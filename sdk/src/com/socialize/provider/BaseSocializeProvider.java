@@ -208,12 +208,15 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 			if(userProviderCredentials != null && userProviderCredentials.getAuthProviderInfo().matches(info)) {
 				boolean ok = true;
 				
-				if(!StringUtils.isEmpty(data.getToken3rdParty())) {
-					ok = userProviderCredentials.getAccessToken().equals(data.getToken3rdParty());
+				String token3rdParty = data.getToken3rdParty();
+				String secret3rdParty = data.getSecret3rdParty();
+				
+				if(!StringUtils.isEmpty(token3rdParty)) {
+					ok = userProviderCredentials.getAccessToken().equals(token3rdParty);
 				}
 				
-				if(ok && !StringUtils.isEmpty(data.getSecret3rdParty())) {
-					ok = userProviderCredentials.getTokenSecret().equals(data.getSecret3rdParty());
+				if(ok && !StringUtils.isEmpty(secret3rdParty)) {
+					ok = userProviderCredentials.getTokenSecret().equals(secret3rdParty);
 				}
 				
 				return ok;

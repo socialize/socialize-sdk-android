@@ -263,6 +263,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.expect(authProviderInfo.matches(info)).andReturn(true); 
 		AndroidMock.expect(userAuthData.getAccessToken()).andReturn(token); 
 		AndroidMock.expect(authProviderData.getToken3rdParty()).andReturn(token); 
+		AndroidMock.expect(authProviderData.getSecret3rdParty()).andReturn(null); 
 
 		AndroidMock.replay(info, config, session, sessionPersister, authProviderDataFactory, authProviderData, authProviderInfoBuilder, authProviderInfoFactory, authProviderInfo, userAuthDataMap, userAuthData);
 

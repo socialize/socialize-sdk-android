@@ -453,6 +453,11 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		AndroidMock.expect(error.isNull("message")).andReturn(false);
 		AndroidMock.expect(error.getString("message")).andReturn(errorMessage);
 		
+		AndroidMock.expect(error.has("code")).andReturn(true);
+		AndroidMock.expect(error.isNull("code")).andReturn(false);
+		AndroidMock.expect(error.getInt("code")).andReturn(190); // Clears session
+		
+		
 		PublicFacebookWallPoster poster = new PublicFacebookWallPoster() {
 			@Override
 			protected JSONObject newJSONObject(String response) throws JSONException {
