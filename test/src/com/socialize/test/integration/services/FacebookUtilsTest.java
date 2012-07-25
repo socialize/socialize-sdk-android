@@ -54,7 +54,6 @@ import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
 import com.socialize.facebook.AsyncFacebookRunner;
 import com.socialize.facebook.Facebook;
-import com.socialize.facebook.RequestListener;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.SocializeAuthListener;

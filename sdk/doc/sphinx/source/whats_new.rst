@@ -9,9 +9,16 @@ What's New
 In this version (v2.3)
 ----------------------
 
+Popular Content
+~~~~~~~~~~~~~~~
+With the release of v2.3 we are adding a new feature to enable you to retrieve entities ordered by popularity.  Popularity is determined by the number 
+of social actions performed on an entity (Comments, Likes and Shares).
+
+Refer to :ref:`entity_popular` for more details.
+
 Facebook Open Graph Likes
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-Socialize now supports Facebook Open Graph "likes" by default.  When a user who is authenticated with Facebook posts a like using Socialize we will 
+Socialize now supports Facebook Open Graph "likes".  When a user who is authenticated with Facebook posts a like using Socialize we can 
 automatically post this to the user's activity stream on Facebook as a Facebook Open Graph Like.
 
 Open Graph can significantly improve the visibility of posts made to Facebook and through the Socialize SmartDownload system can in-turn greatly

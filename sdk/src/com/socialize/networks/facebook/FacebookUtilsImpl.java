@@ -50,6 +50,7 @@ import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.auth.facebook.FacebookAuthProvider;
 import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.auth.facebook.FacebookService;
+import com.socialize.auth.facebook.FacebookSessionStore;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
@@ -212,6 +213,7 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	 */
 	@Override
 	public void unlink(Context context) {
+		
 		SocializeSession session = getSocialize().getSession();
 		session.clear(AuthProviderType.FACEBOOK);
 		
@@ -222,6 +224,22 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 		}
 		
 		userSystem.saveSession(context, session);
+		
+		// Clear the FB session
+		try {
+			// Logout does NOT clear the token.. thanks FB :/
+			new FacebookSessionStore().clear(context);
+			
+			getFacebook(context).logout(context);
+		}
+		catch (Exception e) {
+			if(logger != null) {
+				logger.error("Error while logging out of Facebook", e);
+			}
+			else {
+				e.printStackTrace();
+			}
+		}			
 	}
 
 	/* (non-Javadoc)
@@ -271,10 +289,10 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	
 	@Override
 	public void extendAccessToken(final Context context, final SocializeAuthListener listener) {
-		
+		Facebook facebook = getFacebook(context);
 		if(isLinked(context)) {
 			
-			if(!getFacebook(context).extendAccessTokenIfNeeded(context, new ServiceListener() {
+			if(!facebook.extendAccessTokenIfNeeded(context, new ServiceListener() {
 				@Override
 				public void onFacebookError(FacebookError e) {
 					if(logger != null) {
@@ -381,6 +399,13 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 				if(logger != null) {
 					logger.warn("Failed to bind to the Facebook RefreshToken Service");
 				}	
+			}
+		}
+		else {
+			// Ensure the local fb session is cleared
+			String accessToken = facebook.getAccessToken();
+			if(!StringUtils.isEmpty(accessToken)) {
+				new FacebookSessionStore().clear(context);
 			}
 		}
 	}

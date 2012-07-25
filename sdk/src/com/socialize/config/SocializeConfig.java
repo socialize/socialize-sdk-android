@@ -338,7 +338,7 @@ public class SocializeConfig {
 	}
 	
 	public boolean isOGLike() {
-		return getBooleanProperty(FACEBOOK_OG_USE_INBUILT_LIKE, true);
+		return getBooleanProperty(FACEBOOK_OG_USE_INBUILT_LIKE, false);
 	}
 	
 	public boolean isGooglePlusEnabled() {

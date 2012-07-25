@@ -35,7 +35,7 @@ The following table lists the configuration options that can be specified in you
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | facebook.sso.enabled            | Boolean | true     |                                        | Enable/Disable Single Sign on for Facebook                       |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
-| facebook.og.like.enabled        | Boolean | true     |                                        | Enable/Disable Open Graph Likes                                  |
+| facebook.og.like.enabled        | Boolean | false    |                                        | Enable/Disable Open Graph Likes                                  |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | twitter.consumer.key            | String  | None     | U18LUnVjULkkpGoJ6                      | Your Twitter consumer key                                        |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+

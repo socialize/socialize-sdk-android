@@ -30,8 +30,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.socialize.error.SocializeException;
+import com.socialize.facebook.AsyncFacebookRunner.RequestListener;
 import com.socialize.facebook.FacebookError;
-import com.socialize.facebook.RequestListener;
 import com.socialize.listener.SocializeListener;
 
 

@@ -95,7 +95,11 @@ To create an entity, simply call the **saveEntity** method:
 	
 Retrieving Entity Data
 ~~~~~~~~~~~~~~~~~~~~~~
-.. include:: entity_retrieve.inc		
+.. include:: entity_retrieve.inc
+
+Retrieving Popular Entities
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. include:: entity_popular.inc			
 
 .. _entity_stats:	
 

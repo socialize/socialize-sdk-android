@@ -88,23 +88,71 @@ Executing a **DELETE**
 
 Using Facebook Open Graph
 -------------------------
-From v2.3 onwards Socialize supports Facebook "like" actions by default.  This means that when a user executes a "like" on Socialize and elects to 
-share this on Facebook it will be posted as an "Open Graph Like" in the user's Facebook Activity stream.
+From v2.3 onwards Socialize supports Facebook "like" Open Graph actions.  This means that when a user executes a "like" on Socialize and elects to 
+share this on Facebook it can be posted as an "Open Graph Like" in the user's Facebook Activity stream.
 
-This default behavior can be disabled via configuration in your **socialize.properties** file
+This default behavior can be enabled via configuration in your **socialize.properties** file
 
 .. literalinclude:: snippets/props_fb_like.txt
    :language: properties
 
-In order to leverage the Facebook Open Graph (OG) it is first important to understand the distinction between "Default" OG actions and custom OG actions.
-
 .. note:: If you are not already familiar with the Facebook Open Graph we recommend reviewing the `Facebook Documentation <https://developers.facebook.com/docs/opengraph/>`_ first
 
-Default Open Graph Actions
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Configuring your Facebook App for Open Graph
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Before you are able to utilize Open Graph calls such as "like" you must first follow the Facebook Guidelines for approval of Open Graph actions.
 
-The default OG actions provided by Facebook **do not require any configuration in your Facebook App** and are supported by default, however there is a limited
-set of actions available and a corresponding limited set of object types.
+This is detailed on the Facebook website here:
+
+`Open Graph Approval Process <http://developers.facebook.com/docs/opengraph/opengraph-approval/>`_
+
+The following steps apply to seeking approval for the in-built "like" action however the same approach can be followed for all Open Graph Actions.
+
+Adding an Open Graph Action to your App
+"""""""""""""""""""""""""""""""""""""""
+In your app settings on Facebook, access the Open Graph section:
+
+.. image:: images/fb_og_menu.png
+
+You will be presented with the default configuration screen for Open Graph.  Click the **Create New Action Type** button and select the action to be added
+
+.. image:: images/fb_og_page1.png
+
+You will then be presented with a dialog in which your action can be selected.  Choose an appropriate action and click **Submit**
+
+.. image:: images/fb_og_select_action.png
+
+Once your action has been added you are ready to submit it for approval.  Click the **Submit** link.
+
+.. image:: images/fb_og_page2.png
+
+At this point you may encounter some validation errors.  The most common of which are:
+
+.. image:: images/fb_og_error1.png
+
+The **Publish Action** requirement is most easily satisfied by simply executing the same *curl* command provided by Facebook.
+
+Click on the **Get Code** link next to your action and run the *curl* command you are provided from your terminal (command line) interface
+
+.. image:: images/fb_og_curl.png
+
+The final step in the approval process requires you to clarify with Facebook the exact purpose for your OG action.  
+
+.. image:: images/fb_og_error2.png
+
+For the in-built "like" action we recommend using a description similar to the following::
+
+	The like action will be used in conjunction with an equivalent like feature provided by Socialize in a mobile app.  
+	
+	Whenever a user of the mobile app clicks a like button in the app this action will be propagated to Facebook as an Open Graph like.
+	
+	The app is yet to be published.
+
+
+Using In Built Open Graph Actions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The in built OG actions provided by Facebook **require approval by Facebook** and there is a limited set of actions available and a corresponding limited set of object types.
 
 The actions supported and the corresponding object types are as follows
 
@@ -162,8 +210,8 @@ If you don't have an actual URL for your entity you can setup the correct descri
 
 Refer to :ref:`entity_no_url` for more details on customizing the entity page.
 
-Custom Open Graph Actions
-"""""""""""""""""""""""""
+Using Custom Open Graph Actions
+"""""""""""""""""""""""""""""""
 The Facebook Open Graph allows developers to create custom actions which can more closely represent the activity within your app.  
 
 For example an app that shows movie clips may want to post the fact that a user "watched" a "movie" rather than simply saying a user "shared" a "link".
