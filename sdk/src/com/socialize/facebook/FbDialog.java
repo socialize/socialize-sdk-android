@@ -16,7 +16,6 @@
 
 package com.socialize.facebook;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -110,8 +109,7 @@ public class FbDialog extends Dialog {
         mCrossImage.setVisibility(View.INVISIBLE);
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
-	private void setUpWebView(int margin) {
+    private void setUpWebView(int margin) {
         LinearLayout webViewContainer = new LinearLayout(getContext());
         mWebView = new WebView(getContext());
         mWebView.setVerticalScrollBarEnabled(false);

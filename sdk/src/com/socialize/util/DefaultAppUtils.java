@@ -24,6 +24,8 @@ package com.socialize.util;
 import java.util.List;
 import java.util.Locale;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningAppProcessInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -275,6 +277,21 @@ public class DefaultAppUtils implements AppUtils {
 		return context.getPackageManager().checkPermission(permission, context.getPackageName()) == PackageManager.PERMISSION_GRANTED;
 	}	
 	
+	
+	@Override
+	public boolean isAppInBackground(Context context) {
+		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+		List<RunningAppProcessInfo> runningProcInfo = activityManager .getRunningAppProcesses();
+		for(int i = 0; i < runningProcInfo.size(); i++){
+	        if(runningProcInfo.get(i).processName.equals(context.getPackageName())) {
+                if (runningProcInfo.get(i).lru==RunningAppProcessInfo.IMPORTANCE_FOREGROUND){
+                	return false;
+                }
+	        }
+		}
+		return true;
+	}
+
 	public static boolean launchMainApp(Activity origin) {
 		Intent mainIntent = getMainAppIntent(origin);
 		if(mainIntent != null) {

@@ -991,6 +991,13 @@ public class SocializeServiceImpl implements SocializeService {
 		if(locationProvider != null) {
 			locationProvider.pause(context);	
 		}
+		
+//		if(appUtils.isAppInBackground(context)) {
+//			Log.i("Socialize", "Background");
+//		}
+//		else {
+//			Log.i("Socialize", "Foreground");
+//		}
 	}
 
 	@Override

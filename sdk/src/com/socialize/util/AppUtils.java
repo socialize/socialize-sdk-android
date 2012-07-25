@@ -62,5 +62,7 @@ public interface AppUtils {
 	public String getUserAgentString();
 	
 	public void checkAndroidManifest(Context context);
+	
+	public boolean isAppInBackground(Context context);
 
 }
