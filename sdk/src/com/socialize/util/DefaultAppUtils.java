@@ -283,9 +283,13 @@ public class DefaultAppUtils implements AppUtils {
 		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 		List<RunningAppProcessInfo> runningProcInfo = activityManager .getRunningAppProcesses();
 		for(int i = 0; i < runningProcInfo.size(); i++){
-	        if(runningProcInfo.get(i).processName.equals(context.getPackageName())) {
-                if (runningProcInfo.get(i).lru==RunningAppProcessInfo.IMPORTANCE_FOREGROUND){
+			RunningAppProcessInfo runningAppProcessInfo = runningProcInfo.get(i);
+	        if(runningAppProcessInfo.processName.equals(context.getPackageName())) {
+                if (runningAppProcessInfo.importance==RunningAppProcessInfo.IMPORTANCE_FOREGROUND || runningAppProcessInfo.lru==RunningAppProcessInfo.IMPORTANCE_VISIBLE){
                 	return false;
+                }
+                else {
+                	return true;
                 }
 	        }
 		}

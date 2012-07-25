@@ -59,6 +59,7 @@ import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.facebook.DefaultFacebookWallPoster;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.mock.MockableRequestListener;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.util.ImageUtils;
 
@@ -351,7 +352,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		AsyncFacebookRunner.class,
 		Facebook.class,
 		FacebookSessionStore.class,
-		RequestListener.class,
+		MockableRequestListener.class,
 		SocialNetworkListener.class,
 		ImageUtils.class
 	})
@@ -366,7 +367,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		final Facebook fb  = AndroidMock.createMock(Facebook.class, fbId);
 		final SocialNetworkListener socialNetworkListener = AndroidMock.createMock(SocialNetworkListener.class);
 		final FacebookSessionStore store = AndroidMock.createMock(FacebookSessionStore.class);
-		final RequestListener requestListener = AndroidMock.createMock(RequestListener.class);
+		final MockableRequestListener requestListener = AndroidMock.createMock(MockableRequestListener.class);
 		final ImageUtils imageUtils = AndroidMock.createMock(ImageUtils.class);
 		
 		final AsyncFacebookRunner runner = new AsyncFacebookRunner(fb) {
@@ -640,7 +641,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 	}
 	
 	
-	@UsesMocks ({Facebook.class, AsyncFacebookRunner.class, FacebookSessionStore.class, RequestListener.class})
+	@UsesMocks ({Facebook.class, AsyncFacebookRunner.class, FacebookSessionStore.class, MockableRequestListener.class})
 	public void testFacebookCall() {
 		
 		final String appId = "foobar";
@@ -648,7 +649,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		final Facebook mockFacebook = AndroidMock.createMock(Facebook.class, appId);
 		final AsyncFacebookRunner mockAsyncFacebookRunner = AndroidMock.createMock(AsyncFacebookRunner.class, mockFacebook);
 		final FacebookSessionStore mockFacebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
-		final RequestListener mockRequestListener = AndroidMock.createMock(RequestListener.class);
+		final MockableRequestListener mockRequestListener = AndroidMock.createMock(MockableRequestListener.class);
 		final String method = "GET";
 		final String graphPath = "foobarPath";
 		

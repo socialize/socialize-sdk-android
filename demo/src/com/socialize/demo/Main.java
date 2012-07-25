@@ -21,7 +21,6 @@
  */
 package com.socialize.demo;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,7 +37,7 @@ import com.socialize.android.ioc.IOCContainer;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
 
-public class Main extends Activity {
+public class Main extends DemoActivity {
     final Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
