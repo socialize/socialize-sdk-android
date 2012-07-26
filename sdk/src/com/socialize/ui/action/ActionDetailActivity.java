@@ -45,7 +45,7 @@ public class ActionDetailActivity extends SocializeUIActivity {
 		Intent intent = getIntent();
 		doActivityLoad(intent);
 	}
-	
+
 	@Override
 	protected void onNewIntentSafe(Intent intent) {
 		Bundle extras = intent.getExtras();
@@ -55,32 +55,22 @@ public class ActionDetailActivity extends SocializeUIActivity {
 	}
 
 	protected void doActivityLoad(Intent intent) {
-		
+
 		SocializeSession session = getSocialize().getSession();
-		
+
 		if(session == null) {
 			finish();
 		}
 		else {
 			User user = session.getUser();
-			
+
 			if(user == null) {
 				finish();
 			}
 			else {
-//				Bundle extras = intent.getExtras();
-
-//				if (extras == null || !extras.containsKey(Socialize.ACTION_ID)) {
-//					Toast.makeText(this, "No action id provided", Toast.LENGTH_SHORT).show();
-//					finish();
-//				}
-//				else {
-					// TODO: do we need this?
-//					setResult(SocializeUIActivity.PROFILE_UPDATE);
-					view = new ActionDetailView(this);
-					setContentView(view);
-				}
-//			}
+				view = new ActionDetailView(this);
+				setContentView(view);
+			}
 		}	
 	}
 
@@ -90,7 +80,7 @@ public class ActionDetailActivity extends SocializeUIActivity {
 			view.onProfileUpdate();
 		}
 	}
-	
+
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if(keyCode == KeyEvent.KEYCODE_BACK) {
@@ -114,7 +104,7 @@ public class ActionDetailActivity extends SocializeUIActivity {
 		}
 		return false;
 	}
-	
+
 	protected SocializeService getSocialize() {
 		return Socialize.getSocialize();
 	}

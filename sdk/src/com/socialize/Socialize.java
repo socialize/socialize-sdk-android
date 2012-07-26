@@ -21,6 +21,7 @@
  */
 package com.socialize;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import com.socialize.listener.SocializeInitListener;
@@ -104,34 +105,34 @@ public class Socialize {
 	}
 
 	/**
-	 * Called by containing Activities in their onPause() method.
+	 * Called by containing Activity's in their onPause() method.
 	 * @param context
 	 */
-	public static void onPause(Context context) {
+	public static void onPause(Activity context) {
 		instance.onPause(context);
 	}
 	
 	/**
-	 * Called by containing Activities in their onResume() method.
+	 * Called by containing Activity's in their onResume() method.
 	 * @param context
 	 */
-	public static void onResume(Context context) {
+	public static void onResume(Activity context) {
 		instance.onResume(context);
 	}
 	
 	/**
-	 * Called by containing Activities in their onCreate() method.
+	 * Called by containing Activity's in their onCreate() method.
 	 * @param context
 	 */
-	public static void onCreate(Context context, Bundle savedInstanceState) {
+	public static void onCreate(Activity context, Bundle savedInstanceState) {
 		instance.onCreate(context, savedInstanceState);
 	}
 
 	/**
-	 * Called by containing Activities in their onDestroy() method.
+	 * Called by containing Activity's in their onDestroy() method.
 	 * @param context
 	 */
-	public static void onDestroy(Context context) {
+	public static void onDestroy(Activity context) {
 		instance.onDestroy(context);
 	}	
 }

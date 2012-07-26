@@ -43,6 +43,8 @@ public abstract class DemoActivity extends Activity implements DialogRegister {
 	private List<Dialog> dialogs = new ArrayList<Dialog>();
 	protected Entity entity;
 	
+	public static final int PAGE_SIZE = 10;
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		entity = Entity.newInstance("http://getsocialize.com", "Socialize");

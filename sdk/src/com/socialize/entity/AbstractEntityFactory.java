@@ -36,6 +36,7 @@ public abstract class AbstractEntityFactory<T extends Entity> extends SocializeO
 	private static final String SHARES = "shares";
 	private static final String COMMENTS = "comments";
 	private static final String VIEWS = "views";
+	private static final String TOTAL = "total_activity";
 	
 	private static final String USER_ACTION_SUMMARY = "user_action_summary";
 	
@@ -56,6 +57,7 @@ public abstract class AbstractEntityFactory<T extends Entity> extends SocializeO
 		stats.setShares(getInt(object, SHARES));
 		stats.setComments(getInt(object, COMMENTS));
 		stats.setViews(getInt(object, VIEWS));
+		stats.setTotalActivityCount(getInt(object, TOTAL));
 		
 		entry.setEntityStats(stats);
 		

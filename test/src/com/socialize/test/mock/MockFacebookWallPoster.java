@@ -2,7 +2,6 @@ package com.socialize.test.mock;
 
 import java.util.Map;
 import android.app.Activity;
-import android.content.Context;
 import android.net.Uri;
 import com.socialize.auth.facebook.FacebookService;
 import com.socialize.entity.Entity;
@@ -89,7 +88,7 @@ public class MockFacebookWallPoster implements FacebookWallPoster {
 	}
 
 	@Override
-	public void getCurrentPermissions(Context parent, String token, FacebookPermissionCallback callback) {
+	public void getCurrentPermissions(Activity parent, String token, FacebookPermissionCallback callback) {
 		if(callback != null) {
 			callback.onSuccess(FacebookService.DEFAULT_PERMISSIONS);
 		}

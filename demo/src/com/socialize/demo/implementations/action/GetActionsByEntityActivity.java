@@ -41,7 +41,7 @@ public class GetActionsByEntityActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(String text) {
 		
-		ActionUtils.getActionsByEntity(this, entity.getKey(), 0, 50, new ActionListListener() {
+		ActionUtils.getActionsByEntity(this, entity.getKey(), 0, PAGE_SIZE, new ActionListListener() {
 			
 			@Override
 			public void onList(ListResult<SocializeAction> result) {
@@ -65,6 +65,6 @@ public class GetActionsByEntityActivity extends SDKDemoActivity {
 	 */
 	@Override
 	public String getButtonText() {
-		return "List 50 Actions for Current Entity";
+		return "List " + PAGE_SIZE + " Actions for Current Entity";
 	}
 }

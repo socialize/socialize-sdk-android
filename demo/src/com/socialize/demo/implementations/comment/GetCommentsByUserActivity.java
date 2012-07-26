@@ -42,7 +42,7 @@ public class GetCommentsByUserActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(String text) {
 		
-		CommentUtils.getCommentsByUser(this, UserUtils.getCurrentUser(this), 0, 50, new CommentListListener() {
+		CommentUtils.getCommentsByUser(this, UserUtils.getCurrentUser(this), 0, PAGE_SIZE, new CommentListListener() {
 			
 			@Override
 			public void onList(ListResult<Comment> comments) {
@@ -66,6 +66,6 @@ public class GetCommentsByUserActivity extends SDKDemoActivity {
 	 */
 	@Override
 	public String getButtonText() {
-		return "List 50 Comments for Current User";
+		return "List " + PAGE_SIZE + " Comments for Current User";
 	}
 }

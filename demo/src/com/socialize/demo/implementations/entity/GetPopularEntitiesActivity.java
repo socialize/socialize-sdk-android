@@ -21,7 +21,11 @@
  */
 package com.socialize.demo.implementations.entity;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import com.socialize.EntityUtils;
+import com.socialize.EntityUtils.SortOrder;
 import com.socialize.demo.SDKDemoActivity;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
@@ -33,7 +37,7 @@ import com.socialize.listener.entity.EntityListListener;
  * @author Jason Polites
  *
  */
-public class GetAllEntitiesActivity extends SDKDemoActivity {
+public class GetPopularEntitiesActivity extends SDKDemoActivity {
 
 	/* (non-Javadoc)
 	 * @see com.socialize.demo.DemoActivity#executeDemo()
@@ -41,16 +45,23 @@ public class GetAllEntitiesActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(String text) {
 		
-		EntityUtils.getEntities(this, 0, PAGE_SIZE, new EntityListListener() {
+		EntityUtils.getEntities(this, 0, PAGE_SIZE, SortOrder.TOTAL_ACTIVITY, new EntityListListener() {
 			
 			@Override
 			public void onList(ListResult<Entity> entities) {
-				handleBasicSocializeResult(entities);
+				
+				List<Entity> items = entities.getItems();
+				Collection<String> strResults = new ArrayList<String>();
+				for (Entity socializeAction : items) {
+					strResults.add(socializeAction.toString() + " (Total Activity " + socializeAction.getEntityStats().getTotalActivityCount() + ")");
+				}
+				
+				handleResults(strResults);
 			}
 			
 			@Override
 			public void onError(SocializeException error) {
-				handleError(GetAllEntitiesActivity.this, error);
+				handleError(GetPopularEntitiesActivity.this, error);
 			}
 		});
 	}
@@ -65,6 +76,6 @@ public class GetAllEntitiesActivity extends SDKDemoActivity {
 	 */
 	@Override
 	public String getButtonText() {
-		return "List " + PAGE_SIZE + " Entities";
+		return "List top " + PAGE_SIZE + " most popular entities";
 	}
 }

@@ -571,6 +571,8 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			
 			if(authProvider != null) {
 				
+//				final SocializeSession fSession = session;
+				
 				AuthProviderListener authProviderListener = new AuthProviderListener() {
 					
 					@Override
@@ -582,6 +584,9 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 					
 					@Override
 					public void onAuthSuccess(AuthProviderResponse response) {
+						
+						// Update the local session, it will be saved after regular auth
+//						provider.updateSession(fSession, authProviderData);
 						
 						authProviderData.setUserId3rdParty(response.getUserId());
 						authProviderData.setToken3rdParty(response.getToken());

@@ -19,21 +19,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo.implementations.entity;
+package com.socialize.demo.implementations.facebook;
 
-import com.socialize.EntityUtils;
+import java.util.Arrays;
 import com.socialize.demo.SDKDemoActivity;
-import com.socialize.entity.Entity;
-import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.entity.EntityListListener;
+import com.socialize.networks.facebook.FacebookPermissionCallback;
+import com.socialize.networks.facebook.FacebookUtils;
+import com.socialize.util.StringUtils;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class GetAllEntitiesActivity extends SDKDemoActivity {
+public class GetPermissionsActivity extends SDKDemoActivity {
 
 	/* (non-Javadoc)
 	 * @see com.socialize.demo.DemoActivity#executeDemo()
@@ -41,18 +41,25 @@ public class GetAllEntitiesActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(String text) {
 		
-		EntityUtils.getEntities(this, 0, PAGE_SIZE, new EntityListListener() {
-			
-			@Override
-			public void onList(ListResult<Entity> entities) {
-				handleBasicSocializeResult(entities);
-			}
-			
-			@Override
-			public void onError(SocializeException error) {
-				handleError(GetAllEntitiesActivity.this, error);
-			}
-		});
+		String token = FacebookUtils.getAccessToken(this);
+		
+		if(!StringUtils.isEmpty(token)) {
+			FacebookUtils.getCurrentPermissions(this, token, new FacebookPermissionCallback() {
+				
+				@Override
+				public void onError(SocializeException error) {
+					handleError(GetPermissionsActivity.this, error);
+				}
+				
+				@Override
+				public void onSuccess(String[] permissions) {
+					handleResults(Arrays.asList(permissions));
+				}
+			});
+		}
+		else {
+			handleError(this, new SocializeException("Not signed into Facebook"));
+		}
 	}
 	
 	@Override
@@ -65,6 +72,6 @@ public class GetAllEntitiesActivity extends SDKDemoActivity {
 	 */
 	@Override
 	public String getButtonText() {
-		return "List " + PAGE_SIZE + " Entities";
+		return "Get Current Permissions";
 	}
 }

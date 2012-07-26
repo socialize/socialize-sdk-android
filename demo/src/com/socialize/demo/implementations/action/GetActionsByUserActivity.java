@@ -42,7 +42,7 @@ public class GetActionsByUserActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(String text) {
 		
-		ActionUtils.getActionsByUser(this, UserUtils.getCurrentUser(this).getId(), 0, 50, new ActionListListener() {
+		ActionUtils.getActionsByUser(this, UserUtils.getCurrentUser(this).getId(), 0, PAGE_SIZE, new ActionListListener() {
 			
 			@Override
 			public void onList(ListResult<SocializeAction> result) {
@@ -66,6 +66,6 @@ public class GetActionsByUserActivity extends SDKDemoActivity {
 	 */
 	@Override
 	public String getButtonText() {
-		return "List 50 Actions for Current User";
+		return "List " + PAGE_SIZE + " Actions for Current User";
 	}
 }

@@ -88,6 +88,7 @@
         <activity android:name=".implementations.entity.EntityActivity"/>
         <activity android:name=".implementations.entity.AddEntityActivity"/>
         <activity android:name=".implementations.entity.GetEntityByKeyActivity"/>
+        <activity android:name=".implementations.entity.GetPopularEntitiesActivity"/>
         <activity android:name=".implementations.entity.GetAllEntitiesActivity"/>
         
         <!-- View -->
@@ -133,6 +134,7 @@
         <activity android:name=".implementations.facebook.PostToWallActivity"/> 
         <activity android:name=".implementations.facebook.PostPhotoActivity"/> 
         <activity android:name=".implementations.facebook.GetTokenActivity"/> 
+        <activity android:name=".implementations.facebook.GetPermissionsActivity"/> 
         <activity android:name=".implementations.facebook.OpenGraphActivity"/>
         
         <!-- Twitter -->

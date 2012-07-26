@@ -34,5 +34,7 @@ public interface EntityStats {
 	public Integer getShares();
 
 	public Integer getViews();
+	
+	public Integer getTotalActivityCount();
 
 }

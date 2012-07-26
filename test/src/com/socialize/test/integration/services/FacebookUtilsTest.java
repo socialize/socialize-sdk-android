@@ -194,7 +194,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		
 		DefaultFacebookWallPoster mockWallPoster = new DefaultFacebookWallPoster() {
 			@Override
-			public void getCurrentPermissions(Context parent, String token, FacebookPermissionCallback callback) {
+			public void getCurrentPermissions(Activity parent, String token, FacebookPermissionCallback callback) {
 				callback.onSuccess(new String[]{"foobar_permission"});
 			}
 		};

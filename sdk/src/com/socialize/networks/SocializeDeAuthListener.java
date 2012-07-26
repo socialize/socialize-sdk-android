@@ -19,40 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo.implementations.entity;
+package com.socialize.networks;
 
-import android.app.ListActivity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import com.socialize.demo.R;
+import com.socialize.listener.SocializeListener;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class EntityActivity extends ListActivity {
-	final String[] values = new String[] { "Add Entity", "Get Entity By Key", "Get Popular Entities", "Get All Entities"};
-	final Class<?>[] activities = new Class<?>[] { AddEntityActivity.class, GetEntityByKeyActivity.class, GetPopularEntitiesActivity.class, GetAllEntitiesActivity.class};
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.demo_list);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
-		setListAdapter(adapter);
-	}
-	
+public interface SocializeDeAuthListener extends SocializeListener {
 
-	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		Class<?> activityClass = activities[position];
-		if(activityClass != null) {
-			Intent intent = new Intent(this, activityClass);
-			startActivity(intent);
-		}
-	}
+	public void onSuccess();
+	
 }

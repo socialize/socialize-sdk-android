@@ -35,6 +35,7 @@ public class EntityStatsImpl implements EntityStats, Serializable{
 	private Integer comments;
 	private Integer shares;
 	private Integer likes;
+	private Integer totalActivityCount;
 	
 	@Override
 	public Integer getViews() {
@@ -70,5 +71,14 @@ public class EntityStatsImpl implements EntityStats, Serializable{
 	
 	public void setLikes(Integer likes) {
 		this.likes = likes;
+	}
+
+	@Override
+	public Integer getTotalActivityCount() {
+		return totalActivityCount;
+	}
+	
+	public void setTotalActivityCount(Integer totalActivityCount) {
+		this.totalActivityCount = totalActivityCount;
 	}
 }

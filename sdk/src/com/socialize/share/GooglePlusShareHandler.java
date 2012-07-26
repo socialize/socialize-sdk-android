@@ -25,7 +25,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.text.Html;
 import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ShareType;
 import com.socialize.entity.Entity;
@@ -66,12 +65,10 @@ public class GooglePlusShareHandler extends AbstractShareHandler {
 		
 		Entity entity = action.getEntity();
 		
-		String subject = shareMessageBuilder.buildShareSubject(entity);
-		String body = shareMessageBuilder.buildShareMessage(entity, info, text, true, true);
+		String body = shareMessageBuilder.buildShareMessage(entity, info, text, false, true);
 		
-		shareIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(body));
-		shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-		shareIntent.setType("text/html");
+		shareIntent.putExtra(Intent.EXTRA_TEXT, body);
+		shareIntent.setType("text/plain");
 		shareIntent.setPackage("com.google.android.apps.plus");
 		context.startActivity(shareIntent);
 		

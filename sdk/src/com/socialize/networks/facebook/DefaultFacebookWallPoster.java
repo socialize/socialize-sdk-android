@@ -311,12 +311,57 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		doFacebookCall(parent, bundle, graphPath, method, listener);
 	}
 	
-	public void getCurrentPermissions(Context parent, String token, FacebookPermissionCallback callback) {
+	public void getCurrentPermissions(final Activity parent, String token, final FacebookPermissionCallback callback) {
 		Facebook fb = new Facebook(getFacebookAppId());
 		fb.setAccessToken(token);
 		AsyncFacebookRunner runner = newAsyncFacebookRunner(fb);
-		runner.request("me/permissions", callback);		
+		runner.request("me/permissions", new RequestListener() {
+			
+			@Override
+			public void onMalformedURLException(MalformedURLException e, Object state) {
+				handlePermissionError(parent, callback, e);
+			}
+			
+			@Override
+			public void onIOException(IOException e, Object state) {
+				handlePermissionError(parent, callback, e);
+			}
+			
+			@Override
+			public void onFileNotFoundException(FileNotFoundException e, Object state) {
+				handlePermissionError(parent, callback, e);
+			}
+			
+			@Override
+			public void onFacebookError(FacebookError e, Object state) {
+				handlePermissionError(parent, callback, e);
+			}
+			
+			@Override
+			public void onComplete(final String response, final Object state) {
+				if(callback != null) {
+					parent.runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							callback.onComplete(response, state);
+						}
+					});
+				}
+			}
+		});		
 	}	
+	
+	protected void handlePermissionError(Activity parent, final FacebookPermissionCallback callback, final Exception e) {
+		if(callback != null) {
+			parent.runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					callback.onError(SocializeException.wrap(e));
+				}
+			});
+		}
+	}
 	
 	protected void doFacebookCall(Activity parent, Bundle data, String graphPath, String method, SocialNetworkPostListener listener) {
 		Facebook fb = getFacebook(parent);

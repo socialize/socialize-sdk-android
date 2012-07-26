@@ -91,7 +91,7 @@ Using Facebook Open Graph
 From v2.3 onwards Socialize supports Facebook "like" Open Graph actions.  This means that when a user executes a "like" on Socialize and elects to 
 share this on Facebook it can be posted as an "Open Graph Like" in the user's Facebook Activity stream.
 
-This default behavior can be enabled via configuration in your **socialize.properties** file
+This behavior can be enabled via configuration in your **socialize.properties** file
 
 .. literalinclude:: snippets/props_fb_like.txt
    :language: properties
@@ -212,9 +212,9 @@ Refer to :ref:`entity_no_url` for more details on customizing the entity page.
 
 Using Custom Open Graph Actions
 """""""""""""""""""""""""""""""
-The Facebook Open Graph allows developers to create custom actions which can more closely represent the activity within your app.  
+In addition to using the built-in Open Graph actions, you can also define your own.
 
-For example an app that shows movie clips may want to post the fact that a user "watched" a "movie" rather than simply saying a user "shared" a "link".
+For example an app that reviews restaurants may want to post the fact that a user "ate" a "meal" rather than simply saying a user "shared" a "link".
 
 There is however a fairly lengthy setup process to correctly configure your application to handle custom OG actions.
 

@@ -253,22 +253,22 @@ public interface SocializeService extends SocializeSessionConsumer {
 	/**
 	 * Should be called in the onPause method of the containing activity
 	 */
-	public void onPause(Context context);
+	public void onPause(Activity context);
 	
 	/**
 	 * Should be called in the onResume method of the containing activity
 	 */
-	public void onResume(Context context);
+	public void onResume(Activity context);
 	
 	/**
 	 * Should be called in the onCreate method of the containing activity
 	 */
-	public void onCreate(Context context, Bundle savedInstanceState);
+	public void onCreate(Activity context, Bundle savedInstanceState);
 
 	/**
 	 * Should be called in the onDestroy method of the containing activity
 	 */
-	public void onDestroy(Context context);
+	public void onDestroy(Activity context);
 	
 	@Deprecated
 	public View showActionBar(Activity parent, View original, Entity entity);

@@ -601,6 +601,20 @@ public class SocializeServiceImpl implements SocializeService {
 		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 		AuthProviderInfo authProviderInfo = authProviderInfoBuilder.getFactory(authProviderType).getInstance(permissions);
+		
+//		// Merge the info with the current session data
+//		if(session != null) {
+//			UserProviderCredentials userProviderCredentials = session.getUserProviderCredentials(authProviderType);
+//			if(userProviderCredentials != null) {
+//				AuthProviderInfo currentInfo = userProviderCredentials.getAuthProviderInfo();
+//				
+//				if(currentInfo != null) {
+//					currentInfo.merge(authProviderInfo);
+//					authProviderInfo = currentInfo;
+//				}
+//			}
+//		}
+		
 		authenticate(context, consumerKey, consumerSecret, authProviderInfo,  authListener);
 	}
 
@@ -986,7 +1000,7 @@ public class SocializeServiceImpl implements SocializeService {
 	}
 
 	@Override
-	public void onPause(Context context) {
+	public void onPause(Activity context) {
 		paused = true;
 		if(locationProvider != null) {
 			locationProvider.pause(context);	
@@ -1001,7 +1015,7 @@ public class SocializeServiceImpl implements SocializeService {
 	}
 
 	@Override
-	public void onResume(Context context) {
+	public void onResume(Activity context) {
 		if(paused) {
 			try {
 				FacebookUtils.extendAccessToken(context, null);
@@ -1014,10 +1028,10 @@ public class SocializeServiceImpl implements SocializeService {
 	}
 	
 	@Override
-	public void onCreate(Context context, Bundle savedInstanceState) {}
+	public void onCreate(Activity context, Bundle savedInstanceState) {}
 
 	@Override
-	public void onDestroy(Context context) {}
+	public void onDestroy(Activity context) {}
 
 	protected void setShareSystem(ShareSystem shareSystem) {
 		this.shareSystem = shareSystem;

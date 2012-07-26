@@ -81,7 +81,7 @@ public class ShareUtils {
 	/**
 	 * Displays only Social Network options.
 	 */
-	public static final int SOCIAL = FACEBOOK|TWITTER|GOOGLE_PLUS;
+	public static final int SOCIAL = FACEBOOK|TWITTER;
 	
 	/**
 	 * The default display settings for the share dialog.

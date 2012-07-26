@@ -40,7 +40,7 @@ public class GetLikesByEntityActivity extends SDKDemoActivity {
 	 */
 	@Override
 	public void executeDemo(String text) {
-		LikeUtils.getLikesByEntity(this, entity.getKey(), 0, 50, new LikeListListener() {
+		LikeUtils.getLikesByEntity(this, entity.getKey(), 0, PAGE_SIZE, new LikeListListener() {
 			@Override
 			public void onList(List<Like> items, int totalSize) {
 				handleSocializeResult(items);
@@ -63,6 +63,6 @@ public class GetLikesByEntityActivity extends SDKDemoActivity {
 	 */
 	@Override
 	public String getButtonText() {
-		return "List 50 Likes for Current Entity";
+		return "List " + PAGE_SIZE + " Likes for Current Entity";
 	}
 }

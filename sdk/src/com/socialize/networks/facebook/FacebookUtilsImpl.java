@@ -31,6 +31,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import com.socialize.ConfigUtils;
 import com.socialize.ShareUtils;
@@ -62,6 +63,7 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkPostListener;
+import com.socialize.networks.SocializeDeAuthListener;
 import com.socialize.ui.profile.UserSettings;
 import com.socialize.util.ImageUtils;
 import com.socialize.util.StringUtils;
@@ -106,14 +108,14 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#link(android.app.Activity, java.lang.String, com.socialize.listener.SocializeAuthListener)
 	 */
 	@Override
-	public void link(final Context context, final String token, final boolean verifyPermissions, final SocializeAuthListener listener) {
+	public void link(final Activity context, final String token, final boolean verifyPermissions, final SocializeAuthListener listener) {
 		SocializeConfig config = ConfigUtils.getConfig(context);
 		final FacebookAuthProviderInfo fbInfo = new FacebookAuthProviderInfo();
 		fbInfo.setAppId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID));
 		
 		if(verifyPermissions) {
 			// Get the permissions for this token
-			FacebookUtils.getCurrentPermissions(context, token, new FacebookPermissionCallback() {
+			getCurrentPermissions(context, token, new FacebookPermissionCallback() {
 				
 				@Override
 				public void onError(SocializeException error) {
@@ -212,25 +214,46 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#unlink(android.app.Activity)
 	 */
 	@Override
-	public void unlink(Context context) {
-		
-		SocializeSession session = getSocialize().getSession();
-		session.clear(AuthProviderType.FACEBOOK);
-		
-		UserSettings userSettings = session.getUserSettings();
-		
-		if(userSettings != null) {
-			userSettings.setAutoPostFacebook(false);
-		}
-		
-		userSystem.saveSession(context, session);
+	public void unlink(final Context context, final SocializeDeAuthListener listener) {
 		
 		// Clear the FB session
 		try {
 			// Logout does NOT clear the token.. thanks FB :/
 			new FacebookSessionStore().clear(context);
 			
-			getFacebook(context).logout(context);
+			new AsyncTask<Void, Void, Void>() {
+
+				@Override
+				protected Void doInBackground(Void... params) {
+					
+					try {
+						
+						SocializeSession session = getSocialize().getSession();
+						session.clear(AuthProviderType.FACEBOOK);
+						
+						UserSettings userSettings = session.getUserSettings();
+						
+						if(userSettings != null) {
+							userSettings.setAutoPostFacebook(false);
+						}
+						
+						userSystem.saveSession(context, session);	
+						
+						getFacebook(context).logout(context);
+						if(listener != null) {
+							listener.onSuccess();
+						}
+					}
+					catch (Exception e) {
+						if(listener != null) {
+							listener.onError(SocializeException.wrap(e));
+						}
+					}
+					return null;
+				}
+			}.execute();
+			
+			
 		}
 		catch (Exception e) {
 			if(logger != null) {
@@ -288,7 +311,7 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	}
 	
 	@Override
-	public void extendAccessToken(final Context context, final SocializeAuthListener listener) {
+	public void extendAccessToken(final Activity context, final SocializeAuthListener listener) {
 		Facebook facebook = getFacebook(context);
 		if(isLinked(context)) {
 			
@@ -300,7 +323,7 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 					}				
 					
 					// Clear the local session state
-					unlink(context);
+					unlink(context, null);
 				}
 				
 				@Override
@@ -310,7 +333,7 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 					}
 					
 					// Clear the local session state
-					unlink(context);
+					unlink(context, null);
 				}
 				
 				@Override
@@ -412,8 +435,8 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	
 	
 	@Override
-	public void getCurrentPermissions(Context parent, String token, FacebookPermissionCallback callback) {
-		facebookWallPoster.getCurrentPermissions(parent, token, callback);
+	public void getCurrentPermissions(Activity context, String token, FacebookPermissionCallback callback) {
+		facebookWallPoster.getCurrentPermissions(context, token, callback);
 	}
 
 	@Override
