@@ -44,6 +44,7 @@ public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<MockEn
 	final Integer mockShares =  Integer.valueOf(2);
 	final Integer mockComments = Integer.valueOf(3);
 	final Integer mockViews =  Integer.valueOf(4);
+	final Integer mockActivity =  Integer.valueOf(10);
 
 	protected EntityStatsImpl stats;
 	protected UserEntityStatsImpl userStats;
@@ -80,6 +81,7 @@ public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<MockEn
 		AndroidMock.expect(json.has("views")).andReturn(true);
 		AndroidMock.expect(json.has("meta")).andReturn(true);
 		AndroidMock.expect(json.has("type")).andReturn(true);
+		AndroidMock.expect(json.has("total_activity")).andReturn(true);
 
 		AndroidMock.expect(json.isNull("name")).andReturn(false);
 		AndroidMock.expect(json.isNull("key")).andReturn(false);
@@ -89,6 +91,7 @@ public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<MockEn
 		AndroidMock.expect(json.isNull("views")).andReturn(false);
 		AndroidMock.expect(json.isNull("meta")).andReturn(false);
 		AndroidMock.expect(json.isNull("type")).andReturn(false);
+		AndroidMock.expect(json.isNull("total_activity")).andReturn(false);
 
 		AndroidMock.expect(json.getString("name")).andReturn(mockName);
 		AndroidMock.expect(json.getString("key")).andReturn(mockKey);
@@ -98,6 +101,10 @@ public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<MockEn
 		AndroidMock.expect(json.getInt("shares")).andReturn(mockShares);
 		AndroidMock.expect(json.getInt("views")).andReturn(mockViews);
 		AndroidMock.expect(json.getInt("comments")).andReturn(mockComments);
+		AndroidMock.expect(json.getInt("total_activity")).andReturn(mockActivity);
+		
+		
+		
 		
 		AndroidMock.expect(json.has("user_action_summary")).andReturn(true);
 		AndroidMock.expect(json.isNull("user_action_summary")).andReturn(false);
@@ -124,6 +131,7 @@ public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<MockEn
 		stats.setShares(mockShares);
 		stats.setViews(mockViews);
 		stats.setComments(mockComments);
+		stats.setTotalActivityCount(mockActivity);
 		
 		userStats.setLiked(true);
 		userStats.setShares(mockShares);
