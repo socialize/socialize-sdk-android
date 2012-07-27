@@ -140,13 +140,15 @@ The final step in the approval process requires you to clarify with Facebook the
 
 .. image:: images/fb_og_error2.png
 
-For the in-built "like" action we recommend using a description similar to the following::
+Socialize has prepared a standard response for you to use in this situation.  If you are using the Socialize UI features "out-of-the-box" (that is, without modification) then you 
+can simply refer to the content we have provided for you at:  
 
-	The like action will be used in conjunction with an equivalent like feature provided by Socialize in a mobile app.  
-	
-	Whenever a user of the mobile app clicks a like button in the app this action will be propagated to Facebook as an Open Graph like.
-	
-	The app is yet to be published.
+http://blog.getsocialize.com/facebook-open-graph-review
+
+If you have implemented your own UI and/or are calling the Socialize SDK directly through any other means we recommend you follow the guidelines established by Facebook for the approval of 
+Open Graph actions.
+
+https://developers.facebook.com/docs/opengraph/checklist/
 
 
 Using In Built Open Graph Actions
