@@ -19,16 +19,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.annotations;
+package com.socialize.demo;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
+import com.socialize.entity.Entity;
 
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface NoAuth {
-
+/**
+ * @author Jason Polites
+ *
+ */
+public class EntityLoaderActivity extends DemoActivity {
+	
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.entity_loader_activity);
+		
+		Bundle extras = getIntent().getExtras();
+		
+		if(extras != null) {
+			Entity e = (Entity)extras.get("entity");
+			
+			if(e != null) {
+				TextView text = (TextView) findViewById(R.id.entity);
+				text.setText(e.getDisplayName());
+			}
+		}
+		
+		Button button = (Button) findViewById(R.id.button1);
+		
+		button.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
+	}
 }

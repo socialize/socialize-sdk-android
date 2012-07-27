@@ -21,8 +21,11 @@
  */
 package com.socialize;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -585,10 +588,38 @@ public class SocializeServiceImpl implements SocializeService {
 		}
 	}
 	
-	public synchronized SocializeSession authenticateSynchronous(Context context) throws SocializeException {
+	public synchronized SocializeSession authenticateSynchronous(final Context context) throws SocializeException {
 		if(userSystem != null) {
-			SocializeSession session = userSystem.authenticateSynchronous(context);
-			this.session = session;
+			
+			final CountDownLatch latch = new CountDownLatch(1);
+			final List<Exception> holder = new ArrayList<Exception>(1);
+			
+			new Thread() {
+				@Override
+				public void run() {
+					try {
+						SocializeSession session = userSystem.authenticateSynchronous(context);
+						SocializeServiceImpl.this.session = session;
+						latch.countDown();
+					}
+					catch (Exception e) {
+						holder.add(e);
+						latch.countDown();
+					}
+				}
+			}.start();
+			
+			try {
+				if(!latch.await(10, TimeUnit.SECONDS)) {
+					throw new SocializeException("Timeout while authenticating");
+				}
+			}
+			catch (InterruptedException ignore) {}
+			
+			if(!holder.isEmpty()) {
+				throw SocializeException.wrap(holder.get(0));
+			}
+			
 			return session;
 		}
 		

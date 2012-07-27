@@ -59,6 +59,10 @@ public abstract class BaseNotificationMessageBuilder<M extends NotificationMessa
 					notificationIntent.putExtra(SocializeLaunchActivity.LAUNCH_ACTION, LaunchAction.ACTION.name());
 					break;
 					
+				case ENTITY_NOTIFICATION:
+					notificationIntent.putExtra(SocializeLaunchActivity.LAUNCH_ACTION, LaunchAction.ENTITY.name());
+					break;	
+					
 				case DEVELOPER_NOTIFICATION:
 					notificationIntent.putExtra(SocializeLaunchActivity.LAUNCH_ACTION, LaunchAction.HOME.name());
 					break;

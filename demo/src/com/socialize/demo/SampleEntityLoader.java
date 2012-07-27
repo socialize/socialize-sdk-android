@@ -2,8 +2,7 @@ package com.socialize.demo;
 
 import android.app.Activity;
 import android.content.Context;
-import android.widget.Toast;
-
+import android.content.Intent;
 import com.socialize.entity.Entity;
 import com.socialize.ui.SocializeEntityLoader;
 
@@ -12,8 +11,9 @@ public class SampleEntityLoader implements SocializeEntityLoader {
 	@Override
 	public void loadEntity(Activity activity, Entity entity) {
 		// Demo only.. you would usually load your entity here.
-		String msg = "Clicked on entity with key: " + entity.getKey();
-		Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
+		Intent intent = new Intent(activity, EntityLoaderActivity.class);
+		intent.putExtra("entity", entity);
+		activity.startActivity(intent);
 	}
 
 	@Override

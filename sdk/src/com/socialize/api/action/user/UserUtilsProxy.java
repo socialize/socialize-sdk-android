@@ -23,7 +23,6 @@ package com.socialize.api.action.user;
 
 import android.app.Activity;
 import android.content.Context;
-import com.socialize.annotations.NoAuth;
 import com.socialize.annotations.Synchronous;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
@@ -52,19 +51,15 @@ public interface UserUtilsProxy {
 	
 	public void saveUserSettings (Context context, UserSettings settings, UserSaveListener listener);
 	
-	@NoAuth
 	@Synchronous
 	public void showUserSettingsView(Activity context, Long userId);
 	
-	@NoAuth
 	@Synchronous
 	public void showUserSettingsViewForResult(Activity context, Long userId, int requestCode);
 	
-	@NoAuth
 	@Synchronous
 	public void showUserProfileView(Activity context, User user, SocializeAction action);
 	
-	@NoAuth
 	@Synchronous
 	public void clearSession(Context context);
 }

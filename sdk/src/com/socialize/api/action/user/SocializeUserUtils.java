@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.util.Log;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
+import com.socialize.api.SocializeSession;
 import com.socialize.api.action.SocializeActionUtilsBase;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.SocializeAction;
@@ -131,7 +132,15 @@ public class SocializeUserUtils extends SocializeActionUtilsBase implements User
 
 	@Override
 	public User getCurrentUser(Context context)  {
-		return getSocialize().getSession().getUser();
+		
+		SocializeSession session = getSocialize().getSession();
+		
+		if(session != null) {
+			return session.getUser();	
+		}
+		
+		return null;
+		
 	}
 	
 	@Override
