@@ -130,7 +130,7 @@ public class SharePanelView extends DialogPanelView {
 	public void init() {
 		
 		boolean landscape = false;
-		boolean lowRes = false;
+//		boolean lowRes = false;
 		
 		if(displayUtils != null) {
 			padding = displayUtils.getDIP(12);
@@ -138,7 +138,7 @@ public class SharePanelView extends DialogPanelView {
 			headerHeight = displayUtils.getDIP(45);
 			radii = displayUtils.getDIP(radii);
 			landscape = displayUtils.isLandscape();
-			lowRes = displayUtils.isLowRes();
+//			lowRes = displayUtils.isLowRes();
 			fbRadii = new float[]{radii, radii, radii, radii, 0.0f, 0.0f, 0.0f, 0.0f};
 			twRadii = new float[]{0.0f, 0.0f, 0.0f, 0.0f, radii, radii, radii, radii};
 		}
@@ -190,10 +190,10 @@ public class SharePanelView extends DialogPanelView {
 		emailSMSButtonLayout.setOrientation(VERTICAL);
 		emailSMSButtonLayout.setLayoutParams(emailSMSButtonParams);	
 		
-		if(!landscape && !lowRes) {
-			View shareBadge = makeShareBadge();
-			contentLayout.addView(shareBadge);
-		}
+//		if(!landscape && !lowRes) {
+//			View shareBadge = makeShareBadge();
+//			contentLayout.addView(shareBadge);
+//		}
 		
 		if(facebookShareCell != null || twitterShareCell != null) {
 			
