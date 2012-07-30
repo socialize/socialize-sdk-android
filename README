@@ -12,6 +12,33 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v2.3
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Developer can make Facebook open graph calls for Like
+[feature] Developer can customize colors for Action Bar 
+[feature] Propagations for likes which use FB OG should include and extra param, og_action=like
+[bug] Facebook screenshot in docs should not indicate deep linking enabled
+[feature] Auth decisions from end user should be reported via event tracker
+[feature] Share decisions from end user should be reported via event tracker
+[feature] Users can share to Google+
+[feature] Linking an existing FB token should check to ensure the permissions on the token are sufficient
+[feature] SDK Should re-authenticate the user if their FB token expires
+[feature] Entity objects can nominate a type
+[feature] Developer can override remote path for Social Network posts (e.g. FB OpenGraph)
+[bug] Facebook token not persisting correctly
+[bug] Demo app does not render text fields correctly on Jelly Bean
+[feature] Developer can make custom Facebook open graph calls
+[feature] Developer can learn how to configure Open Graph in documentation
+[feature] Developer can subscribe to an entity (not just new_comments)
+[feature] Developer can get list of entities ordered by activity
+[bug] Unlinking from Facebook does not correctly clear local session data
+[feature] Developer can learn how to retrieve popular content from docs
+[bug] Activity options in documentation for manifest config are wrong
+[bug] Auth dialog does not render correctly when only FB is supported
+[feature] Developer can test popular entities in demo
+[bug] Changing facebook permissions causes re-auth even when permissions are already obtained
+[bug] Opening notification on JB doesn't load entity
+
 v2.2
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [feature] Add Entities That Are Not URLs section in documentation
