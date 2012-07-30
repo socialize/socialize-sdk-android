@@ -58,6 +58,7 @@ public final class R {
         public static final int btnSubscription=0x7f05002e;
         public static final int btnSubscriptionEntity=0x7f05002f;
         public static final int btnTwitter=0x7f05000d;
+        public static final int btnwebview=0x7f050030;
         public static final int button1=0x7f05001f;
         public static final int chkAllowAnon=0x7f050010;
         public static final int chkFB=0x7f050011;
@@ -79,7 +80,7 @@ public final class R {
         public static final int txtLocation=0x7f050021;
         public static final int txtResult=0x7f05001a;
         public static final int txtVersion=0x7f050025;
-        public static final int webview=0x7f050030;
+        public static final int webview=0x7f050031;
     }
     public static final class layout {
         public static final int actionbar=0x7f030000;
