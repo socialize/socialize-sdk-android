@@ -79,6 +79,7 @@ public final class R {
         public static final int txtLocation=0x7f050021;
         public static final int txtResult=0x7f05001a;
         public static final int txtVersion=0x7f050025;
+        public static final int webview=0x7f050030;
     }
     public static final class layout {
         public static final int actionbar=0x7f030000;
@@ -99,6 +100,7 @@ public final class R {
         public static final int share_buttons_activity=0x7f03000f;
         public static final int share_comment=0x7f030010;
         public static final int subscription_buttons_activity=0x7f030011;
+        public static final int webview=0x7f030012;
     }
     public static final class string {
         public static final int app_name=0x7f040000;
