@@ -60,7 +60,7 @@ Action Bar doesn't fit (appears unusually large)
 
 .. image:: images/action_bar_large.png
 
-If your action bar appears too large for the display the most likelt culprit is a rogue **anyDensity** setting in your **AndroidManifest.xml**
+If your action bar appears too large for the display the most likely culprit is a rogue **anyDensity** setting in your **AndroidManifest.xml**
 
 If you have the following setting in your manifest:
 

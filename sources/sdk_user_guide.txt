@@ -81,7 +81,7 @@ Alternatively a **null** argument can be specified for the name which will instr
 Creating an Entity Explicitly
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 An entity consists of a **key** and a **name**.  The name should be descriptive and help you identify the 
-entity when viewing reports on the Socialize dashboard.
+entity when viewing reports on the Socialize dash board.
 
 Creating an entity explicitly in this manner is **optional but recommended**.  If you simply post a 
 comment,view,share or like against a key that does not currently exist, it will be automatically created 
@@ -95,7 +95,11 @@ To create an entity, simply call the **saveEntity** method:
 	
 Retrieving Entity Data
 ~~~~~~~~~~~~~~~~~~~~~~
-.. include:: entity_retrieve.inc		
+.. include:: entity_retrieve.inc
+
+Retrieving Popular Entities
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. include:: entity_popular.inc			
 
 .. _entity_stats:	
 
