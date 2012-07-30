@@ -24,6 +24,8 @@ package com.socialize.util;
 import java.util.List;
 import java.util.Locale;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningAppProcessInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -191,7 +193,7 @@ public class DefaultAppUtils implements AppUtils {
 	 * @see com.socialize.util.IAppUtils#isLocationAvaiable(android.content.Context)
 	 */
 	@Override
-	public boolean isLocationAvaiable(Context context) {
+	public boolean isLocationAvailable(Context context) {
 		if(!locationAssessed) {
 			locationAvailable = config.getBooleanProperty(SocializeConfig.SOCIALIZE_LOCATION_ENABLED, true) && (hasPermission(context, "android.permission.ACCESS_FINE_LOCATION") || hasPermission(context, "android.permission.ACCESS_COARSE_LOCATION"));
 			locationAssessed = true;
@@ -275,6 +277,25 @@ public class DefaultAppUtils implements AppUtils {
 		return context.getPackageManager().checkPermission(permission, context.getPackageName()) == PackageManager.PERMISSION_GRANTED;
 	}	
 	
+	
+	@Override
+	public boolean isAppInBackground(Context context) {
+		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+		List<RunningAppProcessInfo> runningProcInfo = activityManager .getRunningAppProcesses();
+		for(int i = 0; i < runningProcInfo.size(); i++){
+			RunningAppProcessInfo runningAppProcessInfo = runningProcInfo.get(i);
+	        if(runningAppProcessInfo.processName.equals(context.getPackageName())) {
+                if (runningAppProcessInfo.importance==RunningAppProcessInfo.IMPORTANCE_FOREGROUND || runningAppProcessInfo.lru==RunningAppProcessInfo.IMPORTANCE_VISIBLE){
+                	return false;
+                }
+                else {
+                	return true;
+                }
+	        }
+		}
+		return true;
+	}
+
 	public static boolean launchMainApp(Activity origin) {
 		Intent mainIntent = getMainAppIntent(origin);
 		if(mainIntent != null) {

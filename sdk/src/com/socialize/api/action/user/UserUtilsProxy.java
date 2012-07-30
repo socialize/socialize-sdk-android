@@ -21,9 +21,10 @@
  */
 package com.socialize.api.action.user;
 
+import android.app.Activity;
 import android.content.Context;
-import com.socialize.annotations.NoAuth;
 import com.socialize.annotations.Synchronous;
+import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
@@ -37,49 +38,28 @@ import com.socialize.ui.profile.UserSettings;
  */
 public interface UserUtilsProxy {
 
-	/**
-	 * Synchronously returns the current user.  
-	 * If the Socialize instance has not been initialized it will be initialized synchronously here.
-	 * If the Socialize instance has not authenticated it will be authenticated synchronously here.
-	 * @param context The current context.
-	 * @return The current user.
-	 */
 	@Synchronous
 	public User getCurrentUser(Context context);
 	
-	/**
-	 * Returns the settings for the current user.
-	 * @param context The current context.
-	 * @return The settings for the current user.
-	 */
 	@Synchronous
 	public UserSettings getUserSettings(Context context);
 	
-	/**
-	 * Gets the Social Networks the user has elected to auto-post to.
-	 * @param context
-	 * @return
-	 */
 	@Synchronous
 	public SocialNetwork[] getAutoPostSocialNetworks(Context context);
 	
-	/**
-	 * 
-	 * @param context
-	 * @param id
-	 * @param listener
-	 */
 	public void getUser(Context context, long id, UserGetListener listener);
 	
-	/**
-	 * Saves the current user's settings;
-	 * @param context
-	 * @param settings
-	 * @param listener
-	 */
 	public void saveUserSettings (Context context, UserSettings settings, UserSaveListener listener);
 	
-	@NoAuth
+	@Synchronous
+	public void showUserSettingsView(Activity context, Long userId);
+	
+	@Synchronous
+	public void showUserSettingsViewForResult(Activity context, Long userId, int requestCode);
+	
+	@Synchronous
+	public void showUserProfileView(Activity context, User user, SocializeAction action);
+	
 	@Synchronous
 	public void clearSession(Context context);
 }

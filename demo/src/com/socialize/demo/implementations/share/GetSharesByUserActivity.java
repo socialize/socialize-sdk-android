@@ -42,7 +42,7 @@ public class GetSharesByUserActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(String text) {
 		
-		ShareUtils.getSharesByUser(this, UserUtils.getCurrentUser(this), 0, 50, new ShareListListener() {
+		ShareUtils.getSharesByUser(this, UserUtils.getCurrentUser(this), 0, PAGE_SIZE, new ShareListListener() {
 			
 			@Override
 			public void onList(ListResult<Share> shares) {
@@ -66,6 +66,6 @@ public class GetSharesByUserActivity extends SDKDemoActivity {
 	 */
 	@Override
 	public String getButtonText() {
-		return "List 50 Shares for Current User";
+		return "List " + PAGE_SIZE + " Shares for Current User";
 	}
 }

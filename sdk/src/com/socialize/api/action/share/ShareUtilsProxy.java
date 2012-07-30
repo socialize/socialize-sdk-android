@@ -53,7 +53,9 @@ public interface ShareUtilsProxy {
 	
 	public void shareViaSMS(Activity context, Entity entity, ShareAddListener listener);
 	
-	public void shareViaSocialNetworks(Activity context, Entity entity, ShareOptions shareOptions, SocialNetworkShareListener listener, SocialNetwork...networkss);
+	public void shareViaGooglePlus(Activity context, Entity entity, ShareAddListener listener);
+	
+	public void shareViaSocialNetworks(Activity context, Entity entity, ShareOptions shareOptions, SocialNetworkShareListener listener, SocialNetwork...networks);
 	
 	public void getShare (Activity context, ShareGetListener listener, long id);
 	

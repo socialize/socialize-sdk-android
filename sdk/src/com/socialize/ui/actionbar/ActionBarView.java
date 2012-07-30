@@ -41,6 +41,8 @@ public class ActionBarView extends EntityView {
 	private ActionBarLayoutView actionBarLayoutView;
 	private ActionBarListener actionBarListener;
 	
+	private ActionBarOptions actionBarOptions;
+	
 	private Entity entity;
 	
 	private OnActionBarEventListener onActionBarEventListener;
@@ -66,7 +68,8 @@ public class ActionBarView extends EntityView {
 	@Override
 	protected View getView(Bundle bundle, Object... entityKeys) {
 		if(actionBarLayoutView == null) {
-			actionBarLayoutView = container.getBean("actionBarLayoutView", this);
+			
+			actionBarLayoutView = container.getBean("actionBarLayoutView", this, actionBarOptions);
 			
 			if(actionBarLayoutView == null) {
 				Log.w(SocializeLogger.LOG_TAG, "Request for bean [actionBarLayoutView] returned null");
@@ -90,11 +93,6 @@ public class ActionBarView extends EntityView {
 		}
 	}
 	
-	@Override
-	public void onViewRendered(int width, int height) {
-		super.onViewRendered(width, height);
-	}
-
 	public Entity getEntity() {
 		return entity;
 	}
@@ -147,5 +145,13 @@ public class ActionBarView extends EntityView {
 
 	public void setActionBarListener(ActionBarListener actionBarListener) {
 		this.actionBarListener = actionBarListener;
+	}
+	
+	public ActionBarOptions getActionBarOptions() {
+		return actionBarOptions;
+	}
+
+	public void setActionBarOptions(ActionBarOptions actionBarOptions) {
+		this.actionBarOptions = actionBarOptions;
 	}
 }

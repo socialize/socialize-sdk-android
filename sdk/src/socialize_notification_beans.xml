@@ -64,6 +64,10 @@
 					<value ref="actionNotificationMessageBuilder"/>
 				</entry>
 				<entry>
+					<key value="ENTITY_NOTIFICATION"/>
+					<value ref="directEntityNotificationMessageBuilder"/>
+				</entry>
+				<entry>
 					<key value="DEVELOPER_NOTIFICATION"/>
 					<value ref="developerNotificationMessageBuilder"/>
 				</entry>	
@@ -83,6 +87,10 @@
 				<entry>
 					<key value="NEW_COMMENTS"/>
 					<value ref="actionNotificationMessageFactory"/>
+				</entry>
+				<entry>
+					<key value="ENTITY_NOTIFICATION"/>
+					<value ref="developerNotificationMessageFactory"/>
 				</entry>
 				<entry>
 					<key value="DEVELOPER_NOTIFICATION"/>

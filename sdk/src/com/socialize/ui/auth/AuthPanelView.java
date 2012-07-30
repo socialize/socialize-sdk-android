@@ -25,6 +25,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -150,21 +152,25 @@ public class AuthPanelView extends DialogPanelView {
 		
 		contentLayout.addView(anonymousCell);
 		
+		LayoutParams skipAuthParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		skipAuthParams.gravity = Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
+		skipAuthParams.weight = 1.0f;
+		skipAuthParams.setMargins(0, displayUtils.getDIP(30), 0, 0);
+		
+		skipAuth = new TextView(getContext());
+		
+		skipAuth.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+		skipAuth.setTextColor(colors.getColor(Colors.ANON_CELL_TITLE));
+		skipAuth.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL);
+		skipAuth.setPadding(0, 0, 0, padding);
+		skipAuth.setLayoutParams(skipAuthParams);
+		
+		
 		if(ConfigUtils.getConfig(getContext()).isAllowAnonymousUser()) {
-			
-			LayoutParams skipAuthParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-			skipAuthParams.gravity = Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
-			skipAuthParams.weight = 1.0f;
-			skipAuthParams.setMargins(0, displayUtils.getDIP(30), 0, 0);
-			
-			skipAuth = new TextView(getContext());
-			skipAuth.setText("I'd rather not...");
-			skipAuth.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-			skipAuth.setTextColor(colors.getColor(Colors.ANON_CELL_TITLE));
-			skipAuth.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL);
-			skipAuth.setPadding(0, 0, 0, padding);
-			skipAuth.setLayoutParams(skipAuthParams);
-			
+			String mystring=new String("I'd rather not...");
+			SpannableString content = new SpannableString(mystring);
+			content.setSpan(new UnderlineSpan(), 0, mystring.length(), 0);
+			skipAuth.setText(content);
 			skipAuth.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -173,9 +179,12 @@ public class AuthPanelView extends DialogPanelView {
 					}
 				}
 			});
-			
-			contentLayout.addView(skipAuth);
-		}		
+		}
+		else {
+			skipAuth.setText("Authentication is required");
+		}
+		
+		contentLayout.addView(skipAuth);
 		
 		container.addView(contentLayout);
 		

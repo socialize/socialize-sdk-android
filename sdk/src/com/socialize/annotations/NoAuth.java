@@ -27,11 +27,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 
-/**
- * Indicates that the method with this annotation is synchronous.  Used when proxying method calls.
- * @author Jason Polites
- *
- */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface NoAuth {

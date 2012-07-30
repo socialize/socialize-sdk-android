@@ -25,7 +25,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import com.socialize.auth.AuthProvider;
+import com.socialize.auth.AuthProviderInfo;
+import com.socialize.auth.AuthProviderInfoBuilder;
 import com.socialize.auth.AuthProviderResponse;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.error.SocializeException;
 import com.socialize.facebook.Facebook;
 import com.socialize.listener.AuthProviderListener;
@@ -44,6 +47,7 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 	private SocializeLogger logger;
 	private FacebookSessionStore facebookSessionStore;
 	private FacebookUtilsProxy facebookUtils;
+	private AuthProviderInfoBuilder authProviderInfoBuilder;
 	
 	public FacebookAuthProvider() {
 		super();
@@ -54,6 +58,16 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 		this.holder = holder;
 	}
 	
+	@Override
+	public boolean validate(FacebookAuthProviderInfo info) {
+		if(authProviderInfoBuilder != null) {
+			AuthProviderInfo expected = authProviderInfoBuilder.getFactory(AuthProviderType.FACEBOOK).getInstance(FacebookService.DEFAULT_PERMISSIONS);
+			return info.matches(expected);
+		}
+		// Default to true
+		return true;
+	}
+
 	@Override
 	public void authenticate(FacebookAuthProviderInfo info, final AuthProviderListener listener) {
 
@@ -138,5 +152,9 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 
 	public void setFacebookSessionStore(FacebookSessionStore facebookSessionStore) {
 		this.facebookSessionStore = facebookSessionStore;
+	}
+
+	public void setAuthProviderInfoBuilder(AuthProviderInfoBuilder authProviderInfoBuilder) {
+		this.authProviderInfoBuilder = authProviderInfoBuilder;
 	}
 }

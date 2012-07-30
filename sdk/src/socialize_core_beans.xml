@@ -383,8 +383,14 @@
 		<property name="logger" ref="logger"/>
 	</bean>
 	
+	<bean id="googlePlusShareHandler" class="com.socialize.share.GooglePlusShareHandler">
+		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
+		<property name="logger" ref="logger"/>
+	</bean>
+
 	<bean id="twitterShareHandler" class="com.socialize.share.TwitterShareHandler">
 		<property name="twitterSharer" ref="twitterSharer"/>
+		<property name="logger" ref="logger"/>
 	</bean>
 	
 	<bean id="otherShareHandler" class="com.socialize.share.OtherShareHandler" extends="emailShareHandler"/>
@@ -399,10 +405,14 @@
 				<entry>
 					<key value="SMS"/>
 					<value ref="smsShareHandler"/>
-				</entry>				
+				</entry>
 				<entry>
 					<key value="FACEBOOK"/>
 					<value ref="facebookShareHandler"/>
+				</entry>
+				<entry>
+					<key value="GOOGLE_PLUS"/>
+					<value ref="googlePlusShareHandler"/>
 				</entry>
 				<entry>
 					<key value="TWITTER"/>
@@ -549,6 +559,7 @@
 		<property name="logger" ref="logger"/>
 		<property name="facebookSessionStore" ref="facebookSessionStore"/>
 		<property name="facebookUtils" ref="facebookUtils"/>
+		<property name="authProviderInfoBuilder" ref="authProviderInfoBuilder"/>
 		<init-method name="init">
 			<arg type="context"/>
 			<arg ref="listenerHolder"/>
@@ -564,6 +575,7 @@
 	<bean id="facebookUtils" class="com.socialize.networks.facebook.FacebookUtilsImpl">
 		<property name="userSystem" ref="userSystem"/>
 		<property name="facebookWallPoster" ref="facebookWallPoster"/>
+		<property name="facebookAuthProvider" ref="facebookProvider"/>
 		<property name="imageUtils" ref="imageUtils"/>
 		<property name="logger" ref="logger"/>
 		<property name="config" ref="config"/>
@@ -585,6 +597,7 @@
 		id="facebookWallPoster" 
 		class="com.socialize.networks.facebook.DefaultFacebookWallPoster">
 		<property name="logger" ref="logger"/>
+		<property name="config" ref="config"/>
 		<property name="imageUtils" ref="imageUtils"/>
 		<property name="facebookUtils" ref="facebookUtils"/>
 		<property name="facebookRunnerFactory" ref="facebookRunnerFactory"/>
@@ -613,6 +626,7 @@
 		id="twitterSharer" 
 		class="com.socialize.networks.twitter.TwitterSharer"
 		extends="socialNetworkSharer">
+		<property name="twitterUtils" ref="twitterUtils"/>
 	</bean>		
 	
 	<bean 
@@ -654,6 +668,7 @@
 
 	<bean id="twitterProvider" class="com.socialize.auth.twitter.TwitterAuthProvider">
 		<property name="twitterAuthUtils" ref="twitterAuthUtils"/>
+		<property name="authProviderInfoBuilder" ref="authProviderInfoBuilder"/>
 		<init-method name="init">
 			<arg type="context"/>
 		</init-method>

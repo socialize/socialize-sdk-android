@@ -22,6 +22,7 @@
 package com.socialize.networks;
 
 import java.util.Map;
+import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 
 
@@ -33,6 +34,8 @@ public class DefaultPostData implements PostData {
 	
 	private PropagationInfo propagationInfo;
 	private Map<String, Object> postValues;
+	private String path;
+	private Entity entity;
 
 	@Override
 	public PropagationInfo getPropagationInfo() {
@@ -54,4 +57,32 @@ public class DefaultPostData implements PostData {
 	public void setPostValues(Map<String, Object> postValues) {
 		this.postValues = postValues;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.networks.PostData#getPath()
+	 */
+	@Override
+	public String getPath() {
+		return path;
+	}
+
+	@Override
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.networks.PostData#getEntity()
+	 */
+	@Override
+	public Entity getEntity() {
+		return entity;
+	}
+
+	public void setEntity(Entity entity) {
+		this.entity = entity;
+	}
+
 }

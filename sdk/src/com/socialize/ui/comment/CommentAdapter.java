@@ -15,6 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.socialize.Socialize;
+import com.socialize.UserUtils;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.Comment;
 import com.socialize.entity.User;
@@ -177,7 +178,7 @@ public class CommentAdapter extends BaseAdapter {
 							@Override
 							public void onClick(View v) {
 								if(user != null && user.getId() != null) {
-									Socialize.getSocialize().showActionDetailView(context, user, item);
+									UserUtils.showUserProfileWithAction(context, user, item);
 								}
 								else {
 									if(logger != null) {

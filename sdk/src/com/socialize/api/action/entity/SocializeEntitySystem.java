@@ -135,6 +135,13 @@ public class SocializeEntitySystem extends SocializeApi<Entity, SocializeProvide
 	 */
 	@Override
 	public void getEntities(SocializeSession session, int start, int end, SortOrder sortOrder, EntityListener listener) {
-		listAsync(session, ENDPOINT, start, end, listener);
+		Map<String, String> extraParams = null;
+		
+		if(!sortOrder.equals(SortOrder.CREATION_DATE)) {
+			extraParams = new HashMap<String, String>();
+			extraParams.put("sort", sortOrder.name().toLowerCase() );
+		}
+		
+		listAsync(session, ENDPOINT, null, "entity_key", extraParams, start, end, listener);
 	}
 }

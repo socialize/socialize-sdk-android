@@ -47,14 +47,13 @@ public abstract class SocializeUIRobotiumTest extends SocializeManagedActivityTe
 	public static final int BTN_FACEBOOK_SSO = 0;
 	public static final int BTN_MOCK_FACEBOOK = 1;
 	public static final int BTN_MOCK_SOCIALIZE = 2;
-//	public static final int BTN_NOTIFICATIONS_ENABLED = 3;
-	
 	
 	public static final String BTN_CLEAR_CACHE = "Clear Auth Cache";
 	public static final String BTN_SHOW_COMMENTS = "Show Comments";
 	
 	
 	public static final String BTN_NOTIFICATIONS_ENABLED = "Notifications Enabled";
+	public static final String BTN_LOCATION_ENABLED = "Location Enabled";
 	
 	public static final String BTN_SHOW_ACTION_BAR_AUTO = "Show Action Bar (auto)";
 	public static final String BTN_SHOW_ACTION_BAR_MANUAL = "Show Action Bar (manual)";
@@ -118,7 +117,13 @@ public abstract class SocializeUIRobotiumTest extends SocializeManagedActivityTe
 		if(on) {
 			TestUtils.clickOnButton(BTN_NOTIFICATIONS_ENABLED);
 		}
-	}		
+	}	
+	
+	protected void toggleLocationEnabled(boolean on) {
+		if(on) {
+			TestUtils.clickOnButton(BTN_LOCATION_ENABLED);
+		}
+	}			
 	
 	protected void clearAuthCache() {
 		SocializeService socialize = Socialize.getSocialize();

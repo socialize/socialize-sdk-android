@@ -22,6 +22,7 @@
 package com.socialize.ui.share;
 
 import android.app.Dialog;
+import com.socialize.api.action.ShareType;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.dialog.SocializeDialogListener;
 
@@ -34,4 +35,6 @@ public interface ShareDialogListener extends SocializeDialogListener<SharePanelV
 	public boolean onContinue(Dialog dialog, boolean remember, SocialNetwork...networks);
 	
 	public void onFlowInterrupted(DialogFlowController controller);
+	
+	public void onSimpleShare(ShareType type);
 }

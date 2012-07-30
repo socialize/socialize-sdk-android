@@ -100,6 +100,7 @@ public class SharePanelView extends DialogPanelView {
 	
 	private IBeanFactory<FacebookShareCell> facebookShareCellFactory;
 	private IBeanFactory<TwitterShareCell> twitterShareCellFactory;
+	private IBeanFactory<GooglePlusCell> googlePlusCellFactory;
 	private IBeanFactory<EmailCell> emailCellFactory;
 	private IBeanFactory<SMSCell> smsCellFactory;
 	private IBeanFactory<RememberCell> rememberCellFactory;
@@ -113,6 +114,7 @@ public class SharePanelView extends DialogPanelView {
 	private EmailCell emailCell;
 	private SMSCell smsCell;
 	private RememberCell rememberCell;
+	private GooglePlusCell googlePlusCell;
 	
 	float radii = 6;
 	int padding = 8;
@@ -128,7 +130,7 @@ public class SharePanelView extends DialogPanelView {
 	public void init() {
 		
 		boolean landscape = false;
-		boolean lowRes = false;
+//		boolean lowRes = false;
 		
 		if(displayUtils != null) {
 			padding = displayUtils.getDIP(12);
@@ -136,7 +138,7 @@ public class SharePanelView extends DialogPanelView {
 			headerHeight = displayUtils.getDIP(45);
 			radii = displayUtils.getDIP(radii);
 			landscape = displayUtils.isLandscape();
-			lowRes = displayUtils.isLowRes();
+//			lowRes = displayUtils.isLowRes();
 			fbRadii = new float[]{radii, radii, radii, radii, 0.0f, 0.0f, 0.0f, 0.0f};
 			twRadii = new float[]{0.0f, 0.0f, 0.0f, 0.0f, radii, radii, radii, radii};
 		}
@@ -188,10 +190,10 @@ public class SharePanelView extends DialogPanelView {
 		emailSMSButtonLayout.setOrientation(VERTICAL);
 		emailSMSButtonLayout.setLayoutParams(emailSMSButtonParams);	
 		
-		if(!landscape && !lowRes) {
-			View shareBadge = makeShareBadge();
-			contentLayout.addView(shareBadge);
-		}
+//		if(!landscape && !lowRes) {
+//			View shareBadge = makeShareBadge();
+//			contentLayout.addView(shareBadge);
+//		}
 		
 		if(facebookShareCell != null || twitterShareCell != null) {
 			
@@ -236,13 +238,24 @@ public class SharePanelView extends DialogPanelView {
 			contentLayout.addView(socialNetworkButtonLayout);
 		}
 		
+		if(googlePlusCell != null) {
+			LinearLayout googlePlusCellLayout = new LinearLayout(getContext());
+			googlePlusCellLayout.setPadding(0, 0, 0, 0);
+			googlePlusCellLayout.setLayoutParams(emailSMSButtonParams);				
+			googlePlusCellLayout.addView(googlePlusCell);
+			contentLayout.addView(googlePlusCellLayout);
+		}		
+		
 		if(emailCell != null || smsCell != null) {
+		
 			if(emailCell != null) {
 				emailSMSButtonLayout.addView(emailCell);
 			}
+			
 			if(smsCell != null) {
 				emailSMSButtonLayout.addView(smsCell);
 			}
+			
 			contentLayout.addView(emailSMSButtonLayout);
 		}		
 		
@@ -401,6 +414,7 @@ public class SharePanelView extends DialogPanelView {
 		boolean emailOK = (entity != null && (displayOptions & ShareUtils.EMAIL) != 0) && getSocialize().canShare(getContext(), ShareType.EMAIL) && emailCellFactory != null;
 		boolean smsOK = (entity != null && (displayOptions & ShareUtils.SMS) != 0) && getSocialize().canShare(getContext(), ShareType.SMS) && smsCellFactory != null;
 		boolean rememberOk = ((displayOptions & ShareUtils.SHOW_REMEMBER) != 0) && rememberCellFactory != null;
+		boolean googlePlusOK = config.isGooglePlusEnabled() && (entity != null && (displayOptions & ShareUtils.GOOGLE_PLUS) != 0) && getSocialize().canShare(getContext(), ShareType.GOOGLE_PLUS) && googlePlusCellFactory != null;
 		
 		if(fbOK) {
 			facebookShareCell = facebookShareCellFactory.getBean();
@@ -426,6 +440,11 @@ public class SharePanelView extends DialogPanelView {
 				twitterShareCell.setLayoutParams(cellParams);
 				twitterShareCell.setPadding(padding, padding, padding, padding);
 			}
+		}
+		
+		if(googlePlusOK) {
+			googlePlusCell = googlePlusCellFactory.getBean();
+			googlePlusCell.setLayoutParams(cellParams);
 		}
 		
 		if(emailOK) {
@@ -473,13 +492,18 @@ public class SharePanelView extends DialogPanelView {
 			emailCell.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(final View v) {
+					
+					if(shareDialogListener != null) {
+						shareDialogListener.onSimpleShare(ShareType.EMAIL);
+					}
+					
 					final ProgressDialog progress = SafeProgressDialog.show(v.getContext());
 					ShareUtils.shareViaEmail(getActivity(), entity, new ShareAddListener() {
 						
 						@Override
 						public void onError(SocializeException error) {
 							progress.dismiss();
-							showError(v.getContext(), error);
+							showErrorToast(v.getContext(), error);
 						}
 						
 						@Override
@@ -495,13 +519,18 @@ public class SharePanelView extends DialogPanelView {
 			smsCell.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(final View v) {
+					
+					if(shareDialogListener != null) {
+						shareDialogListener.onSimpleShare(ShareType.SMS);
+					}
+					
 					final ProgressDialog progress = SafeProgressDialog.show(v.getContext());
 					ShareUtils.shareViaSMS(getActivity(), entity, new ShareAddListener() {
 						
 						@Override
 						public void onError(SocializeException error) {
 							progress.dismiss();
-							showError(v.getContext(), error);
+							showErrorToast(v.getContext(), error);
 						}
 						
 						@Override
@@ -511,7 +540,35 @@ public class SharePanelView extends DialogPanelView {
 					});
 				}
 			});
-		}		
+		}	
+		
+		if(googlePlusCell != null) {
+			googlePlusCell.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(final View v) {
+					
+					if(shareDialogListener != null) {
+						shareDialogListener.onSimpleShare(ShareType.GOOGLE_PLUS);
+					}
+					
+					final ProgressDialog progress = SafeProgressDialog.show(v.getContext());
+					
+					ShareUtils.shareViaGooglePlus(getActivity(), entity, new ShareAddListener() {
+						
+						@Override
+						public void onError(SocializeException error) {
+							progress.dismiss();
+							showErrorToast(v.getContext(), error);
+						}
+						
+						@Override
+						public void onCreate(Share entity) {
+							progress.dismiss();
+						}
+					});
+				}
+			});
+		}			
 	}
 	
 	protected View makeHeaderView(int headerHeight, float headerRadius) {
@@ -604,6 +661,10 @@ public class SharePanelView extends DialogPanelView {
 		this.rememberCellFactory = rememberCellFactory;
 	}
 	
+	public void setGooglePlusCellFactory(IBeanFactory<GooglePlusCell> googlePlusCellFactory) {
+		this.googlePlusCellFactory = googlePlusCellFactory;
+	}
+
 	public void setConfig(SocializeConfig config) {
 		this.config = config;
 	}

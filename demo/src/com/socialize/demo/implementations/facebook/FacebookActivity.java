@@ -35,8 +35,9 @@ import com.socialize.demo.R;
  *
  */
 public class FacebookActivity extends ListActivity {
-	final String[] values = new String[] { "Post to Wall", "Post Photo", "List Friends", "List Checkins (alt. permissions)", "Get Access Token"};//, "Open Graph Test"};
-	final Class<?>[] activities = new Class<?>[] { PostToWallActivity.class, PostPhotoActivity.class, ListFriendsActivity.class, ListCheckinsActivity.class, GetTokenActivity.class};//, OpenGraphActivity.class};
+	final String[] values = new String[] { "Post to Wall", "Post Photo", "List Friends", "List Checkins (alt. permissions)", "Get Access Token", "Get Current Permissions", "Open Graph Like"};
+	final Class<?>[] activities = new Class<?>[] { PostToWallActivity.class, PostPhotoActivity.class, ListFriendsActivity.class, ListCheckinsActivity.class, GetTokenActivity.class, GetPermissionsActivity.class, OpenGraphActivity.class };
+	//, OpenGraphActivity.class};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

@@ -37,27 +37,25 @@ import com.socialize.networks.SocialNetworkPostListener;
  */
 public interface FacebookWallPoster {
 
-	@Deprecated
-	public void postShare(final Activity parent, Share share, SocialNetworkListener listener);
-	
-	public void postLike(final Activity parent, Entity entity, PropagationInfo propInfo, SocialNetworkListener listener);
+	public void postLike(Activity parent, Entity entity, PropagationInfo propInfo, SocialNetworkListener listener);
 
-	public void postComment(final Activity parent, Entity entity, String comment, PropagationInfo propInfo, SocialNetworkListener listener);	
+	public void postComment(Activity parent, Entity entity, String comment, PropagationInfo propInfo, SocialNetworkListener listener);	
 		
-	public void postPhoto(final Activity parent, Share share, String comment, Uri photoUri, SocialNetworkListener listener);
+	public void postPhoto(Activity parent, Share share, String comment, Uri photoUri, SocialNetworkListener listener);
 	
-	public void postPhoto(final Activity parent, String appId, String link, String caption, Uri photoUri, SocialNetworkListener listener);
+	public void postPhoto(Activity parent, String link, String caption, Uri photoUri, SocialNetworkListener listener);
 	
-	@Deprecated
-	public void post(final Activity parent, String appId, String linkName, String message, String link, String caption, final SocialNetworkListener listener);
+	public void postOG(Activity parent, Entity entity, String message, String action, PropagationInfo propInfo, SocialNetworkListener listener);
 	
-	public void post(final Activity parent, Entity entity, String message, PropagationInfo propInfo, SocialNetworkListener listener);
+	public void post(Activity parent, Entity entity, String message, PropagationInfo propInfo, SocialNetworkListener listener);
 	
-	public void post(final Activity parent, String appId, SocialNetworkListener listener, PostData postData);
+	public void post(Activity parent, SocialNetworkListener listener, PostData postData);
 	
-	public void post(final Activity parent, String graphPath, String appId, Map<String, Object> postData, SocialNetworkPostListener listener);
+	public void post(Activity parent, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener);
 
-	public void get(final Activity parent, String graphPath, String appId, Map<String, Object> postData, SocialNetworkPostListener listener);
+	public void get(Activity parent, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener);
 	
-	public void delete(final Activity parent, String graphPath, String appId, Map<String, Object> postData, SocialNetworkPostListener listener);
+	public void delete(Activity parent, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener);
+	
+	public void getCurrentPermissions(Activity parent, String token, FacebookPermissionCallback callback);
 }

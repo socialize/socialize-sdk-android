@@ -100,6 +100,13 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 			}
 			
 			@Override
+			public void onSimpleShare(ShareType type) {
+				if(dialogListener != null) {
+					dialogListener.onSimpleShare(type);
+				}	
+			}
+
+			@Override
 			public void onFlowInterrupted(DialogFlowController controller) {
 				// Will not be called.
 			}
@@ -238,6 +245,15 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	@Override
 	public void shareViaEmail(Activity context, Entity entity, ShareAddListener listener) {
 		doShare(context, entity, ShareType.EMAIL, listener);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.share.ShareUtilsProxy#shareViaGooglePlus(android.app.Activity, com.socialize.entity.Entity, com.socialize.listener.share.ShareAddListener)
+	 */
+	@Override
+	public void shareViaGooglePlus(Activity context, Entity entity, ShareAddListener listener) {
+		doShare(context, entity, ShareType.GOOGLE_PLUS, listener);
 	}
 
 	/*

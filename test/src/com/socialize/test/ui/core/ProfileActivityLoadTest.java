@@ -24,8 +24,8 @@ package com.socialize.test.ui.core;
 import android.app.Activity;
 import android.content.Context;
 import com.socialize.ConfigUtils;
-import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
+import com.socialize.UserUtils;
 import com.socialize.api.action.user.SocializeUserUtils;
 import com.socialize.entity.User;
 import com.socialize.listener.user.UserGetListener;
@@ -64,35 +64,15 @@ public class ProfileActivityLoadTest extends SocializeUIActivityTest {
 		
 		SocializeAccess.setUserUtilsProxy(userUtils);
 		
-//		SocializeAccess.setInitListener(new SocializeInitListener() {
-//			
-//			@Override
-//			public void onError(SocializeException error) {
-//				error.printStackTrace();
-//				addResult(error);
-//			}
-//			
-//			@Override
-//			public void onInit(Context context, IOCContainer container) {
-//				ProxyObject<UserSystem> proxy = container.getProxy("userSystem");
-//				MockUserSystem mock = new MockUserSystem();
-//				mock.setUser(dummy);
-//				proxy.setDelegate(mock);
-//			}
-//		});
-		
 		// Ensure facebook is enabled
 		ConfigUtils.getConfig(getContext()).setFacebookAppId("1234567890");
 		ConfigUtils.getConfig(getContext()).setTwitterKeySecret("U18LUnVjULkkpGoJ6CoP3A", "RiIljnFq4RWV9LEaCM1ZLsAHf053vX2KyhJhmCOlBE");
 		
-		Socialize.getSocialize().showUserProfileView(TestUtils.getActivity(this), 69L);
+		UserUtils.showUserSettings(TestUtils.getActivity(this));
 		
 		Activity waitForActivity = TestUtils.waitForActivity(5000);
 		
 		assertNotNull(waitForActivity);
-		
-//		SocializeException error = getNextResult();
-//		assertNull(error);		
 		
 		// Check that the user's name is displayed
 		assertTrue(TestUtils.lookForText(waitForActivity, "foo", 10000));

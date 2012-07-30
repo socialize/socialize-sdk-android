@@ -21,6 +21,7 @@
  */
 package com.socialize;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import com.socialize.listener.SocializeInitListener;
@@ -33,7 +34,7 @@ import com.socialize.log.SocializeLogger.LogLevel;
 public class Socialize {
 	
 	// This will be set during the build process
-	public static final String VERSION = "2.1.1";
+	public static final String VERSION = "2.3";
 	
 	public static final String ENTITY_OBJECT = "socialize.entity";
 	public static final String ENTITY_ID = "socialize.entity.id";
@@ -65,7 +66,7 @@ public class Socialize {
 	}
 	
 	/**
-	 * Initialize Socialize asynnchronously.  Can be called from the main UI thread.
+	 * Initialize Socialize asynchronously.  Can be called from the main UI thread.
 	 * @param context
 	 */
 	public static final void initAsync(Context context) {
@@ -73,7 +74,7 @@ public class Socialize {
 	}
 	
 	/**
-	 * Initialize Socialize asynnchronously.  Can be called from the main UI thread.
+	 * Initialize Socialize asynchronously.  Can be called from the main UI thread.
 	 * @param context
 	 * @param listener A listener which will be called after init.
 	 */
@@ -99,44 +100,39 @@ public class Socialize {
 		return instance;
 	}
 	
-	@Deprecated
-	public static final SocializeUI getSocializeUI() {
-		return instance;
-	}
-	
 	static Object getBean(String name) {
 		return instance.getContainer().getBean(name);
 	}
 
 	/**
-	 * Called by containing Activities in their onPause() method.
+	 * Called by containing Activity's in their onPause() method.
 	 * @param context
 	 */
-	public static void onPause(Context context) {
+	public static void onPause(Activity context) {
 		instance.onPause(context);
 	}
 	
 	/**
-	 * Called by containing Activities in their onResume() method.
+	 * Called by containing Activity's in their onResume() method.
 	 * @param context
 	 */
-	public static void onResume(Context context) {
+	public static void onResume(Activity context) {
 		instance.onResume(context);
 	}
 	
 	/**
-	 * Called by containing Activities in their onCreate() method.
+	 * Called by containing Activity's in their onCreate() method.
 	 * @param context
 	 */
-	public static void onCreate(Context context, Bundle savedInstanceState) {
+	public static void onCreate(Activity context, Bundle savedInstanceState) {
 		instance.onCreate(context, savedInstanceState);
 	}
 
 	/**
-	 * Called by containing Activities in their onDestroy() method.
+	 * Called by containing Activity's in their onDestroy() method.
 	 * @param context
 	 */
-	public static void onDestroy(Context context) {
+	public static void onDestroy(Activity context) {
 		instance.onDestroy(context);
 	}	
 }

@@ -48,14 +48,13 @@ public class FacebookActivityService {
 				facebook = facebookUtils.getFacebook(activity);
 				service = getFacebookService();
 				
-				boolean photos = config.getBooleanProperty(SocializeConfig.FACEBOOK_PHOTOS_ENABLED, false);
 				boolean sso = config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true);
 				
 				if(permissions != null && permissions.length > 0) {
-					service.authenticate(sso, photos, permissions);
+					service.authenticate(activity, sso, permissions);
 				}
 				else {
-					service.authenticate(sso, photos);
+					service.authenticate(activity, sso);
 				}
 			}
 			else {
@@ -69,12 +68,12 @@ public class FacebookActivityService {
 	
 	public void onCancel() {
 		if(service != null) {
-			service.cancel();
+			service.cancel(activity);
 		}
 	}
     
     public FacebookService getFacebookService() {
-    	service = new FacebookService(activity, facebook, facebookSessionStore, (AuthProviderListener) listenerHolder.pop("auth"), dialogFactory);
+    	service = new FacebookService(facebook, facebookSessionStore, (AuthProviderListener) listenerHolder.pop("auth"), dialogFactory);
     	return service;
     }
 	

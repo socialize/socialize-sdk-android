@@ -48,7 +48,7 @@ public class ActionBarButton extends LinearLayout {
 		super(context);
 	}
 
-	public void init(int width, float weight) {
+	public void init(int width, float weight, Integer textColor) {
 
 		if (width > 0) {
 			width = displayUtils.getDIP(width);
@@ -62,7 +62,7 @@ public class ActionBarButton extends LinearLayout {
 
 		setLayoutParams(masterParams);
 
-		actionBarItem = actionBarItemFactory.getBean();
+		actionBarItem = actionBarItemFactory.getBean(textColor);
 		actionBarItem.setIcon(icon);
 		actionBarItem.setText(text);
 		actionBarItem.init();

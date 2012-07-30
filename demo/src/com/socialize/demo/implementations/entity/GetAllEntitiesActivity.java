@@ -41,7 +41,7 @@ public class GetAllEntitiesActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(String text) {
 		
-		EntityUtils.getEntities(this, 0, 50, new EntityListListener() {
+		EntityUtils.getEntities(this, 0, PAGE_SIZE, new EntityListListener() {
 			
 			@Override
 			public void onList(ListResult<Entity> entities) {
@@ -65,6 +65,6 @@ public class GetAllEntitiesActivity extends SDKDemoActivity {
 	 */
 	@Override
 	public String getButtonText() {
-		return "List 50 Entities";
+		return "List " + PAGE_SIZE + " Entities";
 	}
 }

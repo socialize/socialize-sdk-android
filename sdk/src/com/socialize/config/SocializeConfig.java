@@ -26,9 +26,7 @@ import java.io.InputStream;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
-
 import android.content.Context;
-
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.ResourceLocator;
 import com.socialize.util.StringUtils;
@@ -55,12 +53,6 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_C2DM_SENDER_ID = "socialize.c2dm.sender.id";
 	
-	@Deprecated
-	public static final String SOCIALIZE_USE_ACTION_WEBVIEW = "socialize.use.action.webview";
-	
-	@Deprecated
-	public static final String SOCIALIZE_BRANDING_ENABLED = "socialize.branding.enabled";
-	
 	public static final String SOCIALIZE_ENTITY_LOADER = "socialize.entity.loader";
 	
 	public static final String SOCIALIZE_LOCATION_ENABLED = "socialize.location.enabled";
@@ -69,15 +61,30 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_ALLOW_ANON = "socialize.allow.anon";
 	
+	public static final String SOCIALIZE_EVENTS_AUTH_ENABLED = "socialize.events.auth.enabled";
+	
+	public static final String SOCIALIZE_EVENTS_SHARE_ENABLED = "socialize.events.share.enabled";
+	
 	public static final String SOCIALIZE_SHOW_COMMENT_LIST_ON_NOTIFY = "socialize.comments.on.notify";
+	
+	public static final String GOOGLE_PLUS_ENABLED = "googleplus.enabled";
 	
 	/**
 	 * true if Single Sign On is enabled.  Default is true.
 	 */
 	public static final String FACEBOOK_SSO_ENABLED = "facebook.sso.enabled";
-	public static final String FACEBOOK_PHOTOS_ENABLED = "facebook.photos.enabled";
-	public static final String FACEBOOK_APP_ID = "facebook.app.id";
 	
+//	public static final String FACEBOOK_OG_SHARE_ACTION = "facebook.og.share.action";
+//	public static final String FACEBOOK_OG_LIKE_ACTION = "facebook.og.like.action";
+//	public static final String FACEBOOK_OG_COMMENT_ACTION = "facebook.og.comment.action";
+//	public static final String FACEBOOK_OG_NAMESPACE = "facebook.og.namespace";
+	public static final String FACEBOOK_OG_USE_INBUILT_LIKE = "facebook.og.like.enabled";
+	
+	@Deprecated
+	public static final String FACEBOOK_PHOTOS_ENABLED = "facebook.photos.enabled";
+	
+	public static final String FACEBOOK_APP_ID = "facebook.app.id";
+
 	@Deprecated
 	public static final String FACEBOOK_USER_ID = "facebook.user.id";
 	
@@ -249,6 +256,20 @@ public class SocializeConfig {
 	 */
 	public String getProperty(String key) {
 		return (properties == null) ? null : properties.getProperty(key);
+	}
+	
+	public String getProperty(String key, String defaultValue) {
+		if(properties == null) {
+			return defaultValue;
+		}
+		
+		String value = properties.getProperty(key);
+		
+		if(StringUtils.isEmpty(value)) {
+			return defaultValue;
+		}
+		
+		return value;
 	}	
 	
 	public void destroy() {
@@ -271,11 +292,6 @@ public class SocializeConfig {
 			return Boolean.parseBoolean(val);
 		}
 		return defaultValue;
-	}
-	
-	@Deprecated
-	public boolean isBrandingEnabled() {
-		return getBooleanProperty(SOCIALIZE_BRANDING_ENABLED, true);
 	}
 	
 	/**
@@ -319,6 +335,14 @@ public class SocializeConfig {
 	
 	public boolean isAllowAnonymousUser() {
 		return getBooleanProperty(SOCIALIZE_ALLOW_ANON, false);
+	}
+	
+	public boolean isOGLike() {
+		return getBooleanProperty(FACEBOOK_OG_USE_INBUILT_LIKE, false);
+	}
+	
+	public boolean isGooglePlusEnabled() {
+		return getBooleanProperty(GOOGLE_PLUS_ENABLED, true);
 	}
 	
 	public boolean isNotificationsEnabled() {

@@ -23,7 +23,7 @@ package com.socialize.api.action.comment;
 
 import android.app.Activity;
 import com.socialize.entity.Entity;
-import com.socialize.listener.subscription.SubscriptionGetListener;
+import com.socialize.listener.subscription.SubscriptionCheckListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.notifications.SubscriptionType;
 
@@ -38,5 +38,5 @@ public interface SubscriptionUtilsProxy {
 	
 	public void unsubscribe (Activity context, Entity e, SubscriptionType type, SubscriptionResultListener listener);
 
-	public void isSubscribed (Activity context, Entity e, SubscriptionType type, SubscriptionGetListener listener);
+	public void isSubscribed (Activity context, Entity e, SubscriptionType type, SubscriptionCheckListener listener);
 }

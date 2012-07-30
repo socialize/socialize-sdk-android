@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import com.socialize.CommentUtils;
 import com.socialize.EntityUtils;
+import com.socialize.EntityUtils.SortOrder;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.EntityStats;
@@ -339,5 +340,30 @@ EntityUtils.getEntity(this, "key", new EntityGetListener() {
 	}
 });
 //end-snippet-9
+}
+
+@SuppressWarnings("unused")
+public void getEntitiesByPopularity() {
+// begin-snippet-10
+// Retrieve the top 10 most popular entities
+	
+// The "this" argument refers to the current Activity
+EntityUtils.getEntities(this, 0, 10, SortOrder.TOTAL_ACTIVITY, new EntityListListener() {
+
+	@Override
+	public void onList(ListResult<Entity> result) {
+		
+		int count = result.getTotalCount();
+		List<Entity> items = result.getItems();
+		
+		// Handle success
+	}
+	
+	@Override
+	public void onError(SocializeException error) {
+		// Handle error
+	}
+});
+//end-snippet-10
 }
 }

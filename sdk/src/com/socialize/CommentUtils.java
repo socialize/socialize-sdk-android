@@ -144,7 +144,7 @@ public class CommentUtils {
 	 * @param listener A listener to handle the result.
 	 */
 	public static void showCommentView(Activity context, Entity entity, OnCommentViewActionListener listener) {
-		Socialize.getSocialize().showCommentView(context, entity, listener);
+		proxy.showCommentView(context, entity, listener);
 	}
 
 	/**
@@ -153,6 +153,6 @@ public class CommentUtils {
 	 * @param entity
 	 */
 	public static void showCommentView(Activity context, Entity entity) {
-		Socialize.getSocialize().showCommentView(context, entity);
+		proxy.showCommentView(context, entity);
 	}
 }

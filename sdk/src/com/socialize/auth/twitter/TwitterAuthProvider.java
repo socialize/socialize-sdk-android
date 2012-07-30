@@ -23,7 +23,10 @@ package com.socialize.auth.twitter;
 
 import android.content.Context;
 import com.socialize.auth.AuthProvider;
+import com.socialize.auth.AuthProviderInfo;
+import com.socialize.auth.AuthProviderInfoBuilder;
 import com.socialize.auth.AuthProviderResponse;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.AuthProviderListener;
 
@@ -35,6 +38,7 @@ public class TwitterAuthProvider implements AuthProvider<TwitterAuthProviderInfo
 	
 	private Context context;
 	private TwitterAuthUtils twitterAuthUtils;
+	private AuthProviderInfoBuilder authProviderInfoBuilder;
 	
 	public void init(Context context) {
 		this.context = context;
@@ -48,6 +52,15 @@ public class TwitterAuthProvider implements AuthProvider<TwitterAuthProviderInfo
 		 twitterAuthUtils.showAuthDialog(context, info, newTwitterAuthListener(listener));
 	}
 	
+	@Override
+	public boolean validate(TwitterAuthProviderInfo info) {
+		if(authProviderInfoBuilder != null) {
+			AuthProviderInfo expected = authProviderInfoBuilder.getFactory(AuthProviderType.TWITTER).getInstance();
+			return info.matches(expected);
+		}
+		return true;
+	}
+
 	protected TwitterAuthListener newTwitterAuthListener(final AuthProviderListener listener) {
 		return new TwitterAuthListener() {
 			 
@@ -88,5 +101,9 @@ public class TwitterAuthProvider implements AuthProvider<TwitterAuthProviderInfo
 
 	public void setTwitterAuthUtils(TwitterAuthUtils twitterUtils) {
 		this.twitterAuthUtils = twitterUtils;
+	}
+	
+	public void setAuthProviderInfoBuilder(AuthProviderInfoBuilder authProviderInfoBuilder) {
+		this.authProviderInfoBuilder = authProviderInfoBuilder;
 	}
 }

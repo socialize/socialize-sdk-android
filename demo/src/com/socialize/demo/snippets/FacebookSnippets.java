@@ -86,7 +86,8 @@ public void linkFBWithToken() {
 String fbToken = "ABCDEF...GHIJKL";
 
 // The "this" argument refers to the current Activity
-FacebookUtils.link(this, fbToken, new SocializeAuthListener() {
+// Specify "true" to verify that the permissions on this token are correct
+FacebookUtils.link(this, fbToken, true, new SocializeAuthListener() {
 
 	@Override
 	public void onCancel() {
@@ -353,9 +354,10 @@ ShareUtils.registerShare(context, entity, options, new ShareAddListener() {
 		// TODO: Get the URI of your image from the local device.
 		// TODO: ***** DON'T FORGET TO USE YOUR OWN IMAGE HERE (See the sample app for a working example) ****
 		Uri photoUri = null;
-
-		// Format the picture for Facebook
+		
 		try {
+			
+			// Format the picture for Facebook
 			byte[] imageData = FacebookUtils.getImageForPost(context, photoUri);
 			
 			// Add the photo to the post
@@ -389,8 +391,148 @@ ShareUtils.registerShare(context, entity, options, new ShareAddListener() {
 			// Handle error
 		}
 	}
-}, SocialNetwork.FACEBOOK);	
+}, SocialNetwork.FACEBOOK); // This is a Facebook-only share	
 //end-snippet-9
+}
+
+public void entityType() {
+// begin-snippet-10
+Entity entity = Entity.newInstance("http://myentity.com", "My Name");
+
+// MUST be a valid OG type
+entity.setType("video.movie");
+//end-snippet-10
+}
+
+public void postOG() {
+// begin-snippet-11
+Entity entity = Entity.newInstance("http://myentity.com", "My Entity Name");
+
+// MUST be a valid OG type
+entity.setType("video.movie");
+	
+// The "this" argument refers to the current Activity
+FacebookUtils.postEntity(this, entity, "Text to be posted", new SocialNetworkShareListener() {
+	
+	@Override
+	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+		// Change the post data to force an Open Graph call
+		postData.setPath("me/video.watches");
+		
+		// me/video.watches requires a movie object type
+		postData.getPostValues().put("movie", postData.getPropagationInfo().getEntityUrl());
+	}	
+	
+	@Override
+	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+		// Handle error
+	}
+	
+	@Override
+	public void onCancel() {
+		// The user cancelled the operation.
+	}
+	
+	@Override
+	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+		// Called after the post returned from Facebook.
+		// responseObject contains the raw JSON response from Facebook.
+	}
+
+});
+// end-snippet-11
+}
+
+
+public void postOGCustom() {
+// begin-snippet-12
+Entity entity = Entity.newInstance("http://myentity.com", "My Entity Name");
+
+// Set the type of the entity to include the namespace.
+entity.setType("yournamespace:yourtype");
+	
+ShareOptions options = ShareUtils.getUserShareOptions(this);
+options.setText("Text to be posted");
+
+// The "this" argument refers to the current Activity
+ShareUtils.shareViaSocialNetworks(this, entity, options, new SocialNetworkShareListener() {
+	
+	@Override
+	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+		
+		if(socialNetwork.equals(SocialNetwork.FACEBOOK)) {
+			// Change the post data to force an Open Graph call
+			postData.setPath("me/yournamespace:youraction");
+			
+			// Set the type to be the entity URL
+			postData.getPostValues().put("yourtype", postData.getPropagationInfo().getEntityUrl());
+		}
+	
+	}	
+	
+	@Override
+	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+		// Handle error
+	}
+	
+	@Override
+	public void onCancel() {
+		// The user cancelled the operation.
+	}
+	
+	@Override
+	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+		// Called after the post returned from Facebook.
+		// responseObject contains the raw JSON response from Facebook.
+	}
+
+}, SocialNetwork.FACEBOOK);
+// end-snippet-12
+}
+
+public void postOGShare() {
+// begin-snippet-13
+Entity entity = Entity.newInstance("http://myentity.com", "My Entity Name");
+
+// MUST be a valid OG type
+entity.setType("video.movie");
+
+ShareOptions options = ShareUtils.getUserShareOptions(this);
+options.setText("Text to be posted");
+
+// The "this" argument refers to the current Activity
+ShareUtils.shareViaSocialNetworks(this, entity, options, new SocialNetworkShareListener() {
+	
+	@Override
+	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+		
+		if(socialNetwork.equals(SocialNetwork.FACEBOOK)) {
+			// Change the post data to force an Open Graph call
+			postData.setPath("me/video.watches");
+			
+			// me/video.watches requires a movie object type
+			postData.getPostValues().put("movie", postData.getPropagationInfo().getEntityUrl());
+		}
+	}	
+	
+	@Override
+	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+		// Handle error
+	}
+	
+	@Override
+	public void onCancel() {
+		// The user cancelled the operation.
+	}
+	
+	@Override
+	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+		// Called after the post returned from Facebook.
+		// responseObject contains the raw JSON response from Facebook.
+	}
+
+}, SocialNetwork.FACEBOOK);
+// end-snippet-13
 }
 
 }

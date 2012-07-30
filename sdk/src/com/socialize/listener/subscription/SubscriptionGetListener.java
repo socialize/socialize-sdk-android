@@ -21,7 +21,6 @@
  */
 package com.socialize.listener.subscription;
 
-import com.socialize.entity.ListResult;
 import com.socialize.entity.Subscription;
 
 /**
@@ -29,12 +28,13 @@ import com.socialize.entity.Subscription;
  *
  */
 public abstract class SubscriptionGetListener extends SubscriptionListener {
-
-	/* (non-Javadoc)
-	 * @see com.socialize.listener.AbstractSocializeListener#onList(com.socialize.entity.ListResult)
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.listener.AbstractSocializeListener#onGet(com.socialize.entity.SocializeObject)
 	 */
 	@Override
-	public final void onList(ListResult<Subscription> entities) {}
+	public final void onGet(Subscription result) {}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.listener.AbstractSocializeListener#onUpdate(com.socialize.entity.SocializeObject)

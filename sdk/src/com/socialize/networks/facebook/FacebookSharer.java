@@ -48,7 +48,9 @@ public class FacebookSharer extends AbstractSocialNetworkSharer {
 				facebookWallPoster.postComment(context, entity, comment, urlSet, listener);
 				break;
 				
-			case SHARE:
+			case SHARE:		
+//				String action = config.getProperty(SocializeConfig.FACEBOOK_OG_SHARE_ACTION, null);
+//				facebookWallPoster.postOG(context, entity, comment, action, urlSet, listener);
 				facebookWallPoster.post(context, entity, comment, urlSet, listener);
 				break;
 				

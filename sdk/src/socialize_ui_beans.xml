@@ -394,6 +394,8 @@
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
 		<property name="logger" ref="logger"/>
+		<property name="eventSystem" ref="eventSystem"/>
+		<property name="config" ref="config"/>
 	</bean>
 	
 	<bean 
@@ -409,6 +411,7 @@
 		<property name="twitterShareCellFactory" ref="twitterShareCellFactory"/>
 		<property name="emailCellFactory" ref="emailCellFactory"/>
 		<property name="smsCellFactory" ref="smsCellFactory"/>
+		<property name="googlePlusCellFactory" ref="googlePlusCellFactory"/>
 		<property name="rememberCellFactory" ref="rememberCellFactory"/>
 		<property name="continueButton" ref="continueButton"/>
 		<property name="cancelButton" ref="cancelButton"/>
@@ -425,6 +428,8 @@
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
 		<property name="logger" ref="logger"/>
+		<property name="eventSystem" ref="eventSystem"/>
+		<property name="config" ref="config"/>
 	</bean>	
 	
 	<bean 
@@ -454,6 +459,20 @@
 	</bean>			
 	
 	<factory id="smsCellFactory" makes="smsCell"/>
+	
+	<bean 
+		id="googlePlusCell" 
+		class="com.socialize.ui.share.GooglePlusCell" 
+		singleton="false"
+		extends="clickableSectionCell">
+		<constructor-arg type="activity"/>	
+		<property name="backgroundColor" value="#3d464c"/>
+		<property name="bgAlpha" value="255" type="integer"/>
+		<property name="displayText" value="Google+ Circles"/>
+		<property name="toggledDrawableName" value="arrow.png"/>
+	</bean>			
+	
+	<factory id="googlePlusCellFactory" makes="googlePlusCell"/>	
 	
 	<bean 
 		id="anonCell" 

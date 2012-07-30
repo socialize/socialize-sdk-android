@@ -55,6 +55,13 @@ public interface AuthProviderInfo extends Serializable {
 	 */
 	public boolean matches(AuthProviderInfo info);
 	
+	/**
+	 * Merges the info passed with the saved session data
+	 * @param info
+	 * @return
+	 */
+	public boolean merge(AuthProviderInfo info);
+	
 	public int hashCode();
 	
 	public boolean equals(Object obj);

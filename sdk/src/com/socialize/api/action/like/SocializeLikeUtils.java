@@ -31,6 +31,7 @@ import com.socialize.LikeUtils;
 import com.socialize.ShareUtils;
 import com.socialize.UserUtils;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ShareType;
 import com.socialize.api.action.SocializeActionUtilsBase;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
@@ -167,6 +168,9 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 
 				@Override
 				public void onFlowInterrupted(DialogFlowController controller) {}
+				
+				@Override
+				public void onSimpleShare(ShareType type) {}
 
 				@Override
 				public boolean onContinue(final Dialog dialog, boolean remember, final SocialNetwork... networks) {

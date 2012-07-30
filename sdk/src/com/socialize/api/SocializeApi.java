@@ -154,7 +154,38 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 					if(propagation != null) {
 						propagation.addExtraParam("f", abbrev);
 					}
-				}	
+				}
+				
+				String ogAction = null;
+				
+				switch(action.getActionType()) {
+					case LIKE:
+						if(config.isOGLike()) {
+							ogAction = "like";
+						}
+//						else {
+//							ogAction = config.getProperty(SocializeConfig.FACEBOOK_OG_LIKE_ACTION, null);
+//						}
+						break;
+						
+//					case COMMENT:
+//							ogAction = config.getProperty(SocializeConfig.FACEBOOK_OG_COMMENT_ACTION, null);
+//						break;
+//						
+//					case SHARE:
+//							ogAction = config.getProperty(SocializeConfig.FACEBOOK_OG_SHARE_ACTION, null);
+//						break;					
+				}
+				
+				if(ogAction != null) {
+					if(propagation != null) {
+						propagation.addExtraParam("og_action", ogAction);
+					}
+					
+					if(localPropagation != null) {
+						localPropagation.addExtraParam("og_action", ogAction);
+					}
+				}				
 			}
 			
 			action.setPropagation(propagation);
@@ -281,7 +312,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	public void getByEntityAsync(SocializeSession session, String endpoint, String key, SocializeActionListener listener) {
 		AsyncGetter getter = new AsyncGetter(session, listener);
 		SocializeGetRequest request = new SocializeGetRequest();
-		request.setRequestType(RequestType.LIST_AS_GET);
+		request.setRequestType(RequestType.LIST);
 		request.setEndpoint(endpoint);
 		request.setKey(key);
 		getter.execute(request);
@@ -472,7 +503,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			return AuthProviderType.SOCIALIZE;
 		}
 		
-		AuthProviderType authProviderType = data.getAuthProviderType();
+		AuthProviderType authProviderType = null;
 		
 		AuthProviderInfo authProviderInfo = data.getAuthProviderInfo();
 		
@@ -483,26 +514,14 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		return authProviderType;
 	}
 	
-	protected void validate(AuthProviderData data) throws SocializeException{
+	protected void validate(AuthProviderData data) throws SocializeException {
 		AuthProviderInfo authProviderInfo = data.getAuthProviderInfo();
 		
 		if(authProviderInfo != null) {
 			authProviderInfo.validate();
 		}
 		else {
-			// Legacy
-			validateLegacy(data);
-		}
-	}
-	
-	protected void validateLegacy(AuthProviderData data) throws SocializeException {
-		AuthProviderType authProviderType = getAuthProviderType(data);
-		
-		String appId3rdParty = data.getAppId3rdParty();
-		if(authProviderType != null && 
-				authProviderType.equals(AuthProviderType.FACEBOOK) && 
-				StringUtils.isEmpty(appId3rdParty)) {
-			throw new SocializeException("No app ID found for auth type FACEBOOK");
+			throw new SocializeException("Empty auth provider info");
 		}
 	}
 	
@@ -552,6 +571,8 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			
 			if(authProvider != null) {
 				
+//				final SocializeSession fSession = session;
+				
 				AuthProviderListener authProviderListener = new AuthProviderListener() {
 					
 					@Override
@@ -563,6 +584,9 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 					
 					@Override
 					public void onAuthSuccess(AuthProviderResponse response) {
+						
+						// Update the local session, it will be saved after regular auth
+//						provider.updateSession(fSession, authProviderData);
 						
 						authProviderData.setUserId3rdParty(response.getUserId());
 						authProviderData.setToken3rdParty(response.getToken());

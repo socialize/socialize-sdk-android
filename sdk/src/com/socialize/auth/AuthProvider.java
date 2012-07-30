@@ -44,4 +44,11 @@ public interface AuthProvider<I extends AuthProviderInfo> {
 	 * @param info
 	 */
 	public void clearCache(Context context, I info);
+	
+	/**
+	 * Returns true if the given info is correct.
+	 * @param info
+	 * @return
+	 */
+	public boolean validate(I info);
 }

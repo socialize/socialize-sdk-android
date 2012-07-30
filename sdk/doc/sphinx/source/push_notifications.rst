@@ -45,7 +45,7 @@ Step 2: Add Configuration to AndroidManifest.xml
 
 The default configuration for Socialize needs to be augmented slightly for push notifications. 
 
-.. note:: Make sure you replace every occurrance of **your_package_name** with the package name of your app!
+.. note:: Make sure you replace every occurrence of **your_package_name** with the package name of your app!
 
 Add the following additional configurations to the **<application.../>** element of your **AndroidManifest.xml**
 
@@ -84,7 +84,7 @@ are indeed being sent.
 
 The simplest way to verify that SmartAlerts are working for your app is to send a test message from the Socialize website.  
 
-This can be found in the dashboard for your app:
+This can be found in the dash board for your app:
 
 .. image:: images/smart_alert.png 
 

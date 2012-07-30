@@ -28,6 +28,7 @@ import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.networks.SocialNetworkSignOutTask;
+import com.socialize.networks.SocializeDeAuthListener;
 import com.socialize.networks.facebook.FacebookAccess;
 import com.socialize.networks.facebook.FacebookUtilsImpl;
 import com.socialize.networks.twitter.TwitterAccess;
@@ -78,8 +79,9 @@ public class SocialNetworkSignOutClickListenerTest extends SocializeActivityTest
 		final CountDownLatch latch = new CountDownLatch(1);
 		
 		FacebookUtilsImpl mockFacebookUtils = new FacebookUtilsImpl() {
+			
 			@Override
-			public void unlink(Context context) {
+			public void unlink(Context context, SocializeDeAuthListener listener) {
 				latch.countDown();
 			}
 		};

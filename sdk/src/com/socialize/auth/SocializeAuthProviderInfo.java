@@ -44,6 +44,11 @@ public class SocializeAuthProviderInfo implements AuthProviderInfo {
 	 */
 	@Override
 	public void validate() throws SocializeException {}
+	
+	@Override
+	public boolean merge(AuthProviderInfo info) {
+		return true;
+	}
 
 	@Override
 	public boolean isValid() {

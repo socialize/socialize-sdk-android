@@ -36,6 +36,7 @@ public abstract class AbstractEntityFactory<T extends Entity> extends SocializeO
 	private static final String SHARES = "shares";
 	private static final String COMMENTS = "comments";
 	private static final String VIEWS = "views";
+	private static final String TOTAL = "total_activity";
 	
 	private static final String USER_ACTION_SUMMARY = "user_action_summary";
 	
@@ -48,6 +49,7 @@ public abstract class AbstractEntityFactory<T extends Entity> extends SocializeO
 		entry.setName(getString(object, "name"));
 		entry.setKey(getString(object, "key"));
 		entry.setMetaData(getString(object, "meta"));
+		entry.setType(getString(object, "type"));
 		
 		EntityStatsImpl stats = newEntityStatsImpl();
 		
@@ -55,6 +57,7 @@ public abstract class AbstractEntityFactory<T extends Entity> extends SocializeO
 		stats.setShares(getInt(object, SHARES));
 		stats.setComments(getInt(object, COMMENTS));
 		stats.setViews(getInt(object, VIEWS));
+		stats.setTotalActivityCount(getInt(object, TOTAL));
 		
 		entry.setEntityStats(stats);
 		
@@ -78,6 +81,7 @@ public abstract class AbstractEntityFactory<T extends Entity> extends SocializeO
 		String name = entry.getName();
 		String key = entry.getKey();
 		String meta = entry.getMetaData();
+		String type = entry.getType();
 		
 		if(!StringUtils.isEmpty(name)) {
 			object.put("name", name);
@@ -86,6 +90,10 @@ public abstract class AbstractEntityFactory<T extends Entity> extends SocializeO
 		if(!StringUtils.isEmpty(key)) {
 			object.put("key", key);
 		}
+		
+		if(!StringUtils.isEmpty(type)) {
+			object.put("type", type);
+		}			
 		
 		if(!StringUtils.isEmpty(meta)) {
 			object.put("meta", meta);

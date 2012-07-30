@@ -37,6 +37,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkPostListener;
+import com.socialize.networks.SocializeDeAuthListener;
 
 
 /**
@@ -76,10 +77,12 @@ public class FacebookUtils {
 	 * Links an existing Facebook access token with the current user.  No authentication dialog will be shown.
 	 * @param context The current context.
 	 * @param token The Facebook access token.
+	 * @param verifyPermissions If true this method will also verify that the permissions assigned to the given token match the default permissions required by Socialize.
+	 * If not an authentication with FB will be attempted.  If this parameter is false it is ASSUMED that permissions are valid.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void link (Activity context, String token, SocializeAuthListener listener){
-		proxy.link(context, token, listener);
+	public static void link (Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener){
+		proxy.link(context, token, verifyPermissions, listener);
 	}
 	
 	/**
@@ -87,7 +90,16 @@ public class FacebookUtils {
 	 * @param context The current context.
 	 */
 	public static void unlink (Context context){
-		proxy.unlink(context);
+		proxy.unlink(context, null);
+	}
+	
+	/**
+	 * Removes the Facebook credentials from the current user.
+	 * @param context The current context.
+	 * @param listener
+	 */
+	public static void unlink (Context context, SocializeDeAuthListener listener){
+		proxy.unlink(context, listener);
 	}
 	
 	/**
@@ -334,9 +346,19 @@ public class FacebookUtils {
 	/**
 	 * Extends the user's Facebook access token if needed.
 	 * @param context The current context
+	 * @param listener A listener to handle the result after re-authentication with Socialize.
 	 */
-	public static void extendAccessToken(Context context) {
-		proxy.extendAccessToken(context);
+	public static void extendAccessToken(Activity context, SocializeAuthListener listener) {
+		proxy.extendAccessToken(context, listener);
 	}
 	
+	/**
+	 * Retrieves the current permissions for token provided.
+	 * @param parent The current context.
+	 * @param token The token for which we are going to retrieve permissions.
+	 * @param callback A callback to handle the response.
+	 */
+	public static void getCurrentPermissions(Activity context, String token, FacebookPermissionCallback callback) {
+		proxy.getCurrentPermissions(context, token, callback);
+	}
 }

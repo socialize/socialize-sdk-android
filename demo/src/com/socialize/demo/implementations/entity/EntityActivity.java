@@ -35,8 +35,8 @@ import com.socialize.demo.R;
  *
  */
 public class EntityActivity extends ListActivity {
-	final String[] values = new String[] { "Add Entity", "Get Entity By Key", "Get All Entities"};
-	final Class<?>[] activities = new Class<?>[] { AddEntityActivity.class, GetEntityByKeyActivity.class, GetAllEntitiesActivity.class};
+	final String[] values = new String[] { "Add Entity", "Get Entity By Key", "Get Popular Entities", "Get All Entities"};
+	final Class<?>[] activities = new Class<?>[] { AddEntityActivity.class, GetEntityByKeyActivity.class, GetPopularEntitiesActivity.class, GetAllEntitiesActivity.class};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

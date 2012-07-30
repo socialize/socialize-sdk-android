@@ -22,17 +22,43 @@
 package com.socialize.networks;
 
 import java.util.Map;
+import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 
 
 /**
+ * Represents the data to be used when posting to external social networks.
  * @author Jason Polites
- *
  */
 public interface PostData {
 
+	/**
+	 * Returns the propagation information supplied by the Socialize API, in which is contained the SmartDownload URLs to be used in the post.
+	 * @return The propagation information supplied by the Socialize API, in which is contained the SmartDownload URLs to be used in the post.
+	 */
 	public PropagationInfo getPropagationInfo();
 	
+	/**
+	 * Returns the map of values to be sent to the Social Network in the POST body.
+	 * @return The map of values to be sent to the Social Network in the POST body.
+	 */
 	public Map<String, Object> getPostValues();
 	
+	/**
+	 * Returns the entity being posted.  May be null if the post does not correspond to an entity.
+	 * @return The entity being posted.  May be null if the post does not correspond to an entity.
+	 */
+	public Entity getEntity();
+	
+	/**
+	 * Sets (overrides) the path to which this data will be posted.
+	 * @param path
+	 */
+	public void setPath(String path);
+	
+	/**
+	 * Returns the path to which this data will be posted.
+	 * @return
+	 */
+	public String getPath();
 }

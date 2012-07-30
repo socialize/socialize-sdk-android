@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import com.socialize.Socialize;
 import com.socialize.demo.implementations.action.ActionActivity;
 import com.socialize.demo.implementations.actionbar.ActionBarActivity;
 import com.socialize.demo.implementations.auth.AuthButtonsActivity;
@@ -65,6 +66,7 @@ public class DemoList extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Socialize.onCreate(this, savedInstanceState);
 		setContentView(R.layout.demo_list);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
 		setListAdapter(adapter);
@@ -86,5 +88,23 @@ public class DemoList extends ListActivity {
 	
 	protected void showConfigDialog() {
 		ConfigDialog.showConfigDialog(this);
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Socialize.onPause(this);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Socialize.onResume(this);
+	}
+
+	@Override
+	protected void onDestroy() {
+		Socialize.onDestroy(this);
+		super.onDestroy();
 	}
 }

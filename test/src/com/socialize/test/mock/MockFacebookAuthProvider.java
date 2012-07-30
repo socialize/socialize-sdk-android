@@ -33,4 +33,9 @@ public class MockFacebookAuthProvider implements AuthProvider<FacebookAuthProvid
 	public void setConfig(SocializeConfig config) {
 		this.config = config;
 	}
+
+	@Override
+	public boolean validate(FacebookAuthProviderInfo info) {
+		return true;
+	}
 }

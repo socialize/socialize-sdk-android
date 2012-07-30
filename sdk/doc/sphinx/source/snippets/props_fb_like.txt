@@ -1,0 +1,2 @@
+# Enable/Disable Open Graph calls for "like"
+facebook.og.like.enabled=true

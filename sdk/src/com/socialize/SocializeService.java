@@ -21,9 +21,11 @@
  */
 package com.socialize;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
@@ -31,17 +33,23 @@ import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.UserProviderCredentials;
+import com.socialize.entity.Entity;
+import com.socialize.entity.SocializeAction;
+import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeEntityLoader;
+import com.socialize.ui.actionbar.ActionBarListener;
+import com.socialize.ui.actionbar.ActionBarOptions;
+import com.socialize.ui.comment.OnCommentViewActionListener;
 
 /**
  * The main Socialize Service.  This is the simplest entry point into the Socialize API.
  * @author Jason Polites
  */
-public interface SocializeService extends SocializeUI, SocializeSessionConsumer {
+public interface SocializeService extends SocializeSessionConsumer {
 
 	/**
 	 * Initializes a SocializeService instance with default settings.  Should be called during the onCreate() method of your Activity.
@@ -82,7 +90,8 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	public void init(Context context, final IOCContainer container);
 
 	/**
-	 * Destroys the SocializeService instance.  Should be called during the onDestroy() method of your Activity.
+	 * Destroys the SocializeService instance.
+	 * Should NOT be called in general use.
 	 */
 	public void destroy();
 	
@@ -244,20 +253,43 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	/**
 	 * Should be called in the onPause method of the containing activity
 	 */
-	public void onPause(Context context);
+	public void onPause(Activity context);
 	
 	/**
 	 * Should be called in the onResume method of the containing activity
 	 */
-	public void onResume(Context context);
+	public void onResume(Activity context);
 	
 	/**
 	 * Should be called in the onCreate method of the containing activity
 	 */
-	public void onCreate(Context context, Bundle savedInstanceState);
+	public void onCreate(Activity context, Bundle savedInstanceState);
 
 	/**
 	 * Should be called in the onDestroy method of the containing activity
 	 */
-	public void onDestroy(Context context);
+	public void onDestroy(Activity context);
+	
+	@Deprecated
+	public View showActionBar(Activity parent, View original, Entity entity);
+	@Deprecated
+	public View showActionBar(Activity parent, View original, Entity entity, ActionBarOptions options);
+	@Deprecated
+	public View showActionBar(Activity parent, View original, Entity entity, ActionBarOptions options, ActionBarListener listener);
+	@Deprecated
+	public View showActionBar(Activity parent, int resId, Entity entity, ActionBarOptions options, ActionBarListener listener);
+	@Deprecated
+	public View showActionBar(Activity parent, int resId, Entity entity, ActionBarOptions options);
+	@Deprecated
+	public View showActionBar(Activity parent, int resId, Entity entity);
+	@Deprecated
+	public void showUserProfileViewForResult(Activity context, Long userId, int requestCode);
+	@Deprecated
+	public void showUserProfileView(Activity context, Long userId);
+	@Deprecated
+	public void showCommentView(Activity context, Entity entity, OnCommentViewActionListener listener);
+	@Deprecated
+	public void showCommentView(Activity context, Entity entity);
+	@Deprecated
+	public void showActionDetailView(Activity context, User user, SocializeAction action);
 }

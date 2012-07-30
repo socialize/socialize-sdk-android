@@ -21,9 +21,14 @@
  */
 package com.socialize.api.action.comment;
 
+import java.util.List;
 import android.app.Activity;
 import com.socialize.api.action.SocializeActionUtilsBase;
 import com.socialize.entity.Entity;
+import com.socialize.entity.ListResult;
+import com.socialize.entity.Subscription;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.subscription.SubscriptionCheckListener;
 import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.notifications.NotificationType;
@@ -49,8 +54,48 @@ public class SocializeSubscriptionUtils extends SocializeActionUtilsBase impleme
 	}
 	
 	@Override
-	public void isSubscribed(Activity context, Entity e, SubscriptionType type, SubscriptionGetListener listener) {
-		subscriptionSystem.getSubscription(getSocialize().getSession(), e, NotificationType.valueOf(type), listener);
+	public void isSubscribed(Activity context, Entity e, final SubscriptionType type, final SubscriptionCheckListener listener) {
+		final NotificationType nType = NotificationType.valueOf(type);
+		subscriptionSystem.getSubscription(getSocialize().getSession(), e, NotificationType.valueOf(type), new SubscriptionGetListener() {
+			
+			@Override
+			public void onList(ListResult<Subscription> result) {
+				if(listener != null) {
+					List<Subscription> items = result.getItems();
+					
+					if(items == null || items.size() == 0) {
+						listener.onNotSubscribed();
+					}
+					
+					boolean matched = false;
+					
+					for (Subscription subscription : items) {
+						if(subscription.getNotificationType().equals(nType)) {
+							matched = true;
+							if(subscription.isSubscribed()) {
+								listener.onSubscribed(subscription);
+							}
+							else {
+								listener.onNotSubscribed();
+							}
+							break;
+						}
+					}
+					
+					if(!matched) {
+						listener.onNotSubscribed();
+					}
+				}
+			
+			}
+			
+			@Override
+			public void onError(SocializeException error) {
+				if(listener != null) {
+					listener.onError(error);
+				}
+			}
+		});
 	}
 
 	public void setSubscriptionSystem(SubscriptionSystem subscriptionSystem) {

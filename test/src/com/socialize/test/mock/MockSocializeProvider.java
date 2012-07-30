@@ -69,7 +69,7 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 	public boolean validateSession(SocializeSession loaded, AuthProviderData data) {
 		return true;
 	}
-
+	
 	@Override
 	public void clearSession() {}
 	

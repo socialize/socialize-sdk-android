@@ -39,6 +39,7 @@ public class SampleActivity2 extends BaseActivity {
 		
 		final CheckBox chkSSO = (CheckBox) findViewById(R.id.chkFacebook);
 		final CheckBox chkNotifications = (CheckBox) findViewById(R.id.chkNotifications);
+		final CheckBox chkLocation = (CheckBox) findViewById(R.id.chkLocation);
 		
 		final SocializeConfig config = ConfigUtils.getConfig(this);
 		
@@ -73,6 +74,7 @@ public class SampleActivity2 extends BaseActivity {
 				entity.setName(txtEntityName.getText().toString());				
 				Socialize.getSocialize().setEntityLoader(loader);
 				config.setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
+				config.setProperty(SocializeConfig.SOCIALIZE_LOCATION_ENABLED, String.valueOf(chkLocation.isChecked()));
 				config.setFacebookAppId(txtFB.getText().toString());
 				config.setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				config.setTwitterKeySecret(txtTW_Key.getText().toString(), txtTW_Sec.getText().toString());
@@ -115,6 +117,7 @@ public class SampleActivity2 extends BaseActivity {
 				intent.putExtra(Socialize.ENTITY_OBJECT, entity);
 				Socialize.getSocialize().setEntityLoader(loader);
 				config.setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
+				config.setProperty(SocializeConfig.SOCIALIZE_LOCATION_ENABLED, String.valueOf(chkLocation.isChecked()));
 				config.setFacebookAppId(txtFB.getText().toString());
 				config.setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				config.setTwitterKeySecret(txtTW_Key.getText().toString(), txtTW_Sec.getText().toString());
@@ -137,6 +140,7 @@ public class SampleActivity2 extends BaseActivity {
 				
 				Socialize.getSocialize().setEntityLoader(loader);
 				config.setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
+				config.setProperty(SocializeConfig.SOCIALIZE_LOCATION_ENABLED, String.valueOf(chkLocation.isChecked()));
 				config.setFacebookAppId(txtFB.getText().toString());
 				config.setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				config.setTwitterKeySecret(txtTW_Key.getText().toString(), txtTW_Sec.getText().toString());

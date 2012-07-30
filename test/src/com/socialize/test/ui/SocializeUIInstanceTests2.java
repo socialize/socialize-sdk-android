@@ -26,6 +26,7 @@ import android.content.Intent;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.Socialize;
+import com.socialize.api.action.user.SocializeUserUtils;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeAction;
@@ -123,7 +124,7 @@ public class SocializeUIInstanceTests2 extends SocializeUIActivityTest {
 			}
 		};
 		
-		PublicSocialize socialize = new PublicSocialize() {
+		SocializeUserUtils socialize = new SocializeUserUtils() {
 
 			@Override
 			public Intent newIntent(Activity context, Class<?> cls) {
@@ -134,7 +135,7 @@ public class SocializeUIInstanceTests2 extends SocializeUIActivityTest {
 		
 		AndroidMock.replay(intent);
 		
-		socialize.showUserProfileView(context, userId);
+		socialize.showUserSettingsView(context, userId);
 		
 		AndroidMock.verify(intent);
 		

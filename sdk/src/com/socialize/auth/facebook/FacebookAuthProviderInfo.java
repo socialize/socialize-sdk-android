@@ -22,6 +22,8 @@
 package com.socialize.auth.facebook;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.error.SocializeException;
@@ -100,6 +102,35 @@ public class FacebookAuthProviderInfo implements AuthProviderInfo {
 		else if (!appId.equals(other.appId))
 			return false;
 		return true;
+	}
+	
+	public void merge(String[] p) {
+		Set<String> allPermissions = new HashSet<String>();
+		
+		if(this.permissions != null) {
+			allPermissions.addAll(Arrays.asList(this.permissions));
+		}
+		
+		allPermissions.addAll(Arrays.asList(p));
+		
+		this.permissions = allPermissions.toArray(new String[allPermissions.size()]);
+		
+		Arrays.sort(this.permissions);
+	}
+
+	@Override
+	public boolean merge(AuthProviderInfo info) {
+		
+		if(info instanceof FacebookAuthProviderInfo) {
+			FacebookAuthProviderInfo that = (FacebookAuthProviderInfo) info;
+			
+			if(that.permissions != null) {
+				merge(that.permissions);
+			}
+			return true;
+		}
+		
+		return false;
 	}
 
 	@Override

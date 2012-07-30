@@ -43,7 +43,7 @@ public interface AppUtils {
 
 	public boolean isReceiverAvailable(Context context, Class<?> cls);
 
-	public boolean isLocationAvaiable(Context context);
+	public boolean isLocationAvailable(Context context);
 
 	public boolean isNotificationsAvailable(Context context);
 
@@ -62,5 +62,7 @@ public interface AppUtils {
 	public String getUserAgentString();
 	
 	public void checkAndroidManifest(Context context);
+	
+	public boolean isAppInBackground(Context context);
 
 }

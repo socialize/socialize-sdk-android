@@ -572,6 +572,47 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		
 		doTestPostFlowNotAuthed(LISTENER_ACTION.CANCEL);
 	}
+	
+	public void testTweetUsesCustomPath() {
+		
+		final String path = "foobar_path";
+		
+		TwitterUtilsImpl twitterUtils = new TwitterUtilsImpl() {
+			@Override
+			protected void post(final Activity context, String resource, HttpEntity entity, final SocialNetworkPostListener listener) {
+				addResult(0, resource);
+			}
+		};
+		
+		SocialNetworkListener listener = new SocialNetworkListener() {
+			
+			@Override
+			public void onNetworkError(Activity context, SocialNetwork network, Exception error) {}
+			
+			@Override
+			public void onCancel() {}
+			
+			@Override
+			public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {}
+			
+			@Override
+			public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+				postData.setPath(path);
+			}
+		};
+		
+		Tweet tweet = new Tweet();
+		tweet.setShareLocation(false);
+		tweet.setText("foobar");
+		
+		twitterUtils.setApiEndpoint("mock");
+		twitterUtils.tweet(getActivity(), tweet, listener);
+		
+		String result = getResult(0);
+		
+		assertEquals("mock"+path, result);
+		
+	}
 
 	protected void doTestPostFlowNotAuthed(final LISTENER_ACTION action) {
 		

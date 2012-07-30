@@ -3,4 +3,4 @@ python sdk-cleanup.py 61328f82-0f36-428a-b1ea-05ea2365e81d 426c76e3-973f-4859-b9
 
 Jason's App
 
-python sdk-cleanup.py 6f86ce56-7d6c-4c7b-bb22-29190fabca60 de11f105-5c0a-4a87-a1ac-de9319837508 http://stage.api.getsocialize.com/v1 524532604 
+python sdk-cleanup.py 6f86ce56-7d6c-4c7b-bb22-29190fabca60 de11f105-5c0a-4a87-a1ac-de9319837508 http://stage.api.getsocialize.com/v1 524532604

@@ -69,7 +69,7 @@ public class FacebookActivityServiceTest extends SocializeActivityTest {
 		FacebookActivity activity = AndroidMock.createMock(FacebookActivity.class);
 		FacebookService facebookService = AndroidMock.createMock(FacebookService.class);
 		
-		facebookService.cancel();
+		facebookService.cancel(activity);
 		
 		AndroidMock.replay(facebookService);
 		
@@ -130,7 +130,7 @@ public class FacebookActivityServiceTest extends SocializeActivityTest {
 		final DialogFactory dialogFactory = AndroidMock.createMock(DialogFactory.class);
 		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
 		
-		final FacebookService service = AndroidMock.createMock(FacebookService.class, context, facebook, facebookSessionStore, listener, dialogFactory);
+		final FacebookService service = AndroidMock.createMock(FacebookService.class, facebook, facebookSessionStore, listener, dialogFactory);
 		
 		FacebookActivityService activityService = new FacebookActivityService(context) {
 			@Override
@@ -153,9 +153,8 @@ public class FacebookActivityServiceTest extends SocializeActivityTest {
 		AndroidMock.expect(facebookUtils.getFacebook(context)).andReturn(facebook);
 		
 		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true)).andReturn(true);
-		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.FACEBOOK_PHOTOS_ENABLED, false)).andReturn(false);
 		
-		service.authenticate(AndroidMock.eq(true), AndroidMock.eq(false), (String[]) AndroidMock.anyObject());
+		service.authenticate(context, true);
 		
 		AndroidMock.replay(config);
 		AndroidMock.replay(context);

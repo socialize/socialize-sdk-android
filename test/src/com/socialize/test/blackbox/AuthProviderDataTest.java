@@ -22,7 +22,6 @@
 package com.socialize.test.blackbox;
 
 import com.socialize.auth.AuthProviderData;
-import com.socialize.auth.AuthProviderType;
 import com.socialize.test.SocializeUnitTest;
 
 /**
@@ -32,24 +31,55 @@ import com.socialize.test.SocializeUnitTest;
 public class AuthProviderDataTest extends SocializeUnitTest {
 
 	// No value in mocking a data bean.. so just assert in/out
-	@SuppressWarnings("deprecation")
 	public void testAuthProviderData() {
 	
 		AuthProviderData data = new AuthProviderData();
 		
-		String appId3rdParty = "foobar_appId3rdParty";
 		String token3rdParty = "foobar_token3rdParty";
 		String userId3rdParty = "foobar_userId3rdParty";
-		AuthProviderType authProviderType = AuthProviderType.FACEBOOK;
 		
-		data.setAppId3rdParty(appId3rdParty);
-		data.setAuthProviderType(authProviderType);
 		data.setToken3rdParty(token3rdParty);
 		data.setUserId3rdParty(userId3rdParty);
 		
-		assertEquals(appId3rdParty, data.getAppId3rdParty());
-		assertEquals(authProviderType, data.getAuthProviderType());
 		assertEquals(token3rdParty, data.getToken3rdParty());
 		assertEquals(userId3rdParty, data.getUserId3rdParty());
+	}
+	
+	public void testEquals() {
+		
+		AuthProviderData data0 = new AuthProviderData();
+		AuthProviderData data1 = new AuthProviderData();
+		AuthProviderData data2 = new AuthProviderData();
+		
+		String token0 = "token0";
+		String token1 = "token1";
+		String token2 = "token0";
+		
+		String secret0 = "secret0";
+		String secret1 = "secret1";
+		String secret2 = "secret0";
+		
+		String user0 = "user0";
+		String user1 = "user1";
+		String user2 = "user0";	
+		
+		
+		data0.setToken3rdParty(token0);
+		data1.setToken3rdParty(token1);
+		data2.setToken3rdParty(token2);
+		
+		data0.setSecret3rdParty(secret0);
+		data1.setSecret3rdParty(secret1);
+		data2.setSecret3rdParty(secret2);
+		
+		data0.setUserId3rdParty(user0);
+		data1.setUserId3rdParty(user1);
+		data2.setUserId3rdParty(user2);
+		
+		assertFalse(data0.equals(data1));
+		assertFalse(data1.equals(data2));
+		
+		assertTrue(data1.equals(data1));
+		assertTrue(data0.equals(data2));
 	}
 }

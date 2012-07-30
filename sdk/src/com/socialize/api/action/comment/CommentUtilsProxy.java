@@ -30,6 +30,7 @@ import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.ui.comment.OnCommentViewActionListener;
 
 
 /**
@@ -54,4 +55,8 @@ public interface CommentUtilsProxy {
 	public void getCommentsByEntity (Activity context, String entityKey, int start, int end, CommentListListener listener);
 	
 	public void getCommentsByApplication (Activity context, int start, int end, CommentListListener listener);
+	
+	public void showCommentView(Activity context, Entity entity, OnCommentViewActionListener listener);
+	
+	public void showCommentView(Activity context, Entity entity);
 }

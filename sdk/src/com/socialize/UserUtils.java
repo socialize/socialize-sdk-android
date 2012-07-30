@@ -25,6 +25,7 @@ import java.lang.reflect.Proxy;
 import android.app.Activity;
 import android.content.Context;
 import com.socialize.api.action.user.UserUtilsProxy;
+import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.user.UserGetListener;
@@ -60,7 +61,7 @@ public class UserUtils {
 	/**
 	 * Returns the current logged in user.  If no user is currently authenticated this will authenticate synchronously.
 	 * @param context The current context.
-	 * @return The current logged in user.
+	 * @return The current logged in user
 	 * @throws SocializeException
 	 */
 	public static User getCurrentUser(Context context)  {
@@ -92,8 +93,18 @@ public class UserUtils {
 	 * @param user
 	 */
 	public static void showUserProfile (Activity context, User user) {
-		Socialize.getSocialize().showActionDetailView(context, user, null);
+		proxy.showUserProfileView(context, user, null);
 	}
+	
+	/**
+	 * Shows the user profile UI for the given user.
+	 * @param context
+	 * @param user
+	 * @param action
+	 */
+	public static void showUserProfileWithAction (Activity context, User user, SocializeAction action) {
+		proxy.showUserProfileView(context, user, action);
+	}	
 	
 	/**
 	 * Shows the settings UI for the current user.
@@ -101,7 +112,16 @@ public class UserUtils {
 	 * @throws SocializeException If the current user could not be found or authenticated.
 	 */
 	public static void showUserSettings (Activity context)  {
-		Socialize.getSocialize().showUserProfileView(context, UserUtils.getCurrentUser(context).getId());
+		proxy.showUserSettingsView(context, UserUtils.getCurrentUser(context).getId());
+	}
+	
+	/**
+	 * Shows the settings UI for the current user.
+	 * @param context
+	 * @param requestCode
+	 */
+	public static void showUserSettingsForResult(Activity context, int requestCode) {
+		proxy.showUserSettingsViewForResult(context, UserUtils.getCurrentUser(context).getId(), requestCode);
 	}
 	
 	/**
@@ -113,6 +133,8 @@ public class UserUtils {
 	public static void saveUserSettings (Context context, UserSettings userSettings, UserSaveListener listener) {
 		proxy.saveUserSettings(context, userSettings, listener);
 	}
+	
+	
 	
 	/**
 	 * Clears the saved session state for the user.  

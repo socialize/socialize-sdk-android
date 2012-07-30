@@ -40,4 +40,9 @@ public class EmptyAuthProvider implements AuthProvider<AuthProviderInfo> {
 
 	@Override
 	public void clearCache(Context context, AuthProviderInfo info) {}
+
+	@Override
+	public boolean validate(AuthProviderInfo info) {
+		return true;
+	}
 }

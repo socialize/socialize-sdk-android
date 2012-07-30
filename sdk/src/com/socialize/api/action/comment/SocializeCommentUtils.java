@@ -23,15 +23,21 @@ package com.socialize.api.action.comment;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import com.socialize.ShareUtils;
+import com.socialize.Socialize;
 import com.socialize.UserUtils;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ShareType;
 import com.socialize.api.action.SocializeActionUtilsBase;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.ListenerHolder;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
@@ -39,6 +45,9 @@ import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.auth.AuthDialogListener;
 import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.auth.IAuthDialogFactory;
+import com.socialize.ui.comment.CommentActivity;
+import com.socialize.ui.comment.CommentView;
+import com.socialize.ui.comment.OnCommentViewActionListener;
 import com.socialize.ui.profile.UserSettings;
 import com.socialize.ui.share.DialogFlowController;
 import com.socialize.ui.share.IShareDialogFactory;
@@ -54,6 +63,28 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 	private CommentSystem commentSystem;
 	private IAuthDialogFactory authDialogFactory;
 	private IShareDialogFactory shareDialogFactory;
+	private ListenerHolder listenerHolder;
+	
+	@Override
+	public void showCommentView(Activity context, Entity entity) {
+		showCommentView(context, entity, null);
+	}
+	
+	@Override
+	public void showCommentView(Activity context, Entity entity, OnCommentViewActionListener listener) {
+		if(listener != null) {
+			listenerHolder.push(CommentView.COMMENT_LISTENER, listener);
+		}
+
+		try {
+			Intent i = newIntent(context, CommentActivity.class);
+			i.putExtra(Socialize.ENTITY_OBJECT, entity);
+			context.startActivity(i);
+		} 
+		catch (ActivityNotFoundException e) {
+			Log.e(Socialize.LOG_KEY, "Could not find CommentActivity.  Make sure you have added this to your AndroidManifest.xml");
+		} 
+	}
 
 	@Override
 	public CommentOptions getUserCommentOptions(Context context) {
@@ -126,13 +157,16 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 	protected void doCommentWithShareDialog(final Activity context, final SocializeSession session, final Entity entity, final String text, final CommentOptions commentOptions, final CommentAddListener listener) {
 		
 		if(isDisplayShareDialog(context, commentOptions)) {
-			shareDialogFactory.show(context, entity, null,  new ShareDialogListener() {
+			shareDialogFactory.show(context, entity, null, new ShareDialogListener() {
 				@Override
 				public void onShow(Dialog dialog, SharePanelView dialogView) {}
 				
 				@Override
 				public void onFlowInterrupted(DialogFlowController controller) {}
 				
+				@Override
+				public void onSimpleShare(ShareType type) {}
+
 				@Override
 				public boolean onContinue(final Dialog dialog, boolean remember, final SocialNetwork...networks) {
 					
@@ -205,7 +239,11 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 				}
 			}
 		}, networks);		
-	}	
+	}
+	
+	protected Intent newIntent(Activity context, Class<?> cls) {
+		return new Intent(context, cls);
+	}
 
 	@Override
 	public void getComment(Activity context, long id, CommentGetListener listener) {
@@ -242,5 +280,9 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 
 	public void setShareDialogFactory(IShareDialogFactory shareDialogFactory) {
 		this.shareDialogFactory = shareDialogFactory;
+	}
+
+	public void setListenerHolder(ListenerHolder listenerHolder) {
+		this.listenerHolder = listenerHolder;
 	}
 }

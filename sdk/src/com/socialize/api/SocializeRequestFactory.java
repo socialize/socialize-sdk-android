@@ -25,7 +25,6 @@ import java.util.Collection;
 import java.util.Map;
 import org.apache.http.client.methods.HttpUriRequest;
 import com.socialize.auth.AuthProviderData;
-import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeException;
@@ -38,14 +37,8 @@ public interface SocializeRequestFactory<T extends SocializeObject> {
 	
 	public HttpUriRequest getAuthRequest(SocializeSession session, String endpoint, String udid, AuthProviderData data) throws SocializeException;
 	
-	@Deprecated
-	public HttpUriRequest getAuthRequest(SocializeSession session, String endpoint, String udid) throws SocializeException;
-	
 	public HttpUriRequest getAuthRequestWith3rdParty(SocializeSession session, String endpoint, String udid, UserProviderCredentials userProviderCredentials) throws SocializeException;
 	
-	@Deprecated
-	public HttpUriRequest getAuthRequestWith3rdParty(SocializeSession session, String endpoint, String udid, AuthProviderType provider, String providerId, String providerToken) throws SocializeException;
-
 	public HttpUriRequest getGetRequest(SocializeSession session, String endpoint,String id) throws SocializeException;
 
 	public HttpUriRequest getListRequest(SocializeSession session, String endpoint, String key, String[] ids, String idKey) throws SocializeException;

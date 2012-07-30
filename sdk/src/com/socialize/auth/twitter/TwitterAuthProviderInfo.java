@@ -70,6 +70,15 @@ public class TwitterAuthProviderInfo implements AuthProviderInfo {
 	public boolean matches(AuthProviderInfo info) {
 		return this.equals(info);
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.auth.AuthProviderInfo#merge(com.socialize.auth.AuthProviderInfo)
+	 */
+	@Override
+	public boolean merge(AuthProviderInfo info) {
+		return true;
+	}
 
 	public String getConsumerKey() {
 		return consumerKey;

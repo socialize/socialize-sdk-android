@@ -21,17 +21,16 @@
  */
 package com.socialize.demo.implementations.facebook;
 
-import java.util.HashMap;
-import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.Activity;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.demo.SDKDemoActivity;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.facebook.FacebookUtils;
 
 
@@ -47,6 +46,7 @@ public class OpenGraphActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(final String text) {
 		
+		// Link if we need to
 		FacebookUtils.link(this, new SocializeAuthListener() {
 			
 			@Override
@@ -62,12 +62,19 @@ public class OpenGraphActivity extends SDKDemoActivity {
 			@Override
 			public void onAuthSuccess(SocializeSession session) {
 				
-				Map<String, Object> postData = new HashMap<String, Object>();
-				postData.put("dish", "http://samples.ogp.me/228268990626132"); // <-- Entity URL, expects OG tag of socializeandroidtest:dish
+				// This could be a custom Open Graph path in the form namespace:action
+				final String graphPath = "me/og.likes";
 				
-				String graphPath = "me/socializeandroidtest:eat";
-				
-				FacebookUtils.post(OpenGraphActivity.this, graphPath, postData, new SocialNetworkPostListener() {
+				FacebookUtils.postEntity(OpenGraphActivity.this, entity, text, new SocialNetworkShareListener() {
+					@Override
+					public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+						
+						// Add/Change the contents of the post to fit with open graph
+						postData.setPath(graphPath);
+						
+						// Facebook like requires an "object" parameter
+						postData.getPostValues().put("object", postData.getPropagationInfo().getEntityUrl());
+					}
 					
 					@Override
 					public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
@@ -89,13 +96,14 @@ public class OpenGraphActivity extends SDKDemoActivity {
 						}
 					}
 				});
+				
 			}
 			
 			@Override
 			public void onAuthFail(SocializeException error) {
 				handleError(OpenGraphActivity.this, error);
 			}
-		}, "publish_actions");
+		});
 	}
 
 	/* (non-Javadoc)
@@ -103,7 +111,7 @@ public class OpenGraphActivity extends SDKDemoActivity {
 	 */
 	@Override
 	public String getButtonText() {
-		return "Eat a food";
+		return "Facebook Like";
 	}
 
 	/* (non-Javadoc)
@@ -111,7 +119,7 @@ public class OpenGraphActivity extends SDKDemoActivity {
 	 */
 	@Override
 	public boolean isTextEntryRequired() {
-		return true;
+		return false;
 	}
 
 }

@@ -199,7 +199,7 @@ public class CommentEntryView extends BaseView {
 		addView(commentLayout);
 		addView(buttonLayout);
 		
-		initShareToolbar();
+		initLocationToolbar();
 		
 		if(notificationsAvailable && displayUtils.getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
 
@@ -260,11 +260,9 @@ public class CommentEntryView extends BaseView {
 		}	
 	}
 	
-	protected void initShareToolbar() {
+	protected void initLocationToolbar() {
 		
-		final boolean locationSupported = appUtils.isLocationAvaiable(getContext());
-		
-		if(locationSupported) {
+		if(appUtils.isLocationAvailable(getContext())) {
 			
 			UserSettings settings = Socialize.getSocialize().getSession().getUserSettings();
 			
@@ -294,11 +292,9 @@ public class CommentEntryView extends BaseView {
 			toolbarLayout.addView(toolbarLayoutLeft);
 			toolbarLayout.addView(toolbarLayoutRight);		
 			
-			if(locationSupported) {
-				locationCheckBox = locationEnabledOptionFactory.getBean();
-				locationCheckBox.setChecked(settings.isLocationEnabled());
-				toolbarLayoutLeft.addView(locationCheckBox);
-			}		
+			locationCheckBox = locationEnabledOptionFactory.getBean();
+			locationCheckBox.setChecked(settings.isLocationEnabled());
+			toolbarLayoutLeft.addView(locationCheckBox);
 
 			if(notifyCheckBox != null && displayUtils.getOrientation() != Configuration.ORIENTATION_PORTRAIT) {
 				toolbarLayoutRight.addView(notifyCheckBox);

@@ -22,7 +22,6 @@
 package com.socialize.api;
 
 import java.io.Serializable;
-import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
@@ -58,32 +57,6 @@ public interface SocializeSession extends Serializable, OAuthAuthorizer {
 	
 	public UserProviderCredentials getUserProviderCredentials(AuthProviderType type);
 	
-	/**
-	 * @deprecated use getUserProviderCredentials
-	 * @return
-	 */
-	@Deprecated
-	public String get3rdPartyUserId();
-	
-	/**
-	 * @deprecated use getUserProviderCredentials
-	 * @return
-	 */
-	@Deprecated
-	public String get3rdPartyToken();
-	
-	/**
-	 * @deprecated use getUserProviderCredentials
-	 * @return
-	 */
-	@Deprecated
-	public String get3rdPartyAppId();
-
-	@Deprecated
-	public AuthProviderType getAuthProviderType();
-	
-	@Deprecated
-	public AuthProvider<?> getAuthProvider();
 	
 	public void clear(AuthProviderType type);
 	

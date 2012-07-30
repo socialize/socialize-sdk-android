@@ -42,7 +42,7 @@ public class GetLikesByUserActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(String text) {
 		
-		LikeUtils.getLikesByUser(this, UserUtils.getCurrentUser(this), 0, 50, new LikeListListener() {
+		LikeUtils.getLikesByUser(this, UserUtils.getCurrentUser(this), 0, PAGE_SIZE, new LikeListListener() {
 			
 			@Override
 			public void onList(List<Like> items, int totalSize) {
@@ -66,6 +66,6 @@ public class GetLikesByUserActivity extends SDKDemoActivity {
 	 */
 	@Override
 	public String getButtonText() {
-		return "List 50 Likes for Current User";
+		return "List " + PAGE_SIZE + " Likes for Current User";
 	}
 }

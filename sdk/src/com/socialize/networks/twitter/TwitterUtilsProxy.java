@@ -65,6 +65,8 @@ public interface TwitterUtilsProxy {
 	
 	public void tweetEntity(Activity context, Entity entity, String text, SocialNetworkShareListener listener);
 	
+	public void tweet(Activity context, Entity entity, Tweet tweet, SocialNetworkListener listener);
+	
 	public void tweet(Activity context, Tweet tweet, SocialNetworkListener listener);
 	
 	public void post(Activity context, String resource, Map<String, Object> postData, SocialNetworkPostListener listener);

@@ -41,7 +41,13 @@ To create an entity, simply call the **saveEntity** method:
 	
 Retrieving Entity Data
 -----------------------
-.. include:: entity_retrieve.inc		
+.. include:: entity_retrieve.inc	
+
+.. _entity_popular:
+	
+Retrieving Popular Entities
+---------------------------
+.. include:: entity_popular.inc	
 
 Entity Meta Data
 ----------------
@@ -51,7 +57,9 @@ Entity Meta Data
 
 Entities Without URLs
 ---------------------
-
+.. raw:: html
+   :file: snippets/entity_page_notice.html
+   
 .. _SmartDownload: http://go.getsocialize.com/SmartDownloads
 
 All entities in Socialize will be given an automatically generated entity page which forms part of the Socialize SmartDownload_ process.  

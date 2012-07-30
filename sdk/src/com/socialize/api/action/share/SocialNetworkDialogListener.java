@@ -22,6 +22,7 @@
 package com.socialize.api.action.share;
 
 import android.app.Dialog;
+import com.socialize.api.action.ShareType;
 import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
 import com.socialize.networks.SocialNetwork;
@@ -40,6 +41,9 @@ public abstract class SocialNetworkDialogListener extends SocialNetworkShareList
 	 */
 	@Override
 	public void onShow(Dialog dialog, SharePanelView dialogView) {}
+	
+	@Override
+	public void onSimpleShare(ShareType type) {}	
 
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.auth.ShareDialogListener#onContinue(android.app.Dialog, com.socialize.networks.SocialNetwork[])

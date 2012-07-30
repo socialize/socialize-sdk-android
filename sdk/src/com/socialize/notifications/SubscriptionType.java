@@ -26,5 +26,6 @@ package com.socialize.notifications;
  * @author Jason Polites
  */
 public enum SubscriptionType {
-	NEW_COMMENTS
+	NEW_COMMENTS,
+	ENTITY_NOTIFICATION
 }

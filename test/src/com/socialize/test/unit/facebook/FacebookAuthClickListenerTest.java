@@ -44,7 +44,9 @@ import com.socialize.facebook.Facebook;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetworkPostListener;
+import com.socialize.networks.SocializeDeAuthListener;
 import com.socialize.networks.facebook.FacebookAuthClickListener;
+import com.socialize.networks.facebook.FacebookPermissionCallback;
 import com.socialize.networks.facebook.FacebookUtilsProxy;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.ui.dialog.SimpleDialogFactory;
@@ -94,7 +96,7 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 		FacebookUtilsProxy facebookUtils = new FacebookUtilsProxy() {
 			
 			@Override
-			public void unlink(Context context) {}
+			public void unlink(Context context, SocializeDeAuthListener listener) {}
 			
 			@Override
 			public void setAppId(Context context, String appId) {}
@@ -103,8 +105,8 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 			public void postEntity(Activity context, Entity entity, String text, SocialNetworkShareListener listener) {}
 			
 			@Override
-			public void link(Activity context, String token, SocializeAuthListener listener) {}
-			
+			public void link(Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener) {}
+
 			@Override
 			public void link(Activity context, SocializeAuthListener listener, String... permissions) {}
 
@@ -149,7 +151,10 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 			public void delete(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {}
 
 			@Override
-			public void extendAccessToken(Context context) {}
+			public void extendAccessToken(Activity context, SocializeAuthListener listener) {}
+
+			@Override
+			public void getCurrentPermissions(Activity parent, String token, FacebookPermissionCallback callback) {}
 
 			@Override
 			public Facebook getFacebook(Context context) {

@@ -21,8 +21,18 @@
  */
 package com.socialize.ui.share;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import android.app.Dialog;
 import android.content.Context;
+import com.socialize.Socialize;
+import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ShareType;
+import com.socialize.api.event.EventSystem;
+import com.socialize.api.event.SocializeEvent;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.ui.dialog.AsyncDialogFactory;
 
@@ -33,6 +43,9 @@ import com.socialize.ui.dialog.AsyncDialogFactory;
  */
 public class ShareDialogFactory extends AsyncDialogFactory<SharePanelView, ShareDialogListener> implements IShareDialogFactory {
 
+	private EventSystem eventSystem;
+	private SocializeConfig config;
+	
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.share.IShareDialogFactory#show(android.content.Context, com.socialize.entity.Entity, com.socialize.networks.SocialNetworkListener, com.socialize.ui.share.ShareDialogListener, int)
 	 */
@@ -41,13 +54,109 @@ public class ShareDialogFactory extends AsyncDialogFactory<SharePanelView, Share
 			Context context, 
 			Entity entity, 
 			SocialNetworkListener socialNetworkListener, 
-			ShareDialogListener shareDialoglistener, 
+			final ShareDialogListener shareDialoglistener, 
 			int displayOptions) {
-		makeDialog(context, shareDialoglistener, entity, socialNetworkListener, shareDialoglistener, displayOptions);
+		
+		makeDialog(context, new ShareDialogListener() {
+
+			@Override
+			public void onShow(Dialog dialog, SharePanelView dialogView) {
+				recordEvent("show");
+				if(shareDialoglistener != null) {
+					shareDialoglistener.onShow(dialog, dialogView);
+				}
+			}
+
+			@Override
+			public void onSimpleShare(ShareType type) {
+				recordEvent("share", type.name());
+				if(shareDialoglistener != null) {
+					shareDialoglistener.onSimpleShare(type);
+				}
+			}
+
+			@Override
+			public void onCancel(Dialog dialog) {
+				recordEvent("close");
+				if(shareDialoglistener != null) {
+					shareDialoglistener.onCancel(dialog);
+				}
+			}
+
+			@Override
+			public boolean onContinue(Dialog dialog, boolean remember, SocialNetwork... networks) {
+				recordEvent("share", networks);
+				if(shareDialoglistener != null) {
+					return shareDialoglistener.onContinue(dialog, remember, networks);
+				}
+				
+				return false;
+			}
+
+			@Override
+			public void onFlowInterrupted(DialogFlowController controller) {
+				if(shareDialoglistener != null) {
+					shareDialoglistener.onFlowInterrupted(controller);
+				}
+			}
+		}, entity, socialNetworkListener, displayOptions);
 	}
 
 	@Override
 	public void setListener(SharePanelView view, ShareDialogListener listener) {
 		view.setShareDialogListener(listener);
+	}
+	
+	
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
+	}
+
+	protected void recordEvent(String action, SocialNetwork[] networks) {
+		if(networks != null && networks.length > 0) {
+			String[] strNets = new String[networks.length];
+			for (int i = 0; i < networks.length; i++) {
+				strNets[i] = networks[i].name();
+			}
+			
+			recordEvent(action, strNets);
+		}
+		else {
+			recordEvent(action);
+		}
+	}
+	
+	protected void recordEvent(String action, String...networks) {
+		if(eventSystem != null && config != null && config.getBooleanProperty(SocializeConfig.SOCIALIZE_EVENTS_SHARE_ENABLED, true)) {
+			try {
+				SocializeSession session = Socialize.getSocialize().getSession();
+				if(session != null) {
+					SocializeEvent event = new SocializeEvent();
+					event.setBucket("SHARE_DIALOG");
+					JSONObject json = new JSONObject();
+					json.put("action", action);
+					
+					if(networks != null && networks.length > 0) {
+						JSONArray array = new JSONArray();
+						for (String string : networks) {
+							array.put(string);
+						}
+						json.put("network", array);
+					}
+					
+					event.setData(json);
+					eventSystem.addEvent(session, event, null);
+				}
+			}
+			catch (Throwable e) {
+				if(logger != null) {
+					logger.warn("Error recording share dialog event", e);
+				}
+			}
+		}
+	}
+
+	public void setEventSystem(EventSystem eventSystem) {
+		this.eventSystem = eventSystem;
 	}
 }

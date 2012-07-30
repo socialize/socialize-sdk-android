@@ -42,8 +42,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderInfo;
-import com.socialize.auth.AuthProviderType;
-import com.socialize.auth.DefaultUserProviderCredentials;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.config.SocializeConfig;
@@ -135,44 +133,6 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 		return post;
 	}
 
-	@Deprecated
-	@Override
-	public HttpUriRequest getAuthRequestWith3rdParty(SocializeSession session, String endpoint, String udid, final AuthProviderType provider, String providerId, String providerToken) throws SocializeException {
-		DefaultUserProviderCredentials userProviderCredentials = new DefaultUserProviderCredentials();
-		userProviderCredentials.setAccessToken(providerToken);
-		userProviderCredentials.setUserId(providerId);
-		userProviderCredentials.setAuthProviderInfo(new AuthProviderInfo() {
-			private static final long serialVersionUID = -6225147199137181190L;
-
-			@Override
-			public void validate() throws SocializeException {}
-			
-			@Override
-			public boolean isValid() {
-				return true;
-			}
-
-			@Override
-			public AuthProviderType getType() {
-				return provider;
-			}
-
-			@Override
-			public boolean matches(AuthProviderInfo info) {
-				return true;
-			}
-		});
-		
-		return getAuthRequestWith3rdParty(session, endpoint, udid, userProviderCredentials);
-	}
-
-	@Deprecated
-	@Override
-	public HttpUriRequest getAuthRequest(SocializeSession session, String endpoint, String udid) throws SocializeException {
-		return getAuthRequestWith3rdParty(session, endpoint, udid, session.getAuthProviderType(), session.get3rdPartyUserId(), session.get3rdPartyToken());
-	}
-	
-	@SuppressWarnings("deprecation")
 	@Override
 	public HttpUriRequest getAuthRequest(SocializeSession session, String endpoint, String udid, AuthProviderData data) throws SocializeException {
 		
@@ -184,10 +144,13 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 				UserProviderCredentials userProviderCredentials = userProviderCredentialsMap.get(authProviderInfo.getType());
 				return getAuthRequestWith3rdParty(session, endpoint, udid, userProviderCredentials);
 			}
+			else {
+				throw new SocializeException("No provider info found in stored session");
+			}
 		}
-		
-		// Legacy
-		return getAuthRequest(session, endpoint, udid);
+		else {
+			throw new SocializeException("No provider credentials found in stored session");
+		}
 	}
 
 	@Override

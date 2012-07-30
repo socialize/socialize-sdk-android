@@ -32,11 +32,5 @@ public interface EventSystem {
 	
 	public static final String ENDPOINT = "/private/sdk_event/";
 	
-	/**
-	 * 
-	 * @param session
-	 * @param event
-	 * @param eventListener
-	 */
 	public void addEvent(SocializeSession session, SocializeEvent event, EventListener eventListener);
 }

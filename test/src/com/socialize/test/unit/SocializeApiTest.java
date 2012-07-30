@@ -24,6 +24,7 @@ package com.socialize.test.unit;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import android.content.Context;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
@@ -32,6 +33,9 @@ import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeAuthRequest;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.WritableSession;
+import com.socialize.api.action.ActionOptions;
+import com.socialize.api.action.ShareType;
+import com.socialize.api.action.share.ShareOptions;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderInfo;
@@ -39,12 +43,16 @@ import com.socialize.auth.AuthProviderResponse;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
 import com.socialize.config.SocializeConfig;
+import com.socialize.entity.Like;
 import com.socialize.entity.ListResult;
+import com.socialize.entity.Propagation;
+import com.socialize.entity.SocializeAction;
 import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeActivityTest;
 
@@ -181,6 +189,58 @@ public class SocializeApiTest extends SocializeActivityTest {
 
 		AndroidMock.verify(provider);
 	}
+	
+	public void testSetPropagationDataForOGLike() {
+		
+		MockSocializeApi api = new MockSocializeApi();
+		
+		PublicShareOptions options = new PublicShareOptions();
+		options.setSelfManaged(true);
+		
+		Like action = new Like();
+		SocializeConfig config = new SocializeConfig();
+		config.setProperty(SocializeConfig.FACEBOOK_OG_USE_INBUILT_LIKE, "true");
+		
+		api.setConfig(config);
+		api.setPropagationData(action, options, SocialNetwork.TWITTER);
+		
+		Propagation propagationInfoRequest = action.getPropagationInfoRequest();
+		Propagation propagation = action.getPropagation();
+		
+		assertNull(propagation);
+		assertNotNull(propagationInfoRequest);
+		
+		Map<String, String> extraParams = propagationInfoRequest.getExtraParams();
+		
+		assertNotNull(extraParams);
+		
+		String og_action = (String) extraParams.get("og_action");
+		
+		assertNotNull(og_action);
+		assertEquals("like", og_action);
+		
+	}
+	
+	public void testSetPropagationDataLocal() {
+		
+		MockSocializeApi api = new MockSocializeApi();
+		
+		PublicShareOptions options = new PublicShareOptions();
+		
+		Like action = new Like();
+		api.setPropagationData(action, options, SocialNetwork.TWITTER);
+		
+		Propagation propagationInfoRequest = action.getPropagationInfoRequest();
+		Propagation propagation = action.getPropagation();
+		
+		assertNull(propagation);
+		assertNotNull(propagationInfoRequest);
+		
+		List<ShareType> thirdParties = propagationInfoRequest.getThirdParties();
+		
+		assertNotNull(thirdParties);
+		assertTrue(thirdParties.contains(ShareType.TWITTER));
+	}	
 
 	@UsesMocks({ 
 		SocializeProvider.class, 
@@ -195,7 +255,6 @@ public class SocializeApiTest extends SocializeActivityTest {
 	@SuppressWarnings("unchecked")
 	public void testHandle3rdPartyAuthSuccess() throws SocializeException {
 
-//		String appId3rdParty = "foobar_appId3rdParty";
 		String key = "foobar_key";
 		String secret = "foobar_secret";
 
@@ -230,12 +289,14 @@ public class SocializeApiTest extends SocializeActivityTest {
 				fail();
 			}
 
+			@Override
+			public boolean validate(AuthProviderInfo info) {
+				return true;
+			}
 		};
 
 		
 		AndroidMock.expect(request.getEndpoint()).andReturn(endpoint);
-		AndroidMock.expect(authProviderData.getAuthProviderType()).andReturn(authProviderType);
-//		AndroidMock.expect(authProviderData.getAppId3rdParty()).andReturn(appId3rdParty);
 		AndroidMock.expect(authProviders.getProvider(authProviderType)).andReturn(authProvider);
 		AndroidMock.expect(request.getAuthProviderData()).andReturn(authProviderData);
 		AndroidMock.expect(authProviderData.getAuthProviderInfo()).andReturn(authProviderInfo).anyTimes();
@@ -291,7 +352,6 @@ public class SocializeApiTest extends SocializeActivityTest {
 	@SuppressWarnings("unchecked")
 	public void testHandle3rdPartyAuthFail() throws SocializeException {
 
-//		String appId3rdParty = "foobar_appId3rdParty";
 		String key = "foobar_key";
 		String secret = "foobar_secret";
 		String endpoint = "foobar_endpoint";
@@ -320,14 +380,17 @@ public class SocializeApiTest extends SocializeActivityTest {
 			public void clearCache(Context context, AuthProviderInfo info) {
 				fail();
 			}
+			
+			@Override
+			public boolean validate(AuthProviderInfo info) {
+				return true;
+			}
 		};
 
 		listener.onError(error);
 		listener.onError(error);
 
 		AndroidMock.expect(request.getEndpoint()).andReturn(endpoint);
-		AndroidMock.expect(authProviderData.getAuthProviderType()).andReturn(authProviderType);
-//		AndroidMock.expect(authProviderData.getAppId3rdParty()).andReturn(appId3rdParty);
 		AndroidMock.expect(authProviders.getProvider(authProviderType)).andReturn(authProvider);
 		AndroidMock.expect(request.getAuthProviderData()).andReturn(authProviderData);
 		AndroidMock.expect(authProviderData.getAuthProviderInfo()).andReturn(authProviderInfo).anyTimes();
@@ -359,6 +422,12 @@ public class SocializeApiTest extends SocializeActivityTest {
 		AndroidMock.verify(authProviderData, authProviderInfo, authProviders, request);
 
 	}
+	
+	public class PublicShareOptions extends ShareOptions {
+		public PublicShareOptions() {
+			super();
+		}
+	}
 
 	public class MockSocializeApi extends SocializeApi<SocializeObject, SocializeProvider<SocializeObject>> {
 
@@ -366,6 +435,10 @@ public class SocializeApiTest extends SocializeActivityTest {
 			super(provider);
 		}
 
+		public MockSocializeApi() {
+			super(provider);
+		}
+		
 		@Override
 		protected void handleRegularAuth(Context context, SocializeAuthRequest request, SocializeActionListener wrapper, SocializeAuthListener listener, String key, String secret) {
 			addResult(3, "handleRegularAuth");
@@ -380,6 +453,16 @@ public class SocializeApiTest extends SocializeActivityTest {
 		public SocializeSession loadSession(String endpoint, String key, String secret) throws SocializeException {
 			addResult(0, "loadSession");
 			return null;
+		}
+
+		@Override
+		public void setPropagationData(SocializeAction action, ActionOptions shareOptions, SocialNetwork... networks) {
+			super.setPropagationData(action, shareOptions, networks);
+		}
+
+		@Override
+		public void setPropagationData(SocializeAction action, ShareType shareType) {
+			super.setPropagationData(action, shareType);
 		}
 	}
 }

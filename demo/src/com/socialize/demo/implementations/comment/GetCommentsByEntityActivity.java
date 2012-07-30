@@ -41,7 +41,7 @@ public class GetCommentsByEntityActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(String text) {
 		
-		CommentUtils.getCommentsByEntity(this, entity.getKey(), 0, 50, new CommentListListener() {
+		CommentUtils.getCommentsByEntity(this, entity.getKey(), 0, PAGE_SIZE, new CommentListListener() {
 			
 			@Override
 			public void onList(ListResult<Comment> comments) {
@@ -65,6 +65,6 @@ public class GetCommentsByEntityActivity extends SDKDemoActivity {
 	 */
 	@Override
 	public String getButtonText() {
-		return "List 50 Comments for Current Entity";
+		return "List " + PAGE_SIZE + " Comments for Current Entity";
 	}
 }

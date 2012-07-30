@@ -51,7 +51,6 @@ import com.socialize.entity.SocializeAction;
 import com.socialize.error.SocializeException;
 import com.socialize.facebook.AsyncFacebookRunner;
 import com.socialize.facebook.Facebook;
-import com.socialize.facebook.RequestListener;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.networks.PostData;
@@ -149,6 +148,11 @@ public class SocialNetworkShareListenerTest extends SocializeActivityTest {
 			@Override
 			protected Facebook getFacebook(Context context) {
 				return mockFacebook;
+			}
+
+			@Override
+			protected String getFacebookAppId() {
+				return "foobar";
 			}
 		};
 		

@@ -3,12 +3,14 @@ package com.socialize;
 import android.content.Context;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
+import com.socialize.api.SocializeSession;
 import com.socialize.api.action.comment.CommentUtilsProxy;
 import com.socialize.api.action.entity.EntityUtilsProxy;
 import com.socialize.api.action.like.LikeUtilsProxy;
 import com.socialize.api.action.share.ShareUtilsProxy;
 import com.socialize.api.action.user.UserUtilsProxy;
 import com.socialize.api.action.view.ViewUtilsProxy;
+import com.socialize.auth.AuthProviders;
 import com.socialize.config.ConfigUtilsProxy;
 import com.socialize.listener.SocializeInitListener;
 
@@ -70,12 +72,16 @@ public class SocializeAccess {
 		Socialize.getSocialize().getSystem().setSystemInitListener(listener);
 	}
 	
-//	public static void setSocialize(SocializeServiceImpl service) {
-//		Socialize.instance = service;
-//	}
-	
 	public static void init(Context context, String...paths) {
 		Socialize.instance.init(context, paths);
+	}
+	
+	public static void setAuthProviders(AuthProviders authProviders) {
+		Socialize.instance.setAuthProviders(authProviders);
+	}
+	
+	public static void setSession(SocializeSession session) {
+		Socialize.instance.setSession(session);
 	}
 	
 	public static void setCommentUtilsProxy(CommentUtilsProxy proxy) {

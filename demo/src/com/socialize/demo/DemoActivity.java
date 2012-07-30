@@ -27,7 +27,9 @@ import java.util.List;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
+import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.ui.dialog.DialogRegister;
 
@@ -41,11 +43,16 @@ public abstract class DemoActivity extends Activity implements DialogRegister {
 	private List<Dialog> dialogs = new ArrayList<Dialog>();
 	protected Entity entity;
 	
+	public static final int PAGE_SIZE = 10;
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		entity = Entity.newInstance("http://getsocialize.com", "Socialize");
+		entity.setType("article");
 		
 		Socialize.onCreate(this, savedInstanceState);
+		ConfigUtils.getConfig(this).setProperty(SocializeConfig.SOCIALIZE_EVENTS_AUTH_ENABLED, "false");
+		ConfigUtils.getConfig(this).setProperty(SocializeConfig.SOCIALIZE_EVENTS_SHARE_ENABLED, "false");
 	}
 	
 	/* (non-Javadoc)

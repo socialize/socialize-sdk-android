@@ -40,7 +40,7 @@ public class GetActionsByApplicationActivity extends SDKDemoActivity {
 	 */
 	@Override
 	public void executeDemo(String text) {
-		ActionUtils.getActionsByApplication(this, 0, 50, new ActionListListener() {
+		ActionUtils.getActionsByApplication(this, 0, PAGE_SIZE, new ActionListListener() {
 			@Override
 			public void onList(ListResult<SocializeAction> result) {
 				handleSocializeResult(result);
@@ -63,6 +63,6 @@ public class GetActionsByApplicationActivity extends SDKDemoActivity {
 	 */
 	@Override
 	public String getButtonText() {
-		return "List 50 Actions for this app";
+		return "List " + PAGE_SIZE + " Actions for this app";
 	}
 }

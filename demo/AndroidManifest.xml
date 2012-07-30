@@ -88,6 +88,7 @@
         <activity android:name=".implementations.entity.EntityActivity"/>
         <activity android:name=".implementations.entity.AddEntityActivity"/>
         <activity android:name=".implementations.entity.GetEntityByKeyActivity"/>
+        <activity android:name=".implementations.entity.GetPopularEntitiesActivity"/>
         <activity android:name=".implementations.entity.GetAllEntitiesActivity"/>
         
         <!-- View -->
@@ -106,6 +107,9 @@
         <activity android:name=".implementations.actionbar.DefaultActionBarActivity"/>
         <activity android:name=".implementations.actionbar.CustomActionBarActivity"/>
         <activity android:name=".implementations.actionbar.MultiActionBarActivity"/>
+        <activity android:name=".implementations.actionbar.AutumnActionBarActivity"/>
+        <activity android:name=".implementations.actionbar.RedActionBarActivity"/>
+        <activity android:name=".implementations.actionbar.TopActionBarActivity"/>
         
         <!-- User Activity -->
         <activity android:name=".implementations.action.ActionActivity"/>
@@ -130,6 +134,7 @@
         <activity android:name=".implementations.facebook.PostToWallActivity"/> 
         <activity android:name=".implementations.facebook.PostPhotoActivity"/> 
         <activity android:name=".implementations.facebook.GetTokenActivity"/> 
+        <activity android:name=".implementations.facebook.GetPermissionsActivity"/> 
         <activity android:name=".implementations.facebook.OpenGraphActivity"/>
         
         <!-- Twitter -->
@@ -141,6 +146,10 @@
             
         <!-- User -->
         <activity android:name=".implementations.user.UserActivity"/> 
+        
+        <!-- Entity Loader -->
+        <activity android:name=".EntityLoaderActivity"/> 
+        
         
         <!--****************************************************************-->   
         <!--************** END SOCIALIZE DEMO CONFIGURATION ****************-->

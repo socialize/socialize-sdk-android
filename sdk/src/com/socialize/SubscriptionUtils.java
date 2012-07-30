@@ -25,7 +25,7 @@ import java.lang.reflect.Proxy;
 import android.app.Activity;
 import com.socialize.api.action.comment.SubscriptionUtilsProxy;
 import com.socialize.entity.Entity;
-import com.socialize.listener.subscription.SubscriptionGetListener;
+import com.socialize.listener.subscription.SubscriptionCheckListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.notifications.SubscriptionType;
 
@@ -73,7 +73,7 @@ public class SubscriptionUtils {
 	 * @param type The subscription type.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void isSubscribed (Activity context, Entity e, SubscriptionType type, SubscriptionGetListener listener) {
+	public static void isSubscribed (Activity context, Entity e, SubscriptionType type, SubscriptionCheckListener listener) {
 		subscriptionUtils.isSubscribed(context, e, type, listener);
 	}
 		
