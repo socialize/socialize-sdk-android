@@ -24,8 +24,10 @@ package com.socialize.demo.implementations.actionbar;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import com.socialize.ActionBarUtils;
 import com.socialize.demo.DemoActivity;
 import com.socialize.demo.R;
@@ -59,6 +61,16 @@ public class WebViewActionBarActivity extends DemoActivity {
 		});
 		
 		setContentView(actionBar);
+		
+		Button button = (Button) findViewById(R.id.btnwebview);
+		
+		button.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
 		
 		myWebView = (WebView) findViewById(R.id.webview);
 		
