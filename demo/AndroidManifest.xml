@@ -110,6 +110,7 @@
         <activity android:name=".implementations.actionbar.AutumnActionBarActivity"/>
         <activity android:name=".implementations.actionbar.RedActionBarActivity"/>
         <activity android:name=".implementations.actionbar.TopActionBarActivity"/>
+        <activity android:name=".implementations.actionbar.WebViewActionBarActivity"/>
         
         <!-- User Activity -->
         <activity android:name=".implementations.action.ActionActivity"/>
