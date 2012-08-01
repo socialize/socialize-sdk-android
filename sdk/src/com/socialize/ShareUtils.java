@@ -116,6 +116,22 @@ public class ShareUtils {
 	}
 	
 	/**
+	 * Pre-loads the share dialog in the background to improve load speed and end user responsiveness.
+	 * @param context The current context.
+	 */
+	public static void preloadShareDialog (Activity context) {
+		proxy.preloadShareDialog(context);
+	};	
+	
+	/**
+	 * Pre-loads the link dialog in the background to improve load speed and end user responsiveness.
+	 * @param context The current context.
+	 */
+	public static void preloadLinkDialog (Activity context) {
+		proxy.preloadLinkDialog(context);
+	};	
+	
+	/**
 	 * Displays the default share dialog.  In most cases this is the simplest version to use.
 	 * @param context The current context.
 	 * @param entity The entity being shared.

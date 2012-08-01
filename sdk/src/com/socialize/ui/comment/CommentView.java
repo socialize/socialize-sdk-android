@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
-
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.entity.Entity;
@@ -45,10 +44,10 @@ public class CommentView extends EntityView {
 				drawables = container.getBean("drawables");
 			}
 			
-			// TODO: always create?
 			if(commentListView == null) {
 				Entity entity = (Entity) entityKey[0];
-				commentListView = container.getBean("commentList", entity);
+				commentListView = container.getBean("commentList");
+				commentListView.setEntity(entity);
 				ListenerHolder holder = container.getBean("listenerHolder");
 				if(holder != null) {
 					OnCommentViewActionListener onCommentViewActionListener = holder.pop(COMMENT_LISTENER);

@@ -45,6 +45,10 @@ public interface ShareUtilsProxy {
 	
 	public void showLinkDialog (Activity context, AuthDialogListener listener);
 	
+	public void preloadLinkDialog (Activity context);
+	
+	public void preloadShareDialog (Activity context);
+	
 	public void showShareDialog (Activity context, Entity entity, int options, SocialNetworkShareListener listener, ShareDialogListener dialogListener);
 	
 	public void shareViaEmail(Activity context, Entity entity, ShareAddListener listener);

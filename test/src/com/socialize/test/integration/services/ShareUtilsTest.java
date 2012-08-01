@@ -278,6 +278,9 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		
 		IShareDialogFactory mockShareDialogFactory = new IShareDialogFactory() {
 			@Override
+			public void preload(Context context) {}
+			
+			@Override
 			public void show(Context context, Entity entity, SocialNetworkListener socialNetworkListener, ShareDialogListener shareDialoglistener, int displayOptions) {
 				// Immediately call onContinue
 				shareDialoglistener.onContinue(null, true, network);
@@ -339,6 +342,9 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		final String text = "foobar";
 		
 		IShareDialogFactory mockShareDialogFactory = new IShareDialogFactory() {
+			@Override
+			public void preload(Context context) {}
+			
 			@Override
 			public void show(Context context, Entity entity, SocialNetworkListener socialNetworkListener, ShareDialogListener shareDialoglistener, int displayOptions) {
 				// Immediately call onContinue
@@ -406,12 +412,14 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		
 		IShareDialogFactory mockShareDialogFactory = new IShareDialogFactory() {
 			@Override
+			public void preload(Context context) {}
+			
+			@Override
 			public void show(Context context, Entity entity, SocialNetworkListener socialNetworkListener, ShareDialogListener shareDialoglistener, int displayOptions) {
 				// Immediately call cancel
 				shareDialoglistener.onCancel(null);
 			}
 		};
-		
 		
 		final SocializeShareUtils mockShareUtils = new SocializeShareUtils() {
 			

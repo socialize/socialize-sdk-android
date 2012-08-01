@@ -77,6 +77,16 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	public void showLinkDialog(Activity context, AuthDialogListener listener) {
 		authDialogFactory.show(context, listener);
 	}
+	
+	@Override
+	public void preloadShareDialog(Activity context) {
+		shareDialogFactory.preload(context);
+	}
+
+	@Override
+	public void preloadLinkDialog(Activity context) {
+		authDialogFactory.preload(context);
+	}
 
 	/*
 	 * (non-Javadoc)

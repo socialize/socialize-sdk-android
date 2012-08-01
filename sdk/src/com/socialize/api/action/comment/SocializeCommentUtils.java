@@ -30,6 +30,7 @@ import android.util.Log;
 import com.socialize.ShareUtils;
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
+import com.socialize.android.ioc.Container;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.SocializeActionUtilsBase;
@@ -64,12 +65,31 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 	private IAuthDialogFactory authDialogFactory;
 	private IShareDialogFactory shareDialogFactory;
 	private ListenerHolder listenerHolder;
+	private Container container;
 	
+	@Override
+	public void onCreate(Container container) {
+		this.container = container;
+	}
+
+	@Override
+	public void onDestroy(Container container) {
+		this.container = null;
+	}
+
 	@Override
 	public void showCommentView(Activity context, Entity entity) {
 		showCommentView(context, entity, null);
 	}
 	
+	@Override
+	public void preloadCommentView(Activity context) {
+		// Just do a get bean as it will be cached
+		if(container != null) {
+			container.getBean("commentList");
+		}
+	}
+
 	@Override
 	public void showCommentView(Activity context, Entity entity, OnCommentViewActionListener listener) {
 		if(listener != null) {

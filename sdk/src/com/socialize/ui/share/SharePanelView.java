@@ -78,24 +78,8 @@ public class SharePanelView extends DialogPanelView {
 	
 	private Entity entity;
 	
-	public SharePanelView(Context context, Entity entity, int displayOptions) {
-		this(context, entity, null, null, displayOptions);
-	}
-	
-	public SharePanelView(Context context, Entity entity, ShareDialogListener listener, int displayOptions) {
-		this(context, entity, null, listener, displayOptions);
-	}
-	
-	public SharePanelView(Context context, Entity entity, SocialNetworkListener socialNetworkListener, ShareDialogListener listener, int displayOptions) {
-		super(context);
-		this.shareDialogListener = listener;
-		this.socialNetworkListener = socialNetworkListener;
-		this.displayOptions = displayOptions;
-		this.entity = entity;
-	}
-	
 	public SharePanelView(Context context) {
-		this(context, null, null, null, ShareUtils.SOCIAL);
+		super(context);
 	}
 	
 	private IBeanFactory<FacebookShareCell> facebookShareCellFactory;
@@ -262,44 +246,41 @@ public class SharePanelView extends DialogPanelView {
 		if(rememberCell != null) {
 			contentLayout.addView(rememberCell);
 		}
+			
+		LayoutParams skipAuthParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		skipAuthParams.gravity = Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
+		skipAuthParams.weight = 1.0f;
+		skipAuthParams.setMargins(0, displayUtils.getDIP(10), 0, 0);
 		
-		if((displayOptions & ShareUtils.MORE_OPTIONS) != 0) {
-			
-			LayoutParams skipAuthParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-			skipAuthParams.gravity = Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
-			skipAuthParams.weight = 1.0f;
-			skipAuthParams.setMargins(0, displayUtils.getDIP(10), 0, 0);
-			
-			otherOptions = new TextView(getContext());
-			otherOptions.setText("More options...");
-			otherOptions.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-			otherOptions.setTextColor(colors.getColor(Colors.ANON_CELL_TITLE));
-			otherOptions.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL);
-			otherOptions.setPadding(0, 0, 0, padding);
-			otherOptions.setLayoutParams(skipAuthParams);
-			
-			otherOptions.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					final SafeProgressDialog progress = SafeProgressDialog.show(getContext());
-					ShareUtils.shareViaOther(getActivity(), entity, new ShareAddListener() {
-						
-						@Override
-						public void onError(SocializeException error) {
-							progress.dismiss();
-							showErrorToast(getContext(), error);
-						}
-						
-						@Override
-						public void onCreate(Share result) {
-							progress.dismiss();
-						}
-					});
-				}
-			});
-			
-			contentLayout.addView(otherOptions);			
-		}
+		otherOptions = new TextView(getContext());
+		otherOptions.setText("More options...");
+		otherOptions.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+		otherOptions.setTextColor(colors.getColor(Colors.ANON_CELL_TITLE));
+		otherOptions.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL);
+		otherOptions.setPadding(0, 0, 0, padding);
+		otherOptions.setLayoutParams(skipAuthParams);
+		
+		otherOptions.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				final SafeProgressDialog progress = SafeProgressDialog.show(getContext());
+				ShareUtils.shareViaOther(getActivity(), entity, new ShareAddListener() {
+					
+					@Override
+					public void onError(SocializeException error) {
+						progress.dismiss();
+						showErrorToast(getContext(), error);
+					}
+					
+					@Override
+					public void onCreate(Share result) {
+						progress.dismiss();
+					}
+				});
+			}
+		});
+		
+		contentLayout.addView(otherOptions);			
 		
 		if(landscape) {
 			RelativeLayout.LayoutParams scrollParams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
@@ -324,97 +305,82 @@ public class SharePanelView extends DialogPanelView {
 		updateNetworkButtonState();
 	}
 	
-	protected View makeContinueButton() {
+	public void applyDisplayOptions() {
 		
-		LinearLayout buttonLayout = new LinearLayout(getContext());
+		if(otherOptions != null) {
+			if((displayOptions & ShareUtils.MORE_OPTIONS) != 0) {
+				otherOptions.setVisibility(View.VISIBLE);
+			}
+			else {
+				otherOptions.setVisibility(View.GONE);
+			}
+		}
 		
-		if(continueButton != null) {
+		if(facebookShareCell != null) {
+			if(((displayOptions & ShareUtils.FACEBOOK) != 0)) {
+				facebookShareCell.setVisibility(View.VISIBLE);
+			}
+			else {
+				facebookShareCell.setVisibility(View.GONE);
+			}
+		}
+		
+		if(twitterShareCell != null) {
+			if(((displayOptions & ShareUtils.TWITTER) != 0)) {
+				twitterShareCell.setVisibility(View.VISIBLE);
+			}
+			else {
+				twitterShareCell.setVisibility(View.GONE);
+			}
+		}
+		
+		if(emailCell != null) {
+			if(((displayOptions & ShareUtils.EMAIL) != 0)) {
+				emailCell.setVisibility(View.VISIBLE);
+			}
+			else {
+				emailCell.setVisibility(View.GONE);
+			}
+		}
+		
+		if(smsCell != null) {
+			if(((displayOptions & ShareUtils.SMS) != 0)) {
+				smsCell.setVisibility(View.VISIBLE);
+			}
+			else {
+				smsCell.setVisibility(View.GONE);
+			}
+		}
+		
+		if(rememberCell != null) {
+			if(((displayOptions & ShareUtils.SHOW_REMEMBER) != 0)) {
+				rememberCell.setVisibility(View.VISIBLE);
+			}
+			else {
+				rememberCell.setVisibility(View.GONE);
+			}
+		}	
+		
+		if(googlePlusCell != null) {
+			if(((displayOptions & ShareUtils.GOOGLE_PLUS) != 0)) {
+				googlePlusCell.setVisibility(View.VISIBLE);
+			}
+			else {
+				googlePlusCell.setVisibility(View.GONE);
+			}
+		}			
+	}
+	
 
-			LayoutParams buttonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-			buttonParams.setMargins(0, displayUtils.getDIP(30), 0, 0);
-			
-			buttonLayout.setPadding(padding, 0, padding, padding);
-			buttonLayout.setOrientation(HORIZONTAL);
-			buttonLayout.setLayoutParams(buttonParams);
-			buttonLayout.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL);	
-			
-			continueButton.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					
-					SocialNetwork[] networks = null;
-					
-					// Get the number of networks enabled
-					if(facebookShareCell != null && facebookShareCell.isToggled()) {
-						if(twitterShareCell != null && twitterShareCell.isToggled()) {
-							networks = new SocialNetwork[]{SocialNetwork.FACEBOOK, SocialNetwork.TWITTER};
-						}
-						else {
-							networks = new SocialNetwork[]{SocialNetwork.FACEBOOK};
-						}
-					}
-					else if(twitterShareCell != null && twitterShareCell.isToggled()) {
-						networks = new SocialNetwork[]{SocialNetwork.TWITTER};
-					}
-					
-					boolean remember = false;
-					
-					if(rememberCell != null) {
-						remember = rememberCell.isToggled();
-					}
-					
-					shareDialogListener.onContinue(dialog, remember, networks);
-				}
-			});
-			
-			cancelButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					dialog.dismiss();
-					shareDialogListener.onCancel(dialog);
-				}
-			});
-			
-			buttonLayout.addView(cancelButton);
-			buttonLayout.addView(continueButton);
-		}
-		
-		return buttonLayout;
-	}
-	
-	protected View makeShareBadge() {
-		RelativeLayout.LayoutParams badgeParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		
-		LayoutParams badgeLayoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		
-		badgeLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
-		
-		badgeParams.addRule(RelativeLayout.CENTER_IN_PARENT);		
-		
-		RelativeLayout badgeLayout = new RelativeLayout(getContext());
-		badgeLayout.setLayoutParams(badgeLayoutParams);
-		
-		if(drawables != null) {
-			ImageView authBadge = new ImageView(getContext());
-			authBadge.setImageDrawable(drawables.getDrawable("share_badge.png"));
-			authBadge.setLayoutParams(badgeParams);
-			authBadge.setPadding(0, 0, 0, padding);
-			badgeLayout.addView(authBadge);
-		}
-		
-		return badgeLayout;
-	}
-	
 	protected void makeShareButtons() {
 		LayoutParams cellParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		
-		boolean fbOK = getSocialize().isSupported(AuthProviderType.FACEBOOK) && ((displayOptions & ShareUtils.FACEBOOK) != 0) && facebookShareCellFactory != null;
-		boolean twOK = getSocialize().isSupported(AuthProviderType.TWITTER) && ((displayOptions & ShareUtils.TWITTER) != 0) && twitterShareCellFactory != null;
-		boolean emailOK = (entity != null && (displayOptions & ShareUtils.EMAIL) != 0) && getSocialize().canShare(getContext(), ShareType.EMAIL) && emailCellFactory != null;
-		boolean smsOK = (entity != null && (displayOptions & ShareUtils.SMS) != 0) && getSocialize().canShare(getContext(), ShareType.SMS) && smsCellFactory != null;
-		boolean rememberOk = ((displayOptions & ShareUtils.SHOW_REMEMBER) != 0) && rememberCellFactory != null;
-		boolean googlePlusOK = config.isGooglePlusEnabled() && (entity != null && (displayOptions & ShareUtils.GOOGLE_PLUS) != 0) && getSocialize().canShare(getContext(), ShareType.GOOGLE_PLUS) && googlePlusCellFactory != null;
+		boolean fbOK = getSocialize().isSupported(AuthProviderType.FACEBOOK) && facebookShareCellFactory != null;
+		boolean twOK = getSocialize().isSupported(AuthProviderType.TWITTER) && twitterShareCellFactory != null;
+		boolean emailOK = getSocialize().canShare(getContext(), ShareType.EMAIL) && emailCellFactory != null;
+		boolean smsOK = getSocialize().canShare(getContext(), ShareType.SMS) && smsCellFactory != null;
+		boolean rememberOk = rememberCellFactory != null;
+		boolean googlePlusOK = config.isGooglePlusEnabled() && getSocialize().canShare(getContext(), ShareType.GOOGLE_PLUS) && googlePlusCellFactory != null;
 		
 		if(fbOK) {
 			facebookShareCell = facebookShareCellFactory.getBean();
@@ -569,7 +535,91 @@ public class SharePanelView extends DialogPanelView {
 				}
 			});
 		}			
+	}	
+
+	
+	protected View makeContinueButton() {
+		
+		LinearLayout buttonLayout = new LinearLayout(getContext());
+		
+		if(continueButton != null) {
+
+			LayoutParams buttonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+			buttonParams.setMargins(0, displayUtils.getDIP(30), 0, 0);
+			
+			buttonLayout.setPadding(padding, 0, padding, padding);
+			buttonLayout.setOrientation(HORIZONTAL);
+			buttonLayout.setLayoutParams(buttonParams);
+			buttonLayout.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL);	
+			
+			continueButton.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					
+					SocialNetwork[] networks = null;
+					
+					// Get the number of networks enabled
+					if(facebookShareCell != null && facebookShareCell.isToggled()) {
+						if(twitterShareCell != null && twitterShareCell.isToggled()) {
+							networks = new SocialNetwork[]{SocialNetwork.FACEBOOK, SocialNetwork.TWITTER};
+						}
+						else {
+							networks = new SocialNetwork[]{SocialNetwork.FACEBOOK};
+						}
+					}
+					else if(twitterShareCell != null && twitterShareCell.isToggled()) {
+						networks = new SocialNetwork[]{SocialNetwork.TWITTER};
+					}
+					
+					boolean remember = false;
+					
+					if(rememberCell != null) {
+						remember = rememberCell.isToggled();
+					}
+					
+					shareDialogListener.onContinue(dialog, remember, networks);
+				}
+			});
+			
+			cancelButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					dialog.dismiss();
+					shareDialogListener.onCancel(dialog);
+				}
+			});
+			
+			buttonLayout.addView(cancelButton);
+			buttonLayout.addView(continueButton);
+		}
+		
+		return buttonLayout;
 	}
+	
+	protected View makeShareBadge() {
+		RelativeLayout.LayoutParams badgeParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		
+		LayoutParams badgeLayoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		
+		badgeLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+		
+		badgeParams.addRule(RelativeLayout.CENTER_IN_PARENT);		
+		
+		RelativeLayout badgeLayout = new RelativeLayout(getContext());
+		badgeLayout.setLayoutParams(badgeLayoutParams);
+		
+		if(drawables != null) {
+			ImageView authBadge = new ImageView(getContext());
+			authBadge.setImageDrawable(drawables.getDrawable("share_badge.png"));
+			authBadge.setLayoutParams(badgeParams);
+			authBadge.setPadding(0, 0, 0, padding);
+			badgeLayout.addView(authBadge);
+		}
+		
+		return badgeLayout;
+	}
+	
 	
 	protected View makeHeaderView(int headerHeight, float headerRadius) {
 		LayoutParams headerParams = new LayoutParams(LayoutParams.FILL_PARENT, headerHeight);
@@ -676,7 +726,15 @@ public class SharePanelView extends DialogPanelView {
 	public void setEntity(Entity entity) {
 		this.entity = entity;
 	}
-
+	
+	public void setSocialNetworkListener(SocialNetworkListener socialNetworkListener) {
+		this.socialNetworkListener = socialNetworkListener;
+	}
+	
+	public void setDisplayOptions(int displayOptions) {
+		this.displayOptions = displayOptions;
+	}
+	
 	protected SocializeAuthListener getAuthClickListener(final ClickableSectionCell cell, final SocialNetwork network) {
 		return new SocializeAuthListener() {
 			

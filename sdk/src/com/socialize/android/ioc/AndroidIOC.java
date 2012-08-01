@@ -155,4 +155,9 @@ public class AndroidIOC implements IOCContainer {
 	public Context getContext() {
 		return container.getContext();
 	}
+
+	@Override
+	public void onContextDestroyed(Context context) {
+		container.onContextDestroyed(context);
+	}
 }

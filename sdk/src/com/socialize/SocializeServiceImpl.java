@@ -24,7 +24,9 @@ package com.socialize;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import android.app.Activity;
@@ -48,6 +50,7 @@ import com.socialize.auth.AuthProviders;
 import com.socialize.auth.SocializeAuthProviderInfo;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
+import com.socialize.auth.facebook.FacebookService;
 import com.socialize.concurrent.AsyncTaskManager;
 import com.socialize.concurrent.ManagedAsyncTask;
 import com.socialize.config.SocializeConfig;
@@ -350,6 +353,12 @@ public class SocializeServiceImpl implements SocializeService {
 			container.setContext(context);
 		}
 	}
+	
+	void onContextDestroyed(Context context) {
+		if(container != null) {
+			container.onContextDestroyed(context);
+		}
+	}
 
 	// So we can mock
 	protected String[] getInitPaths() {
@@ -631,20 +640,16 @@ public class SocializeServiceImpl implements SocializeService {
 		SocializeConfig config = getConfig();
 		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
-		AuthProviderInfo authProviderInfo = authProviderInfoBuilder.getFactory(authProviderType).getInstance(permissions);
 		
-//		// Merge the info with the current session data
-//		if(session != null) {
-//			UserProviderCredentials userProviderCredentials = session.getUserProviderCredentials(authProviderType);
-//			if(userProviderCredentials != null) {
-//				AuthProviderInfo currentInfo = userProviderCredentials.getAuthProviderInfo();
-//				
-//				if(currentInfo != null) {
-//					currentInfo.merge(authProviderInfo);
-//					authProviderInfo = currentInfo;
-//				}
-//			}
-//		}
+		if(!Arrays.equals(permissions, FacebookService.DEFAULT_PERMISSIONS)) {
+			// Ensure the requested permissions include the default permissions
+			Set<String> all = new HashSet<String>();
+			all.addAll(Arrays.asList(permissions));
+			all.addAll(Arrays.asList(FacebookService.DEFAULT_PERMISSIONS));
+			permissions = all.toArray(new String[all.size()]);
+		}
+		
+		AuthProviderInfo authProviderInfo = authProviderInfoBuilder.getFactory(authProviderType).getInstance(permissions);
 		
 		authenticate(context, consumerKey, consumerSecret, authProviderInfo,  authListener);
 	}
@@ -1056,13 +1061,18 @@ public class SocializeServiceImpl implements SocializeService {
 			}
 			paused = false;
 		}
+		
+		// This is the current context
+		setContext(context);
 	}
 	
 	@Override
 	public void onCreate(Activity context, Bundle savedInstanceState) {}
 
 	@Override
-	public void onDestroy(Activity context) {}
+	public void onDestroy(Activity context) {
+		onContextDestroyed(context);
+	}
 
 	protected void setShareSystem(ShareSystem shareSystem) {
 		this.shareSystem = shareSystem;

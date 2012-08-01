@@ -30,12 +30,13 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
-import com.socialize.CommentUtils;
 import com.socialize.EntityUtils;
 import com.socialize.LikeUtils;
 import com.socialize.ShareUtils;
 import com.socialize.ViewUtils;
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.api.action.comment.CommentUtilsProxy;
+import com.socialize.api.action.share.ShareUtilsProxy;
 import com.socialize.api.action.share.SocialNetworkDialogListener;
 import com.socialize.entity.Entity;
 import com.socialize.entity.EntityStats;
@@ -92,6 +93,10 @@ public class ActionBarLayoutView extends BaseView {
 	private ProgressDialogFactory progressDialogFactory;
 	
 	private DisplayUtils displayUtils;
+	
+	private ShareUtilsProxy shareUtils;
+
+	private CommentUtilsProxy commentUtils;
 	
 	private ActionBarView actionBarView;
 	
@@ -212,7 +217,7 @@ public class ActionBarLayoutView extends BaseView {
 					}
 					
 					if(!consumed) {
-						CommentUtils.showCommentView(getActivity(), actionBarView.getEntity());
+						commentUtils.showCommentView(getActivity(), actionBarView.getEntity());
 					}
 				}
 			});			
@@ -346,6 +351,11 @@ public class ActionBarLayoutView extends BaseView {
 	}
 	
 	protected void doLoadSequence(boolean reload) {
+		
+		// Pre-load dialogs
+		shareUtils.preloadShareDialog(getActivity());
+		shareUtils.preloadLinkDialog(getActivity());
+		
 		final Entity userProvidedEntity = actionBarView.getEntity();
 		if(ticker != null) ticker.resetTicker();
 		if(userProvidedEntity != null) {
@@ -665,6 +675,15 @@ public class ActionBarLayoutView extends BaseView {
 
 	public void setItemFactory(IBeanFactory<ActionBarItem> itemFactory) {
 		this.itemFactory = itemFactory;
+	}
+	
+	
+	public void setShareUtils(ShareUtilsProxy shareUtils) {
+		this.shareUtils = shareUtils;
+	}
+	
+	public void setCommentUtils(CommentUtilsProxy commentUtils) {
+		this.commentUtils = commentUtils;
 	}
 
 	public void stopTicker() {

@@ -87,9 +87,8 @@ public class CommentListView extends BaseView {
 	
 	private OnCommentViewActionListener onCommentViewActionListener;
 	
-	public CommentListView(Context context, Entity entity) {
+	public CommentListView(Context context) {
 		super(context);
-		this.entity = entity;
 	}
 	
 	public void init() {

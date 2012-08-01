@@ -30,6 +30,8 @@ import com.socialize.networks.SocialNetworkListener;
  *
  */
 public interface IShareDialogFactory {
+	
+	public void preload(Context context);
 
 	public void show(Context context, Entity entity, SocialNetworkListener socialNetworkListener, ShareDialogListener shareDialoglistener, int displayOptions);
 

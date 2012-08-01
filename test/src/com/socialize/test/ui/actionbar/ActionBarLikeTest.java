@@ -197,6 +197,9 @@ public class ActionBarLikeTest extends ActionBarTest {
 		IShareDialogFactory mockShareFactory = new IShareDialogFactory() {
 			
 			@Override
+			public void preload(Context context) {}
+
+			@Override
 			public void show(Context context, Entity entity, SocialNetworkListener socialNetworkListener, ShareDialogListener shareDialoglistener, int displayOptions) {
 				latch.countDown();
 			}

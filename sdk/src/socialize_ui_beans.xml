@@ -372,11 +372,13 @@
 	<bean 
 		id="authPanelView" 
 		class="com.socialize.ui.auth.AuthPanelView"		
-		singleton="false">
+		singleton="false"
+		cache="true">
 		<constructor-arg type="activity"/>
 		<property name="colors" ref="colors"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="displayUtils" ref="displayUtils"/>
+		<property name="configUtils" ref="configUtils"/>
 		<property name="facebookSignInCellFactory" ref="facebookSignInCellFactory"/>
 		<property name="twitterSignInCellFactory" ref="twitterSignInCellFactory"/>
 		<property name="anonCellFactory" ref="anonCellFactory"/>
@@ -401,7 +403,8 @@
 	<bean 
 		id="sharePanelView" 
 		class="com.socialize.ui.share.SharePanelView"		
-		singleton="false">
+		singleton="false"
+		cache="true">
 		<constructor-arg type="activity"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="drawables" ref="drawables"/>
@@ -851,7 +854,9 @@
 		id="commentList" 
 		class="com.socialize.ui.comment.CommentListView"
 		singleton="false"
-		extends="socializeView">
+		extends="socializeView"
+		cache="true">
+		
 		<constructor-arg type="activity"/>
 
 		<init-method name="init"/>
@@ -1353,6 +1358,8 @@
 		
 		<property name="drawables" ref="drawables"/>
 		<property name="displayUtils" ref="displayUtils"/>
+		<property name="shareUtils" ref="shareUtils"/>
+		<property name="commentUtils" ref="commentUtils"/>
 		<property name="entityCache" ref="entityCache"/>
 		<property name="logger" ref="logger"/>
 		<property name="buttonFactory" ref="actionBarButtonFactory"/>

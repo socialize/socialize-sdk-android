@@ -623,7 +623,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 	class PublicCommentListView extends CommentListView {
 
 		public PublicCommentListView(Context context) {
-			super(context, Entity.newInstance("foobar", null));
+			super(context);
 		}
 		
 		@Override

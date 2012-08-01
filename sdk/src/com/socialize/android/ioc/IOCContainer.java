@@ -140,5 +140,11 @@ public interface IOCContainer {
 	 * @return
 	 */
 	public Context getContext();
+	
+	/**
+	 * Called when the current context is destroyed (Activity onDestroy)
+	 * @param context
+	 */
+	public void onContextDestroyed(Context context);
 
 }
