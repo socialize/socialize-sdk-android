@@ -10,10 +10,10 @@ import com.socialize.android.ioc.IOCContainer;
 import com.socialize.config.SocializeConfig;
 import com.socialize.config.SocializeConfigUtils;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.test.ui.SocializeUIActivityTest;
+import com.socialize.test.SocializeActivityTest;
 import com.socialize.ui.view.AuthenticatedView;
 
-public class AuthenticatedViewTest extends SocializeUIActivityTest {
+public class AuthenticatedViewTest extends SocializeActivityTest {
 
 	@UsesMocks ({IOCContainer.class, SocializeService.class, SocializeAuthListener.class, SocializeConfig.class})
 	public void testOnViewLoad() {

@@ -34,7 +34,7 @@ import com.socialize.networks.facebook.FacebookAuthClickListener;
 import com.socialize.networks.facebook.FacebookSignInCell;
 import com.socialize.networks.twitter.TwitterAuthClickListener;
 import com.socialize.networks.twitter.TwitterSignInCell;
-import com.socialize.test.ui.SocializeUIActivityTest;
+import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.auth.AuthPanelView;
 
@@ -42,7 +42,7 @@ import com.socialize.ui.auth.AuthPanelView;
  * @author Jason Polites
  *
  */
-public class AuthPanelViewTest extends SocializeUIActivityTest {
+public class AuthPanelViewTest extends SocializeActivityTest {
 
 	public void testAuthPanelViewRenderAndClick() throws Throwable {
 		

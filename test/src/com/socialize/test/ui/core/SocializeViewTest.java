@@ -10,11 +10,11 @@ import com.socialize.SocializeSystem;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.listener.SocializeInitListener;
-import com.socialize.test.ui.SocializeUIActivityTest;
+import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.SocializeBaseView;
 
-public class SocializeViewTest extends SocializeUIActivityTest {
+public class SocializeViewTest extends SocializeActivityTest {
 
 	@UsesMocks ({IOCContainer.class, SocializeErrorHandler.class})
 	public void testOnWindowVisibilityChanged() throws Throwable {

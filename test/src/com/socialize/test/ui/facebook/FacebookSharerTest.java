@@ -43,14 +43,14 @@ import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.FacebookSharer;
 import com.socialize.networks.facebook.FacebookWallPoster;
 import com.socialize.test.PublicSocialize;
-import com.socialize.test.ui.SocializeActivityTestCase;
+import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 
 /**
  * @author Jason Polites
  *
  */
-public class FacebookSharerTest extends SocializeActivityTestCase {
+public class FacebookSharerTest extends SocializeActivityTest {
 
 	@SuppressWarnings("unchecked")
 	@UsesMocks ({SocializeService.class, SocializeConfig.class, AuthProviderInfoFactory.class, AuthProviderInfo.class})

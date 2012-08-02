@@ -36,15 +36,15 @@ import com.socialize.error.SocializeException;
 import com.socialize.launcher.LaunchManager;
 import com.socialize.launcher.Launcher;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.PublicSocializeLaunchActivity;
-import com.socialize.test.ui.SocializeUIActivityTest;
 import com.socialize.ui.SocializeLaunchActivity;
 
 /**
  * @author Jason Polites
  *
  */
-public class SocializeLaunchActivityTest extends SocializeUIActivityTest {
+public class SocializeLaunchActivityTest extends SocializeActivityTest {
 
 	@UsesMocks ({IOCContainer.class, SocializeErrorHandler.class, SocializeService.class, SocializeAuthListener.class, EventSystem.class})
 	public void testOnCreate() throws Throwable {

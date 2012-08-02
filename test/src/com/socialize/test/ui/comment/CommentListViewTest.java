@@ -25,7 +25,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.test.ui.SocializeUIActivityTest;
+import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.comment.CommentAdapter;
 import com.socialize.ui.comment.CommentAddButtonListener;
@@ -35,7 +35,7 @@ import com.socialize.ui.dialog.SimpleDialogFactory;
 import com.socialize.ui.header.SocializeHeader;
 import com.socialize.ui.view.LoadingListView;
 
-public class CommentListViewTest extends SocializeUIActivityTest {
+public class CommentListViewTest extends SocializeActivityTest {
 	
 	Entity entity = Entity.newInstance("foobar", null);
 	

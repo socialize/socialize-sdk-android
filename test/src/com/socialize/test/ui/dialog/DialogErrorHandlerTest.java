@@ -7,14 +7,14 @@ import android.graphics.drawable.Drawable;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.config.SocializeConfig;
+import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.mock.MockAlertDialog;
 import com.socialize.test.mock.MockDialogBuilder;
-import com.socialize.test.ui.SocializeUIActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.error.DialogErrorHandler;
 import com.socialize.util.Drawables;
 
-public class DialogErrorHandlerTest extends SocializeUIActivityTest {
+public class DialogErrorHandlerTest extends SocializeActivityTest {
 
 	@UsesMocks ({
 		MockDialogBuilder.class, 

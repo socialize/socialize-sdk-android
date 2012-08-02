@@ -359,4 +359,11 @@ public class DefaultAppUtils implements AppUtils {
 	public void setConfig(SocializeConfig config) {
 		this.config = config;
 	}
+
+	
+	void setNotificationsAssessed(boolean notificationsAssessed) {
+		this.notificationsAssessed = notificationsAssessed;
+	}
+	
+	
 }

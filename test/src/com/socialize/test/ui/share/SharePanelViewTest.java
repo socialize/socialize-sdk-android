@@ -38,7 +38,7 @@ import com.socialize.entity.SocializeAction;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.share.ShareHandler;
-import com.socialize.test.ui.SocializeUIActivityTest;
+import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.share.EmailCell;
 import com.socialize.ui.share.SMSCell;
@@ -48,7 +48,7 @@ import com.socialize.ui.share.SharePanelView;
  * @author Jason Polites
  *
  */
-public class SharePanelViewTest extends SocializeUIActivityTest {
+public class SharePanelViewTest extends SocializeActivityTest {
 
 	public void testEmailLaunchesEmailClient() throws Throwable {
 		
