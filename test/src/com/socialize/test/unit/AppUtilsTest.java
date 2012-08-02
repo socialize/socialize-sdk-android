@@ -21,114 +21,88 @@
  */
 package com.socialize.test.unit;
 
+import android.app.Activity;
+import android.content.Context;
+import com.google.android.testing.mocking.AndroidMock;
+import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.SocializeService;
+import com.socialize.config.SocializeConfig;
+import com.socialize.log.SocializeLogger;
+import com.socialize.sample.Main;
 import com.socialize.sample.R;
-import com.socialize.test.SocializeUnitTest;
+import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 import com.socialize.util.DefaultAppUtils;
 
 /**
  * @author Jason Polites
  * 
  */
-public class AppUtilsTest extends SocializeUnitTest {
-
-//	@UsesMocks({ SocializeConfig.class })
-//	public void test_getAppUrl() {
-//		final String consumerKey = "foobar";
-//		final String host = "foo_host_bar";
-//		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-//
-//		AndroidMock.expect(config.getProperty(SocializeConfig.REDIRECT_HOST)).andReturn(host);
-//		AndroidMock.expect(config.getProperty(SocializeConfig.REDIRECT_APP_STORE)).andReturn(null);
-//		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn(consumerKey);
-//
-//		AndroidMock.replay(config);
-//
-//		DefaultAppUtils utils = new DefaultAppUtils();
-//		utils.setConfig(config);
-//
-//		String url = utils.getAppUrl();
-//
-//		AndroidMock.verify(config);
-//
-//		assertEquals(host + "/a/" + consumerKey, url);
-//	}
-
-//	@UsesMocks({ SocializeConfig.class })
-//	public void test_getAppUrlWithAmazon() {
-//		final String consumerKey = "foobar";
-//		final String host = "foo_host_bar";
-//		final String appStore = "amazon";
-//		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-//
-//		AndroidMock.expect(config.getProperty(SocializeConfig.REDIRECT_HOST)).andReturn(host);
-//		AndroidMock.expect(config.getProperty(SocializeConfig.REDIRECT_APP_STORE)).andReturn(appStore);
-//		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn(consumerKey);
-//
-//		AndroidMock.replay(config);
-//
-//		DefaultAppUtils utils = new DefaultAppUtils();
-//		utils.setConfig(config);
-//
-//		String url = utils.getAppUrl();
-//
-//		AndroidMock.verify(config);
-//
-//		assertEquals(host + "/a/" + consumerKey + "/?f=amz", url);
-//	}
-	
-	
-//	@UsesMocks({ SocializeConfig.class, Entity.class })
-//	public void test_getEntityUrl() {
-//		final String host = "foo_host_bar";
-//		
-//		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-//		Entity entity = AndroidMock.createMock(Entity.class);
-//		
-//		AndroidMock.expect(config.getProperty(SocializeConfig.REDIRECT_HOST)).andReturn(host);
-//		AndroidMock.expect(config.getProperty(SocializeConfig.REDIRECT_APP_STORE)).andReturn(null);
-//		AndroidMock.expect(entity.getId()).andReturn(69L);
-//
-//		AndroidMock.replay(config, entity);
-//
-//		DefaultAppUtils utils = new DefaultAppUtils();
-//		utils.setConfig(config);
-//
-//		String url = utils.getEntityUrl(entity);
-//
-//		AndroidMock.verify(config, entity);
-//
-//		assertEquals(host + "/e/69", url);
-//	}
-
-//	@UsesMocks({ SocializeConfig.class, Entity.class })
-//	public void test_getEntityUrlWithAmazon() {
-//		final String host = "foo_host_bar";
-//		final String appStore = "amazon";
-//		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-//		Entity entity = AndroidMock.createMock(Entity.class);
-//
-//		AndroidMock.expect(config.getProperty(SocializeConfig.REDIRECT_HOST)).andReturn(host);
-//		AndroidMock.expect(config.getProperty(SocializeConfig.REDIRECT_APP_STORE)).andReturn(appStore);
-//		AndroidMock.expect(entity.getId()).andReturn(69L);
-//
-//		
-//		AndroidMock.replay(config, entity);
-//
-//		DefaultAppUtils utils = new DefaultAppUtils();
-//		utils.setConfig(config);
-//
-//		String url = utils.getEntityUrl(entity);
-//
-//		AndroidMock.verify(config, entity);
-//
-//		assertEquals(host + "/e/69/?f=amz", url);
-//	}	
-//	
+public class AppUtilsTest extends SocializeActivityTest {
 	
 	public void testGetAppIconId() {
 		DefaultAppUtils utils = new DefaultAppUtils();
 		int appIconId = utils.getAppIconId(getContext());
 		assertEquals(R.drawable.ic_icon, appIconId);
+	}
+	
+	public void testLaunchMainApp() {
+		
+		TestUtils.setUpActivityMonitor(Main.class);
+		
+		DefaultAppUtils.launchMainApp(getContext());
+		
+		Activity activity = TestUtils.waitForActivity(20000);
+		
+		assertNotNull(activity);
+		activity.finish();
+		assertEquals(Main.class.getName(), activity.getClass().getName());
+		
+	}
+	
+	@UsesMocks ({SocializeConfig.class, SocializeService.class})
+	public void test_isNotificationsAvailable() {
+		
+		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
+		
+		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_ENABLED, true)).andReturn(true);
+		AndroidMock.expect(config.isEntityLoaderCheckEnabled()).andReturn(true);
+		AndroidMock.expect(socialize.getEntityLoader()).andReturn(null);
+		
+		AndroidMock.replay(config, socialize);
+		
+		SocializeLogger mockLogger = new SocializeLogger();
+		
+		DefaultAppUtils appUtils = new DefaultAppUtils() {
+			@Override
+			public boolean hasPermission(Context context, String permission) {
+				addResult(permission);
+				return false;
+			}
+
+			@Override
+			protected SocializeService getSocialize() {
+				return socialize;
+			}
+		};
+		
+		appUtils.setConfig(config);
+		appUtils.setLogger(mockLogger);
+		
+		assertFalse(appUtils.isNotificationsAvailable(getContext()));
+		
+
+		AndroidMock.verify(config, socialize);
+		
+		String result0 = getResult(0);
+		String result1 = getResult(1);
+		
+		assertNotNull(result0);
+		assertNotNull(result1);
+		
+		assertEquals(getContext().getPackageName() + ".permission.C2D_MESSAGE", result0);
+		assertEquals("com.google.android.c2dm.permission.RECEIVE", result1);
 	}
 
 }

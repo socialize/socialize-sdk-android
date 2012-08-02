@@ -129,10 +129,6 @@ public class UserFactory extends SocializeObjectFactory<User> {
 		object.put(SMALL_IMAGE_URI, user.getSmallImageUri());
 		object.put(MEDIUM_IMAGE_URI, user.getMediumImageUri());
 		object.put(LARGE_IMAGE_URI, user.getLargeImageUri());
-//		object.put(AUTO_POST_FACEBOOK, user.isAutoPostToFacebook());
-//		object.put(AUTO_POST_TWITTER, user.isAutoPostToTwitter());
-//		object.put(SHARE_LOCATION, user.isShareLocation());
-//		object.put(NOTIFICATIONS_ENABLED, user.isNotificationsEnabled());
 
 		List<UserAuthData> authData = user.getAuthData();
 		

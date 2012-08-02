@@ -63,6 +63,6 @@ public interface AppUtils {
 	
 	public void checkAndroidManifest(Context context);
 	
-	public boolean isAppInBackground(Context context);
+//	public boolean isAppInBackground(Context context);
 
 }

@@ -24,8 +24,6 @@ package com.socialize.util;
 import java.util.List;
 import java.util.Locale;
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningAppProcessInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -38,6 +36,7 @@ import android.content.res.Resources;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import com.socialize.Socialize;
+import com.socialize.SocializeService;
 import com.socialize.config.SocializeConfig;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeLaunchActivity;
@@ -101,17 +100,6 @@ public class DefaultAppUtils implements AppUtils {
 		if(StringUtils.isEmpty(country)) {
 			country = Locale.getDefault().getCountry();
 		}
-	}
-	
-	protected String appendAppStore(String url) {
-		String appStore = config.getProperty(SocializeConfig.REDIRECT_APP_STORE);
-		if(!StringUtils.isEmpty(appStore)) {
-			appStore = getAppStoreAbbreviation(appStore.trim());
-			if(appStore != null) {
-				url += "/?f=" + appStore;
-			}
-		}
-		return url;
 	}
 	
 	@Override
@@ -215,9 +203,7 @@ public class DefaultAppUtils implements AppUtils {
 			
 			if(config.getBooleanProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_ENABLED, true)) {
 				if(!hasPermission(context, permissionString)) {
-					lastNotificationWarning = "Notifications not available, permission [" +
-							permissionString +
-							"] not specified in AndroidManifest.xml";
+					lastNotificationWarning = "Notifications not available, permission [" + permissionString + "] not specified in AndroidManifest.xml";
 					if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
 					ok = false;
 				}
@@ -228,7 +214,7 @@ public class DefaultAppUtils implements AppUtils {
 					ok = false;
 				}
 				
-				if(config.isEntityLoaderCheckEnabled() && Socialize.getSocialize().getEntityLoader() == null) {
+				if(config.isEntityLoaderCheckEnabled() && getSocialize().getEntityLoader() == null) {
 					lastNotificationWarning = "Notifications not available. Entity loader not found.";
 					if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
 					ok = false;
@@ -251,6 +237,10 @@ public class DefaultAppUtils implements AppUtils {
 		}
 
 		return notificationsAvailable;
+	}
+	
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
 	}
 	
 	@Override
@@ -277,24 +267,23 @@ public class DefaultAppUtils implements AppUtils {
 		return context.getPackageManager().checkPermission(permission, context.getPackageName()) == PackageManager.PERMISSION_GRANTED;
 	}	
 	
-	
-	@Override
-	public boolean isAppInBackground(Context context) {
-		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-		List<RunningAppProcessInfo> runningProcInfo = activityManager .getRunningAppProcesses();
-		for(int i = 0; i < runningProcInfo.size(); i++){
-			RunningAppProcessInfo runningAppProcessInfo = runningProcInfo.get(i);
-	        if(runningAppProcessInfo.processName.equals(context.getPackageName())) {
-                if (runningAppProcessInfo.importance==RunningAppProcessInfo.IMPORTANCE_FOREGROUND || runningAppProcessInfo.lru==RunningAppProcessInfo.IMPORTANCE_VISIBLE){
-                	return false;
-                }
-                else {
-                	return true;
-                }
-	        }
-		}
-		return true;
-	}
+//	@Override
+//	public boolean isAppInBackground(Context context) {
+//		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+//		List<RunningAppProcessInfo> runningProcInfo = activityManager .getRunningAppProcesses();
+//		for(int i = 0; i < runningProcInfo.size(); i++){
+//			RunningAppProcessInfo runningAppProcessInfo = runningProcInfo.get(i);
+//	        if(runningAppProcessInfo.processName.equals(context.getPackageName())) {
+//                if (runningAppProcessInfo.importance==RunningAppProcessInfo.IMPORTANCE_FOREGROUND || runningAppProcessInfo.lru==RunningAppProcessInfo.IMPORTANCE_VISIBLE){
+//                	return false;
+//                }
+//                else {
+//                	return true;
+//                }
+//	        }
+//		}
+//		return true;
+//	}
 
 	public static boolean launchMainApp(Activity origin) {
 		Intent mainIntent = getMainAppIntent(origin);

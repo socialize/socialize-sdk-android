@@ -21,6 +21,7 @@
  */
 package com.socialize.test.ui.image;
 
+import java.util.Queue;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.test.SocializeUnitTest;
@@ -83,6 +84,68 @@ public class ImageLoadRequestTest extends SocializeUnitTest {
 		
 		AndroidMock.verify(listener0, listener1);
 		
+	}
+	
+	@UsesMocks({ImageLoadListener.class})
+	public void testNotifyListenersError() {
+		
+		ImageLoadListener listener0 = AndroidMock.createMock(ImageLoadListener.class);
+		ImageLoadListener listener1 = AndroidMock.createMock(ImageLoadListener.class);
+		Exception error = new Exception("IGNORE ME - TESTING ONLY");
+		
+		final ImageLoadRequest request = new ImageLoadRequest() {
+			@Override
+			public boolean isCanceled() {
+				return false;
+			}
+		};
+		
+		listener0.onImageLoadFail(request, error);
+		listener1.onImageLoadFail(request, error);
+		
+		AndroidMock.replay(listener0, listener1);
+		
+		request.addListener(listener0);
+		request.addListener(listener1);
+		
+		request.notifyListeners(error);
+		
+		AndroidMock.verify(listener0, listener1);
+		
+	}
+	
+	@UsesMocks({ImageLoadListener.class})
+	public void testMerge() {
+		ImageLoadListener listener0 = AndroidMock.createMock(ImageLoadListener.class);
+		ImageLoadListener listener1 = AndroidMock.createMock(ImageLoadListener.class);
+		ImageLoadListener listener2 = AndroidMock.createMock(ImageLoadListener.class);
+		
+		ImageLoadRequest request0 = new ImageLoadRequest();
+		ImageLoadRequest request1 = new ImageLoadRequest();
+		
+		request0.addListener(listener0);
+		request0.addListener(listener1);
+		request1.addListener(listener2);
+		
+		assertNotNull(request0.getListeners());
+		assertNotNull(request1.getListeners());
+		
+		assertEquals(2, request0.getListeners().size());
+		assertEquals(1, request1.getListeners().size());
+		
+		request0.merge(request1);
+		
+		assertNotNull(request0.getListeners());
+		assertNotNull(request1.getListeners());
+		
+		assertEquals(3, request0.getListeners().size());
+		assertEquals(1, request1.getListeners().size());
+		
+		Queue<ImageLoadListener> listeners = request0.getListeners();
+		
+		assertTrue(listeners.contains(listener0));
+		assertTrue(listeners.contains(listener1));
+		assertTrue(listeners.contains(listener2));
 	}
 	
 }

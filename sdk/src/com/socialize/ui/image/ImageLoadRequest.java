@@ -22,8 +22,8 @@
 package com.socialize.ui.image;
 
 import java.util.Collection;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
 import com.socialize.util.SafeBitmapDrawable;
 
 
@@ -143,9 +143,12 @@ public class ImageLoadRequest {
 		return scaleHeight;
 	}
 
-	
 	public void setScaleHeight(int scaleHeight) {
 		this.scaleHeight = scaleHeight;
+	}
+	
+	public Queue<ImageLoadListener> getListeners() {
+		return listeners;
 	}
 
 	@Override
