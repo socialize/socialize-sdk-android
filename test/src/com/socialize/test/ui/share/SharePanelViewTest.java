@@ -81,7 +81,9 @@ public class SharePanelViewTest extends SocializeUIActivityTest {
 		
 		Socialize.getSocialize().init(getContext(), config);
 		
-		final SharePanelView view = SocializeAccess.getBean("sharePanelView", entity, ShareUtils.DEFAULT);
+		final SharePanelView view = SocializeAccess.getBean("sharePanelView");
+		view.setEntity(entity);
+		view.setDisplayOptions(ShareUtils.DEFAULT);
 		
 		final CountDownLatch latch0 = new CountDownLatch(1);
 		
@@ -150,7 +152,9 @@ public class SharePanelViewTest extends SocializeUIActivityTest {
 		
 		Socialize.getSocialize().init(getContext(), config);
 		
-		final SharePanelView view = SocializeAccess.getBean("sharePanelView", entity, ShareUtils.DEFAULT);
+		final SharePanelView view = SocializeAccess.getBean("sharePanelView");
+		view.setEntity(entity);
+		view.setDisplayOptions(ShareUtils.DEFAULT);
 		
 		final CountDownLatch latch0 = new CountDownLatch(1);
 		

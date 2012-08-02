@@ -641,14 +641,16 @@ public class SocializeServiceImpl implements SocializeService {
 		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 		
-		if(!Arrays.equals(permissions, FacebookService.DEFAULT_PERMISSIONS)) {
-			// Ensure the requested permissions include the default permissions
-			Set<String> all = new HashSet<String>();
-			all.addAll(Arrays.asList(permissions));
-			all.addAll(Arrays.asList(FacebookService.DEFAULT_PERMISSIONS));
-			permissions = all.toArray(new String[all.size()]);
+		if(permissions.length > 0) {
+			if(!Arrays.equals(permissions, FacebookService.DEFAULT_PERMISSIONS)) {
+				// Ensure the requested permissions include the default permissions
+				Set<String> all = new HashSet<String>();
+				all.addAll(Arrays.asList(permissions));
+				all.addAll(Arrays.asList(FacebookService.DEFAULT_PERMISSIONS));
+				permissions = all.toArray(new String[all.size()]);
+			}
 		}
-		
+
 		AuthProviderInfo authProviderInfo = authProviderInfoBuilder.getFactory(authProviderType).getInstance(permissions);
 		
 		authenticate(context, consumerKey, consumerSecret, authProviderInfo,  authListener);

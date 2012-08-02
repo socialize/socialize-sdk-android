@@ -74,7 +74,7 @@ public class SharePanelView extends DialogPanelView {
 	private SocializeButton cancelButton;
 	private TextView otherOptions;
 	
-	private int displayOptions;
+	private int displayOptions = ShareUtils.DEFAULT;
 	
 	private Entity entity;
 	

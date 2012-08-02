@@ -37,6 +37,8 @@ import com.socialize.ui.view.LoadingListView;
 
 public class CommentListViewTest extends SocializeUIActivityTest {
 	
+	Entity entity = Entity.newInstance("foobar", null);
+	
 	public void testGetCommentScrollListener() {
 		PublicCommentListView view = new PublicCommentListView(getContext()) {
 			@Override
@@ -44,6 +46,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 				addResult(true);
 			}
 		};
+		
 		
 		view.setLoading(true);
 		
@@ -624,6 +627,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 
 		public PublicCommentListView(Context context) {
 			super(context);
+			setEntity(entity);
 		}
 		
 		@Override

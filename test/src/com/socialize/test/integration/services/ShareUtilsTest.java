@@ -28,6 +28,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.view.View;
 import com.socialize.ShareUtils;
 import com.socialize.SocializeAccess;
 import com.socialize.api.action.ShareType;
@@ -236,6 +237,11 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		assertNotNull(twButton);
 		assertNotNull(emailCell);
 		assertNotNull(smsCell);
+		
+		assertEquals(View.VISIBLE, fbButton.getVisibility());
+		assertEquals(View.VISIBLE, twButton.getVisibility());
+		assertEquals(View.VISIBLE, emailCell.getVisibility());
+		assertEquals(View.VISIBLE, smsCell.getVisibility());
 	}
 	
 	public void testShowShareDialogSocial() throws Exception {
@@ -267,8 +273,13 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		
 		assertNotNull(fbButton);
 		assertNotNull(twButton);
-		assertNull(emailCell);
-		assertNull(smsCell);
+		assertNotNull(emailCell);
+		assertNotNull(smsCell);
+		
+		assertEquals(View.VISIBLE, fbButton.getVisibility());
+		assertEquals(View.VISIBLE, twButton.getVisibility());
+		assertEquals(View.GONE, emailCell.getVisibility());
+		assertEquals(View.GONE, smsCell.getVisibility());
 	}	
 	
 	public void testShowShareDialogAndContinueWithoutFlowControl() throws Exception {

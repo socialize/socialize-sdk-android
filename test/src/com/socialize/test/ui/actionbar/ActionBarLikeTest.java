@@ -51,6 +51,9 @@ public class ActionBarLikeTest extends ActionBarTest {
 		IAuthDialogFactory mockFactory = new IAuthDialogFactory() {
 			
 			@Override
+			public void preload(Context context) {}
+
+			@Override
 			public void show(Context context, AuthDialogListener listener) {
 				latch.countDown();
 			}
