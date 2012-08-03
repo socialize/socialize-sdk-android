@@ -51,8 +51,8 @@ public class CommentUtils {
 	
 	/**
 	 * Returns the default sharing options for the user.
-	 * @param context
-	 * @return
+	 * @param context The current context.
+	 * @return The default sharing options for the user.
 	 */
 	public static CommentOptions getUserCommentOptions(Context context) {
 		return proxy.getUserCommentOptions(context);

@@ -24,19 +24,18 @@ package com.socialize.api;
 /**
  * Produces SocializeEntityResponse instances.
  * @author Jason Polites
- *
  */
 public interface SocializeResponseFactory<T> {
 
 	/**
 	 * Creates a single SocializeEntityResponse instance.
-	 * @return
+	 * @return A new SocializeEntityResponse instance.
 	 */
 	public SocializeEntityResponse<T> newEntityResponse();
 	
 	/**
 	 * Creates a single SocializeAuthResponse instance.
-	 * @return
+	 * @return A new SocializeAuthResponse instance.
 	 */
 	public SocializeAuthResponse newAuthResponse();
 	

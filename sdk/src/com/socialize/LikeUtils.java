@@ -55,8 +55,8 @@ public class LikeUtils {
 	
 	/**
 	 * Returns the default sharing options for the user.
-	 * @param context
-	 * @return
+	 * @param context The current context.
+	 * @return The default sharing options for the user.
 	 */
 	public static LikeOptions getUserLikeOptions(Context context) {
 		return proxy.getUserLikeOptions(context);

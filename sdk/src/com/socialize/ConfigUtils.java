@@ -45,7 +45,7 @@ public class ConfigUtils {
 	/**
 	 * Returns the internal Socialize configuration object.
 	 * @param context The current context.
-	 * @return
+	 * @return The global configuration object which can be used to programmatically set config.
 	 */
 	public static SocializeConfig getConfig(Context context) {
 		return proxy.getConfig(context);

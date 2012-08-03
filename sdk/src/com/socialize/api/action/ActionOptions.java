@@ -50,7 +50,7 @@ public class ActionOptions {
 	
 	/**
 	 * Returns true if auth is required for sharing.  Defaults to socialize.require.auth
-	 * @return
+	 * @return true if auth is required for sharing.
 	 */
 	public boolean isShowAuthDialog() {
 		return showAuthDialog;
@@ -66,8 +66,8 @@ public class ActionOptions {
 	}
 	
 	/**
-	 * Used to merge legacy ShareOptions objects.
-	 * @param other
+	 * Used to merge legacy ActionOptions objects.
+	 * @param other The options to be merged into this object.
 	 */
 	public void merge(ActionOptions other) {
 		setShowAuthDialog(other.isShowAuthDialog());
