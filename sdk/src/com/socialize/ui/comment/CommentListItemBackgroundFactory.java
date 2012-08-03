@@ -24,6 +24,7 @@ package com.socialize.ui.comment;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.PaintDrawable;
 
 import com.socialize.ui.util.Colors;
 
@@ -53,10 +54,9 @@ public class CommentListItemBackgroundFactory  {
 	}
 	
 	protected Drawable makeDefaultBackground() {
-		// TODO: Make a singleton
-		GradientDrawable shadow = makeGradient(bottomColor, bottomColor);
-		GradientDrawable highlight = makeGradient(topColor, topColor);
-		GradientDrawable surface = makeGradient(bgColor, bgColor);
+		PaintDrawable shadow = new PaintDrawable(bottomColor);
+		PaintDrawable highlight = new PaintDrawable(topColor);
+		PaintDrawable surface = new PaintDrawable(bgColor);
 		LayerDrawable layers = new LayerDrawable(new Drawable[] {shadow, highlight, surface});
 		
 		layers.setLayerInset(0, 0, 0, 0, 0);

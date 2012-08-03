@@ -80,6 +80,14 @@
 					<value value="#ffffff"/>
 				</entry>
 				<entry>
+					<key value="COMMENT_TITLE"/>
+					<value value="#00abe3"/>
+				</entry>
+				<entry>
+					<key value="COMMENT_BODY"/>
+					<value value="#ffffff"/>
+				</entry>				
+				<entry>
 					<key value="SOCIALIZE_BLUE"/>
 					<value value="#00abe3"/>
 				</entry>

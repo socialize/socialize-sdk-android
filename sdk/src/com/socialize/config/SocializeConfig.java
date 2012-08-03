@@ -61,6 +61,7 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_REQUIRE_SHARE = "socialize.require.share";
 	
+	@Deprecated
 	public static final String SOCIALIZE_ALLOW_ANON = "socialize.allow.anon";
 	
 	public static final String SOCIALIZE_EVENTS_AUTH_ENABLED = "socialize.events.auth.enabled";

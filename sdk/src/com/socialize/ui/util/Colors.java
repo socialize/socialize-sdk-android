@@ -39,6 +39,10 @@ public class Colors {
 	public static final String TITLE = "TITLE";
 	public static final String BODY = "BODY";
 	public static final String HEADER = "HEADER";
+	
+	public static final String COMMENT_TITLE = "COMMENT_TITLE";
+	public static final String COMMENT_BODY = "COMMENT_BODY";
+	
 	public static final String BUTTON_BOTTOM = "BUTTON_BOTTOM";
 	public static final String SOCIALIZE_BLUE = "SOCIALIZE_BLUE";
 	

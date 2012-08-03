@@ -77,6 +77,7 @@ public class ShareDialogFactory extends AsyncDialogFactory<SharePanelView, Share
 				bean.setShareDialogListener(shareDialoglistener);
 				bean.setDisplayOptions(displayOptions);
 				bean.applyDisplayOptions();
+				bean.updateNetworkButtonState();
 			}
 		}, new ShareDialogListener() {
 

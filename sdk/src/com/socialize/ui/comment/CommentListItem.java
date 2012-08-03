@@ -30,7 +30,10 @@ public class CommentListItem extends LinearLayout {
 	private Drawables drawables;
 	private SocializeLogger logger;
 	
+	@SuppressWarnings("unused")
 	private CommentListItemBackgroundFactory backgroundFactory;
+	
+//	private Drawable bg;
 
 	public CommentListItem(Context context) {
 		super(context);
@@ -41,19 +44,13 @@ public class CommentListItem extends LinearLayout {
 		final int eight = displayUtils.getDIP(8);
 		final int four = displayUtils.getDIP(4);
 		final int imagePadding = displayUtils.getDIP(2);
-		final int textColor = colors.getColor(Colors.BODY);
-		final int titleColor = colors.getColor(Colors.TITLE);
+		final int textColor = colors.getColor(Colors.COMMENT_BODY);
+		final int titleColor = colors.getColor(Colors.COMMENT_TITLE);
 		final int iconSize = displayUtils.getDIP(64);
 		
-		ListView.LayoutParams layout = new ListView.LayoutParams(ListView.LayoutParams.FILL_PARENT, displayUtils.getDIP(80));
-		setDrawingCacheEnabled(true);
+		ListView.LayoutParams layout = new ListView.LayoutParams(ListView.LayoutParams.FILL_PARENT, ListView.LayoutParams.WRAP_CONTENT);
 		
-		if(backgroundFactory != null) {
-			setBackgroundDrawable(backgroundFactory.getBackground());
-		}
-		else {
-			setBackgroundColor(colors.getColor(Colors.LIST_ITEM_BG));
-		}
+		setBackgroundColor(colors.getColor(Colors.LIST_ITEM_BG));
 		
 		setOrientation(LinearLayout.HORIZONTAL);
 		setLayoutParams(layout);
@@ -94,7 +91,7 @@ public class CommentListItem extends LinearLayout {
 		comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
 		comment.setTextColor(textColor);
 		comment.setLayoutParams(commentLayoutParams);
-		comment.setMaxLines(2);
+//		comment.setMaxLines(2);
 
 		LinearLayout.LayoutParams timeLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
@@ -154,7 +151,7 @@ public class CommentListItem extends LinearLayout {
 		addView(iconLayout);
 		addView(contentLayout);
 	}
-
+	
 	public TextView getComment() {
 		return comment;
 	}
