@@ -25,8 +25,9 @@ public class CommentListItemTest extends SocializeUnitTest {
 		
 		
 		AndroidMock.expect(deviceUtils.getDIP(AndroidMock.anyInt())).andReturn(4).anyTimes();
-		AndroidMock.expect(colors.getColor(Colors.BODY)).andReturn(1);
-		AndroidMock.expect(colors.getColor(Colors.TITLE)).andReturn(1);
+		AndroidMock.expect(colors.getColor(Colors.COMMENT_BODY)).andReturn(1);
+		AndroidMock.expect(colors.getColor(Colors.COMMENT_TITLE)).andReturn(1);
+		AndroidMock.expect(colors.getColor(Colors.LIST_ITEM_BG)).andReturn(1);
 		AndroidMock.expect(drawables.getDrawable("icon_location_pin.png")).andReturn(null);
 		AndroidMock.expect(backgroundFactory.getBackground()).andReturn(null);
 		
