@@ -22,6 +22,7 @@
 package com.socialize.android.ioc;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -199,10 +200,32 @@ public class BeanBuilder {
 		}
 		
 		if(!methodMatched) {
+			// Try setting the field directly
+			Field field = findField(cls, name);
+			
+			if(field != null) {
+				field.setAccessible(true);
+				
+				try {
+					field.set(instance, value);
+				}
+				catch (Exception e) {
+					Logger.w(getClass().getSimpleName(), "Failed to set property [" +
+							name +
+							"] of bean [" +
+							cls.getName() +
+							"] with value of type [" +
+							((value == null) ? "null" : value.getClass().getName()) +
+							"]", e);
+				}
+			}
+			else {
 				// No method found.
 				StringBuilder builder = new StringBuilder();
 				builder.append("No public method found called [");
 				builder.append(setterName);
+				builder.append("] or field called [");
+				builder.append( name );
 				builder.append("] of class [");
 				builder.append( cls.getName() );
 				builder.append( "] with args [" );
@@ -212,6 +235,22 @@ public class BeanBuilder {
 				builder.append("]");
 				
 				Logger.w(getClass().getSimpleName(), builder.toString());
+			}
+		}
+	}
+	
+	protected Field findField(Class<?> cls, String name) {
+		try {
+			return cls.getDeclaredField(name);
+		}
+		catch (NoSuchFieldException e) {
+			cls = cls.getSuperclass();
+			
+			if(cls != null) {
+				return findField(cls, name);
+			}
+			
+			return null;
 		}
 	}
 

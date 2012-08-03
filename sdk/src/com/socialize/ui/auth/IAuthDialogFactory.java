@@ -30,5 +30,7 @@ import android.content.Context;
 public interface IAuthDialogFactory {
 
 	public void show(Context context, AuthDialogListener listener);
+	
+	public void preload(Context context);
 
 }

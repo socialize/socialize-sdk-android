@@ -28,6 +28,7 @@ import android.view.View.OnClickListener;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.facebook.FacebookUtils;
@@ -49,17 +50,22 @@ public abstract class SocialNetworkAuthClickListener implements OnClickListener 
 		
 		view.setEnabled(false);
 		
-		dialog = dialogFactory.show(view.getContext(), "Authentication", "Authenticating...");
-		
 		SocialNetwork network = getSocialNetwork();
+		SocializeAuthListener authListener = getAuthListener(view);
 		
-		switch (network) {
-			case FACEBOOK:
-				FacebookUtils.link((Activity) view.getContext(), getAuthListener(view));
-				break;
-			case TWITTER:
-				TwitterUtils.link((Activity) view.getContext(), getAuthListener(view));
-				break;
+		if(!getSocialize().isAuthenticated(AuthProviderType.valueOf(network))) {
+			dialog = dialogFactory.show(view.getContext(), "Authentication", "Authenticating...");
+			switch (network) {
+				case FACEBOOK:
+					FacebookUtils.link((Activity) view.getContext(), getAuthListener(view));
+					break;
+				case TWITTER:
+					TwitterUtils.link((Activity) view.getContext(), getAuthListener(view));
+					break;
+			}
+		}
+		else {
+			authListener.onAuthSuccess(getSocialize().getSession());
 		}
 	}
 	
@@ -68,7 +74,10 @@ public abstract class SocialNetworkAuthClickListener implements OnClickListener 
 			
 			@Override
 			public void onError(SocializeException error) {
-				dialog.dismiss();
+				if(dialog != null) {
+					dialog.dismiss();
+				}
+				
 				if(listener != null) {
 					listener.onError(error);
 				}
@@ -77,7 +86,9 @@ public abstract class SocialNetworkAuthClickListener implements OnClickListener 
 			
 			@Override
 			public void onAuthSuccess(SocializeSession session) {
-				dialog.dismiss();
+				if(dialog != null) {
+					dialog.dismiss();
+				}
 				if(listener != null) {
 					listener.onAuthSuccess(session);
 				}
@@ -86,7 +97,9 @@ public abstract class SocialNetworkAuthClickListener implements OnClickListener 
 			
 			@Override
 			public void onAuthFail(SocializeException error) {
-				dialog.dismiss();
+				if(dialog != null) {
+					dialog.dismiss();
+				}
 				if(listener != null) {
 					listener.onAuthFail(error);
 				}
@@ -95,7 +108,9 @@ public abstract class SocialNetworkAuthClickListener implements OnClickListener 
 
 			@Override
 			public void onCancel() {
-				dialog.dismiss();
+				if(dialog != null) {
+					dialog.dismiss();
+				}
 				if(listener != null) {
 					listener.onCancel();
 				}

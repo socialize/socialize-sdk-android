@@ -26,7 +26,7 @@ import android.location.Location;
 
 /**
  * Represents a single tweet.
- * @see https://dev.twitter.com/docs/api/1/post/statuses/update
+ * @see <a href="https://dev.twitter.com/docs/api/1/post/statuses/update">https://dev.twitter.com/docs/api/1/post/statuses/update</a>
  * @author Jason Polites
  */
 public class Tweet {

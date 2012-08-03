@@ -78,7 +78,6 @@ public abstract class BaseView extends LinearLayout implements SocializeView {
 		
 		if(!isInEditMode()) {
 			if(visibility == VISIBLE) {
-				
 				try {
 					if(!checkLoaded()) {
 						onViewLoad();

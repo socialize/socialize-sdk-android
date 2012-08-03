@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.SocializeAccess;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.comment.CommentOptions;
@@ -25,7 +24,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.test.ui.SocializeUIActivityTest;
+import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.comment.CommentAdapter;
 import com.socialize.ui.comment.CommentAddButtonListener;
@@ -35,7 +34,9 @@ import com.socialize.ui.dialog.SimpleDialogFactory;
 import com.socialize.ui.header.SocializeHeader;
 import com.socialize.ui.view.LoadingListView;
 
-public class CommentListViewTest extends SocializeUIActivityTest {
+public class CommentListViewTest extends SocializeActivityTest {
+	
+	Entity entity = Entity.newInstance("foobar", null);
 	
 	public void testGetCommentScrollListener() {
 		PublicCommentListView view = new PublicCommentListView(getContext()) {
@@ -44,6 +45,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 				addResult(true);
 			}
 		};
+		
 		
 		view.setLoading(true);
 		
@@ -83,7 +85,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 			}
 		};
 		
-		SocializeAccess.setCommentUtilsProxy(mockCommentUtils);
+		view.setCommentUtils(mockCommentUtils);
 		
 		final CommentAddButtonListener commentScrollListener = view.getCommentAddButtonListener();
 		
@@ -173,8 +175,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 			}
 		};
 		
-		SocializeAccess.setCommentUtilsProxy(mockCommentUtilsProxy);			
-		
 		PublicCommentListView view = new PublicCommentListView(TestUtils.getActivity(this)) {
 
 			@Override
@@ -191,7 +191,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		view.setStartIndex(startIndex);
 		view.setEndIndex(endIndex);
 		view.setEntity(entity);
-		
+		view.setCommentUtils(mockCommentUtilsProxy);
 		view.getCommentAddButtonListener().onComment(commentString, shareLocation, false);
 		
 		AndroidMock.verify(progressDialogFactory);
@@ -246,8 +246,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 			}
 		};
 		
-		SocializeAccess.setCommentUtilsProxy(mockCommentUtilsProxy);		
-		
 		PublicCommentListView view = new PublicCommentListView(getContext()) {
 			@Override
 			public void showError(Context context, Exception message) {
@@ -258,7 +256,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		view.setProgressDialogFactory(progressDialogFactory);
 		view.setEntity(entity);
-		
+		view.setCommentUtils(mockCommentUtilsProxy);
 		view.getCommentAddButtonListener().onComment(comment, true, false);
 		
 		AndroidMock.verify(progressDialogFactory);
@@ -350,8 +348,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 			}
 		};
 		
-		SocializeAccess.setCommentUtilsProxy(mockCommentUtilsProxy);
-		
 		PublicCommentListView view = new PublicCommentListView(getContext()) {
 			@Override
 			protected void preLoadImages(List<Comment> comments) {
@@ -363,7 +359,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		view.setStartIndex(startIndex);
 		view.setEndIndex(endIndex);
 		view.setDefaultGrabLength(10);
-		
+		view.setCommentUtils(mockCommentUtilsProxy);
 		view.getNextSet();
 		
 		AndroidMock.verify(commentAdapter);
@@ -421,8 +417,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 			}
 		};
 		
-		SocializeAccess.setCommentUtilsProxy(mockCommentUtilsProxy);		
-		
 		PublicCommentListView view = new PublicCommentListView(getContext()) {
 			@Override
 			protected void preLoadImages(List<Comment> comments) {
@@ -435,7 +429,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		view.setContent(content);
 		view.setStartIndex(startIndex);
 		view.setDefaultGrabLength(endIndex);
-		
+		view.setCommentUtils(mockCommentUtilsProxy);
 		view.doListComments(false);
 		
 		assertEquals(totalCount, view.getTotalCount());
@@ -479,8 +473,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 			}
 		};
 		
-		SocializeAccess.setCommentUtilsProxy(mockCommentUtilsProxy);
-				
 		PublicCommentListView view = new PublicCommentListView(getContext()) {
 			@Override
 			public void showError(Context context, Exception error) {
@@ -490,7 +482,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		view.setCommentAdapter(commentAdapter);
 		view.setContent(content);
-		
+		view.setCommentUtils(mockCommentUtilsProxy);
 		view.doListComments(false);
 		
 		AndroidMock.verify(commentAdapter);
@@ -623,7 +615,8 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 	class PublicCommentListView extends CommentListView {
 
 		public PublicCommentListView(Context context) {
-			super(context, Entity.newInstance("foobar", null));
+			super(context);
+			setEntity(entity);
 		}
 		
 		@Override

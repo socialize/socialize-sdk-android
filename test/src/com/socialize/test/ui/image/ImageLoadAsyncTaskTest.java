@@ -26,7 +26,7 @@ import java.util.Queue;
 import android.graphics.Bitmap;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.test.ui.SocializeUIActivityTest;
+import com.socialize.test.SocializeActivityTest;
 import com.socialize.ui.image.ImageLoadAsyncTask;
 import com.socialize.ui.image.ImageLoadRequest;
 import com.socialize.ui.image.ImageLoadType;
@@ -48,7 +48,7 @@ import com.socialize.util.SafeBitmapDrawable;
 	SafeBitmapDrawable.class,
 	ImageLoadRequest.class
 })
-public class ImageLoadAsyncTaskTest extends SocializeUIActivityTest {
+public class ImageLoadAsyncTaskTest extends SocializeActivityTest {
 
 
 	public void testImageLoadAsyncTaskImageInCache() {

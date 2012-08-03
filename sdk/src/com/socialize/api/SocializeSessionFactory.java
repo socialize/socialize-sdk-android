@@ -33,21 +33,28 @@ public interface SocializeSessionFactory {
 
 	/**
 	 * Creates a new session.
-	 * @param key
-	 * @param secret
+	 * @param key The socialize consumer key.
+	 * @param secret The socialize consumer secret.
 	 * @param userProviderCredentials
-	 * @return
+	 * @return A new writable session object.
 	 */
 	public WritableSession create(String key, String secret, UserProviderCredentials userProviderCredentials);
 	
+	/**
+	 * Creates a new session.
+	 * @param key The socialize consumer key.
+	 * @param secret The socialize consumer secret.
+	 * @param userProviderCredentialsMap Data pertaining to the auth provider used when creating the session.
+	 * @return A new writable session object.
+	 */
 	public WritableSession create(String key, String secret, UserProviderCredentialsMap userProviderCredentialsMap);
 	
 	/**
 	 * Creates a new session.
-	 * @param key
-	 * @param secret
-	 * @param data
-	 * @return
+	 * @param key The socialize consumer key.
+	 * @param secret The socialize consumer secret.
+	 * @param data Data pertaining to the auth provider used when creating the session.
+	 * @return A new writable session object.
 	 */
 	public WritableSession create(String key, String secret, AuthProviderData data);
 	

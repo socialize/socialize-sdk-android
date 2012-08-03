@@ -20,7 +20,7 @@
 		<CheckBox android:id="@+id/chkAllowAnon"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:text="Allow Anonymous Posts"/> 
+		        android:text="Require Share on Post"/> 
 		        
 		<CheckBox android:id="@+id/chkFB"
 		        android:layout_width="wrap_content"

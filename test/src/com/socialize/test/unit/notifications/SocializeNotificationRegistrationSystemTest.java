@@ -21,6 +21,8 @@
  */
 package com.socialize.test.unit.notifications;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -31,10 +33,13 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.DeviceRegistrationListener;
 import com.socialize.api.DeviceRegistrationSystem;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.SocializeSessionConsumer;
+import com.socialize.api.action.user.SocializeUserSystem;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.DeviceRegistration;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
 import com.socialize.notifications.NotificationRegistrationState;
 import com.socialize.notifications.SocializeNotificationRegistrationSystem;
 import com.socialize.test.SocializeUnitTest;
@@ -52,7 +57,7 @@ import com.socialize.test.SocializeUnitTest;
 public class SocializeNotificationRegistrationSystemTest extends SocializeUnitTest {
 
 	@SuppressWarnings("unchecked")
-	public void test_registerSocialize() throws SocializeException {
+	public void test_doRegistrationSocialize() throws SocializeException {
 		
 		final String registrationId = "foobar";
 		final User user = new User();
@@ -201,6 +206,61 @@ public class SocializeNotificationRegistrationSystemTest extends SocializeUnitTe
 		
 		AndroidMock.verify(notificationRegistrationState);
 	}
+	
+	public void test_registerC2DMAsync() throws Exception {
+		
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		SocializeNotificationRegistrationSystem system = new SocializeNotificationRegistrationSystem() {
+			@Override
+			public synchronized void registerC2DM(Context context) {
+				latch.countDown();
+			}
+		};
+		
+		system.registerC2DMAsync(getContext());
+		
+		assertTrue(latch.await(10, TimeUnit.SECONDS));
+	}
+	
+	
+	public void test_registerSocialize() {
+		NotificationRegistrationState notificationRegistrationState = AndroidMock.createMock(NotificationRegistrationState.class);
+		notificationRegistrationState.setPendingSocializeRequestTime(AndroidMock.anyLong());
+		notificationRegistrationState.save(getContext());
+		
+		final SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		final String registrationId = "foobar";
+		
+		SocializeUserSystem userSystem = new SocializeUserSystem(null) {
+			@Override
+			public void authenticate(Context context, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
+				listener.onAuthSuccess(session);
+			}
+		};
+		
+		SocializeNotificationRegistrationSystem system = new SocializeNotificationRegistrationSystem() {
+			@Override
+			protected void doRegistrationSocialize(Context context, SocializeSession session, String registrationId) {
+				addResult(0, session);
+			}
+		};
+		
+		system.setUserSystem(userSystem);
+		system.setNotificationRegistrationState(notificationRegistrationState);
+		
+		AndroidMock.replay(notificationRegistrationState, session);
+		
+		system.registerSocialize(getContext(), registrationId);
+		
+		AndroidMock.verify(notificationRegistrationState, session);
+		
+		SocializeSession result = getResult(0);
+		
+		assertSame(session, result);
+		
+	}
+	
 	
 	class PublicSocializeNotificationRegistrationSystem extends SocializeNotificationRegistrationSystem {
 

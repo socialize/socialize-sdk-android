@@ -35,10 +35,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.socialize.ConfigUtils;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.config.ConfigUtilsProxy;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
@@ -59,6 +59,7 @@ public class AuthPanelView extends DialogPanelView {
 	private Colors colors;
 	private Drawables drawables;
 	private DisplayUtils displayUtils;
+	private ConfigUtilsProxy configUtils;
 	private IBeanFactory<FacebookSignInCell> facebookSignInCellFactory;
 	private IBeanFactory<TwitterSignInCell> twitterSignInCellFactory;
 	private IBeanFactory<AnonymousCell> anonCellFactory;
@@ -166,7 +167,7 @@ public class AuthPanelView extends DialogPanelView {
 		skipAuth.setLayoutParams(skipAuthParams);
 		
 		
-		if(ConfigUtils.getConfig(getContext()).isAllowAnonymousUser()) {
+		if(configUtils.getConfig(getContext()).isAuthRequired()) {
 			String mystring=new String("I'd rather not...");
 			SpannableString content = new SpannableString(mystring);
 			content.setSpan(new UnderlineSpan(), 0, mystring.length(), 0);
@@ -316,6 +317,10 @@ public class AuthPanelView extends DialogPanelView {
 
 	public void setColors(Colors colors) {
 		this.colors = colors;
+	}
+	
+	public void setConfigUtils(ConfigUtilsProxy configUtils) {
+		this.configUtils = configUtils;
 	}
 
 	protected SocializeAuthListener getAuthClickListener(final ClickableSectionCell cell, final SocialNetwork network) {

@@ -70,8 +70,8 @@ public class UserUtils {
 	
 	/**
 	 * Returns the settings for the current user.
-	 * @param context
-	 * @return
+	 * @param context The current context.
+	 * @return The settings for the current user.
 	 */
 	public static UserSettings getUserSettings(Context context) {
 		return proxy.getUserSettings(context);
@@ -79,9 +79,9 @@ public class UserUtils {
 	
 	/**
 	 * Retrieves a User based on the given ID.
-	 * @param context
-	 * @param id
-	 * @param listener
+	 * @param context The current context.
+	 * @param id The id of the user.
+	 * @param listener A listener to handle the GET.
 	 */
 	public static void getUser(Context context, long id, UserGetListener listener) {
 		proxy.getUser(context, id, listener);
@@ -89,8 +89,8 @@ public class UserUtils {
 	
 	/**
 	 * Shows the user profile UI for the given user.
-	 * @param context
-	 * @param user
+	 * @param context The current context.
+	 * @param user The user for whom the profile will be shown.
 	 */
 	public static void showUserProfile (Activity context, User user) {
 		proxy.showUserProfileView(context, user, null);
@@ -98,9 +98,9 @@ public class UserUtils {
 	
 	/**
 	 * Shows the user profile UI for the given user.
-	 * @param context
-	 * @param user
-	 * @param action
+	 * @param context The current context.
+	 * @param user The user for whom the profile will be shown.
+	 * @param action The action (comment/share/like) that was performed.
 	 */
 	public static void showUserProfileWithAction (Activity context, User user, SocializeAction action) {
 		proxy.showUserProfileView(context, user, action);
@@ -108,8 +108,7 @@ public class UserUtils {
 	
 	/**
 	 * Shows the settings UI for the current user.
-	 * @param context
-	 * @throws SocializeException If the current user could not be found or authenticated.
+	 * @param context The current context.
 	 */
 	public static void showUserSettings (Activity context)  {
 		proxy.showUserSettingsView(context, UserUtils.getCurrentUser(context).getId());
@@ -117,8 +116,8 @@ public class UserUtils {
 	
 	/**
 	 * Shows the settings UI for the current user.
-	 * @param context
-	 * @param requestCode
+	 * @param context The current context.
+	 * @param requestCode (Optional)  Set as the result on the UserSettings activity.
 	 */
 	public static void showUserSettingsForResult(Activity context, int requestCode) {
 		proxy.showUserSettingsViewForResult(context, UserUtils.getCurrentUser(context).getId(), requestCode);
@@ -126,20 +125,18 @@ public class UserUtils {
 	
 	/**
 	 * Saves the profile for the given user.
-	 * @param context
-	 * @param user
-	 * @param listener
+	 * @param context The current context.
+	 * @param user The user for whom the settings will be saved.
+	 * @param listener A listener to handle the save.
 	 */
 	public static void saveUserSettings (Context context, UserSettings userSettings, UserSaveListener listener) {
 		proxy.saveUserSettings(context, userSettings, listener);
 	}
 	
-	
-	
 	/**
 	 * Clears the saved session state for the user.  
 	 * WARNING: This will wipe any locally saved preferences for this user.
-	 * @param context
+	 * @param context The current context.
 	 */
 	public static void clearLocalSessionData(Context context) {
 		proxy.clearSession(context);

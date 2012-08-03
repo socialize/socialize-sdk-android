@@ -23,6 +23,7 @@ package com.socialize.api.action.comment;
 
 import android.app.Activity;
 import android.content.Context;
+import com.socialize.android.ioc.ContainerAware;
 import com.socialize.annotations.Synchronous;
 import com.socialize.entity.Entity;
 import com.socialize.entity.User;
@@ -37,7 +38,7 @@ import com.socialize.ui.comment.OnCommentViewActionListener;
  * @author Jason Polites
  *
  */
-public interface CommentUtilsProxy {
+public interface CommentUtilsProxy extends ContainerAware {
 	
 	@Synchronous
 	public CommentOptions getUserCommentOptions(Context context);
@@ -55,6 +56,8 @@ public interface CommentUtilsProxy {
 	public void getCommentsByEntity (Activity context, String entityKey, int start, int end, CommentListListener listener);
 	
 	public void getCommentsByApplication (Activity context, int start, int end, CommentListListener listener);
+	
+	public void preloadCommentView (Activity context);
 	
 	public void showCommentView(Activity context, Entity entity, OnCommentViewActionListener listener);
 	

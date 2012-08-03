@@ -554,6 +554,9 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		
 		final IShareDialogFactory mockShareDialogFactory = new IShareDialogFactory() {
 			@Override
+			public void preload(Context context) {}
+			
+			@Override
 			public void show(Context context, Entity entity, SocialNetworkListener socialNetworkListener, ShareDialogListener shareDialoglistener, int displayOptions) {
 				shareDialoglistener.onContinue(null, true, network);
 			}

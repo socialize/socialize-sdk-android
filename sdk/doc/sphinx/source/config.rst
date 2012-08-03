@@ -25,7 +25,7 @@ The following table lists the configuration options that can be specified in you
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | socialize.require.auth          | Boolean | true     |                                        | Require users to authenticate with a 3rd party for social actions|
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
-| socialize.allow.anon            | Boolean | false    |                                        | Allow users to authenticate anonymously for social actions       |
+| socialize.require.share         | Boolean | false    |                                        | Require users to share with a 3rd party for social actions       |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | socialize.c2dm.sender.id        | String  | None     | ``yoursender@gmail.com``               | Optional.  Use if you have your own C2DM sender ID               |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+

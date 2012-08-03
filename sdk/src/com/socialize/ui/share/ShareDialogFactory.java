@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import android.app.Dialog;
 import android.content.Context;
 import com.socialize.Socialize;
+import com.socialize.android.ioc.BeanCreationListener;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.event.EventSystem;
@@ -46,18 +47,39 @@ public class ShareDialogFactory extends AsyncDialogFactory<SharePanelView, Share
 	private EventSystem eventSystem;
 	private SocializeConfig config;
 	
+	@Override
+	public void preload(Context context) {
+		super.preload(context);
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.share.IShareDialogFactory#show(android.content.Context, com.socialize.entity.Entity, com.socialize.networks.SocialNetworkListener, com.socialize.ui.share.ShareDialogListener, int)
 	 */
 	@Override
 	public void show(
 			Context context, 
-			Entity entity, 
-			SocialNetworkListener socialNetworkListener, 
+			final Entity entity, 
+			final SocialNetworkListener socialNetworkListener, 
 			final ShareDialogListener shareDialoglistener, 
-			int displayOptions) {
+			final int displayOptions) {
 		
-		makeDialog(context, new ShareDialogListener() {
+		showDialog(context, 
+				
+		new BeanCreationListener<SharePanelView>() {
+			
+			@Override
+			public void onError(String name, Exception e) {}
+			
+			@Override
+			public void onCreate(SharePanelView bean) {
+				bean.setSocialNetworkListener(socialNetworkListener);
+				bean.setEntity(entity);
+				bean.setShareDialogListener(shareDialoglistener);
+				bean.setDisplayOptions(displayOptions);
+				bean.applyDisplayOptions();
+				bean.updateNetworkButtonState();
+			}
+		}, new ShareDialogListener() {
 
 			@Override
 			public void onShow(Dialog dialog, SharePanelView dialogView) {
@@ -99,14 +121,9 @@ public class ShareDialogFactory extends AsyncDialogFactory<SharePanelView, Share
 					shareDialoglistener.onFlowInterrupted(controller);
 				}
 			}
-		}, entity, socialNetworkListener, displayOptions);
+		});
 	}
 
-	@Override
-	public void setListener(SharePanelView view, ShareDialogListener listener) {
-		view.setShareDialogListener(listener);
-	}
-	
 	
 	public void setConfig(SocializeConfig config) {
 		this.config = config;

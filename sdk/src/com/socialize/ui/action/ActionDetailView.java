@@ -29,7 +29,6 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-
 import com.socialize.Socialize;
 import com.socialize.entity.SocializeAction;
 import com.socialize.log.SocializeLogger;

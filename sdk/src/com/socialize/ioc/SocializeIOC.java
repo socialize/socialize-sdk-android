@@ -22,9 +22,7 @@
 package com.socialize.ioc;
 
 import java.io.InputStream;
-
 import android.content.Context;
-
 import com.socialize.android.ioc.AndroidIOC;
 import com.socialize.config.SocializeConfig;
 import com.socialize.util.ResourceLocator;
@@ -34,7 +32,7 @@ import com.socialize.util.ResourceLocator;
  *
  */
 public class SocializeIOC extends AndroidIOC {
-	
+
 	public void init(Context context, ResourceLocator resourceLocator, String...configPaths) throws Exception {
 		InputStream[] streams = null;
 		try {

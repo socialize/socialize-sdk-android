@@ -80,6 +80,14 @@
 					<value value="#ffffff"/>
 				</entry>
 				<entry>
+					<key value="COMMENT_TITLE"/>
+					<value value="#00abe3"/>
+				</entry>
+				<entry>
+					<key value="COMMENT_BODY"/>
+					<value value="#ffffff"/>
+				</entry>				
+				<entry>
 					<key value="SOCIALIZE_BLUE"/>
 					<value value="#00abe3"/>
 				</entry>
@@ -372,11 +380,13 @@
 	<bean 
 		id="authPanelView" 
 		class="com.socialize.ui.auth.AuthPanelView"		
-		singleton="false">
+		singleton="false"
+		cache="true">
 		<constructor-arg type="activity"/>
 		<property name="colors" ref="colors"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="displayUtils" ref="displayUtils"/>
+		<property name="configUtils" ref="configUtils"/>
 		<property name="facebookSignInCellFactory" ref="facebookSignInCellFactory"/>
 		<property name="twitterSignInCellFactory" ref="twitterSignInCellFactory"/>
 		<property name="anonCellFactory" ref="anonCellFactory"/>
@@ -401,7 +411,8 @@
 	<bean 
 		id="sharePanelView" 
 		class="com.socialize.ui.share.SharePanelView"		
-		singleton="false">
+		singleton="false"
+		cache="true">
 		<constructor-arg type="activity"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="drawables" ref="drawables"/>
@@ -851,7 +862,9 @@
 		id="commentList" 
 		class="com.socialize.ui.comment.CommentListView"
 		singleton="false"
-		extends="socializeView">
+		extends="socializeView"
+		cache="true">
+		
 		<constructor-arg type="activity"/>
 
 		<init-method name="init"/>
@@ -860,9 +873,11 @@
 		<property name="drawables" ref="drawables"/>
 		<property name="appUtils" ref="appUtils"/>
 		<property name="displayUtils" ref="displayUtils"/>
+		<property name="commentUtils" ref="commentUtils"/>
+		<property name="userUtils" ref="userUtils"/>
+		<property name="subscriptionUtils" ref="subscriptionUtils"/>
 		<property name="logger" ref="logger"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
-		<!-- <property name="alertDialogFactory" ref="alertDialogFactory"/> -->
 		<property name="commentHeaderFactory" ref="commentHeaderFactory"/>
 		<property name="commentEditFieldFactory" ref="commentEditFieldFactory"/>
 		<property name="commentContentViewFactory" ref="loadingListViewFactory"/>
@@ -1353,6 +1368,8 @@
 		
 		<property name="drawables" ref="drawables"/>
 		<property name="displayUtils" ref="displayUtils"/>
+		<property name="shareUtils" ref="shareUtils"/>
+		<property name="commentUtils" ref="commentUtils"/>
 		<property name="entityCache" ref="entityCache"/>
 		<property name="logger" ref="logger"/>
 		<property name="buttonFactory" ref="actionBarButtonFactory"/>
@@ -1596,6 +1613,7 @@
 		<property name="authDialogFactory" ref="authDialogFactory"/>
 		<property name="shareDialogFactory" ref="shareDialogFactory"/>
 		<property name="shareHandlers" ref="shareHandlers"/>
+		<property name="listenerHolder" ref="listenerHolder"/>
 	</bean>
 	
 	<bean id="subscriptionUtils" class="com.socialize.api.action.comment.SocializeSubscriptionUtils">

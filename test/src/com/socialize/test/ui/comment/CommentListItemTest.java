@@ -21,16 +21,13 @@ public class CommentListItemTest extends SocializeUnitTest {
 		DisplayUtils deviceUtils = AndroidMock.createMock(DisplayUtils.class);
 		Colors colors = AndroidMock.createMock(Colors.class);
 		Drawables drawables = AndroidMock.createMock(Drawables.class);
-		CommentListItemBackgroundFactory backgroundFactory = AndroidMock.createMock(CommentListItemBackgroundFactory.class);
 		
 		
 		AndroidMock.expect(deviceUtils.getDIP(AndroidMock.anyInt())).andReturn(4).anyTimes();
-		AndroidMock.expect(colors.getColor(Colors.BODY)).andReturn(1);
-		AndroidMock.expect(colors.getColor(Colors.TITLE)).andReturn(1);
+		AndroidMock.expect(colors.getColor(Colors.COMMENT_BODY)).andReturn(1);
+		AndroidMock.expect(colors.getColor(Colors.COMMENT_TITLE)).andReturn(1);
+		AndroidMock.expect(colors.getColor(Colors.LIST_ITEM_BG)).andReturn(1);
 		AndroidMock.expect(drawables.getDrawable("icon_location_pin.png")).andReturn(null);
-		AndroidMock.expect(backgroundFactory.getBackground()).andReturn(null);
-		
-		AndroidMock.replay(backgroundFactory);
 		AndroidMock.replay(deviceUtils);
 		AndroidMock.replay(colors);
 		AndroidMock.replay(drawables);
@@ -39,11 +36,9 @@ public class CommentListItemTest extends SocializeUnitTest {
 		item.setDisplayUtils(deviceUtils);
 		item.setColors(colors);
 		item.setDrawables(drawables);
-		item.setBackgroundFactory(backgroundFactory);
 		
 		item.init();
 		
-		AndroidMock.verify(backgroundFactory);
 		AndroidMock.verify(deviceUtils);
 		AndroidMock.verify(colors);
 		AndroidMock.verify(drawables);

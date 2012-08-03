@@ -28,6 +28,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.view.View;
 import com.socialize.ShareUtils;
 import com.socialize.SocializeAccess;
 import com.socialize.api.action.ShareType;
@@ -236,6 +237,11 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		assertNotNull(twButton);
 		assertNotNull(emailCell);
 		assertNotNull(smsCell);
+		
+		assertEquals(View.VISIBLE, fbButton.getVisibility());
+		assertEquals(View.VISIBLE, twButton.getVisibility());
+		assertEquals(View.VISIBLE, emailCell.getVisibility());
+		assertEquals(View.VISIBLE, smsCell.getVisibility());
 	}
 	
 	public void testShowShareDialogSocial() throws Exception {
@@ -267,8 +273,13 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		
 		assertNotNull(fbButton);
 		assertNotNull(twButton);
-		assertNull(emailCell);
-		assertNull(smsCell);
+		assertNotNull(emailCell);
+		assertNotNull(smsCell);
+		
+		assertEquals(View.VISIBLE, fbButton.getVisibility());
+		assertEquals(View.VISIBLE, twButton.getVisibility());
+		assertEquals(View.GONE, emailCell.getVisibility());
+		assertEquals(View.GONE, smsCell.getVisibility());
 	}	
 	
 	public void testShowShareDialogAndContinueWithoutFlowControl() throws Exception {
@@ -277,6 +288,9 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		final Entity entity = Entity.newInstance("http://entity1.com", "http://entity1.com");
 		
 		IShareDialogFactory mockShareDialogFactory = new IShareDialogFactory() {
+			@Override
+			public void preload(Context context) {}
+			
 			@Override
 			public void show(Context context, Entity entity, SocialNetworkListener socialNetworkListener, ShareDialogListener shareDialoglistener, int displayOptions) {
 				// Immediately call onContinue
@@ -339,6 +353,9 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		final String text = "foobar";
 		
 		IShareDialogFactory mockShareDialogFactory = new IShareDialogFactory() {
+			@Override
+			public void preload(Context context) {}
+			
 			@Override
 			public void show(Context context, Entity entity, SocialNetworkListener socialNetworkListener, ShareDialogListener shareDialoglistener, int displayOptions) {
 				// Immediately call onContinue
@@ -406,12 +423,14 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		
 		IShareDialogFactory mockShareDialogFactory = new IShareDialogFactory() {
 			@Override
+			public void preload(Context context) {}
+			
+			@Override
 			public void show(Context context, Entity entity, SocialNetworkListener socialNetworkListener, ShareDialogListener shareDialoglistener, int displayOptions) {
 				// Immediately call cancel
 				shareDialoglistener.onCancel(null);
 			}
 		};
-		
 		
 		final SocializeShareUtils mockShareUtils = new SocializeShareUtils() {
 			

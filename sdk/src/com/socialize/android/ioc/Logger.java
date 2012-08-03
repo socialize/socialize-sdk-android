@@ -27,7 +27,7 @@ public class Logger {
 
 	public static String LOG_KEY = "AndroidIOC";
 	
-	public static int logLevel = Log.WARN;
+	public static int logLevel = Log.INFO;
 	
 	static {
 		if(Log.isLoggable(LOG_KEY, Log.DEBUG)) {

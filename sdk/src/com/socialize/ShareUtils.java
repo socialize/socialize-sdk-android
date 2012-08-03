@@ -99,8 +99,8 @@ public class ShareUtils {
 	
 	/**
 	 * Returns the default sharing options for the user.
-	 * @param context
-	 * @return
+	 * @param context The current context.
+	 * @return The default sharing options for the user.
 	 */
 	public static ShareOptions getUserShareOptions(Context context) {
 		return proxy.getUserShareOptions(context);
@@ -114,6 +114,22 @@ public class ShareUtils {
 	public static void showLinkDialog (Activity context, AuthDialogListener listener) {
 		proxy.showLinkDialog(context, listener);
 	}
+	
+	/**
+	 * Pre-loads the share dialog in the background to improve load speed and end user responsiveness.
+	 * @param context The current context.
+	 */
+	public static void preloadShareDialog (Activity context) {
+		proxy.preloadShareDialog(context);
+	};	
+	
+	/**
+	 * Pre-loads the link dialog in the background to improve load speed and end user responsiveness.
+	 * @param context The current context.
+	 */
+	public static void preloadLinkDialog (Activity context) {
+		proxy.preloadLinkDialog(context);
+	};	
 	
 	/**
 	 * Displays the default share dialog.  In most cases this is the simplest version to use.
@@ -227,8 +243,8 @@ public class ShareUtils {
 	 * @param end The end index for the result set.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void getSharesByUser (Activity context, User userId, int start, int end, ShareListListener listener) {
-		proxy.getSharesByUser(context, userId, start, end, listener);
+	public static void getSharesByUser (Activity context, User user, int start, int end, ShareListListener listener) {
+		proxy.getSharesByUser(context, user, start, end, listener);
 	};
 	
 	/**

@@ -89,6 +89,7 @@ public class Main extends Activity {
 				return null;
 			}
 
+			@SuppressWarnings("deprecation")
 			@Override
 			protected void onPostExecute(Void result) {
 				progress.dismiss();

@@ -11,11 +11,12 @@ import com.socialize.android.ioc.IOCContainer;
 import com.socialize.sample.ui.SampleSocializeActivity;
 import com.socialize.sample.ui.TestActivityCallbackHolder;
 import com.socialize.sample.ui.TestSocializeActivityCallback;
+import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.ActivityIOCProvider;
 import com.socialize.ui.SocializeActivity;
 
-public class SocializeActivityTestCase extends SocializeUIActivityTest {
+public class SocializeActivityTestCase extends SocializeActivityTest {
 
 	
 	@UsesMocks ({TestSocializeActivityCallback.class, IOCContainer.class})

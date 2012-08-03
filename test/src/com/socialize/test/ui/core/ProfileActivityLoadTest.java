@@ -29,7 +29,7 @@ import com.socialize.UserUtils;
 import com.socialize.api.action.user.SocializeUserUtils;
 import com.socialize.entity.User;
 import com.socialize.listener.user.UserGetListener;
-import com.socialize.test.ui.SocializeUIActivityTest;
+import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.profile.ProfileActivity;
 
@@ -37,7 +37,7 @@ import com.socialize.ui.profile.ProfileActivity;
  * @author Jason Polites
  *
  */
-public class ProfileActivityLoadTest extends SocializeUIActivityTest {
+public class ProfileActivityLoadTest extends SocializeActivityTest {
 	
 	public void testProfileActivityLoadsCorrectData() throws Throwable {
 		

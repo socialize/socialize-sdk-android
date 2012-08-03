@@ -54,8 +54,7 @@ public class LocationUtils {
 	
 	/**
 	 * Requests a location update from the device.
-	 * @param context
-	 * @return
+	 * @param context The current context.
 	 */
 	public static void updateLocation(Activity context) {
 		proxy.updateLocation(context);

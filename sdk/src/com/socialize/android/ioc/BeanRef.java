@@ -45,6 +45,7 @@ public class BeanRef {
 	private String extendsBean = null;
 	
 	private boolean singleton = true;
+	private boolean cached = false;
 	private boolean abstractBean = false;
 	
 	private boolean initCalled = false;
@@ -113,6 +114,14 @@ public class BeanRef {
 		this.singleton = singleton;
 	}
 
+	public boolean isCached() {
+		return cached;
+	}
+
+	public void setCached(boolean cached) {
+		this.cached = cached;
+	}
+
 	public MethodRef getInitMethod() {
 		return initMethod;
 	}
@@ -161,7 +170,7 @@ public class BeanRef {
 	}
 
 	public boolean isContextSensitive() {
-		return contextSensitive;
+		return contextSensitive || contextSensitiveConstructor || contextSensitiveInitMethod;
 	}
 
 	public void setContextSensitive(boolean contextSensitive) {

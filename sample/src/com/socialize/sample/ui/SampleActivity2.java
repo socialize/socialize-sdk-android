@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.socialize.CommentUtils;
 import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
@@ -74,11 +75,12 @@ public class SampleActivity2 extends BaseActivity {
 				entity.setName(txtEntityName.getText().toString());				
 				Socialize.getSocialize().setEntityLoader(loader);
 				config.setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
+				config.setProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_ENABLED, String.valueOf(chkNotifications.isChecked()));
 				config.setProperty(SocializeConfig.SOCIALIZE_LOCATION_ENABLED, String.valueOf(chkLocation.isChecked()));
 				config.setFacebookAppId(txtFB.getText().toString());
 				config.setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				config.setTwitterKeySecret(txtTW_Key.getText().toString(), txtTW_Sec.getText().toString());
-				Socialize.getSocialize().showCommentView(SampleActivity2.this, entity);
+				CommentUtils.showCommentView(SampleActivity2.this, entity);
 			}
 		});
 		
@@ -117,6 +119,7 @@ public class SampleActivity2 extends BaseActivity {
 				intent.putExtra(Socialize.ENTITY_OBJECT, entity);
 				Socialize.getSocialize().setEntityLoader(loader);
 				config.setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
+				config.setProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_ENABLED, String.valueOf(chkNotifications.isChecked()));
 				config.setProperty(SocializeConfig.SOCIALIZE_LOCATION_ENABLED, String.valueOf(chkLocation.isChecked()));
 				config.setFacebookAppId(txtFB.getText().toString());
 				config.setFacebookSingleSignOnEnabled(chkSSO.isChecked());
@@ -140,6 +143,7 @@ public class SampleActivity2 extends BaseActivity {
 				
 				Socialize.getSocialize().setEntityLoader(loader);
 				config.setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
+				config.setProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_ENABLED, String.valueOf(chkNotifications.isChecked()));
 				config.setProperty(SocializeConfig.SOCIALIZE_LOCATION_ENABLED, String.valueOf(chkLocation.isChecked()));
 				config.setFacebookAppId(txtFB.getText().toString());
 				config.setFacebookSingleSignOnEnabled(chkSSO.isChecked());

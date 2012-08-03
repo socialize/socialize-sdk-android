@@ -49,7 +49,11 @@ public abstract class AsyncDialogFactory<V extends DialogPanelView, L extends So
 	private Colors colors;
 	protected SocializeLogger logger;
 	
-	protected void makeDialog(final Context context, final L listener, Object...args) {
+	protected void preload(Context context, Object...args) {
+		panelViewFactory.getBeanAsync(null, args);
+	}
+	
+	protected void showDialog(final Context context, final BeanCreationListener<V> beanListener, final L listener, final Object...args) {
 		
 		final Dialog dialog = newDialog(context);
 		final ProgressDialog progress = SafeProgressDialog.show(context, "", "Please wait...");
@@ -67,14 +71,20 @@ public abstract class AsyncDialogFactory<V extends DialogPanelView, L extends So
 				else {
 					Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
 				}
+				
+				if(beanListener != null) {
+					beanListener.onError(name, e);
+				}
 			}
 			
 			@Override
 			public void onCreate(V view) {
 				
-				view.setDialog(dialog);
+				if(beanListener != null) {
+					beanListener.onCreate(view);
+				}
 				
-				setListener(view, listener);
+				view.setDialog(dialog);
 				
 				LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 				params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
@@ -123,8 +133,6 @@ public abstract class AsyncDialogFactory<V extends DialogPanelView, L extends So
 		}, args);
 	}
 	
-	public abstract void setListener(V view, L listener);
-
 	public void setPanelViewFactory(IBeanFactory<V> panelViewFactory) {
 		this.panelViewFactory = panelViewFactory;
 	}

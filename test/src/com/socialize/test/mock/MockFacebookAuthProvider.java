@@ -1,13 +1,13 @@
 package com.socialize.test.mock;
 
 import android.content.Context;
-import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderResponse;
+import com.socialize.auth.facebook.FacebookAuthProvider;
 import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.config.SocializeConfig;
 import com.socialize.listener.AuthProviderListener;
 
-public class MockFacebookAuthProvider implements AuthProvider<FacebookAuthProviderInfo> {
+public class MockFacebookAuthProvider extends FacebookAuthProvider {
 
 	private SocializeConfig config;
 	

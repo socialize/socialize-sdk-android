@@ -26,6 +26,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import com.socialize.Socialize;
+import com.socialize.android.ioc.BeanCreationListener;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.event.EventSystem;
 import com.socialize.api.event.SocializeEvent;
@@ -45,13 +46,27 @@ public class AuthDialogFactory extends AsyncDialogFactory<AuthPanelView, AuthDia
 	public AuthDialogFactory() {
 		super();
 	}
+	
+	@Override
+	public void preload(Context context) {
+		super.preload(context);
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.auth.IAuthDialogFactory#show(android.content.Context, com.socialize.ui.auth.AuthDialogListener)
 	 */
 	@Override
 	public void show(Context context, final AuthDialogListener listener) {
-		makeDialog(context, new AuthDialogListener() {
+		showDialog(context, new BeanCreationListener<AuthPanelView>() {
+			
+			@Override
+			public void onError(String name, Exception e) {}
+			
+			@Override
+			public void onCreate(AuthPanelView bean) {
+				bean.setAuthDialogListener(listener);
+			}
+		}, new AuthDialogListener() {
 			
 			@Override
 			public void onShow(Dialog dialog, AuthPanelView dialogView) {
@@ -93,11 +108,6 @@ public class AuthDialogFactory extends AsyncDialogFactory<AuthPanelView, AuthDia
 				}
 			}
 		});
-	}
-
-	@Override
-	public void setListener(AuthPanelView view, AuthDialogListener listener) {
-		view.setAuthDialogListener(listener);
 	}
 	
 	protected void recordEvent(String action) {

@@ -4,10 +4,10 @@ import java.util.List;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.entity.Comment;
-import com.socialize.test.ui.SocializeUIActivityTest;
+import com.socialize.test.SocializeActivityTest;
 import com.socialize.ui.comment.CommentAdapter;
 
-public class CommentAdapterTest extends SocializeUIActivityTest {
+public class CommentAdapterTest extends SocializeActivityTest {
 
 	@SuppressWarnings("unchecked")
 	@UsesMocks ({List.class})

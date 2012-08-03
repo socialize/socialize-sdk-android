@@ -28,6 +28,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import com.socialize.ShareUtils;
 import com.socialize.SocializeAccess;
+import com.socialize.android.ioc.BeanCreationListener;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionImpl;
 import com.socialize.api.action.ShareType;
@@ -39,6 +40,7 @@ import com.socialize.networks.SocialNetwork;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.ui.share.ShareDialogFactory;
 import com.socialize.ui.share.ShareDialogListener;
+import com.socialize.ui.share.SharePanelView;
 
 
 /**
@@ -50,9 +52,9 @@ public class ShareDialogFactoryTest extends SocializeActivityTest {
 	public void testShareDialogFactoryRecordsEvents() throws Exception {
 		
 		ShareDialogFactory factory = new ShareDialogFactory() {
-
+			
 			@Override
-			protected void makeDialog(Context context, ShareDialogListener listener, Object... args) {
+			protected void showDialog(Context context, BeanCreationListener<SharePanelView> beanListener, ShareDialogListener listener, Object... args) {
 				listener.onShow(null, null);
 				listener.onContinue(null, false, SocialNetwork.TWITTER, SocialNetwork.FACEBOOK);
 				listener.onSimpleShare(ShareType.TWITTER);
@@ -124,12 +126,10 @@ public class ShareDialogFactoryTest extends SocializeActivityTest {
 	}
 	
 	public class PublicShareDialogFactory extends ShareDialogFactory{
-
 		@Override
-		public void makeDialog(Context context, ShareDialogListener listener, Object... args) {
-			super.makeDialog(context, listener, args);
+		public void showDialog(Context context, BeanCreationListener<SharePanelView> beanListener, ShareDialogListener listener, Object... args) {
+			super.showDialog(context, beanListener, listener, args);
 		}
-		
 	}
 	
 }

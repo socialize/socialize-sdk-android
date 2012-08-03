@@ -5,12 +5,12 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.error.SocializeException;
-import com.socialize.test.ui.SocializeUIActivityTest;
+import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.view.AuthenticatedView;
 import com.socialize.ui.view.AuthenticatedViewListener;
 
-public class AuthenticatedViewListenerTest extends SocializeUIActivityTest {
+public class AuthenticatedViewListenerTest extends SocializeActivityTest {
 
 	
 	@UsesMocks ({AuthenticatedView.class, SocializeException.class, IOCContainer.class})

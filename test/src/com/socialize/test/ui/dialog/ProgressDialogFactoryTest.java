@@ -5,11 +5,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.test.ui.SocializeUIActivityTest;
+import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 
-public class ProgressDialogFactoryTest extends SocializeUIActivityTest {
+public class ProgressDialogFactoryTest extends SocializeActivityTest {
 
 	@UsesMocks ({ProgressDialog.class, Activity.class})
 	public void testShow() {
