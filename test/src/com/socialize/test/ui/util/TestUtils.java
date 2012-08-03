@@ -658,6 +658,11 @@ public class TestUtils {
 		setupSocializeOverrides(mockFacebook, mockSocialize, (String[])null);
 	}
 	
+	
+	public static void setupSocializeProxies() {
+		SocializeAccess.setBeanOverrides("socialize_proxy_beans.xml");
+	}
+	
 	public static void setupSocializeOverrides(boolean mockFacebook, boolean mockSocialize, String...others) {
 		
 		List<String> configs = new ArrayList<String>();

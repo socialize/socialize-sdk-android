@@ -167,7 +167,7 @@ public class AuthPanelView extends DialogPanelView {
 		skipAuth.setLayoutParams(skipAuthParams);
 		
 		
-		if(configUtils.getConfig(getContext()).isAllowAnonymousUser()) {
+		if(configUtils.getConfig(getContext()).isAuthRequired()) {
 			String mystring=new String("I'd rather not...");
 			SpannableString content = new SpannableString(mystring);
 			content.setSpan(new UnderlineSpan(), 0, mystring.length(), 0);

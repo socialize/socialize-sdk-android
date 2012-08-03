@@ -193,9 +193,7 @@ public class SharePanelView extends DialogPanelView {
 							rememberCell.setVisibility(View.VISIBLE);
 						}
 						
-						if(!config.isAllowAnonymousUser()) {
-							continueButton.setEnabled(true);
-						}
+						continueButton.setEnabled(true);
 						
 					}
 					else {
@@ -204,7 +202,7 @@ public class SharePanelView extends DialogPanelView {
 							rememberCell.setVisibility(View.GONE);
 						}
 						
-						if(!config.isAllowAnonymousUser()) {
+						if(config.isShareRequired()) {
 							continueButton.setEnabled(false);
 						}
 					}

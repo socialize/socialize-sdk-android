@@ -92,7 +92,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 
 	@Override
 	public void showCommentView(Activity context, Entity entity, OnCommentViewActionListener listener) {
-		if(listener != null) {
+		if(listener != null && listenerHolder != null) {
 			listenerHolder.push(CommentView.COMMENT_LISTENER, listener);
 		}
 
