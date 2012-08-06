@@ -1593,6 +1593,7 @@
 
 	<bean id="likeUtils" class="com.socialize.api.action.like.SocializeLikeUtils">
 		<property name="likeSystem" ref="likeSystem"/>
+		<property name="config" ref="config"/>
 		<property name="authDialogFactory" ref="authDialogFactory"/>
 		<property name="shareDialogFactory" ref="shareDialogFactory"/>
 		<property name="shareHandlers" ref="shareHandlers"/>
@@ -1604,12 +1605,14 @@
 	
 	<bean id="shareUtils" class="com.socialize.api.action.share.SocializeShareUtils">
 		<property name="shareSystem" ref="shareSystem"/>
+		<property name="config" ref="config"/>
 		<property name="shareDialogFactory" ref="shareDialogFactory"/>
 		<property name="authDialogFactory" ref="authDialogFactory"/>
 	</bean>		
 	
 	<bean id="commentUtils" class="com.socialize.api.action.comment.SocializeCommentUtils">
 		<property name="commentSystem" ref="commentSystem"/>
+		<property name="config" ref="config"/>
 		<property name="authDialogFactory" ref="authDialogFactory"/>
 		<property name="shareDialogFactory" ref="shareDialogFactory"/>
 		<property name="shareHandlers" ref="shareHandlers"/>

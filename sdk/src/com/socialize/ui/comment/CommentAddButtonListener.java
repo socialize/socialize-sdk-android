@@ -21,7 +21,6 @@
  */
 package com.socialize.ui.comment;
 
-import android.content.Context;
 import com.socialize.util.StringUtils;
 
 /**
@@ -30,34 +29,16 @@ import com.socialize.util.StringUtils;
  */
 public class CommentAddButtonListener {
 
-//	private String consumerKey;
-//	private String consumerSecret;
-//	private Context context;
 	private CommentButtonCallback callback;
 	
 	public CommentAddButtonListener() {
 		super();
 	}
 
-	public CommentAddButtonListener(Context context) {
+	public CommentAddButtonListener(CommentButtonCallback callback) {
 		super();
-//		this.context = context;
-	}
-
-	public CommentAddButtonListener(
-			Context context, 
-			CommentButtonCallback callback) {
-		
-		this(context);
-		
 		this.callback = callback;
-//		this.consumerKey = ConfigUtils.getConfig(context).getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-//		this.consumerSecret = ConfigUtils.getConfig(context).getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 	}
-	
-//	protected SocializeService getSocialize() {
-//		return Socialize.getSocialize();
-//	}
 	
 	public void onCancel() {
 		callback.onCancel();

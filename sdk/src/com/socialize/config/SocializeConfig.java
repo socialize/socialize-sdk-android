@@ -59,10 +59,12 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_REQUIRE_AUTH = "socialize.require.auth";
 	
+	@Deprecated
 	public static final String SOCIALIZE_REQUIRE_SHARE = "socialize.require.share";
 	
-	@Deprecated
 	public static final String SOCIALIZE_ALLOW_ANON = "socialize.allow.anon";
+	
+	public static final String SOCIALIZE_ALLOW_ANON_COMMENT = "socialize.allow.anon.comments";
 	
 	public static final String SOCIALIZE_EVENTS_AUTH_ENABLED = "socialize.events.auth.enabled";
 	
@@ -337,11 +339,15 @@ public class SocializeConfig {
 		setProperty(SocializeConfig.FACEBOOK_USER_TOKEN, token);
 	}
 	
+	@Deprecated
 	public boolean isShareRequired() {
 		return getBooleanProperty(SOCIALIZE_REQUIRE_SHARE, getBooleanProperty(SOCIALIZE_ALLOW_ANON, false));
 	}
 	
-	@Deprecated
+	public boolean isAllowAnonymousComments() {
+		return getBooleanProperty(SOCIALIZE_ALLOW_ANON_COMMENT, false);
+	}
+	
 	public boolean isAllowAnonymousUser() {
 		return getBooleanProperty(SOCIALIZE_ALLOW_ANON, false);
 	}

@@ -200,7 +200,8 @@ public class SharePanelView extends DialogPanelView {
 							rememberCell.setVisibility(View.GONE);
 						}
 						
-						if(config.isShareRequired()) {
+						// If we ONLY have TW and FB, disable the button
+						if(displayOptions == ShareUtils.SOCIAL) {
 							continueButton.setEnabled(false);
 						}
 					}

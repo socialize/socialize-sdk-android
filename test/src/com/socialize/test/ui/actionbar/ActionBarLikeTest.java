@@ -54,7 +54,7 @@ public class ActionBarLikeTest extends ActionBarTest {
 			public void preload(Context context) {}
 
 			@Override
-			public void show(Context context, AuthDialogListener listener) {
+			public void show(Context context, AuthDialogListener listener, boolean required) {
 				latch.countDown();
 			}
 		};

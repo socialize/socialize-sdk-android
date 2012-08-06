@@ -222,7 +222,7 @@ public class CommentListView extends BaseView {
 	}
 	
 	protected CommentAddButtonListener getCommentAddButtonListener() {
-		return new CommentAddButtonListener(getContext(), new CommentButtonCallback() {
+		return new CommentAddButtonListener(new CommentButtonCallback() {
 			
 			@Override
 			public void onError(Context context, SocializeException e) {

@@ -56,7 +56,7 @@ public class AuthDialogFactory extends AsyncDialogFactory<AuthPanelView, AuthDia
 	 * @see com.socialize.ui.auth.IAuthDialogFactory#show(android.content.Context, com.socialize.ui.auth.AuthDialogListener)
 	 */
 	@Override
-	public void show(Context context, final AuthDialogListener listener) {
+	public void show(Context context, final AuthDialogListener listener, final boolean required) {
 		showDialog(context, new BeanCreationListener<AuthPanelView>() {
 			
 			@Override
@@ -65,6 +65,7 @@ public class AuthDialogFactory extends AsyncDialogFactory<AuthPanelView, AuthDia
 			@Override
 			public void onCreate(AuthPanelView bean) {
 				bean.setAuthDialogListener(listener);
+				bean.setAuthRequired(required);
 			}
 		}, new AuthDialogListener() {
 			

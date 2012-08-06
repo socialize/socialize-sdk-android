@@ -38,7 +38,6 @@ import android.widget.TextView;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
-import com.socialize.config.ConfigUtilsProxy;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
@@ -59,7 +58,6 @@ public class AuthPanelView extends DialogPanelView {
 	private Colors colors;
 	private Drawables drawables;
 	private DisplayUtils displayUtils;
-	private ConfigUtilsProxy configUtils;
 	private IBeanFactory<FacebookSignInCell> facebookSignInCellFactory;
 	private IBeanFactory<TwitterSignInCell> twitterSignInCellFactory;
 	private IBeanFactory<AnonymousCell> anonCellFactory;
@@ -166,8 +164,16 @@ public class AuthPanelView extends DialogPanelView {
 		skipAuth.setPadding(0, 0, 0, padding);
 		skipAuth.setLayoutParams(skipAuthParams);
 		
+		contentLayout.addView(skipAuth);
 		
-		if(configUtils.getConfig(getContext()).isAuthRequired()) {
+		container.addView(contentLayout);
+		
+		addView(header);
+		addView(container);
+	}
+	
+	public void setAuthRequired(boolean required) {
+		if(!required) {
 			String mystring=new String("I'd rather not...");
 			SpannableString content = new SpannableString(mystring);
 			content.setSpan(new UnderlineSpan(), 0, mystring.length(), 0);
@@ -184,13 +190,6 @@ public class AuthPanelView extends DialogPanelView {
 		else {
 			skipAuth.setText("Authentication is required");
 		}
-		
-		contentLayout.addView(skipAuth);
-		
-		container.addView(contentLayout);
-		
-		addView(header);
-		addView(container);
 	}
 	
 	protected View makeShareBadge() {
@@ -319,10 +318,6 @@ public class AuthPanelView extends DialogPanelView {
 		this.colors = colors;
 	}
 	
-	public void setConfigUtils(ConfigUtilsProxy configUtils) {
-		this.configUtils = configUtils;
-	}
-
 	protected SocializeAuthListener getAuthClickListener(final ClickableSectionCell cell, final SocialNetwork network) {
 		return new SocializeAuthListener() {
 			

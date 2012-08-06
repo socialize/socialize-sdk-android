@@ -34,6 +34,7 @@ import com.socialize.android.ioc.Container;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.SocializeActionUtilsBase;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.User;
@@ -66,6 +67,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 	private IShareDialogFactory shareDialogFactory;
 	private ListenerHolder listenerHolder;
 	private Container container;
+	private SocializeConfig config;
 	
 	@Override
 	public void onCreate(Container container) {
@@ -162,7 +164,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 						doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener, networks);
 					}
 				}
-			});
+			}, !(config.isAllowAnonymousComments() && config.isAllowAnonymousUser()));
 		}
 		else {
 			if(doShare) {
@@ -305,4 +307,10 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 	public void setListenerHolder(ListenerHolder listenerHolder) {
 		this.listenerHolder = listenerHolder;
 	}
+
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
+	}
+	
+	
 }

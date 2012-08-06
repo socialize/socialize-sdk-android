@@ -33,6 +33,7 @@ import com.socialize.UserUtils;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.SocializeActionUtilsBase;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.User;
@@ -62,6 +63,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 	private IAuthDialogFactory authDialogFactory;
 	private IShareDialogFactory shareDialogFactory;
 	private LikeSystem likeSystem;
+	private SocializeConfig config;
 
 	/*
 	 * (non-Javadoc)
@@ -113,7 +115,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 						doLikeWithoutShare(context, session, entity, likeOptions, listener, networks);
 					}					
 				}
-			});
+			}, !config.isAllowAnonymousUser());
 		}
 		else {
 			if(doShare) {
@@ -325,6 +327,10 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 
 	public void setLikeSystem(LikeSystem likeSystem) {
 		this.likeSystem = likeSystem;
+	}
+	
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
 	}
 
 	@Override
