@@ -27,7 +27,7 @@ The following table lists the configuration options that can be specified in you
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | socialize.allow.anon            | Boolean | false    |                                        | Allow users to post comments & likes anonymously                 |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
-| socialize.allow.anon.comments   | Boolean | false    |                                        | Allow users to post comments anonymously                 |
+| socialize.allow.anon.comments   | Boolean | false    |                                        | Allow users to post comments anonymously                         |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | socialize.c2dm.sender.id        | String  | None     | ``yoursender@gmail.com``               | Optional.  Use if you have your own C2DM sender ID               |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
