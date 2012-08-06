@@ -48,6 +48,13 @@ public class ActionBarLikeTest extends ActionBarTest {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
+		SocializeConfig mockConfig = new SocializeConfig() {
+			@Override
+			public boolean isAllowAnonymousUser() {
+				return true;
+			}
+		};
+		
 		IAuthDialogFactory mockFactory = new IAuthDialogFactory() {
 			
 			@Override
@@ -67,6 +74,7 @@ public class ActionBarLikeTest extends ActionBarTest {
 		};
 		
 		mockLikeUtils.setAuthDialogFactory(mockFactory);
+		mockLikeUtils.setConfig(mockConfig);
 		
 		SocializeAccess.setLikeUtilsProxy(mockLikeUtils);		
 		
