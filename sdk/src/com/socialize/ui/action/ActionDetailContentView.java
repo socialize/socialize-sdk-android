@@ -287,12 +287,7 @@ public class ActionDetailContentView extends BaseView {
 
 	public void loadUserActivity(User user, SocializeAction current) {
 		if(userActivityView != null) {
-//			if(current != null) {
-				userActivityView.loadUserActivity(user.getId(), current);
-//			}
-//			else {
-//				userActivityView.clearUserActivity();
-//			}
+			userActivityView.loadUserActivity(user.getId(), current);
 		}
 	}
 	

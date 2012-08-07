@@ -101,6 +101,7 @@ public class ActionBarTicker extends LinearLayout {
 		if(rotator != null) {
 			rotator.skipToNext();
 		}
+		invalidate();
 	}
 	
 	public void stopTicker() {

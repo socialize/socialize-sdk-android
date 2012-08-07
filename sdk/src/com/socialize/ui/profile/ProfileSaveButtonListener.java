@@ -31,6 +31,7 @@ import com.socialize.entity.User;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.user.UserSaveListener;
+import com.socialize.ui.comment.CommentActivity;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 
 /**
@@ -104,6 +105,7 @@ public class ProfileSaveButtonListener implements OnClickListener {
 			@Override
 			public void onUpdate(User entity) {
 				progress.dismiss();
+				context.setResult(CommentActivity.PROFILE_UPDATE);
 				context.finish();
 			}
 		});

@@ -69,6 +69,11 @@ public class RotatingFadeViewAnimator {
 		this.stickTime = stickTime;
 	}
 	
+	public void startAt(int index) {
+		currentView = index;
+		start();
+	}
+	
 	public void start() {
 		if(fadeIn == null || fadeOut == null) {
 			initAnimations();
@@ -79,10 +84,15 @@ public class RotatingFadeViewAnimator {
 	}
 	
 	public void stop() {
+		
+		if(fadeIn != null) fadeIn.reset();
+		if(fadeOut != null) fadeOut.reset();
+		
 		for (View view : views) {
 			view.clearAnimation();
 			view.setVisibility(View.GONE);
 		}
+		
 		currentView = 0;
 	}
 	
@@ -95,12 +105,8 @@ public class RotatingFadeViewAnimator {
 	}
 	
 	protected void restartAt(int index) {
-		for (View view : views) {
-			view.clearAnimation();
-			view.setVisibility(View.GONE);
-		}
-		currentView = index;
-		start();
+		stop();
+		startAt(index);
 	}
 	
 	protected View getCurrentView() {
