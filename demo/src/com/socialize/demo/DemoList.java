@@ -47,7 +47,7 @@ import com.socialize.demo.implementations.view.ViewActivity;
  */
 public class DemoList extends ListActivity {
 	
-	final String[] values = new String[] { "Config", "Linking Twitter & Facebook", "Facebook Direct", "Twitter Direct",  "Action Bar", "Sharing", "Comments", "Likes", "Views", "Entities", "User Profile", "Actions (User Activity)", "Subscriptions", "Location"};
+	final String[] values = new String[] { "Config", "Linking Twitter & Facebook", "Facebook Direct", "Twitter Direct",  "Action Bar", "Sharing", "Comments", "Likes", "Views", "Entities", "User Profile", "Actions (User Activity)", "Subscriptions", "Location", "Init"};
 	final Class<?>[] activities = new Class<?>[] { 
 			AuthButtonsActivity.class, 
 			FacebookActivity.class,
@@ -61,7 +61,8 @@ public class DemoList extends ListActivity {
 			UserActivity.class,
 			ActionActivity.class, 
 			SubscriptionActivity.class, 
-			LocationActivity.class};
+			LocationActivity.class,
+			InitActivity.class};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
