@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -845,6 +844,7 @@ public class TestUtils {
 			ByteArrayOutputStream bout = new ByteArrayOutputStream();
 			PrintWriter pw = new PrintWriter(bout);
 			e.printStackTrace(pw);
+			pw.flush();
 			return new String(bout.toByteArray());
 		}
 		return "null";
