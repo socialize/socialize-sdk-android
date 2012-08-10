@@ -209,7 +209,9 @@ public class ViewUtilsTest extends SocializeActivityTest {
 		
 		List<View> items = getResult(1);
 		Exception error = getResult(2);
-		assertNotNull("No views found for user.  This means the view was created but there was an error retrieving the views after [" +
+		assertNotNull("No views found for user [" +
+				user.getId() +
+				"].  This means the view was created but there was an error retrieving the views after [" +
 				TestUtils.stackTraceToString(error) +
 				"]",  items);
 		
