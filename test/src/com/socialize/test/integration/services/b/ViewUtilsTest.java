@@ -181,11 +181,13 @@ public class ViewUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(View view) {
 				
+				addResult(0, view);
+				
 				ViewUtils.getViewsByUser(TestUtils.getActivity(ViewUtilsTest.this), user, 0, 100, new ViewListListener() {
 					
 					@Override
 					public void onList(List<View> items, int totalSize) {
-						addResult(items);
+						addResult(1, items);
 						latch.countDown();
 					}
 					
@@ -201,8 +203,11 @@ public class ViewUtilsTest extends SocializeActivityTest {
 		
 		latch.await(20, TimeUnit.SECONDS);
 		
-		List<View> items = getResult(0);
-		assertNotNull(items);
+		View view = getResult(0);
+		assertNotNull("No view found for user.  This means the view was not created",  view);
+		
+		List<View> items = getResult(1);
+		assertNotNull("No views found for user.  This means the view was created but was not returned in the subsequent query",  items);
 		assertTrue(items.size() >= 1);
 	}
 	
