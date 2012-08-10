@@ -192,7 +192,7 @@ public class ViewUtilsTest extends SocializeActivityTest {
 					@Override
 					public void onError(SocializeException error) {
 						error.printStackTrace();
-						fail();
+						latch.countDown();
 					}
 				});
 				
