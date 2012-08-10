@@ -3,9 +3,12 @@ package com.socialize.test.ui.util;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -836,4 +839,14 @@ public class TestUtils {
 		return holder.getAllResults();
 	}
 	
+	
+	public static String stackTraceToString(Exception e) {
+		if(e != null) {
+			ByteArrayOutputStream bout = new ByteArrayOutputStream();
+			PrintWriter pw = new PrintWriter(bout);
+			e.printStackTrace(pw);
+			return new String(bout.toByteArray());
+		}
+		return "null";
+	}
 }

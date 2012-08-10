@@ -193,7 +193,8 @@ public class ViewUtilsTest extends SocializeActivityTest {
 					
 					@Override
 					public void onError(SocializeException error) {
-						error.printStackTrace();
+//						error.printStackTrace();
+						addResult(2, error);
 						latch.countDown();
 					}
 				});
@@ -207,7 +208,11 @@ public class ViewUtilsTest extends SocializeActivityTest {
 		assertNotNull("No view found for user.  This means the view was not created",  view);
 		
 		List<View> items = getResult(1);
-		assertNotNull("No views found for user.  This means the view was created but was not returned in the subsequent query",  items);
+		Exception error = getResult(2);
+		assertNotNull("No views found for user.  This means the view was created but there was an error retrieving the views after [" +
+				TestUtils.stackTraceToString(error) +
+				"]",  items);
+		
 		assertTrue(items.size() >= 1);
 	}
 	
