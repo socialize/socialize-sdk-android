@@ -229,7 +229,7 @@ The simplest way to allow users to share an entity (your content) is via the sha
 Custom Share Dialog
 ~~~~~~~~~~~~~~~~~~~
 
-If you just want to allow sharing to Facebook or Twitter
+If you just want to allow sharing to Social Networks
 
 .. image:: images/2_0_share_via_networks.png
 

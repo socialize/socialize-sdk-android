@@ -105,7 +105,7 @@ public void showShareDialogWithOptions() {
 Entity entity = Entity.newInstance("http://myentity.com", "My Name");	
 
 // Setup the options for display
-int options = ShareUtils.FACEBOOK | ShareUtils.TWITTER;
+int options = ShareUtils.FACEBOOK | ShareUtils.TWITTER | ShareUtils.GOOGLE_PLUS;
 
 // The "this" argument refers to the current Activity
 ShareUtils.showShareDialog(this, entity, new SocialNetworkDialogListener() {
@@ -135,7 +135,7 @@ public void showShareDialogWithOverride() {
 Entity entity = Entity.newInstance("http://myentity.com", "My Name");	
 
 // Setup the options for display
-int options = ShareUtils.SOCIAL; // This is just a shortcut for Twitter and Facebook.
+int options = ShareUtils.SOCIAL; // This is just a shortcut for Twitter, Facebook and Google+.
 
 // The "this" argument refers to the current Activity
 ShareUtils.showShareDialog(this, entity, new SocialNetworkDialogListener() {
