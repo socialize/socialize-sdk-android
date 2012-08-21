@@ -183,6 +183,9 @@ public class ViewUtilsTest extends SocializeActivityTest {
 				
 				addResult(0, view);
 				
+				// Wait for the server to catch up
+				sleep(1000);
+				
 				ViewUtils.getViewsByUser(TestUtils.getActivity(ViewUtilsTest.this), user, 0, 100, new ViewListListener() {
 					
 					@Override
