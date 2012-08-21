@@ -115,7 +115,7 @@ public abstract class SocializeActionUtilsBase {
 	
 	protected boolean isDisplayShareDialog(Context context, ShareableActionOptions options) {
 		
-		if((options == null || options.isShowShareDialog()) && config.isPromptForShare()) {
+		if((options == null || options.isShowShareDialog()) && ConfigUtils.getConfig(context).isPromptForShare()) {
 			
 			boolean fbSupported = FacebookUtils.isAvailable(context);
 			boolean twSupported = TwitterUtils.isAvailable(context);
