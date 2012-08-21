@@ -33,7 +33,6 @@ import com.socialize.UserUtils;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.SocializeActionUtilsBase;
-import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.User;
@@ -63,7 +62,6 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 	private IAuthDialogFactory authDialogFactory;
 	private IShareDialogFactory shareDialogFactory;
 	private LikeSystem likeSystem;
-	private SocializeConfig config;
 
 	/*
 	 * (non-Javadoc)
@@ -76,7 +74,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 
 	@Override
 	public void like(final Activity context, final Entity entity, final LikeOptions likeOptions, final LikeAddListener listener, final SocialNetwork...networks) {
-		final boolean doShare = likeOptions == null || likeOptions.isShowShareDialog();
+		final boolean doShare = isDisplayShareDialog(context, likeOptions);
 		final SocializeSession session = getSocialize().getSession();
 
 		if(isDisplayAuthDialog(context, likeOptions, networks)) {
@@ -329,10 +327,6 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 		this.likeSystem = likeSystem;
 	}
 	
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
-	}
-
 	@Override
 	public void makeLikeButton(final Activity context, final CompoundButton button, final Entity entity, final LikeButtonListener listener) {
 		

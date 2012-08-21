@@ -29,6 +29,7 @@ import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.UserUtils;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.SocializeAction;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
@@ -47,6 +48,7 @@ import com.socialize.ui.profile.UserSettings;
 public abstract class SocializeActionUtilsBase {
 	
 	private ShareHandlers shareHandlers;
+	protected SocializeConfig config;
 	
 	protected void populateActionOptions(Context context, ActionOptions options) {
 		options.setShowAuthDialog(ConfigUtils.getConfig(context).isAuthRequired());
@@ -113,7 +115,7 @@ public abstract class SocializeActionUtilsBase {
 	
 	protected boolean isDisplayShareDialog(Context context, ShareableActionOptions options) {
 		
-		if(options == null || options.isShowShareDialog()) {
+		if((options == null || options.isShowShareDialog()) && config.isPromptForShare()) {
 			
 			boolean fbSupported = FacebookUtils.isAvailable(context);
 			boolean twSupported = TwitterUtils.isAvailable(context);
@@ -189,6 +191,8 @@ public abstract class SocializeActionUtilsBase {
 	public void setShareHandlers(ShareHandlers shareHandlers) {
 		this.shareHandlers = shareHandlers;
 	}
-
 	
+	public final void setConfig(SocializeConfig config) {
+		this.config = config;
+	}
 }

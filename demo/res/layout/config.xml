@@ -25,7 +25,12 @@
 		<CheckBox android:id="@+id/chkAllowAnonComment"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:text="Allow Anonymous Comments"/> 		
+		        android:text="Allow Anonymous Comments"/>
+		 
+		<CheckBox android:id="@+id/chkPromptForShare"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="Always Prompt for Share"/>        
 		        
 		<CheckBox android:id="@+id/chkFB"
 		        android:layout_width="wrap_content"

@@ -52,14 +52,19 @@ public class ConfigDialog {
 		final CheckBox chkRequireAuth = (CheckBox) layout.findViewById(R.id.chkRequireAuth);
 		final CheckBox chkAllowAnon = (CheckBox) layout.findViewById(R.id.chkAllowAnon);
 		final CheckBox chkAllowAnonComment = (CheckBox) layout.findViewById(R.id.chkAllowAnonComment);
+		final CheckBox chkPromptForShare = (CheckBox) layout.findViewById(R.id.chkPromptForShare);
 		final CheckBox chkFBSSO = (CheckBox) layout.findViewById(R.id.chkFBSSO);
 		final CheckBox chkFB = (CheckBox) layout.findViewById(R.id.chkFB);
 		final CheckBox chkTW = (CheckBox) layout.findViewById(R.id.chkTW);
 		
-		chkRequireAuth.setChecked(ConfigUtils.getConfig(mContext).isAuthRequired());
-		chkAllowAnon.setChecked(ConfigUtils.getConfig(mContext).isAllowAnonymousUser());
-		chkAllowAnonComment.setChecked(ConfigUtils.getConfig(mContext).isAllowAnonymousComments());
-		chkFBSSO.setChecked(ConfigUtils.getConfig(mContext).getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true));
+		final SocializeConfig config = ConfigUtils.getConfig(mContext);
+		
+		chkRequireAuth.setChecked(config.isAuthRequired());
+		chkAllowAnon.setChecked(config.isAllowAnonymousUser());
+		chkAllowAnonComment.setChecked(config.isAllowAnonymousComments());
+		chkFBSSO.setChecked(config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true));
+		chkFBSSO.setChecked(config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true));
+		chkPromptForShare.setChecked(config.isPromptForShare());
 		
 		chkFB.setChecked(Socialize.getSocialize().isSupported(AuthProviderType.FACEBOOK));
 		chkTW.setChecked(Socialize.getSocialize().isSupported(AuthProviderType.TWITTER));
@@ -99,10 +104,11 @@ public class ConfigDialog {
 		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				ConfigUtils.getConfig(mContext).setProperty(SocializeConfig.SOCIALIZE_ALLOW_ANON, String.valueOf(chkAllowAnon.isChecked()));
-				ConfigUtils.getConfig(mContext).setProperty(SocializeConfig.SOCIALIZE_ALLOW_ANON_COMMENT, String.valueOf(chkAllowAnonComment.isChecked()));
-				ConfigUtils.getConfig(mContext).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, String.valueOf(chkRequireAuth.isChecked()));
-				ConfigUtils.getConfig(mContext).setFacebookSingleSignOnEnabled(chkFBSSO.isChecked());
+				config.setProperty(SocializeConfig.SOCIALIZE_ALLOW_ANON, String.valueOf(chkAllowAnon.isChecked()));
+				config.setProperty(SocializeConfig.SOCIALIZE_ALLOW_ANON_COMMENT, String.valueOf(chkAllowAnonComment.isChecked()));
+				config.setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, String.valueOf(chkRequireAuth.isChecked()));
+				config.setProperty(SocializeConfig.SOCIALIZE_PROMPT_SHARE, String.valueOf(chkPromptForShare.isChecked()));
+				config.setFacebookSingleSignOnEnabled(chkFBSSO.isChecked());
 			}
 		});
 		builder.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {

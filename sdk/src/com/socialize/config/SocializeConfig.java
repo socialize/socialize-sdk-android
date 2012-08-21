@@ -72,6 +72,8 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_SHOW_COMMENT_LIST_ON_NOTIFY = "socialize.comments.on.notify";
 	
+	public static final String SOCIALIZE_PROMPT_SHARE = "socialize.prompt.share";
+	
 	public static final String GOOGLE_PLUS_ENABLED = "googleplus.enabled";
 	
 	/**
@@ -362,6 +364,10 @@ public class SocializeConfig {
 	
 	public boolean isAuthRequired() {
 		return getBooleanProperty(SOCIALIZE_REQUIRE_AUTH, true);
+	}
+	
+	public boolean isPromptForShare() {
+		return getBooleanProperty(SOCIALIZE_PROMPT_SHARE, true);
 	}
 	
 	/**

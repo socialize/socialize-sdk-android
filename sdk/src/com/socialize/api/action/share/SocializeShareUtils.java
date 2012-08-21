@@ -30,7 +30,6 @@ import android.location.Location;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.SocializeActionUtilsBase;
-import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
 import com.socialize.entity.User;
@@ -56,7 +55,6 @@ import com.socialize.ui.share.SharePanelView;
 public class SocializeShareUtils extends SocializeActionUtilsBase implements ShareUtilsProxy {
 	
 	private ShareSystem shareSystem;
-	private SocializeConfig config;
 	private IShareDialogFactory shareDialogFactory;
 	private IAuthDialogFactory authDialogFactory;
 	
@@ -454,9 +452,5 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	
 	public void setAuthDialogFactory(IAuthDialogFactory authDialogFactory) {
 		this.authDialogFactory = authDialogFactory;
-	}
-
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
 	}
 }
