@@ -46,10 +46,16 @@ import com.socialize.log.SocializeLogger;
 public class SocializeActionProxy implements InvocationHandler {
 
 	private String delegateBean;
+	private boolean synchronous = false;
 	
 	public SocializeActionProxy(String delegateBean) {
 		super();
 		this.delegateBean = delegateBean;
+	}
+	
+	public SocializeActionProxy(String delegateBean, boolean synchronous) {
+		this(delegateBean);
+		this.synchronous = synchronous;
 	}
 
 	/* (non-Javadoc)
@@ -58,7 +64,7 @@ public class SocializeActionProxy implements InvocationHandler {
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		try {
-			if(method.isAnnotationPresent(Synchronous.class) || !isVoidMethod(method)) {
+			if(synchronous || method.isAnnotationPresent(Synchronous.class) || !isVoidMethod(method)) {
 				
 				Context context = findContext(args);
 				

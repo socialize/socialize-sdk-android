@@ -24,6 +24,7 @@ package com.socialize.test.integration.services.b;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import android.app.Activity;
 import com.socialize.EntityUtils;
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
@@ -168,14 +169,18 @@ public class ViewUtilsTest extends SocializeActivityTest {
 		
 		final Entity entity = Entity.newInstance("testGetViewsByUser", "testGetViewsByUser");
 		
-		final CountDownLatch latch = new CountDownLatch(1);
+		final CountDownLatch latch0 = new CountDownLatch(1);
+		final CountDownLatch latch1 = new CountDownLatch(1);
 		
-		ViewUtils.view(TestUtils.getActivity(this), entity, new ViewAddListener() {
+		
+		final Activity activity = TestUtils.getActivity(this);
+		
+		ViewUtils.view(activity, entity, new ViewAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
 				error.printStackTrace();
-				latch.countDown();
+				latch0.countDown();
 			}
 			
 			@Override
@@ -184,31 +189,33 @@ public class ViewUtilsTest extends SocializeActivityTest {
 				addResult(0, view);
 				
 				// Wait for the server to catch up
-				sleep(1000);
+				sleep(2000);
 				
-				ViewUtils.getViewsByUser(TestUtils.getActivity(ViewUtilsTest.this), user, 0, 100, new ViewListListener() {
-					
-					@Override
-					public void onList(List<View> items, int totalSize) {
-						addResult(1, items);
-						latch.countDown();
-					}
-					
-					@Override
-					public void onError(SocializeException error) {
-//						error.printStackTrace();
-						addResult(2, error);
-						latch.countDown();
-					}
-				});
-				
+				latch0.countDown();
 			}
 		});		
 		
-		latch.await(20, TimeUnit.SECONDS);
+		assertTrue(latch0.await(20, TimeUnit.SECONDS));
 		
 		View view = getResult(0);
 		assertNotNull("No view found for user.  This means the view was not created",  view);
+		
+		ViewUtils.getViewsByUser(activity, user, 0, 100, new ViewListListener() {
+			
+			@Override
+			public void onList(List<View> items, int totalSize) {
+				addResult(1, items);
+				latch1.countDown();
+			}
+			
+			@Override
+			public void onError(SocializeException error) {
+				addResult(2, error);
+				latch1.countDown();
+			}
+		});
+				
+		assertTrue(latch1.await(20, TimeUnit.SECONDS));
 		
 		List<View> items = getResult(1);
 		Exception error = getResult(2);
