@@ -40,6 +40,8 @@ The following configurations are required for SmartAlerts.
 | socialize.comments.on.notify    | Boolean | false    |                                        | Users are directed to the comment list for comment notifications |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 
+.. _auth_customize:	
+
 Customizing Authentication Behavior
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -95,6 +97,16 @@ Allowing Users to Save their Preference
 										socialize.allow.never.auth=true	
 ===============================		=========================================================================================================================================================
 
+.. _share_customize:	
+
+Customizing Sharing Behavior
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+By default Socialize will prompt a user to share their action (comment or like) on a 3rd party network (e.g. Twitter or Facebook).
+
+This behavior can be disabled with the following setting::
+
+	socialize.prompt.share=false	
 	
 Facebook Configuration
 ~~~~~~~~~~~~~~~~~~~~~~

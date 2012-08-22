@@ -6,8 +6,23 @@
 What's New
 ==========
 
-In this version (v2.3)
+In this version (v2.4)
 ----------------------
+
+Customization of Authentication Behavior
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Developers now have greater control over how Socialize handles requests for authentication from end users.
+
+Refer to :ref:`auth_customize` for more details.
+
+Customization of Sharing Behavior
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Developers now have greater control over how Socialize handles requests for sharing from end users.
+
+Refer to :ref:`share_customize` for more details.
+
+v2.3
+----
 
 Popular Content
 ~~~~~~~~~~~~~~~
