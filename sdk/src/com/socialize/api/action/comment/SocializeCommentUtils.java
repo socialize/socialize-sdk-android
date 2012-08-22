@@ -125,7 +125,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 		final boolean doShare = isDisplayShareDialog(context, commentOptions);
 		final SocializeSession session = getSocialize().getSession();
 		
-		if(isDisplayAuthDialog(context, commentOptions, networks)) {
+		if(isDisplayAuthDialog(context, session, commentOptions, networks)) {
 			
 			authDialogFactory.show(context, new AuthDialogListener() {
 				
@@ -163,7 +163,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 						doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener, networks);
 					}
 				}
-			}, !(config.isAllowAnonymousComments() && config.isAllowAnonymousUser()));
+			}, !(config.isAllowSkipAuthOnComments() && config.isAllowSkipAuthOnAllActions()));
 		}
 		else {
 			if(doShare) {

@@ -383,13 +383,15 @@
 		singleton="false"
 		cache="true">
 		<constructor-arg type="activity"/>
+		<property name="config" ref="config"/>
 		<property name="colors" ref="colors"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="facebookSignInCellFactory" ref="facebookSignInCellFactory"/>
 		<property name="twitterSignInCellFactory" ref="twitterSignInCellFactory"/>
 		<property name="anonCellFactory" ref="anonCellFactory"/>
-		
+		<property name="rememberAuthCellFactory" ref="rememberAuthCellFactory"/>
+		<property name="sessionPersister" ref="sessionPersister"/>
 		<init-method name="init"/>
 	</bean>
 	
@@ -496,7 +498,6 @@
 	
 	<factory id="anonCellFactory" makes="anonCell"/>
 	
-	
 	<bean 
 		id="rememberCell" 
 		class="com.socialize.ui.share.RememberCell" 
@@ -507,9 +508,25 @@
 		<property name="bgAlpha" value="255" type="integer"/>
 		<property name="toggledDrawableName" value="tick_on.png"/>
 		<property name="untoggledDrawableName" value="tick_off.png"/>
+		<property name="text" value="Always post to selected networks"/>
 	</bean>	
 	
-	<factory id="rememberCellFactory" makes="rememberCell"/>			
+	<factory id="rememberCellFactory" makes="rememberCell"/>	
+	
+	<bean 
+		id="rememberAuthCell" 
+		class="com.socialize.ui.share.RememberCell" 
+		singleton="false"
+		extends="clickableSectionCell">
+		<constructor-arg type="activity"/>	
+		<property name="backgroundColor" value="#293036"/>
+		<property name="bgAlpha" value="255" type="integer"/>
+		<property name="toggledDrawableName" value="tick_on.png"/>
+		<property name="untoggledDrawableName" value="tick_off.png"/>
+		<property name="text" value="Don't ask me again"/>
+	</bean>	
+	
+	<factory id="rememberAuthCellFactory" makes="rememberAuthCell"/>			
 	
 	<bean 
 		id="continueButton" 

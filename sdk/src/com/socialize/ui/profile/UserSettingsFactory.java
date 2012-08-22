@@ -39,6 +39,7 @@ public class UserSettingsFactory extends JSONFactory<UserSettings> {
 	public static final String AUTO_POST_TWITTER = "auto_post_tw";
 	public static final String NOTIFICATIONS_ENABLED = "notifications_enabled";
 	public static final String SHARE_LOCATION = "share_location";
+	public static final String SHOW_AUTH = "show_auth_dialog";
 	
 	private BitmapUtils bitmapUtils;
 	
@@ -55,6 +56,7 @@ public class UserSettingsFactory extends JSONFactory<UserSettings> {
 		user.setAutoPostTwitter(getBoolean(object,AUTO_POST_TWITTER, false));
 		user.setLocationEnabled(getBoolean(object,SHARE_LOCATION, true));
 		user.setNotificationsEnabled(getBoolean(object,NOTIFICATIONS_ENABLED, true));
+		user.setShowAuthDialog(getBoolean(object,SHOW_AUTH, true));
 	}
 
 	@Override
@@ -77,6 +79,7 @@ public class UserSettingsFactory extends JSONFactory<UserSettings> {
 		object.put(AUTO_POST_TWITTER, user.isAutoPostTwitter());
 		object.put(SHARE_LOCATION, user.isLocationEnabled());
 		object.put(NOTIFICATIONS_ENABLED, user.isNotificationsEnabled());
+		object.put(SHOW_AUTH, user.isShowAuthDialog());
 	}
 
 	public void setBitmapUtils(BitmapUtils bitmapUtils) {

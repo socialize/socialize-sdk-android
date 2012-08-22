@@ -75,7 +75,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	 */
 	@Override
 	public void showLinkDialog(Activity context, AuthDialogListener listener) {
-		authDialogFactory.show(context, listener, !config.isAllowAnonymousUser());
+		authDialogFactory.show(context, listener, !config.isAllowSkipAuthOnAllActions());
 	}
 	
 	@Override
@@ -339,7 +339,10 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	 */
 	@Override
 	public void shareViaSocialNetworks(Activity context, final Entity entity, final ShareOptions shareOptions, final SocialNetworkShareListener listener, final SocialNetwork...networks) {
-		if(isDisplayAuthDialog(context, shareOptions, networks)) {
+		
+		final SocializeSession session = getSocialize().getSession();
+		
+		if(isDisplayAuthDialog(context, session, shareOptions, networks)) {
 			
 			authDialogFactory.show(context, new AuthDialogListener() {
 				
@@ -372,7 +375,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 					dialog.dismiss();
 					doShare(context, entity, listener, shareOptions, network);
 				}
-			}, !config.isAllowAnonymousUser());
+			}, !config.isAllowSkipAuthOnAllActions());
 		}
 		else {
 			doShare(context, entity, listener, shareOptions, networks);

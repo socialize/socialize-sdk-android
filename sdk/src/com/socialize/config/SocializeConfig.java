@@ -66,6 +66,8 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_ALLOW_ANON_COMMENT = "socialize.allow.anon.comments";
 	
+	public static final String SOCIALIZE_ALLOW_NEVER_AUTH = "socialize.allow.never.auth";
+	
 	public static final String SOCIALIZE_EVENTS_AUTH_ENABLED = "socialize.events.auth.enabled";
 	
 	public static final String SOCIALIZE_EVENTS_SHARE_ENABLED = "socialize.events.share.enabled";
@@ -342,14 +344,18 @@ public class SocializeConfig {
 		return getBooleanProperty(SOCIALIZE_REQUIRE_SHARE, getBooleanProperty(SOCIALIZE_ALLOW_ANON, false));
 	}
 	
-	public boolean isAllowAnonymousComments() {
+	public boolean isAllowSkipAuthOnComments() {
 		return getBooleanProperty(SOCIALIZE_ALLOW_ANON_COMMENT, false);
 	}
 	
-	public boolean isAllowAnonymousUser() {
+	public boolean isAllowSkipAuthOnAllActions() {
 		return getBooleanProperty(SOCIALIZE_ALLOW_ANON, false);
 	}
 	
+	public boolean isAllowNeverAuth() {
+		return getBooleanProperty(SOCIALIZE_ALLOW_NEVER_AUTH, false);
+	}
+
 	public boolean isOGLike() {
 		return getBooleanProperty(FACEBOOK_OG_USE_INBUILT_LIKE, false);
 	}
@@ -362,7 +368,7 @@ public class SocializeConfig {
 		return getBooleanProperty(SOCIALIZE_NOTIFICATIONS_ENABLED, true);
 	}
 	
-	public boolean isAuthRequired() {
+	public boolean isPromptForAuth() {
 		return getBooleanProperty(SOCIALIZE_REQUIRE_AUTH, true);
 	}
 	

@@ -52,6 +52,7 @@ public class ConfigDialog {
 		final CheckBox chkRequireAuth = (CheckBox) layout.findViewById(R.id.chkRequireAuth);
 		final CheckBox chkAllowAnon = (CheckBox) layout.findViewById(R.id.chkAllowAnon);
 		final CheckBox chkAllowAnonComment = (CheckBox) layout.findViewById(R.id.chkAllowAnonComment);
+		final CheckBox chkAllowSkipAuth = (CheckBox) layout.findViewById(R.id.chkAllowSkipAuth);
 		final CheckBox chkPromptForShare = (CheckBox) layout.findViewById(R.id.chkPromptForShare);
 		final CheckBox chkFBSSO = (CheckBox) layout.findViewById(R.id.chkFBSSO);
 		final CheckBox chkFB = (CheckBox) layout.findViewById(R.id.chkFB);
@@ -59,13 +60,13 @@ public class ConfigDialog {
 		
 		final SocializeConfig config = ConfigUtils.getConfig(mContext);
 		
-		chkRequireAuth.setChecked(config.isAuthRequired());
-		chkAllowAnon.setChecked(config.isAllowAnonymousUser());
-		chkAllowAnonComment.setChecked(config.isAllowAnonymousComments());
+		chkRequireAuth.setChecked(config.isPromptForAuth());
+		chkAllowAnon.setChecked(config.isAllowSkipAuthOnAllActions());
+		chkAllowAnonComment.setChecked(config.isAllowSkipAuthOnComments());
 		chkFBSSO.setChecked(config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true));
 		chkFBSSO.setChecked(config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true));
 		chkPromptForShare.setChecked(config.isPromptForShare());
-		
+		chkAllowSkipAuth.setChecked(config.isAllowNeverAuth());
 		chkFB.setChecked(Socialize.getSocialize().isSupported(AuthProviderType.FACEBOOK));
 		chkTW.setChecked(Socialize.getSocialize().isSupported(AuthProviderType.TWITTER));
 		
@@ -73,11 +74,11 @@ public class ConfigDialog {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked) {
-					ConfigUtils.getConfig(mContext).setProperty(SocializeConfig.FACEBOOK_APP_ID, fbAppId);
+					config.setProperty(SocializeConfig.FACEBOOK_APP_ID, fbAppId);
 				}
 				else {
-					fbAppId = ConfigUtils.getConfig(mContext).getProperty(SocializeConfig.FACEBOOK_APP_ID);
-					ConfigUtils.getConfig(mContext).setProperty(SocializeConfig.FACEBOOK_APP_ID, null);
+					fbAppId = config.getProperty(SocializeConfig.FACEBOOK_APP_ID);
+					config.setProperty(SocializeConfig.FACEBOOK_APP_ID, null);
 				}
 			}
 		});
@@ -86,15 +87,15 @@ public class ConfigDialog {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked) {
-					ConfigUtils.getConfig(mContext).setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, twKey);
-					ConfigUtils.getConfig(mContext).setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, twSecret);
+					config.setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, twKey);
+					config.setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, twSecret);
 				}
 				else {
-					twKey = ConfigUtils.getConfig(mContext).getProperty(SocializeConfig.TWITTER_CONSUMER_KEY);
-					twSecret = ConfigUtils.getConfig(mContext).getProperty(SocializeConfig.TWITTER_CONSUMER_SECRET);
+					twKey = config.getProperty(SocializeConfig.TWITTER_CONSUMER_KEY);
+					twSecret = config.getProperty(SocializeConfig.TWITTER_CONSUMER_SECRET);
 					
-					ConfigUtils.getConfig(mContext).setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, null);
-					ConfigUtils.getConfig(mContext).setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, null);
+					config.setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, null);
+					config.setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, null);
 				}
 			}
 		});		
@@ -108,6 +109,7 @@ public class ConfigDialog {
 				config.setProperty(SocializeConfig.SOCIALIZE_ALLOW_ANON_COMMENT, String.valueOf(chkAllowAnonComment.isChecked()));
 				config.setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, String.valueOf(chkRequireAuth.isChecked()));
 				config.setProperty(SocializeConfig.SOCIALIZE_PROMPT_SHARE, String.valueOf(chkPromptForShare.isChecked()));
+				config.setProperty(SocializeConfig.SOCIALIZE_ALLOW_NEVER_AUTH, String.valueOf(chkAllowSkipAuth.isChecked()));
 				config.setFacebookSingleSignOnEnabled(chkFBSSO.isChecked());
 			}
 		});

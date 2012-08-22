@@ -79,6 +79,30 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 		editor.commit();
 	}
 	
+	@Override
+	public void saveUserSettingsAsync(final Context context, final UserSettings settings) {
+		new Thread() {
+			@Override
+			public void run() {
+				SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+				Editor editor = prefs.edit();
+				try {
+					String userJSON = userSettingsFactory.toJSON(settings).toString();
+					editor.putString("user-settings", userJSON);
+					editor.commit();
+				}
+				catch (JSONException e) {
+					if(logger != null) {
+						logger.error("Failed to serialize user settings object", e);
+					}
+					else {
+						Log.e(SocializeLogger.LOG_TAG, "Failed to serialize user settings object", e);
+					}
+				}
+			}
+		}.start();
+	}
+
 	public synchronized void saveUser(Editor editor, User user, UserSettings userSettings) {
 		if(user != null) {
 			try {

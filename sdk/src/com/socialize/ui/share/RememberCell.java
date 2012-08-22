@@ -11,6 +11,8 @@ import com.socialize.ui.util.Colors;
 import com.socialize.ui.view.ClickableSectionCell;
 
 public class RememberCell extends ClickableSectionCell {
+	
+	private String text;
 
 	public RememberCell(Context context) {
 		super(context);
@@ -43,7 +45,7 @@ public class RememberCell extends ClickableSectionCell {
 		
 		TextView title = new TextView(getContext());
 		
-		title.setText("Always post to selected networks");
+		title.setText(text);
 		
 		title.setTextColor(colors.getColor(Colors.ANON_CELL_TITLE));
 		
@@ -55,4 +57,15 @@ public class RememberCell extends ClickableSectionCell {
 		
 		return layout;
 	}
+
+	
+	public String getText() {
+		return text;
+	}
+	
+	public void setText(String text) {
+		this.text = text;
+	}
+	
+	
 }

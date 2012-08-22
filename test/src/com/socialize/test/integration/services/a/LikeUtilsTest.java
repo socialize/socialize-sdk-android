@@ -582,7 +582,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		SocializeLikeUtils mockLikeUtils = new SocializeLikeUtils() {
 
 			@Override
-			protected boolean isDisplayAuthDialog(Context context, ActionOptions options, SocialNetwork... networks) {
+			protected boolean isDisplayAuthDialog(Context context, SocializeSession session, ActionOptions options, SocialNetwork... networks) {
 				return false;
 			}
 

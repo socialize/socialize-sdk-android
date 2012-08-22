@@ -77,7 +77,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 		final boolean doShare = isDisplayShareDialog(context, likeOptions);
 		final SocializeSession session = getSocialize().getSession();
 
-		if(isDisplayAuthDialog(context, likeOptions, networks)) {
+		if(isDisplayAuthDialog(context, session, likeOptions, networks)) {
 			authDialogFactory.show(context, new AuthDialogListener() {
 				@Override
 				public void onShow(Dialog dialog, AuthPanelView dialogView) {}
@@ -113,7 +113,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 						doLikeWithoutShare(context, session, entity, likeOptions, listener, networks);
 					}					
 				}
-			}, !config.isAllowAnonymousUser());
+			}, !config.isAllowSkipAuthOnAllActions());
 		}
 		else {
 			if(doShare) {

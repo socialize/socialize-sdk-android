@@ -45,6 +45,7 @@ public class UserSettings implements Serializable {
 	
 	private boolean autoPostFacebook = false;
 	private boolean autoPostTwitter = false;
+	private boolean showAuthDialog = true;
 	
 	public String getFullName() {
 		if(fullName == null) {
@@ -148,6 +149,14 @@ public class UserSettings implements Serializable {
 		this.locationEnabled = locationEnabled;
 	}
 	
+	public boolean isShowAuthDialog() {
+		return showAuthDialog;
+	}
+	
+	public void setShowAuthDialog(boolean showAuthDialog) {
+		this.showAuthDialog = showAuthDialog;
+	}
+
 	/**
 	 * Update the local settings based on the given user object.
 	 * @param user
@@ -164,6 +173,7 @@ public class UserSettings implements Serializable {
 		setLastName(other.getLastName());
 		setLocationEnabled(other.isLocationEnabled());
 		setNotificationsEnabled(other.isNotificationsEnabled());
+		setShowAuthDialog(other.isShowAuthDialog());
 	}
 	
 	public boolean setAutoPostPreferences(SocialNetwork...networks) {

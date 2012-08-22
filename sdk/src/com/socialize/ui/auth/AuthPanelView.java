@@ -37,7 +37,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.SocializeSessionPersister;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
@@ -45,6 +47,8 @@ import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.facebook.FacebookSignInCell;
 import com.socialize.networks.twitter.TwitterSignInCell;
 import com.socialize.ui.dialog.DialogPanelView;
+import com.socialize.ui.profile.UserSettings;
+import com.socialize.ui.share.RememberCell;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.view.ClickableSectionCell;
 import com.socialize.util.DisplayUtils;
@@ -61,6 +65,9 @@ public class AuthPanelView extends DialogPanelView {
 	private IBeanFactory<FacebookSignInCell> facebookSignInCellFactory;
 	private IBeanFactory<TwitterSignInCell> twitterSignInCellFactory;
 	private IBeanFactory<AnonymousCell> anonCellFactory;
+	private IBeanFactory<RememberCell> rememberAuthCellFactory;
+	private SocializeConfig config;
+	private SocializeSessionPersister sessionPersister;
 	
 	public AuthPanelView(Context context) {
 		super(context);
@@ -75,6 +82,7 @@ public class AuthPanelView extends DialogPanelView {
 	private FacebookSignInCell facebookSignInCell;
 	private TwitterSignInCell twitterSignInCell;
 	private AnonymousCell anonymousCell;
+	private RememberCell rememberCell;
 	private TextView skipAuth;
 	
 	float radii = 6;
@@ -157,12 +165,15 @@ public class AuthPanelView extends DialogPanelView {
 		skipAuthParams.setMargins(0, displayUtils.getDIP(30), 0, 0);
 		
 		skipAuth = new TextView(getContext());
-		
-		skipAuth.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+		skipAuth.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
 		skipAuth.setTextColor(colors.getColor(Colors.ANON_CELL_TITLE));
 		skipAuth.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL);
 		skipAuth.setPadding(0, 0, 0, padding);
 		skipAuth.setLayoutParams(skipAuthParams);
+		
+		if(rememberCell != null) {
+			contentLayout.addView(rememberCell);
+		}
 		
 		contentLayout.addView(skipAuth);
 		
@@ -172,15 +183,27 @@ public class AuthPanelView extends DialogPanelView {
 		addView(container);
 	}
 	
-	public void setAuthRequired(boolean required) {
+	public void setAuthRequired(final boolean required) {
 		if(!required) {
-			String mystring=new String("I'd rather not...");
+			
+			if(rememberCell != null) {
+				rememberCell.setVisibility(View.VISIBLE);
+			}
+			
+			String mystring = new String("I'd rather not...");
 			SpannableString content = new SpannableString(mystring);
 			content.setSpan(new UnderlineSpan(), 0, mystring.length(), 0);
 			skipAuth.setText(content);
 			skipAuth.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					if(rememberCell != null && rememberCell.isToggled()) {
+						// Never auth again
+						UserSettings settings = getSocialize().getSession().getUserSettings();
+						settings.setShowAuthDialog(false);
+						sessionPersister.saveUserSettingsAsync(getContext(), settings);
+					}
+					
 					if(authDialogListener != null) {
 						authDialogListener.onSkipAuth(getActivity(), dialog);
 					}
@@ -188,6 +211,10 @@ public class AuthPanelView extends DialogPanelView {
 			});
 		}
 		else {
+			if(rememberCell != null) {
+				rememberCell.setVisibility(View.GONE);
+			}
+			
 			skipAuth.setText("Authentication is required");
 		}
 	}
@@ -221,6 +248,7 @@ public class AuthPanelView extends DialogPanelView {
 		
 		boolean fbOK = getSocialize().isSupported(AuthProviderType.FACEBOOK) && facebookSignInCellFactory != null;
 		boolean twOK = getSocialize().isSupported(AuthProviderType.TWITTER) && twitterSignInCellFactory != null;
+		boolean rememberOk = rememberAuthCellFactory != null && config.isAllowNeverAuth();
 		
 		if(fbOK) {
 			facebookSignInCell = facebookSignInCellFactory.getBean();
@@ -256,6 +284,13 @@ public class AuthPanelView extends DialogPanelView {
 			twitterSignInCell.setAuthListener(getAuthClickListener(twitterSignInCell, SocialNetwork.TWITTER));
 		}
 		
+		if(rememberOk) {
+			rememberCell = rememberAuthCellFactory.getBean();
+			LayoutParams rememberCellParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+			rememberCellParams.setMargins(0, padding, 0, 0);
+			rememberCell.setLayoutParams(rememberCellParams);
+		}
+				
 		anonymousCell = anonCellFactory.getBean();
 		LayoutParams anonCellParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		anonCellParams.setMargins(0, padding, 0, 0);
@@ -318,6 +353,18 @@ public class AuthPanelView extends DialogPanelView {
 		this.colors = colors;
 	}
 	
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
+	}
+
+	public void setRememberAuthCellFactory(IBeanFactory<RememberCell> rememberAuthCellFactory) {
+		this.rememberAuthCellFactory = rememberAuthCellFactory;
+	}
+	
+	public void setSessionPersister(SocializeSessionPersister sessionPersister) {
+		this.sessionPersister = sessionPersister;
+	}
+
 	protected SocializeAuthListener getAuthClickListener(final ClickableSectionCell cell, final SocialNetwork network) {
 		return new SocializeAuthListener() {
 			

@@ -50,7 +50,7 @@ public class ActionBarLikeTest extends ActionBarTest {
 		
 		SocializeConfig mockConfig = new SocializeConfig() {
 			@Override
-			public boolean isAllowAnonymousUser() {
+			public boolean isAllowSkipAuthOnAllActions() {
 				return true;
 			}
 		};

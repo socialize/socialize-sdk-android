@@ -12,40 +12,60 @@
 	    android:orientation="vertical"
 	    android:padding="8dip">
 	    
-		<CheckBox android:id="@+id/chkRequireAuth"
+		<CheckBox 
+		    	android:id="@+id/chkRequireAuth"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:text="Require Authentication"/>  
+		        android:text="Always Prompt Auth"
+		        android:textSize="14dip"/>  
+		        
+		<CheckBox 
+		    	android:id="@+id/chkPromptForShare"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="Always Prompt for Share"
+		        android:textSize="14dip"/>  		
 		        
 		<CheckBox android:id="@+id/chkAllowAnon"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:text="Allow Anonymous Users"/> 
+		        android:text="Allow Users to Skip Auth"
+		        android:textSize="14dip"/> 
 		        
-		<CheckBox android:id="@+id/chkAllowAnonComment"
+		<CheckBox 
+		    	android:id="@+id/chkAllowAnonComment"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:text="Allow Anonymous Comments"/>
-		 
-		<CheckBox android:id="@+id/chkPromptForShare"
+		        android:text="Allow Users to Skip Auth on Comments"
+		        android:textSize="14dip"/>
+		
+		<CheckBox 
+		    	android:id="@+id/chkAllowSkipAuth"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:text="Always Prompt for Share"/>        
+		        android:text="Allow Users to Save Auth Preference"
+		        android:textSize="14dip"/>		
 		        
-		<CheckBox android:id="@+id/chkFB"
+		<CheckBox 
+		    	android:id="@+id/chkFB"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:text="Facebook Enabled"/>  
+		        android:text="Facebook Enabled"
+		        android:textSize="14dip"/>  
 		        
-		<CheckBox android:id="@+id/chkTW"
+		<CheckBox 
+		    	android:id="@+id/chkTW"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:text="Twitter Enabled"/>  			
+		        android:text="Twitter Enabled"
+		        android:textSize="14dip"/>  			
 		        
-		<CheckBox android:id="@+id/chkFBSSO"
+		<CheckBox 
+		    	android:id="@+id/chkFBSSO"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:text="FB Single Sign On Enabled"/>  	
+		        android:text="FB Single Sign On Enabled"
+		        android:textSize="14dip"/>  	
 	</LinearLayout>
 
 </ScrollView>
