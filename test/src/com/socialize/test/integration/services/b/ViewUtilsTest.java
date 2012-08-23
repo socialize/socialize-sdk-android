@@ -31,7 +31,6 @@ import com.socialize.entity.View;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.view.ViewAddListener;
-import com.socialize.listener.view.ViewGetListener;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 
@@ -135,20 +134,7 @@ public class ViewUtilsTest extends SocializeActivityTest {
 			
 			@Override
 			public void onCreate(View view) {
-				ViewUtils.getView(TestUtils.getActivity(ViewUtilsTest.this), view.getId(), new ViewGetListener() {
-					
-					@Override
-					public void onGet(View entity) {
-						addResult(0, entity);
-						latch.countDown();
-					}
-					
-					@Override
-					public void onError(SocializeException error) {
-						error.printStackTrace();
-						latch.countDown();
-					}
-				});
+				addResult(0, view);
 			}
 		});		
 		
