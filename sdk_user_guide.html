@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Socialize Android Developer Guide &mdash; Socialize Android SDK v2.3.3 documentation</title>
+    <title>Socialize Android Developer Guide &mdash; Socialize Android SDK v2.4 documentation</title>
     
     <link rel="stylesheet" href="static/nature.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     'v2.3.3',
+        VERSION:     'v2.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,21 +25,21 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v2.3.3 documentation" href="index.html?v=v2.3.3" />
-    <link rel="next" title="Configuration Settings" href="config.html?v=v2.3.3" />
-    <link rel="prev" title="Entity Loaders" href="entity_loader.html?v=v2.3.3" /> 
+    <link rel="top" title="Socialize Android SDK v2.4 documentation" href="index.html?v=v2.4" />
+    <link rel="next" title="Configuration Settings" href="config.html?v=v2.4" />
+    <link rel="prev" title="Entity Loaders" href="entity_loader.html?v=v2.4" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="config.html?v=v2.3.3" title="Configuration Settings"
+          <a href="config.html?v=v2.4" title="Configuration Settings"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="entity_loader.html?v=v2.3.3" title="Entity Loaders"
+          <a href="entity_loader.html?v=v2.4" title="Entity Loaders"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html?v=v2.3.3">Socialize Android SDK v2.3.3 documentation</a> &raquo;</li> 
+        <li><a href="index.html?v=v2.4">Socialize Android SDK v2.4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -750,12 +750,12 @@ The following section is not required if you are simply using the <b>Action Bar<
 </div>
 <div class="section" id="custom-share-dialog">
 <span id="custom-share"></span><h3>Custom Share Dialog<a class="headerlink" href="#custom-share-dialog" title="Permalink to this headline">¶</a></h3>
-<p>If you just want to allow sharing to Facebook or Twitter</p>
+<p>If you just want to allow sharing to Social Networks</p>
 <img alt="images/2_0_share_via_networks.png" src="images/2_0_share_via_networks.png" />
 <div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>	
 
 <span class="c1">// Setup the options for display</span>
-<span class="kt">int</span> <span class="n">options</span> <span class="o">=</span> <span class="n">ShareUtils</span><span class="o">.</span><span class="na">FACEBOOK</span> <span class="o">|</span> <span class="n">ShareUtils</span><span class="o">.</span><span class="na">TWITTER</span><span class="o">;</span>
+<span class="kt">int</span> <span class="n">options</span> <span class="o">=</span> <span class="n">ShareUtils</span><span class="o">.</span><span class="na">FACEBOOK</span> <span class="o">|</span> <span class="n">ShareUtils</span><span class="o">.</span><span class="na">TWITTER</span> <span class="o">|</span> <span class="n">ShareUtils</span><span class="o">.</span><span class="na">GOOGLE_PLUS</span><span class="o">;</span>
 
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">ShareUtils</span><span class="o">.</span><span class="na">showShareDialog</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="k">new</span> <span class="n">SocialNetworkDialogListener</span><span class="o">()</span> <span class="o">{</span>
@@ -831,7 +831,7 @@ implement the <strong>onBeforePost</strong> method of the listener you pass to t
 <div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>	
 
 <span class="c1">// Setup the options for display</span>
-<span class="kt">int</span> <span class="n">options</span> <span class="o">=</span> <span class="n">ShareUtils</span><span class="o">.</span><span class="na">SOCIAL</span><span class="o">;</span> <span class="c1">// This is just a shortcut for Twitter and Facebook.</span>
+<span class="kt">int</span> <span class="n">options</span> <span class="o">=</span> <span class="n">ShareUtils</span><span class="o">.</span><span class="na">SOCIAL</span><span class="o">;</span> <span class="c1">// This is just a shortcut for Twitter, Facebook and Google+.</span>
 
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">ShareUtils</span><span class="o">.</span><span class="na">showShareDialog</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="k">new</span> <span class="n">SocialNetworkDialogListener</span><span class="o">()</span> <span class="o">{</span>
@@ -970,7 +970,7 @@ The following section is not required if you are simply using the <b>Action Bar<
 </div>
 </div><div class="section" id="displaying-the-comment-list-ui">
 <h3>Displaying the Comment List UI<a class="headerlink" href="#displaying-the-comment-list-ui" title="Permalink to this headline">¶</a></h3>
-<p>The standard Socialize Comment List UI is included with the <a class="reference internal" href="action_bar.html?v=v2.3.3"><em>Socialize Action Bar</em></a> however if you wanted to create your own ActionBar or
+<p>The standard Socialize Comment List UI is included with the <a class="reference internal" href="action_bar.html?v=v2.4"><em>Socialize Action Bar</em></a> however if you wanted to create your own ActionBar or
 simply want to launch the Comment List from elsewhere in your app this can simply be done with a few lines of code</p>
 <div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
 
@@ -1433,7 +1433,7 @@ The following section is not required if you are simply using the <b>Action Bar<
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="search.html?v=v2.3.3" method="get">
+    <form class="search" action="search.html?v=v2.4" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -1444,21 +1444,21 @@ The following section is not required if you are simply using the <b>Action Bar<
     </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-<h3><a href="index.html?v=v2.3.3">Table Of Contents</a></h3>
+<h3><a href="index.html?v=v2.4">Table Of Contents</a></h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v2.3.3">What&#8217;s New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v2.3.3">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lifecycle.html?v=v2.3.3">Socialize Lifecycle</a></li>
-<li class="toctree-l1"><a class="reference internal" href="demo.html?v=v2.3.3">Socialize Demo App</a></li>
-<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v2.3.3">Socialize Action Bar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="entities.html?v=v2.3.3">Socialize Entities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v2.3.3">Custom Like Buttons</a></li>
-<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v2.3.3">Facebook Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v2.3.3">Twitter Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="facebook_adv.html?v=v2.3.3">Advanced Facebook</a></li>
-<li class="toctree-l1"><a class="reference internal" href="twitter_adv.html?v=v2.3.3">Advanced Twitter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v2.3.3">SmartAlerts (Push Notifications)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v2.3.3">Entity Loaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v2.4">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v2.4">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lifecycle.html?v=v2.4">Socialize Lifecycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html?v=v2.4">Socialize Demo App</a></li>
+<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v2.4">Socialize Action Bar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entities.html?v=v2.4">Socialize Entities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v2.4">Custom Like Buttons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v2.4">Facebook Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v2.4">Twitter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook_adv.html?v=v2.4">Advanced Facebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter_adv.html?v=v2.4">Advanced Twitter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v2.4">SmartAlerts (Push Notifications)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v2.4">Entity Loaders</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Socialize Android Developer Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#initializing-socialize-optional">Initializing Socialize (Optional)</a></li>
@@ -1471,11 +1471,11 @@ The following section is not required if you are simply using the <b>Action Bar<
 <li class="toctree-l2"><a class="reference internal" href="#views">Views</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="config.html?v=v2.3.3">Configuration Settings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v2.3.3">Amazon AppStore URLs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v2.3.3">ProGuard Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v2.3.3">Troubleshooting &amp; Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v2.3.3">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html?v=v2.4">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v2.4">Amazon AppStore URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v2.4">ProGuard Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v2.4">Troubleshooting &amp; Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v2.4">Change Log</a></li>
 </ul>
 
         </div>
@@ -1486,12 +1486,12 @@ The following section is not required if you are simply using the <b>Action Bar<
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="config.html?v=v2.3.3" title="Configuration Settings"
+          <a href="config.html?v=v2.4" title="Configuration Settings"
              >next</a></li>
         <li class="right" >
-          <a href="entity_loader.html?v=v2.3.3" title="Entity Loaders"
+          <a href="entity_loader.html?v=v2.4" title="Entity Loaders"
              >previous</a> |</li>
-        <li><a href="index.html?v=v2.3.3">Socialize Android SDK v2.3.3 documentation</a> &raquo;</li> 
+        <li><a href="index.html?v=v2.4">Socialize Android SDK v2.4 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
