@@ -423,6 +423,7 @@ public class SocializeServiceImpl implements SocializeService {
 				SocializeConfig mainConfig = container.getBean("config");
 				
 				mainConfig.merge(config);
+				mainConfig.merge(ConfigUtils.preInitConfig);
 				
 				this.config = mainConfig;
 				this.initCount++;
