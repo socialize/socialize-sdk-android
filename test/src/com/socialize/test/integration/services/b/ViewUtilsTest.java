@@ -188,9 +188,6 @@ public class ViewUtilsTest extends SocializeActivityTest {
 				
 				addResult(0, view);
 				
-				// Wait for the server to catch up
-				sleep(2000);
-				
 				latch0.countDown();
 			}
 		});		
@@ -200,7 +197,7 @@ public class ViewUtilsTest extends SocializeActivityTest {
 		View view = getResult(0);
 		assertNotNull("No view found for user.  This means the view was not created",  view);
 		
-		ViewUtils.getViewsByUser(activity, user, 0, 100, new ViewListListener() {
+		ViewUtils.getViewsByUser(activity, user, 0, 1, new ViewListListener() {
 			
 			@Override
 			public void onList(List<View> items, int totalSize) {
@@ -225,7 +222,7 @@ public class ViewUtilsTest extends SocializeActivityTest {
 				TestUtils.stackTraceToString(error) +
 				"]",  items);
 		
-		assertTrue(items.size() >= 1);
+		assertTrue(items.size() == 1);
 	}
 	
 //	public void testGetViewsByEntity() throws SocializeException, InterruptedException {
