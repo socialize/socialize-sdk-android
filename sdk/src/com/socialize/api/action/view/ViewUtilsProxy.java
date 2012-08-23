@@ -46,8 +46,12 @@ public interface ViewUtilsProxy {
 	 * @param context The current context.
 	 * @param e The entity that was viewd.
 	 * @param listener A listener to handle the result.
+	 * @deprecated No longer supported.
 	 */
+	@Deprecated
 	public void getView (Activity context, Entity e, ViewGetListener listener);
+	
+	public void getView (Activity context, long id, ViewGetListener listener);
 	
 	/**
 	 * Lists all views for the given user.
@@ -56,7 +60,9 @@ public interface ViewUtilsProxy {
 	 * @param start The first index (for pagination), starting at 0
 	 * @param end The last index (for pagination)
 	 * @param listener A listener to handle the result.
+	 * @deprecated No longer supported.
 	 */
+	@Deprecated
 	public void getViewsByUser (Activity context, User user, int start, int end, ViewListListener listener);
 	
 	/**
@@ -66,6 +72,8 @@ public interface ViewUtilsProxy {
 	 * @param start The first index (for pagination), starting at 0
 	 * @param end The last index (for pagination)
 	 * @param listener A listener to handle the result.
+	 * @deprecated No longer supported.
 	 */
+	@Deprecated
 	public void getViewsByEntity (Activity context, Entity entity, int start, int end, ViewListListener listener);
 }

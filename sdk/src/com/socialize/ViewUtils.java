@@ -49,7 +49,7 @@ public class ViewUtils {
 	/**
 	 * Records a view against the given entity for the current user.
 	 * @param context The current context.
-	 * @param e The entity to be viewd.
+	 * @param e The entity to be viewed.
 	 * @param listener A listener to handle the result.
 	 */
 	public static void view (Activity context, Entity e, ViewAddListener listener) {
@@ -59,11 +59,17 @@ public class ViewUtils {
 	/**
 	 * Retrieves a view for an entity and the current user.
 	 * @param context The current context.
-	 * @param e The entity that was viewd.
+	 * @param e The entity that was viewed.
 	 * @param listener A listener to handle the result.
+	 * @deprecated No longer supported.
 	 */
+	@Deprecated
 	public static void getView (Activity context, Entity e, ViewGetListener listener) {
 		proxy.getView(context, e, listener);
+	}
+	
+	public static void getView (Activity context, long id, ViewGetListener listener) {
+		proxy.getView(context, id, listener);
 	}
 	
 	
@@ -74,20 +80,10 @@ public class ViewUtils {
 	 * @param start The first index (for pagination), starting at 0
 	 * @param end The last index (for pagination)
 	 * @param listener A listener to handle the result.
+	 * @deprecated No longer supported.
 	 */
+	@Deprecated
 	public static void getViewsByUser (Activity context, User user, int start, int end, ViewListListener listener) {
 		proxy.getViewsByUser(context, user, start, end, listener);
 	}
-	
-//	/**
-//	 * Lists all views for the given entity.
-//	 * @param context The current context.
-//	 * @param entity The entity for whom views will be queried.
-//	 * @param start The first index (for pagination), starting at 0
-//	 * @param end The last index (for pagination)
-//	 * @param listener A listener to handle the result.
-//	 */
-//	public static void getViewsByEntity (Activity context, Entity entity, int start, int end, ViewListListener listener) {
-//		proxy.getViewsByEntity(context, entity, start, end, listener);
-//	}	
 }

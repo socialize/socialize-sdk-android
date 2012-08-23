@@ -34,6 +34,7 @@ import com.socialize.listener.view.ViewListListener;
  * @author Jason Polites
  *
  */
+@Deprecated
 public class GetViewsByUserActivity extends SDKDemoActivity {
 
 	/* (non-Javadoc)

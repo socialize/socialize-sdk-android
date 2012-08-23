@@ -428,12 +428,4 @@ Recording Views
 	:start-after: begin-snippet-0
 	:end-before: end-snippet-0
 
-
-Retrieving Views
-~~~~~~~~~~~~~~~~
-
-.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ViewSnippets.java
-	:start-after: begin-snippet-1
-	:end-before: end-snippet-1
-
 .. include:: footer.inc			

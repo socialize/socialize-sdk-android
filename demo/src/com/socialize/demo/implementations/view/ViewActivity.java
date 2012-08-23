@@ -35,8 +35,8 @@ import com.socialize.demo.R;
  *
  */
 public class ViewActivity extends ListActivity {
-	final String[] values = new String[] { "Add View", "Get Views By User"};//, "Get Views By Entity"};
-	final Class<?>[] activities = new Class<?>[] { AddViewActivity.class, GetViewsByUserActivity.class };//, GetViewsByEntityActivity.class};
+	final String[] values = new String[] { "Add View" };//, "Get Views By Entity"};
+	final Class<?>[] activities = new Class<?>[] { AddViewActivity.class };//, GetViewsByEntityActivity.class};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

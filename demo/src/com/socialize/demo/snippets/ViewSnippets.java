@@ -59,6 +59,7 @@ ViewUtils.view(this, entity, new ViewAddListener() {
 // end-snippet-0
 }
 
+@Deprecated
 public void getViewsByUser() {
 // begin-snippet-1
 User user = UserUtils.getCurrentUser(this);

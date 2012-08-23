@@ -28,7 +28,6 @@ import com.socialize.listener.view.ViewListener;
 
 /**
  * @author Jason Polites
- *
  */
 public interface ViewSystem {
 
@@ -36,12 +35,15 @@ public interface ViewSystem {
 	
 	public void addView(SocializeSession session, Entity entity, Location location, ViewListener listener);
 	
+	@Deprecated
 	public void getView(SocializeSession session, Entity entity, ViewListener listener);
 	
 	public void getView(SocializeSession session, long id, ViewListener listener);
-
+	
+	@Deprecated
 	public void getViewsByEntity(SocializeSession session, String entityKey, int startIndex, int endIndex, ViewListener listener);
 
+	@Deprecated
 	public void getViewsByUser(SocializeSession session, long userId, int startIndex, int endIndex, ViewListener listener);
 
 }

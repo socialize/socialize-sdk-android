@@ -21,22 +21,17 @@
  */
 package com.socialize.test.integration.services.b;
 
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import android.app.Activity;
 import com.socialize.EntityUtils;
 import com.socialize.Socialize;
-import com.socialize.UserUtils;
 import com.socialize.ViewUtils;
 import com.socialize.entity.Entity;
-import com.socialize.entity.User;
 import com.socialize.entity.View;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.listener.view.ViewGetListener;
-import com.socialize.listener.view.ViewListListener;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 
@@ -140,7 +135,7 @@ public class ViewUtilsTest extends SocializeActivityTest {
 			
 			@Override
 			public void onCreate(View view) {
-				ViewUtils.getView(TestUtils.getActivity(ViewUtilsTest.this), entity, new ViewGetListener() {
+				ViewUtils.getView(TestUtils.getActivity(ViewUtilsTest.this), view.getId(), new ViewGetListener() {
 					
 					@Override
 					public void onGet(View entity) {
@@ -164,66 +159,66 @@ public class ViewUtilsTest extends SocializeActivityTest {
 		assertEquals(entity.getKey(), view.getEntityKey());
 	}
 	
-	public void testGetViewsByUser() throws SocializeException, InterruptedException {
-		final User user = UserUtils.getCurrentUser(TestUtils.getActivity(this));
-		
-		final Entity entity = Entity.newInstance("testGetViewsByUser", "testGetViewsByUser");
-		
-		final CountDownLatch latch0 = new CountDownLatch(1);
-		final CountDownLatch latch1 = new CountDownLatch(1);
-		
-		
-		final Activity activity = TestUtils.getActivity(this);
-		
-		ViewUtils.view(activity, entity, new ViewAddListener() {
-			
-			@Override
-			public void onError(SocializeException error) {
-				error.printStackTrace();
-				latch0.countDown();
-			}
-			
-			@Override
-			public void onCreate(View view) {
-				
-				addResult(0, view);
-				
-				latch0.countDown();
-			}
-		});		
-		
-		assertTrue(latch0.await(20, TimeUnit.SECONDS));
-		
-		View view = getResult(0);
-		assertNotNull("No view found for user.  This means the view was not created",  view);
-		
-		ViewUtils.getViewsByUser(activity, user, 0, 1, new ViewListListener() {
-			
-			@Override
-			public void onList(List<View> items, int totalSize) {
-				addResult(1, items);
-				latch1.countDown();
-			}
-			
-			@Override
-			public void onError(SocializeException error) {
-				addResult(2, error);
-				latch1.countDown();
-			}
-		});
-				
-		assertTrue(latch1.await(20, TimeUnit.SECONDS));
-		
-		List<View> items = getResult(1);
-		Exception error = getResult(2);
-		assertNotNull("No views found for user [" +
-				user.getId() +
-				"].  This means the view was created but there was an error retrieving the views after [" +
-				TestUtils.stackTraceToString(error) +
-				"]",  items);
-		
-		assertTrue(items.size() == 1);
-	}
+//	public void testGetViewsByUser() throws SocializeException, InterruptedException {
+//		final User user = UserUtils.getCurrentUser(TestUtils.getActivity(this));
+//		
+//		final Entity entity = Entity.newInstance("testGetViewsByUser", "testGetViewsByUser");
+//		
+//		final CountDownLatch latch0 = new CountDownLatch(1);
+//		final CountDownLatch latch1 = new CountDownLatch(1);
+//		
+//		
+//		final Activity activity = TestUtils.getActivity(this);
+//		
+//		ViewUtils.view(activity, entity, new ViewAddListener() {
+//			
+//			@Override
+//			public void onError(SocializeException error) {
+//				error.printStackTrace();
+//				latch0.countDown();
+//			}
+//			
+//			@Override
+//			public void onCreate(View view) {
+//				
+//				addResult(0, view);
+//				
+//				latch0.countDown();
+//			}
+//		});		
+//		
+//		assertTrue(latch0.await(20, TimeUnit.SECONDS));
+//		
+//		View view = getResult(0);
+//		assertNotNull("No view found for user.  This means the view was not created",  view);
+//		
+//		ViewUtils.getViewsByUser(activity, user, 0, 1, new ViewListListener() {
+//			
+//			@Override
+//			public void onList(List<View> items, int totalSize) {
+//				addResult(1, items);
+//				latch1.countDown();
+//			}
+//			
+//			@Override
+//			public void onError(SocializeException error) {
+//				addResult(2, error);
+//				latch1.countDown();
+//			}
+//		});
+//				
+//		assertTrue(latch1.await(20, TimeUnit.SECONDS));
+//		
+//		List<View> items = getResult(1);
+//		Exception error = getResult(2);
+//		assertNotNull("No views found for user [" +
+//				user.getId() +
+//				"].  This means the view was created but there was an error retrieving the views after [" +
+//				TestUtils.stackTraceToString(error) +
+//				"]",  items);
+//		
+//		assertTrue(items.size() == 1);
+//	}
 	
 //	public void testGetViewsByEntity() throws SocializeException, InterruptedException {
 //		final Entity entity = Entity.newInstance("testGetViewsByEntity", "testGetViewsByEntity");
