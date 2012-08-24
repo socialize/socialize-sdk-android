@@ -187,7 +187,7 @@ public class SocializeConfig {
 				if(override) {
 					// Look for override
 					try {
-						in = resourceLocator.locateInAssets(context, propertiesFileName);
+						in = resourceLocator.locate(context, propertiesFileName);
 						
 						if(in != null) {
 							Properties overrideProps = createProperties();

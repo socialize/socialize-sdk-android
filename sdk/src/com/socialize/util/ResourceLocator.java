@@ -70,6 +70,15 @@ public class ResourceLocator {
 		
 		return in;
 	}
+	
+	public InputStream locateInLocalStorage(Context context, String name) throws IOException {
+		try {
+			return context.openFileInput(name);
+		}
+		catch (FileNotFoundException e) {
+			return null;
+		}
+	}
 
 	public InputStream locateInClassPath(Context context, String name) throws IOException {
 		
@@ -103,6 +112,10 @@ public class ResourceLocator {
 		
 		if(in == null) {
 			in = locateInClassPath(context, name);
+		}
+		
+		if(in == null) {
+			in = locateInLocalStorage(context, name);
 		}
 		
 		if(in == null) {
