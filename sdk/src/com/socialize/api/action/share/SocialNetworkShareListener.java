@@ -46,7 +46,9 @@ public abstract class SocialNetworkShareListener extends ShareAddListener implem
 		onError(SocializeException.wrap(error));
 	}
 
-	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {}
+	public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+		return false;
+	}
 
 	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {}
 

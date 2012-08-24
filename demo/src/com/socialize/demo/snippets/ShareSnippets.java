@@ -156,11 +156,13 @@ ShareUtils.showShareDialog(this, entity, new SocialNetworkDialogListener() {
 	}
 
 	@Override
-	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+	public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
 		// Change data for facebook post
 		if(socialNetwork != null && socialNetwork.equals(SocialNetwork.FACEBOOK)) {
 			postData.getPostValues().put("foo", "bar");
 		}
+		
+		return false;
 	}
 	
 }, options);

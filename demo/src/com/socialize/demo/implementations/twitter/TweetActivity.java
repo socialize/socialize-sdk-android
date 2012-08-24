@@ -71,8 +71,9 @@ public class TweetActivity extends SDKDemoActivity {
 				TwitterUtils.tweet(TweetActivity.this, tweet, new SocialNetworkListener() {
 					
 					@Override
-					public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+					public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
 						// Nothing to see here.. move along.
+						return false;
 					}
 
 					@Override

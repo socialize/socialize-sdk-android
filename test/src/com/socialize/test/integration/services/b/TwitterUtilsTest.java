@@ -510,8 +510,9 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		TwitterUtils.tweet(TestUtils.getActivity(this), tweet, new SocialNetworkListener() {
 			
 			@Override
-			public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+			public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
 				addResult(1, "onBeforePost");
+				return false;
 			}
 
 			@Override
@@ -596,8 +597,9 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 			public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {}
 			
 			@Override
-			public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+			public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
 				postData.setPath(path);
+				return false;
 			}
 		};
 		
@@ -743,8 +745,10 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 			}
 			
 			@Override
-			public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+			public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
 				addResult(3, "onBeforePost");
+				
+				return false;
 			}
 			
 			@Override

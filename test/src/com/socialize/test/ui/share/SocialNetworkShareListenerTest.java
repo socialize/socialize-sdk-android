@@ -179,9 +179,10 @@ public class SocialNetworkShareListenerTest extends SocializeActivityTest {
 			}
 			
 			@Override
-			public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+			public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
 				addResult(0, postData);
 				latch.countDown();
+				return false;
 			}
 		};
 		

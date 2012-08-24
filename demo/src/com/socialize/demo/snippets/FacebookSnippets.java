@@ -151,10 +151,12 @@ FacebookUtils.postEntity(this, entity, "Text to be posted", new SocialNetworkSha
 	}
 	
 	@Override
-	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+	public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
 		// Called just prior to the post.
 		// postData contains the dictionary (map) of data to be posted.  
 		// You can change this here to customize the post.
+		// Return true to prevent the post from occurring.
+		return false;
 	}
 });
 // end-snippet-4
@@ -251,8 +253,10 @@ FacebookUtils.delete(this, graphPath, null, new SocialNetworkListener() {
 	}
 	
 	@Override
-	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
-		// Called just prior to the post.
+	public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+		// Called before the post to the given network is made
+		// Return true to prevent the post from occurring
+		return false;
 	}
 });
 // end-snippet-7
@@ -315,8 +319,10 @@ ShareUtils.registerShare(this, entity, options, new ShareAddListener() {
 			}
 			
 			@Override
-			public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
-				// Called just prior to the post.
+			public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+				// Called before the post to the given network is made
+				// Return true to prevent the post from occurring
+				return false;
 			}
 		});		
 	}
@@ -415,12 +421,14 @@ entity.setType("video.movie");
 FacebookUtils.postEntity(this, entity, "Text to be posted", new SocialNetworkShareListener() {
 	
 	@Override
-	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+	public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
 		// Change the post data to force an Open Graph call
 		postData.setPath("me/video.watches");
 		
 		// me/video.watches requires a movie object type
 		postData.getPostValues().put("movie", postData.getPropagationInfo().getEntityUrl());
+		
+		return false;
 	}	
 	
 	@Override
@@ -458,7 +466,7 @@ options.setText("Text to be posted");
 ShareUtils.shareViaSocialNetworks(this, entity, options, new SocialNetworkShareListener() {
 	
 	@Override
-	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+	public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
 		
 		if(socialNetwork.equals(SocialNetwork.FACEBOOK)) {
 			// Change the post data to force an Open Graph call
@@ -467,7 +475,8 @@ ShareUtils.shareViaSocialNetworks(this, entity, options, new SocialNetworkShareL
 			// Set the type to be the entity URL
 			postData.getPostValues().put("yourtype", postData.getPropagationInfo().getEntityUrl());
 		}
-	
+		
+		return false;
 	}	
 	
 	@Override
@@ -504,7 +513,7 @@ options.setText("Text to be posted");
 ShareUtils.shareViaSocialNetworks(this, entity, options, new SocialNetworkShareListener() {
 	
 	@Override
-	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+	public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
 		
 		if(socialNetwork.equals(SocialNetwork.FACEBOOK)) {
 			// Change the post data to force an Open Graph call
@@ -513,6 +522,8 @@ ShareUtils.shareViaSocialNetworks(this, entity, options, new SocialNetworkShareL
 			// me/video.watches requires a movie object type
 			postData.getPostValues().put("movie", postData.getPropagationInfo().getEntityUrl());
 		}
+		
+		return false;
 	}	
 	
 	@Override

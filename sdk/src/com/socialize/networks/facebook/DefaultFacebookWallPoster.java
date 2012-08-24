@@ -168,52 +168,57 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 
 	@Override
 	public void post(Activity parent, SocialNetworkListener listener, PostData postData) {
+		
+		boolean okToGo = true;
+		
 		if(listener != null) {
-			listener.onBeforePost(parent, SocialNetwork.FACEBOOK , postData);
+			okToGo = !listener.onBeforePost(parent, SocialNetwork.FACEBOOK, postData);
 		}
 		
-		Bundle bundle = new Bundle();
-		
-		Map<String, Object> postValues = postData.getPostValues();
-		
-		if(postValues != null) {
+		if(okToGo) {
+			Bundle bundle = new Bundle();
 			
-			Set<Entry<String, Object>> entries = postValues.entrySet();
+			Map<String, Object> postValues = postData.getPostValues();
 			
-			for (Entry<String, Object> entry : entries) {
-				if(entry != null) {
-					Object value = entry.getValue();
-					String key = entry.getKey();
-					
-					if(key != null && value != null) {
-						if(value instanceof byte[]) {
-							bundle.putByteArray(entry.getKey(), (byte[]) value);
-						}
-						else {
-							bundle.putString(entry.getKey(), value.toString());
+			if(postValues != null) {
+				
+				Set<Entry<String, Object>> entries = postValues.entrySet();
+				
+				for (Entry<String, Object> entry : entries) {
+					if(entry != null) {
+						Object value = entry.getValue();
+						String key = entry.getKey();
+						
+						if(key != null && value != null) {
+							if(value instanceof byte[]) {
+								bundle.putByteArray(entry.getKey(), (byte[]) value);
+							}
+							else {
+								bundle.putString(entry.getKey(), value.toString());
+							}
 						}
 					}
 				}
 			}
-		}
 
-		Facebook fb = getFacebook(parent);
-		
-		final FacebookSessionStore store = newFacebookSessionStore();
-		
-		store.restore(fb, parent);
-		
-		AsyncFacebookRunner runner = newAsyncFacebookRunner(fb);
-		
-		RequestListener requestListener = newRequestListener(parent, listener);
-		
-		String path = postData.getPath();
-		
-		if(StringUtils.isEmpty(path)) {
-			path = "me/links";
+			Facebook fb = getFacebook(parent);
+			
+			final FacebookSessionStore store = newFacebookSessionStore();
+			
+			store.restore(fb, parent);
+			
+			AsyncFacebookRunner runner = newAsyncFacebookRunner(fb);
+			
+			RequestListener requestListener = newRequestListener(parent, listener);
+			
+			String path = postData.getPath();
+			
+			if(StringUtils.isEmpty(path)) {
+				path = "me/links";
+			}
+			
+			runner.request(path, bundle, "POST", requestListener, null);
 		}
-		
-		runner.request(path, bundle, "POST", requestListener, null);	
 	}
 	
 

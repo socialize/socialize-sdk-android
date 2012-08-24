@@ -102,10 +102,11 @@ public final class R {
         public static final int location=0x7f03000d;
         public static final int main=0x7f03000e;
         public static final int photo=0x7f03000f;
-        public static final int share_buttons_activity=0x7f030010;
-        public static final int share_comment=0x7f030011;
-        public static final int subscription_buttons_activity=0x7f030012;
-        public static final int webview=0x7f030013;
+        public static final int photo_actionbar=0x7f030010;
+        public static final int share_buttons_activity=0x7f030011;
+        public static final int share_comment=0x7f030012;
+        public static final int subscription_buttons_activity=0x7f030013;
+        public static final int webview=0x7f030014;
     }
     public static final class string {
         public static final int app_name=0x7f040000;

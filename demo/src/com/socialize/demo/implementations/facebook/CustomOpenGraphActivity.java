@@ -75,13 +75,15 @@ public class CustomOpenGraphActivity extends SDKDemoActivity {
 				
 				ShareUtils.shareViaSocialNetworks(CustomOpenGraphActivity.this, entity, shareOptions, new SocialNetworkShareListener() {
 					@Override
-					public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+					public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
 						
 						// Add/Change the contents of the post to fit with open graph
 						postData.setPath(graphPath);
 						
 						// Facebook like requires an "object" parameter
 						postData.getPostValues().put("dish", postData.getPropagationInfo().getEntityUrl());
+						
+						return false;
 					}
 					
 					@Override

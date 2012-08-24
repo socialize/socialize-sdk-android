@@ -143,10 +143,12 @@ TwitterUtils.tweetEntity(this, entity, "Text to be posted", new SocialNetworkSha
 	}
 	
 	@Override
-	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+	public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
 		// Called just prior to the post.
 		// postData contains the dictionary (map) of data to be posted.  
 		// You can change this here to customize the post.
+		// Return true to prevent the post from occurring.
+		return false;
 	}
 });
 // end-snippet-4
@@ -182,8 +184,10 @@ TwitterUtils.tweet(this, tweet, new SocialNetworkListener() {
 	}
 	
 	@Override
-	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
-		// Called just prior to the post.
+	public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+		// Called before the post to the given network is made
+		// Return true to prevent the post from occurring
+		return false;
 	}
 });
 // end-snippet-5
@@ -300,8 +304,10 @@ ShareUtils.registerShare(this, entity, options, new ShareAddListener() {
 			}
 			
 			@Override
-			public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
-				// Called just prior to the post.
+			public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+				// Called before the post to the given network is made
+				// Return true to prevent the post from occurring
+				return false;
 			}
 		});		
 	}

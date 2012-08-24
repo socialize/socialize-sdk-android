@@ -33,7 +33,6 @@ public class BitmapUtils {
 	
 	private BitmapBuilder bitmapBuilder;
 	private Base64Utils base64Utils;
-//	private int defaultDensity = Bitmap.DENSITY_NONE;
 	private int defaultDensity = DisplayMetrics.DENSITY_DEFAULT;
 	
 	public BitmapUtils(BitmapBuilder bitmapBuilder) {

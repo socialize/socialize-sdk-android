@@ -240,17 +240,21 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 		postData.setPostValues(map);
 		postData.setEntity(entity);
 		
+		boolean okToGo = true;
+		
 		if(listener != null) {
-			listener.onBeforePost(context, SocialNetwork.TWITTER, postData);
+			okToGo = !listener.onBeforePost(context, SocialNetwork.TWITTER, postData);
 		}
 		
-		String path = postData.getPath();
-		
-		if(StringUtils.isEmpty(path)) {
-			path = "statuses/update.json";
+		if(okToGo) {
+			String path = postData.getPath();
+			
+			if(StringUtils.isEmpty(path)) {
+				path = "statuses/update.json";
+			}
+			
+			post(context, path, postData.getPostValues(), listener);
 		}
-		
-		post(context, path, postData.getPostValues(), listener);
 	}	
 	
 	@Override

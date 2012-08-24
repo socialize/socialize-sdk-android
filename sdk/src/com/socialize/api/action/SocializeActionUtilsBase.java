@@ -151,10 +151,11 @@ public abstract class SocializeActionUtilsBase {
 						}
 
 						@Override
-						public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+						public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
 							if(listener != null) {
-								listener.onBeforePost(parent, socialNetwork, postData);
+								return listener.onBeforePost(parent, socialNetwork, postData);
 							}
+							return false;
 						}
 						
 						@Override

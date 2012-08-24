@@ -112,8 +112,10 @@ LikeUtils.like(this, entity, likeOptions, new LikeAddListener() {
 	}
 
 	@Override
-	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+	public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
 		// Called before the post to the given network is made
+		// Return true to prevent the post from occurring
+		return false;
 	}
 
 	@Override

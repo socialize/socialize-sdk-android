@@ -87,7 +87,9 @@ public class ShareButtonsActivity extends DemoActivity {
 					}
 					
 					@Override
-					public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {}
+					public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+						return false;
+					}
 					
 					@Override
 					public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject response) {
@@ -115,7 +117,9 @@ public class ShareButtonsActivity extends DemoActivity {
 					}
 					
 					@Override
-					public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {}
+					public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+						return false;
+					}
 					
 					@Override
 					public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject response) {

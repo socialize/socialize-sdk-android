@@ -628,8 +628,9 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 			public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {}
 			
 			@Override
-			public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+			public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
 				postData.setPath(path);
+				return false;
 			}
 		};
 		

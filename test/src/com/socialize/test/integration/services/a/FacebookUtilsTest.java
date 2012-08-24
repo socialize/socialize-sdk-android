@@ -375,12 +375,14 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 			}
 			
 			@Override
-			public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+			public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
 				// Add some extra data
 				postData.getPostValues().put("foo", "bar");
 				postData.getPostValues().put("foo2", "bar2");
 				
 				addResult(3, postData.getPropagationInfo());
+				
+				return false;
 			}
 			
 			@Override

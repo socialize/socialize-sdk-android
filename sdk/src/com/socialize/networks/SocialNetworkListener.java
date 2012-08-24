@@ -29,6 +29,6 @@ import android.app.Activity;
  */
 public interface SocialNetworkListener extends SocialNetworkPostListener {
 	
-	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData);
+	public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData);
 	
 }

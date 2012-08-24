@@ -26,7 +26,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
 import android.util.Log;
 import com.socialize.log.SocializeLogger;
 
@@ -35,6 +34,8 @@ import com.socialize.log.SocializeLogger;
  *
  */
 public class IOUtils {
+	
+	private static final int IO_BUFFER_SIZE = 4 * 1024; 
 	
 	private SocializeLogger logger;
 
@@ -55,7 +56,7 @@ public class IOUtils {
 	
 	public byte[] readBytes(InputStream in) throws IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		pipe(in, out, 1024);
+		pipe(in, out, IO_BUFFER_SIZE);
 		return out.toByteArray();
 	}
 	
@@ -83,5 +84,4 @@ public class IOUtils {
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}
-	
 }

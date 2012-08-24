@@ -101,8 +101,6 @@ public class ShareClickListener implements OnClickListener {
 				}
 			}
 		}, SocialNetwork.valueOf(shareType));
-		
-//		getSocialize().share(context, entity, provider.getShareText(), shareType, );
 	}
 	
 	public void setProgressDialogFactory(ProgressDialogFactory progressDialogFactory) {
