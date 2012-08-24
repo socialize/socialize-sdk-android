@@ -116,6 +116,8 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		
 		AndroidMock.expect(mockProvider.locateInClassPath(TestUtils.getActivity(this), SocializeConfig.DEFAULT_PROPERTIES_PATH)).andReturn(null);
 		AndroidMock.expect(mockProvider.locateInAssets(TestUtils.getActivity(this), noFile)).andReturn(null);
+		AndroidMock.expect(mockProvider.locateInLocalStorage(TestUtils.getActivity(this), noFile)).andReturn(null);
+		
 		
 		AndroidMock.replay(mockProvider);
 		
@@ -163,15 +165,15 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		final String noFile = "does.not.exist";
 		
 		InputStream primary = AndroidMock.createNiceMock(InputStream.class);
-		InputStream secondary = AndroidMock.createNiceMock(InputStream.class);
+//		InputStream secondary = AndroidMock.createNiceMock(InputStream.class);
 		
 		ResourceLocator mockProvider = AndroidMock.createMock(ResourceLocator.class);
 		
-		AndroidMock.expect(mockProvider.locateInClassPath(TestUtils.getActivity(this), SocializeConfig.DEFAULT_PROPERTIES_PATH)).andReturn(primary);
-		AndroidMock.expect(mockProvider.locateInAssets(TestUtils.getActivity(this), noFile)).andReturn(secondary);
+		AndroidMock.expect(mockProvider.locate(TestUtils.getActivity(this), SocializeConfig.DEFAULT_PROPERTIES_PATH)).andReturn(primary);
+//		AndroidMock.expect(mockProvider.locateInAssets(TestUtils.getActivity(this), noFile)).andReturn(secondary);
 		
 		AndroidMock.replay(primary);
-		AndroidMock.replay(secondary);
+//		AndroidMock.replay(secondary);
 		AndroidMock.replay(mockProvider);
 		
 		SocializeConfig config = new SocializeConfig(noFile) {
