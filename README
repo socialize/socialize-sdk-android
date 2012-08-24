@@ -12,6 +12,36 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v2.4
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Documentation includes examples of sharing to Google+ in screenshots
+[bug] Crash in onDestroy
+[feature] End users can elect to "remember" that they do not want to auth
+[feature] Developer can control prompting for share in global config
+[feature] Documentation more clearly explains configuration options 
+
+v2.3.4
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] App crash when returning from User Settings when accessed from User Profile without an action
+[bug] ActionBar ticker rendering is overlapped on Jelly bean (4.1).
+
+v2.3.3
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Developer can enable/disable anon. comments
+[bug] Share dialog incorrectly uses allow anon for button enable/disable
+
+v2.3.2
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] ActionBar in webview causes scroll problems
+[feature] Share dialog can be cached to improve performance
+[bug] After linking FB/TW when performing a like/comment the auth'd network is not pre-selected when sharing.
+[feature] Comment list should display more than 2 lines of comment
+[bug] Allow anonymous config option deprecated due to confusion. Added socialize.require.share 
+
+v2.3.1
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] Changing the profile pic doesn't work
+
 v2.3
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [feature] Developer can make Facebook open graph calls for Like
