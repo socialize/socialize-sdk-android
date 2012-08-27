@@ -12,6 +12,21 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v2.4.3
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Developer can pre-initialize config prior to Socialize init
+[feature] Socialize checks local storage for socialize.properties file
+[feature] Developer can prevent a 3rd party network share from a listener
+[feature] Developer can see sample of sharing photos from Action Bar in demo app
+
+v2.4.2
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Internal release.
+
+v2.4.1
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Internal release.
+
 v2.4
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [feature] Documentation includes examples of sharing to Google+ in screenshots
