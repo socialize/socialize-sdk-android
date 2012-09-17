@@ -28,6 +28,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.socialize.CommentUtils;
+import com.socialize.ConfigUtils;
+import com.socialize.config.SocializeConfig;
 import com.socialize.demo.R;
 import com.socialize.entity.Entity;
 
@@ -37,12 +39,17 @@ import com.socialize.entity.Entity;
  *
  */
 public class CommentActivity extends ListActivity {
-	final String[] values = new String[] { "Show Comment List", "Add Comment", "Add Comment Without Share", "Get Comments By Entity", "Get Comments By User", "Get Comment By ID"};
+	final String[] values = new String[] { "Show Comment List","Show Comment List (No Header)", "Add Comment", "Add Comment Without Share", "Get Comments By Entity", "Get Comments By User", "Get Comment By ID"};
 	final Class<?>[] activities = new Class<?>[] { AddCommentActivity.class, AddCommentWithoutShareActivity.class, GetCommentsByEntityActivity.class, GetCommentsByUserActivity.class, GetCommentsByIDActivity.class};
+	
+	private SocializeConfig config;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		config = ConfigUtils.getConfig(this);
+		config.setProperty(SocializeConfig.SOCIALIZE_SHOW_COMMENT_HEADER, "true");
+		
 		setContentView(R.layout.demo_list);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
 		setListAdapter(adapter);
@@ -51,6 +58,11 @@ public class CommentActivity extends ListActivity {
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		if(position == 0) {
+			config.setProperty(SocializeConfig.SOCIALIZE_SHOW_COMMENT_HEADER, "true");
+			CommentUtils.showCommentView(this, Entity.newInstance("http://getsocialize.com", "Socialize"));
+		}
+		else if(position == 1) {
+			config.setProperty(SocializeConfig.SOCIALIZE_SHOW_COMMENT_HEADER, "false");
 			CommentUtils.showCommentView(this, Entity.newInstance("http://getsocialize.com", "Socialize"));
 		}
 		else {
