@@ -12,6 +12,11 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v2.4.4
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Developers can remove header on comment list
+Developers can learn how to disable comment list header in docs
+
 v2.4.3
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [feature] Developer can pre-initialize config prior to Socialize init
