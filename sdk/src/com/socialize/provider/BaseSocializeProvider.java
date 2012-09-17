@@ -34,6 +34,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -594,12 +595,19 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 				builder.append("\n");
 			}
 			
-			logger.debug("Executing request \nurl:[" +
+			logger.debug("REQUEST \nurl:[" +
 					request.getURI().toString() +
 					"] \nheaders:\n" +
-					builder.toString() +
-					"");
+					builder.toString());
 			
+			if(request instanceof HttpPost) {
+				HttpPost post = (HttpPost) request;
+				HttpEntity entity = post.getEntity();
+				String requestData = ioUtils.readSafe(entity.getContent());
+				logger.debug("REQUEST \ndata:[" +
+						requestData +
+						"]");
+			}			
 		}
 		
 		return client.execute(request);

@@ -47,6 +47,60 @@ import com.socialize.test.ui.util.TestUtils;
  */
 public class EntityUtilsTest extends SocializeActivityTest {
 	
+	public void testEntityMetaDataWithUrl() throws Exception {
+		
+		final String entityKey = "testEntityMetaDataWithUrl" + Math.random();
+		
+		Entity entity = Entity.newInstance(entityKey, "testAddEntity");
+		
+		String url = "http://www.getsocialize.com";
+		
+		JSONObject metaData = new JSONObject();
+		metaData.put("url", url);
+		
+		String jsonString = metaData.toString();
+		
+		entity.setMetaData(jsonString);
+		
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		// Force no config
+		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		
+		EntityUtils.saveEntity(TestUtils.getActivity(this), entity, new EntityAddListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				addResult(0, error);
+				latch.countDown();
+			}
+			
+			@Override
+			public void onCreate(Entity entity) {
+				addResult(0, entity);
+				latch.countDown();
+			}
+		});
+		
+		latch.await(20, TimeUnit.SECONDS);	
+		
+		Object result = getResult(0);
+		
+		assertNotNull(result);
+		assertTrue("Result is not a entity object", (result instanceof Entity));
+		
+		Entity entityAfter = (Entity) result;
+		
+		String metaDataAfter = entityAfter.getMetaData();
+		
+		assertNotNull(metaDataAfter);
+		
+		JSONObject json = new JSONObject(metaDataAfter);
+		String urlAfter = json.getString("url");
+		
+		assertEquals(url, urlAfter);
+	}
 
 	public void testAddEntity() throws Exception {
 		final String entityKey = "testAddEntity" + Math.random();
@@ -319,5 +373,7 @@ public class EntityUtilsTest extends SocializeActivityTest {
 		assertEquals(keys[1], sortedItems.get(1).getKey());
 		assertEquals(keys[2], sortedItems.get(2).getKey());
 	}	
+	
+	
 	
 }

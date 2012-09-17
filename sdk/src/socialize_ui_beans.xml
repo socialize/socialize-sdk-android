@@ -888,6 +888,7 @@
 		<property name="commentAdapter" ref="commentAdapter"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="appUtils" ref="appUtils"/>
+		<property name="config" ref="config"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="commentUtils" ref="commentUtils"/>
 		<property name="userUtils" ref="userUtils"/>
