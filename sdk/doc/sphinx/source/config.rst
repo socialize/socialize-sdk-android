@@ -106,7 +106,16 @@ By default Socialize will prompt a user to share their action (comment or like) 
 
 This behavior can be disabled with the following setting::
 
-	socialize.prompt.share=false	
+	socialize.prompt.share=false
+	
+Customizing The Comment List
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The Comment List view by default will display a header banner. 
+
+This can be disabled with the following setting::
+
+	socialize.show.comment.header=false		
 	
 Facebook Configuration
 ~~~~~~~~~~~~~~~~~~~~~~
