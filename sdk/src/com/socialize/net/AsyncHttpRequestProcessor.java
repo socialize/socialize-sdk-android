@@ -26,6 +26,7 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import com.socialize.concurrent.ManagedAsyncTask;
 import com.socialize.error.SocializeApiError;
@@ -70,11 +71,19 @@ public class AsyncHttpRequestProcessor extends ManagedAsyncTask<AsyncHttpRequest
 						builder.append("\n");
 					}
 					
-					logger.debug("Executing request \nurl:[" +
+					logger.debug("REQUEST \nurl:[" +
 							httpRequest.getURI().toString() +
 							"] \nheaders:\n" +
-							builder.toString() +
-							"");					
+							builder.toString());
+					
+					if(httpRequest instanceof HttpPost) {
+						HttpPost post = (HttpPost) httpRequest;
+						HttpEntity entity = post.getEntity();
+						String requestData = ioUtils.readSafe(entity.getContent());
+						logger.debug("REQUEST \ndata:[" +
+								requestData +
+								"]");
+					}
 				}
 				
 				HttpClient client = clientFactory.getClient();

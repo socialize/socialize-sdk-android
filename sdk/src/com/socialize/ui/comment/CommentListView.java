@@ -15,6 +15,7 @@ import com.socialize.api.action.comment.CommentOptions;
 import com.socialize.api.action.comment.CommentUtilsProxy;
 import com.socialize.api.action.comment.SubscriptionUtilsProxy;
 import com.socialize.api.action.user.UserUtilsProxy;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
@@ -65,6 +66,7 @@ public class CommentListView extends BaseView {
 	private SubscriptionUtilsProxy subscriptionUtils;
 	private UserUtilsProxy userUtils;
 	private ProgressDialog dialog = null;
+	private SocializeConfig config;
 	
 	private IBeanFactory<SocializeHeader> commentHeaderFactory;
 	private IBeanFactory<CommentEditField> commentEditFieldFactory;
@@ -147,7 +149,7 @@ public class CommentListView extends BaseView {
 		middle.setLayoutParams(middleParams);
 		sliderAnchor.setLayoutParams(bottomParams);
 
-		if(!landscape) {
+		if(!landscape && config.isShowCommentHeader()) {
 			header = commentHeaderFactory.getBean();
 		}
 		
@@ -824,5 +826,9 @@ public class CommentListView extends BaseView {
 	
 	public void setUserUtils(UserUtilsProxy userUtils) {
 		this.userUtils = userUtils;
+	}
+	
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
 	}
 }
