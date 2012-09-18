@@ -12,6 +12,10 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v2.5
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Developer can learn how to implement a custom URL scheme in the documentation for "deep linking" to content in their app
+
 v2.4.4
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Developers can remove header on comment list
