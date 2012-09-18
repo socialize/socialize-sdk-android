@@ -1611,6 +1611,8 @@
 
 	<bean id="entityUtils" class="com.socialize.api.action.entity.SocializeEntityUtils">
 		<property name="entitySystem" ref="entitySystem"/>
+		<property name="entityLoaderUtils" ref="entityLoaderUtils"/>
+		<property name="logger" ref="logger"/>
 	</bean>
 
 	<bean id="likeUtils" class="com.socialize.api.action.like.SocializeLikeUtils" extends="utilsBase">

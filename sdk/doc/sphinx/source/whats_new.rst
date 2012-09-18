@@ -6,8 +6,18 @@
 What's New
 ==========
 
-In this version (v2.4)
+In this version (v2.5)
 ----------------------
+
+Deep Linking
+~~~~~~~~~~~~
+Socialize for Android now supports "Deep Linking".  This is a process whereby URLs that are published to the web, when clicked from a mobile device 
+will take the user into your app and take them directly to the content referred to in the link.
+
+Refer to :ref:`deep_linking` for more details.
+
+v2.4
+----
 
 Customization of Authentication Behavior
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

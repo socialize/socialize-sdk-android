@@ -30,9 +30,6 @@
             </intent-filter>
         </activity>
         
-        
-        
-        
         <!--****************************************************************-->   
         <!--************** STANDARD SOCIALIZE CONFIGURATION ****************-->
         <!--****************************************************************-->   
@@ -153,6 +150,15 @@
         <!-- Entity Loader -->
         <activity android:name=".EntityLoaderActivity"/> 
         
+        <!-- Deep Link Loader -->
+        <activity android:name=".DeepLinkActivity">
+			<intent-filter>
+	            <action android:name="android.intent.action.VIEW" />
+	            <category android:name="android.intent.category.DEFAULT" />
+	            <category android:name="android.intent.category.BROWSABLE" />
+	            <data android:scheme="socialize"/>
+	        </intent-filter>             
+        </activity>
         
         <!--****************************************************************-->   
         <!--************** END SOCIALIZE DEMO CONFIGURATION ****************-->

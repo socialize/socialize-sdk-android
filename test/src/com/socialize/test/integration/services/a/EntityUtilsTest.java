@@ -27,9 +27,12 @@ import java.util.concurrent.TimeUnit;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import android.app.Activity;
+import com.google.android.testing.mocking.AndroidMock;
+import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.ConfigUtils;
 import com.socialize.EntityUtils;
 import com.socialize.EntityUtils.SortOrder;
+import com.socialize.api.action.entity.SocializeEntityUtils;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
@@ -39,6 +42,8 @@ import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.entity.EntityListListener;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
+import com.socialize.ui.SocializeEntityLoader;
+import com.socialize.util.EntityLoaderUtils;
 
 
 /**
@@ -374,6 +379,58 @@ public class EntityUtilsTest extends SocializeActivityTest {
 		assertEquals(keys[2], sortedItems.get(2).getKey());
 	}	
 	
+	@UsesMocks ({SocializeEntityLoader.class, EntityLoaderUtils.class})
+	public void testShowEntityByKey() {
+		final Entity entity = new Entity();
+		
+		SocializeEntityUtils utils = new SocializeEntityUtils() {
+			@Override
+			public void getEntity(Activity context, String key, EntityGetListener listener) {
+				listener.onGet(entity);
+			}
+		};
+		
+		SocializeEntityLoader entityLoader = AndroidMock.createMock(SocializeEntityLoader.class);
+		EntityLoaderUtils entityLoaderUtils = AndroidMock.createMock(EntityLoaderUtils.class);
+		
+		AndroidMock.expect(entityLoaderUtils.initEntityLoader()).andReturn(entityLoader);
+		AndroidMock.expect(entityLoader.canLoad(getActivity(), entity)).andReturn(true);
+		
+		entityLoader.loadEntity(getActivity(), entity);
+		
+		AndroidMock.replay(entityLoaderUtils, entityLoader);
+		
+		utils.setEntityLoaderUtils(entityLoaderUtils);
+		utils.showEntity(getActivity(), "foobar", null);
+		
+		AndroidMock.verify(entityLoaderUtils, entityLoader);
+	}
 	
+	@UsesMocks ({SocializeEntityLoader.class, EntityLoaderUtils.class})
+	public void testShowEntityById() {
+		final Entity entity = new Entity();
+		
+		SocializeEntityUtils utils = new SocializeEntityUtils() {
+			@Override
+			public void getEntity(Activity context, long id, EntityGetListener listener) {
+				listener.onGet(entity);
+			}
+		};
+		
+		SocializeEntityLoader entityLoader = AndroidMock.createMock(SocializeEntityLoader.class);
+		EntityLoaderUtils entityLoaderUtils = AndroidMock.createMock(EntityLoaderUtils.class);
+		
+		AndroidMock.expect(entityLoaderUtils.initEntityLoader()).andReturn(entityLoader);
+		AndroidMock.expect(entityLoader.canLoad(getActivity(), entity)).andReturn(true);
+		
+		entityLoader.loadEntity(getActivity(), entity);
+		
+		AndroidMock.replay(entityLoaderUtils, entityLoader);
+		
+		utils.setEntityLoaderUtils(entityLoaderUtils);
+		utils.showEntity(getActivity(), 123, null);
+		
+		AndroidMock.verify(entityLoaderUtils, entityLoader);
+	}	
 	
 }

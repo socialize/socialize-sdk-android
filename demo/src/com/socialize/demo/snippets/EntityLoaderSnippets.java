@@ -24,7 +24,12 @@ package com.socialize.demo.snippets;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import com.socialize.EntityUtils;
 import com.socialize.entity.Entity;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.ui.SocializeEntityLoader;
 
 
@@ -104,6 +109,45 @@ public class MyEntityLoader implements SocializeEntityLoader {
 }
 //end-snippet-1
 }
+
+//begin-snippet-2
+//Create a new activity, or use an existing activity in your app
+public class MyAppActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		
+		super.onCreate(savedInstanceState);
+		
+		// Get the URI of the link
+		Uri uri = getIntent().getData();
+		
+		if(uri != null) {
+			// We have a uri
+			String key = uri.getQueryParameter("key");
+			
+			if(key != null) {
+				// Use EntityUtils to display the entity within the app (requires an Entity Loader)
+				EntityUtils.showEntity(this, key, new EntityGetListener() {
+					@Override
+					public void onGet(Entity result) {
+						// Do nothing
+					}
+					
+					@Override
+					public void onError(SocializeException error) {
+						// Handle error
+					}
+				});
+			}
+			else {
+				// Handle no key
+			}
+		}
+		else {
+			// Handle no uri
+		}
+	}
 }
-
-
+//end-snippet-2
+}
