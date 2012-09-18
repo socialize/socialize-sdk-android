@@ -19,6 +19,7 @@ Contents:
 	twitter_adv
 	push_notifications
 	entity_loader
+	deep_linking
 	sdk_user_guide
 	config
 	amazon

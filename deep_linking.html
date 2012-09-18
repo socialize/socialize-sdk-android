@@ -1,0 +1,242 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Deep Linking &mdash; Socialize Android SDK v2.5 documentation</title>
+    
+    <link rel="stylesheet" href="static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     'v2.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="shortcut icon" href="static/favicon.ico"/>
+    <link rel="top" title="Socialize Android SDK v2.5 documentation" href="index.html?v=v2.5" />
+    <link rel="next" title="Socialize Android Developer Guide" href="sdk_user_guide.html?v=v2.5" />
+    <link rel="prev" title="Entity Loaders" href="entity_loader.html?v=v2.5" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="sdk_user_guide.html?v=v2.5" title="Socialize Android Developer Guide"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="entity_loader.html?v=v2.5" title="Entity Loaders"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html?v=v2.5">Socialize Android SDK v2.5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+      <META HTTP-EQUIV="Pragma" CONTENT="no-cache"/>
+    <META HTTP-EQUIV="Expires" CONTENT="-1"/>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-9835027-5']);
+    _gaq.push(['_setDomainName', '.getsocialize.com']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+
+    <script type="text/javascript" charset="utf-8">
+      var is_ssl = ("https:" == document.location.protocol);
+      var asset_host = is_ssl ? "https://s3.amazonaws.com/getsatisfaction.com/" : "http://s3.amazonaws.com/getsatisfaction.com/";
+      document.write(unescape("%3Cscript src='" + asset_host + "javascripts/feedback-v2.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+
+    <script type="text/javascript" charset="utf-8">
+      var feedback_widget_options = {};
+      feedback_widget_options.display = "overlay";
+      feedback_widget_options.company = "socialize";
+      feedback_widget_options.placement = "right";
+      feedback_widget_options.color = "#222";
+      feedback_widget_options.style = "question";
+      feedback_widget_options.product = "socialize_android_sdk";
+      feedback_widget_options.limit = "3";
+      GSFN.feedback_widget.prototype.local_base_url = "http://support.getsocialize.com";
+      GSFN.feedback_widget.prototype.local_ssl_base_url = "http://support.getsocialize.com";
+      var feedback_widget = new GSFN.feedback_widget(feedback_widget_options);
+    </script><div class="section" id="deep-linking">
+<span id="id1"></span><h1>Deep Linking<a class="headerlink" href="#deep-linking" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Deep Linking refers to the process of creating a link that appears on the web and which, when opened from a device, takes the user directly into your
+app and directly to the content referred to in the link.</p>
+<p>Socialize provides a simple way to enable deep linking for your app(s) which means that any and all links to content shared via Socialize will be pre-configured
+to &#8220;deep link&#8221; into the content of your app.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Deep Linking requires an Entity Loader.  Refer to <a class="reference internal" href="entity_loader.html?v=v2.5#entity-loader"><em>Entity Loaders</em></a> for more details.</p>
+</div>
+</div>
+<div class="section" id="enabling-deep-linking">
+<h2>Enabling Deep Linking<a class="headerlink" href="#enabling-deep-linking" title="Permalink to this headline">¶</a></h2>
+<p>Enabling Deep Linking is a simple 3 step process:</p>
+<div class="section" id="step-1-setup-a-custom-url-scheme-at-getsocialize-com">
+<h3>Step 1 - Setup a Custom Url Scheme at getsocialize.com<a class="headerlink" href="#step-1-setup-a-custom-url-scheme-at-getsocialize-com" title="Permalink to this headline">¶</a></h3>
+<p>From your Dashboard at getsocialize.com go to the <strong>SmartDownloads</strong> section</p>
+<img alt="images/custom_url0.png" src="images/custom_url0.png" />
+<p>Scroll to the bottom of the page to the section entitled, <strong>Open App URL Schema Settings</strong></p>
+<img alt="images/custom_url1.png" src="images/custom_url1.png" />
+<p>Enter a custom URL scheme.  This can be anything however for the purposes of this example we have used &#8220;socialize&#8221; as the scheme:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="nl">socialize:</span><span class="c1">//?key={{entity_key}}</span>
+</pre></div>
+</div>
+<p>The <strong>{{entity_key}}</strong> portion is a place-holder into which we (Socialize) will automatically insert the entity key.</p>
+</div>
+<div class="section" id="step-2-create-an-activity-to-handle-custom-urls">
+<h3>Step 2 - Create an Activity to handle custom URLs<a class="headerlink" href="#step-2-create-an-activity-to-handle-custom-urls" title="Permalink to this headline">¶</a></h3>
+<p>You can either create a new Activity to handle deep linking (recommended) or simply add the code below to an existing activity.</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="c1">//Create a new activity, or use an existing activity in your app</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyAppActivity</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="o">{</span>
+
+	<span class="nd">@Override</span>
+	<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+		
+		<span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+		
+		<span class="c1">// Get the URI of the link</span>
+		<span class="n">Uri</span> <span class="n">uri</span> <span class="o">=</span> <span class="n">getIntent</span><span class="o">().</span><span class="na">getData</span><span class="o">();</span>
+		
+		<span class="k">if</span><span class="o">(</span><span class="n">uri</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+			<span class="c1">// We have a uri</span>
+			<span class="n">String</span> <span class="n">key</span> <span class="o">=</span> <span class="n">uri</span><span class="o">.</span><span class="na">getQueryParameter</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">);</span>
+			
+			<span class="k">if</span><span class="o">(</span><span class="n">key</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+				<span class="c1">// Use EntityUtils to display the entity within the app (requires an Entity Loader)</span>
+				<span class="n">EntityUtils</span><span class="o">.</span><span class="na">showEntity</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntityGetListener</span><span class="o">()</span> <span class="o">{</span>
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGet</span><span class="o">(</span><span class="n">Entity</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// Do nothing</span>
+					<span class="o">}</span>
+					
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// Handle error</span>
+					<span class="o">}</span>
+				<span class="o">});</span>
+			<span class="o">}</span>
+			<span class="k">else</span> <span class="o">{</span>
+				<span class="c1">// Handle no key</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+		<span class="k">else</span> <span class="o">{</span>
+			<span class="c1">// Handle no uri</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-3-configure-your-app-to-handle-custom-urls">
+<h3>Step 3 - Configure your app to handle custom URLs<a class="headerlink" href="#step-3-configure-your-app-to-handle-custom-urls" title="Permalink to this headline">¶</a></h3>
+<p>Finally configure the activity in your AndroidManifest.xml to handle URLs with this scheme</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;activity</span> <span class="na">android:name=</span><span class="s">&quot;.MyAppActivity&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;intent-filter&gt;</span>
+        <span class="nt">&lt;action</span> <span class="na">android:name=</span><span class="s">&quot;android.intent.action.VIEW&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">&quot;android.intent.category.DEFAULT&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">&quot;android.intent.category.BROWSABLE&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;data</span> <span class="na">android:scheme=</span><span class="s">&quot;socialize&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/intent-filter&gt;</span>             
+<span class="nt">&lt;/activity&gt;</span>
+</pre></div>
+</div>
+<script type="text/javascript">
+</script></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html?v=v2.5" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html?v=v2.5">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v2.5">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v2.5">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lifecycle.html?v=v2.5">Socialize Lifecycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html?v=v2.5">Socialize Demo App</a></li>
+<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v2.5">Socialize Action Bar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entities.html?v=v2.5">Socialize Entities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v2.5">Custom Like Buttons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v2.5">Facebook Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v2.5">Twitter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook_adv.html?v=v2.5">Advanced Facebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter_adv.html?v=v2.5">Advanced Twitter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v2.5">SmartAlerts (Push Notifications)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v2.5">Entity Loaders</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Deep Linking</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#enabling-deep-linking">Enabling Deep Linking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v2.5">Socialize Android Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html?v=v2.5">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v2.5">Amazon AppStore URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v2.5">ProGuard Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v2.5">Troubleshooting &amp; Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v2.5">Change Log</a></li>
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="sdk_user_guide.html?v=v2.5" title="Socialize Android Developer Guide"
+             >next</a></li>
+        <li class="right" >
+          <a href="entity_loader.html?v=v2.5" title="Entity Loaders"
+             >previous</a> |</li>
+        <li><a href="index.html?v=v2.5">Socialize Android SDK v2.5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Socialize Inc.
+    </div>
+  </body>
+</html>
