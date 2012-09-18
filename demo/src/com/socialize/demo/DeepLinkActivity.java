@@ -19,26 +19,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.action.entity;
+package com.socialize.demo;
 
-import android.app.Activity;
-import com.socialize.EntityUtils.SortOrder;
+import com.socialize.EntityUtils;
 import com.socialize.entity.Entity;
-import com.socialize.listener.entity.EntityAddListener;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.entity.EntityGetListener;
-import com.socialize.listener.entity.EntityListListener;
+import android.net.Uri;
+import android.os.Bundle;
 
 
 /**
  * @author Jason Polites
+ *
  */
-public interface EntityUtilsProxy {
-	public void saveEntity (Activity context, Entity e, EntityAddListener listener);
-	public void getEntity (Activity context, long id, EntityGetListener listener);
-	public void getEntity (Activity context, String key, EntityGetListener listener);
-	public void getEntities (Activity context, int start, int end, SortOrder sortOrder, EntityListListener listener);
-	public void getEntities (Activity context, SortOrder sortOrder, EntityListListener listener, String...key);
-	
-	public void showEntity(Activity context, String key, EntityGetListener listener);
-	public void showEntity(Activity context, long id, EntityGetListener listener);
+public class DeepLinkActivity extends DemoActivity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Uri uri = getIntent().getData();
+		String key = uri.getQueryParameter("key");
+		if(key != null) {
+			EntityUtils.showEntity(this, key, new EntityGetListener() {
+				@Override
+				public void onGet(Entity result) {}
+				
+				@Override
+				public void onError(SocializeException error) {
+					handleError(DeepLinkActivity.this, error);
+				}
+			});
+		}
+	}
 }

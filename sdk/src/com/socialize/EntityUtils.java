@@ -120,4 +120,24 @@ public class EntityUtils {
 	public static void getEntities (Activity context, SortOrder sortOrder, EntityListListener listener, String...keys) {
 		proxy.getEntities(context, sortOrder, listener, keys);	
 	}	
+	
+	/**
+	 * Uses the registered entity loader (if one exists) to load the entity denoted by the given entity key.
+	 * @param context The current context.
+	 * @param key The entity key.
+	 * @param listener A listener to handle the result.
+	 */
+	public static void showEntity(Activity context, String key, EntityGetListener listener) {
+		proxy.showEntity(context, key, listener);
+	}
+	
+	/**
+	 * Uses the registered entity loader (if one exists) to load the entity denoted by the given entity ID.
+	 * @param context The current context.
+	 * @param id The entity id.
+	 * @param listener A listener to handle the result.
+	 */
+	public static void showEntity(Activity context, long id, EntityGetListener listener) {
+		proxy.showEntity(context, id, listener);
+	}
 }
