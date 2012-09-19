@@ -74,6 +74,8 @@
         <activity android:name=".implementations.comment.GetCommentsByEntityActivity"/>
         <activity android:name=".implementations.comment.GetCommentsByUserActivity"/>
         <activity android:name=".implementations.comment.GetCommentsByIDActivity"/>
+        <activity android:name=".implementations.comment.CommentViewEmbeddedActivity"/>
+        
         
         <!-- Share -->
         <activity android:name=".implementations.share.ShareActivity"/>

@@ -52,6 +52,8 @@ public class CommentListView extends BaseView {
 	private CommentAdapter commentAdapter;
 	private boolean loading = true; // Default to true
 	
+	private boolean headerDisplayed = true;
+
 	private Entity entity;
 	
 	private int startIndex = 0;
@@ -149,7 +151,7 @@ public class CommentListView extends BaseView {
 		middle.setLayoutParams(middleParams);
 		sliderAnchor.setLayoutParams(bottomParams);
 
-		if(!landscape && config.isShowCommentHeader()) {
+		if(!landscape && config.isShowCommentHeader() && headerDisplayed) {
 			header = commentHeaderFactory.getBean();
 		}
 		
@@ -830,5 +832,17 @@ public class CommentListView extends BaseView {
 	
 	public void setConfig(SocializeConfig config) {
 		this.config = config;
+	}
+	
+	public void setHeaderDisplayed(boolean showHeader) {
+		this.headerDisplayed = showHeader;
+		if(header != null) {
+			if(headerDisplayed) {
+				header.setVisibility(View.VISIBLE);
+			}
+			else {
+				header.setVisibility(View.GONE);
+			}
+		}
 	}
 }
