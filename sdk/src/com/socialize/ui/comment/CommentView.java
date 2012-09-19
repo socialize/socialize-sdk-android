@@ -25,6 +25,8 @@ public class CommentView extends EntityView {
 	private Dialog progress;
 	private CommentListView commentListView;
 	private Drawables drawables;
+	private boolean headerDisplayed;
+	private Entity entity;
 	
 	public static final String COMMENT_LISTENER = "socialize.comment.listener";
 	
@@ -38,16 +40,21 @@ public class CommentView extends EntityView {
 
 	@Override
 	protected View getView(Bundle bundle, Object...entityKey) {
-		if (entityKey != null) {
+		if (entityKey != null || entity != null) {
 			
 			if(drawables == null) {
 				drawables = container.getBean("drawables");
 			}
 			
 			if(commentListView == null) {
-				Entity entity = (Entity) entityKey[0];
+				
+				if(entity == null) {
+					entity = (Entity) entityKey[0];
+				}
+				
 				commentListView = container.getBean("commentList");
 				commentListView.setEntity(entity);
+				commentListView.setHeaderDisplayed(headerDisplayed);
 				ListenerHolder holder = container.getBean("listenerHolder");
 				if(holder != null) {
 					OnCommentViewActionListener onCommentViewActionListener = holder.pop(COMMENT_LISTENER);
@@ -112,6 +119,26 @@ public class CommentView extends EntityView {
 		return (commentListView == null) ? null : commentListView.getCommentEntryViewSlider();
 	}
 	
+	public boolean isHeaderDisplayed() {
+		return headerDisplayed;
+	}
+	
+	public void setHeaderDisplayed(boolean headerDisplayed) {
+		this.headerDisplayed = headerDisplayed;
+		
+		if(commentListView != null) {
+			commentListView.setHeaderDisplayed(headerDisplayed);
+		}
+	}
+	
+	public void setEntity(Entity entity) {
+		this.entity = entity;
+	}
+	
+	public Entity getEntity() {
+		return entity;
+	}
+
 	public boolean onCreateOptionsMenu(final Activity source, Menu menu) {
 		createOptionsMenuItem(source, menu);
 

@@ -40,7 +40,7 @@ import com.socialize.entity.Entity;
  */
 public class CommentActivity extends ListActivity {
 	final String[] values = new String[] { "Show Comment List","Show Comment List (No Header)", "Add Comment", "Add Comment Without Share", "Get Comments By Entity", "Get Comments By User", "Get Comment By ID"};
-	final Class<?>[] activities = new Class<?>[] { AddCommentActivity.class, AddCommentWithoutShareActivity.class, GetCommentsByEntityActivity.class, GetCommentsByUserActivity.class, GetCommentsByIDActivity.class};
+	final Class<?>[] activities = new Class<?>[] { CommentViewEmbeddedActivity.class, AddCommentActivity.class, AddCommentWithoutShareActivity.class, GetCommentsByEntityActivity.class, GetCommentsByUserActivity.class, GetCommentsByIDActivity.class};
 	
 	private SocializeConfig config;
 	
@@ -59,10 +59,6 @@ public class CommentActivity extends ListActivity {
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		if(position == 0) {
 			config.setProperty(SocializeConfig.SOCIALIZE_SHOW_COMMENT_HEADER, "true");
-			CommentUtils.showCommentView(this, Entity.newInstance("http://getsocialize.com", "Socialize"));
-		}
-		else if(position == 1) {
-			config.setProperty(SocializeConfig.SOCIALIZE_SHOW_COMMENT_HEADER, "false");
 			CommentUtils.showCommentView(this, Entity.newInstance("http://getsocialize.com", "Socialize"));
 		}
 		else {
