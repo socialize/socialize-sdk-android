@@ -24,12 +24,14 @@ package com.socialize;
 import java.lang.reflect.Proxy;
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import com.socialize.api.action.user.UserUtilsProxy;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
+import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.profile.UserSettings;
 
@@ -64,7 +66,7 @@ public class UserUtils {
 	 * @return The current logged in user
 	 * @throws SocializeException
 	 */
-	public static User getCurrentUser(Context context)  {
+	public static User getCurrentUser(Context context) throws SocializeException  {
 		return proxy.getCurrentUser(context);
 	}
 	
@@ -111,7 +113,12 @@ public class UserUtils {
 	 * @param context The current context.
 	 */
 	public static void showUserSettings (Activity context)  {
-		proxy.showUserSettingsView(context, UserUtils.getCurrentUser(context).getId());
+		try {
+			proxy.showUserSettingsView(context, UserUtils.getCurrentUser(context).getId());
+		}
+		catch (SocializeException e) {
+			Log.e(SocializeLogger.LOG_TAG, "Error displaying user settings", e);
+		}		
 	}
 	
 	/**
@@ -120,7 +127,12 @@ public class UserUtils {
 	 * @param requestCode (Optional)  Set as the result on the UserSettings activity.
 	 */
 	public static void showUserSettingsForResult(Activity context, int requestCode) {
-		proxy.showUserSettingsViewForResult(context, UserUtils.getCurrentUser(context).getId(), requestCode);
+		try {
+			proxy.showUserSettingsViewForResult(context, UserUtils.getCurrentUser(context).getId(), requestCode);
+		}
+		catch (SocializeException e) {
+			Log.e(SocializeLogger.LOG_TAG, "Error displaying user settings", e);
+		}
 	}
 	
 	/**

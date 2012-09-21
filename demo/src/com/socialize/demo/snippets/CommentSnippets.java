@@ -266,7 +266,7 @@ CommentUtils.getCommentsByEntity(this, entityKey, 0, 10, new CommentListListener
 //end-snippet-6
 }
 
-public void getCommentsByUser() {
+public void getCommentsByUser() throws SocializeException {
 // begin-snippet-5
 User user = UserUtils.getCurrentUser(this);
 

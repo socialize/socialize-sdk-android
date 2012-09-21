@@ -42,7 +42,7 @@ import com.socialize.ui.profile.UserSettings;
 @SuppressWarnings("unused")
 public class UserSnippets extends Activity {
 	
-public void getCurrentUser() {
+public void getCurrentUser() throws SocializeException {
 // begin-snippet-0
 User currentUser = UserUtils.getCurrentUser(this);
 // end-snippet-0	
@@ -55,7 +55,7 @@ UserUtils.showUserSettings(this);
 // end-snippet-1	
 }
 
-public void userProfile() {
+public void userProfile() throws SocializeException {
 // begin-snippet-2
 	
 // The "this" argument refers to the current Activity
@@ -110,7 +110,7 @@ UserUtils.getUser(this, id, new UserGetListener() {
 // end-snippet-4	
 }
 
-public void getActivity() {
+public void getActivity() throws SocializeException {
 // begin-snippet-5
 User user = UserUtils.getCurrentUser(this);
 

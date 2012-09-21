@@ -60,7 +60,7 @@ ViewUtils.view(this, entity, new ViewAddListener() {
 }
 
 @Deprecated
-public void getViewsByUser() {
+public void getViewsByUser() throws SocializeException {
 // begin-snippet-1
 User user = UserUtils.getCurrentUser(this);
 

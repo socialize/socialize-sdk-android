@@ -71,7 +71,7 @@ ActionUtils.getActionsByEntity(this, "key", 0, 10, new ActionListListener() {
 // end-snippet-1
 }
 
-public void getUserEntityActivity() {
+public void getUserEntityActivity() throws SocializeException {
 // begin-snippet-2
 // Get the last 10 actions performed in the app for the entity with the key "key" by the current user
 User user = UserUtils.getCurrentUser(this);

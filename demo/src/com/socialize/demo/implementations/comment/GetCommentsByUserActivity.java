@@ -42,18 +42,23 @@ public class GetCommentsByUserActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(String text) {
 		
-		CommentUtils.getCommentsByUser(this, UserUtils.getCurrentUser(this), 0, PAGE_SIZE, new CommentListListener() {
-			
-			@Override
-			public void onList(ListResult<Comment> comments) {
-				handleSocializeResult(comments);
-			}
-			
-			@Override
-			public void onError(SocializeException error) {
-				handleError(GetCommentsByUserActivity.this, error);
-			}
-		});
+		try {
+			CommentUtils.getCommentsByUser(this, UserUtils.getCurrentUser(this), 0, PAGE_SIZE, new CommentListListener() {
+				
+				@Override
+				public void onList(ListResult<Comment> comments) {
+					handleSocializeResult(comments);
+				}
+				
+				@Override
+				public void onError(SocializeException error) {
+					handleError(GetCommentsByUserActivity.this, error);
+				}
+			});
+		}
+		catch (SocializeException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

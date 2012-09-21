@@ -152,7 +152,7 @@ LikeUtils.getLikesByEntity(this, entityKey, 0, 10, new LikeListListener() {
 //end-snippet-6
 }
 
-public void getLikesByUser() {
+public void getLikesByUser() throws SocializeException {
 // begin-snippet-5
 User user = UserUtils.getCurrentUser(this);
 

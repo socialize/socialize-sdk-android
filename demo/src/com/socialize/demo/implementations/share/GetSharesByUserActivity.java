@@ -42,18 +42,23 @@ public class GetSharesByUserActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(String text) {
 		
-		ShareUtils.getSharesByUser(this, UserUtils.getCurrentUser(this), 0, PAGE_SIZE, new ShareListListener() {
-			
-			@Override
-			public void onList(ListResult<Share> shares) {
-				handleSocializeResult(shares);
-			}
-			
-			@Override
-			public void onError(SocializeException error) {
-				handleError(GetSharesByUserActivity.this, error);
-			}
-		});
+		try {
+			ShareUtils.getSharesByUser(this, UserUtils.getCurrentUser(this), 0, PAGE_SIZE, new ShareListListener() {
+				
+				@Override
+				public void onList(ListResult<Share> shares) {
+					handleSocializeResult(shares);
+				}
+				
+				@Override
+				public void onError(SocializeException error) {
+					handleError(GetSharesByUserActivity.this, error);
+				}
+			});
+		}
+		catch (SocializeException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

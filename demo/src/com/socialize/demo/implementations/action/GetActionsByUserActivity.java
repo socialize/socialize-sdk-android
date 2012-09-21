@@ -42,18 +42,23 @@ public class GetActionsByUserActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(String text) {
 		
-		ActionUtils.getActionsByUser(this, UserUtils.getCurrentUser(this).getId(), 0, PAGE_SIZE, new ActionListListener() {
-			
-			@Override
-			public void onList(ListResult<SocializeAction> result) {
-				handleSocializeResult(result);
-			}
-			
-			@Override
-			public void onError(SocializeException error) {
-				handleError(GetActionsByUserActivity.this, error);
-			}
-		});
+		try {
+			ActionUtils.getActionsByUser(this, UserUtils.getCurrentUser(this).getId(), 0, PAGE_SIZE, new ActionListListener() {
+				
+				@Override
+				public void onList(ListResult<SocializeAction> result) {
+					handleSocializeResult(result);
+				}
+				
+				@Override
+				public void onError(SocializeException error) {
+					handleError(GetActionsByUserActivity.this, error);
+				}
+			});
+		}
+		catch (SocializeException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

@@ -54,7 +54,7 @@ public class UserUtilsTest extends SocializeActivityTest {
 		
 	}
 	
-	public void testShowUserProfile()  {
+	public void testShowUserProfile() throws SocializeException  {
 		TestUtils.setUp(this);
 		
 		TestUtils.setUpActivityMonitor(ProfileActivity.class);
@@ -73,7 +73,7 @@ public class UserUtilsTest extends SocializeActivityTest {
 		profile.finish();
 	}
 	
-	public void testSaveUserSettings() throws InterruptedException  {
+	public void testSaveUserSettings() throws Exception  {
 		
 		UserSettings userSettings = UserUtils.getUserSettings(TestUtils.getActivity(this));
 		User user = UserUtils.getCurrentUser(TestUtils.getActivity(this));

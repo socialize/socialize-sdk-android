@@ -33,6 +33,7 @@ import com.socialize.api.action.SocializeActionUtilsBase;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.networks.SocialNetwork;
@@ -131,16 +132,31 @@ public class SocializeUserUtils extends SocializeActionUtilsBase implements User
 	}
 
 	@Override
-	public User getCurrentUser(Context context)  {
-		
+	public User getCurrentUser(Context context) throws SocializeException  {
+		return getCurrentUser(context, false);
+	}
+	
+	protected User getCurrentUser(Context context, boolean failOnError) throws SocializeException  {
 		SocializeSession session = getSocialize().getSession();
 		
 		if(session != null) {
-			return session.getUser();	
+			User user = session.getUser();
+			if(user != null) {
+				return user;
+			}
 		}
 		
-		return null;
-		
+		// We couldn't get a user, this shouldn't happen
+		if(failOnError) {
+			throw new SocializeException("No user returned from getCurrentUser after second attempt");
+		}
+		else {
+			if(!Socialize.getSocialize().isInitialized(context)) {
+				Socialize.getSocialize().init(context);
+			}
+			Socialize.getSocialize().authenticateSynchronous(context);
+			return getCurrentUser(context, true);
+		}
 	}
 	
 	@Override
