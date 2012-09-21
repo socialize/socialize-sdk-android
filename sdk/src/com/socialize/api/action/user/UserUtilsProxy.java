@@ -26,6 +26,7 @@ import android.content.Context;
 import com.socialize.annotations.Synchronous;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.networks.SocialNetwork;
@@ -39,7 +40,7 @@ import com.socialize.ui.profile.UserSettings;
 public interface UserUtilsProxy {
 
 	@Synchronous
-	public User getCurrentUser(Context context);
+	public User getCurrentUser(Context context) throws SocializeException;
 	
 	@Synchronous
 	public UserSettings getUserSettings(Context context);

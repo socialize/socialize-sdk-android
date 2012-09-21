@@ -268,7 +268,7 @@ ShareUtils.getSharesByEntity(this, entityKey, 0, 10, new ShareListListener() {
 //end-snippet-6
 }
 
-public void getSharesByUser() {
+public void getSharesByUser() throws SocializeException {
 // begin-snippet-5
 User user = UserUtils.getCurrentUser(this);
 

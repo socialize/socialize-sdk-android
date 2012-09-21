@@ -43,18 +43,23 @@ public class GetViewsByUserActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(String text) {
 		
-		ViewUtils.getViewsByUser(this, UserUtils.getCurrentUser(this), 0, PAGE_SIZE, new ViewListListener() {
-			
-			@Override
-			public void onList(List<View> items, int totalSize) {
-				handleSocializeResult(items);
-			}
-			
-			@Override
-			public void onError(SocializeException error) {
-				handleError(GetViewsByUserActivity.this, error);
-			}
-		});
+		try {
+			ViewUtils.getViewsByUser(this, UserUtils.getCurrentUser(this), 0, PAGE_SIZE, new ViewListListener() {
+				
+				@Override
+				public void onList(List<View> items, int totalSize) {
+					handleSocializeResult(items);
+				}
+				
+				@Override
+				public void onError(SocializeException error) {
+					handleError(GetViewsByUserActivity.this, error);
+				}
+			});
+		}
+		catch (SocializeException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

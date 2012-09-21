@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.widget.LinearLayout;
 import com.socialize.UserUtils;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.user.UserGetListener;
+import com.socialize.log.SocializeLogger;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.header.SocializeHeader;
 import com.socialize.util.BitmapUtils;
@@ -88,13 +90,19 @@ public class ProfileLayoutView extends BaseView {
 			public void onGet(User user) {
 				
 				// Merge the current session user
-				User currentUser = UserUtils.getCurrentUser(getContext());
 				UserSettings settings = UserUtils.getUserSettings(getContext());
 				
-				if(currentUser.getId().equals(user.getId())) {
-					currentUser.update(user);
-					settings.update(user);
-					user = currentUser;
+				try {
+					User currentUser = UserUtils.getCurrentUser(getContext());
+					
+					if(currentUser.getId().equals(user.getId())) {
+						currentUser.update(user);
+						settings.update(user);
+						user = currentUser;
+					}
+				}
+				catch (Exception e) {
+					Log.e(SocializeLogger.LOG_TAG, "Error getting user", e);
 				}
 				
 				// Set the user details into the view elements

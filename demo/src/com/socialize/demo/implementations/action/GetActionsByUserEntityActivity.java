@@ -42,20 +42,25 @@ public class GetActionsByUserEntityActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(String text) {
 		
-		ActionUtils.getActionsByUserAndEntity(this, UserUtils.getCurrentUser(this).getId(), entity.getKey(), 0, PAGE_SIZE, new ActionListListener() {
+		try {
+			ActionUtils.getActionsByUserAndEntity(this, UserUtils.getCurrentUser(this).getId(), entity.getKey(), 0, PAGE_SIZE, new ActionListListener() {
+				
+				
+				@Override
+				public void onList(ListResult<SocializeAction> result) {
 			
-			
-			@Override
-			public void onList(ListResult<SocializeAction> result) {
-		
-				handleSocializeResult(result);
-			}
-			
-			@Override
-			public void onError(SocializeException error) {
-				handleError(GetActionsByUserEntityActivity.this, error);
-			}
-		});
+					handleSocializeResult(result);
+				}
+				
+				@Override
+				public void onError(SocializeException error) {
+					handleError(GetActionsByUserEntityActivity.this, error);
+				}
+			});
+		}
+		catch (SocializeException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

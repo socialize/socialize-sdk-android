@@ -29,6 +29,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 import com.socialize.UserUtils;
 import com.socialize.demo.R;
+import com.socialize.error.SocializeException;
 
 
 /**
@@ -55,7 +56,12 @@ public class UserActivity extends ListActivity {
 			break;
 
 		case 1:
-			UserUtils.showUserProfile(this, UserUtils.getCurrentUser(this));
+			try {
+				UserUtils.showUserProfile(this, UserUtils.getCurrentUser(this));
+			}
+			catch (SocializeException e) {
+				e.printStackTrace();
+			}
 			break;
 			
 		case 2:

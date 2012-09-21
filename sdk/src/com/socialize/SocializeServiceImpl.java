@@ -1044,13 +1044,6 @@ public class SocializeServiceImpl implements SocializeService {
 		if(locationProvider != null) {
 			locationProvider.pause(context);	
 		}
-		
-//		if(appUtils.isAppInBackground(context)) {
-//			Log.i("Socialize", "Background");
-//		}
-//		else {
-//			Log.i("Socialize", "Foreground");
-//		}
 	}
 
 	@Override
@@ -1065,8 +1058,24 @@ public class SocializeServiceImpl implements SocializeService {
 			paused = false;
 		}
 		
-		// This is the current context
-		setContext(context);
+		if(!Socialize.getSocialize().isInitialized(context)) {
+			Socialize.getSocialize().initAsync(context, new SocializeInitListener() {
+				@Override
+				public void onError(SocializeException error) {
+					Log.e(SocializeLogger.LOG_TAG, "Error occurred on resume", error);
+				}
+				
+				@Override
+				public void onInit(Context context, IOCContainer container) {
+					// This is the current context
+					setContext(context);
+				}
+			});
+		}
+		else {
+			// This is the current context
+			setContext(context);
+		}
 	}
 	
 	@Override
