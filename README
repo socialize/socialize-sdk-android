@@ -12,6 +12,19 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v2.5.3
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] Comment Header does not display
+[bug] NPE on resume during authentication
+
+v2.5.2
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] NPE when user settings is displayed
+
+v2.5.1
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Developers can programmatically disable the comment list header 
+
 v2.5
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [feature] Developer can learn how to implement a custom URL scheme in the documentation 
