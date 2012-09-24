@@ -25,7 +25,7 @@ public class CommentView extends EntityView {
 	private Dialog progress;
 	private CommentListView commentListView;
 	private Drawables drawables;
-	private boolean headerDisplayed;
+	private boolean headerDisplayed = true;
 	private Entity entity;
 	
 	public static final String COMMENT_LISTENER = "socialize.comment.listener";

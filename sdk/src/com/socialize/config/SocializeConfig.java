@@ -362,7 +362,6 @@ public class SocializeConfig {
 		return getBooleanProperty(SOCIALIZE_SHOW_COMMENT_HEADER, true);
 	}
 
-
 	public boolean isOGLike() {
 		return getBooleanProperty(FACEBOOK_OG_USE_INBUILT_LIKE, false);
 	}
