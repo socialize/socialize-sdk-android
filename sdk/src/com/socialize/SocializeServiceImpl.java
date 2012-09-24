@@ -601,6 +601,7 @@ public class SocializeServiceImpl implements SocializeService {
 	public synchronized SocializeSession authenticateSynchronous(final Context context) throws SocializeException {
 		
 		if(userSystem == null) {
+			initCount = 0;
 			init(context);
 		}
 		
