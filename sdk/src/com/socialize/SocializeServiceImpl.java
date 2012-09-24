@@ -599,6 +599,11 @@ public class SocializeServiceImpl implements SocializeService {
 	}
 	
 	public synchronized SocializeSession authenticateSynchronous(final Context context) throws SocializeException {
+		
+		if(userSystem == null) {
+			init(context);
+		}
+		
 		if(userSystem != null) {
 			
 			final CountDownLatch latch = new CountDownLatch(1);
