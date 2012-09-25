@@ -33,6 +33,7 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.facebook.Facebook;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.ListenerHolder;
+import com.socialize.log.SocializeLogger;
 import com.socialize.networks.facebook.FacebookUtilsProxy;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.util.DialogFactory;
@@ -116,7 +117,8 @@ public class FacebookActivityServiceTest extends SocializeActivityTest {
 		Facebook.class,
 		DialogFactory.class,
 		SocializeConfig.class,
-		FacebookUtilsProxy.class})
+		FacebookUtilsProxy.class,
+		SocializeLogger.class})
 	public void testOnCreate() {
 		
 		final String appId = "foobar";
@@ -129,8 +131,9 @@ public class FacebookActivityServiceTest extends SocializeActivityTest {
 		final AuthProviderListener listener = AndroidMock.createMock(AuthProviderListener.class);
 		final DialogFactory dialogFactory = AndroidMock.createMock(DialogFactory.class);
 		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+		final SocializeLogger logger = AndroidMock.createMock(SocializeLogger.class);
 		
-		final FacebookService service = AndroidMock.createMock(FacebookService.class, facebook, facebookSessionStore, listener, dialogFactory, null);
+		final FacebookService service = AndroidMock.createMock(FacebookService.class, facebook, facebookSessionStore, listener, dialogFactory, logger);
 		
 		FacebookActivityService activityService = new FacebookActivityService(context) {
 			@Override
@@ -150,6 +153,7 @@ public class FacebookActivityServiceTest extends SocializeActivityTest {
 		AndroidMock.expect(context.getBean("dialogFactory")).andReturn(dialogFactory);
 		AndroidMock.expect(context.getBean("config")).andReturn(config);
 		AndroidMock.expect(context.getBean("facebookUtils")).andReturn(facebookUtils);
+		AndroidMock.expect(context.getBean("logger")).andReturn(logger);
 		AndroidMock.expect(facebookUtils.getFacebook(context)).andReturn(facebook);
 		
 		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true)).andReturn(true);
