@@ -57,6 +57,8 @@ public class ConfigDialog {
 		final CheckBox chkFBSSO = (CheckBox) layout.findViewById(R.id.chkFBSSO);
 		final CheckBox chkFB = (CheckBox) layout.findViewById(R.id.chkFB);
 		final CheckBox chkTW = (CheckBox) layout.findViewById(R.id.chkTW);
+		final CheckBox chkDiagnostic = (CheckBox) layout.findViewById(R.id.chkDiagnostic);
+		
 		
 		final SocializeConfig config = ConfigUtils.getConfig(mContext);
 		
@@ -69,6 +71,7 @@ public class ConfigDialog {
 		chkAllowSkipAuth.setChecked(config.isAllowNeverAuth());
 		chkFB.setChecked(Socialize.getSocialize().isSupported(AuthProviderType.FACEBOOK));
 		chkTW.setChecked(Socialize.getSocialize().isSupported(AuthProviderType.TWITTER));
+		chkDiagnostic.setChecked(config.isDiagnosticLoggingEnabled());
 		
 		chkFB.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
@@ -110,6 +113,9 @@ public class ConfigDialog {
 				config.setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, String.valueOf(chkRequireAuth.isChecked()));
 				config.setProperty(SocializeConfig.SOCIALIZE_PROMPT_SHARE, String.valueOf(chkPromptForShare.isChecked()));
 				config.setProperty(SocializeConfig.SOCIALIZE_ALLOW_NEVER_AUTH, String.valueOf(chkAllowSkipAuth.isChecked()));
+				config.setDiagnosticLoggingEnabled(mContext, chkDiagnostic.isChecked());
+				
+				
 				config.setFacebookSingleSignOnEnabled(chkFBSSO.isChecked());
 			}
 		});

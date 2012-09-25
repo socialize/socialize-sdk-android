@@ -22,7 +22,6 @@
 package com.socialize.util;
 
 import java.io.UnsupportedEncodingException;
-import android.util.Log;
 import com.socialize.log.SocializeLogger;
 
 /**
@@ -62,7 +61,7 @@ public class StringUtils {
 			return new String(text.getBytes(), "utf-8");
 		} 
 		catch (UnsupportedEncodingException e) {
-			Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
+			SocializeLogger.e(e.getMessage(), e);
 			return text;
 		}
 	}

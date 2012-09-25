@@ -65,7 +65,14 @@
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:text="FB Single Sign On Enabled"
-		        android:textSize="14dip"/>  	
+		        android:textSize="14dip"/>  
+		        
+		<CheckBox 
+		    	android:id="@+id/chkDiagnostic"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="Diagnostic Logging Enabled"
+		        android:textSize="14dip"/>  			
 	</LinearLayout>
 
 </ScrollView>

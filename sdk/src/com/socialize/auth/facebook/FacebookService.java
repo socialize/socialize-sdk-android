@@ -24,9 +24,7 @@ package com.socialize.auth.facebook;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.widget.Toast;
-
 import com.socialize.error.SocializeException;
 import com.socialize.facebook.Facebook;
 import com.socialize.listener.AuthProviderListener;
@@ -43,6 +41,7 @@ public class FacebookService {
 	private FacebookSessionStore facebookSessionStore; 
 	private AuthProviderListener listener;
 	private DialogFactory dialogFactory;
+	private SocializeLogger logger;
 	
 	public static final String[] DEFAULT_PERMISSIONS = {"publish_stream", "publish_actions", "photo_upload"};
 	
@@ -54,12 +53,14 @@ public class FacebookService {
 			Facebook facebook, 
 			FacebookSessionStore facebookSessionStore, 
 			AuthProviderListener listener, 
-			DialogFactory dialogFactory) {
+			DialogFactory dialogFactory,
+			SocializeLogger logger) {
 		super();
 		this.facebook = facebook;
 		this.facebookSessionStore = facebookSessionStore;
 		this.listener = listener;
 		this.dialogFactory = dialogFactory;
+		this.logger = logger;
 	}
 	
 	/**
@@ -138,7 +139,7 @@ public class FacebookService {
 				listener.onError(new SocializeException(e));
 			}
 			else {
-				Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
+				logger.error(e.getMessage(), e);
 			}
 		}
 	}
@@ -146,7 +147,7 @@ public class FacebookService {
 	public void doError(final Activity context, final Throwable e, final String[] permissions, final boolean sso) {
 		context.runOnUiThread(new Runnable() {
 			public void run() {
-				Log.e(SocializeLogger.LOG_TAG, "Facebook error", e);
+				logger.error("Facebook error", e);
 				doErrorUI(context, e.getMessage(), permissions, sso);
 			}
 		});
@@ -157,7 +158,7 @@ public class FacebookService {
 			makeErrorDialog(context, error, permissions, sso).show();
 		}
 		catch (Exception e) {
-			Log.e(SocializeLogger.LOG_TAG, "Facebook error", e);
+			logger.error("Facebook error", e);
 		}
 	}
 	

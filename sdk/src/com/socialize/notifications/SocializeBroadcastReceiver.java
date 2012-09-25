@@ -21,12 +21,11 @@
  */
 package com.socialize.notifications;
 
-import com.socialize.Socialize;
-import com.socialize.SocializeService;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import com.socialize.Socialize;
+import com.socialize.SocializeService;
 
 /**
  * @author Jason Polites

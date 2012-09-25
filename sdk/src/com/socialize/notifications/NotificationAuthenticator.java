@@ -1,7 +1,6 @@
 package com.socialize.notifications;
 
 import android.content.Context;
-
 import com.socialize.api.SocializeSession;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;

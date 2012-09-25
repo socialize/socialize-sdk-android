@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import com.socialize.api.action.ShareType;
 import com.socialize.networks.SocialNetwork;
 

@@ -28,7 +28,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.dialog.DialogRegister;
 
@@ -49,7 +48,7 @@ public abstract class SocializeUIActivity extends Activity implements DialogRegi
 			onCreateSafe(savedInstanceState);
 		}
 		catch (Throwable e) {
-			Log.e(SocializeLogger.LOG_TAG, "", e);
+			SocializeLogger.e("", e);
 			finish();
 		}
 	}
@@ -60,7 +59,7 @@ public abstract class SocializeUIActivity extends Activity implements DialogRegi
 			onNewIntentSafe(intent);
 		}
 		catch (Throwable e) {
-			Log.e(SocializeLogger.LOG_TAG, "", e);
+			SocializeLogger.e("", e);
 			finish();
 		}
 	}

@@ -24,7 +24,6 @@ package com.socialize;
 import java.lang.reflect.Proxy;
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import com.socialize.api.action.user.UserUtilsProxy;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
@@ -117,7 +116,7 @@ public class UserUtils {
 			proxy.showUserSettingsView(context, UserUtils.getCurrentUser(context).getId());
 		}
 		catch (SocializeException e) {
-			Log.e(SocializeLogger.LOG_TAG, "Error displaying user settings", e);
+			SocializeLogger.e("Error displaying user settings", e);
 		}		
 	}
 	
@@ -131,7 +130,7 @@ public class UserUtils {
 			proxy.showUserSettingsViewForResult(context, UserUtils.getCurrentUser(context).getId(), requestCode);
 		}
 		catch (SocializeException e) {
-			Log.e(SocializeLogger.LOG_TAG, "Error displaying user settings", e);
+			SocializeLogger.e("Error displaying user settings", e);
 		}
 	}
 	

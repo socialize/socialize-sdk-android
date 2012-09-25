@@ -31,7 +31,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.StateListDrawable;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -140,7 +139,7 @@ public class SocializeButton extends LinearLayout {
 				align = TEXT_ALIGN.valueOf(textAlign);
 			}
 			catch (Exception e) {
-				Log.w(SocializeLogger.LOG_TAG, e.getMessage(), e);
+				SocializeLogger.w(e.getMessage(), e);
 			}
 		}
 		

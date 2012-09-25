@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
@@ -65,7 +64,7 @@ public class CommentView extends EntityView {
 			return commentListView;
 		}
 		else {
-			Log.e(SocializeLogger.LOG_TAG, "No entity url specified for comment view");
+			SocializeLogger.e("No entity url specified for comment view");
 			return null;
 		}
 	}

@@ -6,6 +6,7 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.facebook.Facebook;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.ListenerHolder;
+import com.socialize.log.SocializeLogger;
 import com.socialize.networks.facebook.FacebookUtilsProxy;
 import com.socialize.util.DialogFactory;
 
@@ -18,6 +19,7 @@ public class FacebookActivityService {
 	private FacebookActivity activity;
 	private DialogFactory dialogFactory;
 	private SocializeConfig config;
+	private SocializeLogger logger;
 	
 	private FacebookService service;
 	
@@ -43,6 +45,7 @@ public class FacebookActivityService {
 				facebookSessionStore = activity.getBean("facebookSessionStore");
 				listenerHolder = activity.getBean("listenerHolder");
 				dialogFactory = activity.getBean("dialogFactory");
+				logger = activity.getBean("logger");
 				config = activity.getBean("config");
 				facebookUtils = activity.getBean("facebookUtils");
 				facebook = facebookUtils.getFacebook(activity);
@@ -73,7 +76,7 @@ public class FacebookActivityService {
 	}
     
     public FacebookService getFacebookService() {
-    	service = new FacebookService(facebook, facebookSessionStore, (AuthProviderListener) listenerHolder.pop("auth"), dialogFactory);
+    	service = new FacebookService(facebook, facebookSessionStore, (AuthProviderListener) listenerHolder.pop("auth"), dialogFactory, logger);
     	return service;
     }
 	
@@ -93,5 +96,9 @@ public class FacebookActivityService {
 	
 	public void setActivity(FacebookActivity activity) {
 		this.activity = activity;
+	}
+
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
 	}
 }

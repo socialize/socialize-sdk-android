@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-
 import com.socialize.log.SocializeLogger;
 
 public abstract class EntityView extends AuthenticatedView {
@@ -49,7 +47,7 @@ public abstract class EntityView extends AuthenticatedView {
 			return getView(bundle, (Object[]) null);
 		} 
 		catch (Throwable e) {
-			Log.e(SocializeLogger.LOG_TAG, "", e);
+			SocializeLogger.e("", e);
 			return getErrorView();
 		}
 	}

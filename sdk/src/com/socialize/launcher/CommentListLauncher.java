@@ -23,7 +23,6 @@ package com.socialize.launcher;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import com.socialize.CommentUtils;
 import com.socialize.Socialize;
 import com.socialize.api.SocializeSession;
@@ -98,7 +97,7 @@ public class CommentListLauncher extends BaseLauncher {
 			logger.error(msg, e);
 		}
 		else {
-			Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
+			SocializeLogger.e(e.getMessage(), e);
 		}
 	}		
 	

@@ -26,10 +26,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
-import com.socialize.log.SocializeLogger;
-
 import android.graphics.Color;
-import android.util.Log;
+import com.socialize.log.SocializeLogger;
 
 /**
  * @author Jason Polites
@@ -107,7 +105,7 @@ public class Colors {
 					colors.put(entry.getKey(), color);
 				}
 				catch (Exception e) {
-					Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
+					SocializeLogger.e(e.getMessage(), e);
 				}
 			}
 		}

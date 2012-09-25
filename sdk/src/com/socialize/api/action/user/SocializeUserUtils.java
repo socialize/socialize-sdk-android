@@ -25,7 +25,6 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
@@ -36,6 +35,7 @@ import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
+import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.action.ActionDetailActivity;
 import com.socialize.ui.comment.CommentDetailActivity;
@@ -50,7 +50,7 @@ import com.socialize.ui.profile.UserSettings;
 public class SocializeUserUtils extends SocializeActionUtilsBase implements UserUtilsProxy {
 
 	private UserSystem userSystem;
-	
+	private SocializeLogger logger;
 
 	@Override
 	public UserSettings getUserSettings(Context context) {
@@ -66,7 +66,7 @@ public class SocializeUserUtils extends SocializeActionUtilsBase implements User
 			context.startActivityForResult(i, requestCode);
 		} 
 		catch (ActivityNotFoundException e) {
-			Log.e(Socialize.LOG_KEY, "Could not find ProfileActivity.  Make sure you have added this to your AndroidManifest.xml");
+			logger.error("Could not find ProfileActivity.  Make sure you have added this to your AndroidManifest.xml");
 		}	
 	}
 	
@@ -78,7 +78,7 @@ public class SocializeUserUtils extends SocializeActionUtilsBase implements User
 			context.startActivity(i);
 		} 
 		catch (ActivityNotFoundException e) {
-			Log.e(Socialize.LOG_KEY, "Could not find ProfileActivity.  Make sure you have added this to your AndroidManifest.xml");
+			logger.error("Could not find ProfileActivity.  Make sure you have added this to your AndroidManifest.xml");
 		}
 	}
 	
@@ -102,10 +102,10 @@ public class SocializeUserUtils extends SocializeActionUtilsBase implements User
 			i.setClass(context, CommentDetailActivity.class);
 			try {
 				context.startActivity(i);
-				Log.w(Socialize.LOG_KEY, "Using legacy CommentDetailActivity.  Please update your AndroidManifest.xml to use ActionDetailActivity");
+				if(logger != null) logger.warn("Using legacy CommentDetailActivity.  Please update your AndroidManifest.xml to use ActionDetailActivity");
 			} 
 			catch (ActivityNotFoundException e2) {
-				Log.e(Socialize.LOG_KEY, "Could not find ActionDetailActivity.  Make sure you have added this to your AndroidManifest.xml");
+				if(logger != null) logger.error("Could not find ActionDetailActivity.  Make sure you have added this to your AndroidManifest.xml");
 			}
 		}		
 	}
@@ -173,6 +173,10 @@ public class SocializeUserUtils extends SocializeActionUtilsBase implements User
 		this.userSystem = userSystem;
 	}
 	
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
+	}
+
 	@Override
 	public void clearSession(Context context) {
 		getSocialize().clearSessionCache(context);

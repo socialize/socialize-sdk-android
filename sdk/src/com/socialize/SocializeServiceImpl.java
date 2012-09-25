@@ -199,7 +199,7 @@ public class SocializeServiceImpl implements SocializeService {
 				logger.error(SocializeLogger.INITIALIZE_FAILED, e);
 			}
 			else {
-				Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
+				SocializeLogger.e(e.getMessage(), e);
 			}
 		}
 		
@@ -449,7 +449,7 @@ public class SocializeServiceImpl implements SocializeService {
 					logger.error(SocializeLogger.INITIALIZE_FAILED, e);
 				}
 				else {
-					Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
+					SocializeLogger.e(e.getMessage(), e);
 				}
 			}
 		}
@@ -687,7 +687,7 @@ public class SocializeServiceImpl implements SocializeService {
 			logger.error(message, error);
 		}
 		else {
-			Log.e(SocializeLogger.LOG_TAG, message, error);
+			SocializeLogger.e(message, error);
 		}
 	}
 	
@@ -891,7 +891,7 @@ public class SocializeServiceImpl implements SocializeService {
 					}
 					else {
 						if(error != null) {
-							Log.e(SocializeLogger.LOG_TAG, errorMessage, error);
+							SocializeLogger.e(errorMessage, error);
 						}
 						else {
 							System.err.println(errorMessage);
@@ -1059,7 +1059,7 @@ public class SocializeServiceImpl implements SocializeService {
 				FacebookUtils.extendAccessToken(context, null);
 			}
 			catch (Exception e) {
-				Log.e(SocializeLogger.LOG_TAG, "Error occurred on resume", e);
+				SocializeLogger.e("Error occurred on resume", e);
 			}
 			paused = false;
 		}
@@ -1068,7 +1068,7 @@ public class SocializeServiceImpl implements SocializeService {
 			Socialize.getSocialize().initAsync(context, new SocializeInitListener() {
 				@Override
 				public void onError(SocializeException error) {
-					Log.e(SocializeLogger.LOG_TAG, "Error occurred on resume", error);
+					SocializeLogger.e("Error occurred on resume", error);
 				}
 				
 				@Override

@@ -22,9 +22,9 @@
 package com.socialize.listener;
 
 
+import com.socialize.api.SocializeApi.RequestType;
 import com.socialize.api.SocializeEntityResponse;
 import com.socialize.api.SocializeResponse;
-import com.socialize.api.SocializeApi.RequestType;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeApiError;

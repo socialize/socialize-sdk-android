@@ -19,16 +19,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.notifications;
+package com.socialize.demo.implementations.tools;
 
-import android.content.Context;
 import android.os.Bundle;
-import com.socialize.error.SocializeException;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.Toast;
+import com.socialize.SocializeTools;
+import com.socialize.demo.DemoActivity;
+import com.socialize.demo.R;
+
 
 /**
- * Translates the bundle received from a notification into one that is expected by the given launch action.
  * @author Jason Polites
+ *
  */
-public interface MessageTranslator<T> {
-	public T translate(Context context, Bundle data, NotificationMessage message) throws SocializeException;
+public class ToolsActivity extends DemoActivity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		
+		super.onCreate(savedInstanceState);
+
+		setContentView(R.layout.tools);
+
+		Button btnLocation = (Button) findViewById(R.id.btnSend);
+		
+		btnLocation.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(!SocializeTools.sendExternalLogs(ToolsActivity.this)) {
+					Toast.makeText(ToolsActivity.this, "No logs to send", Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
+
+		Button btnClear = (Button) findViewById(R.id.btnClear);
+		
+		btnClear.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				SocializeTools.deleteExternalLogs(ToolsActivity.this);
+				Toast.makeText(ToolsActivity.this, "Logs cleared", Toast.LENGTH_SHORT).show();
+			}
+		});		
+	}
 }

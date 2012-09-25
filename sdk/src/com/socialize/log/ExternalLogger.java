@@ -19,16 +19,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.notifications;
+package com.socialize.log;
 
 import android.content.Context;
-import android.os.Bundle;
-import com.socialize.error.SocializeException;
+import com.socialize.log.SocializeLogger.LogLevel;
+
 
 /**
- * Translates the bundle received from a notification into one that is expected by the given launch action.
  * @author Jason Polites
+ *
  */
-public interface MessageTranslator<T> {
-	public T translate(Context context, Bundle data, NotificationMessage message) throws SocializeException;
+public interface ExternalLogger {
+	
+	public boolean canWrite();
+	
+	public void init(Context context);
+	
+	public void destroy();
+
+	public void log(LogLevel level, long time, String tag, String message);
+	
+	public void log(LogLevel level, long time, String tag, String message, Throwable error);
 }

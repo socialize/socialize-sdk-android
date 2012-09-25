@@ -24,7 +24,6 @@ package com.socialize.entity;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

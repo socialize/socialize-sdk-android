@@ -24,14 +24,11 @@ package com.socialize.ui.util;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
-
-import com.socialize.log.SocializeLogger;
-import com.socialize.util.StringUtils;
-
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
-import android.util.Log;
+import com.socialize.log.SocializeLogger;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -62,7 +59,7 @@ public class GeoUtils {
 						"]", e);
 			}
 			else {
-				Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
+				SocializeLogger.e(e.getMessage(), e);
 			}
 		}
 

@@ -23,7 +23,6 @@ package com.socialize.ui.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.util.Log;
 import android.view.Window;
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
@@ -54,7 +53,7 @@ public abstract class BaseDialogFactory {
 			logger.error(msg, error);
 		}
 		else {
-			Log.e(SocializeLogger.LOG_TAG, error.getMessage(), error);
+			SocializeLogger.e(error.getMessage(), error);
 		}
 	}
 

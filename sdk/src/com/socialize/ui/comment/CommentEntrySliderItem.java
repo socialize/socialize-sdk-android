@@ -22,7 +22,6 @@
 package com.socialize.ui.comment;
 
 import android.view.View;
-
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.ui.slider.ActionBarSliderItem;
 import com.socialize.ui.slider.ActionBarSliderView;

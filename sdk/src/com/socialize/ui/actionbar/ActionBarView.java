@@ -24,7 +24,6 @@ package com.socialize.ui.actionbar;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import com.socialize.entity.Entity;
 import com.socialize.log.SocializeLogger;
@@ -72,7 +71,7 @@ public class ActionBarView extends EntityView {
 			actionBarLayoutView = container.getBean("actionBarLayoutView", this, actionBarOptions);
 			
 			if(actionBarLayoutView == null) {
-				Log.w(SocializeLogger.LOG_TAG, "Request for bean [actionBarLayoutView] returned null");
+				SocializeLogger.w("Request for bean [actionBarLayoutView] returned null");
 			}
 		}
 		
@@ -112,7 +111,7 @@ public class ActionBarView extends EntityView {
 	@Override
 	public void showError(Context context, Exception e) {
 		// Don't display popup
-		Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
+		SocializeLogger.e(e.getMessage(), e);
 	}
 
 	@Override

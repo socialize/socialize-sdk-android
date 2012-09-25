@@ -23,7 +23,6 @@ package com.socialize.entity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.socialize.api.action.ShareType;
 import com.socialize.util.StringUtils;
 

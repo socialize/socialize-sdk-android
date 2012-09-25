@@ -27,7 +27,6 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
 import com.socialize.EntityUtils;
@@ -395,7 +394,7 @@ public class ActionBarLayoutView extends BaseView {
 			ViewUtils.view(getActivity(), entity, new ViewAddListener() {
 				@Override
 				public void onError(SocializeException error) {
-					Log.e(SocializeLogger.LOG_TAG, error.getMessage(), error);
+					SocializeLogger.e(error.getMessage(), error);
 					getLike(entity.getKey());
 				}
 				
@@ -625,7 +624,7 @@ public class ActionBarLayoutView extends BaseView {
 			logger.error(msg, error);
 		}
 		else {
-			Log.e(SocializeLogger.LOG_TAG, msg, error);
+			SocializeLogger.e(msg, error);
 		}
 	}
 	

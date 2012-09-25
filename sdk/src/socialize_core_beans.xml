@@ -17,8 +17,10 @@
 	
 	<bean id="logger" class="com.socialize.log.SocializeLogger">
 		<init-method name="init">
+			<arg type="context"/>
 			<arg ref="config"/>
 		</init-method>
+		<destroy-method name="destroy"/>
 	</bean>
 	
 	<bean id="deviceUtils" class="com.socialize.util.DeviceUtils">

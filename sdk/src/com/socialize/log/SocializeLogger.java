@@ -21,6 +21,7 @@
  */
 package com.socialize.log;
 
+import android.content.Context;
 import android.util.Log;
 import com.socialize.config.SocializeConfig;
 import com.socialize.util.StringUtils;
@@ -47,6 +48,8 @@ public class SocializeLogger {
 	private boolean logThread = true;
 	private boolean initialized = false;
 	
+	private ExternalLogger externalLogger;
+	
 	public SocializeLogger() {
 		super();
 	}
@@ -56,7 +59,13 @@ public class SocializeLogger {
 		this.logLevel = level;
 	}
 
-	public void init(SocializeConfig config) {
+	public void init(Context context, SocializeConfig config) {
+		
+		if(config.isDiagnosticLoggingEnabled() && externalLogger == null) {
+			externalLogger = newExternalLogger();
+			externalLogger.init(context);
+		}
+		
 		String ll = config.getProperty(SocializeConfig.LOG_LEVEL);
 		logThread = config.getBooleanProperty(SocializeConfig.LOG_THREAD, true);
 		
@@ -74,6 +83,26 @@ public class SocializeLogger {
 		this.initialized = true;
 	}
 	
+	// Mockable
+	protected ExternalLogger newExternalLogger() {
+		return new AsyncSDCardExternalLogger();
+	}
+	
+	public void destroy() {
+		if(externalLogger != null) {
+			externalLogger.destroy();
+			externalLogger = null;
+		}
+	}
+	
+	public ExternalLogger getExternalLogger() {
+		return externalLogger;
+	}
+
+	public void setExternalLogger(ExternalLogger externalLogger) {
+		this.externalLogger = externalLogger;
+	}
+
 	public void setLogLevel(LogLevel logLevel) {
 		this.logLevel = logLevel;
 	}
@@ -103,31 +132,66 @@ public class SocializeLogger {
 	}
 	
 	public void debug(String msg) {
-		Log.d(LOG_TAG, getMessage(msg));
+		msg = getMessage(msg);
+		d(msg);
+		
+		if(externalLogger != null && externalLogger.canWrite()) {
+			externalLogger.log(LogLevel.DEBUG, System.currentTimeMillis(), LOG_TAG, msg);
+		}
 	}
 	
 	public void debug(String msg, Throwable error) {
-		Log.d(LOG_TAG, getMessage(msg), error);
+		msg = getMessage(msg);
+		d(msg, error);
+		
+		if(externalLogger != null && externalLogger.canWrite()) {
+			externalLogger.log(LogLevel.DEBUG, System.currentTimeMillis(), LOG_TAG, msg);
+		}
 	}
 	
 	public void info(String msg) {
-		Log.i(LOG_TAG, getMessage(msg));
+		msg = getMessage(msg);
+		i(msg);
+		
+		if(externalLogger != null && externalLogger.canWrite()) {
+			externalLogger.log(LogLevel.INFO, System.currentTimeMillis(), LOG_TAG, msg);
+		}
 	}
 	
 	public void warn(String msg) {
-		Log.w(LOG_TAG, getMessage(msg));
+		msg = getMessage(msg);
+		w(msg);
+		
+		if(externalLogger != null && externalLogger.canWrite()) {
+			externalLogger.log(LogLevel.WARN, System.currentTimeMillis(), LOG_TAG, msg);
+		}
 	}
 	
 	public void error(String msg) {
-		Log.e(LOG_TAG, getMessage(msg));
+		msg = getMessage(msg);
+		e(msg);
+		
+		if(externalLogger != null && externalLogger.canWrite()) {
+			externalLogger.log(LogLevel.ERROR, System.currentTimeMillis(), LOG_TAG, msg);
+		}
 	}
 	
 	public void warn(String msg, Throwable error) {
-		Log.w(LOG_TAG, getMessage(msg), error);
+		msg = getMessage(msg);
+		w(msg, error);
+		
+		if(externalLogger != null && externalLogger.canWrite()) {
+			externalLogger.log(LogLevel.WARN, System.currentTimeMillis(), LOG_TAG, msg, error);
+		}
 	}
 	
 	public void error(String msg, Throwable error) {
-		Log.e(LOG_TAG, getMessage(msg), error);
+		msg = getMessage(msg);
+		e(msg, error);
+		
+		if(externalLogger != null && externalLogger.canWrite()) {
+			externalLogger.log(LogLevel.ERROR, System.currentTimeMillis(), LOG_TAG, msg, error);
+		}
 	}
 	
 	public boolean isVerboseEnabled() {
@@ -161,7 +225,6 @@ public class SocializeLogger {
 		}
 	}
 	
-	
 	public String getMessage(int id) {
 		if(this.config != null) {
 			String msg =  this.config.getProperty(SocializeConfig.LOG_MSG + id);
@@ -174,5 +237,48 @@ public class SocializeLogger {
 			return getMessage("Log System Error!  The log system has not been initialized correctly.  No config found.");
 		}
 	}
+	
+	
+	public boolean isLogThread() {
+		return logThread;
+	}
+
+	public void setLogThread(boolean logThread) {
+		this.logThread = logThread;
+	}
+
+	public LogLevel getLogLevel() {
+		return logLevel;
+	}
+
+	public static void d(String msg) {
+		Log.d(LOG_TAG, msg);
+	}
+	
+	public static void d(String msg, Throwable error) {
+		Log.d(LOG_TAG, msg, error);
+	}
+	
+	public static void i(String msg) {
+		Log.i(LOG_TAG, msg);
+	}
+	
+	public static void e(String msg, Throwable error) {
+		Log.e(LOG_TAG, msg, error);
+	}
+	
+	public static void e(String msg) {
+		Log.e(LOG_TAG, msg);
+	}
+	
+	public static void w(String msg, Throwable error) {
+		Log.w(LOG_TAG, msg, error);
+	}
+	
+	public static void w(String msg) {
+		Log.w(LOG_TAG, msg);
+	}
+	
+	
 	
 }

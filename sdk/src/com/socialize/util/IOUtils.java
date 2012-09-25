@@ -26,7 +26,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import android.util.Log;
 import com.socialize.log.SocializeLogger;
 
 /**
@@ -48,7 +47,7 @@ public class IOUtils {
 				logger.error("", e);
 			}
 			else {
-				Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
+				SocializeLogger.e(e.getMessage(), e);
 			}
 		}
 		return "";

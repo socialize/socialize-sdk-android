@@ -23,15 +23,12 @@ package com.socialize.util;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import com.socialize.log.SocializeLogger;
-
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
-import android.util.Log;
+import com.socialize.log.SocializeLogger;
 
 /**
  * Convenience class for getting drawables from raw images.
@@ -165,7 +162,7 @@ public class Drawables {
 					in.close();
 				}
 				catch (IOException e) {
-					Log.w(SocializeLogger.LOG_TAG, e.getMessage(), e);
+					SocializeLogger.w(e.getMessage(), e);
 				}
 			}
 		}

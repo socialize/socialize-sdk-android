@@ -22,12 +22,10 @@
 package com.socialize.auth.facebook;
 
 import org.json.JSONObject;
-
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Toast;
-
 import com.socialize.auth.AuthProviderResponse;
 import com.socialize.error.SocializeException;
 import com.socialize.facebook.DialogError;

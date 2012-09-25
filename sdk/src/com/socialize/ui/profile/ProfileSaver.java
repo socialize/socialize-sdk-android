@@ -22,7 +22,6 @@
 package com.socialize.ui.profile;
 
 import android.content.Context;
-
 import com.socialize.listener.user.UserSaveListener;
 
 /**

@@ -23,7 +23,6 @@ package com.socialize.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-
 import com.socialize.cache.ICacheable;
 
 /**

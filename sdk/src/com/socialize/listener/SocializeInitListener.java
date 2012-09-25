@@ -4,7 +4,6 @@
 package com.socialize.listener;
 
 import android.content.Context;
-
 import com.socialize.android.ioc.IOCContainer;
 
 /**

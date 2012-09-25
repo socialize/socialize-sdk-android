@@ -23,7 +23,6 @@ package com.socialize.notifications;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.socialize.util.StringUtils;
 
 /**
