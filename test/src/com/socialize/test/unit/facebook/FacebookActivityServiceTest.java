@@ -130,7 +130,7 @@ public class FacebookActivityServiceTest extends SocializeActivityTest {
 		final DialogFactory dialogFactory = AndroidMock.createMock(DialogFactory.class);
 		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
 		
-		final FacebookService service = AndroidMock.createMock(FacebookService.class, facebook, facebookSessionStore, listener, dialogFactory);
+		final FacebookService service = AndroidMock.createMock(FacebookService.class, facebook, facebookSessionStore, listener, dialogFactory, null);
 		
 		FacebookActivityService activityService = new FacebookActivityService(context) {
 			@Override

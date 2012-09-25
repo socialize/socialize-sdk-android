@@ -139,7 +139,12 @@ public class FacebookService {
 				listener.onError(new SocializeException(e));
 			}
 			else {
-				logger.error(e.getMessage(), e);
+				if(logger != null) {
+					logger.error(e.getMessage(), e);
+				}
+				else {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -147,7 +152,13 @@ public class FacebookService {
 	public void doError(final Activity context, final Throwable e, final String[] permissions, final boolean sso) {
 		context.runOnUiThread(new Runnable() {
 			public void run() {
-				logger.error("Facebook error", e);
+				if(logger != null) {
+					logger.error("Facebook error", e);
+				}
+				else {
+					e.printStackTrace();
+				}
+				
 				doErrorUI(context, e.getMessage(), permissions, sso);
 			}
 		});
@@ -158,7 +169,13 @@ public class FacebookService {
 			makeErrorDialog(context, error, permissions, sso).show();
 		}
 		catch (Exception e) {
-			logger.error("Facebook error", e);
+			if(logger != null) {
+				logger.error("Facebook error", e);
+			}
+			else {
+				e.printStackTrace();
+			}
+			
 		}
 	}
 	

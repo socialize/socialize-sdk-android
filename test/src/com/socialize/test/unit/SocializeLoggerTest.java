@@ -43,6 +43,7 @@ public class SocializeLoggerTest extends SocializeActivityTest {
 		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_LEVEL)).andReturn(LogLevel.VERBOSE.name());
 		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_TAG)).andReturn("LoggerTest");
 		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.LOG_THREAD, true)).andReturn(false);
+		AndroidMock.expect(config.isDiagnosticLoggingEnabled()).andReturn(false);
 		
 		AndroidMock.replay(config);
 
@@ -66,6 +67,7 @@ public class SocializeLoggerTest extends SocializeActivityTest {
 		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_TAG)).andReturn(logTag);
 		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.LOG_THREAD, true)).andReturn(false);
 		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_MSG + id)).andReturn(expected);
+		AndroidMock.expect(config.isDiagnosticLoggingEnabled()).andReturn(false);
 
 		AndroidMock.replay(config);
 
@@ -147,6 +149,7 @@ public class SocializeLoggerTest extends SocializeActivityTest {
 		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_LEVEL)).andReturn(LogLevel.VERBOSE.name());
 		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_TAG)).andReturn("LoggerTest");
 		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.LOG_THREAD, true)).andReturn(false);
+		AndroidMock.expect(config.isDiagnosticLoggingEnabled()).andReturn(false);
 		
 		AndroidMock.replay(config);
 
@@ -315,6 +318,7 @@ public class SocializeLoggerTest extends SocializeActivityTest {
 		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_LEVEL)).andReturn(level.name());
 		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_TAG)).andReturn("LoggerTest");
 		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.LOG_THREAD, true)).andReturn(false);
+		AndroidMock.expect(config.isDiagnosticLoggingEnabled()).andReturn(false);
 		
 		AndroidMock.replay(config);
 
