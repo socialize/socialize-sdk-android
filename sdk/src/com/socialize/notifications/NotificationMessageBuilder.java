@@ -21,11 +21,10 @@
  */
 package com.socialize.notifications;
 
-import com.socialize.error.SocializeException;
-
 import android.app.Notification;
 import android.content.Context;
 import android.os.Bundle;
+import com.socialize.error.SocializeException;
 
 /**
  * @author Jason Polites

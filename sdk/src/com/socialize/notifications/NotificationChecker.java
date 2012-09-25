@@ -22,8 +22,6 @@
 package com.socialize.notifications;
 
 import android.content.Context;
-import android.util.Log;
-
 import com.socialize.Socialize;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
@@ -77,7 +75,7 @@ public class NotificationChecker {
 			logger.error("Error checking notification state", e);
 		}
 		else {
-			Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
+			SocializeLogger.e(e.getMessage(), e);
 		}
 	}
 	

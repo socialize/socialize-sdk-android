@@ -34,7 +34,6 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.config.SocializeConfig;
@@ -77,7 +76,7 @@ public class DefaultAppUtils implements AppUtils {
 				logger.error(msg, e);
 			}
 			else {
-				Log.e(SocializeLogger.LOG_TAG, msg, e);
+				SocializeLogger.e(msg, e);
 			}
 		}
 
@@ -160,7 +159,7 @@ public class DefaultAppUtils implements AppUtils {
 						"]", e);
 			}
 			else {
-				Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
+				SocializeLogger.e(e.getMessage(), e);
 			}
 		}
 		

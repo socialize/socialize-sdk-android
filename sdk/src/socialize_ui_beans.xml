@@ -1636,6 +1636,7 @@
 		<property name="authDialogFactory" ref="authDialogFactory"/>
 		<property name="shareDialogFactory" ref="shareDialogFactory"/>
 		<property name="listenerHolder" ref="listenerHolder"/>
+		<property name="logger" ref="logger"/>
 	</bean>
 	
 	<bean id="subscriptionUtils" class="com.socialize.api.action.comment.SocializeSubscriptionUtils" extends="utilsBase">
@@ -1644,6 +1645,7 @@
 
 	<bean id="userUtils" class="com.socialize.api.action.user.SocializeUserUtils" extends="utilsBase">
 		<property name="userSystem" ref="userSystem"/>
+		<property name="logger" ref="logger"/>
 	</bean>
 	
 	<bean id="actionUtils" class="com.socialize.api.action.activity.SocializeActionUtils">

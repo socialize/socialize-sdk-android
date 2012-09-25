@@ -1,0 +1,17 @@
+<manifest...>
+
+	<uses-permission android:name="android.permission.INTERNET"/>
+	
+	<!-- Required for Diagnostic Logging -->
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	
+	<!-- Optional but recommended -->
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	
+	<!-- Optionally add ONE of the following to include location data in comments -->
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+	
+	<application.../>
+
+</manifest>	

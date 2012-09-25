@@ -23,8 +23,6 @@ package com.socialize.ui.dialog;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.util.Log;
-
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.Drawables;
 
@@ -59,7 +57,7 @@ public class ProgressDialogFactory implements SimpleDialogFactory<ProgressDialog
 				logger.error("Error displaying progress dialog", e);
 			}
 			else {
-				Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
+				SocializeLogger.e(e.getMessage(), e);
 			}
 			
 			return null;

@@ -2,7 +2,6 @@ package com.socialize.notifications;
 
 import android.content.Context;
 import android.os.Bundle;
-
 import com.socialize.error.SocializeException;
 import com.socialize.util.AppUtils;
 

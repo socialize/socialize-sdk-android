@@ -4,7 +4,6 @@
 package com.socialize.ui.comment;
 
 import java.util.List;
-
 import com.socialize.entity.Comment;
 import com.socialize.listener.SocializeListener;
 

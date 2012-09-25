@@ -22,7 +22,6 @@
 package com.socialize.notifications;
 
 import android.content.Context;
-
 import com.socialize.error.SocializeException;
 
 /**

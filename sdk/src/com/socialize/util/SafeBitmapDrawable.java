@@ -1,12 +1,11 @@
 package com.socialize.util;
 
 import java.io.InputStream;
-
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
-import android.util.Log;
+import com.socialize.log.SocializeLogger;
 
 
 /**
@@ -40,11 +39,11 @@ public class SafeBitmapDrawable extends BitmapDrawable {
 				super.draw(canvas);
 			}
 			catch (Throwable e) {
-				Log.w("SafeBitmapDrawable", "Bitmap was recycled");
+				SocializeLogger.w("Bitmap was recycled");
 			}
 		}
 		else {
-			Log.w("SafeBitmapDrawable", "Bitmap was recycled");
+			SocializeLogger.w("Bitmap was recycled");
 		}
 	}
 	

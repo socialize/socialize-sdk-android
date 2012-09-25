@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.widget.LinearLayout;
 import com.socialize.UserUtils;
 import com.socialize.android.ioc.IBeanFactory;
@@ -102,7 +101,7 @@ public class ProfileLayoutView extends BaseView {
 					}
 				}
 				catch (Exception e) {
-					Log.e(SocializeLogger.LOG_TAG, "Error getting user", e);
+					SocializeLogger.e("Error getting user", e);
 				}
 				
 				// Set the user details into the view elements

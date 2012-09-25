@@ -3,9 +3,7 @@ package com.socialize.ui.profile;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
 import com.socialize.log.SocializeLogger;
@@ -28,7 +26,7 @@ public class ProfileView extends EntityView {
 			return profileLayoutView;
 		}
 		else {
-			Log.e(SocializeLogger.LOG_TAG, "No user id specified for " + getClass().getSimpleName());
+			SocializeLogger.e("No user id specified for " + getClass().getSimpleName());
 			return null;
 		}			
 	}

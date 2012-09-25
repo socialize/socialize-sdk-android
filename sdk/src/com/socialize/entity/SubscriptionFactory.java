@@ -22,10 +22,8 @@
 package com.socialize.entity;
 
 import java.text.ParseException;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.socialize.log.SocializeLogger;
 import com.socialize.notifications.NotificationType;
 import com.socialize.util.StringUtils;

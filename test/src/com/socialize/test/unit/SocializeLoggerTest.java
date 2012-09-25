@@ -24,6 +24,7 @@ package com.socialize.test.unit;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.config.SocializeConfig;
+import com.socialize.log.ExternalLogger;
 import com.socialize.log.SocializeLogger;
 import com.socialize.log.SocializeLogger.LogLevel;
 import com.socialize.test.SocializeActivityTest;
@@ -42,12 +43,13 @@ public class SocializeLoggerTest extends SocializeActivityTest {
 		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_LEVEL)).andReturn(LogLevel.VERBOSE.name());
 		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_TAG)).andReturn("LoggerTest");
 		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.LOG_THREAD, true)).andReturn(false);
+		AndroidMock.expect(config.isDiagnosticLoggingEnabled()).andReturn(false);
 		
 		AndroidMock.replay(config);
 
 		SocializeLogger logger = new SocializeLogger();
 
-		logger.init(config);
+		logger.init(null, config);
 
 		AndroidMock.verify(config);
 	}
@@ -65,12 +67,13 @@ public class SocializeLoggerTest extends SocializeActivityTest {
 		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_TAG)).andReturn(logTag);
 		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.LOG_THREAD, true)).andReturn(false);
 		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_MSG + id)).andReturn(expected);
+		AndroidMock.expect(config.isDiagnosticLoggingEnabled()).andReturn(false);
 
 		AndroidMock.replay(config);
 
 		SocializeLogger logger = new SocializeLogger();
 
-		logger.init(config);
+		logger.init(null, config);
 		String actual = logger.getMessage(id);
 
 		AndroidMock.verify(config);
@@ -146,12 +149,13 @@ public class SocializeLoggerTest extends SocializeActivityTest {
 		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_LEVEL)).andReturn(LogLevel.VERBOSE.name());
 		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_TAG)).andReturn("LoggerTest");
 		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.LOG_THREAD, true)).andReturn(false);
+		AndroidMock.expect(config.isDiagnosticLoggingEnabled()).andReturn(false);
 		
 		AndroidMock.replay(config);
 
 		SocializeLogger logger = new SocializeLogger();
 
-		logger.init(config);
+		logger.init(null, config);
 
 		logger.debug("Test message");
 		logger.info("Test message");
@@ -206,6 +210,105 @@ public class SocializeLoggerTest extends SocializeActivityTest {
 		assertFalse(logger.isDebugEnabled());
 		assertFalse(logger.isVerboseEnabled());
 	}
+	
+	@UsesMocks ({SocializeConfig.class, ExternalLogger.class})
+	public void testLoggerInitCreatesExternalLogger() {
+		SocializeConfig config = AndroidMock.createNiceMock(SocializeConfig.class);
+		final ExternalLogger externalLogger = AndroidMock.createMock(ExternalLogger.class);
+		
+		AndroidMock.expect(config.isDiagnosticLoggingEnabled()).andReturn(true);
+		
+		AndroidMock.replay(config);
+		
+		SocializeLogger logger = new SocializeLogger() {
+			@Override
+			protected ExternalLogger newExternalLogger() {
+				return externalLogger;
+			}
+		};
+		
+		logger.init(getContext(), config);
+		
+		AndroidMock.verify(config);
+		
+		assertNotNull(logger.getExternalLogger());
+		assertSame(externalLogger, logger.getExternalLogger());
+	}	
+	
+	
+	@UsesMocks ({ExternalLogger.class})
+	public void testLoggerWritesToExternalLogs() {
+		final ExternalLogger externalLogger = AndroidMock.createMock(ExternalLogger.class);
+		
+		SocializeLogger logger = new SocializeLogger();
+		logger.setLogThread(false);
+		logger.setExternalLogger(externalLogger);
+		
+		final String msg = "foobar";
+		final Throwable error = new Exception();
+		
+		AndroidMock.expect(externalLogger.canWrite()).andReturn(true).anyTimes();
+		
+		externalLogger.log(AndroidMock.eq(LogLevel.DEBUG), AndroidMock.anyLong(), AndroidMock.eq(SocializeLogger.LOG_TAG), AndroidMock.eq(msg));
+		externalLogger.log(AndroidMock.eq(LogLevel.INFO), AndroidMock.anyLong(), AndroidMock.eq(SocializeLogger.LOG_TAG), AndroidMock.eq(msg));
+		externalLogger.log(AndroidMock.eq(LogLevel.WARN), AndroidMock.anyLong(), AndroidMock.eq(SocializeLogger.LOG_TAG), AndroidMock.eq(msg));
+		externalLogger.log(AndroidMock.eq(LogLevel.ERROR), AndroidMock.anyLong(), AndroidMock.eq(SocializeLogger.LOG_TAG), AndroidMock.eq(msg));
+		
+		externalLogger.log(AndroidMock.eq(LogLevel.WARN), AndroidMock.anyLong(), AndroidMock.eq(SocializeLogger.LOG_TAG), AndroidMock.eq(msg), AndroidMock.same(error));
+		externalLogger.log(AndroidMock.eq(LogLevel.ERROR), AndroidMock.anyLong(), AndroidMock.eq(SocializeLogger.LOG_TAG), AndroidMock.eq(msg), AndroidMock.same(error));
+		
+		AndroidMock.replay(externalLogger);
+		
+		logger.debug(msg);
+		logger.info(msg);
+		logger.warn(msg);
+		logger.error(msg);
+		
+		logger.warn(msg, error);
+		logger.error(msg, error);
+		
+		AndroidMock.verify(externalLogger);
+	}
+	
+	@UsesMocks (SocializeLogger.class)
+	public void testConfigCreatesExternalLogger() {
+		
+		final SocializeLogger logger = AndroidMock.createMock(SocializeLogger.class);
+		
+		SocializeConfig config = new SocializeConfig();
+		config.setLogger(logger);
+	
+		logger.destroy();
+		logger.init(getContext(), config);
+		
+		AndroidMock.replay(logger);
+		
+		config.setDiagnosticLoggingEnabled(getContext(), true);
+		
+		AndroidMock.verify(logger);
+	}
+	
+	@UsesMocks ({ExternalLogger.class})
+	public void testConfigDestroysExternalLogger() {
+		
+		final SocializeConfig config = new SocializeConfig();
+		final SocializeLogger logger = new SocializeLogger();
+		final ExternalLogger externalLogger = AndroidMock.createMock(ExternalLogger.class);
+		
+		logger.setExternalLogger(externalLogger);
+		config.setLogger(logger);
+	
+		externalLogger.destroy();
+		
+		AndroidMock.replay(externalLogger);
+		
+		config.setDiagnosticLoggingEnabled(getContext(), false);
+		
+		AndroidMock.verify(externalLogger);
+		
+		assertNull(logger.getExternalLogger());
+		
+	}
 
 	private SocializeLogger setupLoggerConfigTest(LogLevel level) {
 		SocializeLogger logger = new SocializeLogger();
@@ -215,10 +318,11 @@ public class SocializeLoggerTest extends SocializeActivityTest {
 		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_LEVEL)).andReturn(level.name());
 		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_TAG)).andReturn("LoggerTest");
 		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.LOG_THREAD, true)).andReturn(false);
+		AndroidMock.expect(config.isDiagnosticLoggingEnabled()).andReturn(false);
 		
 		AndroidMock.replay(config);
 
-		logger.init(config);
+		logger.init(null, config);
 
 		return logger;
 	}

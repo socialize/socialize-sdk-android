@@ -21,11 +21,11 @@
  */
 package com.socialize.ui.actionbar;
 
-import com.socialize.ui.actionbar.ActionBarOptions.ColorLayout;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.PaintDrawable;
+import com.socialize.ui.actionbar.ActionBarOptions.ColorLayout;
 
 
 /**

@@ -26,7 +26,6 @@ import java.lang.reflect.Method;
 import org.apache.http.MethodNotSupportedException;
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.annotations.NoAuth;
 import com.socialize.annotations.Synchronous;
@@ -101,7 +100,7 @@ public class SocializeActionProxy implements InvocationHandler {
 			return null;
 		}
 		catch (Throwable e) {
-			Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
+			SocializeLogger.e(e.getMessage(), e);
 			throw e;
 		}
 	}

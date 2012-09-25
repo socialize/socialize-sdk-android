@@ -23,7 +23,6 @@ package com.socialize.oauth;
 
 
 import org.apache.http.client.methods.HttpUriRequest;
-
 import com.socialize.api.SocializeSession;
 import com.socialize.error.SocializeException;
 import com.socialize.oauth.signpost.OAuthConsumer;

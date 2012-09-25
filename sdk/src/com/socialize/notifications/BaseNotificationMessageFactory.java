@@ -23,8 +23,6 @@ package com.socialize.notifications;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import android.util.Log;
 import com.socialize.entity.JSONFactory;
 import com.socialize.log.SocializeLogger;
 
@@ -54,7 +52,7 @@ public abstract class BaseNotificationMessageFactory extends JSONFactory<Notific
 			logger.error(msg, e);
 		}
 		else {
-			Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
+			SocializeLogger.e(e.getMessage(), e);
 		}
 	}
 }

@@ -22,11 +22,9 @@
 package com.socialize.entity;
 
 import java.util.List;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.socialize.util.StringUtils;
 
 

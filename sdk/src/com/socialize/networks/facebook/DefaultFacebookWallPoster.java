@@ -34,7 +34,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
@@ -275,7 +274,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 				logger.error("Unable to scale image for upload", e);
 			}
 			else {
-				Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
+				SocializeLogger.e(e.getMessage(), e);
 			}
 		}
 	}
@@ -510,7 +509,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		}
 		else {
 			if(e != null) {
-				Log.e(SocializeLogger.LOG_TAG, msg, e);
+				SocializeLogger.e(msg, e);
 			}
 			else {
 				System.err.println(msg);

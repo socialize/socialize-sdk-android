@@ -28,7 +28,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.LinearLayout.LayoutParams;
@@ -69,7 +68,7 @@ public abstract class AsyncDialogFactory<V extends DialogPanelView, L extends So
 					logger.error("Error creating dialog", e);
 				}
 				else {
-					Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
+					SocializeLogger.e(e.getMessage(), e);
 				}
 				
 				if(beanListener != null) {
@@ -126,7 +125,7 @@ public abstract class AsyncDialogFactory<V extends DialogPanelView, L extends So
 						logger.warn("Error displaying dialog", e);
 					}
 					else {
-						Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
+						SocializeLogger.e(e.getMessage(), e);
 					}
 				}
 			}

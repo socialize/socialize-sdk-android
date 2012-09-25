@@ -23,8 +23,6 @@ package com.socialize.entity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import android.util.Log;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.log.SocializeLogger;
 
@@ -63,7 +61,7 @@ public class UserAuthDataFactory extends SocializeObjectFactory<UserAuthData> {
 							"]", e);
 				}
 				else {
-					Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
+					SocializeLogger.e(e.getMessage(), e);
 				}
 			}
 		}

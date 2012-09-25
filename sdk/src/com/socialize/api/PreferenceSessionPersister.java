@@ -26,7 +26,6 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.util.Log;
 import com.socialize.Socialize;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.DefaultUserProviderCredentials;
@@ -96,7 +95,7 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 						logger.error("Failed to serialize user settings object", e);
 					}
 					else {
-						Log.e(SocializeLogger.LOG_TAG, "Failed to serialize user settings object", e);
+						SocializeLogger.e("Failed to serialize user settings object", e);
 					}
 				}
 			}
@@ -114,7 +113,7 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 					logger.error("Failed to serialize user object", e);
 				}
 				else {
-					Log.e(SocializeLogger.LOG_TAG, "Failed to serialize user object", e);
+					SocializeLogger.e("Failed to serialize user object", e);
 				}
 			}
 			
@@ -132,7 +131,7 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 					logger.error("Failed to serialize user settings object", e);
 				}
 				else {
-					Log.e(SocializeLogger.LOG_TAG, "Failed to serialize user settings object", e);
+					SocializeLogger.e("Failed to serialize user settings object", e);
 				}
 			}
 		}			
@@ -326,7 +325,7 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 					logger.error("Failed to deserialize user object", e);
 				}
 				else {
-					Log.e(SocializeLogger.LOG_TAG, "Failed to deserialize user object", e);
+					SocializeLogger.e("Failed to deserialize user object", e);
 				}
 			}
 		}
@@ -344,7 +343,7 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 					logger.error("Failed to deserialize user settings object", e);
 				}
 				else {
-					Log.e(SocializeLogger.LOG_TAG, "Failed to deserialize user settings object", e);
+					SocializeLogger.e("Failed to deserialize user settings object", e);
 				}
 			}
 		}

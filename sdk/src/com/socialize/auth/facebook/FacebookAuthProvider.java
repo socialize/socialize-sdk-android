@@ -23,7 +23,6 @@ package com.socialize.auth.facebook;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderInfoBuilder;
@@ -124,7 +123,7 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 				logger.error("Failed to log out of Facebook", e);
 			}
 			else {
-				Log.e(SocializeLogger.LOG_TAG, "Failed to log out of Facebook", e);
+				SocializeLogger.e("Failed to log out of Facebook", e);
 			}
 		}
 		finally {

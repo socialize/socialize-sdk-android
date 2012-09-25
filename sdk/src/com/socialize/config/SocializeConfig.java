@@ -27,6 +27,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import android.content.Context;
+import com.socialize.log.ExternalLogger;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.ResourceLocator;
 import com.socialize.util.StringUtils;
@@ -58,6 +59,8 @@ public class SocializeConfig {
 	public static final String SOCIALIZE_LOCATION_ENABLED = "socialize.location.enabled";
 	
 	public static final String SOCIALIZE_REQUIRE_AUTH = "socialize.require.auth";
+	
+	public static final String SOCIALIZE_EXTERNAL_LOGS_ENABLED = "socialize.external.logs.enabled";
 	
 	@Deprecated
 	public static final String SOCIALIZE_REQUIRE_SHARE = "socialize.require.share";
@@ -348,6 +351,27 @@ public class SocializeConfig {
 	
 	public boolean isAllowSkipAuthOnComments() {
 		return getBooleanProperty(SOCIALIZE_ALLOW_ANON_COMMENT, false);
+	}
+	
+	public boolean isDiagnosticLoggingEnabled() {
+		return getBooleanProperty(SOCIALIZE_EXTERNAL_LOGS_ENABLED, false);
+	}
+	
+	public void setDiagnosticLoggingEnabled(Context context, boolean enabled) {
+		setProperty(SOCIALIZE_EXTERNAL_LOGS_ENABLED, String.valueOf(enabled));
+		if(logger != null) {
+			if(enabled) {
+				logger.destroy();
+				logger.init(context, this);
+			}
+			else {
+				ExternalLogger externalLogger = logger.getExternalLogger();
+				if(externalLogger != null) {
+					externalLogger.destroy();
+				}
+				logger.setExternalLogger(null);
+			}
+		}
 	}
 	
 	public boolean isAllowSkipAuthOnAllActions() {

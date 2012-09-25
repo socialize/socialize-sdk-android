@@ -26,7 +26,6 @@ import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import com.socialize.ShareUtils;
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
@@ -42,6 +41,7 @@ import com.socialize.listener.ListenerHolder;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
+import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.auth.AuthDialogListener;
 import com.socialize.ui.auth.AuthPanelView;
@@ -66,7 +66,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 	private IShareDialogFactory shareDialogFactory;
 	private ListenerHolder listenerHolder;
 	private Container container;
-
+	private SocializeLogger logger;
 	
 	@Override
 	public void onCreate(Container container) {
@@ -103,7 +103,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 			context.startActivity(i);
 		} 
 		catch (ActivityNotFoundException e) {
-			Log.e(Socialize.LOG_KEY, "Could not find CommentActivity.  Make sure you have added this to your AndroidManifest.xml");
+			logger.error("Could not find CommentActivity.  Make sure you have added this to your AndroidManifest.xml");
 		} 
 	}
 
@@ -305,5 +305,9 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 
 	public void setListenerHolder(ListenerHolder listenerHolder) {
 		this.listenerHolder = listenerHolder;
+	}
+
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
 	}
 }

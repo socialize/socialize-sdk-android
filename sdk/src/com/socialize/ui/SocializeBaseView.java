@@ -24,7 +24,6 @@ package com.socialize.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
@@ -77,7 +76,7 @@ public abstract class SocializeBaseView extends BaseView {
 			
 			@Override
 			public void onError(SocializeException error) {
-				Log.e(SocializeLogger.LOG_TAG, "Error initializing Socialize", error);
+				SocializeLogger.e("Error initializing Socialize", error);
 				onViewError(error);
 			}
 			
@@ -95,7 +94,7 @@ public abstract class SocializeBaseView extends BaseView {
 			
 			@Override
 			public void onError(SocializeException error) {
-				Log.e(SocializeLogger.LOG_TAG, "Error initializing Socialize", error);
+				SocializeLogger.e("Error initializing Socialize", error);
 			}
 			
 			@Override

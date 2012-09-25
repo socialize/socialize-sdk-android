@@ -23,8 +23,6 @@ package com.socialize.entity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import android.util.Log;
 import com.socialize.api.action.ActionType;
 import com.socialize.log.SocializeLogger;
 
@@ -80,7 +78,7 @@ public class GenericActionFactory extends SocializeActionFactory<SocializeAction
 					logger.error("Error getting activity type", e);
 				}
 				else {
-					Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
+					SocializeLogger.e(e.getMessage(), e);
 				}
 			}
 		}

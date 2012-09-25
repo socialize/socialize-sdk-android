@@ -22,7 +22,12 @@
 package com.socialize;
 
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
+import java.util.Set;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import com.socialize.tools.SocializeToolsProxy;
 import com.socialize.ui.image.ImageLoader;
 import com.socialize.ui.util.GeoUtils;
@@ -33,7 +38,6 @@ import com.socialize.util.IOUtils;
 
 /**
  * @author Jason Polites
- *
  */
 public class SocializeTools {
 	static SocializeToolsProxy proxy;
@@ -52,16 +56,37 @@ public class SocializeTools {
 	public static GeoUtils getGeoUtils(Context context) {
 		return proxy.getGeoUtils(context);
 	}
+	
 	public static DisplayUtils getDisplayUtils(Context context) {
 		return proxy.getDisplayUtils(context);
 	}
+	
 	public static KeyboardUtils getKeyboardUtils(Context context) {
 		return proxy.getKeyboardUtils(context);
 	}
+	
 	public static IOUtils getIOUtils(Context context) {
 		return proxy.getIOUtils(context);
 	}
+	
 	public static AppUtils getAppUtils(Context context) {
 		return proxy.getAppUtils(context);
-	}			
+	}		
+	
+	public static boolean sendExternalLogs(Activity context) {
+		Set<Uri> urls = proxy.getExternalLogFilePaths(context);
+		if(urls != null && urls.size() > 0) {
+			ArrayList<Uri> extras = new ArrayList<Uri>(urls);
+			final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND_MULTIPLE);
+			emailIntent.setType("text/plain");
+			emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, extras);
+			context.startActivity(emailIntent);
+			return true;
+		}
+		return false;
+	}
+	
+	public static void deleteExternalLogs(Context context) {
+		proxy.deleteExternalLogFiles(context);
+	}
 }

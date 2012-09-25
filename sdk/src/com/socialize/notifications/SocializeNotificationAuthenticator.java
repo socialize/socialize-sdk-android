@@ -1,7 +1,6 @@
 package com.socialize.notifications;
 
 import android.content.Context;
-
 import com.socialize.Socialize;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.user.UserSystem;

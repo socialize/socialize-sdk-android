@@ -21,7 +21,9 @@
  */
 package com.socialize.tools;
 
+import java.util.Set;
 import android.content.Context;
+import android.net.Uri;
 import com.socialize.annotations.Synchronous;
 import com.socialize.ui.image.ImageLoader;
 import com.socialize.ui.util.GeoUtils;
@@ -52,5 +54,11 @@ public interface SocializeToolsProxy {
 	public IOUtils getIOUtils(Context context);	
 	
 	@Synchronous
-	public AppUtils getAppUtils(Context context);		
+	public AppUtils getAppUtils(Context context);
+	
+	@Synchronous
+	public Set<Uri> getExternalLogFilePaths(Context context);
+	
+	@Synchronous
+	public void deleteExternalLogFiles(Context context);
 }

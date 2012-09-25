@@ -21,10 +21,9 @@
  */
 package com.socialize.notifications;
 
-import com.socialize.error.SocializeException;
-
 import android.content.Context;
 import android.os.Bundle;
+import com.socialize.error.SocializeException;
 
 /**
  * Translates the bundle received from a notification into one that is expected by the given launch action.

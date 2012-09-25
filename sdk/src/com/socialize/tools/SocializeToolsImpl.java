@@ -21,7 +21,10 @@
  */
 package com.socialize.tools;
 
+import java.util.Set;
 import android.content.Context;
+import android.net.Uri;
+import com.socialize.log.SDCardExternalLogger;
 import com.socialize.ui.image.ImageLoader;
 import com.socialize.ui.util.GeoUtils;
 import com.socialize.ui.util.KeyboardUtils;
@@ -108,6 +111,16 @@ public class SocializeToolsImpl implements SocializeToolsProxy {
 	
 	public ImageLoader getImageLoader() {
 		return imageLoader;
+	}
+
+	@Override
+	public Set<Uri> getExternalLogFilePaths(Context context) {
+		return SDCardExternalLogger.getExternalLogFilePaths(context);
+	}
+
+	@Override
+	public void deleteExternalLogFiles(Context context) {
+		SDCardExternalLogger.clearExternalLogFiles(context);
 	}
 	
 }

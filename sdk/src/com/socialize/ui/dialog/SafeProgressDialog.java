@@ -21,10 +21,9 @@
  */
 package com.socialize.ui.dialog;
 
-import com.socialize.log.SocializeLogger;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.util.Log;
+import com.socialize.log.SocializeLogger;
 
 /**
  * @author Jason Polites
@@ -60,7 +59,7 @@ public class SafeProgressDialog extends ProgressDialog {
 			}
 		}
 		catch (Exception error) {
-			Log.e(SocializeLogger.LOG_TAG, error.getMessage(), error);
+			SocializeLogger.e(error.getMessage(), error);
 		}
 		
 	}
@@ -71,7 +70,7 @@ public class SafeProgressDialog extends ProgressDialog {
 			super.show();
 		}
 		catch (Throwable error) {
-			Log.e(SocializeLogger.LOG_TAG, error.getMessage(), error);
+			SocializeLogger.e(error.getMessage(), error);
 		}
 	}
 	

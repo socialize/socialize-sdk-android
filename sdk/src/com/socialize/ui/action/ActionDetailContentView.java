@@ -32,7 +32,6 @@ import android.graphics.drawable.GradientDrawable.Orientation;
 import android.location.Address;
 import android.net.Uri;
 import android.text.InputFilter;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -330,7 +329,7 @@ public class ActionDetailContentView extends BaseView {
 									logger.warn("Failed to load map view", e);
 								}
 								else {
-									Log.w(SocializeLogger.LOG_TAG, "Failed to load map view", e);
+									SocializeLogger.w("Failed to load map view", e);
 								}
 							}
 						}

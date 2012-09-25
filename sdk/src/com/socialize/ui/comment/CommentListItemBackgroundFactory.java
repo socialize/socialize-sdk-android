@@ -25,7 +25,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.PaintDrawable;
-
 import com.socialize.ui.util.Colors;
 
 /**

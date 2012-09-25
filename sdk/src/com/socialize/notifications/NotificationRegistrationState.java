@@ -24,7 +24,6 @@ package com.socialize.notifications;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-
 import com.socialize.entity.User;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.StringUtils;

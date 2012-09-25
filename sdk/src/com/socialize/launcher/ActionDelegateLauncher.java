@@ -25,7 +25,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
@@ -90,7 +89,7 @@ public class ActionDelegateLauncher extends BaseLauncher {
 				logger.error("Failed to inspect socialize config", e);
 			}
 			else {
-				Log.e(SocializeLogger.LOG_TAG, e.getMessage(), e);
+				SocializeLogger.e(e.getMessage(), e);
 			}
 		}
 

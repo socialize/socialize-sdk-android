@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 	
 	<!-- Permissions required for Push Notifications -->
 	<permission android:name="com.socialize.demo.permission.C2D_MESSAGE" android:protectionLevel="signature" />
@@ -66,6 +67,8 @@
         
         <activity android:name=".DemoList"/>
         <activity android:name=".InitActivity"/>
+        <activity android:name=".implementations.tools.ToolsActivity"/>
+        
         
         <!-- Comment -->
         <activity android:name=".implementations.comment.CommentActivity"/>
