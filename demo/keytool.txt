@@ -1,0 +1,1 @@
+keytool -exportcert -alias socializedemo -keystore keystore/socializedemo.keystore | openssl sha1 -binary | openssl base64

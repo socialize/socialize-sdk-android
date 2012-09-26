@@ -22,6 +22,7 @@
 package com.socialize.auth.twitter;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.View;
@@ -38,11 +39,17 @@ public class TwitterWebViewClient extends WebViewClient {
 	
 	private OAuthRequestListener oAuthRequestListener;
 	private boolean called = false;
-	
+	private boolean close = false;
 	private Dialog progress;
+	private Context context;
 	
 	public TwitterWebViewClient() {
 		super();
+	}
+	
+	public TwitterWebViewClient(Context context) {
+		super();
+		this.context = context;
 	}
 
 	public void setOauthRequestListener(OAuthRequestListener oAuthRequestListener) {
@@ -55,14 +62,17 @@ public class TwitterWebViewClient extends WebViewClient {
 		if(progress != null) {
 			progress.dismiss();
 		}
+		if(close) {
+			view.setVisibility(View.GONE);
+		}
 	}
 
 	@Override
 	public void onPageStarted(WebView view, String url, Bitmap favicon) {
 		
-		progress = SafeProgressDialog.show(view.getContext());
-		
 		if(url.trim().toLowerCase().startsWith(TwitterOAuthProvider.OAUTH_CALLBACK_URL.toLowerCase())) {
+		
+			progress = SafeProgressDialog.show(getContext(view));
 			
 			if(!called) {
 				called = true;
@@ -78,7 +88,8 @@ public class TwitterWebViewClient extends WebViewClient {
 					}
 				}
 				else {
-					view.setVisibility(View.GONE);
+					// Causes native crash on ICS/JB
+//					view.setVisibility(View.GONE);
 					
 					String token = uri.getQueryParameter("oauth_token");
 					String verifier = uri.getQueryParameter("oauth_verifier");
@@ -87,13 +98,21 @@ public class TwitterWebViewClient extends WebViewClient {
 						oAuthRequestListener.onRequestToken(token, verifier);
 					}
 				}
+				
+				close = true;
 			}
 			progress.dismiss();
-			view.stopLoading();
 		}
 		else {
 			super.onPageStarted(view, url, favicon);
 		}
+	}
+	
+	protected Context getContext(WebView view) {
+		if(context != null) {
+			return context;
+		}
+		return view.getContext();
 	}
 	
 	

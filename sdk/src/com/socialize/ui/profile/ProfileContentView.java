@@ -239,6 +239,7 @@ public class ProfileContentView extends BaseView {
 			
 			@Override
 			public void onError(SocializeException error) {
+				error.printStackTrace();
 				ProfileContentView.this.showErrorToast(ProfileContentView.this.getContext(), error);
 			}
 			
@@ -254,6 +255,7 @@ public class ProfileContentView extends BaseView {
 			
 			@Override
 			public void onAuthFail(SocializeException error) {
+				error.printStackTrace();
 				ProfileContentView.this.showErrorToast(ProfileContentView.this.getContext(), error);
 			}
 		};
@@ -363,9 +365,6 @@ public class ProfileContentView extends BaseView {
 			if(Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
 				facebookEnabledCheckbox.setChecked(true);
 				autoPostFacebook.setChecked(settings.isAutoPostFacebook());
-			}
-			else {
-				facebookEnabledCheckbox.setChecked(false);
 			}
 		}
 		

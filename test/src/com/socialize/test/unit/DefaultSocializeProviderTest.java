@@ -21,6 +21,7 @@
  */
 package com.socialize.test.unit;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -187,18 +188,21 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		final String oauth_token = "oauth_token";
 		final String oauth_token_secret = "oauth_token_secret";
 		final String url = "https://" + host + "/" + endpoint;
+		final InputStream in = new InputStream() {
+			@Override
+			public int read() throws IOException {return -1;}
+		};
 
 		AndroidMock.expect(clientFactory.isDestroyed()).andReturn(false);
 		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
-		// AndroidMock.expect(authProviderData.getAuthProviderType()).andReturn(null);
-		// AndroidMock.expect(authProviderData.getAppId3rdParty()).andReturn(null);
 		AndroidMock.expect(sessionFactory.create(key, secret, authProviderData)).andReturn(session);
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
 		AndroidMock.expect(client.execute(request)).andReturn(response);
 		AndroidMock.expect(response.getEntity()).andReturn(entity);
-		AndroidMock.expect(entity.getContent()).andReturn(null);
+		AndroidMock.expect(entity.getContent()).andReturn(in);
+		AndroidMock.expect(ioUtils.readSafe(in)).andReturn(null);
 		AndroidMock.expect(requestFactory.getAuthRequest(session, url, uuid, authProviderData)).andReturn(request);
-		AndroidMock.expect(jsonParser.parseObject((InputStream) null)).andReturn(json);
+		AndroidMock.expect(jsonParser.parseObject((String) null)).andReturn(json);
 		AndroidMock.expect(json.getJSONObject("user")).andReturn(json);
 		AndroidMock.expect(json.getString("oauth_token")).andReturn(oauth_token);
 		AndroidMock.expect(json.getString("oauth_token_secret")).andReturn(oauth_token_secret);
@@ -321,14 +325,20 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		final String host = "host";
 		final String url = "http://" + host + "/" + endpoint;
 		final SocializeObject object = new SocializeObject();
+		final InputStream in = new InputStream() {
+			@Override
+			public int read() throws IOException {return -1;}
+		};
+
 
 		AndroidMock.expect(clientFactory.isDestroyed()).andReturn(false);
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
 		AndroidMock.expect(requestFactory.getGetRequest(session, url, id)).andReturn(request);
 		AndroidMock.expect(client.execute(request)).andReturn(response);
 		AndroidMock.expect(response.getEntity()).andReturn(entity);
-		AndroidMock.expect(entity.getContent()).andReturn(null);
-		AndroidMock.expect(jsonParser.parseObject((InputStream) null)).andReturn(json);
+		AndroidMock.expect(entity.getContent()).andReturn(in);
+		AndroidMock.expect(ioUtils.readSafe(in)).andReturn(null);
+		AndroidMock.expect(jsonParser.parseObject((String) null)).andReturn(json);
 		AndroidMock.expect(objectFactory.fromJSON(json)).andReturn(object);
 		AndroidMock.expect(httpUtils.isHttpError(response)).andReturn(false);
 		AndroidMock.expect(session.getHost()).andReturn(host);

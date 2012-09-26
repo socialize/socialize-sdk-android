@@ -1,20 +1,12 @@
-# To enable ProGuard in your project, edit project.properties
-# to define the proguard.config property as described in that file.
-#
-# Add project specific ProGuard rules here.
-# By default, the flags in this file are appended to flags specified
-# in ${sdk.dir}/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the ProGuard
-# include property in project.properties.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# Add the Socalize JAR file as a library jar
+-libraryjars libs/socialize-2.5.4.jar
 
-# Add any project specific keep options here:
+# Ignore Socialize warnings
+-dontwarn com.socialize.**
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+#-keeppackagenames com.socialize.**
+
+# Keep Socialize classes
+-keep public class com.socialize.** { *; }
+
+-keepattributes Signature

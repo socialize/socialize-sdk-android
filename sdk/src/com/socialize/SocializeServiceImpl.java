@@ -742,12 +742,16 @@ public class SocializeServiceImpl implements SocializeService {
 				
 				if(authProviderInfo != null) {
 					AuthProvider<AuthProviderInfo> provider = authProviders.getProvider(providerType);
-					return provider.validate(authProviderInfo);
+					
+					boolean valid = provider.validate(authProviderInfo);
+					
+					return valid;
 				}
 				
 				return false;
 			}
 		}
+		
 		return false;
 	}
 
