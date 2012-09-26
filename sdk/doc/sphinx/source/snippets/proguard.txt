@@ -6,3 +6,6 @@
 
 # Keep Socialize classes
 -keep public class com.socialize.** { *; }
+
+# Keep Signatures to cater for Proguard losing generic type information
+-keepattributes Signature

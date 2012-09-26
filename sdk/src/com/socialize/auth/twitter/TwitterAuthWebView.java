@@ -24,7 +24,6 @@ package com.socialize.auth.twitter;
 import android.content.Context;
 import android.view.View;
 import android.webkit.WebView;
-
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.error.SocializeException;
 import com.socialize.oauth.signpost.OAuth;

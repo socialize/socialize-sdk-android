@@ -92,22 +92,14 @@
 			<fileset dir="../sdk/build" includes="**/*.jar"/>
 		</copy>
 		
-		<!--
-		<echo>Removing project reference for sdk...</echo>
-		<replaceregexp file="project.properties" match="android\.library\.reference\.1=\.\./sdk" replace="#android.library.reference.1=../sdk" />
-		-->
 		<echo>Building demo...</echo>
-		<antcall target="release"/>
-		
-		<!--
-		<echo>Replacing project reference for sdk...</echo>
-		<replaceregexp file="project.properties" match="\#android\.library\.reference\.1=\.\./sdk" replace="android.library.reference.1=../sdk" />
-		-->
+		<antcall target="release" inheritall="true"/>
 		
 		<echo>Removing sdk jar...</echo>
 		<delete>
 			<fileset dir="libs" includes="**/*.jar"/>
 		</delete>
+		
 	</target>
 
 </project>

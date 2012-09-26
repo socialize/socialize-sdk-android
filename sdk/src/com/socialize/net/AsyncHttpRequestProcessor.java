@@ -93,7 +93,7 @@ public class AsyncHttpRequestProcessor extends ManagedAsyncTask<AsyncHttpRequest
 				response.setResponse(httpResponse);
 				
 				if(logger != null && logger.isDebugEnabled()) {
-					logger.debug("Response: " + httpResponse.getStatusLine().getStatusCode());
+					logger.debug("RESPONSE CODE: " + httpResponse.getStatusLine().getStatusCode());
 				}
 				
 				HttpEntity entity = null;
@@ -109,7 +109,7 @@ public class AsyncHttpRequestProcessor extends ManagedAsyncTask<AsyncHttpRequest
 						String responseData = ioUtils.readSafe(entity.getContent());
 						
 						if(logger != null && logger.isDebugEnabled()) {
-							logger.debug("Response JSON: " + responseData);
+							logger.debug("RESPONSE: " + responseData);
 						}						
 						
 						response.setResponseData(responseData);
