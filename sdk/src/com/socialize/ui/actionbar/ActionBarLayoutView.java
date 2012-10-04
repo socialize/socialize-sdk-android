@@ -456,16 +456,16 @@ public class ActionBarLayoutView extends BaseView {
 			}
 			
 			@Override
-			public void onCreate(Like entity) {
-				CacheableEntity localEntity = setLocalEntity(entity.getEntity());
+			public void onCreate(Like like) {
+				CacheableEntity localEntity = setLocalEntity(like.getEntity());
 				localEntity.setLiked(true);
-				localEntity.setLikeId(entity.getId());
+				localEntity.setLikeId(like.getId());
 				setEntityData(localEntity);
 				
 				button.hideLoading();
 				
 				if(onActionBarEventListener != null) {
-					onActionBarEventListener.onPostLike(actionBarView, entity);
+					onActionBarEventListener.onPostLike(actionBarView, like);
 				}
 			}
 		});
@@ -510,6 +510,15 @@ public class ActionBarLayoutView extends BaseView {
 	}
 	
 	protected CacheableEntity setLocalEntity(Entity entity) {
+		// Don't override the action bar entity if it has changed.
+		if(actionBarView.getEntity() != null) {
+			if(entity.getKey().equals(actionBarView.getEntity().getKey())) {
+				return entityCache.putEntity(entity);
+			}
+			else {
+				return entityCache.putEntity(actionBarView.getEntity());
+			}
+		}
 		return entityCache.putEntity(entity);
 	}
 	

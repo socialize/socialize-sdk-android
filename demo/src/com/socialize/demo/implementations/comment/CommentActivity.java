@@ -21,6 +21,7 @@
  */
 package com.socialize.demo.implementations.comment;
 
+import java.util.List;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,10 +29,13 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.socialize.CommentUtils;
-import com.socialize.ConfigUtils;
-import com.socialize.config.SocializeConfig;
+import com.socialize.Socialize;
 import com.socialize.demo.R;
+import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
+import com.socialize.error.SocializeException;
+import com.socialize.ui.comment.CommentListView;
+import com.socialize.ui.comment.OnCommentViewActionListener;
 
 
 /**
@@ -42,14 +46,9 @@ public class CommentActivity extends ListActivity {
 	final String[] values = new String[] { "Show Comment List","Show Comment List (No Header)", "Add Comment", "Add Comment Without Share", "Get Comments By Entity", "Get Comments By User", "Get Comment By ID"};
 	final Class<?>[] activities = new Class<?>[] { CommentViewEmbeddedActivity.class, AddCommentActivity.class, AddCommentWithoutShareActivity.class, GetCommentsByEntityActivity.class, GetCommentsByUserActivity.class, GetCommentsByIDActivity.class};
 	
-	private SocializeConfig config;
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		config = ConfigUtils.getConfig(this);
-		config.setProperty(SocializeConfig.SOCIALIZE_SHOW_COMMENT_HEADER, "true");
-		
 		setContentView(R.layout.demo_list);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
 		setListAdapter(adapter);
@@ -58,8 +57,33 @@ public class CommentActivity extends ListActivity {
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		if(position == 0) {
-			config.setProperty(SocializeConfig.SOCIALIZE_SHOW_COMMENT_HEADER, "true");
-			CommentUtils.showCommentView(this, Entity.newInstance("http://getsocialize.com", "Socialize"));
+			CommentUtils.showCommentView(this, Entity.newInstance("http://getsocialize.com", "Socialize"), new OnCommentViewActionListener() {
+				
+				@Override
+				public void onError(SocializeException error) {
+					error.printStackTrace();
+				}
+				
+				@Override
+				public void onRender(CommentListView view) {
+				}
+				
+				@Override
+				public void onReload(CommentListView view) {
+				}
+				
+				@Override
+				public void onPostComment(Comment comment) {
+				}
+				
+				@Override
+				public void onCreate(CommentListView view) {
+				}
+				
+				@Override
+				public void onCommentList(CommentListView view, List<Comment> comments, int start, int end) {
+				}
+			});
 		}
 		else {
 			Class<?> activityClass = activities[position-1];

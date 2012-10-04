@@ -21,6 +21,7 @@
  */
 package com.socialize.demo;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,7 +34,7 @@ import android.view.animation.Animation.AnimationListener;
 import android.widget.TextView;
 import com.socialize.Socialize;
 
-public class Main extends DemoActivity {
+public class Main extends Activity {
     final Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
