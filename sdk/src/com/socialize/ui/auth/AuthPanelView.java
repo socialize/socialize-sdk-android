@@ -156,16 +156,21 @@ public class AuthPanelView extends DialogPanelView {
 			contentLayout.addView(socialNetworkButtonLayout);
 		}
 		
-		contentLayout.addView(anonymousCell);
+		if(anonymousCell != null) {
+			contentLayout.addView(anonymousCell);
+		}
 		
 		LayoutParams skipAuthParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		skipAuthParams.gravity = Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
 		skipAuthParams.weight = 1.0f;
-		skipAuthParams.setMargins(0, displayUtils.getDIP(30), 0, 0);
+		
+		if(displayUtils != null) {
+			skipAuthParams.setMargins(0, displayUtils.getDIP(30), 0, 0);
+		}
 		
 		skipAuth = new TextView(getContext());
 		skipAuth.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-		skipAuth.setTextColor(colors.getColor(Colors.ANON_CELL_TITLE));
+		if(colors != null) skipAuth.setTextColor(colors.getColor(Colors.ANON_CELL_TITLE));
 		skipAuth.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL);
 		skipAuth.setPadding(0, 0, 0, padding);
 		skipAuth.setLayoutParams(skipAuthParams);
@@ -285,15 +290,23 @@ public class AuthPanelView extends DialogPanelView {
 		
 		if(rememberOk) {
 			rememberCell = rememberAuthCellFactory.getBean();
-			LayoutParams rememberCellParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-			rememberCellParams.setMargins(0, padding, 0, 0);
-			rememberCell.setLayoutParams(rememberCellParams);
+			
+			if(rememberCell != null) {
+				LayoutParams rememberCellParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+				rememberCellParams.setMargins(0, padding, 0, 0);
+				rememberCell.setLayoutParams(rememberCellParams);
+			}
 		}
 				
-		anonymousCell = anonCellFactory.getBean();
-		LayoutParams anonCellParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		anonCellParams.setMargins(0, padding, 0, 0);
-		anonymousCell.setLayoutParams(anonCellParams);
+		if(anonCellFactory != null) {
+			anonymousCell = anonCellFactory.getBean();
+			
+			if(anonymousCell != null) {
+				LayoutParams anonCellParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+				anonCellParams.setMargins(0, padding, 0, 0);
+				anonymousCell.setLayoutParams(anonCellParams);
+			}
+		}
 	}
 	
 	protected View makeHeaderView(int headerHeight, float headerRadius) {

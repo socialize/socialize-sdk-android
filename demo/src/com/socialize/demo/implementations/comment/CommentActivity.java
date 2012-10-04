@@ -29,7 +29,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.socialize.CommentUtils;
-import com.socialize.Socialize;
 import com.socialize.demo.R;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;

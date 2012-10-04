@@ -48,9 +48,9 @@ import com.socialize.ui.actionbar.ActionBarView;
  */
 public class ActionBarReloadTest extends ActionBarTest {
 	
-	
 	public void testReloadRace() throws Throwable {
 		Activity activity = getActivity();
+		assertTrue(globalLatch.await(90, TimeUnit.SECONDS));
 
 		// Ensure FB/TW are not supported
 		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.FACEBOOK_APP_ID, "");
@@ -67,7 +67,7 @@ public class ActionBarReloadTest extends ActionBarTest {
 
 		assertNotNull(actionBar);
 		
-		final int num = 50;
+		final int num = 10;
 		
 		final SocializeLikeUtils mockLikeUtils = new SocializeLikeUtils() {
 			@Override
