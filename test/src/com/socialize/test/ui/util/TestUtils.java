@@ -159,7 +159,6 @@ public class TestUtils {
 		Socialize.getSocialize().destroy(true);
 		
 		SocializeAccess.clearBeanOverrides();
-		SocializeAccess.revertProxies();
 		SocializeIOC.clearStubs();
 		SocializeAccess.revertProxies();
 		TwitterAccess.revertTwitterUtilsProxy();
@@ -169,7 +168,6 @@ public class TestUtils {
 			holder.clear();
 			holder = null;
 		}
-		
 		
 		if(monitor != null) {
 			Activity lastActivity = monitor.getLastActivity();

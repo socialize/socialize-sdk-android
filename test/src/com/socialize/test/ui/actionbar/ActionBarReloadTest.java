@@ -138,24 +138,29 @@ public class ActionBarReloadTest extends ActionBarTest {
 		like.setId(-1L);
 		
 		SocializeViewUtils viewUtils = new SocializeViewUtils() {
-
 			@Override
 			public void view(Activity context, Entity e, final ViewAddListener listener) {
 				// run in separate thread
-				new Thread() {
+				try {
+					runTestOnUiThread(
+						new Runnable() {
 
-					@Override
-					public void run() {
-						try {
-							viewLatch.await();
-						}
-						catch (InterruptedException ignore) {}
-						finally {
-							listener.onCreate(view);
-						}
-					}
-					
-				}.start();
+							@Override
+							public void run() {
+								try {
+									viewLatch.await();
+								}
+								catch (InterruptedException ignore) {}
+								finally {
+									listener.onCreate(view);
+								}
+							}
+
+						});
+				}
+				catch (Throwable e1) {
+					e1.printStackTrace();
+				}
 			}
 		};
 		
@@ -190,11 +195,11 @@ public class ActionBarReloadTest extends ActionBarTest {
 			}
 		});					
 				
-		// Don't countdown the latch yet
+		// Don't count down the latch yet
 		// Set the second entity
 		actionBar.setEntity(entity1);
 		
-		// Countdown the first latch
+		// Count down the first latch
 		viewLatch.countDown();
 		
 		this.runTestOnUiThread(new Runnable() {
