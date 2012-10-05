@@ -29,7 +29,7 @@ public abstract class ActionBarTest extends SocializeManagedActivityTest<ActionB
 	
 	final SocializeEntityUtils mockEntityUtils = new SocializeEntityUtils() {
 		@Override
-		public void getEntity(Activity context, String key, EntityGetListener listener) {
+		public void getEntity(Activity context, String key, final EntityGetListener listener) {
 			listener.onGet(entity);
 			globalLatch.countDown();
 		}

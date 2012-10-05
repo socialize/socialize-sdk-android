@@ -97,7 +97,7 @@ public abstract class ClickableSectionCell extends LinearLayout {
 	
 	public void init() {
 		
-		if(strokeColor < 0) {
+		if(strokeColor < 0 && colors != null) {
 			strokeColor = colors.getColor(Colors.CLICKABLE_CELL_STROKE);
 		}
 		
@@ -120,14 +120,14 @@ public abstract class ClickableSectionCell extends LinearLayout {
 		if(!StringUtils.isEmpty(backgroundColor)) {
 			bgColor = Colors.parseColor(backgroundColor);
 		}
-		else {
+		else if(colors != null) {
 			bgColor = colors.getColor(Colors.ACTIVITY_BG);
 		}
 		
 		if(!StringUtils.isEmpty(textColor)) {
 			txtColor = Colors.parseColor(textColor);
 		}
-		else {
+		else if(colors != null) {
 			txtColor = colors.getColor(Colors.BODY);
 		}
 		

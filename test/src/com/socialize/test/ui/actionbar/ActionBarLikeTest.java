@@ -247,7 +247,7 @@ public class ActionBarLikeTest extends ActionBarTest {
 	public void testLikeStateIsRetained() throws Throwable {
 		
 		Activity activity = TestUtils.getActivity(this);
-		assertTrue(globalLatch.await(10, TimeUnit.SECONDS));
+		assertTrue(globalLatch.await(30, TimeUnit.SECONDS));
 		
 		TestUtils.setUpActivityMonitor(CommentActivity.class);
 		

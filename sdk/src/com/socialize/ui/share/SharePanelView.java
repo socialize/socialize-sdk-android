@@ -246,12 +246,15 @@ public class SharePanelView extends DialogPanelView {
 		LayoutParams skipAuthParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		skipAuthParams.gravity = Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
 		skipAuthParams.weight = 1.0f;
-		skipAuthParams.setMargins(0, displayUtils.getDIP(10), 0, 0);
+		
+		if(displayUtils != null) {
+			skipAuthParams.setMargins(0, displayUtils.getDIP(10), 0, 0);
+		}
 		
 		otherOptions = new TextView(getContext());
 		otherOptions.setText("More options...");
 		otherOptions.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-		otherOptions.setTextColor(colors.getColor(Colors.ANON_CELL_TITLE));
+		if(colors != null) otherOptions.setTextColor(colors.getColor(Colors.ANON_CELL_TITLE));
 		otherOptions.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL);
 		otherOptions.setPadding(0, 0, 0, padding);
 		otherOptions.setLayoutParams(skipAuthParams);
@@ -374,7 +377,7 @@ public class SharePanelView extends DialogPanelView {
 		boolean emailOK = getSocialize().canShare(getContext(), ShareType.EMAIL) && emailCellFactory != null;
 		boolean smsOK = getSocialize().canShare(getContext(), ShareType.SMS) && smsCellFactory != null;
 		boolean rememberOk = rememberCellFactory != null;
-		boolean googlePlusOK = config.isGooglePlusEnabled() && getSocialize().canShare(getContext(), ShareType.GOOGLE_PLUS) && googlePlusCellFactory != null;
+		boolean googlePlusOK = config != null && config.isGooglePlusEnabled() && getSocialize().canShare(getContext(), ShareType.GOOGLE_PLUS) && googlePlusCellFactory != null;
 		
 		if(fbOK) {
 			facebookShareCell = facebookShareCellFactory.getBean();
@@ -404,7 +407,10 @@ public class SharePanelView extends DialogPanelView {
 		
 		if(googlePlusOK) {
 			googlePlusCell = googlePlusCellFactory.getBean();
-			googlePlusCell.setLayoutParams(cellParams);
+			
+			if(googlePlusCell != null) {
+				googlePlusCell.setLayoutParams(cellParams);
+			}
 		}
 		
 		if(emailOK) {
@@ -435,9 +441,12 @@ public class SharePanelView extends DialogPanelView {
 		
 		if(rememberOk) {
 			rememberCell = rememberCellFactory.getBean();
-			LayoutParams rememberCellParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-			rememberCellParams.setMargins(0, padding, 0, 0);
-			rememberCell.setLayoutParams(rememberCellParams);
+			
+			if(rememberCell != null) {
+				LayoutParams rememberCellParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+				rememberCellParams.setMargins(0, padding, 0, 0);
+				rememberCell.setLayoutParams(rememberCellParams);
+			}
 		}
 		
 		if(facebookShareCell != null) {
