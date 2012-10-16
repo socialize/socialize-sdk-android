@@ -237,7 +237,7 @@ public class ActionBarLayoutView extends BaseView {
 					}
 					
 					if(!consumed) {
-						doLike(likeButton);
+						doLike(likeButton, null);
 					}
 				}
 			});			
@@ -340,16 +340,16 @@ public class ActionBarLayoutView extends BaseView {
 	@Override
 	public void onViewLoad() {
 		super.onViewLoad();
-		doLoadSequence(false);
+		doLoadSequence(false, null);
 	}
 	
 	@Override
 	public void onViewUpdate() {
 		super.onViewUpdate();
-		doLoadSequence(true);
+		doLoadSequence(true, null);
 	}
 	
-	protected void doLoadSequence(boolean reload) {
+	protected void doLoadSequence(boolean reload, final OnActionBarReloadListener listener) {
 		
 		// Pre-load dialogs
 		shareUtils.preloadShareDialog(getActivity());
@@ -377,7 +377,7 @@ public class ActionBarLayoutView extends BaseView {
 				}	
 			}
 			
-			updateEntity(userProvidedEntity, reload);
+			updateEntity(userProvidedEntity, reload, listener);
 		}
 		else {
 			if(logger != null) {
@@ -386,7 +386,7 @@ public class ActionBarLayoutView extends BaseView {
 		}
 	}
 	
-	protected void updateEntity(final Entity entity, boolean reload) {
+	protected void updateEntity(final Entity entity, boolean reload, final OnActionBarReloadListener listener) {
 
 		CacheableEntity localEntity = getLocalEntity();
 		
@@ -395,23 +395,23 @@ public class ActionBarLayoutView extends BaseView {
 				@Override
 				public void onError(SocializeException error) {
 					SocializeLogger.e(error.getMessage(), error);
-					getLike(entity.getKey());
+					getLike(entity.getKey(), listener);
 				}
 				
 				@Override
 				public void onCreate(View view) {
 					// Entity will be set in like
-					getLike(view.getEntity().getKey());
+					getLike(view.getEntity().getKey(), listener);
 				}
 			});
 		}
 		else {
 			if(reload) {
 				if(localEntity.isLiked()) {
-					getLike(entity.getKey());
+					getLike(entity.getKey(), listener);
 				}
 				else {
-					getEntity(entity.getKey());
+					getEntity(entity.getKey(), listener);
 				}
 			}
 			else {
@@ -419,24 +419,28 @@ public class ActionBarLayoutView extends BaseView {
 				if(onActionBarEventListener != null) {
 					onActionBarEventListener.onGetEntity(actionBarView, localEntity.getEntity());
 				}					
-				setEntityData(localEntity);
+				setEntityData(localEntity, listener);
 			}
 		}
 	}
 	
 	public void reload() {
+		reload(null);
+	}
+	
+	public void reload(OnActionBarReloadListener listener) {
 		if(actionBarView.getEntity() != null) {
 			entityCache.remove(actionBarView.getEntity().getKey());
 		}
-		doLoadSequence(true);
+		doLoadSequence(true, listener);
 	}
 
-	protected void doLike(final ActionBarButton button) {
+	protected void doLike(final ActionBarButton button, final OnActionBarReloadListener listener) {
 		final CacheableEntity localEntity = getLocalEntity();
 		
 		if(localEntity != null && localEntity.isLiked()) {
 			// Unlike
-			doUnLike(button, localEntity);
+			doUnLike(button, localEntity, listener);
 			return;
 		}
 		
@@ -460,7 +464,7 @@ public class ActionBarLayoutView extends BaseView {
 				CacheableEntity localEntity = setLocalEntity(like.getEntity());
 				localEntity.setLiked(true);
 				localEntity.setLikeId(like.getId());
-				setEntityData(localEntity);
+				setEntityData(localEntity, listener);
 				
 				button.hideLoading();
 				
@@ -471,7 +475,7 @@ public class ActionBarLayoutView extends BaseView {
 		});
 	}
 	
-	protected void doUnLike(final ActionBarButton button, final CacheableEntity localEntity) {
+	protected void doUnLike(final ActionBarButton button, final CacheableEntity localEntity, final OnActionBarReloadListener listener) {
 		button.showLoading();
 		
 		LikeUtils.unlike(getActivity(), localEntity.getKey(), new LikeDeleteListener() {
@@ -481,7 +485,7 @@ public class ActionBarLayoutView extends BaseView {
 				
 				if(localEntity != null) {
 					localEntity.setLiked(false);
-					setEntityData(localEntity);
+					setEntityData(localEntity, listener);
 				}
 
 				button.hideLoading();
@@ -491,7 +495,7 @@ public class ActionBarLayoutView extends BaseView {
 			public void onDelete() {
 				if(localEntity != null) {
 					localEntity.setLiked(false);
-					setEntityData(localEntity);
+					setEntityData(localEntity, listener);
 				}
 
 				button.hideLoading();
@@ -522,7 +526,7 @@ public class ActionBarLayoutView extends BaseView {
 		return entityCache.putEntity(entity);
 	}
 	
-	protected void getLike(final String entityKey) {
+	protected void getLike(final String entityKey, final OnActionBarReloadListener listener) {
 		
 		// Get the like
 		LikeUtils.getLike(getActivity(), entityKey, new LikeGetListener() {
@@ -533,7 +537,7 @@ public class ActionBarLayoutView extends BaseView {
 					CacheableEntity putEntity = setLocalEntity(like.getEntity());
 					putEntity.setLiked(true);
 					putEntity.setLikeId(like.getId());
-					setEntityData(putEntity);
+					setEntityData(putEntity, listener);
 					
 					if(onActionBarEventListener != null) {
 						onActionBarEventListener.onGetLike(actionBarView, like);
@@ -544,7 +548,7 @@ public class ActionBarLayoutView extends BaseView {
 					}	
 				}
 				else {
-					getEntity(entityKey);
+					getEntity(entityKey, listener);
 				}
 			}
 			
@@ -553,7 +557,7 @@ public class ActionBarLayoutView extends BaseView {
 				if(error instanceof SocializeApiError) {
 					if(((SocializeApiError)error).getResultCode() == 404) {
 						// no like
-						getEntity(entityKey);
+						getEntity(entityKey, listener);
 						// Don't log error
 						return;
 					}
@@ -564,12 +568,12 @@ public class ActionBarLayoutView extends BaseView {
 		});
 	}
 	
-	protected void getEntity(String entityKey) {
+	protected void getEntity(String entityKey, final OnActionBarReloadListener listener) {
 		EntityUtils.getEntity(getActivity(), entityKey, new EntityGetListener() {
 			@Override
 			public void onGet(Entity entity) {
 				CacheableEntity putEntity = setLocalEntity(entity);
-				setEntityData(putEntity);
+				setEntityData(putEntity, listener);
 				
 				if(onActionBarEventListener != null) {
 					onActionBarEventListener.onGetEntity(actionBarView, entity);
@@ -585,7 +589,7 @@ public class ActionBarLayoutView extends BaseView {
 		});
 	}
 	
-	protected void setEntityData(CacheableEntity ce) {
+	protected void setEntityData(CacheableEntity ce, OnActionBarReloadListener listener) {
 		Entity entity = ce.getEntity();
 		
 		actionBarView.setEntity(entity);
@@ -608,6 +612,10 @@ public class ActionBarLayoutView extends BaseView {
 				likeButton.setText("Like");
 				likeButton.setIcon(likeIcon);
 			}
+		}
+		
+		if(listener != null) {
+			listener.onReload(entity);
 		}
 	}
 	

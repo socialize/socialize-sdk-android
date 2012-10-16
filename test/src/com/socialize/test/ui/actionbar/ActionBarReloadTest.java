@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 import android.app.Activity;
 import com.socialize.ConfigUtils;
 import com.socialize.SocializeAccess;
+import com.socialize.api.action.entity.SocializeEntityUtils;
 import com.socialize.api.action.like.LikeOptions;
 import com.socialize.api.action.like.SocializeLikeUtils;
 import com.socialize.api.action.view.SocializeViewUtils;
@@ -33,6 +34,7 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.View;
+import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.view.ViewAddListener;
@@ -40,6 +42,7 @@ import com.socialize.networks.SocialNetwork;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.actionbar.ActionBarLayoutView;
 import com.socialize.ui.actionbar.ActionBarView;
+import com.socialize.ui.actionbar.OnActionBarReloadListener;
 
 
 /**
@@ -110,6 +113,68 @@ public class ActionBarReloadTest extends ActionBarTest {
 			assertEquals("reloadTest" + i, result.getKey());
 		}
 	}
+	
+	public void testReloadListener() throws Throwable {
+		Activity activity = getActivity();
+		assertTrue(globalLatch.await(90, TimeUnit.SECONDS));
+
+		// Ensure FB/TW are not supported
+		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.FACEBOOK_APP_ID, "");
+		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, "");
+		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, "");
+		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		
+		final ActionBarView actionBar = TestUtils.findView(activity, ActionBarView.class, 5000);
+
+		assertNotNull(actionBar);
+		
+		final SocializeLikeUtils mockLikeUtils = new SocializeLikeUtils() {
+			@Override
+			public void getLike(Activity context, String entityKey, LikeGetListener listener) {
+				listener.onGet(null); // not liked
+			}
+		};
+		
+		final SocializeEntityUtils mockEntityUtils = new SocializeEntityUtils() {
+			@Override
+			public void getEntity(Activity context, String key, EntityGetListener listener) {
+				if(listener != null) {
+					listener.onGet(Entity.newInstance(key, key));
+				}
+			}
+		};
+	
+		
+		SocializeAccess.setLikeUtilsProxy(mockLikeUtils);
+		SocializeAccess.setEntityUtilsProxy(mockEntityUtils);
+		
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		final OnActionBarReloadListener reloadListener = new OnActionBarReloadListener() {
+			@Override
+			public void onReload(Entity entity) {
+				TestUtils.addResult(0, entity);
+				latch.countDown();
+			}
+		};
+		
+		final String name = "foobar111";
+		
+		// Simulate likes
+		this.runTestOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				actionBar.setEntity(Entity.newInstance(name, name));
+				actionBar.refresh(reloadListener);
+			}
+		});	
+		
+		assertTrue(latch.await(5, TimeUnit.SECONDS));
+		
+		Entity result = (Entity) TestUtils.getResult(0);
+		assertNotNull(result);
+		assertEquals(name, result.getKey());
+	}	
 	
 	// Tests that reloading with a delay for the view does not override
 	// The entity if the entity has changed.

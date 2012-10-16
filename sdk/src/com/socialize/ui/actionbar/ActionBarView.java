@@ -125,10 +125,14 @@ public class ActionBarView extends EntityView {
 	}
 
 	public void refresh() {
-		if(actionBarLayoutView != null) {
-			actionBarLayoutView.reload();
-		}
+		refresh(null);
 	}
+	
+	public void refresh(OnActionBarReloadListener listener) {
+		if(actionBarLayoutView != null) {
+			actionBarLayoutView.reload(listener);
+		}
+	}	
 	
 	public void stopTicker() {
 		if(actionBarLayoutView != null) {
