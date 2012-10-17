@@ -32,7 +32,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
-import android.content.res.Resources;
 import android.telephony.TelephonyManager;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
@@ -65,12 +64,11 @@ public class DefaultAppUtils implements AppUtils {
 		
 		// Try to get the app name 
 		try {
-			Resources appR = context.getResources(); 
-			CharSequence txt = appR.getText(appR.getIdentifier("app_name",  "string", packageName)); 
-			appName = txt.toString();
-		} 
+			PackageManager pkgManager = context.getPackageManager();
+			appName = pkgManager.getApplicationLabel(pkgManager.getApplicationInfo(packageName, 0)).toString();
+		}
 		catch (Exception e) {
-			String msg = "Failed to locate app_name String from resources.  Make sure this is specified in your AndroidManifest.xml";
+			String msg = "Failed to lookup application label.  Make sure this is specified in your AndroidManifest.xml";
 			
 			if(logger != null) {
 				logger.error(msg, e);
