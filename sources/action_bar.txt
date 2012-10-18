@@ -52,6 +52,28 @@ to capture these.
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ActionBarSampleListener.java
 	:start-after: begin-snippet-0
 	:end-before: end-snippet-0
+	
+ActionBar Comment Listener
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+In addition to ActionBar events you can also register a listener to receive events triggered by the Comment List View
+
+If you need or want to obtain a reference to the ActionBar view at runtime, you can use a creation listener to listen 
+for the "onCreate" event of the ActionBar.
+
+If you want to attach your own events to user operations on the ActionBar you can bind an **OnCommentViewActionListener** 
+to capture these.
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ActionBarCommentListener.java
+	:start-after: begin-snippet-0
+	:end-before: end-snippet-0
+	
+Making Hyerlinks Clickable
+--------------------------	
+The Socialize SDK includes a pre-built OnCommentViewActionListener instance that automatically makes hyperlinks appearing in comments clickable
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ActionBarLinkifyCommentListener.java
+	:start-after: begin-snippet-0
+	:end-before: end-snippet-0
 
 Reloading the Action Bar
 ~~~~~~~~~~~~~~~~~~~~~~~~

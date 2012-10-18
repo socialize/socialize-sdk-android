@@ -308,6 +308,15 @@ You can also display the UI with a listener to handle events
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/CommentSnippets.java
 	:start-after: begin-snippet-2
 	:end-before: end-snippet-2	
+	
+	
+Making Hyerlinks Clickable
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~	
+The Socialize SDK includes a pre-built OnCommentViewActionListener instance that automatically makes hyperlinks appearing in comments clickable
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/CommentSnippets.java
+	:start-after: begin-snippet-10
+	:end-before: end-snippet-10
 
 Adding Comments
 ~~~~~~~~~~~~~~~
@@ -327,7 +336,7 @@ You can also manually specify how the comment is to be propagated to 3rd party n
 Adding Comments Without Sharing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you want to explicity disable sharing of comments you can do this using the **CommentOptions**
+If you want to explicitly disable sharing of comments you can do this using the **CommentOptions**
 
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/CommentSnippets.java
 	:start-after: begin-snippet-8

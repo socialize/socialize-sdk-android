@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Advanced Facebook &mdash; Socialize Android SDK v2.5.5 documentation</title>
+    <title>Advanced Facebook &mdash; Socialize Android SDK v2.6 documentation</title>
     
     <link rel="stylesheet" href="static/nature.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     'v2.5.5',
+        VERSION:     'v2.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,21 +25,21 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v2.5.5 documentation" href="index.html?v=v2.5.5" />
-    <link rel="next" title="Advanced Twitter" href="twitter_adv.html?v=v2.5.5" />
-    <link rel="prev" title="Twitter Integration" href="twitter.html?v=v2.5.5" /> 
+    <link rel="top" title="Socialize Android SDK v2.6 documentation" href="index.html?v=v2.6" />
+    <link rel="next" title="Advanced Twitter" href="twitter_adv.html?v=v2.6" />
+    <link rel="prev" title="Twitter Integration" href="twitter.html?v=v2.6" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="twitter_adv.html?v=v2.5.5" title="Advanced Twitter"
+          <a href="twitter_adv.html?v=v2.6" title="Advanced Twitter"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="twitter.html?v=v2.5.5" title="Twitter Integration"
+          <a href="twitter.html?v=v2.6" title="Twitter Integration"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html?v=v2.5.5">Socialize Android SDK v2.5.5 documentation</a> &raquo;</li> 
+        <li><a href="index.html?v=v2.6">Socialize Android SDK v2.6 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -382,7 +382,24 @@ do this by creating a simple share object without propagation first.</p>
 <p>From v2.3 onwards Socialize supports Facebook &#8220;like&#8221; Open Graph actions.  This means that when a user executes a &#8220;like&#8221; on Socialize and elects to
 share this on Facebook it can be posted as an &#8220;Open Graph Like&#8221; in the user&#8217;s Facebook Activity stream.</p>
 <p>This behavior can be enabled via configuration in your <strong>socialize.properties</strong> file</p>
-<div class="highlight-properties"><div class="highlight"><pre><span class="c"># Enable/Disable Open Graph calls for &quot;like&quot;</span>
+<div style="background-color:#cce3ff;border-style:solid;border-color:#0051b6;border-width:1px;">
+<table border="0">
+	<tr>
+		<td>
+			<img src="static/info.png"/>
+		</td>
+		<td>
+			<div style="font-size:1.2em;font-weight:bold;padding:8px;color:#0051b6;padding-left:0px;">
+			&nbsp;Please Note
+			</div>
+		</td>
+	</tr>
+</table>
+<div style="font-size:0.9em;font-weight:normal;padding:8px;color:#0051b6;">
+Setting this configuration option will force ALL likes within Socialize to use the Open Graph.  Aside from the Facebook setup steps 
+described below no other changes are required.
+</div>
+</div><div class="highlight-properties"><div class="highlight"><pre><span class="c"># Enable/Disable Open Graph calls for &quot;like&quot;</span>
 <span class="na">facebook.og.like.enabled</span><span class="o">=</span><span class="s">true</span>
 </pre></div>
 </div>
@@ -570,7 +587,7 @@ you MUST add the Facebook OG meta tags to your entity page manually.  If the fin
 meta tags the post to Facebook may fail.
 </div>
 </div><p>If you don&#8217;t have an actual URL for your entity you can setup the correct description, image etc by changing the meta data on your entity.</p>
-<p>Refer to <a class="reference internal" href="entities.html?v=v2.5.5#entity-no-url"><em>Entities Without URLs</em></a> for more details on customizing the entity page.</p>
+<p>Refer to <a class="reference internal" href="entities.html?v=v2.6#entity-no-url"><em>Entities Without URLs</em></a> for more details on customizing the entity page.</p>
 <div class="section" id="using-custom-open-graph-actions">
 <h4>Using Custom Open Graph Actions<a class="headerlink" href="#using-custom-open-graph-actions" title="Permalink to this headline">¶</a></h4>
 <p>In addition to using the built-in Open Graph actions, you can also define your own.</p>
@@ -739,7 +756,7 @@ against the Facebook App to guarantee that 3rd party users cannot fraudulently r
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="search.html?v=v2.5.5" method="get">
+    <form class="search" action="search.html?v=v2.6" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -750,17 +767,17 @@ against the Facebook App to guarantee that 3rd party users cannot fraudulently r
     </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-<h3><a href="index.html?v=v2.5.5">Table Of Contents</a></h3>
+<h3><a href="index.html?v=v2.6">Table Of Contents</a></h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v2.5.5">What&#8217;s New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v2.5.5">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lifecycle.html?v=v2.5.5">Socialize Lifecycle</a></li>
-<li class="toctree-l1"><a class="reference internal" href="demo.html?v=v2.5.5">Socialize Demo App</a></li>
-<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v2.5.5">Socialize Action Bar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="entities.html?v=v2.5.5">Socialize Entities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v2.5.5">Custom Like Buttons</a></li>
-<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v2.5.5">Facebook Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v2.5.5">Twitter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v2.6">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v2.6">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lifecycle.html?v=v2.6">Socialize Lifecycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html?v=v2.6">Socialize Demo App</a></li>
+<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v2.6">Socialize Action Bar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entities.html?v=v2.6">Socialize Entities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v2.6">Custom Like Buttons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v2.6">Facebook Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v2.6">Twitter Integration</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Advanced Facebook</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#linking-users-with-facebook">Linking Users with Facebook</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#unlinking-users-from-facebook">Unlinking Users from Facebook</a></li>
@@ -770,16 +787,16 @@ against the Facebook App to guarantee that 3rd party users cannot fraudulently r
 <li class="toctree-l2"><a class="reference internal" href="#facebook-single-sign-on-sso">Facebook Single Sign On (SSO)</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="twitter_adv.html?v=v2.5.5">Advanced Twitter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v2.5.5">SmartAlerts (Push Notifications)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v2.5.5">Entity Loaders</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deep_linking.html?v=v2.5.5">Deep Linking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v2.5.5">Socialize Android Developer Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html?v=v2.5.5">Configuration Settings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v2.5.5">Amazon AppStore URLs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v2.5.5">ProGuard Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v2.5.5">Troubleshooting &amp; Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v2.5.5">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter_adv.html?v=v2.6">Advanced Twitter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v2.6">SmartAlerts (Push Notifications)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v2.6">Entity Loaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deep_linking.html?v=v2.6">Deep Linking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v2.6">Socialize Android Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html?v=v2.6">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v2.6">Amazon AppStore URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v2.6">ProGuard Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v2.6">Troubleshooting &amp; Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v2.6">Change Log</a></li>
 </ul>
 
         </div>
@@ -790,12 +807,12 @@ against the Facebook App to guarantee that 3rd party users cannot fraudulently r
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="twitter_adv.html?v=v2.5.5" title="Advanced Twitter"
+          <a href="twitter_adv.html?v=v2.6" title="Advanced Twitter"
              >next</a></li>
         <li class="right" >
-          <a href="twitter.html?v=v2.5.5" title="Twitter Integration"
+          <a href="twitter.html?v=v2.6" title="Twitter Integration"
              >previous</a> |</li>
-        <li><a href="index.html?v=v2.5.5">Socialize Android SDK v2.5.5 documentation</a> &raquo;</li> 
+        <li><a href="index.html?v=v2.6">Socialize Android SDK v2.6 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
