@@ -93,6 +93,9 @@ share this on Facebook it can be posted as an "Open Graph Like" in the user's Fa
 
 This behavior can be enabled via configuration in your **socialize.properties** file
 
+.. raw:: html
+   :file: snippets/facebook_og_like_notice.html
+
 .. literalinclude:: snippets/props_fb_like.txt
    :language: properties
 
