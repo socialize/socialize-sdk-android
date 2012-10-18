@@ -19,35 +19,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo.implementations.actionbar;
-
+package com.socialize.demo.snippets;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import com.socialize.ActionBarUtils;
-import com.socialize.demo.DemoActivity;
 import com.socialize.demo.R;
+import com.socialize.entity.Entity;
 import com.socialize.ui.actionbar.ActionBarListener;
+import com.socialize.ui.actionbar.ActionBarOptions;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.comment.LinkifyCommentViewActionListener;
 
-
-/**
- * @author Jason Polites
- */
-public class DefaultActionBarActivity extends DemoActivity {
-
+//begin-snippet-0
+public class ActionBarLinkifyCommentListener extends Activity {
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
-		View actionBar = ActionBarUtils.showActionBar(this, R.layout.actionbar, entity, null, new ActionBarListener() {
+		
+		// Your entity key. May be passed as a Bundle parameter to your activity
+		String entityKey = "http://www.getsocialize.com";
+		
+		// Create an entity object including a name
+		// The Entity object is Serializable, so you could also store the whole object in the Intent
+		Entity entity = Entity.newInstance(entityKey, "Socialize");
+		
+		// Add more options
+		ActionBarOptions options = new ActionBarOptions();
+		
+		// Wrap your existing view with the action bar.
+		// your_layout refers to the resource ID of your current layout.
+		View actionBarWrapped = ActionBarUtils.showActionBar(this, R.layout.actionbar, entity, options, new ActionBarListener() {
 			@Override
 			public void onCreate(ActionBarView actionBar) {
 				// Add clickable links to comments
 				actionBar.setOnCommentViewActionListener(new LinkifyCommentViewActionListener());
 			}
-		});		
+		});
 		
-		setContentView(actionBar);
+		// Now set the view for your activity to be the wrapped view.
+		setContentView(actionBarWrapped);
 	}
-
 }
+//end-snippet-0
+
+

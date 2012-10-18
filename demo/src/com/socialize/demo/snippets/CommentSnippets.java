@@ -37,7 +37,9 @@ import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.ui.comment.CommentListItem;
 import com.socialize.ui.comment.CommentListView;
+import com.socialize.ui.comment.LinkifyCommentViewActionListener;
 import com.socialize.ui.comment.OnCommentViewActionListener;
 
 
@@ -112,9 +114,22 @@ CommentUtils.showCommentView(this, entity, new OnCommentViewActionListener() {
 	public void onCommentList(CommentListView view, List<Comment> comments, int start, int end) {
 		// Called when a list of comments is retrieved.
 	}
+
+	@Override
+	public void onBeforeSetComment(Comment comment, CommentListItem item) {
+		// Called before a single comment is set on the comment list item view
+	}
+
+	@Override
+	public void onAfterSetComment(Comment comment, CommentListItem item) {
+		// Called after a single comment is set on the comment list item view
+	}
+	
+	
 });
 //end-snippet-2
 }
+
 
 
 public void addCommentWithManualShare() {
@@ -304,6 +319,17 @@ CommentUtils.getCommentsByApplication(this, 0, 10, new CommentListListener() {
 	}
 });
 //end-snippet-9
+}
+
+
+
+public void showCommentViewWithLinkify() {
+// begin-snippet-10
+Entity entity = Entity.newInstance("http://myentity.com", "My Name");
+
+// The "this" argument refers to the current Activity
+CommentUtils.showCommentView(this, entity, new LinkifyCommentViewActionListener());
+//end-snippet-10
 }
 
 }

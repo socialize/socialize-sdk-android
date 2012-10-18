@@ -39,6 +39,7 @@ public class CommentEditField extends LinearLayout {
 	
 	private DisplayUtils displayUtils;
 	private Colors colors;
+	private TextView editText;
 	
 	public CommentEditField(Context context) {
 		super(context);
@@ -60,7 +61,7 @@ public class CommentEditField extends LinearLayout {
 		editTextLayoutParams.weight = 1.0f;
 		editTextLayoutParams.setMargins(0, 0, 0, 0);
 
-		TextView editText = new TextView(getContext());
+		editText = new TextView(getContext());
 		editText.setMinHeight(displayUtils.getDIP(36)); 
 		editText.setGravity(Gravity.CENTER_VERTICAL);
 		editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
@@ -94,5 +95,9 @@ public class CommentEditField extends LinearLayout {
 
 	public void setColors(Colors colors) {
 		this.colors = colors;
+	}
+	
+	public TextView getEditText() {
+		return editText;
 	}
 }

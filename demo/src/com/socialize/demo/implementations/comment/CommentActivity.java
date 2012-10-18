@@ -33,6 +33,7 @@ import com.socialize.demo.R;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
+import com.socialize.ui.comment.CommentListItem;
 import com.socialize.ui.comment.CommentListView;
 import com.socialize.ui.comment.OnCommentViewActionListener;
 
@@ -82,6 +83,16 @@ public class CommentActivity extends ListActivity {
 				@Override
 				public void onCommentList(CommentListView view, List<Comment> comments, int start, int end) {
 				}
+
+				@Override
+				public void onBeforeSetComment(Comment comment, CommentListItem item) {
+				}
+
+				@Override
+				public void onAfterSetComment(Comment comment, CommentListItem item) {
+				}
+				
+				
 			});
 		}
 		else {

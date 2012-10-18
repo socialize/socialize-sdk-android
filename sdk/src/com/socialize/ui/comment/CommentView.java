@@ -118,6 +118,10 @@ public class CommentView extends EntityView {
 		return (commentListView == null) ? null : commentListView.getCommentEntryViewSlider();
 	}
 	
+	public CommentEditField getCommentEntryField() {
+		return (commentListView == null) ? null : commentListView.getCommentEntryField();
+	}
+	
 	public boolean isHeaderDisplayed() {
 		return headerDisplayed;
 	}
@@ -137,7 +141,7 @@ public class CommentView extends EntityView {
 	public Entity getEntity() {
 		return entity;
 	}
-
+	
 	public boolean onCreateOptionsMenu(final Activity source, Menu menu) {
 		createOptionsMenuItem(source, menu);
 

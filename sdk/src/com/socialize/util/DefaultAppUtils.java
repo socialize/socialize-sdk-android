@@ -35,9 +35,13 @@ import android.content.pm.ResolveInfo;
 import android.telephony.TelephonyManager;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
+import com.socialize.auth.facebook.FacebookActivity;
 import com.socialize.config.SocializeConfig;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeLaunchActivity;
+import com.socialize.ui.action.ActionDetailActivity;
+import com.socialize.ui.comment.CommentActivity;
+import com.socialize.ui.profile.ProfileActivity;
 
 /**
  * @author Jason Polites
@@ -243,6 +247,8 @@ public class DefaultAppUtils implements AppUtils {
 	@Override
 	public void checkAndroidManifest(Context context) {
 		// Check the launch activity config
+		checkActivitiesExist(context, CommentActivity.class, ActionDetailActivity.class, ProfileActivity.class, FacebookActivity.class, SocializeLaunchActivity.class);
+		
 		ActivityInfo info = getActivityInfo(context, SocializeLaunchActivity.class);
 		if(info != null) {
 			if((info.flags & ActivityInfo.FLAG_NO_HISTORY) != ActivityInfo.FLAG_NO_HISTORY) {
@@ -253,7 +259,27 @@ public class DefaultAppUtils implements AppUtils {
 			if((info.launchMode & ActivityInfo.LAUNCH_SINGLE_TOP) == ActivityInfo.LAUNCH_SINGLE_TOP) {
 				logger.warn("Activity flag android:launchMode=\"singleTop\" found for " + SocializeLaunchActivity.class.getSimpleName() + ".  This should be removed from the declaration of this activity in your AndroidManifest.xml");
 			}
-		}		
+		}	
+		
+		info = getActivityInfo(context, CommentActivity.class);
+		
+		if(info != null) {
+			if((info.configChanges & ActivityInfo.CONFIG_ORIENTATION) != ActivityInfo.CONFIG_ORIENTATION) {
+				logger.warn("Activity flag android:configChanges=\"orientation|keyboardHidden|screenSize\" not found for " + CommentActivity.class.getSimpleName() + ".  Please ensure this is added to the declaration of this activity in your AndroidManifest.xml");
+			}
+		}
+	}
+	
+	protected void checkActivitiesExist(Context context, Class<?>...classes) {
+		for (Class<?> cls : classes) {
+			ActivityInfo info = getActivityInfo(context, cls);
+			
+			if(info == null) {
+				logger.warn("No activity element declared for [" +
+						cls.getName() +
+						"].  Please ensure you have included this in your AndroidManifest.xml");
+			}
+		}
 	}
 
 	/* (non-Javadoc)

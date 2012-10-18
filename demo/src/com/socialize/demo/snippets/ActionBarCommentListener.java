@@ -20,21 +20,24 @@
  * THE SOFTWARE.
  */
 package com.socialize.demo.snippets;
-import com.socialize.demo.R;
-//begin-snippet-0
+import java.util.List;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import com.socialize.ActionBarUtils;
+import com.socialize.demo.R;
+import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
-import com.socialize.entity.Like;
-import com.socialize.entity.Share;
+import com.socialize.error.SocializeException;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarOptions;
 import com.socialize.ui.actionbar.ActionBarView;
-import com.socialize.ui.actionbar.OnActionBarEventListener;
+import com.socialize.ui.comment.CommentListItem;
+import com.socialize.ui.comment.CommentListView;
+import com.socialize.ui.comment.OnCommentViewActionListener;
 
-public class ActionBarSampleListener extends Activity {
+//begin-snippet-0
+public class ActionBarCommentListener extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,51 +61,48 @@ public class ActionBarSampleListener extends Activity {
 			@Override
 			public void onCreate(ActionBarView actionBar) {
 				
-				actionBar.setOnActionBarEventListener(new OnActionBarEventListener() {
+				actionBar.setOnCommentViewActionListener(new OnCommentViewActionListener() {
 
 					@Override
-					public void onUpdate(ActionBarView actionBar) {
-						// Called when the action bar has its data updated
+					public void onError(SocializeException error) {
+						// Handle error
+					}
+					
+					@Override
+					public void onRender(CommentListView view) {
+						// Called when the list view is rendered
+					}
+					
+					@Override
+					public void onReload(CommentListView view) {
+						// Called when a reload event is posted to the list view.
+					}
+					
+					@Override
+					public void onPostComment(Comment comment) {
+						// Called after a comment is posted.
+					}
+					
+					@Override
+					public void onCreate(CommentListView view) {
+						// Called when the list view component was created (but may not be shown)
+					}
+					
+					@Override
+					public void onCommentList(CommentListView view, List<Comment> comments, int start, int end) {
+						// Called when a list of comments is retrieved.
 					}
 
 					@Override
-					public void onPostUnlike(ActionBarView actionBar) {
-						// Called AFTER a user has removed a like
+					public void onBeforeSetComment(Comment comment, CommentListItem item) {
+						// Called before a single comment is set on the comment list item view
 					}
 
 					@Override
-					public void onPostShare(ActionBarView actionBar, Share share) {
-						// Called AFTER a user has posted a share
+					public void onAfterSetComment(Comment comment, CommentListItem item) {
+						// Called after a single comment is set on the comment list item view
 					}
-
-					@Override
-					public void onPostLike(ActionBarView actionBar, Like like) {
-						// Called AFTER a user has posted a like
-					}
-
-					@Override
-					public void onLoad(ActionBarView actionBar) {
-						// Called when the action bar is loaded
-					}
-
-					@Override
-					public void onGetLike(ActionBarView actionBar, Like like) {
-						// Called when the action bar retrieves the like for the
-						// current user
-					}
-
-					@Override
-					public void onGetEntity(ActionBarView actionBar, Entity entity) {
-						// Called when the action bar retrieves the entity data
-					}
-
-					@Override
-					public boolean onClick(ActionBarView actionBar, ActionBarEvent evt) {
-						// Called when the user clicks on the action bar
-						// Return true to indicate you do NOT want the action to continue
-						return false;
-					}
-				});				
+				});
 			}
 		});
 		

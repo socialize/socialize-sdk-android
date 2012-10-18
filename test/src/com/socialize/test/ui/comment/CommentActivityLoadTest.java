@@ -44,6 +44,7 @@ import com.socialize.listener.comment.CommentListener;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.comment.CommentActivity;
+import com.socialize.ui.comment.CommentListItem;
 import com.socialize.ui.comment.CommentListView;
 import com.socialize.ui.comment.OnCommentViewActionListener;
 
@@ -133,18 +134,34 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 		});
 		
 		CommentUtils.showCommentView(TestUtils.getActivity(this), entity1, new OnCommentViewActionListener() {
+			@Override
 			public void onError(SocializeException error) {
 				error.printStackTrace();
 				lock.countDown();
 			}
+			
+			@Override
 			public void onReload(CommentListView view) {}
+			
+			@Override
 			public void onPostComment(Comment comment) {}
+			
+			@Override
 			public void onCreate(CommentListView view) {}
+			
+			@Override
 			public void onCommentList(CommentListView view, List<Comment> comments, int start, int end) {}
+			
+			@Override
 			public void onRender(CommentListView view) {
 				results0.addAll(view.getCommentAdapter().getComments());
 				lock.countDown();
 			}
+			@Override
+			public void onBeforeSetComment(Comment comment, CommentListItem item) {}
+			@Override
+			public void onAfterSetComment(Comment comment, CommentListItem item) {}
+			
 		});
 		
 				
@@ -164,14 +181,20 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 		lr.setItems(dummyResults2);
 		
 		CommentUtils.showCommentView(TestUtils.getActivity(this), entity2, new OnCommentViewActionListener() {
+			@Override
 			public void onError(SocializeException error) {
 				error.printStackTrace();
 				lock2.countDown();
 			}
+			@Override
 			public void onReload(CommentListView view) {}
+			@Override
 			public void onPostComment(Comment comment) {}
+			@Override
 			public void onCreate(CommentListView view) {}
+			@Override
 			public void onCommentList(CommentListView view, List<Comment> comments, int start, int end) {}
+			@Override
 			public void onRender(CommentListView view) {
 				
 				List<Comment> comments = view.getCommentAdapter().getComments();
@@ -182,6 +205,10 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 				
 				lock2.countDown();
 			}
+			@Override
+			public void onBeforeSetComment(Comment comment, CommentListItem item) {}
+			@Override
+			public void onAfterSetComment(Comment comment, CommentListItem item) {}			
 		});	
 		
 		waitForActivity = TestUtils.waitForActivity(5000);

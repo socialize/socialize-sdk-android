@@ -55,6 +55,7 @@ public class CommentAdapter extends BaseAdapter {
 
 	private IBeanFactory<CommentListItem> commentItemViewFactory;
 	private IBeanFactory<ListItemLoadingView> listItemLoadingViewFactory;
+	private OnCommentViewActionListener onCommentViewActionListener;
 	private List<Comment> comments;
 	private SocializeLogger logger;
 	private Drawables drawables;
@@ -209,6 +210,10 @@ public class CommentAdapter extends BaseAdapter {
 						displayName = "Anonymous";
 					}
 
+					if(onCommentViewActionListener != null) {
+						onCommentViewActionListener.onBeforeSetComment(item, view);
+					}
+					
 					TextView comment = view.getComment();
 					TextView userName = view.getAuthor();
 					TextView time = view.getTime();
@@ -283,6 +288,11 @@ public class CommentAdapter extends BaseAdapter {
 							}
 						}
 					}
+					
+					if(onCommentViewActionListener != null) {
+						onCommentViewActionListener.onAfterSetComment(item, view);
+					}
+										
 				}
 			}
 		}
@@ -393,6 +403,14 @@ public class CommentAdapter extends BaseAdapter {
 
 	public void setTotalCount(int totalCount) {
 		this.totalCount = totalCount;
+	}
+	
+	public OnCommentViewActionListener getOnCommentViewActionListener() {
+		return onCommentViewActionListener;
+	}
+	
+	public void setOnCommentViewActionListener(OnCommentViewActionListener onCommentViewActionListener) {
+		this.onCommentViewActionListener = onCommentViewActionListener;
 	}
 
 	protected void logError(String msg, Exception e) {

@@ -39,6 +39,8 @@ The following configurations are required for SmartAlerts.
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | socialize.comments.on.notify    | Boolean | false    |                                        | Users are directed to the comment list for comment notifications |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
+| socialize.notification.enabled  | Boolean | true     |                                        | Enable/Disable SmartAlerts across the entire app                 |
++---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 
 .. _auth_customize:	
 

@@ -74,7 +74,7 @@ public class CommentListView extends BaseView {
 	private IBeanFactory<LoadingListView> commentContentViewFactory;
 	private IBeanFactory<CustomCheckbox> notificationEnabledOptionFactory;
 	
-	private View commentEntryField;
+	private CommentEditField commentEntryField;
 	private SocializeHeader header;
 	private LoadingListView content;
 	
@@ -617,6 +617,10 @@ public class CommentListView extends BaseView {
 		if(onCommentViewActionListener != null) {
 			onCommentViewActionListener.onCreate(this);
 		}		
+		
+		if(commentAdapter != null && onCommentViewActionListener != null) {
+			commentAdapter.setOnCommentViewActionListener(onCommentViewActionListener);
+		}
 	}
 
 	@Override
@@ -723,7 +727,7 @@ public class CommentListView extends BaseView {
 		this.loading = loading;
 	}
 
-	protected void setCommentEntryField(View field) {
+	protected void setCommentEntryField(CommentEditField field) {
 		this.commentEntryField = field;
 	}
 
@@ -804,6 +808,10 @@ public class CommentListView extends BaseView {
 
 	public void setOnCommentViewActionListener(OnCommentViewActionListener onCommentViewActionListener) {
 		this.onCommentViewActionListener = onCommentViewActionListener;
+		
+		if(commentAdapter != null) {
+			commentAdapter.setOnCommentViewActionListener(onCommentViewActionListener);
+		}
 	}
 	
 	public ActionBarSliderView getCommentEntryViewSlider() {
@@ -833,6 +841,10 @@ public class CommentListView extends BaseView {
 		this.config = config;
 	}
 	
+	public CommentEditField getCommentEntryField() {
+		return commentEntryField;
+	}
+
 	public void setHeaderDisplayed(boolean showHeader) {
 		this.headerDisplayed = showHeader;
 		if(header != null) {

@@ -19,6 +19,10 @@ public interface OnCommentViewActionListener extends SocializeListener {
 	
 	public void onCommentList(CommentListView view, List<Comment> comments, int start, int end);
 	
+	public void onBeforeSetComment(Comment comment, CommentListItem item);
+	
+	public void onAfterSetComment(Comment comment, CommentListItem item);
+	
 	public void onReload(CommentListView view);
 	
 	public void onPostComment(Comment comment);

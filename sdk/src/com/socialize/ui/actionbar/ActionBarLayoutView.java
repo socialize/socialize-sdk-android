@@ -53,6 +53,7 @@ import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.actionbar.OnActionBarEventListener.ActionBarEvent;
 import com.socialize.ui.cache.CacheableEntity;
 import com.socialize.ui.cache.EntityCache;
+import com.socialize.ui.comment.OnCommentViewActionListener;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
@@ -104,6 +105,7 @@ public class ActionBarLayoutView extends BaseView {
 	final String loadingText = "...";
 	
 	private OnActionBarEventListener onActionBarEventListener;
+	private OnCommentViewActionListener onCommentViewActionListener;
 	
 	public ActionBarLayoutView(Activity context, ActionBarView actionBarView) {
 		this(context, actionBarView, new ActionBarOptions());
@@ -216,7 +218,7 @@ public class ActionBarLayoutView extends BaseView {
 					}
 					
 					if(!consumed) {
-						commentUtils.showCommentView(getActivity(), actionBarView.getEntity());
+						commentUtils.showCommentView(getActivity(), actionBarView.getEntity(), onCommentViewActionListener);
 					}
 				}
 			});			
@@ -721,5 +723,13 @@ public class ActionBarLayoutView extends BaseView {
 	
 	public OnActionBarEventListener getOnActionBarEventListener() {
 		return onActionBarEventListener;
+	}
+
+	public OnCommentViewActionListener getOnCommentViewActionListener() {
+		return onCommentViewActionListener;
+	}
+	
+	public void setOnCommentViewActionListener(OnCommentViewActionListener onCommentViewActionListener) {
+		this.onCommentViewActionListener = onCommentViewActionListener;
 	}
 }
