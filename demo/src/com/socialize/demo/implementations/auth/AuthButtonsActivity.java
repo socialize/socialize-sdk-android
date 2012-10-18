@@ -56,7 +56,6 @@ public class AuthButtonsActivity extends DemoActivity {
 		final Button btnTwitter = (Button) findViewById(R.id.btnTwitter);
 		final Button btnAuth = (Button) findViewById(R.id.btnAuth);
 		
-		
 		btnAuth.setOnClickListener(new OnClickListener() {
 			
 			@Override
