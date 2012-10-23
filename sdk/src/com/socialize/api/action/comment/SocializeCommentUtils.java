@@ -160,7 +160,12 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 						doCommentWithShareDialog(context, session, entity, text, commentOptions, listener);
 					}
 					else {
-						doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener, networks);
+						if(networks == null || networks.length == 0) {
+							doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener, UserUtils.getAutoPostSocialNetworks(context));
+						}
+						else {
+							doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener, networks);
+						}						
 					}
 				}
 			}, !(config.isAllowSkipAuthOnComments() && config.isAllowSkipAuthOnAllActions()));
@@ -170,7 +175,12 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 				doCommentWithShareDialog(context, session, entity, text, commentOptions, listener);
 			}
 			else {
-				doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener, networks);
+				if(networks == null || networks.length == 0) {
+					doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener, UserUtils.getAutoPostSocialNetworks(context));
+				}
+				else {
+					doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener, networks);
+				}					
 			}
 		}			
 	}

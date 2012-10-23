@@ -24,10 +24,18 @@ package com.socialize.test.integration.services.a;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import android.app.Activity;
+import android.content.Context;
 import com.socialize.CommentUtils;
+import com.socialize.SocializeAccess;
 import com.socialize.SubscriptionUtils;
 import com.socialize.UserUtils;
+import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ActionOptions;
+import com.socialize.api.action.ShareableActionOptions;
 import com.socialize.api.action.comment.CommentOptions;
+import com.socialize.api.action.comment.SocializeCommentUtils;
+import com.socialize.api.action.user.SocializeUserUtils;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
@@ -37,6 +45,7 @@ import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.listener.subscription.SubscriptionCheckListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.notifications.SubscriptionType;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
@@ -447,4 +456,47 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		assertEquals(e.getKey(), subscription.getEntity().getKey());
 		assertFalse(subscription.isSubscribed());	
 	}
+	
+	public void testCommentIsSharedWithAutoPost() {
+		final Entity entity = Entity.newInstance("testCommentIsSharedWithAutoPost", "testCommentIsSharedWithAutoPost");
+		
+		final SocialNetwork[] autoPost = {
+			SocialNetwork.TWITTER,
+			SocialNetwork.FACEBOOK,
+		};
+		
+		SocializeCommentUtils commentUtils = new SocializeCommentUtils() {
+			@Override
+			protected void doCommentWithoutShareDialog(Activity context, SocializeSession session, Entity entity, String text, CommentOptions likeOptions, CommentAddListener listener, SocialNetwork... networks) {
+				TestUtils.addResult(0, networks);
+			}
+
+			@Override
+			protected boolean isDisplayAuthDialog(Context context, SocializeSession session, ActionOptions options, SocialNetwork... networks) {
+				return false;
+			}
+
+			@Override
+			protected boolean isDisplayShareDialog(Context context, ShareableActionOptions options) {
+				return false;
+			}
+			
+		};
+		
+		SocializeUserUtils userUtils = new SocializeUserUtils() {
+			@Override
+			public SocialNetwork[] getAutoPostSocialNetworks(Context context) {
+				return autoPost;
+			}
+		};
+		
+		SocializeAccess.setUserUtilsProxy(userUtils);
+		
+		commentUtils.addComment(getActivity(), entity, "foobar", null);
+		
+		SocialNetwork[] networks = TestUtils.getResult(0);
+		
+		assertNotNull(networks);
+		assertEquals(2, networks.length);
+	}	
 }

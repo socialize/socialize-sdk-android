@@ -627,4 +627,47 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		assertSame(like, likeAfter0);
 		assertSame(like, likeAfter1);
 	}
+	
+	public void testLikeIsSharedWithAutoPost() {
+		final Entity entity = Entity.newInstance("testLikeIsSharedWithAutoPost", "testLikeIsSharedWithAutoPost");
+		
+		final SocialNetwork[] autoPost = {
+			SocialNetwork.TWITTER,
+			SocialNetwork.FACEBOOK,
+		};
+		
+		SocializeLikeUtils likeUtils = new SocializeLikeUtils() {
+			@Override
+			protected void doLikeWithoutShareDialog(Activity context, SocializeSession session, Entity entity, LikeOptions likeOptions, LikeAddListener listener, SocialNetwork... networks) {
+				TestUtils.addResult(0, networks);
+			}
+
+			@Override
+			protected boolean isDisplayAuthDialog(Context context, SocializeSession session, ActionOptions options, SocialNetwork... networks) {
+				return false;
+			}
+
+			@Override
+			protected boolean isDisplayShareDialog(Context context, ShareableActionOptions options) {
+				return false;
+			}
+			
+		};
+		
+		SocializeUserUtils userUtils = new SocializeUserUtils() {
+			@Override
+			public SocialNetwork[] getAutoPostSocialNetworks(Context context) {
+				return autoPost;
+			}
+		};
+		
+		SocializeAccess.setUserUtilsProxy(userUtils);
+		
+		likeUtils.like(getActivity(), entity, null);
+		
+		SocialNetwork[] networks = TestUtils.getResult(0);
+		
+		assertNotNull(networks);
+		assertEquals(2, networks.length);
+	}
 }

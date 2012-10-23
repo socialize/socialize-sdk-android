@@ -25,7 +25,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import android.app.Activity;
 import android.app.Dialog;
-import android.os.Debug;
 import com.socialize.ConfigUtils;
 import com.socialize.ShareUtils;
 import com.socialize.SocializeAccess;
