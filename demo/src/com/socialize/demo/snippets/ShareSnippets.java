@@ -84,8 +84,8 @@ ShareUtils.showShareDialog(this, entity, new SocialNetworkDialogListener() {
 	public void onFlowInterrupted(DialogFlowController controller) {
 		// This will only be called if onContinue returns true
 		
-		// Obtain a share from the user
-		String text = "...";
+		// Obtain share text (e.g. from the user via a dialog)
+		String text = "Add another message here";
 		
 		// Call continue when you want flow to resume
 		controller.onContinue(text);

@@ -93,7 +93,7 @@ public abstract class AbstractSocializeListener<T extends SocializeObject> imple
 	 * @param error
 	 * @return
 	 */
-	protected boolean isNotFoundError(SocializeException error) {
+	protected final boolean isNotFoundError(SocializeException error) {
 		if(error instanceof SocializeApiError) {
 			return ((SocializeApiError)error).getResultCode() == 404;
 		}

@@ -67,6 +67,14 @@ to capture these.
 	:start-after: begin-snippet-0
 	:end-before: end-snippet-0
 	
+ActionBar Share & Social Listener
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+You can also specify a more complete listener interface to capture both action bar and sharing events.
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ActionBarShareDialogListener.java
+	:start-after: begin-snippet-0
+	:end-before: end-snippet-0
+	
 Making Hyerlinks Clickable
 --------------------------	
 The Socialize SDK includes a pre-built OnCommentViewActionListener instance that automatically makes hyperlinks appearing in comments clickable
