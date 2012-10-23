@@ -12,6 +12,37 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v2.6.1
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Developer can learn how to specify a share dialog listener on the action bar in docs
+[bug] Auto-post to networks not working
+[feature] Developer can add a share dialog listener to the ActionBar
+
+v2.6.0
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Hyperlinks in comments should be clickable
+[feature] Developer can learn how to disable SmartAlerts in docs
+[bug] Comment entry cleared on rotate
+
+v2.5.7
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] ActionBar reloads can be heard with a listener 
+
+v2.5.6
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] ActionBar uses wrong entity if entity is changed rapidly during load 
+
+v2.5.5
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] User cannot sign in to both TW and FB when app is compiled with proguard
+[feature] Proguard section in docs includes updated config items for retaining Signatures 
+
+v2.5.4
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Developers can send diagnostic logs via email from the device
+[feature] Developers can enable detailed diagnostic logs for troubleshooting devices in the wild
+[feature] Developer can learn how to enable diagnostic logging in docs
+
 v2.5.3
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [bug] Comment Header does not display
