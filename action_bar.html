@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Socialize Action Bar &mdash; Socialize Android SDK v2.6 documentation</title>
+    <title>Socialize Action Bar &mdash; Socialize Android SDK v2.6.1 documentation</title>
     
     <link rel="stylesheet" href="static/nature.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     'v2.6',
+        VERSION:     'v2.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,21 +25,21 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v2.6 documentation" href="index.html?v=v2.6" />
-    <link rel="next" title="Socialize Entities" href="entities.html?v=v2.6" />
-    <link rel="prev" title="Socialize Demo App" href="demo.html?v=v2.6" /> 
+    <link rel="top" title="Socialize Android SDK v2.6.1 documentation" href="index.html?v=v2.6.1" />
+    <link rel="next" title="Socialize Entities" href="entities.html?v=v2.6.1" />
+    <link rel="prev" title="Socialize Demo App" href="demo.html?v=v2.6.1" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="entities.html?v=v2.6" title="Socialize Entities"
+          <a href="entities.html?v=v2.6.1" title="Socialize Entities"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="demo.html?v=v2.6" title="Socialize Demo App"
+          <a href="demo.html?v=v2.6.1" title="Socialize Demo App"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html?v=v2.6">Socialize Android SDK v2.6 documentation</a> &raquo;</li> 
+        <li><a href="index.html?v=v2.6.1">Socialize Android SDK v2.6.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -159,7 +159,7 @@
 <span class="o">}</span>
 </pre></div>
 </div>
-<p>(Refer to the <a class="reference internal" href="getting_started.html?v=v2.6"><em>Getting Started</em></a> section for details on configuring your <strong>socialize.properties</strong> file.)</p>
+<p>(Refer to the <a class="reference internal" href="getting_started.html?v=v2.6.1"><em>Getting Started</em></a> section for details on configuring your <strong>socialize.properties</strong> file.)</p>
 </div>
 <div class="section" id="disabling-the-scrollview">
 <h2>Disabling the ScrollView<a class="headerlink" href="#disabling-the-scrollview" title="Permalink to this headline">¶</a></h2>
@@ -370,6 +370,156 @@ to capture these.</p>
 					<span class="nd">@Override</span>
 					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAfterSetComment</span><span class="o">(</span><span class="n">Comment</span> <span class="n">comment</span><span class="o">,</span> <span class="n">CommentListItem</span> <span class="n">item</span><span class="o">)</span> <span class="o">{</span>
 						<span class="c1">// Called after a single comment is set on the comment list item view</span>
+					<span class="o">}</span>
+				<span class="o">});</span>
+			<span class="o">}</span>
+		<span class="o">});</span>
+		
+		<span class="c1">// Now set the view for your activity to be the wrapped view.</span>
+		<span class="n">setContentView</span><span class="o">(</span><span class="n">actionBarWrapped</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="actionbar-share-social-listener">
+<h2>ActionBar Share &amp; Social Listener<a class="headerlink" href="#actionbar-share-social-listener" title="Permalink to this headline">¶</a></h2>
+<p>You can also specify a more complete listener interface to capture both action bar and sharing events.</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ActionBarShareDialogListener</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="o">{</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+		
+		<span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+		
+		<span class="c1">// Your entity key. May be passed as a Bundle parameter to your activity</span>
+		<span class="n">String</span> <span class="n">entityKey</span> <span class="o">=</span> <span class="s">&quot;http://www.getsocialize.com&quot;</span><span class="o">;</span>
+		
+		<span class="c1">// Create an entity object including a name</span>
+		<span class="c1">// The Entity object is Serializable, so you could also store the whole object in the Intent</span>
+		<span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="n">entityKey</span><span class="o">,</span> <span class="s">&quot;Socialize&quot;</span><span class="o">);</span>
+		
+		<span class="c1">// Add more options</span>
+		<span class="n">ActionBarOptions</span> <span class="n">options</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ActionBarOptions</span><span class="o">();</span>
+		
+		<span class="c1">// Wrap your existing view with the action bar.</span>
+		<span class="c1">// your_layout refers to the resource ID of your current layout.</span>
+		<span class="n">View</span> <span class="n">actionBarWrapped</span> <span class="o">=</span> <span class="n">ActionBarUtils</span><span class="o">.</span><span class="na">showActionBar</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">actionbar</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="n">options</span><span class="o">,</span> <span class="k">new</span> <span class="n">ActionBarListener</span><span class="o">()</span> <span class="o">{</span>
+			<span class="nd">@Override</span>
+			<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">ActionBarView</span> <span class="n">actionBar</span><span class="o">)</span> <span class="o">{</span>
+				<span class="c1">// Add event listener for share dialog events</span>
+				<span class="n">actionBar</span><span class="o">.</span><span class="na">setOnActionBarEventListener</span><span class="o">(</span><span class="k">new</span> <span class="n">OnActionBarShareEventListener</span><span class="o">()</span> <span class="o">{</span>
+					
+					<span class="cm">/******************************************************************</span>
+<span class="cm">					 * Standard event listener callbacks (Optional)</span>
+<span class="cm">					 ******************************************************************/</span>
+					
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onUpdate</span><span class="o">(</span><span class="n">ActionBarView</span> <span class="n">actionBar</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// Called when the action bar has its data updated</span>
+					<span class="o">}</span>
+
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onPostUnlike</span><span class="o">(</span><span class="n">ActionBarView</span> <span class="n">actionBar</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// Called AFTER a user has removed a like</span>
+					<span class="o">}</span>
+
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onPostShare</span><span class="o">(</span><span class="n">ActionBarView</span> <span class="n">actionBar</span><span class="o">,</span> <span class="n">Share</span> <span class="n">share</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// Called AFTER a user has posted a share</span>
+					<span class="o">}</span>
+
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onPostLike</span><span class="o">(</span><span class="n">ActionBarView</span> <span class="n">actionBar</span><span class="o">,</span> <span class="n">Like</span> <span class="n">like</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// Called AFTER a user has posted a like</span>
+					<span class="o">}</span>
+
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onLoad</span><span class="o">(</span><span class="n">ActionBarView</span> <span class="n">actionBar</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// Called when the action bar is loaded</span>
+					<span class="o">}</span>
+
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGetLike</span><span class="o">(</span><span class="n">ActionBarView</span> <span class="n">actionBar</span><span class="o">,</span> <span class="n">Like</span> <span class="n">like</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// Called when the action bar retrieves the like for the</span>
+						<span class="c1">// current user</span>
+					<span class="o">}</span>
+
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGetEntity</span><span class="o">(</span><span class="n">ActionBarView</span> <span class="n">actionBar</span><span class="o">,</span> <span class="n">Entity</span> <span class="n">entity</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// Called when the action bar retrieves the entity data</span>
+					<span class="o">}</span>
+
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">onClick</span><span class="o">(</span><span class="n">ActionBarView</span> <span class="n">actionBar</span><span class="o">,</span> <span class="n">ActionBarEvent</span> <span class="n">evt</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// Called when the user clicks on the action bar</span>
+						<span class="c1">// Return true to indicate you do NOT want the action to continue</span>
+						<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+					<span class="o">}</span>
+
+					<span class="cm">/******************************************************************</span>
+<span class="cm">					 * Share dialog callbacks (Optional)</span>
+<span class="cm">					 ******************************************************************/</span>
+					
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onShow</span><span class="o">(</span><span class="n">Dialog</span> <span class="n">dialog</span><span class="o">,</span> <span class="n">SharePanelView</span> <span class="n">dialogView</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// The dialog was shown.</span>
+					<span class="o">}</span>
+					
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCancel</span><span class="o">(</span><span class="n">Dialog</span> <span class="n">dialog</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// User cancelled.</span>
+					<span class="o">}</span>
+					
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSimpleShare</span><span class="o">(</span><span class="n">ShareType</span> <span class="n">type</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// User performed a simple share operation (e.g. Email or SMS)</span>
+					<span class="o">}</span>
+					
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onFlowInterrupted</span><span class="o">(</span><span class="n">DialogFlowController</span> <span class="n">controller</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// This will only be called if onContinue returns true</span>
+						
+						<span class="c1">// Obtain share text (e.g. from the user via a dialog)</span>
+						<span class="n">String</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&quot;Add another message here&quot;</span><span class="o">;</span>
+						
+						<span class="c1">// Call continue when you want flow to resume</span>
+						<span class="n">controller</span><span class="o">.</span><span class="na">onContinue</span><span class="o">(</span><span class="n">text</span><span class="o">);</span>
+					<span class="o">}</span>
+					
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">onContinue</span><span class="o">(</span><span class="n">Dialog</span> <span class="n">dialog</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">remember</span><span class="o">,</span> <span class="n">SocialNetwork</span><span class="o">...</span> <span class="n">networks</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// Return true if you want to interrupt the flow</span>
+						<span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+					<span class="o">}</span>
+					
+					<span class="cm">/******************************************************************</span>
+<span class="cm">					 * Social Network Callbacks (Optional)</span>
+<span class="cm">					 ******************************************************************/</span>
+					
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onNetworkError</span><span class="o">(</span><span class="n">Activity</span> <span class="n">context</span><span class="o">,</span> <span class="n">SocialNetwork</span> <span class="n">network</span><span class="o">,</span> <span class="n">Exception</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// Handle error</span>
+					<span class="o">}</span>
+					
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCancel</span><span class="o">()</span> <span class="o">{</span>
+						<span class="c1">// The user cancelled the operation.</span>
+					<span class="o">}</span>
+					
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAfterPost</span><span class="o">(</span><span class="n">Activity</span> <span class="n">parent</span><span class="o">,</span> <span class="n">SocialNetwork</span> <span class="n">socialNetwork</span><span class="o">,</span> <span class="n">JSONObject</span> <span class="n">responseObject</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// Called after the post returned from the social network.</span>
+						<span class="c1">// responseObject contains the raw JSON response from the social network.</span>
+					<span class="o">}</span>
+					
+					<span class="nd">@Override</span>
+					<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">onBeforePost</span><span class="o">(</span><span class="n">Activity</span> <span class="n">parent</span><span class="o">,</span> <span class="n">SocialNetwork</span> <span class="n">socialNetwork</span><span class="o">,</span> <span class="n">PostData</span> <span class="n">postData</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">// Called just prior to the post.</span>
+						<span class="c1">// postData contains the dictionary (map) of data to be posted.  </span>
+						<span class="c1">// You can change this here to customize the post.</span>
+						<span class="c1">// Return true to prevent the post from occurring.</span>
+						<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
 					<span class="o">}</span>
 				<span class="o">});</span>
 			<span class="o">}</span>
@@ -636,7 +786,7 @@ you can always just add the view manually.</p>
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="search.html?v=v2.6" method="get">
+    <form class="search" action="search.html?v=v2.6.1" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -647,38 +797,39 @@ you can always just add the view manually.</p>
     </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-<h3><a href="index.html?v=v2.6">Table Of Contents</a></h3>
+<h3><a href="index.html?v=v2.6.1">Table Of Contents</a></h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v2.6">What&#8217;s New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v2.6">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lifecycle.html?v=v2.6">Socialize Lifecycle</a></li>
-<li class="toctree-l1"><a class="reference internal" href="demo.html?v=v2.6">Socialize Demo App</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v2.6.1">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v2.6.1">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lifecycle.html?v=v2.6.1">Socialize Lifecycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html?v=v2.6.1">Socialize Demo App</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Socialize Action Bar</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#displaying-the-action-bar">Displaying the Action Bar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#disabling-the-scrollview">Disabling the ScrollView</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#actionbar-listener">ActionBar Listener</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#actionbar-comment-listener">ActionBar Comment Listener</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#actionbar-share-social-listener">ActionBar Share &amp; Social Listener</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#reloading-the-action-bar">Reloading the Action Bar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#customizing-the-action-bar">Customizing the Action Bar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#action-bar-icon-assets">Action Bar Icon Assets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#xml-based-layout">XML Based Layout</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="entities.html?v=v2.6">Socialize Entities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v2.6">Custom Like Buttons</a></li>
-<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v2.6">Facebook Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v2.6">Twitter Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="facebook_adv.html?v=v2.6">Advanced Facebook</a></li>
-<li class="toctree-l1"><a class="reference internal" href="twitter_adv.html?v=v2.6">Advanced Twitter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v2.6">SmartAlerts (Push Notifications)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v2.6">Entity Loaders</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deep_linking.html?v=v2.6">Deep Linking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v2.6">Socialize Android Developer Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html?v=v2.6">Configuration Settings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v2.6">Amazon AppStore URLs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v2.6">ProGuard Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v2.6">Troubleshooting &amp; Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v2.6">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entities.html?v=v2.6.1">Socialize Entities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v2.6.1">Custom Like Buttons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v2.6.1">Facebook Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v2.6.1">Twitter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook_adv.html?v=v2.6.1">Advanced Facebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter_adv.html?v=v2.6.1">Advanced Twitter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v2.6.1">SmartAlerts (Push Notifications)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v2.6.1">Entity Loaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deep_linking.html?v=v2.6.1">Deep Linking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v2.6.1">Socialize Android Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html?v=v2.6.1">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v2.6.1">Amazon AppStore URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v2.6.1">ProGuard Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v2.6.1">Troubleshooting &amp; Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v2.6.1">Change Log</a></li>
 </ul>
 
         </div>
@@ -689,12 +840,12 @@ you can always just add the view manually.</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="entities.html?v=v2.6" title="Socialize Entities"
+          <a href="entities.html?v=v2.6.1" title="Socialize Entities"
              >next</a></li>
         <li class="right" >
-          <a href="demo.html?v=v2.6" title="Socialize Demo App"
+          <a href="demo.html?v=v2.6.1" title="Socialize Demo App"
              >previous</a> |</li>
-        <li><a href="index.html?v=v2.6">Socialize Android SDK v2.6 documentation</a> &raquo;</li> 
+        <li><a href="index.html?v=v2.6.1">Socialize Android SDK v2.6.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
