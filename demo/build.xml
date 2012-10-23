@@ -39,7 +39,7 @@
          application and should be checked into Version Control Systems. -->
 	
 	<!-- Replaced so we don't try to build a dependent library -->
-    <loadproperties srcFile="project.properties" />
+    <loadproperties srcFile="build.properties" />
 
     <!-- quick check on sdk.dir -->
     <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project' or to inject it through an env var" unless="sdk.dir"/>
@@ -83,6 +83,7 @@
 	<target name="build">
 		
 		<echo>Building sdk...</echo>
+		
 		
 		<subant target="jar">
 	      <fileset dir="../sdk" includes="build.xml"/>

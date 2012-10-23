@@ -53,17 +53,6 @@ public class ActionBarShareListenerTest extends ActionBarTest {
 	public boolean isManual() {
 		return false;
 	}
-	
-	@Override
-	protected void setUp() throws Exception {
-		Debug.startMethodTracing();
-		super.setUp();
-	}
-
-	@Override
-	protected void tearDown() throws Exception {
-		Debug.stopMethodTracing();
-	}
 
 	public void testOnActionBarShareEventListenerIsCalledOnDialogDisplay() throws Throwable {
 		
