@@ -312,125 +312,135 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	
 	@Override
 	public void extendAccessToken(final Activity context, final SocializeAuthListener listener) {
-		Facebook facebook = getFacebook(context);
-		if(isLinked(context)) {
-			
-			if(!facebook.extendAccessTokenIfNeeded(context, new ServiceListener() {
-				@Override
-				public void onFacebookError(FacebookError e) {
-					if(logger != null) {
-						logger.warn("An error occurred while attempting to extend a Facebook access token.  The local Facebook account will be cleared.", e);
-					}				
-					
-					// Clear the local session state
-					unlink(context, null);
-				}
-				
-				@Override
-				public void onError(Error e) {
-					if(logger != null) {
-						logger.warn("An error occurred while attempting to extend a Facebook access token.  The local Facebook account will be cleared.", e);
+		try {
+			Facebook facebook = getFacebook(context);
+			if(isLinked(context)) {
+				if(facebook != null && !facebook.extendAccessTokenIfNeeded(context, new ServiceListener() {
+					@Override
+					public void onFacebookError(FacebookError e) {
+						if(logger != null) {
+							logger.warn("An error occurred while attempting to extend a Facebook access token.  The local Facebook account will be cleared.", e);
+						}				
+						
+						// Clear the local session state
+						unlink(context, null);
 					}
 					
-					// Clear the local session state
-					unlink(context, null);
-				}
-				
-				@Override
-				public void onComplete(Bundle values) {
-					// Update the local session state
-					SocializeSession session = getSocialize().getSession();
+					@Override
+					public void onError(Error e) {
+						if(logger != null) {
+							logger.warn("An error occurred while attempting to extend a Facebook access token.  The local Facebook account will be cleared.", e);
+						}
+						
+						// Clear the local session state
+						unlink(context, null);
+					}
 					
-					if(session != null) {
+					@Override
+					public void onComplete(Bundle values) {
+						// Update the local session state
+						SocializeSession session = getSocialize().getSession();
 						
-						final String newAccessToken = values.getString(Facebook.TOKEN);
-						
-						if(!StringUtils.isEmpty(newAccessToken)) {
-						
-							if(logger != null && logger.isDebugEnabled()) {
-								logger.debug("Got new Facebook access token [" +
-										newAccessToken +
-										"]");
-							}
+						if(session != null) {
 							
-							// Link the user again
-							link(context, newAccessToken, false, new SocializeAuthListener() {
-								
-								@Override
-								public void onError(SocializeException error) {
-									if(logger != null) {
-										logger.error("An error occurred while attempting to update authentication details", error);
-									}
-									
-									if(listener != null) {
-										listener.onError(error);
-									}
+							final String newAccessToken = values.getString(Facebook.TOKEN);
+							
+							if(!StringUtils.isEmpty(newAccessToken)) {
+							
+								if(logger != null && logger.isDebugEnabled()) {
+									logger.debug("Got new Facebook access token [" +
+											newAccessToken +
+											"]");
 								}
 								
-								@Override
-								public void onCancel() {
-									if(listener != null) {
-										listener.onCancel();
+								// Link the user again
+								link(context, newAccessToken, false, new SocializeAuthListener() {
+									
+									@Override
+									public void onError(SocializeException error) {
+										if(logger != null) {
+											logger.error("An error occurred while attempting to update authentication details", error);
+										}
+										
+										if(listener != null) {
+											listener.onError(error);
+										}
 									}
+									
+									@Override
+									public void onCancel() {
+										if(listener != null) {
+											listener.onCancel();
+										}
+									}
+									
+									@Override
+									public void onAuthSuccess(SocializeSession session) {
+										
+										UserProviderCredentialsMap map = session.getUserProviderCredentials();
+										
+										UserProviderCredentials creds = map.get(AuthProviderType.FACEBOOK);
+										
+										DefaultUserProviderCredentials newCreds = new DefaultUserProviderCredentials();
+										
+										if(creds != null) {
+											newCreds.merge(creds);
+										}
+										
+										newCreds.setAccessToken(newAccessToken);
+										
+										map.put(AuthProviderType.FACEBOOK, newCreds);
+										
+										getSocialize().setSession(session);
+										getSocialize().saveSession(context);		
+										
+										if(listener != null) {
+											listener.onAuthSuccess(session);
+										}
+									}
+									
+									@Override
+									public void onAuthFail(SocializeException error) {
+										if(logger != null) {
+											logger.error("An error occurred while attempting to update authentication details", error);
+										}
+										
+										if(listener != null) {
+											listener.onAuthFail(error);
+										}
+									}
+								});								
+							}
+							else {
+								if(logger != null) {
+									logger.warn("Access token returned from Facebook was empty during request to extend");
 								}
-								
-								@Override
-								public void onAuthSuccess(SocializeSession session) {
-									
-									UserProviderCredentialsMap map = session.getUserProviderCredentials();
-									
-									UserProviderCredentials creds = map.get(AuthProviderType.FACEBOOK);
-									
-									DefaultUserProviderCredentials newCreds = new DefaultUserProviderCredentials();
-									
-									if(creds != null) {
-										newCreds.merge(creds);
-									}
-									
-									newCreds.setAccessToken(newAccessToken);
-									
-									map.put(AuthProviderType.FACEBOOK, newCreds);
-									
-									getSocialize().setSession(session);
-									getSocialize().saveSession(context);		
-									
-									if(listener != null) {
-										listener.onAuthSuccess(session);
-									}
-								}
-								
-								@Override
-								public void onAuthFail(SocializeException error) {
-									if(logger != null) {
-										logger.error("An error occurred while attempting to update authentication details", error);
-									}
-									
-									if(listener != null) {
-										listener.onAuthFail(error);
-									}
-								}
-							});								
-						}
-						else {
-							if(logger != null) {
-								logger.warn("Access token returned from Facebook was empty during request to extend");
 							}
 						}
 					}
+				})) {
+					if(logger != null) {
+						logger.warn("Failed to bind to the Facebook RefreshToken Service");
+					}	
 				}
-			})) {
-				if(logger != null) {
-					logger.warn("Failed to bind to the Facebook RefreshToken Service");
-				}	
+			}
+			else if(facebook != null) {
+				// Ensure the local fb session is cleared
+				String accessToken = facebook.getAccessToken();
+				if(!StringUtils.isEmpty(accessToken)) {
+					new FacebookSessionStore().clear(context);
+				}
 			}
 		}
-		else {
-			// Ensure the local fb session is cleared
-			String accessToken = facebook.getAccessToken();
-			if(!StringUtils.isEmpty(accessToken)) {
-				new FacebookSessionStore().clear(context);
+		catch (Exception e) {
+			if(listener != null) {
+				listener.onError(SocializeException.wrap(e));
 			}
+			if(logger != null) {
+				logger.error("Failure during Facebook Token Refresh", e);
+			}	
 		}
+		
 	}
 	
 	
