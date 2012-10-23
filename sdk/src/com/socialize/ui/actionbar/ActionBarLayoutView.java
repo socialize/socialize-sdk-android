@@ -256,27 +256,37 @@ public class ActionBarLayoutView extends BaseView {
 					
 					boolean consumed = false;
 					
+					SocialNetworkDialogListener snListener = null;
+					
 					if(onActionBarEventListener != null) {
 						consumed = onActionBarEventListener.onClick(actionBarView, ActionBarEvent.SHARE);
+						
+						if(onActionBarEventListener instanceof SocialNetworkDialogListener) {
+							snListener = (SocialNetworkDialogListener) onActionBarEventListener;
+						}
 					}
 					if(!consumed) {
-						ShareUtils.showShareDialog(getActivity(), actionBarView.getEntity(), new SocialNetworkDialogListener() {
+						if(snListener == null) {
+							snListener = new SocialNetworkDialogListener() {
 
-							@Override
-							public void onError(SocializeException error) {
-								Toast.makeText(getActivity(), "Share Failed!  Please try again", Toast.LENGTH_SHORT).show();
-							}
+								@Override
+								public void onError(SocializeException error) {
+									Toast.makeText(getActivity(), "Share Failed!  Please try again", Toast.LENGTH_SHORT).show();
+								}
 
-							@Override
-							public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
-								Toast.makeText(context, "Share Failed!  Please try again", Toast.LENGTH_SHORT).show();
-							}
+								@Override
+								public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+									Toast.makeText(context, "Share Failed!  Please try again", Toast.LENGTH_SHORT).show();
+								}
 
-							@Override
-							public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
-								Toast.makeText(parent, "Share Successful", Toast.LENGTH_SHORT).show();
-							}
-						});
+								@Override
+								public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+									Toast.makeText(parent, "Share Successful", Toast.LENGTH_SHORT).show();
+								}
+							};
+						}
+						
+						ShareUtils.showShareDialog(getActivity(), actionBarView.getEntity(), snListener);
 					}
 				}
 			});

@@ -21,13 +21,18 @@
  */
 package com.socialize.demo.implementations.actionbar;
 
+import org.json.JSONObject;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 import com.socialize.ActionBarUtils;
 import com.socialize.demo.DemoActivity;
 import com.socialize.demo.R;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarView;
+import com.socialize.ui.actionbar.OnActionBarShareEventListener;
 import com.socialize.ui.comment.LinkifyCommentViewActionListener;
 
 
@@ -44,6 +49,12 @@ public class DefaultActionBarActivity extends DemoActivity {
 			public void onCreate(ActionBarView actionBar) {
 				// Add clickable links to comments
 				actionBar.setOnCommentViewActionListener(new LinkifyCommentViewActionListener());
+				actionBar.setOnActionBarEventListener(new OnActionBarShareEventListener() {
+					@Override
+					public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+						Toast.makeText(DefaultActionBarActivity.this, "Share successful", Toast.LENGTH_SHORT).show();
+					}
+				});
 			}
 		});		
 		
