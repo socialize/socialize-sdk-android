@@ -19,31 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api;
+package com.socialize.android.ioc;
 
-import java.util.ArrayList;
-import java.util.List;
-import com.socialize.entity.DeviceRegistration;
-import com.socialize.provider.SocializeProvider;
+import java.io.InputStream;
+
 
 /**
  * @author Jason Polites
  *
  */
-public class SocializeDeviceRegistrationSystem extends SocializeApi<DeviceRegistration, SocializeProvider<DeviceRegistration>> implements DeviceRegistrationSystem {
+public interface BeanMappingSource {
 
-	public SocializeDeviceRegistrationSystem(SocializeProvider<DeviceRegistration> provider) {
-		super(provider);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.api.DeviceRegistrationSystem#registerDevice(com.socialize.api.SocializeSession, com.socialize.entity.DeviceRegistration)
-	 */
-	@Override
-	public void registerDevice(SocializeSession session, DeviceRegistration registration, DeviceRegistrationListener listener) {
-		List<DeviceRegistration> registrations = new ArrayList<DeviceRegistration>(1);
-		registrations.add(registration);
-		postAsync(session, ENDPOINT, registrations, listener);
-	}
+	public InputStream[] getSources();
+	
+	public String getName();
 	
 }

@@ -62,6 +62,19 @@ public class AndroidIOC implements IOCContainer {
 	}
 	
 	@Override
+	public void init(Context context, ContainerBuilder builder, BeanMappingSource source) throws Exception {
+		if(!initialized) {
+			container = builder.build(source);
+			initialized = true;
+		}
+	}
+
+	@Override
+	public void init(Context context, BeanMappingSource source) throws Exception {
+		init(context, new ContainerBuilder(context), source);
+	}
+
+	@Override
 	public void init(Context context, InputStream...in) throws Exception {
 		init(context, new ContainerBuilder(context), in);
 	}
@@ -148,9 +161,7 @@ public class AndroidIOC implements IOCContainer {
 	 */
 	@Override
 	public void setContext(Context context) {
-		if(container != null) {
-			container.setContext(context);
-		}
+		container.setContext(context);
 	}
 
 	@Override
@@ -160,8 +171,6 @@ public class AndroidIOC implements IOCContainer {
 
 	@Override
 	public void onContextDestroyed(Context context) {
-		if(container != null) {
-			container.onContextDestroyed(context);
-		}
+		container.onContextDestroyed(context);
 	}
 }

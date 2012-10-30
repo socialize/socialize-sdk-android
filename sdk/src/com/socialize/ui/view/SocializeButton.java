@@ -36,6 +36,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.socialize.i18n.LocalizationService;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.util.Colors;
 import com.socialize.util.DisplayUtils;
@@ -49,6 +50,7 @@ public class SocializeButton extends LinearLayout {
 	
 	public static enum TEXT_ALIGN {LEFT, CENTER, RIGHT};
 	
+	private LocalizationService localizationService;
 	private Drawables drawables;
 	private Colors colors;
 	private DisplayUtils displayUtils;
@@ -67,7 +69,11 @@ public class SocializeButton extends LinearLayout {
 	private int imagePaddingLeft = 0;
 	private int imagePaddingRight = 0;
 	
+	@Deprecated
 	private String text = "";
+	
+	private String textKey;
+	
 	private String imageName;
 	
 	private boolean bold = false;
@@ -177,7 +183,10 @@ public class SocializeButton extends LinearLayout {
 		
 		setTextSize(textSize);
 		
-		textView.setText(text);
+		if(!StringUtils.isEmpty(textKey)) {
+			textView.setText(localizationService.getString(textKey));
+		}
+		
 		textView.setLayoutParams(textLayout);
 		
 		if(!StringUtils.isEmpty(imageName)) {
@@ -326,12 +335,21 @@ public class SocializeButton extends LinearLayout {
 		this.textSize = textSize;
 	}
 	
+	@Deprecated
 	public void setText(String text) {
 		if(textView != null) {
 			textView.setText(text);
 			textView.setPadding(textPadding, 0, 0, 0);
 		}
 		this.text = text;
+	}
+	
+	public void setTextKey(String textKey) {
+		if(textView != null) {
+			textView.setText(localizationService.getString(textKey));
+			textView.setPadding(textPadding, 0, 0, 0);
+		}
+		this.textKey = textKey;
 	}
 
 	public void setBottomColor(String bottomColor) {
@@ -400,6 +418,10 @@ public class SocializeButton extends LinearLayout {
 	
 	public void setBackgroundVisible(boolean backgroundVisible) {
 		this.backgroundVisible = backgroundVisible;
+	}
+	
+	public void setLocalizationService(LocalizationService localizationService) {
+		this.localizationService = localizationService;
 	}
 
 	public void addOnClickListenerAfter(OnClickListener listener) {

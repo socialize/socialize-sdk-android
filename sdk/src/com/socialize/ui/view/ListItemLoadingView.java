@@ -8,6 +8,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import com.socialize.i18n.I18NConstants;
+import com.socialize.i18n.LocalizationService;
 import com.socialize.ui.util.Colors;
 import com.socialize.util.DisplayUtils;
 import com.socialize.view.BaseView;
@@ -19,6 +21,7 @@ import com.socialize.view.BaseView;
  */
 public class ListItemLoadingView extends BaseView {
 
+	private LocalizationService localizationService;
 	private DisplayUtils displayUtils;
 	private Colors colors;
 	
@@ -27,28 +30,6 @@ public class ListItemLoadingView extends BaseView {
 	}
 	
 	public void init() {
-//		final int eight = displayUtils.getDIP(8);
-		
-//		ProgressBar progress = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleSmall);
-//		TextView text = new TextView(getContext());
-//		
-//		progress.setPadding(eight, eight, 0, eight);
-//		
-//		text.setTextColor(colors.getColor(Colors.BODY));
-//		text.setText("Loading...");
-//		text.setPadding(eight, eight, eight, eight);
-//		
-//		ListView.LayoutParams layout = new ListView.LayoutParams(ListView.LayoutParams.FILL_PARENT, ListView.LayoutParams.WRAP_CONTENT);
-//		
-//		setBackgroundColor();
-//		setOrientation(LinearLayout.HORIZONTAL);
-//		setLayoutParams(layout);
-//		setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
-//		setPadding(eight,eight,eight,eight);
-//		
-//		addView(progress);
-//		addView(text);
-		
 		int padding = displayUtils.getDIP(4);
 		
 		ListView.LayoutParams masterParams = new ListView.LayoutParams(ListView.LayoutParams.FILL_PARENT, displayUtils.getDIP(48));
@@ -64,7 +45,7 @@ public class ListItemLoadingView extends BaseView {
 		TextView text = new TextView(getContext());
 		text.setTextColor(Color.GRAY);
 		text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-		text.setText("Loading...");
+		text.setText(localizationService.getString(I18NConstants.LOADING));
 		text.setPadding(0, padding, padding, padding);
 		
 		LayoutParams progressLayoutParams = new LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -99,5 +80,9 @@ public class ListItemLoadingView extends BaseView {
 
 	public void setColors(Colors colors) {
 		this.colors = colors;
+	}
+	
+	public void setLocalizationService(LocalizationService localizationService) {
+		this.localizationService = localizationService;
 	}
 }

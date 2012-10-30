@@ -38,6 +38,8 @@ import android.widget.Toast;
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
+import com.socialize.i18n.I18NConstants;
+import com.socialize.i18n.LocalizationService;
 import com.socialize.ui.profile.UserSettings;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.util.KeyboardUtils;
@@ -63,6 +65,7 @@ public class CommentEntryView extends BaseView {
 	private Colors colors;
 	private KeyboardUtils keyboardUtils;
 	private EditText commentField;
+	private LocalizationService localizationService;
 	
 	private IBeanFactory<CustomCheckbox> locationEnabledOptionFactory;
 	private IBeanFactory<CustomCheckbox> notificationEnabledOptionFactory;
@@ -359,6 +362,10 @@ public class CommentEntryView extends BaseView {
 		updateUI();
 	}
 
+	public void setLocalizationService(LocalizationService localizationService) {
+		this.localizationService = localizationService;
+	}
+
 	protected void updateUI() {
 		
 		if(notificationsAvailable) {
@@ -369,24 +376,24 @@ public class CommentEntryView extends BaseView {
 	
 			if(notificationsEnabled) {
 				if(notificationsText != null) {
-					notificationsText.setText("We will notify you when someone replies.");
+					notificationsText.setText(localizationService.getString(I18NConstants.COMMENT_SMARTALERTS_SUBSCRIBED_WILL_NOTIFY));
 				}
 				if(notificationsTitle != null) {
-					notificationsTitle.setText("You will be subscribed.");
+					notificationsTitle.setText(localizationService.getString(I18NConstants.COMMENT_SMARTALERTS_SUBSCRIBED_YES));
 				}
 				if(subscribeNotificationButton != null) {
-					subscribeNotificationButton.setText("Unsubscribe");
+					subscribeNotificationButton.setTextKey(I18NConstants.COMMENT_SMARTALERTS_UNSUBSCRIBE);
 				}
 			}
 			else {
 				if(notificationsText != null) {
-					notificationsText.setText("Click subscribe to receive updates.");
+					notificationsText.setText(localizationService.getString(I18NConstants.COMMENT_SMARTALERTS_SUBSCRIBE_ASK));
 				}
 				if(notificationsTitle != null) {
-					notificationsTitle.setText("You will not be subscribed.");
+					notificationsTitle.setText(localizationService.getString(I18NConstants.COMMENT_SMARTALERTS_SUBSCRIBED_NO));
 				}
 				if(subscribeNotificationButton != null) {
-					subscribeNotificationButton.setText("Subscribe");
+					subscribeNotificationButton.setTextKey(I18NConstants.COMMENT_SMARTALERTS_SUBSCRIBE);
 				}
 			}
 		}
@@ -426,7 +433,6 @@ public class CommentEntryView extends BaseView {
 	protected void reset() {
 		keyboardUtils.hideKeyboard(commentField);
 		commentField.setText("");
-//		update();
 	}
 	
 	public void update() {

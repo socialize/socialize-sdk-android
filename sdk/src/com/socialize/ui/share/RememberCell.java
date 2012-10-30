@@ -11,7 +11,7 @@ import com.socialize.ui.view.ClickableSectionCell;
 
 public class RememberCell extends ClickableSectionCell {
 	
-	private String text;
+	private String textKey;
 
 	public RememberCell(Context context) {
 		super(context);
@@ -44,7 +44,7 @@ public class RememberCell extends ClickableSectionCell {
 		
 		TextView title = new TextView(getContext());
 		
-		title.setText(text);
+		title.setText(localizationService.getString(textKey));
 		
 		title.setTextColor(colors.getColor(Colors.ANON_CELL_TITLE));
 		
@@ -56,15 +56,8 @@ public class RememberCell extends ClickableSectionCell {
 		
 		return layout;
 	}
-
 	
-	public String getText() {
-		return text;
+	public void setTextKey(String textKey) {
+		this.textKey = textKey;
 	}
-	
-	public void setText(String text) {
-		this.text = text;
-	}
-	
-	
 }
