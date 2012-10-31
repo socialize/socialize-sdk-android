@@ -33,6 +33,7 @@ public class ListItemLoadingViewTest extends SocializeUITestCase {
 		ListItemLoadingView view = new ListItemLoadingView(getContext());
 		
 		view.setColors(colors);
+		view.setLocalizationService(localizationService);
 		view.setDisplayUtils(deviceUtils);
 		view.init();
 		
