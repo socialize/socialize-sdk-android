@@ -6,8 +6,25 @@
 What's New
 ==========
 
-In this version (v2.5)
+In this version (v2.7)
 ----------------------
+
+Localization!
+~~~~~~~~~~~~~
+After many many requests we are happy to announce we now support localization!  You can now coompletely customize the UI in Socialize with alternate languages 
+via standard Android localization.
+
+Refer to :ref:`localization` for more details. 
+
+Support for Google Cloud Messaging
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+With the deprecation by Google of the current "C2DM" framework Socialize has built and tested the required changes to support the newer 
+Google Cloud Messaging (GCM) system.
+
+Refer to :ref:`push_notifications` for more details. 
+
+v2.5
+----
 
 Deep Linking
 ~~~~~~~~~~~~
