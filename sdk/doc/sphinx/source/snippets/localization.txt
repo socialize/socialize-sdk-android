@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="socialize_facebook_button_signin">Connectez-vous à Facebook</string>
+    
+    <!-- Add other values here -->
+</resources>

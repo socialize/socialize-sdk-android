@@ -205,12 +205,12 @@ public class ProfileContentView extends BaseView {
 		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
 			facebookEnabledCheckbox = facebookEnabledCheckboxFactory.getBean();
 			autoPostFacebook = new CheckBox(getContext());
-			setupSocialButton(group, facebookEnabledCheckbox, autoPostFacebook, "Post to Facebook by default");
+			setupSocialButton(group, facebookEnabledCheckbox, autoPostFacebook, localizationService.getString(I18NConstants.AUTO_POST_FB));
 		}
 		if(getSocialize().isSupported(AuthProviderType.TWITTER)) {
 			twitterEnabledCheckbox = twitterEnabledCheckboxFactory.getBean();
 			autoPostTwitter = new CheckBox(getContext());
-			setupSocialButton(group, twitterEnabledCheckbox, autoPostTwitter, "Post to Twitter by default");
+			setupSocialButton(group, twitterEnabledCheckbox, autoPostTwitter, localizationService.getString(I18NConstants.AUTO_POST_TW));
 		}		
 	}
 	

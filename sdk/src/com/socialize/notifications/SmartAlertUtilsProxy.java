@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2012 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,51 +19,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity;
+package com.socialize.notifications;
 
-import com.socialize.api.action.ActionType;
-import com.socialize.api.action.ShareType;
+import android.content.Context;
+import android.content.Intent;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class Share extends SocializeAction {
+public interface SmartAlertUtilsProxy {
 	
-	private static final long serialVersionUID = -7747516178154031316L;
+	public boolean onMessage(Context context, Intent intent);
 	
-	private String text;
-	private ShareType shareType;
+	public void onRegister(Context context, String registrationId) ;
 	
-	@Override
-	public ActionType getActionType() {
-		return ActionType.SHARE;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	@Override
-	public String getDisplayText() {
-		return "via " + shareType.getName();
-	}
+	public void onError(Context context, String errorId);
 	
-	public ShareType getShareType() {
-		return shareType;
-	}
-
-	public void setShareType(ShareType shareType) {
-		this.shareType = shareType;
-	}
-
-	@Override
-	public int hashCode() {
-		return super.hashCode();
-	}
+	public void onUnregister(Context context, String registrationId);
 }

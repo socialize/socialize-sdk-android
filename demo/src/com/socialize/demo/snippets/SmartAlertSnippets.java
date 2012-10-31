@@ -24,6 +24,7 @@ package com.socialize.demo.snippets;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import com.google.android.gcm.GCMBaseIntentService;
 import com.socialize.SmartAlertUtils;
 
 
@@ -44,4 +45,45 @@ public void onReceive(Context context, Intent intent) {
 	}
 }
 // end-snippet-0
+// begin-snippet-1
+
+public class MyGCMIntentService extends GCMBaseIntentService {
+
+	@Override
+	protected void onMessage(Context context, Intent intent) {
+		
+		if(!SmartAlertUtils.onMessage(context, intent)) {
+			// Your code here
+		}
+	}
+
+	@Override
+	protected void onRegistered(Context context, String registrationId) {
+		
+		SmartAlertUtils.onRegister(context, registrationId);
+		
+		// Your code here
+	}
+
+	@Override
+	protected void onUnregistered(Context context, String registrationId) {
+		
+		SmartAlertUtils.onUnregister(context, registrationId);
+		
+		// Your code here
+	}
+	
+	@Override
+	protected void onError(Context context, String errorId) {
+		
+		SmartAlertUtils.onError(context, errorId);
+		
+		// Your code here
+	}
 }
+//end-snippet-1
+}
+
+
+
+

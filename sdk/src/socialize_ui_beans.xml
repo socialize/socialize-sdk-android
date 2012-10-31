@@ -49,7 +49,9 @@
 		<property name="errorHandler" ref="socializeUIErrorHandler"/>
 	</bean>
 	
-	<bean id="dateUtils" class="com.socialize.ui.util.DateUtils"/>
+	<bean id="dateUtils" class="com.socialize.ui.util.DateUtils">
+		<property name="localizationService" ref="localizationService"/>
+	</bean>
 	
 	<bean id="geoUtils" class="com.socialize.ui.util.GeoUtils">
 		<init-method name="init">
@@ -387,6 +389,7 @@
 		singleton="false"
 		cache="true">
 		<constructor-arg type="activity"/>
+		<property name="localizationService" ref="localizationService"/>
 		<property name="config" ref="config"/>
 		<property name="colors" ref="colors"/>
 		<property name="drawables" ref="drawables"/>
@@ -419,6 +422,7 @@
 		singleton="false"
 		cache="true">
 		<constructor-arg type="activity"/>
+		<property name="localizationService" ref="localizationService"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="colors" ref="colors"/>

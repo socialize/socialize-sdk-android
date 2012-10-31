@@ -14,7 +14,11 @@
 	<permission android:name="your_package_name.permission.C2D_MESSAGE" android:protectionLevel="signature" />
 	
 	<uses-permission android:name="your_package_name.permission.C2D_MESSAGE" />
-	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />			
+	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />		
+	
+	<!-- Google Cloud Messaging Requires these additional permissions -->
+	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" /> 			
 
 	<application...>
 	

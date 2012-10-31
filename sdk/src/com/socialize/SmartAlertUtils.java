@@ -21,8 +21,10 @@
  */
 package com.socialize;
 
+import java.lang.reflect.Proxy;
 import android.content.Context;
 import android.content.Intent;
+import com.socialize.notifications.SmartAlertUtilsProxy;
 
 
 /**
@@ -30,6 +32,15 @@ import android.content.Intent;
  * @author Jason Polites
  */
 public class SmartAlertUtils {
+	
+	static SmartAlertUtilsProxy proxy;
+	
+	static {
+		proxy = (SmartAlertUtilsProxy) Proxy.newProxyInstance(
+				SmartAlertUtilsProxy.class.getClassLoader(),
+				new Class[]{SmartAlertUtilsProxy.class},
+				new SocializeActionProxy("smartAlertUtils"));	// Bean name
+	}	
 
 	/**
 	 * Handles a broadcast intent recieved by a Broadcast Receiver on Android.
@@ -40,5 +51,27 @@ public class SmartAlertUtils {
 	 */
 	public static boolean handleBroadcastIntent(Context context, Intent intent) {
 		return Socialize.getSocialize().handleBroadcastIntent(context, intent);
+	}
+	
+	/**
+	 * Handles a GCM message.  Returns true ONLY if this message was intended for Socialize.
+	 * @param context
+	 * @param messageData
+	 * @return
+	 */
+	public static boolean onMessage(Context context, Intent intent) {
+		return proxy.onMessage(context, intent);
+	}
+	
+	public static void onRegister(Context context, String registrationId) {
+		proxy.onRegister(context, registrationId);
+	}
+	
+	public static void onError(Context context, String errorId) {
+		proxy.onError(context, errorId);
+	}
+	
+	public static void onUnregister(Context context, String registrationId) {
+		proxy.onUnregister(context, registrationId);
 	}
 }

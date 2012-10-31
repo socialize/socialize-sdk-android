@@ -40,6 +40,8 @@ import com.socialize.api.SocializeSessionPersister;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
+import com.socialize.i18n.I18NConstants;
+import com.socialize.i18n.LocalizationService;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetwork;
@@ -67,6 +69,7 @@ public class AuthPanelView extends DialogPanelView {
 	private IBeanFactory<RememberCell> rememberAuthCellFactory;
 	private SocializeConfig config;
 	private SocializeSessionPersister sessionPersister;
+	private LocalizationService localizationService;
 	
 	public AuthPanelView(Context context) {
 		super(context);
@@ -194,7 +197,7 @@ public class AuthPanelView extends DialogPanelView {
 				rememberCell.setVisibility(View.VISIBLE);
 			}
 			
-			String mystring = new String("I'd rather not...");
+			String mystring = new String(localizationService.getString(I18NConstants.AUTH_RATHER_NOT));
 			SpannableString content = new SpannableString(mystring);
 			content.setSpan(new UnderlineSpan(), 0, mystring.length(), 0);
 			skipAuth.setText(content);
@@ -219,7 +222,7 @@ public class AuthPanelView extends DialogPanelView {
 				rememberCell.setVisibility(View.GONE);
 			}
 			
-			skipAuth.setText("Authentication is required");
+			skipAuth.setText(localizationService.getString(I18NConstants.AUTH_REQUIRED));
 		}
 	}
 	
@@ -320,7 +323,7 @@ public class AuthPanelView extends DialogPanelView {
 			header.setBackgroundDrawable(headerBG);
 		}
 
-		header.setText("Sign in to post");
+		header.setText(localizationService.getString(I18NConstants.AUTH_HEADER));
 		header.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
 		header.setTextColor(Color.WHITE);
 		header.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
@@ -375,6 +378,10 @@ public class AuthPanelView extends DialogPanelView {
 	
 	public void setSessionPersister(SocializeSessionPersister sessionPersister) {
 		this.sessionPersister = sessionPersister;
+	}
+	
+	public void setLocalizationService(LocalizationService localizationService) {
+		this.localizationService = localizationService;
 	}
 
 	protected SocializeAuthListener getAuthClickListener(final ClickableSectionCell cell, final SocialNetwork network) {

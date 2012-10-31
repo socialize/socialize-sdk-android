@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Socialize Demos French</string>
-    <string name="socialize_actionbar_label_like">Frenchy!</string>
+ 	<string name="socialize_facebook_button_signin">Connectez-vous à Facebook</string>
+ 	<string name="socialize_twitter_button_signin">Connectez-vous à Twitter</string>
 </resources>

@@ -57,6 +57,8 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_GCM_SENDER_ID = "socialize.gcm.sender.id";
 	
+	public static final String SOCIALIZE_CUSTOM_GCM_SENDER_ID = "socialize.custom.gcm.sender.id";
+	
 	public static final String SOCIALIZE_ENTITY_LOADER = "socialize.entity.loader";
 	
 	public static final String SOCIALIZE_LOCATION_ENABLED = "socialize.location.enabled";

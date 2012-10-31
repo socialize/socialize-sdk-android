@@ -20,6 +20,7 @@ Contents:
 	push_notifications
 	entity_loader
 	deep_linking
+	localization
 	sdk_user_guide
 	config
 	amazon

@@ -218,10 +218,7 @@ public class CustomCheckbox extends BaseView {
 
 	protected void setText(String text) {
 		if(checkboxLabel != null) {
-			if(checked) {
-				checkboxLabel.setText(text);
-			}
-			
+			checkboxLabel.setText(text);
 			checkboxLabel.setVisibility(VISIBLE);
 		}
 	}

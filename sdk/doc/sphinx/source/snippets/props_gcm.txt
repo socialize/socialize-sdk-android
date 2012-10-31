@@ -1,0 +1,2 @@
+# This is your current GCM Sender ID
+socialize.custom.gcm.sender.id=1234567890

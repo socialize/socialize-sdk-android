@@ -35,7 +35,7 @@ The following configurations are required for SmartAlerts.
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | socialize.entity.loader         | String  | None     | com.mypackage.MyEntityLoader           | Fully qualified class name of your entity loader implementation  |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
-| socialize.c2dm.sender.id        | String  | None     | ``yoursender@gmail.com``               | Optional.  Use if you have your own C2DM sender ID               |
+| socialize.custom.gcm.sender.id  | Number  | None     | 1234567890                             | Optional.  Use if ONLY you have your own GCM sender ID           |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | socialize.comments.on.notify    | Boolean | false    |                                        | Users are directed to the comment list for comment notifications |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+

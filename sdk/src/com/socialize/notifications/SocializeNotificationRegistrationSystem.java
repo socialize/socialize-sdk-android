@@ -105,6 +105,12 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 			
 			@SuppressWarnings("deprecation")
 			String senderId = config.getProperty(SocializeConfig.SOCIALIZE_GCM_SENDER_ID, config.getProperty(SocializeConfig.SOCIALIZE_C2DM_SENDER_ID));
+			String customSender = config.getProperty(SocializeConfig.SOCIALIZE_CUSTOM_GCM_SENDER_ID);
+			
+			// Only supported in GCM
+			if(!StringUtils.isEmpty(senderId) && !StringUtils.isEmpty(customSender)) {
+				senderId = senderId + "," + customSender;
+			}
 			
 			Intent registrationIntent = newIntent(REQUEST_REGISTRATION_INTENT);
 			registrationIntent.putExtra(EXTRA_APPLICATION_PENDING_INTENT, newPendingIntent(context));
