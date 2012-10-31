@@ -110,7 +110,7 @@ public class SocializeNotificationRegistrationSystemTest extends SocializeUnitTe
 		notificationRegistrationState.setC2dmPendingRequestTime(AndroidMock.anyLong());
 		notificationRegistrationState.save(context);
 		
-		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_C2DM_SENDER_ID)).andReturn(senderId);
+		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_GCM_SENDER_ID)).andReturn(senderId);
 		
 		AndroidMock.expect(registrationIntent.putExtra(SocializeNotificationRegistrationSystem.EXTRA_APPLICATION_PENDING_INTENT, (PendingIntent) null)).andReturn(registrationIntent);
 		AndroidMock.expect(registrationIntent.putExtra(SocializeNotificationRegistrationSystem.EXTRA_SENDER, senderId)).andReturn(registrationIntent);

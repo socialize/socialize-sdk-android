@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Socialize Sample App</string>
+    
+    <!--  DO NOT DELETE.  THIS IS USED IN TESTS -->
+    <string name="socialize_comment_hint">Be the first to comment...</string>
+    
 </resources>

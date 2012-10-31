@@ -73,6 +73,9 @@ public class CustomLocalizationService implements LocalizationService {
 			if(str != null) {
 				strings.put(key, str);
 			}
+			else {
+				str = key;
+			}
 		}
 		
 		return str;

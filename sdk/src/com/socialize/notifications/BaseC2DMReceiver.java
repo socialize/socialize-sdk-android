@@ -128,7 +128,7 @@ public abstract class BaseC2DMReceiver extends IntentService {
 			onRegistrered(context, registrationId);
 		}
 		else {
-			onError(context, "No registration ID in response from C2DM");
+			onError(context, "No registration ID in response from GCM");
 		}
 	}
 }

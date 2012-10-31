@@ -91,7 +91,7 @@ public class NotificationChecker {
 
 			if(config.getBooleanProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, true)) {
 				if(logger != null && logger.isDebugEnabled()) {
-					logger.debug("Checking C2DM registration state");
+					logger.debug("Checking GCM registration state");
 				}
 				
 				if(!notificationRegistrationSystem.isRegisteredC2DM() || !notificationRegistrationSystem.isRegisteredSocialize(session.getUser())) {
@@ -103,12 +103,12 @@ public class NotificationChecker {
 						
 						if(notificationRegistrationSystem.isRegistrationPending()) {
 							if(logger != null && logger.isDebugEnabled()) {
-								logger.debug("C2DM Registration already pending");
+								logger.debug("GCM Registration already pending");
 							}
 						}
 						else {
 							if(logger != null && logger.isInfoEnabled()) {
-								logger.info("Not registered with C2DM, sending registration request...");
+								logger.info("Not registered with GCM, sending registration request...");
 							}
 							
 							notificationRegistrationSystem.registerC2DMAsync(context);
@@ -118,12 +118,12 @@ public class NotificationChecker {
 						
 						if(notificationRegistrationSystem.isSocializeRegistrationPending()) {
 							if(logger != null && logger.isDebugEnabled()) {
-								logger.debug("Registration already pending with Socialize for C2DM");
+								logger.debug("Registration already pending with Socialize for GCM");
 							}
 						}
 						else {
 							if(logger != null && logger.isInfoEnabled()) {
-								logger.info("Not registered with Socialize for C2DM, registering...");
+								logger.info("Not registered with Socialize for GCM, registering...");
 							}
 							
 							notificationRegistrationSystem.registerSocialize(context, notificationRegistrationState.getC2DMRegistrationId());
@@ -140,7 +140,7 @@ public class NotificationChecker {
 			}
 			else {
 				if(logger != null && logger.isWarnEnabled()) {
-					logger.warn("C2DM registration check skipped");
+					logger.warn("GCM registration check skipped");
 				}	
 			}
 		}
@@ -148,7 +148,6 @@ public class NotificationChecker {
 			if(logger != null && logger.isInfoEnabled()) {
 				logger.info("Notifications not enabled.  Check the AndroidManifest.xml for correct configuration.");
 			}	
-			
 			
 			checked = true;
 		}

@@ -36,8 +36,6 @@ import com.socialize.api.event.EventSystem;
 import com.socialize.concurrent.ManagedAsyncTask;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.error.SocializeException;
-import com.socialize.i18n.I18NConstants;
-import com.socialize.i18n.LocalizationService;
 import com.socialize.launcher.AsyncLauncher;
 import com.socialize.launcher.LaunchListener;
 import com.socialize.launcher.LaunchManager;
@@ -62,7 +60,6 @@ public class SocializeLaunchActivity extends Activity {
 	protected SocializeErrorHandler errorHandler;
 	protected Intent originalIntent;
 	protected EventSystem eventSystem;
-	protected LocalizationService localizationService;
 	
 	@Override
 	protected void onNewIntent(Intent intent) {
@@ -90,7 +87,7 @@ public class SocializeLaunchActivity extends Activity {
 		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
 		
 		TextView text = new TextView(this);
-		text.setText(localizationService.getString(I18NConstants.LOADING));
+		text.setText("Loading...");
 		text.setTextColor(Color.WHITE);
 		
 		LayoutParams text_params = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
@@ -111,7 +108,6 @@ public class SocializeLaunchActivity extends Activity {
 		logger = container.getBean("logger");
 		errorHandler = container.getBean("socializeUIErrorHandler");
 		eventSystem = container.getBean("eventSystem");
-		localizationService = container.getBean("localizationService");
 	}
 	
 	protected void doAuthenticate() {
