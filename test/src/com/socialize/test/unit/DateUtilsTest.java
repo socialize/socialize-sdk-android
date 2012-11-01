@@ -1,7 +1,9 @@
 package com.socialize.test.unit;
 
+import com.socialize.i18n.DefaultLocalizationService;
 import com.socialize.test.ui.SocializeUITestCase;
 import com.socialize.ui.util.DateUtils;
+import com.socialize.util.ResourceLocator;
 
 
 public class DateUtilsTest extends SocializeUITestCase {
@@ -32,6 +34,16 @@ public class DateUtilsTest extends SocializeUITestCase {
 		
 		DateUtils timeUtils = new DateUtils();
 		
+		DefaultLocalizationService defaultLocalizationService = new DefaultLocalizationService();
+		ResourceLocator resourceLocator = new ResourceLocator();
+		
+		defaultLocalizationService.setResourceLocator(resourceLocator);
+		
+		defaultLocalizationService.init(getContext());
+		
+		timeUtils.setLocalizationService(defaultLocalizationService);
+		
+		
 		String aValue = timeUtils.getTimeString(a);
 		String bValue = timeUtils.getTimeString(b);
 		String cValue = timeUtils.getTimeString(c);
@@ -39,12 +51,12 @@ public class DateUtilsTest extends SocializeUITestCase {
 		String eValue = timeUtils.getTimeString(e);
 		String fValue = timeUtils.getTimeString(f);
 		
-		System.out.println(aValue);
-		System.out.println(bValue);
-		System.out.println(cValue);
-		System.out.println(dValue);
-		System.out.println(eValue);
-		System.out.println(fValue);
+//		System.out.println(aValue);
+//		System.out.println(bValue);
+//		System.out.println(cValue);
+//		System.out.println(dValue);
+//		System.out.println(eValue);
+//		System.out.println(fValue);
 		
 		assertEquals("Just now", aValue);
 		assertEquals("20 minutes ago", bValue);

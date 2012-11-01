@@ -21,9 +21,6 @@
  */
 package com.socialize.gcm;
 
-import java.util.Set;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import com.google.android.gcm.server.Message;
 import com.google.android.gcm.server.Message.Builder;
 import com.google.android.gcm.server.Result;
@@ -39,29 +36,24 @@ public class SendMessage {
 	/**
 	 * @param args
 	 */
-	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws Exception {
-		if(args.length < 3) {
-			System.err.println("Usage: " + SendMessage.class.getSimpleName() + " <Auth Key> <Device Token> <Message>");
-		}
-		else {
-			JSONParser p = new JSONParser();
-			JSONObject json = (JSONObject) p.parse(args[2]);
-			
-			Set<String> keySet = (Set<String>) json.keySet();
-			Builder builder = new Message.Builder();
-			
-			for (String string : keySet) {
-				builder.addData(string, json.get(string).toString());
-			}
-			
-			Message message = builder.build();
-			Sender sender = new Sender(args[0]);
-			Result result = sender.send(message,args[1], 5);
-			
-			System.out.println("Message ID: " + result.getMessageId());
-			System.out.println("Error Code: " + result.getErrorCodeName());
-		}
+		
+		String data = "{'notification_type': 'developer_notification', 'message': 'Harp testing GCM from GCMHelper.', 'application_id': 1}";
+//		String key = "AIzaSyD-Kc99pYtKmd4CWT-3Zs7qOdpSqpgH_K4";
+//		String token = "APA91bE05JJl68VlBgytSFDiHXcJRAtmFFeH4b9IzRGIGD00SsOiKFC8ciowaEQvD_klSpa6jTikp1ZSYW0cy104Nr0b9MQztDddaTF4JWCJdrERdMacfKR4gEMPtw_wYuct70LGU22dCZkzkbUpcEaboIv91xH9hw";
+		
+		String key = "AIzaSyAa_DXsURtX9Pi0iDkvH8mD411zaToNky4";
+		String token = "APA91bGgMOU81nL2EFZk4W8UaQHVjCKLms3QQc52NNtFgaOD3jjXA_OK8FXtDwDCzSIxoCrpTqa72SlfD3iIQKdFc2Xe5EcC9po8m31rK8C3KwquIhdd6-tuAAQbFeCvxY5R6LWTQjZ9vidU5qA7QPzCu5zeWWc3kA";
+		
+		Builder builder = new Message.Builder();
+		builder.addData("message", data);
+		builder.addData("source", "socialize");
+		builder.collapseKey("1");
+		Message message = builder.build();
+		Sender sender = new Sender(key);
+		Result result = sender.send(message, token, 5);
+		System.out.println("Message ID: " + result.getMessageId());
+		System.out.println("Error Code: " + result.getErrorCodeName());
 	}
 
 }
