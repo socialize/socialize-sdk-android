@@ -96,6 +96,7 @@ public class SocializeNotificationRegistrationSystemTest extends SocializeUnitTe
 		AndroidMock.verify(deviceRegistrationFactory, registration, notificationRegistrationState, session);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@UsesMocks ({SocializeConfig.class, MockContext.class, Intent.class})
 	public void test_registerC2DM() {
 		final String senderId = "foobar";

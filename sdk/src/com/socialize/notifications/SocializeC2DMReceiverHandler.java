@@ -68,7 +68,7 @@ public class SocializeC2DMReceiverHandler implements C2DMReceiverHandler {
 	 * @see com.socialize.notifications.C2DMReceiverHandler#onRegistrered(android.content.Context, java.lang.String)
 	 */
 	@Override
-	public void onRegistrered(Context context, String registrationId)  {
+	public void onRegistered(Context context, String registrationId)  {
 		try {
 			if(notificationCallback != null) {
 				notificationCallback.onRegister(context, registrationId);

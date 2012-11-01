@@ -823,6 +823,5 @@
 		<init-method name="init">
 			<arg type="context"/>
 		</init-method>
-	</bean>		
-	
+	</bean>	
 </beans>
