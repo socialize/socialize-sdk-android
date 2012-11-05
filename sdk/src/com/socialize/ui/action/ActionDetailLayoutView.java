@@ -35,6 +35,7 @@ import com.socialize.entity.Comment;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
+import com.socialize.i18n.I18NConstants;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.log.SocializeLogger;
@@ -111,7 +112,7 @@ public class ActionDetailLayoutView extends BaseView {
 	public void reload() {
 		if(getSocialize().isAuthenticated()) {
 			
-			dialog = progressDialogFactory.show(getContext(), "Loading", "Please wait...");
+			dialog = progressDialogFactory.show(getContext(), I18NConstants.LOADING, I18NConstants.PLEASE_WAIT);
 			
 			count = 1;
 			
@@ -269,7 +270,7 @@ public class ActionDetailLayoutView extends BaseView {
 	}
 
 	public void onProfileUpdate() {
-		dialog = progressDialogFactory.show(getContext(), "Loading", "Please wait...");
+		dialog = progressDialogFactory.show(getContext(), I18NConstants.LOADING, I18NConstants.PLEASE_WAIT);
 		count = 1;
 		currentUser = null;
 		doGetUserProfile(currentAction);

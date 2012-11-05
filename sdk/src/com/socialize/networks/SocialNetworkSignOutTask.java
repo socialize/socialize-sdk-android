@@ -25,6 +25,7 @@ import android.app.Dialog;
 import android.content.Context;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.concurrent.ManagedAsyncTask;
+import com.socialize.i18n.I18NConstants;
 import com.socialize.networks.facebook.FacebookUtils;
 import com.socialize.networks.twitter.TwitterUtils;
 import com.socialize.ui.dialog.ProgressDialogFactory;
@@ -51,7 +52,7 @@ public class SocialNetworkSignOutTask extends ManagedAsyncTask<Void, Void, Void>
 
 	@Override
 	protected void onPreExecute() {
-		dialog = dialogFactory.show(context, "Signing out", "Please wait...");
+		dialog = dialogFactory.show(context, I18NConstants.DLG_AUTH_SIGNOUT, I18NConstants.PLEASE_WAIT);
 	}
 
 	@Override

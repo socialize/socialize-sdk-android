@@ -21,6 +21,7 @@ import com.socialize.entity.ListResult;
 import com.socialize.entity.Subscription;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
+import com.socialize.i18n.I18NConstants;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.listener.subscription.SubscriptionCheckListener;
@@ -247,7 +248,7 @@ public class CommentListView extends BaseView {
 				text = StringUtils.replaceNewLines(text, 3, 2);
 				
 				if(progressDialogFactory != null) {
-					dialog = progressDialogFactory.show(getContext(), "Posting comment", "Please wait...");
+					dialog = progressDialogFactory.show(getContext(), I18NConstants.DLG_COMMENT, I18NConstants.PLEASE_WAIT);
 				}
 				
 				CommentOptions options = newShareOptions();

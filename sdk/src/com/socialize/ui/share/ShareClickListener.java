@@ -33,6 +33,7 @@ import com.socialize.api.action.share.ShareOptions;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
+import com.socialize.i18n.I18NConstants;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.actionbar.ActionBarView;
@@ -81,7 +82,7 @@ public class ShareClickListener implements OnClickListener {
 	 */
 	@Override
 	public void onClick(View view) {
-		final ProgressDialog dialog = progressDialogFactory.show(view.getContext(), "Share", "Sharing via " + shareType.getDisplayName() + "...");
+		final ProgressDialog dialog = progressDialogFactory.show(view.getContext(), I18NConstants.DLG_SHARE, I18NConstants.DLG_SHARE_MESSAGE + " " + shareType.getDisplayName() + "...");
 		
 		ShareOptions shareOptions = ShareUtils.getUserShareOptions(context);
 		shareOptions.setText(provider.getShareText());

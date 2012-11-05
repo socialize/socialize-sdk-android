@@ -41,6 +41,8 @@ public class I18NConstants {
 	public static final String COMMENT_HINT = "socialize_comment_hint";
 	public static final String SHARE_MORE_OPTIONS = "socialize_share_more_options";
 	public static final String SHARE_HEADER = "socialize_share_header";
+	
+	public static final String SETTINGS_HEADER = "socialize_settings_header";
 	public static final String SETTINGS_LABEL_FIRST_NAME = "socialize_settings_label_firstname";
 	public static final String SETTINGS_LABEL_LAST_NAME = "socialize_settings_label_lastname";
 	public static final String ACTIONBAR_COMMENT = "socialize_actionbar_label_comment";
@@ -50,6 +52,16 @@ public class I18NConstants {
 	public static final String ACTIONBAR_SHARE_SUCCESS = "socialize_actionbar_toast_sharesuccess";
 	public static final String ACTIONBAR_SHARE_FAIL = "socialize_actionbar_toast_sharefail";
 	public static final String LOADING = "socialize_loading";
+	public static final String PLEASE_WAIT = "socialize_please_wait";
+	
+	public static final String DLG_AUTH = "socialize_auth_dialog";
+	public static final String DLG_AUTH_MESSAGE = "socialize_auth_dialog_message";
+	public static final String DLG_SETTINGS = "socialize_settings_dialog";
+	public static final String DLG_SHARE = "socialize_share_dialog";
+	public static final String DLG_SHARE_MESSAGE = "socialize_share_dialog_message";
+	public static final String DLG_COMMENT = "socialize_comment_dialog";
+	public static final String DLG_AUTH_SIGNOUT = "socialize_auth_dialog_sign_out";
+	
 	public static final String AUTO_POST_FB = "socialize_facebook_autopost";
 	public static final String AUTO_POST_TW = "socialize_twitter_autopost";
 	

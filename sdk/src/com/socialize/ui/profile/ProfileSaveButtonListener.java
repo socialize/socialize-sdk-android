@@ -30,6 +30,7 @@ import android.view.View.OnClickListener;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.error.SocializeException;
+import com.socialize.i18n.I18NConstants;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.ui.comment.CommentActivity;
 import com.socialize.ui.dialog.ProgressDialogFactory;
@@ -44,6 +45,7 @@ public class ProfileSaveButtonListener implements OnClickListener {
 	private ProfileSaver profileSaver;
 	private SocializeErrorHandler errorHandler;
 	private ProgressDialogFactory progressDialogFactory;
+
 	private Activity context;
 	
 	public ProfileSaveButtonListener(Activity context, ProfileContentView view) {
@@ -59,7 +61,7 @@ public class ProfileSaveButtonListener implements OnClickListener {
 	public void onClick(View v) {
 
 		// Show a progress bar...
-		final ProgressDialog progress = progressDialogFactory.show(context, "Saving Profile", "Please wait...");
+		final ProgressDialog progress = progressDialogFactory.show(context, I18NConstants.DLG_SETTINGS, I18NConstants.PLEASE_WAIT);
 		
 		// Get the updated info
 		UserSettings profile = new UserSettings();
@@ -122,4 +124,5 @@ public class ProfileSaveButtonListener implements OnClickListener {
 	public void setProgressDialogFactory(ProgressDialogFactory progressDialogFactory) {
 		this.progressDialogFactory = progressDialogFactory;
 	}
+
 }

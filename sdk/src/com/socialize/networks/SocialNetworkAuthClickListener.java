@@ -30,6 +30,7 @@ import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.error.SocializeException;
+import com.socialize.i18n.I18NConstants;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.facebook.FacebookUtils;
 import com.socialize.networks.twitter.TwitterUtils;
@@ -54,7 +55,7 @@ public abstract class SocialNetworkAuthClickListener implements OnClickListener 
 		SocializeAuthListener authListener = getAuthListener(view);
 		
 		if(!getSocialize().isAuthenticated(AuthProviderType.valueOf(network))) {
-			dialog = dialogFactory.show(view.getContext(), "Authentication", "Authenticating...");
+			dialog = dialogFactory.show(view.getContext(), I18NConstants.DLG_AUTH, I18NConstants.DLG_AUTH_MESSAGE);
 			switch (network) {
 				case FACEBOOK:
 					FacebookUtils.link((Activity) view.getContext(), getAuthListener(view));

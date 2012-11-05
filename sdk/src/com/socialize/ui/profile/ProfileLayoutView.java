@@ -9,6 +9,7 @@ import com.socialize.UserUtils;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
+import com.socialize.i18n.I18NConstants;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.dialog.ProgressDialogFactory;
@@ -81,7 +82,7 @@ public class ProfileLayoutView extends BaseView {
 
 	public void doGetUserProfile() {
 		long id = Long.parseLong(userId);
-		dialog = progressDialogFactory.show(getContext(), "Loading", "Please wait...");
+		dialog = progressDialogFactory.show(getContext(), I18NConstants.LOADING, I18NConstants.PLEASE_WAIT);
 		
 		UserUtils.getUser(getContext(), id, new UserGetListener() {
 			

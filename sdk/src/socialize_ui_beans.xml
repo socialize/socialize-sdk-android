@@ -38,6 +38,7 @@
 	
 	<bean id="progressDialogFactory" class="com.socialize.ui.dialog.ProgressDialogFactory">
 		<property name="logger" ref="logger"/>
+		<property name="localizationService" ref="localizationService"/>
 		<property name="drawables" ref="drawables"/>
 	</bean>
 	
