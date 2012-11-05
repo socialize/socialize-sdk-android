@@ -79,6 +79,11 @@ public class ShareUtils {
 	public static final int GOOGLE_PLUS = 1<<6;
 	
 	/**
+	 * Used to indicate that the continue button should always be enabled.
+	 */
+	public static final int ALWAYS_CONTINUE = 1<<7;
+	
+	/**
 	 * Displays only Social Network options.
 	 */
 	public static final int SOCIAL = FACEBOOK|TWITTER|GOOGLE_PLUS;

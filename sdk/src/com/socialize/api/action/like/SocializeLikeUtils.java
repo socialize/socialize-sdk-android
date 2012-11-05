@@ -230,7 +230,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 						listener.onCancel();
 					}
 				}
-			}, ShareUtils.SOCIAL|ShareUtils.SHOW_REMEMBER);
+			}, ShareUtils.SOCIAL|ShareUtils.SHOW_REMEMBER|ShareUtils.ALWAYS_CONTINUE);
 		}
 		else {
 			doLikeWithoutShareDialog(context, session, entity, listener);
