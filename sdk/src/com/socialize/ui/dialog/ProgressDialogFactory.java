@@ -39,8 +39,10 @@ public class ProgressDialogFactory implements SimpleDialogFactory<ProgressDialog
 
 	public ProgressDialog show(Context context, String title, String message) {
 
-		title = localizationService.getString(title);
-		message = localizationService.getString(message);
+		if(localizationService != null){
+			title = localizationService.getString(title);
+			message = localizationService.getString(message);
+		}
 
 		try {
 			ProgressDialog dialog = makeDialog(context);

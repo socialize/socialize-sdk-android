@@ -19,31 +19,12 @@ public class SocializeViewTest extends SocializeActivityTest {
 	@UsesMocks ({IOCContainer.class, SocializeErrorHandler.class})
 	public void testOnWindowVisibilityChanged() throws Throwable {
 		
-//		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
-//		SocializeErrorHandler errorHandler = AndroidMock.createMock(SocializeErrorHandler.class);
-		
-//		AndroidMock.expect(container.getBean("socializeUIErrorHandler")).andReturn(errorHandler);
-		
-//		AndroidMock.replay(container);
-		
-//		ActivityIOCProvider.getInstance().setContainer(container);
-		
 		final SocializeBaseView view = new SocializeBaseView(TestUtils.getActivity(this)) {
 			
-//			@Override
-//			protected void onBeforeSocializeInit() {
-//				addResult("onBeforeSocializeInit");
-//			}
-
 			@Override
 			protected void doSocializeInit(SocializeInitListener listener) {
 				addResult("doSocializeInit");
 			}
-
-//			@Override
-//			public void setErrorHandler(SocializeErrorHandler errorHandler) {
-//				addResult(errorHandler);
-//			}
 
 			@Override
 			public View getLoadingView() {
@@ -62,19 +43,11 @@ public class SocializeViewTest extends SocializeActivityTest {
 		
 		sleep(1000);
 		
-//		String onBeforeSocializeInit = getNextResult();
 		String initSocialize = getNextResult();
-//		SocializeErrorHandler errorHandlerAfter = getNextResult();
 		
-//		assertNotNull(errorHandlerAfter);
 		assertNotNull(initSocialize);
-//		assertNotNull(onBeforeSocializeInit);
 		
-//		assertSame(errorHandler, errorHandlerAfter);
 		assertEquals("doSocializeInit", initSocialize);
-//		assertEquals("onBeforeSocializeInit", onBeforeSocializeInit);
-		
-//		AndroidMock.verify(container);
 	}
 	
 	public void test_onViewLoad() {
@@ -157,6 +130,11 @@ public class SocializeViewTest extends SocializeActivityTest {
 	public void test_getInitLoadListener() {
 		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
 		
+		AndroidMock.expect(container.getBean("drawables")).andReturn(null);
+		AndroidMock.expect(container.getBean("localizationService")).andReturn(null);
+		
+		AndroidMock.replay(container);
+		
 		PublicView view = new PublicView(TestUtils.getActivity(this)) {
 			@Override
 			public void onViewLoad(IOCContainer container) {
@@ -164,12 +142,20 @@ public class SocializeViewTest extends SocializeActivityTest {
 			}
 		};
 		view.getInitLoadListener().onInit(TestUtils.getActivity(this), container);
+		
+		AndroidMock.verify(container);
+		
 		assertSame(container, getNextResult());
 	}
 	
 	@UsesMocks({IOCContainer.class})
 	public void test_getInitUpdateListener() {
 		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
+		
+		AndroidMock.expect(container.getBean("drawables")).andReturn(null);
+		AndroidMock.expect(container.getBean("localizationService")).andReturn(null);
+		
+		AndroidMock.replay(container);
 		
 		PublicView view = new PublicView(TestUtils.getActivity(this)) {
 			@Override
@@ -178,6 +164,9 @@ public class SocializeViewTest extends SocializeActivityTest {
 			}
 		};
 		view.getInitUpdateListener().onInit(TestUtils.getActivity(this), container);
+		
+		AndroidMock.verify(container);
+		
 		assertSame(container, getNextResult());
 	}
 	
