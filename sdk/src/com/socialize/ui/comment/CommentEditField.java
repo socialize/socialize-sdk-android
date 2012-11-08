@@ -29,6 +29,8 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.socialize.i18n.I18NConstants;
+import com.socialize.i18n.LocalizationService;
 import com.socialize.ui.util.Colors;
 import com.socialize.util.DisplayUtils;
 
@@ -40,6 +42,7 @@ public class CommentEditField extends LinearLayout {
 	private DisplayUtils displayUtils;
 	private Colors colors;
 	private TextView editText;
+	private LocalizationService localizationService;
 	
 	public CommentEditField(Context context) {
 		super(context);
@@ -66,7 +69,7 @@ public class CommentEditField extends LinearLayout {
 		editText.setGravity(Gravity.CENTER_VERTICAL);
 		editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
 		editText.setBackgroundDrawable(makeTextViewBackground());
-		editText.setHint(" Write a comment...");
+		editText.setHint(" " + localizationService.getString(I18NConstants.COMMENT_HINT));
 		editText.setLayoutParams(editTextLayoutParams);
 		editText.setPadding(four, four, four, four);
 		
@@ -99,5 +102,9 @@ public class CommentEditField extends LinearLayout {
 	
 	public TextView getEditText() {
 		return editText;
+	}
+	
+	public void setLocalizationService(LocalizationService localizationService) {
+		this.localizationService = localizationService;
 	}
 }

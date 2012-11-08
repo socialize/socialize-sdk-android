@@ -24,12 +24,12 @@ package com.socialize.ioc;
 import java.io.InputStream;
 import android.content.Context;
 import com.socialize.android.ioc.AndroidIOC;
+import com.socialize.android.ioc.BeanMappingSource;
 import com.socialize.config.SocializeConfig;
 import com.socialize.util.ResourceLocator;
 
 /**
  * @author Jason Polites
- *
  */
 public class SocializeIOC extends AndroidIOC {
 
@@ -41,8 +41,27 @@ public class SocializeIOC extends AndroidIOC {
 			for (int i = 0; i < configPaths.length; i++) {
 				streams[i] = resourceLocator.locate(context, configPaths[i]);
 			}
+			
+			final InputStream[] fstreams = streams;
+			
+			final StringBuilder name = new StringBuilder();
+			
+			for (String path : configPaths) {
+				name.append(path);
+			}
+			
+			BeanMappingSource source = new BeanMappingSource() {
+				@Override
+				public InputStream[] getSources() {
+					return fstreams;
+				}
+				@Override
+				public String getName() {
+					return name.toString();
+				}
+			};
 
-			super.init(context, streams);
+			super.init(context, source);
 		}
 		finally {
 			if(streams != null) {

@@ -51,7 +51,7 @@ public class Share extends SocializeAction {
 
 	@Override
 	public String getDisplayText() {
-		return "Shared via " + shareType.getName();
+		return "via " + shareType.getName();
 	}
 	
 	public ShareType getShareType() {

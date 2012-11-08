@@ -39,11 +39,11 @@ public class SocializeC2DMReceiverHandler implements C2DMReceiverHandler {
 				notificationCallback.onMessage(context, intent.getExtras());
 			}
 			else {
-				logWarn("No notificationCallback foind in C2DM receiver.  Initialization may have failed.");
+				logWarn("No notificationCallback found in GCM receiver.  Initialization may have failed.");
 			}
 		} 
 		catch (Exception e) {
-			logError("Error processing C2DM message", e);
+			logError("Error processing GCM message", e);
 		}
 	}
 
@@ -53,14 +53,14 @@ public class SocializeC2DMReceiverHandler implements C2DMReceiverHandler {
 	@Override
 	public void onError(Context context, String errorId) {
 		if(logger != null) {
-			logger.error("C2DM registration failed with error: " + errorId);
+			logger.error("GCM registration failed with error: " + errorId);
 		}
 		
 		if(notificationCallback != null) {
 			notificationCallback.onError(context, errorId);
 		}
 		else {
-			logWarn("No notificationCallback found in C2DM receiver.  Initialization may have failed.");
+			logWarn("No notificationCallback found in GCM receiver.  Initialization may have failed.");
 		}			
 	}
 	
@@ -68,17 +68,17 @@ public class SocializeC2DMReceiverHandler implements C2DMReceiverHandler {
 	 * @see com.socialize.notifications.C2DMReceiverHandler#onRegistrered(android.content.Context, java.lang.String)
 	 */
 	@Override
-	public void onRegistrered(Context context, String registrationId)  {
+	public void onRegistered(Context context, String registrationId)  {
 		try {
 			if(notificationCallback != null) {
 				notificationCallback.onRegister(context, registrationId);
 			}
 			else {
-				logWarn("No notificationCallback found in C2DM receiver.  Initialization may have failed.");
+				logWarn("No notificationCallback found in GCM receiver.  Initialization may have failed.");
 			}	
 		} 
 		catch (Exception e) {
-			logError("C2DM registration failed", e);
+			logError("GCM registration failed", e);
 		}
 	}
 
@@ -95,7 +95,7 @@ public class SocializeC2DMReceiverHandler implements C2DMReceiverHandler {
 			}
 		}
 		else {
-			logWarn("No notificationCallback found in C2DM receiver.  Initialization may have failed.");
+			logWarn("No notificationCallback found in GCM receiver.  Initialization may have failed.");
 		}	
 	}
 
@@ -113,7 +113,7 @@ public class SocializeC2DMReceiverHandler implements C2DMReceiverHandler {
 			initBeans();
 		}
 		catch (Exception e) {
-			logError("Error initializing C2DM receiver!", e);
+			logError("Error initializing GCM receiver!", e);
 		}
 	}
 	

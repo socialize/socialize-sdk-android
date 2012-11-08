@@ -23,6 +23,8 @@ package com.socialize.ui.comment;
 
 import android.view.View;
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.i18n.I18NConstants;
+import com.socialize.i18n.LocalizationService;
 import com.socialize.ui.slider.ActionBarSliderItem;
 import com.socialize.ui.slider.ActionBarSliderView;
 import com.socialize.ui.slider.ActionBarSliderView.DisplayState;
@@ -38,6 +40,8 @@ public class CommentEntrySliderItem implements ActionBarSliderItem {
 	private CommentEntryView commentEntryView;
 	
 	private CommentAddButtonListener listener;
+	
+	private LocalizationService localizationService;
 
 	public CommentEntrySliderItem(CommentAddButtonListener listener) {
 		super();
@@ -98,11 +102,15 @@ public class CommentEntrySliderItem implements ActionBarSliderItem {
 	 */
 	@Override
 	public String getTitle() {
-		return "Add Comment";
+		return localizationService.getString(I18NConstants.COMMENT_SLIDER_TITLE);
 	}
 
 	public void setViewFactory(IBeanFactory<CommentEntryView> viewFactory) {
 		this.viewFactory = viewFactory;
+	}
+	
+	public void setLocalizationService(LocalizationService localizationService) {
+		this.localizationService = localizationService;
 	}
 
 	@Override

@@ -153,7 +153,7 @@ public class SocializeC2DMReceiverTest extends SocializeUnitTest {
 		
 		final SocializeC2DMReceiverHandler container = AndroidMock.createMock(SocializeC2DMReceiverHandler.class);
 		final String errorId = "foobar";
-		container.onRegistrered(getContext(), errorId);
+		container.onRegistered(getContext(), errorId);
 		
 		AndroidMock.replay(container);
 		

@@ -52,7 +52,12 @@ public class SocializeConfig {
 	public static final String SOCIALIZE_NOTIFICATIONS_ENABLED = "socialize.notification.enabled";
 	public static final String SOCIALIZE_NOTIFICATION_APP_ICON = "socialize.notification.app.icon";
 	
+	@Deprecated
 	public static final String SOCIALIZE_C2DM_SENDER_ID = "socialize.c2dm.sender.id";
+	
+	public static final String SOCIALIZE_GCM_SENDER_ID = "socialize.gcm.sender.id";
+	
+	public static final String SOCIALIZE_CUSTOM_GCM_SENDER_ID = "socialize.custom.gcm.sender.id";
 	
 	public static final String SOCIALIZE_ENTITY_LOADER = "socialize.entity.loader";
 	

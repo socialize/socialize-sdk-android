@@ -214,6 +214,18 @@ public class ContainerBuilder {
 		return build(primary);
 	}
 	
+	public Container build(BeanMappingSource source) throws IOException {
+		
+		BeanMapping beanMapping = BeanMappingCache.get(source.getName());
+		
+		if(beanMapping == null) {
+			beanMapping = this.parser.parse(context, source.getSources());
+			BeanMappingCache.put(source.getName(), beanMapping);
+		}
+		
+		return build(beanMapping);
+	}
+	
 	protected void resolveImports(BeanMapping original) throws IOException {
 		BeanMapping imported = new BeanMapping();
 		resolveImports(original, imported, 0);

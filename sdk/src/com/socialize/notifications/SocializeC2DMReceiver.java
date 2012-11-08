@@ -29,7 +29,7 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 	
 	@Override
 	public void onRegistrered(Context context, String registrationId)  {
-		handler.onRegistrered(context, registrationId);
+		handler.onRegistered(context, registrationId);
 	}
 
 	@Override

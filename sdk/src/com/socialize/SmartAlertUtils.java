@@ -23,6 +23,11 @@ package com.socialize;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import com.socialize.log.SocializeLogger;
+import com.socialize.notifications.C2DMCallback;
+import com.socialize.notifications.SocializeC2DMReceiverHandler;
 
 
 /**
@@ -30,10 +35,67 @@ import android.content.Intent;
  * @author Jason Polites
  */
 public class SmartAlertUtils {
+	
+	// Does not use the SocializeActionProxy because we need to manually init notification beans
+	static SocializeC2DMReceiverHandler handler = null;
+	static final Object syncLock = new Object();
 
 	/**
-	 * Handles a broadcast intent recieved by a Broadcast Receiver on Android.
-	 * Call this method if you already have a broadcast reciever defined but want to also utilize Socialize SmartAlerts.
+	 * Handles a GCM message.  Returns true ONLY if this message was intended for Socialize.
+	 * @param context
+	 * @param messageData
+	 * @return
+	 */
+	public static boolean onMessage(Context context, Intent intent) {
+		assertInitialized(context);
+		
+		Bundle messageData = intent.getExtras();
+		
+		if(messageData != null) {
+			String source = messageData.getString(C2DMCallback.SOURCE_KEY);
+			if(source != null && source.trim().equalsIgnoreCase(C2DMCallback.SOURCE_SOCIALIZE)) {
+				handler.onMessage(context, intent);
+				return true;
+			}
+		}
+
+		return false;		
+	}
+	
+	public static void onRegister(Context context, String registrationId) {
+		assertInitialized(context);
+		handler.onRegistered(context, registrationId);
+	}
+	
+	public static void onError(Context context, String errorId) {
+		assertInitialized(context);
+		handler.onError(context, errorId);
+	}
+	
+	public static void onUnregister(Context context, String registrationId) {
+		assertInitialized(context);
+		handler.onUnregistered(context);	
+	}
+	
+	static void assertInitialized(Context context) {
+		if(handler == null) {
+			synchronized (syncLock) {
+				if(handler == null) {
+					handler = new SocializeC2DMReceiverHandler();
+					handler.onCreate(context);
+				}
+			}
+		}
+	}
+	
+	static void logNotInitializedError() {
+		Log.e(SocializeLogger.LOG_TAG, "GCMUtils was not initialized.  Make sure you are calling onCreate in your receiver");
+	}	
+	
+	
+	/**
+	 * Handles a broadcast intent received by a Broadcast Receiver on Android.
+	 * Call this method if you already have a broadcast receiver defined but want to also utilize Socialize SmartAlerts.
 	 * @param context The current context.
 	 * @param intent The broadcast intent provided by Android.
 	 * @return Returns true if Socialize handled the intent.  This indicates the intent was designed to be handled by Socialize and you do not need to handle it yourself.

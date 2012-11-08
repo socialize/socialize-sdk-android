@@ -33,7 +33,7 @@ import com.socialize.log.SocializeLogger;
  */
 public class ResourceLocator {
 
-	private ClassLoaderProvider classLoaderProvider;
+	private ClassLoaderProvider classLoaderProvider = new ClassLoaderProvider();
 	private SocializeLogger logger;
 
 	public InputStream locateInAssets(Context context, String name) throws IOException {

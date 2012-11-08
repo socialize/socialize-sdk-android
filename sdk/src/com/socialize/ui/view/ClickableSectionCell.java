@@ -31,6 +31,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.socialize.i18n.LocalizationService;
 import com.socialize.ui.util.Colors;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
@@ -42,11 +43,13 @@ import com.socialize.util.StringUtils;
  */
 public abstract class ClickableSectionCell extends LinearLayout {
 
+	
+	protected LocalizationService localizationService;
 	protected Drawables drawables;
 	protected Colors colors;
 	protected DisplayUtils displayUtils;
 	
-	private String displayText;
+	private String displayTextKey;
 	private TextView textView;
 	private ImageView imageView;
 	private String backgroundColor;
@@ -182,7 +185,7 @@ public abstract class ClickableSectionCell extends LinearLayout {
 	
 	protected View makeDisplayText() {
 		textView = new TextView(getContext());
-		textView.setText(displayText);
+		textView.setText(localizationService.getString(displayTextKey));
 		textView.setTextColor(txtColor);
 		textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
 		return textView;
@@ -246,10 +249,10 @@ public abstract class ClickableSectionCell extends LinearLayout {
 		this.displayUtils = displayUtils;
 	}
 
-	public void setDisplayText(String displayText) {
-		this.displayText = displayText;
+	public void setDisplayTextKey(String displayTextKey) {
+		this.displayTextKey = displayTextKey;
 		if(textView != null) {
-			textView.setText(displayText);
+			textView.setText(localizationService.getString(displayTextKey));
 		}
 	}
 	
@@ -360,5 +363,9 @@ public abstract class ClickableSectionCell extends LinearLayout {
 	
 	public void setCellWidth(int cellWidth) {
 		this.cellWidth = cellWidth;
+	}
+
+	public void setLocalizationService(LocalizationService localizationService) {
+		this.localizationService = localizationService;
 	}	
 }

@@ -43,7 +43,7 @@ public class SocializeDeviceRegistrationSystem extends SocializeApi<DeviceRegist
 	public void registerDevice(SocializeSession session, DeviceRegistration registration, DeviceRegistrationListener listener) {
 		List<DeviceRegistration> registrations = new ArrayList<DeviceRegistration>(1);
 		registrations.add(registration);
-		postAsync(session, ENDPOINT, registrations,listener);
+		postAsync(session, ENDPOINT, registrations, listener);
 	}
 	
 }

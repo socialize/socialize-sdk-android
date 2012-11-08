@@ -81,8 +81,6 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 		notificationRegistrationState.setC2dmPendingRequestTime(0);
 		notificationRegistrationState.save(context);
 	}
-	
-	
 
 	@Override
 	public void registerC2DMAsync(final Context context) {
@@ -99,13 +97,21 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 	public synchronized void registerC2DM(final Context context) {
 		if(!isRegisteredC2DM() && !notificationRegistrationState.isC2dmPending()) {
 			if(logger != null && logger.isDebugEnabled()) {
-				logger.debug("Registering with C2DM");
+				logger.debug("Registering with GCM");
 			}
 			
 			notificationRegistrationState.setC2dmPendingRequestTime(System.currentTimeMillis());
 			notificationRegistrationState.save(context);
 			
-			String senderId = config.getProperty(SocializeConfig.SOCIALIZE_C2DM_SENDER_ID);
+			@SuppressWarnings("deprecation")
+			String senderId = config.getProperty(SocializeConfig.SOCIALIZE_GCM_SENDER_ID, config.getProperty(SocializeConfig.SOCIALIZE_C2DM_SENDER_ID));
+			String customSender = config.getProperty(SocializeConfig.SOCIALIZE_CUSTOM_GCM_SENDER_ID);
+			
+			// Only supported in GCM
+			if(!StringUtils.isEmpty(senderId) && !StringUtils.isEmpty(customSender)) {
+				senderId = senderId + "," + customSender;
+			}
+			
 			Intent registrationIntent = newIntent(REQUEST_REGISTRATION_INTENT);
 			registrationIntent.putExtra(EXTRA_APPLICATION_PENDING_INTENT, newPendingIntent(context));
 			registrationIntent.putExtra(EXTRA_SENDER, senderId);
@@ -113,7 +119,7 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 		}	
 		else {
 			if(logger != null && logger.isDebugEnabled()) {
-				logger.debug("C2DM registration already in progress or complete");
+				logger.debug("GCM registration already in progress or complete");
 			}
 		}
 	}
@@ -173,7 +179,7 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 				notificationRegistrationState.save(context);
 				
 				if(logger != null && logger.isInfoEnabled()) {
-					logger.info("Registration with Socialize for C2DM successful.");
+					logger.info("Registration with Socialize for GCM successful.");
 				}
 			}
 		});

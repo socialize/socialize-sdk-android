@@ -23,6 +23,7 @@ package com.socialize.ui.dialog;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import com.socialize.i18n.LocalizationService;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.Drawables;
 
@@ -31,25 +32,32 @@ import com.socialize.util.Drawables;
  * @author Jason Polites
  */
 public class ProgressDialogFactory implements SimpleDialogFactory<ProgressDialog> {
-	
+
 	private SocializeLogger logger;
 	private Drawables drawables;
+	private LocalizationService localizationService;
 
 	public ProgressDialog show(Context context, String title, String message) {
+
+		if(localizationService != null){
+			title = localizationService.getString(title);
+			message = localizationService.getString(message);
+		}
+
 		try {
 			ProgressDialog dialog = makeDialog(context);
 			dialog.setTitle(title);
 			dialog.setMessage(message);
-			
+
 			if(drawables != null) {
 				dialog.setIcon(drawables.getDrawable("socialize_icon_white.png"));
 			}
-			
+
 			// Register to prevent window leakage
 			DialogRegistration.register(context, dialog);
-			
+
 			dialog.show();
-			
+
 			return dialog;
 		}
 		catch (Exception e) {
@@ -59,11 +67,11 @@ public class ProgressDialogFactory implements SimpleDialogFactory<ProgressDialog
 			else {
 				SocializeLogger.e(e.getMessage(), e);
 			}
-			
+
 			return null;
 		}
 	}
-	
+
 	protected ProgressDialog makeDialog(Context context) {
 		return new SafeProgressDialog(context);
 	}
@@ -75,4 +83,10 @@ public class ProgressDialogFactory implements SimpleDialogFactory<ProgressDialog
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;
 	}
+
+	public void setLocalizationService(LocalizationService localizationService) {
+		this.localizationService = localizationService;
+	}
+
+
 }

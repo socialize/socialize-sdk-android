@@ -34,7 +34,7 @@ public interface C2DMReceiverHandler {
 
 	public void onError(Context context, String errorId);
 
-	public void onRegistrered(Context context, String registrationId);
+	public void onRegistered(Context context, String registrationId);
 
 	public void onUnregistered(Context context);
 

@@ -32,9 +32,11 @@ import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.socialize.i18n.LocalizationService;
 import com.socialize.ui.util.Colors;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -47,7 +49,8 @@ public class SocializeHeader extends LinearLayout {
 	private DisplayUtils displayUtils;
 	private Drawables drawables;
 	private Colors colors;
-	
+	private LocalizationService localizationService;
+	private String headerTextKey;
 	private String headerText;
 
 	public void setHeaderText(String headerText) {
@@ -108,7 +111,14 @@ public class SocializeHeader extends LinearLayout {
 		titleText = new TextView(getContext());
 		titleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
 		titleText.setTextColor(colors.getColor(Colors.HEADER));
-		titleText.setText(getHeaderText());
+		
+		if(!StringUtils.isEmpty(headerTextKey)) {
+			titleText.setText(localizationService.getString(headerTextKey));
+		}
+		else {
+			titleText.setText(getHeaderText());
+		}
+		
 		titleText.setPadding(0, 0, 0, displayUtils.getDIP(2));
 		titleText.setSingleLine(true);
 		titleText.setEllipsize(TruncateAt.END);
@@ -137,5 +147,13 @@ public class SocializeHeader extends LinearLayout {
 
 	public String getHeaderText() {
 		return headerText;
+	}
+
+	public void setHeaderTextKey(String headerTextKey) {
+		this.headerTextKey = headerTextKey;
+	}
+
+	public void setLocalizationService(LocalizationService localizationService) {
+		this.localizationService = localizationService;
 	}
 }

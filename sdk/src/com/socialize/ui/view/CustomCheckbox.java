@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.i18n.LocalizationService;
 import com.socialize.ui.util.Colors;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
@@ -22,6 +23,8 @@ import com.socialize.util.StringUtils;
 import com.socialize.view.BaseView;
 
 public class CustomCheckbox extends BaseView {
+	
+	private LocalizationService localizationService;
 	
 	private ImageView checkBox;
 	private TextView checkboxLabel;
@@ -35,8 +38,8 @@ public class CustomCheckbox extends BaseView {
 	private String imageOn;
 	private String imageOff;
 	
-	private String textOn;
-	private String textOff;
+	private String textOnKey;
+	private String textOffKey;	
 	
 	private boolean borderOn = true;
 	
@@ -126,7 +129,7 @@ public class CustomCheckbox extends BaseView {
 		// Must be super.
 		super.setOnClickListener(defaultClickListener);
 		
-		if(StringUtils.isEmpty(textOn) && StringUtils.isEmpty(textOff)) {
+		if(StringUtils.isEmpty(textOnKey) && StringUtils.isEmpty(textOffKey)) {
 			checkboxLabel.setVisibility(GONE);
 		}
 		
@@ -151,11 +154,11 @@ public class CustomCheckbox extends BaseView {
 	
 	protected void setDisplay() {
 		if(checked) {
-			checkboxLabel.setText(textOn);
+			setTextOnKey(textOnKey);
 			checkBox.setImageDrawable(drawables.getDrawable(imageOn));
 		}
 		else {
-			checkboxLabel.setText(textOff);
+			setTextOffKey(textOffKey);
 			checkBox.setImageDrawable(drawables.getDrawable(imageOff));
 		}		
 	}
@@ -193,30 +196,33 @@ public class CustomCheckbox extends BaseView {
 		}
 	}
 
+	@Deprecated
 	public void setTextOn(String textOn) {
-		this.textOn = textOn;
-		
-		if(checkboxLabel != null) {
-			if(checked) {
-				checkboxLabel.setText(textOn);
-			}
-			
-			checkboxLabel.setVisibility(VISIBLE);
-		}
+		setText(textOn);
 	}
 
+	@Deprecated
 	public void setTextOff(String textOff) {
-		this.textOff = textOff;
-		
+		setText(textOff);
+	}
+	
+	public void setTextOnKey(String key) {
+		this.textOnKey = key;
+		setText(localizationService.getString(textOnKey));
+	}
+
+	public void setTextOffKey(String key) {
+		this.textOffKey = key;
+		setText(localizationService.getString(textOffKey));
+	}
+
+	protected void setText(String text) {
 		if(checkboxLabel != null) {
-			if(checked) {
-				checkboxLabel.setText(textOff);
-			}
-			
+			checkboxLabel.setText(text);
 			checkboxLabel.setVisibility(VISIBLE);
 		}
 	}
-
+	
 	public void setBorderOn(boolean borderOn) {
 		this.borderOn = borderOn;
 	}
@@ -286,6 +292,10 @@ public class CustomCheckbox extends BaseView {
 		if(checkboxLabel != null) {
 			checkboxLabel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
 		}
+	}
+	
+	public void setLocalizationService(LocalizationService localizationService) {
+		this.localizationService = localizationService;
 	}
 
 	@Override

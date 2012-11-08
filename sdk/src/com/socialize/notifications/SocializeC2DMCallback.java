@@ -61,10 +61,10 @@ public class SocializeC2DMCallback implements C2DMCallback {
 	public void onRegister(Context context, String registrationId)  {
 		
 		if(logger != null && logger.isInfoEnabled()) {
-			logger.info("Registration with C2DM successful: " + registrationId);
+			logger.info("Registration with GCM successful: " + registrationId);
 			
 			if(logger.isDebugEnabled()) {
-				logger.debug("C2DM ID [" +
+				logger.debug("GCM ID [" +
 						registrationId +
 						"]");
 			}
@@ -79,7 +79,7 @@ public class SocializeC2DMCallback implements C2DMCallback {
 	@Override
 	public void onError(Context context, String errorId) {
 		if(logger != null && logger.isWarnEnabled()) {
-			logger.warn("Registration with C2DM failed: " + errorId);
+			logger.warn("Registration with GCM failed: " + errorId);
 		}
 	}
 

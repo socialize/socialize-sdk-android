@@ -43,6 +43,8 @@ import com.socialize.entity.Like;
 import com.socialize.entity.View;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
+import com.socialize.i18n.I18NConstants;
+import com.socialize.i18n.LocalizationService;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
@@ -66,6 +68,8 @@ public class ActionBarLayoutView extends BaseView {
 	
 	static final NumberFormat countFormat = new DecimalFormat("##0.0K");
 
+	private LocalizationService localizationService;
+	
 	private ActionBarButton commentButton;
 	private ActionBarButton likeButton;
 	private ActionBarButton shareButton;
@@ -271,17 +275,17 @@ public class ActionBarLayoutView extends BaseView {
 
 								@Override
 								public void onError(SocializeException error) {
-									Toast.makeText(getActivity(), "Share Failed!  Please try again", Toast.LENGTH_SHORT).show();
+									Toast.makeText(getActivity(), localizationService.getString(I18NConstants.ACTIONBAR_SHARE_FAIL), Toast.LENGTH_SHORT).show();
 								}
 
 								@Override
 								public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
-									Toast.makeText(context, "Share Failed!  Please try again", Toast.LENGTH_SHORT).show();
+									Toast.makeText(context, localizationService.getString(I18NConstants.ACTIONBAR_SHARE_FAIL), Toast.LENGTH_SHORT).show();
 								}
 
 								@Override
 								public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
-									Toast.makeText(parent, "Share Successful", Toast.LENGTH_SHORT).show();
+									Toast.makeText(parent, localizationService.getString(I18NConstants.ACTIONBAR_SHARE_SUCCESS), Toast.LENGTH_SHORT).show();
 								}
 							};
 						}
@@ -320,7 +324,7 @@ public class ActionBarLayoutView extends BaseView {
 			commentsItem.setText(loadingText);
 			
 			commentButton.init(commentWidth, 0.0f, textColor);
-			commentButton.setText("Comment");
+			commentButton.setText(localizationService.getString(I18NConstants.ACTIONBAR_COMMENT));
 		}
 		
 		if(likesItem != null) {
@@ -336,7 +340,7 @@ public class ActionBarLayoutView extends BaseView {
 			sharesItem.setText(loadingText);
 			
 			shareButton.init(shareWidth, 0.0f, textColor);
-			shareButton.setText("Share");
+			shareButton.setText(localizationService.getString(I18NConstants.ACTIONBAR_SHARE));
 		}
 		
 		if(ticker != null) {
@@ -611,17 +615,17 @@ public class ActionBarLayoutView extends BaseView {
 		if(stats != null) {
 			if(viewsItem != null) viewsItem.setText(getCountText(stats.getViews()));
 			if(commentsItem != null) commentsItem.setText(getCountText(stats.getComments()));
-			if(likesItem != null) likesItem.setText(getCountText(stats.getLikes() + ((ce.isLiked()) ? 1 : 0)));
+			if(likesItem != null) likesItem.setText(getCountText(stats.getLikes()));
 			if(sharesItem != null) sharesItem.setText(getCountText(stats.getShares()));
 		}
 		
 		if(likeButton != null) {
 			if(ce.isLiked()) {
-				likeButton.setText("Unlike");
+				likeButton.setText(localizationService.getString(I18NConstants.ACTIONBAR_UNLIKE));
 				likeButton.setIcon(likeIconHi);
 			}
 			else {
-				likeButton.setText("Like");
+				likeButton.setText(localizationService.getString(I18NConstants.ACTIONBAR_LIKE));
 				likeButton.setIcon(likeIcon);
 			}
 		}
@@ -741,5 +745,9 @@ public class ActionBarLayoutView extends BaseView {
 	
 	public void setOnCommentViewActionListener(OnCommentViewActionListener onCommentViewActionListener) {
 		this.onCommentViewActionListener = onCommentViewActionListener;
+	}
+	
+	public void setLocalizationService(LocalizationService localizationService) {
+		this.localizationService = localizationService;
 	}
 }

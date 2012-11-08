@@ -42,6 +42,8 @@ import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
+import com.socialize.i18n.I18NConstants;
+import com.socialize.i18n.LocalizationService;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetworkCheckbox;
 import com.socialize.networks.SocialNetworkSignOutListener;
@@ -63,6 +65,8 @@ public class ProfileContentView extends BaseView {
 	private DisplayUtils displayUtils;
 	private AppUtils appUtils;
 	private Drawables drawables;
+	
+	private LocalizationService localizationService;
 	
 	private ProfilePictureEditView profilePictureEditView;
 	
@@ -149,8 +153,8 @@ public class ProfileContentView extends BaseView {
 		firstNameEdit = socializeEditTextFactory.getBean();
 		lastNameEdit = socializeEditTextFactory.getBean();
 		
-		firstNameEdit.setLabel("First Name");
-		lastNameEdit.setLabel("Last Name");
+		firstNameEdit.setLabel(localizationService.getString(I18NConstants.SETTINGS_LABEL_FIRST_NAME));
+		lastNameEdit.setLabel(localizationService.getString(I18NConstants.SETTINGS_LABEL_LAST_NAME));
 		
 		saveButton = profileSaveButtonFactory.getBean();
 		cancelButton = profileCancelButtonFactory.getBean();
@@ -201,12 +205,12 @@ public class ProfileContentView extends BaseView {
 		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
 			facebookEnabledCheckbox = facebookEnabledCheckboxFactory.getBean();
 			autoPostFacebook = new CheckBox(getContext());
-			setupSocialButton(group, facebookEnabledCheckbox, autoPostFacebook, "Post to Facebook by default");
+			setupSocialButton(group, facebookEnabledCheckbox, autoPostFacebook, localizationService.getString(I18NConstants.AUTO_POST_FB));
 		}
 		if(getSocialize().isSupported(AuthProviderType.TWITTER)) {
 			twitterEnabledCheckbox = twitterEnabledCheckboxFactory.getBean();
 			autoPostTwitter = new CheckBox(getContext());
-			setupSocialButton(group, twitterEnabledCheckbox, autoPostTwitter, "Post to Twitter by default");
+			setupSocialButton(group, twitterEnabledCheckbox, autoPostTwitter, localizationService.getString(I18NConstants.AUTO_POST_TW));
 		}		
 	}
 	
@@ -527,6 +531,10 @@ public class ProfileContentView extends BaseView {
 	
 	public void setLocationEnabledCheckboxFactory(IBeanFactory<CustomCheckbox> locationEnabledCheckboxFactory) {
 		this.locationEnabledCheckboxFactory = locationEnabledCheckboxFactory;
+	}
+	
+	public void setLocalizationService(LocalizationService localizationService) {
+		this.localizationService = localizationService;
 	}
 
 	public void setDrawables(Drawables drawables) {

@@ -6,11 +6,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.socialize.i18n.I18NConstants;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.view.ClickableSectionCell;
 
 public class AnonymousCell extends ClickableSectionCell {
-	
 	
 	public AnonymousCell(Context context) {
 		super(context);
@@ -39,8 +39,8 @@ public class AnonymousCell extends ClickableSectionCell {
 		TextView title = new TextView(getContext());
 		TextView sub = new TextView(getContext());
 		
-		title.setText("You are currently anonymous");
-		sub.setText("Authenticate with a service above");
+		title.setText(localizationService.getString(I18NConstants.AUTH_ANONYMOUS));
+		sub.setText(localizationService.getString(I18NConstants.AUTH_MESSAGE));
 		
 		title.setTextColor(colors.getColor(Colors.ANON_CELL_TITLE));
 		sub.setTextColor(colors.getColor(Colors.ANON_CELL_TEXT));

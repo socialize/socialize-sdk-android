@@ -10,13 +10,15 @@
 	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" /> 
 	
 	<!-- Permissions required for Push Notifications -->
 	<permission android:name="com.socialize.demo.permission.C2D_MESSAGE" android:protectionLevel="signature" />
 	 
 	<uses-permission android:name="com.socialize.demo.permission.C2D_MESSAGE" />
-	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />     
-    
+	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />    
+
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
@@ -41,29 +43,27 @@
        	<activity android:name="com.socialize.ui.profile.ProfileActivity"/>
        	<activity android:name="com.socialize.auth.facebook.FacebookActivity"/> 
        	<activity android:name="com.socialize.ui.SocializeLaunchActivity" android:noHistory="true"/>
- 
-        <!-- SmartAlerts Config -->
-        <service android:name="com.socialize.notifications.SocializeC2DMReceiver"/>
-        <receiver android:name="com.socialize.notifications.SocializeBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
-			<intent-filter>
-				<action android:name="com.google.android.c2dm.intent.RECEIVE" />
-				<category android:name="com.socialize.demo" />
-			</intent-filter>
-			<intent-filter>
-				<action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-				<category android:name="com.socialize.demo" />
-			</intent-filter>
-        </receiver>  
+
         
         <!--****************************************************************-->   
         <!--************ END STANDARD SOCIALIZE CONFIGURATION **************-->
         <!--****************************************************************-->  
         
         
-        
         <!--****************************************************************-->   
         <!--**************** SOCIALIZE DEMO CONFIGURATION ******************-->
         <!--****************************************************************-->  
+ 
+        <!-- GCM Config -->
+        <service android:name=".GCMIntentService" />
+        
+		<receiver android:name="com.google.android.gcm.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND" >
+		  <intent-filter>
+		    <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+		    <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+		    <category android:name="com.socialize.demo" />
+		  </intent-filter>
+		</receiver>        
         
         <activity android:name=".DemoList"/>
         <activity android:name=".InitActivity"/>

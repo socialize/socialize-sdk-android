@@ -127,8 +127,8 @@ public class CommentListViewTest extends SocializeActivityTest {
 		Entity.class})
 	public void testPostCommentSuccess() {
 		
-		final String title = "Posting comment";
-		final String message = "Please wait...";
+		final String title = "socialize_comment_dialog";
+		final String message = "socialize_please_wait";
 		final int totalCount = 69;
 		final int startIndex = 0;
 		final int endIndex = 10;
@@ -216,8 +216,8 @@ public class CommentListViewTest extends SocializeActivityTest {
 		SocializeException.class})
 	public void testPostCommentFail() {
 		
-		final String title = "Posting comment";
-		final String message = "Please wait...";
+		final String title = "socialize_comment_dialog";
+		final String message = "socialize_please_wait";
 		final String comment = "foobar";
 		
 		final String entityKey = "foobar_entity_key";

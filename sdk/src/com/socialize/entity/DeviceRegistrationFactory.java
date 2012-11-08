@@ -43,8 +43,9 @@ public class DeviceRegistrationFactory extends SocializeObjectFactory<DeviceRegi
 	 */
 	@Override
 	protected void postToJSON(DeviceRegistration from, JSONObject to) throws JSONException {
-		to.put("c2dm_registration_id", from.getRegistrationId());
+		to.put("gcm_registration_id", from.getRegistrationId());
 		to.put("device_type", "Android");
+		to.put("service_type", "ANDROID_GCM");
 	}
 
 	/* (non-Javadoc)

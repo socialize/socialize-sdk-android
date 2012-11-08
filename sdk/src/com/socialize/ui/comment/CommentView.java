@@ -12,6 +12,8 @@ import android.view.View;
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.entity.Entity;
+import com.socialize.i18n.I18NConstants;
+import com.socialize.i18n.LocalizationService;
 import com.socialize.listener.ListenerHolder;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.dialog.SafeProgressDialog;
@@ -26,6 +28,7 @@ public class CommentView extends EntityView {
 	private Drawables drawables;
 	private boolean headerDisplayed = true;
 	private Entity entity;
+	private LocalizationService localizationService;
 	
 	public static final String COMMENT_LISTENER = "socialize.comment.listener";
 	
@@ -43,6 +46,10 @@ public class CommentView extends EntityView {
 			
 			if(drawables == null) {
 				drawables = container.getBean("drawables");
+			}
+			
+			if(localizationService == null) {
+				localizationService = container.getBean("localizationService");
 			}
 			
 			if(commentListView == null) {
@@ -73,7 +80,7 @@ public class CommentView extends EntityView {
 	protected void onBeforeSocializeInit() {
 		if(!Socialize.getSocialize().isInitialized(getContext()) || !Socialize.getSocialize().isAuthenticated()) {
 			try {
-				progress = SafeProgressDialog.show(getContext(), "Loading Socialize", "Please wait...");
+				progress = SafeProgressDialog.show(getContext(), localizationService.getString(I18NConstants.LOADING), localizationService.getString(I18NConstants.PLEASE_WAIT));
 			}
 			catch (Exception ignore) {}
 		}
@@ -142,6 +149,10 @@ public class CommentView extends EntityView {
 		return entity;
 	}
 	
+	public void setLocalizationService(LocalizationService localizationService) {
+		this.localizationService = localizationService;
+	}
+
 	public boolean onCreateOptionsMenu(final Activity source, Menu menu) {
 		createOptionsMenuItem(source, menu);
 

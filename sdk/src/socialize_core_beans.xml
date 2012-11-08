@@ -800,7 +800,6 @@
 		<property name="httpUtils" ref="httpUtils"/>
 		<property name="ioUtils" ref="ioUtils"/>
 		<property name="logger" ref="logger"/>
-		
 	</bean>	
 	
 	<factory id="requestProcessorFactory" makes="httpRequestProcessor"/>
@@ -809,5 +808,20 @@
 		<property name="requestProcessorFactory" ref="requestProcessorFactory"/>
 	</bean>	
 	
+	<!-- i18n -->
 	
+	<bean id="defaultLocalizationService" class="com.socialize.i18n.DefaultLocalizationService">
+		<property name="logger" ref="logger"/>
+		<property name="resourceLocator" ref="resourceLocator"/>
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>
+	</bean>	
+	
+	<bean id="localizationService" class="com.socialize.i18n.CustomLocalizationService">
+		<property name="defaultLocalizationService" ref="defaultLocalizationService"/>
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>
+	</bean>	
 </beans>

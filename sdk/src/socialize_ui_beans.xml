@@ -38,6 +38,7 @@
 	
 	<bean id="progressDialogFactory" class="com.socialize.ui.dialog.ProgressDialogFactory">
 		<property name="logger" ref="logger"/>
+		<property name="localizationService" ref="localizationService"/>
 		<property name="drawables" ref="drawables"/>
 	</bean>
 	
@@ -49,7 +50,9 @@
 		<property name="errorHandler" ref="socializeUIErrorHandler"/>
 	</bean>
 	
-	<bean id="dateUtils" class="com.socialize.ui.util.DateUtils"/>
+	<bean id="dateUtils" class="com.socialize.ui.util.DateUtils">
+		<property name="localizationService" ref="localizationService"/>
+	</bean>
 	
 	<bean id="geoUtils" class="com.socialize.ui.util.GeoUtils">
 		<init-method name="init">
@@ -294,6 +297,7 @@
 		singleton="false"
 		abstract="true">
 		<constructor-arg type="activity"/>
+		<property name="localizationService" ref="localizationService"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
@@ -306,6 +310,7 @@
 		<init-method name="init"/>
 	</bean>
 	
+	<!-- 
 	<bean 
 		id="socializeSkipAuthButton" 
 		singleton="false"
@@ -321,7 +326,8 @@
 		<property name="textSize" value="16" type="integer"/>
 		<property name="textAlign" value="center"/>
 	</bean>
-	
+	-->
+	 
 	<bean 
 		id="loadingView" 
 		class="com.socialize.ui.view.BasicLoadingView"		
@@ -368,6 +374,7 @@
 		abstract="true"
 		singleton="false">
 		<constructor-arg type="activity"/>
+		<property name="localizationService" ref="localizationService"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="colors" ref="colors"/>
 		<property name="displayUtils" ref="displayUtils"/>
@@ -383,6 +390,7 @@
 		singleton="false"
 		cache="true">
 		<constructor-arg type="activity"/>
+		<property name="localizationService" ref="localizationService"/>
 		<property name="config" ref="config"/>
 		<property name="colors" ref="colors"/>
 		<property name="drawables" ref="drawables"/>
@@ -415,6 +423,7 @@
 		singleton="false"
 		cache="true">
 		<constructor-arg type="activity"/>
+		<property name="localizationService" ref="localizationService"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="colors" ref="colors"/>
@@ -452,7 +461,7 @@
 		<constructor-arg type="activity"/>	
 		<property name="backgroundColor" value="#3d464c"/>
 		<property name="bgAlpha" value="255" type="integer"/>
-		<property name="displayText" value="Email"/>
+		<property name="displayTextKey" value="socialize_share_label_email"/>
 		<property name="toggledDrawableName" value="arrow.png"/>
 	</bean>	
 	
@@ -466,7 +475,7 @@
 		<constructor-arg type="activity"/>	
 		<property name="backgroundColor" value="#3d464c"/>
 		<property name="bgAlpha" value="255" type="integer"/>
-		<property name="displayText" value="SMS"/>
+		<property name="displayTextKey" value="socialize_share_label_sms"/>
 		<property name="toggledDrawableName" value="arrow.png"/>
 	</bean>			
 	
@@ -480,7 +489,7 @@
 		<constructor-arg type="activity"/>	
 		<property name="backgroundColor" value="#3d464c"/>
 		<property name="bgAlpha" value="255" type="integer"/>
-		<property name="displayText" value="Google+ Circles"/>
+		<property name="displayTextKey" value="socialize_share_label_googleplus"/>
 		<property name="toggledDrawableName" value="arrow.png"/>
 	</bean>			
 	
@@ -508,7 +517,7 @@
 		<property name="bgAlpha" value="255" type="integer"/>
 		<property name="toggledDrawableName" value="tick_on.png"/>
 		<property name="untoggledDrawableName" value="tick_off.png"/>
-		<property name="text" value="Always post to selected networks"/>
+		<property name="textKey" value="socialize_share_label_remember"/>
 	</bean>	
 	
 	<factory id="rememberCellFactory" makes="rememberCell"/>	
@@ -523,7 +532,7 @@
 		<property name="bgAlpha" value="255" type="integer"/>
 		<property name="toggledDrawableName" value="tick_on.png"/>
 		<property name="untoggledDrawableName" value="tick_off.png"/>
-		<property name="text" value="Don't ask me again"/>
+		<property name="textKey" value="socialize_share_label_forget"/>
 	</bean>	
 	
 	<factory id="rememberAuthCellFactory" makes="rememberAuthCell"/>			
@@ -533,7 +542,7 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="Continue"/>
+		<property name="textKey" value="socialize_button_continue"/>
 		<property name="height" value="38" type="integer"/>
 		<property name="width" value="120" type="integer"/>
 		<property name="textSize" value="13" type="integer"/>
@@ -547,7 +556,7 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="Close"/>
+		<property name="textKey" value="socialize_button_close"/>
 		<property name="bottomColor" value="GRAY_BTN_BOTTOM"/>
 		<property name="topColor" value="GRAY_BTN_TOP"/>
 		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
@@ -621,7 +630,7 @@
 		extends="clickableSectionCell">
 		<constructor-arg type="activity"/>	
 		<property name="twitterAuthClickListener" ref="twitterAuthClickListener"/>
-		<property name="displayText" value="Twitter"/>
+		<property name="displayTextKey" value="socialize_twitter_name"/>
 		<property name="backgroundColor" value="#3d464c"/>
 		<property name="bgAlpha" value="255" type="integer"/>
 		<property name="toggledDrawableName" value="tick_on.png"/>
@@ -638,7 +647,7 @@
 		extends="clickableSectionCell">
 		<constructor-arg type="activity"/>	
 		<property name="twitterAuthClickListener" ref="twitterAuthClickListener"/>
-		<property name="displayText" value="Twitter"/>
+		<property name="displayTextKey" value="socialize_twitter_name"/>
 		<property name="backgroundColor" value="#3d464c"/>
 		<property name="bgAlpha" value="255" type="integer"/>
 		<property name="toggledDrawableName" value="arrow.png"/>
@@ -646,23 +655,6 @@
 	
 	<factory id="twitterSignInCellFactory" makes="twitterSignInCell"/>		
 		
-	<!-- 
-	<bean 
-		id="autoPostTwitterOption" 
-		extends="customCheckbox"
-		singleton="false">
-		<constructor-arg type="activity"/>
-		
-		<property name="imageOn" value="icon_twitter.png"/>
-		<property name="imageOff" value="icon_twitter_disabled.png"/>
-		<property name="textOn" value=""/>
-		<property name="textOff" value=""/>
-		<property name="borderOn" value="false" type="boolean"/>
-	</bean>	
-	
-	<factory id="autoPostTwitterOptionFactory" makes="autoPostTwitterOption"/>
-	 -->
-	 
 	<bean 
 		id="twitterEnabledCheckbox" 
 		extends="customCheckbox" 
@@ -673,8 +665,8 @@
 		<property name="socialNetworkAuthClickListener" ref="twitterAuthClickListener"/>
 		<property name="imageOn" value="icon_twitter.png"/>
 		<property name="imageOff" value="icon_twitter_disabled.png"/>
-		<property name="textOn" value="Sign out of Twitter"/>
-		<property name="textOff" value="Sign in to Twitter"/>
+		<property name="textOnKey" value="socialize_twitter_button_signout"/>
+		<property name="textOffKey" value="socialize_twitter_button_signin"/>
 		<property name="borderOn" value="true" type="boolean"/>
 		<property name="textSize" value="14" type="integer"/>
 		
@@ -703,25 +695,6 @@
 
 	<factory id="facebookSignOutClickListenerFactory" makes="facebookSignOutClickListener"/>
 	
-	<!-- 
-	<bean 
-		id="facebookSignInButton" 
-		class="com.socialize.networks.facebook.FacebookButton"		
-		singleton="false"
-		extends="socializeButton">
-		<constructor-arg type="activity"/>
-		<property name="facebookAuthClickListener" ref="facebookAuthClickListener"/>
-		<property name="text" value="Sign in with Facebook"/>
-		<property name="imageName" value="fb_button.png"/>
-		<property name="bottomColor" value="FACEBOOK_BOTTOM"/>
-		<property name="topColor" value="FACEBOOK_TOP"/>
-		<property name="strokeTopColor" value="FACEBOOK_TOP_STROKE"/>
-		<property name="strokeBottomColor" value="FACEBOOK_BOTTOM_STROKE"/>
-		<property name="width" value="200" type="integer"/>
-		<property name="height" value="42" type="integer"/>
-		<property name="textSize" value="16" type="integer"/>
-	</bean>
- -->
 	<bean 
 		id="facebookEnabledCheckbox" 
 		extends="customCheckbox" 
@@ -732,8 +705,8 @@
 		<property name="socialNetworkAuthClickListener" ref="facebookAuthClickListener"/>
 		<property name="imageOn" value="icon_facebook.png"/>
 		<property name="imageOff" value="icon_facebook_disabled.png"/>
-		<property name="textOn" value="Sign out of Facebook"/>
-		<property name="textOff" value="Sign in to Facebook"/>
+		<property name="textOnKey" value="socialize_facebook_button_signout"/>
+		<property name="textOffKey" value="socialize_facebook_button_signin"/>
 		<property name="borderOn" value="true" type="boolean"/>
 		<property name="textSize" value="14" type="integer"/>
 		
@@ -751,22 +724,6 @@
 	
 	<factory id="facebookSignOutTaskFactory" makes="facebookSignOutTask"/>
 	
-	<!-- 
-	<bean 
-		id="autoPostFacebookOption" 
-		extends="customCheckbox"
-		singleton="false">
-		<constructor-arg type="activity"/>
-		
-		<property name="imageOn" value="icon_facebook.png"/>
-		<property name="imageOff" value="icon_facebook_disabled.png"/>
-		<property name="textOn" value=""/>
-		<property name="textOff" value=""/>
-		<property name="borderOn" value="false" type="boolean"/>
-	</bean>	
-	
-	<factory id="autoPostFacebookOptionFactory" makes="autoPostFacebookOption"/>
-	 -->
 	<bean 
 		id="facebookShareCell" 
 		class="com.socialize.networks.facebook.FacebookShareCell" 
@@ -774,7 +731,7 @@
 		extends="clickableSectionCell">
 		<constructor-arg type="activity"/>	
 		<property name="facebookAuthClickListener" ref="facebookAuthClickListener"/>
-		<property name="displayText" value="Facebook"/>
+		<property name="displayTextKey" value="socialize_facebook_name"/>
 		<property name="backgroundColor" value="#3d464c"/>
 		<property name="bgAlpha" value="255" type="integer"/>
 		<property name="toggledDrawableName" value="tick_on.png"/>
@@ -790,7 +747,7 @@
 		extends="clickableSectionCell">
 		<constructor-arg type="activity"/>	
 		<property name="facebookAuthClickListener" ref="facebookAuthClickListener"/>
-		<property name="displayText" value="Facebook"/>
+		<property name="displayTextKey" value="socialize_facebook_name"/>
 		<property name="backgroundColor" value="#3d464c"/>
 		<property name="bgAlpha" value="255" type="integer"/>
 		<property name="toggledDrawableName" value="arrow.png"/>
@@ -813,7 +770,6 @@
 		<property name="logger" ref="logger"/>
 		<property name="displayUtils" ref="displayUtils"/><!-- Defined in socialize_beans.xml -->
 		<property name="dateUtils" ref="dateUtils"/>
-		<!-- <property name="base64Utils" ref="base64Utils"/>Defined in socialize_beans.xml -->
 		<property name="imageLoader" ref="imageLoader"/><!-- Defined in socialize_beans.xml -->
 		<property name="iconSize" value="64" type="integer"/>
 		
@@ -849,6 +805,7 @@
 		extends="socializeView">
 		<constructor-arg type="activity"/>
 		<init-method name="init"/>
+		<property name="localizationService" ref="localizationService"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
 	</bean>
@@ -858,6 +815,7 @@
 		class="com.socialize.ui.header.SocializeHeader"
 		singleton="false">
 		<constructor-arg type="activity"/>
+		<property name="localizationService" ref="localizationService"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
 		<property name="drawables" ref="drawables"/>
@@ -869,7 +827,6 @@
 		extends="socializeHeader"
 		singleton="false">
 		<constructor-arg type="activity"/>
-		<property name="headerText" value="Comments"/>
 	</bean>	
 	
 	<factory id="commentHeaderFactory" makes="commentHeader"/>	
@@ -910,7 +867,8 @@
 		singleton="false">
 		
 		<constructor-arg type="activity"/>
-
+		
+		<property name="localizationService" ref="localizationService"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
 		
@@ -946,6 +904,7 @@
 		id="commentEntrySliderItem" 
 		class="com.socialize.ui.comment.CommentEntrySliderItem" 
 		singleton="false">
+		<property name="localizationService" ref="localizationService"/>
 		<property name="viewFactory" ref="commentEntryViewFactory"/>
 	</bean>		
 	
@@ -954,7 +913,7 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="Post Comment"/>
+		<property name="textKey" value="socialize_comment_button_add"/>
 		<property name="height" value="34" type="integer"/>
 		<property name="width" value="100" type="integer"/>
 		<property name="textSize" value="11" type="integer"/>
@@ -968,7 +927,7 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="Cancel"/>
+		<property name="textKey" value="socialize_button_cancel"/>
 		<property name="bottomColor" value="GRAY_BTN_BOTTOM"/>
 		<property name="topColor" value="GRAY_BTN_TOP"/>
 		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
@@ -985,7 +944,7 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="Unsubscribe"/>
+		<property name="textKey" value="socialize_comment_smartalerts_unsubscribe"/>
 		<property name="bottomColor" value="GRAY_BTN_BOTTOM"/>
 		<property name="topColor" value="GRAY_BTN_TOP"/>
 		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
@@ -1003,6 +962,7 @@
 		singleton="false">
 		<constructor-arg type="activity"/>
 		
+		<property name="localizationService" ref="localizationService"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="appUtils" ref="appUtils"/>
 		<property name="keyboardUtils" ref="keyboardUtils"/>
@@ -1043,8 +1003,8 @@
 		<constructor-arg type="activity"/>
 		<property name="imageOn" value="icon_location.png"/>
 		<property name="imageOff" value="icon_location_disabled.png"/>
-		<property name="textOn" value="Location will be shared"/>
-		<property name="textOff" value="Location will not be shared"/>
+		<property name="textOnKey" value="socialize_location_shared"/>
+		<property name="textOffKey" value="socialize_location_notshared"/>		
 		<property name="borderOn" value="false" type="boolean"/>
 	</bean>	
 	
@@ -1057,8 +1017,6 @@
 		<constructor-arg type="activity"/>
 		<property name="imageOn" value="icon_notify.png"/>
 		<property name="imageOff" value="icon_notify_disabled.png"/>
-		<property name="textOn" value=""/>
-		<property name="textOff" value=""/>
 		<property name="borderOn" value="false" type="boolean"/>
 	</bean>	
 	
@@ -1069,8 +1027,8 @@
 		<constructor-arg type="activity"/>
 		<property name="imageOn" value="icon_notify.png"/>
 		<property name="imageOff" value="icon_notify_disabled.png"/>
-		<property name="textOn" value="Push Notifications Enabled"/>
-		<property name="textOff" value="Push Notifications Disabled"/>
+		<property name="textOnKey" value="socialize_smartalerts_enabled"/>
+		<property name="textOffKey" value="socialize_smartalerts_disabled"/>	
 		<property name="borderOn" value="true" type="boolean"/>
 		<property name="textSize" value="14" type="integer"/>
 	</bean>	
@@ -1082,8 +1040,8 @@
 		<constructor-arg type="activity"/>
 		<property name="imageOn" value="icon_location.png"/>
 		<property name="imageOff" value="icon_location_disabled.png"/>
-		<property name="textOn" value="Location Sharing Enabled"/>
-		<property name="textOff" value="Location Sharing Disabled"/>
+		<property name="textOnKey" value="socialize_location_enabled"/>
+		<property name="textOffKey" value="socialize_location_disabled"/>
 		<property name="borderOn" value="true" type="boolean"/>
 		<property name="textSize" value="14" type="integer"/>
 	</bean>		
@@ -1138,7 +1096,7 @@
 		extends="socializeHeader"
 		singleton="false">
 		<constructor-arg type="activity"/>
-		<property name="headerText" value="Settings"/>
+		<property name="headerTextKey" value="socialize_settings_header"/>
 	</bean>		
 	
 	<factory id="profileHeaderFactory" makes="profileHeader"/>		
@@ -1149,6 +1107,8 @@
 		singleton="false">
 		
 		<constructor-arg type="activity"/>	
+		
+		<property name="localizationService" ref="localizationService"/>
 		
 		<property name="errorHandler" ref="socializeUIErrorHandler"/>
 		
@@ -1186,6 +1146,7 @@
 		
 		<constructor-arg type="activity"/>	
 		
+		<property name="localizationService" ref="localizationService"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
 		<property name="drawables" ref="drawables"/>
@@ -1202,7 +1163,7 @@
 		<constructor-arg type="activity"/>	
 		<property name="imageLoader" ref="imageLoader"/>	
 		<property name="profileImageContextMenuFactory" ref="profileImageContextMenuFactory"/>
-		<property name="displayText" value="Edit Profile Picture"/>
+		<property name="displayTextKey" value="socialize_settings_label_picture"/>
 	</bean>	
 	
 	<factory id="profilePictureEditViewFactory" makes="profilePictureEditView"/>
@@ -1228,7 +1189,7 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="Edit Your Profile"/>
+		<property name="textKey" value="socialize_settings_button_edit"/>
 		<property name="bottomColor" value="GRAY_BTN_BOTTOM"/>
 		<property name="topColor" value="GRAY_BTN_TOP"/>
 		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
@@ -1244,7 +1205,7 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="Save"/>
+		<property name="textKey" value="socialize_settings_button_save"/>
 		<property name="height" value="36" type="integer"/>
 		<property name="width" value="70" type="integer"/>
 		<property name="textSize" value="11" type="integer"/>
@@ -1258,7 +1219,7 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="Cancel"/>
+		<property name="textKey" value="socialize_button_cancel"/>
 		<property name="bottomColor" value="GRAY_BTN_BOTTOM"/>
 		<property name="topColor" value="GRAY_BTN_TOP"/>
 		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
@@ -1294,27 +1255,6 @@
 
 <!-- User Activity UI -->
 
-<!-- 
-	<bean 
-		id="userActivityUtils" 
-		singleton="false"
-		class="com.socialize.ui.profile.activity.UserActivityUtils">
-	</bean>
- 
- 
-	<bean 
-		id="userActivityActionHtml" 
-		singleton="false"
-		class="com.socialize.ui.profile.activity.UserActivityActionHtml">
-		<constructor-arg type="activity"/>
-		<property name="colors" ref="colors"/>
-		<property name="userActivityUtils" ref="userActivityUtils"/>
-		<init-method name="init"/>
-	</bean>
-	
-	<factory id="userActivityActionHtmlFactory" makes="userActivityActionHtml"/>
--->
-	
 	<bean 
 		id="userActivityActionText" 
 		singleton="false"
@@ -1345,16 +1285,6 @@
 	
 	<factory id="userActivityListItemFactory" makes="userActivityListItem"/>
 	
-	<!-- 
-	<bean 
-		id="userActivityListAdapter" 
-		singleton="false"
-		class="com.socialize.ui.profile.activity.UserActivityListAdapter">
-		<property name="userActivityListItemFactory" ref="userActivityListItemFactory"/>
-	</bean>
-	
-	<factory id="userActivityListAdapterFactory" makes="userActivityListAdapter"/>
- 	-->
 	<bean 
 		id="userActivityView" 
 		singleton="false"
@@ -1383,6 +1313,7 @@
 		
 		<init-method name="init"/>
 		
+		<property name="localizationService" ref="localizationService"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="shareUtils" ref="shareUtils"/>
@@ -1548,7 +1479,7 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="Close"/>
+		<property name="textKey" value="socialize_button_close"/>
 		<property name="height" value="32" type="integer"/>
 		<property name="width" value="64" type="integer"/>
 		<property name="textSize" value="11" type="integer"/>

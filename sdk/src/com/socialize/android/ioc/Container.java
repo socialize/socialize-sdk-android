@@ -397,6 +397,7 @@ public class Container {
 		staticProxies.clear();
 		staticStubs.clear();
 		staticProxiesRemoved.clear();
+		BeanMappingCache.destroy();
 		
 		destroyed = true;
 	}

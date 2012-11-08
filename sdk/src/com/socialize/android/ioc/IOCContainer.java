@@ -124,6 +124,23 @@ public interface IOCContainer {
 	public void init(Context context, InputStream...in) throws Exception;
 	
 	/**
+	 * Initializes the container.
+	 * @param context The current context.
+	 * @param builder
+	 * @param source
+	 * @throws Exception
+	 */
+	public void init(Context context, ContainerBuilder builder, BeanMappingSource source) throws Exception;
+
+	/**
+	 * Initializes the container.
+	 * @param context The current context.
+	 * @param source
+	 * @throws Exception
+	 */
+	public void init(Context context, BeanMappingSource source) throws Exception;
+	
+	/**
 	 * Returns the number of beans in the container.
 	 * @return
 	 */

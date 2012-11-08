@@ -24,6 +24,8 @@ package com.socialize.ui.util;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import com.socialize.i18n.I18NConstants;
+import com.socialize.i18n.LocalizationService;
 
 
 /**
@@ -36,6 +38,8 @@ public class DateUtils {
 	public static final long day = hour*24;
 	public static final long month = day*30;
 	public static final long year = day*365;
+	
+	private LocalizationService localizationService;
 	
 	private final DateFormat SIMPLE_DATE = new SimpleDateFormat("h:mm a 'on' dd MMM yyyy");
 	
@@ -56,41 +60,60 @@ public class DateUtils {
 				if(diff > day) {
 					
 					if(diff > month) {
-						unit = "month";
 						value = diff / month;
+						
+						if(value > 1) {
+							unit = localizationService.getString(I18NConstants.DATE_MONTH_PLURAL);
+						}
+						else {
+							unit = localizationService.getString(I18NConstants.DATE_MONTH_SINGLE);
+						}
+						
 					}
 					else {
-						unit = "day";
 						value = diff / day;
+						
+						if(value > 1) {
+							unit = localizationService.getString(I18NConstants.DATE_DAY_PLURAL);
+						}
+						else {
+							unit = localizationService.getString(I18NConstants.DATE_DAY_SINGLE);
+						}						
 					}
 				}
 				else {
 					// Calc hours
-					unit = "hour";
 					value = diff / hour;
+					
+					if(value > 1) {
+						unit = localizationService.getString(I18NConstants.DATE_HOUR_PLURAL);
+					}
+					else {
+						unit = localizationService.getString(I18NConstants.DATE_HOUR_SINGLE);
+					}							
 				}
 			}
 			else {
 				// Calc minutes
-				unit = "minute";
 				value = diff / minute;
+				
+				if(value > 1) {
+					unit = localizationService.getString(I18NConstants.DATE_MINUTE_PLURAL);
+				}
+				else {
+					unit = localizationService.getString(I18NConstants.DATE_MINUTE_SINGLE);
+				}						
 			}
 			
 			builder.append(value);
 			builder.append(" ");
 			builder.append(unit);
-			
-			if(value > 1) {
-				builder.append("s");
-			}
-			
-			builder.append(" ago");
 		}
 		else if(diff < minute) {
-			builder.append("Just now");
+			builder.append(localizationService.getString(I18NConstants.DATE_JUST_NOW));
 		}
 		else {
-			builder.append("Over a year ago");
+			builder.append(localizationService.getString(I18NConstants.DATE_OVER_A_YEAR_AGO));
 		}
 		
 		return builder.toString();
@@ -105,4 +128,7 @@ public class DateUtils {
 		return SIMPLE_DATE.format(date);
 	}
 	
+	public void setLocalizationService(LocalizationService localizationService) {
+		this.localizationService = localizationService;
+	}
 }
