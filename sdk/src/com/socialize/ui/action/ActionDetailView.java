@@ -21,10 +21,8 @@
  */
 package com.socialize.ui.action;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -112,9 +110,4 @@ public class ActionDetailView extends EntityView {
 	public View getLoadingView() {
 		return null;
 	}
-	
-	public boolean onCreateOptionsMenu(final Activity source, Menu menu) {
-		createOptionsMenuItem(source, menu);
-		return true;
-	}	
 }

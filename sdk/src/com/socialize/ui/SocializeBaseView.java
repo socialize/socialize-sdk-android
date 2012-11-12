@@ -47,8 +47,10 @@ import com.socialize.view.BaseView;
 public abstract class SocializeBaseView extends BaseView {
 
 	protected IOCContainer container;
-	private Drawables drawables;
-	private LocalizationService localizationService;
+	protected Drawables drawables;
+	protected LocalizationService localizationService;
+	
+	protected Menu menu;
 	
 	public SocializeBaseView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -112,7 +114,12 @@ public abstract class SocializeBaseView extends BaseView {
 	}	
 	
 	// Subclasses override
-	public void onViewLoad(IOCContainer container) {};
+	public void onViewLoad(IOCContainer container) {
+		// Create a menu if we have one.
+		if(menu != null) {
+			createOptionsMenuItem(getActivity(), menu);
+		}
+	};
 	
 	// Subclasses override
 	public void onViewUpdate(IOCContainer container) {};
@@ -185,6 +192,11 @@ public abstract class SocializeBaseView extends BaseView {
 			});
 		}
 	}
+	
+	public final boolean onCreateOptionsMenu(final Activity source, Menu menu) {
+		this.menu = menu;
+		return true;
+	}	
 	
 	// Subclasses override
 	protected void onBeforeSocializeInit() {}
