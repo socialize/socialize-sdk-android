@@ -629,11 +629,16 @@
                 <source path="${source.absolute.dir}"/>
             </aidl>
 
-            <!-- renderscript generates resources so it must be called before aapt -->
-            <echo level="info">----------</echo>
+            <!-- renderscript generates resources so it must be called before aapt
             <echo level="info">Handling RenderScript files...</echo>
+        	
+        	<path id="android.renderscript.include.path">
+        	    <pathelement location="${android.platform.tools.dir}/renderscript/include" />
+        	    <pathelement location="${android.platform.tools.dir}/renderscript/clang-include" />
+        	</path>        	
+        	
             <renderscript executable="${renderscript}"
-                    includePath="${android.renderscript.include.path}"
+            		includePathRefId="android.renderscript.include.path"
                     genFolder="${gen.absolute.dir}"
                     resFolder="${out.res.absolute.dir}/raw"
                     targetApi="${project.minSdkVersion}"
@@ -642,6 +647,7 @@
                     previousBuildType="${build.last.is.packaging.debug}">
                 <source path="${source.absolute.dir}"/>
             </renderscript>
+             -->
 
             <echo level="info">----------</echo>
             <echo level="info">Handling Resources...</echo>
