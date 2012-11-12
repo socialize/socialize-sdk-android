@@ -546,7 +546,6 @@ public class SharePanelView extends DialogPanelView {
 		if(continueButton != null) {
 
 			LayoutParams buttonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-			buttonParams.setMargins(0, displayUtils.getDIP(30), 0, 0);
 			
 			buttonLayout.setPadding(padding, 0, padding, padding);
 			buttonLayout.setOrientation(HORIZONTAL);
