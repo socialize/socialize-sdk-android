@@ -59,7 +59,6 @@ public class ConfigDialog {
 		final CheckBox chkTW = (CheckBox) layout.findViewById(R.id.chkTW);
 		final CheckBox chkDiagnostic = (CheckBox) layout.findViewById(R.id.chkDiagnostic);
 		
-		
 		final SocializeConfig config = ConfigUtils.getConfig(mContext);
 		
 		chkRequireAuth.setChecked(config.isPromptForAuth());
@@ -115,11 +114,18 @@ public class ConfigDialog {
 				config.setProperty(SocializeConfig.SOCIALIZE_ALLOW_NEVER_AUTH, String.valueOf(chkAllowSkipAuth.isChecked()));
 				config.setDiagnosticLoggingEnabled(mContext, chkDiagnostic.isChecked());
 				
-				
 				config.setFacebookSingleSignOnEnabled(chkFBSSO.isChecked());
 			}
 		});
-		builder.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+		
+		builder.setNegativeButton("Setup Profiling...", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				showProfileConfigDialog(mContext);
+			}
+		});
+		
+		builder.setNeutralButton("Cancel",new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
@@ -131,5 +137,46 @@ public class ConfigDialog {
 		AlertDialog dialog = builder.create();
 		dialog.show();
 		
+	}
+	
+	public static void showProfileConfigDialog(final Activity mContext) {
+		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+		final View layout = inflater.inflate(R.layout.profiling, (ViewGroup) mContext.findViewById(R.id.profiling_layout));
+		
+		final CompoundButton profileActionBar = (CompoundButton) layout.findViewById(R.id.profileActionBar);
+		final CompoundButton profileSettings = (CompoundButton) layout.findViewById(R.id.profileSettings);
+		final CompoundButton profileCommentList = (CompoundButton) layout.findViewById(R.id.profileCommentList);
+		final CompoundButton profileShareDialog = (CompoundButton) layout.findViewById(R.id.profileShareDialog);
+		
+		profileActionBar.setChecked(Debug.profileActionBar);
+		profileSettings.setChecked(Debug.profileSettings);
+		profileCommentList.setChecked(Debug.profileCommentList);
+		profileShareDialog.setChecked(Debug.profileShareDialog);
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+		builder.setTitle("Android Profiling");
+		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Debug.profileActionBar = profileActionBar.isChecked();
+				Debug.profileSettings = profileSettings.isChecked();
+				Debug.profileCommentList = profileCommentList.isChecked();
+				Debug.profileShareDialog = profileShareDialog.isChecked();
+				dialog.dismiss();
+				showConfigDialog(mContext);
+			}
+		});
+		builder.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				showConfigDialog(mContext);
+			}
+		});
+		
+		builder.setView(layout);		
+		
+		AlertDialog dialog = builder.create();
+		dialog.show();
 	}
 }

@@ -34,7 +34,6 @@ import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.User;
 import com.socialize.ui.SocializeUIActivity;
-import com.socialize.ui.comment.CommentActivity;
 import com.socialize.util.StringUtils;
 
 /**
@@ -66,7 +65,7 @@ public class ProfileActivity extends SocializeUIActivity {
 				User user = session.getUser();
 				if(user != null) {
 					if(!StringUtils.isEmpty(userId) && Integer.parseInt(userId) == user.getId().intValue()) {
-						setResult(CommentActivity.PROFILE_UPDATE);
+						setResult(ProfileActivity.PROFILE_UPDATE);
 					}
 				}
 			}

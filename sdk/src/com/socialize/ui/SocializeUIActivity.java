@@ -38,6 +38,7 @@ import com.socialize.ui.dialog.DialogRegister;
 public abstract class SocializeUIActivity extends Activity implements DialogRegister {
 	
 	public static final int PROFILE_UPDATE = 1347;
+	
 	private Set<Dialog> dialogs;
 	
 	@Override
