@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+	    
+	<RadioGroup  android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:id="@+id/profiling_layout"
+	    android:background="#000000"
+	    android:orientation="vertical"
+	    android:padding="8dip">
+	    
+		<RadioButton 
+	    	android:id="@+id/profileActionBar"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Profile Action Bar Load"
+	        android:textSize="14dip"/> 
+	        
+		<RadioButton 
+	    	android:id="@+id/profileSettings"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Profile User Settings Load"
+	        android:textSize="14dip"/> 
+	        
+		<RadioButton 
+	    	android:id="@+id/profileCommentList"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Profile Comment List Load"
+	        android:textSize="14dip"/> 
+	        
+		<RadioButton 
+	    	android:id="@+id/profileShareDialog"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Profile Share Dialog Load"
+	        android:textSize="14dip"/> 	    
+	    
+	</RadioGroup> 
+
+</ScrollView>
