@@ -62,6 +62,7 @@
 				<include name="socialize_ui_beans.xml"/>
 				<include name="socialize.errors.properties"/>
 				<include name="default.socialize.properties"/>
+				<include name="i18n.properties"/>
 			</fileset>
 		</copy>
 		

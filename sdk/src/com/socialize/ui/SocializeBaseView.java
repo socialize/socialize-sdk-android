@@ -52,6 +52,8 @@ public abstract class SocializeBaseView extends BaseView {
 	
 	protected Menu menu;
 	
+	protected boolean viewLoaded = false;
+	
 	public SocializeBaseView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
@@ -119,6 +121,8 @@ public abstract class SocializeBaseView extends BaseView {
 		if(menu != null) {
 			createOptionsMenuItem(getActivity(), menu);
 		}
+		
+		viewLoaded = true;
 	};
 	
 	// Subclasses override
@@ -195,6 +199,11 @@ public abstract class SocializeBaseView extends BaseView {
 	
 	public final boolean onCreateOptionsMenu(final Activity source, Menu menu) {
 		this.menu = menu;
+		
+		if(viewLoaded) {
+			createOptionsMenuItem(source, menu);
+		}
+		
 		return true;
 	}	
 	
