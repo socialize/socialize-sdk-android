@@ -1058,7 +1058,7 @@ public class SocializeServiceImpl implements SocializeService {
 
 	@Override
 	public void onResume(Activity context) {
-		if(paused) {
+		if(paused && FacebookUtils.isAvailable(context)) {
 			try {
 				FacebookUtils.extendAccessToken(context, null);
 			}
