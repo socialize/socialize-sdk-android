@@ -6,7 +6,6 @@
 	<classpathentry kind="lib" path="libs/polidea_test_runner_1.1.jar"/>
 	<classpathentry kind="lib" path="libext/AndroidMockGenerator-appmakr-modified.jar" sourcepath="/AndroidMock/src"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry kind="lib" path="libs/socialize-robotium-2.5.jar"/>
 	<classpathentry kind="lib" path="libs/easymock-3.1.jar" sourcepath="libsrc/easymock-3.1-sources.jar"/>
 	<classpathentry kind="lib" path="libs/javassist.jar" sourcepath="/javassist-3.15-GA/src/main"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/socialize-sdk-sample"/>
