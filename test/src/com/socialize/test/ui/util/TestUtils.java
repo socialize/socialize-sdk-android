@@ -55,7 +55,6 @@ public class TestUtils {
 	static Map<String, JSONObject> jsons = new HashMap<String, JSONObject>();
 	
 	private static String fb_token = null;
-	
 	private static String tw_token = null;
 	private static String tw_secret = null;
 	
