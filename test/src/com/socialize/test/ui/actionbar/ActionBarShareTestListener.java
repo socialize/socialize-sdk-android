@@ -32,7 +32,6 @@ public class ActionBarShareTestListener extends ActionBarTest {
 	public void testShareButtonCallsActionBarListener() throws Throwable {
 		
 		Activity activity = TestUtils.getActivity(this);
-		assertTrue(globalLatch.await(10, TimeUnit.SECONDS));
 		
 		final Like mockLike = new Like();
 		mockLike.setEntity(entity);

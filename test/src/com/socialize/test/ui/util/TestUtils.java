@@ -26,6 +26,7 @@ import android.app.Instrumentation;
 import android.app.Instrumentation.ActivityMonitor;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -33,6 +34,8 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
@@ -54,10 +57,12 @@ public class TestUtils {
 	static SocializeManagedActivityTest<?> testCase;
 	static Map<String, JSONObject> jsons = new HashMap<String, JSONObject>();
 	
-	private static String fb_token = null;
+	static ActivityMonitor allActivitiesMonitor;
 	
+	private static String fb_token = null;
 	private static String tw_token = null;
 	private static String tw_secret = null;
+	private static Activity activity;
 	
 	public static final String getDummyTwitterToken(Context context) throws IOException {
 		if(tw_token == null) {
@@ -149,9 +154,16 @@ public class TestUtils {
 		AsyncTaskManager.setManaged(true);
 		
 		testCase = test;
+		
 		holder = new ResultHolder();
 		holder.setUp();
+		
 		instrumentation = testCase.getInstrumentation();
+		allActivitiesMonitor = new ActivityMonitor(new IntentFilter(), null, false);
+		
+		instrumentation.addMonitor(allActivitiesMonitor);
+		
+		getActivity(test);
 	}
 	
 	public static void tearDown(SocializeManagedActivityTest<?> test) {
@@ -169,22 +181,35 @@ public class TestUtils {
 			holder = null;
 		}
 		
+		if(activity != null) {
+			SharedPreferences prefs = activity.getSharedPreferences("SocializeSession", Context.MODE_PRIVATE);
+			prefs.edit().clear().commit();		
+			
+			activity.finish();
+			activity = null;
+		}
+		
 		if(monitor != null) {
 			Activity lastActivity = monitor.getLastActivity();
 			if(lastActivity != null) {
 				lastActivity.finish();
 			}
 			instrumentation.removeMonitor(monitor);
+			
+			monitor = null;
 		}
 		
-		Activity activity = getActivity(test);
-		
-		if(activity != null) {
-			SharedPreferences prefs = activity.getSharedPreferences("SocializeSession", Context.MODE_PRIVATE);
-			prefs.edit().clear().commit();					
-		}
-		
-		monitor = null;
+		if(allActivitiesMonitor != null) {
+			Activity lastActivity = allActivitiesMonitor.getLastActivity();
+			
+			if(lastActivity != null) {
+				lastActivity.finish();
+			}
+			
+			instrumentation.removeMonitor(allActivitiesMonitor);
+			
+			allActivitiesMonitor = null;
+		}		
 	}
 	
 	public static void setUpActivityMonitor(Class<?> activityClass) {
@@ -192,12 +217,42 @@ public class TestUtils {
 		instrumentation.addMonitor(monitor);
 	}
 	
+	public static View clickInList(Activity activity, final int position, final ListView listView) {
+		
+		final CountDownLatch latch = new CountDownLatch(1);
+		final ArrayList<View> holder = new ArrayList<View>(1);
+		activity.runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				listView.requestFocusFromTouch();
+				listView.setSelection(position);
+				View view = listView.getAdapter().getView(position, null, null);
+				listView.performItemClick(view, position, position);
+				holder.add(view);
+				latch.countDown();
+			}
+		});
+		
+		try {
+			latch.await(10, TimeUnit.SECONDS);
+		}
+		catch (InterruptedException e) {}
+		
+		return holder.get(0);
+	}
+	
 	@SuppressWarnings("unchecked")
 	public static <A extends Activity> A waitForActivity(long timeout) {
 		if(monitor != null) {
+			
 			return (A) monitor.waitForActivityWithTimeout(timeout);
 		}
 		return null;
+	}
+	
+	public static void waitForIdleSync() {
+		instrumentation.waitForIdleSync();
 	}
 	
 	public static boolean waitForDialogToShow(Dialog dialog, int timeout) {
@@ -225,11 +280,25 @@ public class TestUtils {
 		}
 	}
 	
-	public static final void sleep(long milliseconds) {
+	public static final long sleep(long milliseconds) {
 		try {
 			Thread.sleep(milliseconds);
 		}
 		catch (InterruptedException ignore) {}
+		
+		return milliseconds;
+	}
+	
+	public static final long sleepUntil(long milliseconds, ExitSleep until) {
+		int num = 10;
+		long slept = 0;
+		for (int i = 0; i < num; i++) {
+			slept += sleep(milliseconds/num);
+			if(until.isExit()) {
+				break;
+			}
+		}
+		return slept;
 	}
 	
 	public static boolean lookForText(Activity activity, String text, long timeoutMs) {
@@ -270,6 +339,51 @@ public class TestUtils {
 				return lookForText(view, text, timeoutMs, startTime);
 			}
 		}
+	}
+	
+	public static <T extends Activity> void clearEditText(final SocializeManagedActivityTest<T> test, final int index) {
+		enterText(test, index, "");
+	}
+	
+	public static <T extends Activity> void enterText(SocializeManagedActivityTest<T> test, int index, final String text) {
+		final EditText editText = findEditText(getActivity(test), index);
+		
+		if(editText != null) {
+			final CountDownLatch latch = new CountDownLatch(1);
+			try {
+				test.runTestOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						editText.setText(text);
+						latch.countDown();
+					}
+				});
+			}
+			catch (Throwable e) {
+				e.printStackTrace();
+				latch.countDown();
+				SocializeManagedActivityTest.fail();
+			}
+			
+			try {
+				latch.await();
+			}
+			catch (InterruptedException e) {
+				e.printStackTrace();
+			}	
+		}			
+	}
+	
+	public static <V extends View> V findViewByIndex(Activity activity, Class<V> viewClass, int index) {
+		List<V> findViews = findViews((ViewGroup)activity.getWindow().getDecorView(), viewClass);
+		if(findViews != null && findViews.size() > index) {
+			return findViews.get(index);
+		}
+		return null;
+	}
+	
+	public static EditText findEditText(Activity activity, int index) {
+		return findViewByIndex(activity, EditText.class, index);
 	}
 	
 	public static <V extends View> V findView(Activity activity, Class<V> viewClass, long timeoutMs) {
@@ -380,11 +494,21 @@ public class TestUtils {
 	}
 	
 	public static boolean clickOnButton(String text) {
-		return clickOnButton(testCase.getActivity(), text, 10000);
+		return clickOnButton(getActivity(testCase), text, 10000);
 	}
-	
+
 	public static boolean clickOnButton(Activity activity, String text, long timeout) {
 		final Button btn = TestUtils.findViewWithText(activity.getWindow().getDecorView(), Button.class, text, timeout);
+		return clickOnButton(activity, btn, timeout);
+	}
+	
+	public static boolean clickOnButton(SocializeManagedActivityTest<?> test, int index) {
+		Activity activity = getActivity(test);
+		final Button btn = findViewByIndex(activity, Button.class, index);
+		return clickOnButton(activity, btn, 5000);
+	}
+	
+	public static boolean clickOnButton(Activity activity, final Button btn, long timeout) {
 		
 		final Set<Boolean> holder = new HashSet<Boolean>();
 		final CountDownLatch latch = new CountDownLatch(1);
@@ -407,6 +531,7 @@ public class TestUtils {
 		
 		return false;
 	}
+	
 	
 	@SuppressWarnings("unchecked")
 	public static <V extends View> V findViewWithText(ViewGroup parent, final Class<V> viewClass, final String text, final long timeoutMs) {
@@ -553,6 +678,23 @@ public class TestUtils {
 		return null;
 	}
 	
+	public static <V extends View> V findViewById(Activity activity, final int id, long timeout) {
+		long start = System.currentTimeMillis();
+		long end = start+timeout;
+		V view = null;
+		while(start < end) {
+			view = findViewById(activity, id);
+			if(view == null) {
+				start+=sleep(100);
+			}
+			else {
+				break;
+			}
+		}
+		
+		return view;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public static <V extends View> V findViewById(Activity activity, final int id) {
 		View view = activity.getWindow().getDecorView();
@@ -604,6 +746,24 @@ public class TestUtils {
 		
 		return items;
 	}	
+	
+	@SuppressWarnings("unchecked")
+	public static <V extends View> V findViewAt(View view, final Class<V> viewClass, int index) {
+		
+		if(view instanceof ViewGroup) {
+			List<V> findViews = findViews((ViewGroup)view, viewClass);
+			if(findViews != null && findViews.size() > index) {
+				return findViews.get(index);
+			}
+		}
+		else {
+			if(index == 0 && viewClass.isAssignableFrom(view.getClass())) {
+				return (V) view;
+			}
+		}
+		
+		return null;
+	}
 	
 	@SuppressWarnings("unchecked")
 	public static <V extends View> V findView(View view, final Class<V> viewClass) {
@@ -759,42 +919,68 @@ public class TestUtils {
 		return json;
 	}
 	
-	public static <T extends Activity> T getActivity(final SocializeManagedActivityTest<T> test) {
-		T activity = null;
-		
-		final CountDownLatch latch = new CountDownLatch(1);
-		final Set<T> holder = new HashSet<T>();
-		
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					T activity = test.getActivity();
-					holder.add(activity);
-				}
-				catch (Exception e) {
-					e.printStackTrace();
-				}
-				finally {
-					latch.countDown();
-				}
-			}
-		}).start();
-		
-		try {
-			if(!latch.await(20, TimeUnit.SECONDS)) {
-				ActivityInstrumentationTestCase2.fail("Timeout waiting for activity to start");
-			}
-			else if(holder.size() == 0) {
-				ActivityInstrumentationTestCase2.fail("Failed waiting for activity to start");
-			}
-			else {
-				activity = holder.iterator().next();
-			}
+	public static Activity getLastActivity() {
+		if(allActivitiesMonitor != null) {
+			return allActivitiesMonitor.getLastActivity();
 		}
-		catch (InterruptedException e) {
-			e.printStackTrace();
-			ActivityInstrumentationTestCase2.fail("Error waiting for activity to start");
+		
+		return null;
+	}
+	
+	public static Activity getLastActivity(long timeout) {
+		Activity last = getLastActivity();
+		long start = System.currentTimeMillis();
+		long end = start+timeout;
+		while(last == null && start < end) {
+			last = getLastActivity();
+			start += sleep(timeout / 10);
+		}
+		return last;
+	}
+	
+	public static Activity getActivity(final SocializeManagedActivityTest<?> test) {
+		
+		if(activity == null) {
+
+			activity = getLastActivity();
+			
+			if(activity == null) {
+
+				final CountDownLatch latch = new CountDownLatch(1);
+				final Set<Activity> holder = new HashSet<Activity>();
+				
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							Activity activity = test.getActivity();
+							holder.add(activity);
+						}
+						catch (Exception e) {
+							e.printStackTrace();
+						}
+						finally {
+							latch.countDown();
+						}
+					}
+				}).start();
+				
+				try {
+					if(!latch.await(20, TimeUnit.SECONDS)) {
+						ActivityInstrumentationTestCase2.fail("Timeout [20 seconds] waiting for activity to start");
+					}
+					else if(holder.size() == 0) {
+						ActivityInstrumentationTestCase2.fail("Failed waiting for activity to start");
+					}
+					else {
+						activity = holder.iterator().next();
+					}
+				}
+				catch (InterruptedException e) {
+					e.printStackTrace();
+					ActivityInstrumentationTestCase2.fail("Error waiting for activity to start");
+				}
+			}
 		}
 		
 		return activity;

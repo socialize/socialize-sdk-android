@@ -29,6 +29,7 @@ import com.socialize.i18n.CustomLocalizationService;
 import com.socialize.i18n.DefaultLocalizationService;
 import com.socialize.i18n.I18NConstants;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 import com.socialize.util.ResourceLocator;
 
 
@@ -47,7 +48,7 @@ public class LocalizationTest extends SocializeActivityTest {
 		int resId = 69;
 		
 		MockContext ctx = AndroidMock.createMock(MockContext.class);
-		Resources resources = AndroidMock.createMock(Resources.class, getActivity().getResources().getAssets(), getActivity().getResources().getDisplayMetrics(), getActivity().getResources().getConfiguration());
+		Resources resources = AndroidMock.createMock(Resources.class, TestUtils.getActivity(this).getResources().getAssets(), TestUtils.getActivity(this).getResources().getDisplayMetrics(), TestUtils.getActivity(this).getResources().getConfiguration());
 		
 		AndroidMock.expect(ctx.getResources()).andReturn(resources);
 		AndroidMock.expect(ctx.getPackageName()).andReturn(packageName);

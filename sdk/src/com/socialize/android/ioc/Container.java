@@ -432,7 +432,9 @@ public class Container {
 	}
 	
 	public void onContextDestroyed(Context context) {
-		beanContextCache.onContextDestroyed(context);
+		if(beanContextCache != null) {
+			beanContextCache.onContextDestroyed(context);
+		}
 	}
 
 	public void setContext(Context context) {

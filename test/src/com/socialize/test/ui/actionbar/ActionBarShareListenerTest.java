@@ -52,19 +52,23 @@ public class ActionBarShareListenerTest extends ActionBarTest {
 	public boolean isManual() {
 		return false;
 	}
+	
+	@Override
+	protected boolean overrideShareUtils() {
+		return false;
+	}
 
 	public void testOnActionBarShareEventListenerIsCalledOnDialogDisplay() throws Throwable {
 		
-		Activity activity = getActivity();
-		assertTrue(globalLatch.await(90, TimeUnit.SECONDS));
+		Activity activity = TestUtils.getActivity(this);
 		
 		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.FACEBOOK_APP_ID, "");
 		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, "");
 		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, "");
 		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
-		ShareUtils.preloadShareDialog(getActivity());
-		ShareUtils.preloadLinkDialog(getActivity());
+		ShareUtils.preloadShareDialog(TestUtils.getActivity(this));
+		ShareUtils.preloadLinkDialog(TestUtils.getActivity(this));
 		
 		final ActionBarView actionBar = TestUtils.findView(activity, ActionBarView.class, 5000);
 		final ActionBarLayoutView actionBarView = TestUtils.findView(activity, ActionBarLayoutView.class, 10000);

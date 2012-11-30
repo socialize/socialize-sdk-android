@@ -139,9 +139,6 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		
 		SocializeIOC.registerStub("twitterProvider", mockTwitterAuthProvider);
 		
-		// Set a mock key/secret
-		TwitterUtils.setCredentials(context, "foo", "bar");
-		
 		final String token = TestUtils.getDummyTwitterToken(context);
 		final String secret = TestUtils.getDummyTwitterSecret(context);
 		
@@ -157,11 +154,13 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 			public void onError(SocializeException error) {
 				Log.e("Socialize", error.getMessage(), error);
 				addResult(1, "fail");
+				latch.countDown();
 			}
 			
 			@Override
 			public void onCancel() {
 				addResult(1, "fail");
+				latch.countDown();
 			}
 			
 			@Override
@@ -608,7 +607,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		tweet.setText("foobar");
 		
 		twitterUtils.setApiEndpoint("mock");
-		twitterUtils.tweet(getActivity(), tweet, listener);
+		twitterUtils.tweet(TestUtils.getActivity(this), tweet, listener);
 		
 		String result = getResult(0);
 		

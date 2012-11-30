@@ -452,7 +452,7 @@ public class CommentEntryView extends BaseView {
 		updateUI();
 	}
 	
-	protected EditText getCommentField() {
+	public EditText getCommentField() {
 		return commentField;
 	}
 

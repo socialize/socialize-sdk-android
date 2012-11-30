@@ -22,7 +22,6 @@ public class ActionBarShareTest extends ActionBarTest {
 	public void testShareButtonLoadsShareView() throws Throwable {
 		
 		Activity activity = TestUtils.getActivity(this);
-		assertTrue(globalLatch.await(10, TimeUnit.SECONDS));
 		
 		assertNotNull(activity);
 		

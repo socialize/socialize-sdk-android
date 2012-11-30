@@ -21,12 +21,9 @@
  */
 package com.socialize.test.ui;
 
-import java.util.ArrayList;
 import android.content.Context;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import com.jayway.android.robotium.solo.Solo;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.sample.ui.SampleActivity2;
@@ -65,7 +62,7 @@ public abstract class SocializeUIRobotiumTest extends SocializeManagedActivityTe
 	public static final int TXT_TWITTER_KEY = 3;
 	public static final int TXT_TWITTER_SECRET = 4;
 		
-	protected Solo robotium;
+//	protected Solo robotium;
 	protected InputMethodManager imm = null;
 
 	public SocializeUIRobotiumTest() {
@@ -74,8 +71,8 @@ public abstract class SocializeUIRobotiumTest extends SocializeManagedActivityTe
 
 	public void setUp() throws Exception {
 		imm = (InputMethodManager)TestUtils.getActivity(this).getSystemService(Context.INPUT_METHOD_SERVICE);
-		robotium = new Solo(getInstrumentation(), TestUtils.getActivity(this));
-		robotium.waitForActivity("SampleActivity", 5000);
+//		robotium = new Solo(getInstrumentation(), TestUtils.getActivity(this));
+//		robotium.waitForActivity("SampleActivity", 5000);
 		TestUtils.setUp(this);
 		hideKeyboard();
 	}
@@ -83,12 +80,12 @@ public abstract class SocializeUIRobotiumTest extends SocializeManagedActivityTe
 
 	@Override
 	protected void tearDown() throws Exception {
-		try {
-			robotium.finish();
-		} 
-		catch (Throwable e) {
-			e.printStackTrace();
-		}
+//		try {
+//			robotium.finish();
+//		} 
+//		catch (Throwable e) {
+//			e.printStackTrace();
+//		}
 		
 		TestUtils.tearDown(this);
 		
@@ -97,19 +94,19 @@ public abstract class SocializeUIRobotiumTest extends SocializeManagedActivityTe
 	
 	protected void toggleFacebookSSO(boolean on) {
 		if(!on) {
-			robotium.clickOnButton(BTN_FACEBOOK_SSO);
+			TestUtils.clickOnButton(this, BTN_FACEBOOK_SSO);
 		}
 	}
 	
 	protected void toggleMockedFacebook(boolean on) {
 		if(on) {
-			robotium.clickOnButton(BTN_MOCK_FACEBOOK);
+			TestUtils.clickOnButton(this,BTN_MOCK_FACEBOOK);
 		}
 	}
 	
 	protected void toggleMockedSocialize(boolean on) {
 		if(on) {
-			robotium.clickOnButton(BTN_MOCK_SOCIALIZE);
+			TestUtils.clickOnButton(this,BTN_MOCK_SOCIALIZE);
 		}
 	}
 	
@@ -144,16 +141,16 @@ public abstract class SocializeUIRobotiumTest extends SocializeManagedActivityTe
 	}
 	
 	protected void clearSocialNetworks() {
-		robotium.clearEditText(TXT_FACEBOOK_ID);
-		robotium.clearEditText(TXT_TWITTER_KEY);
-		robotium.clearEditText(TXT_TWITTER_SECRET);
+		TestUtils.clearEditText(this,TXT_FACEBOOK_ID);
+		TestUtils.clearEditText(this,TXT_TWITTER_KEY);
+		TestUtils.clearEditText(this,TXT_TWITTER_SECRET);
 	}
 	
 	protected void startWithFacebook(boolean sso) {
 		clearSocialNetworks();
-		robotium.clearEditText(TXT_ENTITY_KEY);
-		robotium.enterText(TXT_ENTITY_KEY, DEFAULT_GET_ENTITY);
-		robotium.enterText(TXT_FACEBOOK_ID, SOCIALIZE_FACEBOOK_ID);
+		TestUtils.clearEditText(this,TXT_ENTITY_KEY);
+		TestUtils.enterText(this,TXT_ENTITY_KEY, DEFAULT_GET_ENTITY);
+		TestUtils.enterText(this,TXT_FACEBOOK_ID, SOCIALIZE_FACEBOOK_ID);
 		toggleFacebookSSO(sso);
 		toggleMockedFacebook(true);
 		clearAuthCache();
@@ -164,8 +161,8 @@ public abstract class SocializeUIRobotiumTest extends SocializeManagedActivityTe
 	}
 	protected void startWithoutFacebook(boolean clearCache) {
 		clearSocialNetworks();
-		robotium.clearEditText(TXT_ENTITY_KEY);
-		robotium.enterText(TXT_ENTITY_KEY, DEFAULT_GET_ENTITY);
+		TestUtils.clearEditText(this,TXT_ENTITY_KEY);
+		TestUtils.enterText(this,TXT_ENTITY_KEY, DEFAULT_GET_ENTITY);
 		if(clearCache) clearAuthCache();
 	}
 
@@ -204,26 +201,28 @@ public abstract class SocializeUIRobotiumTest extends SocializeManagedActivityTe
 
 	protected final void hideKeyboard() {
 		// Hide keyboard for all
-		ArrayList<EditText> currentEditTexts = robotium.getCurrentEditTexts();
-
-		if(currentEditTexts != null) {
-			for (EditText editText : currentEditTexts) {
-				imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-			}
-		}
+//		try {
+//			ArrayList<EditText> currentEditTexts = robotium.getCurrentEditTexts();
+//
+//			if(currentEditTexts != null) {
+//				for (EditText editText : currentEditTexts) {
+//					imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+//				}
+//			}
+//		}
+//		catch (Exception e) {}
 	}
 	
-	@SuppressWarnings("unchecked")
+//	@SuppressWarnings("unchecked")
 	protected <T extends View> T findView(Class<T> viewClass) {
-		
-		ArrayList<View> currentViews = robotium.getCurrentViews();
-		for (View view : currentViews) {
-			if(viewClass.isAssignableFrom(view.getClass())) {
-				return (T) view;
-			}
-		}
-		return null;		
-//		return TestUtils.findView(TestUtils.getActivity(this), viewClass, 20000);
+//		ArrayList<View> currentViews = robotium.getCurrentViews();
+//		for (View view : currentViews) {
+//			if(viewClass.isAssignableFrom(view.getClass())) {
+//				return (T) view;
+//			}
+//		}
+//		return null;		
+		return TestUtils.findView(TestUtils.getActivity(this), viewClass, 20000);
 	}
 
 }

@@ -663,7 +663,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		
 		SocializeAccess.setUserUtilsProxy(userUtils);
 		
-		likeUtils.like(getActivity(), entity, null);
+		likeUtils.like(TestUtils.getActivity(this), entity, null);
 		
 		SocialNetwork[] networks = TestUtils.getResult(0);
 		

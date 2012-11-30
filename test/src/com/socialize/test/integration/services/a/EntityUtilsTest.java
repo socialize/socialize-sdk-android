@@ -394,14 +394,14 @@ public class EntityUtilsTest extends SocializeActivityTest {
 		EntityLoaderUtils entityLoaderUtils = AndroidMock.createMock(EntityLoaderUtils.class);
 		
 		AndroidMock.expect(entityLoaderUtils.initEntityLoader()).andReturn(entityLoader);
-		AndroidMock.expect(entityLoader.canLoad(getActivity(), entity)).andReturn(true);
+		AndroidMock.expect(entityLoader.canLoad(TestUtils.getActivity(this), entity)).andReturn(true);
 		
-		entityLoader.loadEntity(getActivity(), entity);
+		entityLoader.loadEntity(TestUtils.getActivity(this), entity);
 		
 		AndroidMock.replay(entityLoaderUtils, entityLoader);
 		
 		utils.setEntityLoaderUtils(entityLoaderUtils);
-		utils.showEntity(getActivity(), "foobar", null);
+		utils.showEntity(TestUtils.getActivity(this), "foobar", null);
 		
 		AndroidMock.verify(entityLoaderUtils, entityLoader);
 	}
@@ -421,14 +421,14 @@ public class EntityUtilsTest extends SocializeActivityTest {
 		EntityLoaderUtils entityLoaderUtils = AndroidMock.createMock(EntityLoaderUtils.class);
 		
 		AndroidMock.expect(entityLoaderUtils.initEntityLoader()).andReturn(entityLoader);
-		AndroidMock.expect(entityLoader.canLoad(getActivity(), entity)).andReturn(true);
+		AndroidMock.expect(entityLoader.canLoad(TestUtils.getActivity(this), entity)).andReturn(true);
 		
-		entityLoader.loadEntity(getActivity(), entity);
+		entityLoader.loadEntity(TestUtils.getActivity(this), entity);
 		
 		AndroidMock.replay(entityLoaderUtils, entityLoader);
 		
 		utils.setEntityLoaderUtils(entityLoaderUtils);
-		utils.showEntity(getActivity(), 123, null);
+		utils.showEntity(TestUtils.getActivity(this), 123, null);
 		
 		AndroidMock.verify(entityLoaderUtils, entityLoader);
 	}	

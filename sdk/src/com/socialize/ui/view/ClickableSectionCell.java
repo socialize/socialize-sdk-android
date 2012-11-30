@@ -104,10 +104,12 @@ public abstract class ClickableSectionCell extends LinearLayout {
 			strokeColor = colors.getColor(Colors.CLICKABLE_CELL_STROKE);
 		}
 		
-		topLeftRadius= displayUtils.getDIP(topLeftRadius);
-		topRightRadius= displayUtils.getDIP(topRightRadius);
-		bottomRightRadius= displayUtils.getDIP(bottomRightRadius);
-		bottomLeftRadius= displayUtils.getDIP(bottomLeftRadius);
+		if(displayUtils != null) {
+			topLeftRadius= displayUtils.getDIP(topLeftRadius);
+			topRightRadius= displayUtils.getDIP(topRightRadius);
+			bottomRightRadius= displayUtils.getDIP(bottomRightRadius);
+			bottomLeftRadius= displayUtils.getDIP(bottomLeftRadius);
+		}
 		
 		radii = new float[]{
 			topLeftRadius,

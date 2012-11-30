@@ -3,9 +3,11 @@ package com.socialize.test.ui.comment;
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.test.ActivityInstrumentationTestCase2;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,7 +30,9 @@ import com.socialize.notifications.NotificationType;
 import com.socialize.test.mock.MockCommentSystem;
 import com.socialize.test.mock.MockSubscriptionSystem;
 import com.socialize.test.ui.SocializeUIRobotiumTest;
+import com.socialize.test.ui.util.ExitSleep;
 import com.socialize.test.ui.util.TestUtils;
+import com.socialize.ui.comment.CommentActivity;
 import com.socialize.ui.comment.CommentDetailActivity;
 import com.socialize.ui.comment.CommentEditField;
 import com.socialize.ui.comment.CommentEntryView;
@@ -42,40 +46,48 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 	
 	@Override
 	protected void startWithFacebook(boolean sso) {
+		TestUtils.setUpActivityMonitor(CommentActivity.class);
 		super.startWithFacebook(sso);
 		showComments();
-		robotium.waitForActivity("CommentActivity", 5000);
-		robotium.waitForView(ListView.class, 1, 5000);
-		sleep(2000);
+		TestUtils.waitForActivity(5000);
+		TestUtils.waitForIdleSync();
 	}
 
 	@Override
 	protected void startWithoutFacebook() {
+		TestUtils.setUpActivityMonitor(CommentActivity.class);
 		super.startWithoutFacebook();
 		toggleNotificationsEnabled(true);
 		toggleLocationEnabled(true);
 		showComments();
-		robotium.waitForActivity("CommentActivity", 5000);
-		robotium.waitForView(ListView.class, 1, 5000);
-		sleep(2000);
+
+		TestUtils.waitForActivity(5000);
+		TestUtils.waitForIdleSync();
 	}
 	
 	public void testCommentAddWithoutFacebook() throws Throwable {
 		
-		final String txtComment = "UI Integration Test Comment";
+		final String txtComment = "UI Integration Test Comment #" + Math.random();
 
 		startWithoutFacebook();
 		
-		// Wait for view to show
-		Thread.sleep(2000);		
+		Activity lastActivity = TestUtils.getLastActivity();
 		
-		ListView comments = TestUtils.findViewById(robotium.getCurrentActivity(), LoadingListView.LIST_VIEW_ID);
+		final ListView comments = TestUtils.findViewById(lastActivity, LoadingListView.LIST_VIEW_ID, 10000);
 		
 		assertNotNull(comments);
 		
-		int count = comments.getCount();
+		// Wait for load to complete
+		TestUtils.sleepUntil(5000, new ExitSleep() {
+			@Override
+			public boolean isExit() {
+				return comments.getCount() > 0;
+			}
+		});
 		
-		final CommentEditField commentEditField = TestUtils.findView(robotium.getCurrentActivity(), CommentEditField.class, 10000);	
+		final int count = comments.getCount();
+		
+		final CommentEditField commentEditField = TestUtils.findView(lastActivity, CommentEditField.class, 10000);	
 
 		assertNotNull(commentEditField);
 		
@@ -92,32 +104,30 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		
 		assertTrue(latch.await(10, TimeUnit.SECONDS));
 		
-		// Wait for view to show
-		Thread.sleep(2000);		
-		
-		CommentEntryView commentEntryView = TestUtils.findView(robotium.getCurrentActivity(), CommentEntryView.class, 10000);	
-		
+		final CommentEntryView commentEntryView = TestUtils.findView(lastActivity, CommentEntryView.class, 10000);	
 		final SocializeButton btnPost = TestUtils.findViewWithText(commentEntryView, SocializeButton.class, "Post Comment", 10000);
-		
-		robotium.enterText(0, txtComment);
-		
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		
 		// Junit test runs in non-ui thread
 		runTestOnUiThread(new Runnable() {
 			@Override
 			public void run() {
+				commentEntryView.getCommentField().setText(txtComment);
 				assertTrue(btnPost.performClick());
 				latch2.countDown();
 			}
 		});
 		
-		assertTrue(latch.await(30, TimeUnit.SECONDS));		
+		assertTrue(latch2.await(30, TimeUnit.SECONDS));		
 		
 		// Wait for view to refresh
-		Thread.sleep(2000);	
+		TestUtils.sleepUntil(5000, new ExitSleep() {
+			@Override
+			public boolean isExit() {
+				return comments.getCount() > count;
+			}
+		});
 	
-		assertNotNull(comments);
 		assertEquals( count+1, comments.getCount());
 		
 		Comment item = (Comment) comments.getItemAtPosition(0);
@@ -206,6 +216,7 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 			
 			@Override
 			public void onError(SocializeException error) {
+				error.printStackTrace();
 				ActivityInstrumentationTestCase2.fail();
 			}
 			@Override
@@ -237,16 +248,20 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		});		
 		
 		toggleMockedFacebook(true);
-		toggleMockedSocialize(true);		
+		toggleMockedSocialize(true);
+		
+		TestUtils.setUpActivityMonitor(CommentActivity.class);
+		
 		super.startWithoutFacebook();
 		
 		showComments();
-		robotium.waitForActivity("CommentActivity", 5000);
-		robotium.waitForView(ListView.class, 1, 5000);
-		sleep(2000);
+		
+		TestUtils.waitForActivity(5000);
+		
+		Activity lastActivity = TestUtils.getLastActivity();
 
 		final CountDownLatch latch = new CountDownLatch(1);
-		final CustomCheckbox chk = TestUtils.findCheckboxWithImageName(robotium.getCurrentActivity(), "icon_notify.png#large", 10000);
+		final CustomCheckbox chk = TestUtils.findCheckboxWithImageName(lastActivity, "icon_notify.png#large", 10000);
 		
 		assertNotNull(chk);
 		
@@ -269,32 +284,46 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 	
 	public void testCommentListAndView() {
 		
-		int pageSize = 20;
+		final int pageSize = 20;
 		
 		TestUtils.setUpActivityMonitor(CommentDetailActivity.class);
-		
+
 		ConfigUtils.getConfig(TestUtils.getActivity(this)).setProperty("comment.page.size", String.valueOf(pageSize));
 		
 		startWithoutFacebook();
 		
-		ListView comments = (ListView) robotium.getCurrentActivity().findViewById(LoadingListView.LIST_VIEW_ID);
+		Activity lastActivity = TestUtils.getLastActivity(5000);
+		
+		assertNotNull(lastActivity);
+		
+		final ListView comments = (ListView) TestUtils.findViewById(lastActivity, LoadingListView.LIST_VIEW_ID, 10000);
 		
 		assertNotNull(comments);
+		
+		TestUtils.sleepUntil(10000, new ExitSleep() {
+			@Override
+			public boolean isExit() {
+				return comments.getCount() >= pageSize;
+			}
+		});
+		
 		assertTrue("Unexpected number of comments.  Expected >= " +
 				pageSize +
 				" but found " +
 				comments.getCount(), comments.getCount() >= pageSize);
 		
-		// Click on the first comment in list. 
-		robotium.clickInList(0);
+		// Click on the first comment in list.
+		View view = TestUtils.clickInList(lastActivity, 0, comments);
+		
+		assertNotNull(view);
 		
 		TestUtils.waitForActivity(10000);
 		
 		// Make sure we have user name, comment, image and location
-		TextView userDisplayName = robotium.getText(0);
-		TextView comment = robotium.getText(1);
-		TextView date_location = robotium.getText(2);
-		ImageView userProfilePic = robotium.getImage(0);
+		TextView userDisplayName = TestUtils.findViewAt(view, TextView.class, 0);
+		TextView comment = TestUtils.findViewAt(view, TextView.class,1);
+		TextView date_location = TestUtils.findViewAt(view, TextView.class,2);
+		ImageView userProfilePic = TestUtils.findViewAt(view, ImageView.class,0);
 		
 		assertNotNull(userDisplayName);
 		assertNotNull(comment);

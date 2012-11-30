@@ -634,7 +634,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 			}
 		};
 		
-		poster.post(getActivity(), listener, postData);
+		poster.post(TestUtils.getActivity(this), listener, postData);
 		
 		String result = getResult(0);
 		

@@ -36,6 +36,7 @@ import com.socialize.entity.SocializeAction;
 import com.socialize.launcher.CommentListLauncher;
 import com.socialize.notifications.NotificationAuthenticator;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 import com.socialize.util.EntityLoaderUtils;
 
 
@@ -69,7 +70,7 @@ public class CommentListLauncherTest extends SocializeActivityTest {
 		
 		
 		AndroidMock.expect(entityLoaderUtils.initEntityLoader()).andReturn(null);
-		AndroidMock.expect(notificationAuthenticator.authenticate(getActivity())).andReturn(session);
+		AndroidMock.expect(notificationAuthenticator.authenticate(TestUtils.getActivity(this))).andReturn(session);
 		AndroidMock.expect(activitySystem.getAction(session, id, ActionType.valueOf(type))).andReturn(action);
 		AndroidMock.expect(action.getEntity()).andReturn(entity);
 		
@@ -89,7 +90,7 @@ public class CommentListLauncherTest extends SocializeActivityTest {
 		launcher.setEntityLoaderUtils(entityLoaderUtils);
 		launcher.setNotificationAuthenticator(notificationAuthenticator);
 		
-		launcher.launch(getActivity(), bundle);
+		launcher.launch(TestUtils.getActivity(this), bundle);
 		
 		AndroidMock.verify(entityLoaderUtils, notificationAuthenticator, activitySystem, action, session);
 		

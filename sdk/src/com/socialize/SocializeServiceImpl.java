@@ -1057,17 +1057,8 @@ public class SocializeServiceImpl implements SocializeService {
 	}
 
 	@Override
-	public void onResume(Activity context) {
-		if(paused) {
-			try {
-				FacebookUtils.extendAccessToken(context, null);
-			}
-			catch (Exception e) {
-				SocializeLogger.e("Error occurred on resume", e);
-			}
-			paused = false;
-		}
-		
+	public void onResume(final Activity context) {
+
 		if(!Socialize.getSocialize().isInitialized(context)) {
 			Socialize.getSocialize().initAsync(context, new SocializeInitListener() {
 				@Override
@@ -1076,13 +1067,32 @@ public class SocializeServiceImpl implements SocializeService {
 				}
 				
 				@Override
-				public void onInit(Context context, IOCContainer container) {
+				public void onInit(Context ctx, IOCContainer container) {
 					// This is the current context
-					setContext(context);
+					setContext(ctx);
+					
+					if(FacebookUtils.isAvailable(ctx)) {
+						try {
+							FacebookUtils.extendAccessToken(context, null);
+						}
+						catch (Exception e) {
+							SocializeLogger.e("Error occurred on resume", e);
+						}
+					}
 				}
 			});
 		}
 		else {
+			if(paused && FacebookUtils.isAvailable(context)) {
+				try {
+					FacebookUtils.extendAccessToken(context, null);
+				}
+				catch (Exception e) {
+					SocializeLogger.e("Error occurred on resume", e);
+				}
+				paused = false;
+			}			
+			
 			// This is the current context
 			setContext(context);
 		}

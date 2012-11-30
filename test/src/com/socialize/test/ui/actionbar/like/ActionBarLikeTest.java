@@ -1,4 +1,4 @@
-package com.socialize.test.ui.actionbar;
+package com.socialize.test.ui.actionbar.like;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -23,6 +23,7 @@ import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
+import com.socialize.test.ui.actionbar.ActionBarTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.actionbar.ActionBarButton;
 import com.socialize.ui.actionbar.ActionBarItem;
@@ -36,7 +37,6 @@ import com.socialize.ui.share.ShareDialogListener;
 
 public class ActionBarLikeTest extends ActionBarTest {
 	
-
 	@Override
 	public boolean isManual() {
 		return false;
@@ -44,7 +44,6 @@ public class ActionBarLikeTest extends ActionBarTest {
 
 	public void testLikePromptsForAuth() throws Throwable {
 		Activity activity = TestUtils.getActivity(this);
-		assertTrue(globalLatch.await(10, TimeUnit.SECONDS));
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
@@ -94,9 +93,7 @@ public class ActionBarLikeTest extends ActionBarTest {
 	
 	public void testLikeCallsApiHost() throws Throwable {
 		
-		
 		Activity activity = TestUtils.getActivity(this);
-		assertTrue(globalLatch.await(10, TimeUnit.SECONDS));
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
@@ -138,7 +135,6 @@ public class ActionBarLikeTest extends ActionBarTest {
 	public void testLikeDoesNotPromptForAuthWhenNetworksNotSupported() throws Throwable {
 		
 		Activity activity = TestUtils.getActivity(this);
-		assertTrue(globalLatch.await(10, TimeUnit.SECONDS));
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
@@ -189,14 +185,12 @@ public class ActionBarLikeTest extends ActionBarTest {
 	public void testLikeDoesNotPromptForAuthWhenUserIsAuthenticated() throws Throwable {
 		
 		Activity activity = TestUtils.getActivity(this);
-		assertTrue(globalLatch.await(20, TimeUnit.SECONDS));
 		
 		final UserProviderCredentials creds = AndroidMock.createMock(UserProviderCredentials.class);
 		final AuthProviderInfo info = AndroidMock.createMock(AuthProviderInfo.class);
 		final AuthProviders authProviders = AndroidMock.createMock(AuthProviders.class);
 		final AuthProvider<AuthProviderInfo> provider = AndroidMock.createMock(AuthProvider.class);
 		final CountDownLatch latch = new CountDownLatch(1);
-		
 		
 		AndroidMock.expect(creds.getAuthProviderInfo()).andReturn(info);
 		AndroidMock.expect(authProviders.getProvider(AuthProviderType.TWITTER)).andReturn(provider);
@@ -247,7 +241,6 @@ public class ActionBarLikeTest extends ActionBarTest {
 	public void testLikeStateIsRetained() throws Throwable {
 		
 		Activity activity = TestUtils.getActivity(this);
-		assertTrue(globalLatch.await(30, TimeUnit.SECONDS));
 		
 		TestUtils.setUpActivityMonitor(CommentActivity.class);
 		

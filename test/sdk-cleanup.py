@@ -26,10 +26,10 @@ def create_android_config(key,secret,url,fb_token):
 	text+= '\nsocialize.location.enabled=false'
 	text+= '\nfacebook.app.id=387684787937421'
 	text+= '\nfacebook.token='+fb_token
-	text+= '\ntwitter.token=353351555-8L6E6HOphntfE5oUYDdPllX7x4gaXaWKHuRqqA'
-	text+= '\ntwitter.secret=a5BNRkL9gmWcnnIUDq3pSSoeQ5fuidB0fxWWTvLxk8'
-	text+= '\ntwitter.consumer.key=DRaBDMT6hzyLO1WAOehvfA' 
-	text+= '\ntwitter.consumer.secret=HhoT2YvgJDJildHnSsEAuuJ3crDFg9VLkae0PGNI' 
+	text+= '\ntwitter.token=252731862-6lLbMdtmkEmIe1QRNtfQChzWfMReb21Z9s0VVD0b'
+	text+= '\ntwitter.secret=yfKD4w29ujFj3WaWgVHWuA4Q7oayA27E1VP1YsxCQ'
+	text+= '\ntwitter.consumer.key=U18LUnVjULkkpGoJ6CoP3A' 
+	text+= '\ntwitter.consumer.secret=RiIljnFq4RWV9LEaCM1ZLsAHf053vX2KyhJhmCOlBE' 
 	text+= '\ntest_value=sample'
 	text+= '\nuntrimmed=value '
 	text+= '\n'
@@ -108,7 +108,7 @@ def get_fb_access_token(fb_app_id, fb_app_secret):
     
     print 'FB app token is ' + resp[1][len('access_token='):]   
     
-    return resp[1][len('access_token='):]   
+    return resp[1][len('access_token='):]
 
 def get_fb_test_user(fb_app_id, fb_app_secret, fb_access_token):
     req_url='https://graph.facebook.com/%s/accounts/test-users?'%fb_app_id

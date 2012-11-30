@@ -492,7 +492,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		
 		SocializeAccess.setUserUtilsProxy(userUtils);
 		
-		commentUtils.addComment(getActivity(), entity, "foobar", null);
+		commentUtils.addComment(TestUtils.getActivity(this), entity, "foobar", null);
 		
 		SocialNetwork[] networks = TestUtils.getResult(0);
 		
