@@ -64,7 +64,7 @@ public class DefaultHttpClientFactoryTest extends SocializeUnitTest {
 
 	public void testClientFactoryCorrectlyConfiguresAClientForHttps() throws Exception {
 		HttpClient client = factory.getClient();
-		HttpGet get = new HttpGet("https://github.com/");
+		HttpGet get = new HttpGet("https://google.com/");
 		HttpResponse response = client.execute(get);
 		assertNotNull(response);
 		assertEquals(200, response.getStatusLine().getStatusCode());
@@ -72,7 +72,7 @@ public class DefaultHttpClientFactoryTest extends SocializeUnitTest {
 	
 	public void testClientFactoryCorrectlyConfiguresAClientForHttp() throws Exception {
 		HttpClient client = factory.getClient();
-		HttpGet get = new HttpGet("http://github.com/");
+		HttpGet get = new HttpGet("http://google.com/");
 		HttpResponse response = client.execute(get);
 		assertNotNull(response);
 		assertEquals(200, response.getStatusLine().getStatusCode());
