@@ -108,7 +108,7 @@ def get_fb_access_token(fb_app_id, fb_app_secret):
     
     print 'FB app token is ' + resp[1][len('access_token='):]   
     
-    return resp[1][len('access_token='):]   
+    return resp[1][len('access_token='):]
 
 def get_fb_test_user(fb_app_id, fb_app_secret, fb_access_token):
     req_url='https://graph.facebook.com/%s/accounts/test-users?'%fb_app_id
