@@ -38,6 +38,7 @@ import com.socialize.api.event.SocializeEventSystem;
 import com.socialize.config.SocializeConfig;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.share.ShareDialogFactory;
 import com.socialize.ui.share.ShareDialogListener;
 import com.socialize.ui.share.SharePanelView;
@@ -83,7 +84,7 @@ public class ShareDialogFactoryTest extends SocializeActivityTest {
 		factory.setConfig(config);
 		factory.setEventSystem(mockEventSystem);
 		
-		factory.show(getActivity(), null, null, null, ShareUtils.DEFAULT);
+		factory.show(TestUtils.getActivity(this), null, null, null, ShareUtils.DEFAULT);
 		
 		assertTrue(latch.await(10, TimeUnit.SECONDS));
 		

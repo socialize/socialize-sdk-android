@@ -10,6 +10,8 @@ public abstract class ActionBarActivity2 extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		Socialize.onCreate(this, savedInstanceState);
+		
 		Entity entity = null;
 		boolean manual = false;
 		Bundle extras = this.getIntent().getExtras();

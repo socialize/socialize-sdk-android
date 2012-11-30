@@ -21,7 +21,7 @@ public class ActionBarAutoActivity2 extends ActionBarActivity2 {
 			setContentView(R.layout.action_bar_manual);
 			ActionBarView socializeActionBarView = (ActionBarView) findViewById(R.id.socializeActionBar);
 			socializeActionBarView.setEntity(entity);
-			socializeActionBarView.refresh(); // Optional.. only if changing entity key.
+			socializeActionBarView.refresh();
 			
 			launchLock.countDown();
 		}
@@ -49,5 +49,11 @@ public class ActionBarAutoActivity2 extends ActionBarActivity2 {
 	protected void onResume() {
 		super.onResume();
 		Socialize.onResume(this);
+	}
+
+	@Override
+	protected void onDestroy() {
+		Socialize.onDestroy(this);
+		super.onDestroy();
 	}
 }

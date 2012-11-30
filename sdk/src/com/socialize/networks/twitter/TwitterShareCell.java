@@ -55,7 +55,9 @@ public class TwitterShareCell extends TwitterCell {
 	}
 
 	public void setAuthListener(SocializeAuthListener listener) {
-		twitterAuthClickListener.setListener(listener);
+		if(twitterAuthClickListener != null) {
+			twitterAuthClickListener.setListener(listener);
+		}
 	}
 
 	public void setTwitterAuthClickListener(TwitterAuthClickListener twitterAuthClickListener) {

@@ -30,6 +30,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -153,19 +154,16 @@ public class TestUtils {
 		AsyncTaskManager.setManaged(true);
 		
 		testCase = test;
+		
 		holder = new ResultHolder();
 		holder.setUp();
+		
 		instrumentation = testCase.getInstrumentation();
-		
-		setUpAllActivityMonitor();
-		
-		activity = test.getActivity();
-
-	}
-	
-	public static void setUpAllActivityMonitor() {
 		allActivitiesMonitor = new ActivityMonitor(new IntentFilter(), null, false);
+		
 		instrumentation.addMonitor(allActivitiesMonitor);
+		
+		getActivity(test);
 	}
 	
 	public static void tearDown(SocializeManagedActivityTest<?> test) {
@@ -188,6 +186,7 @@ public class TestUtils {
 			prefs.edit().clear().commit();		
 			
 			activity.finish();
+			activity = null;
 		}
 		
 		if(monitor != null) {
@@ -196,6 +195,8 @@ public class TestUtils {
 				lastActivity.finish();
 			}
 			instrumentation.removeMonitor(monitor);
+			
+			monitor = null;
 		}
 		
 		if(allActivitiesMonitor != null) {
@@ -206,10 +207,9 @@ public class TestUtils {
 			}
 			
 			instrumentation.removeMonitor(allActivitiesMonitor);
+			
+			allActivitiesMonitor = null;
 		}		
-		
-		allActivitiesMonitor = null;
-		monitor = null;
 	}
 	
 	public static void setUpActivityMonitor(Class<?> activityClass) {
@@ -494,7 +494,7 @@ public class TestUtils {
 	}
 	
 	public static boolean clickOnButton(String text) {
-		return clickOnButton(testCase.getActivity(), text, 10000);
+		return clickOnButton(getActivity(testCase), text, 10000);
 	}
 
 	public static boolean clickOnButton(Activity activity, String text, long timeout) {
@@ -940,46 +940,50 @@ public class TestUtils {
 	
 	public static Activity getActivity(final SocializeManagedActivityTest<?> test) {
 		
-		return getLastActivity();
-//		
-//		T activity = null;
-//		
-//		final CountDownLatch latch = new CountDownLatch(1);
-//		final Set<T> holder = new HashSet<T>();
-//		
-//		new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-//				try {
-//					T activity = test.getActivity();
-//					holder.add(activity);
-//				}
-//				catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//				finally {
-//					latch.countDown();
-//				}
-//			}
-//		}).start();
-//		
-//		try {
-//			if(!latch.await(20, TimeUnit.SECONDS)) {
-//				ActivityInstrumentationTestCase2.fail("Timeout waiting for activity to start");
-//			}
-//			else if(holder.size() == 0) {
-//				ActivityInstrumentationTestCase2.fail("Failed waiting for activity to start");
-//			}
-//			else {
-//				activity = holder.iterator().next();
-//			}
-//		}
-//		catch (InterruptedException e) {
-//			e.printStackTrace();
-//			ActivityInstrumentationTestCase2.fail("Error waiting for activity to start");
-//		}
-//		
-//		return activity;
+		if(activity == null) {
+
+			activity = getLastActivity();
+			
+			if(activity == null) {
+
+				final CountDownLatch latch = new CountDownLatch(1);
+				final Set<Activity> holder = new HashSet<Activity>();
+				
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							Activity activity = test.getActivity();
+							holder.add(activity);
+						}
+						catch (Exception e) {
+							e.printStackTrace();
+						}
+						finally {
+							latch.countDown();
+						}
+					}
+				}).start();
+				
+				try {
+					if(!latch.await(20, TimeUnit.SECONDS)) {
+						ActivityInstrumentationTestCase2.fail("Timeout [20 seconds] waiting for activity to start");
+					}
+					else if(holder.size() == 0) {
+						ActivityInstrumentationTestCase2.fail("Failed waiting for activity to start");
+					}
+					else {
+						activity = holder.iterator().next();
+					}
+				}
+				catch (InterruptedException e) {
+					e.printStackTrace();
+					ActivityInstrumentationTestCase2.fail("Error waiting for activity to start");
+				}
+			}
+		}
+		
+		return activity;
 	}
 	
 	public static Class<?> getActivityForIntent(Context context, Intent intent) throws ClassNotFoundException {

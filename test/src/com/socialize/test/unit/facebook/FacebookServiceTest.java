@@ -210,7 +210,7 @@ import com.socialize.util.DialogFactory;
 		FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
 		AuthProviderListener authProviderListener = AndroidMock.createMock(AuthProviderListener.class);
 		DialogFactory dialogFactory = AndroidMock.createMock(DialogFactory.class);
-		MockBuilder builder = AndroidMock.createMock(MockBuilder.class, context);
+		MockBuilder builder = AndroidMock.createMock(MockBuilder.class, getContext());
 
 		// Expect
 		AndroidMock.expect(dialogFactory.getAlertDialogBuilder(context)).andReturn(builder);
@@ -310,7 +310,7 @@ import com.socialize.util.DialogFactory;
 		AuthProviderListener authProviderListener = AndroidMock.createMock(AuthProviderListener.class);
 		DialogFactory dialogFactory = AndroidMock.createMock(DialogFactory.class);
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(context) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(getContext()) {
 
 			@Override
 			public Builder setPositiveButton(CharSequence text, OnClickListener listener) {

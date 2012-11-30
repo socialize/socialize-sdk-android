@@ -131,7 +131,13 @@ public class ActionBarLayoutView extends BaseView {
 			logger.debug("init called on " + getClass().getSimpleName());
 		}
 		
-		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, displayUtils.getDIP(ActionBarView.ACTION_BAR_HEIGHT));
+		int height = ActionBarView.ACTION_BAR_HEIGHT;
+		
+		if(displayUtils != null) {
+			height = displayUtils.getDIP(ActionBarView.ACTION_BAR_HEIGHT);
+		}
+		
+		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, height);
 		masterParams.gravity = options.getGravity() | Gravity.CENTER_VERTICAL;
 		setLayoutParams(masterParams);
 		setGravity(options.getGravity());

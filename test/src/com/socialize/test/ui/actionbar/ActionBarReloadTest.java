@@ -52,8 +52,7 @@ import com.socialize.ui.actionbar.OnActionBarReloadListener;
 public class ActionBarReloadTest extends ActionBarTest {
 	
 	public void testReloadRace() throws Throwable {
-		Activity activity = getActivity();
-		assertTrue(globalLatch.await(90, TimeUnit.SECONDS));
+		Activity activity = TestUtils.getActivity(this);
 
 		// Ensure FB/TW are not supported
 		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.FACEBOOK_APP_ID, "");
@@ -115,8 +114,7 @@ public class ActionBarReloadTest extends ActionBarTest {
 	}
 	
 	public void testReloadListener() throws Throwable {
-		Activity activity = getActivity();
-		assertTrue(globalLatch.await(90, TimeUnit.SECONDS));
+		Activity activity = TestUtils.getActivity(this);
 
 		// Ensure FB/TW are not supported
 		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.FACEBOOK_APP_ID, "");
@@ -180,8 +178,7 @@ public class ActionBarReloadTest extends ActionBarTest {
 	// The entity if the entity has changed.
 	public void testReloadWithDelay() throws Throwable {
 		
-		Activity activity = getActivity();
-		assertTrue(globalLatch.await(90, TimeUnit.SECONDS));
+		Activity activity = TestUtils.getActivity(this);
 
 		// Ensure FB/TW are not supported
 		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.FACEBOOK_APP_ID, "");

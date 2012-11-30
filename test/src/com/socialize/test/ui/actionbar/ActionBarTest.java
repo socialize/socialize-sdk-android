@@ -1,12 +1,14 @@
 package com.socialize.test.ui.actionbar;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import android.app.Activity;
 import android.content.Intent;
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.api.action.entity.SocializeEntityUtils;
 import com.socialize.api.action.like.SocializeLikeUtils;
+import com.socialize.api.action.share.SocializeShareUtils;
 import com.socialize.entity.Entity;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.like.LikeGetListener;
@@ -36,6 +38,24 @@ public abstract class ActionBarTest extends SocializeManagedActivityTest<ActionB
 	};
 	
 	
+	// Don't preload
+	protected final SocializeShareUtils mockShareUtils = new SocializeShareUtils() {
+
+		@Override
+		public void preloadShareDialog(Activity context) {}
+
+		@Override
+		public void preloadLinkDialog(Activity context) {}
+	};
+	
+	
+	protected final void waitForActionBarLoad() {
+		try {
+			assertTrue(globalLatch.await(30, TimeUnit.SECONDS));
+		}
+		catch (InterruptedException e) {}
+	}
+	
 	public ActionBarTest() {
 		super("com.socialize.sample.ui", ActionBarAutoActivity2.class);
 	}
@@ -53,15 +73,30 @@ public abstract class ActionBarTest extends SocializeManagedActivityTest<ActionB
 		globalLatch = new CountDownLatch(1);
 		
 		SocializeAccess.setLikeUtilsProxy(mockLikeUtils);
-		SocializeAccess.setEntityUtilsProxy(mockEntityUtils);		
+		SocializeAccess.setEntityUtilsProxy(mockEntityUtils);
+		
+		if(overrideShareUtils()) {
+			SocializeAccess.setShareUtilsProxy(mockShareUtils);
+		}
+		
 		
 		TestUtils.setUp(this);
-
+		
+		waitForActionBarLoad();
+	}
+	
+	protected boolean overrideShareUtils() {
+		return true;
 	}
 	
 	@Override
 	protected void tearDown() throws Exception {
+		if(globalLatch != null) {
+			globalLatch.countDown();
+		}
+		
 		TestUtils.tearDown(this);
+		
 		super.tearDown();
 	}
 	
