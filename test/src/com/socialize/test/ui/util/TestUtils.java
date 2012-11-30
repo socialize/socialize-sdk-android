@@ -30,7 +30,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -62,6 +61,7 @@ public class TestUtils {
 	private static String fb_token = null;
 	private static String tw_token = null;
 	private static String tw_secret = null;
+	private static Activity activity;
 	
 	public static final String getDummyTwitterToken(Context context) throws IOException {
 		if(tw_token == null) {
@@ -156,6 +156,14 @@ public class TestUtils {
 		holder = new ResultHolder();
 		holder.setUp();
 		instrumentation = testCase.getInstrumentation();
+		
+		setUpAllActivityMonitor();
+		
+		activity = test.getActivity();
+
+	}
+	
+	public static void setUpAllActivityMonitor() {
 		allActivitiesMonitor = new ActivityMonitor(new IntentFilter(), null, false);
 		instrumentation.addMonitor(allActivitiesMonitor);
 	}
@@ -175,6 +183,13 @@ public class TestUtils {
 			holder = null;
 		}
 		
+		if(activity != null) {
+			SharedPreferences prefs = activity.getSharedPreferences("SocializeSession", Context.MODE_PRIVATE);
+			prefs.edit().clear().commit();		
+			
+			activity.finish();
+		}
+		
 		if(monitor != null) {
 			Activity lastActivity = monitor.getLastActivity();
 			if(lastActivity != null) {
@@ -184,16 +199,16 @@ public class TestUtils {
 		}
 		
 		if(allActivitiesMonitor != null) {
+			Activity lastActivity = allActivitiesMonitor.getLastActivity();
+			
+			if(lastActivity != null) {
+				lastActivity.finish();
+			}
+			
 			instrumentation.removeMonitor(allActivitiesMonitor);
-		}
+		}		
 		
-		Activity activity = getActivity(test);
-		
-		if(activity != null) {
-			SharedPreferences prefs = activity.getSharedPreferences("SocializeSession", Context.MODE_PRIVATE);
-			prefs.edit().clear().commit();					
-		}
-		
+		allActivitiesMonitor = null;
 		monitor = null;
 	}
 	
@@ -487,8 +502,8 @@ public class TestUtils {
 		return clickOnButton(activity, btn, timeout);
 	}
 	
-	public static <T extends Activity> boolean clickOnButton(SocializeManagedActivityTest<T> test, int index) {
-		T activity = getActivity(test);
+	public static boolean clickOnButton(SocializeManagedActivityTest<?> test, int index) {
+		Activity activity = getActivity(test);
 		final Button btn = findViewByIndex(activity, Button.class, index);
 		return clickOnButton(activity, btn, 5000);
 	}
@@ -905,7 +920,11 @@ public class TestUtils {
 	}
 	
 	public static Activity getLastActivity() {
-		return allActivitiesMonitor.getLastActivity();
+		if(allActivitiesMonitor != null) {
+			return allActivitiesMonitor.getLastActivity();
+		}
+		
+		return null;
 	}
 	
 	public static Activity getLastActivity(long timeout) {
@@ -919,45 +938,48 @@ public class TestUtils {
 		return last;
 	}
 	
-	public static <T extends Activity> T getActivity(final SocializeManagedActivityTest<T> test) {
-		T activity = null;
+	public static Activity getActivity(final SocializeManagedActivityTest<?> test) {
 		
-		final CountDownLatch latch = new CountDownLatch(1);
-		final Set<T> holder = new HashSet<T>();
-		
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					T activity = test.getActivity();
-					holder.add(activity);
-				}
-				catch (Exception e) {
-					e.printStackTrace();
-				}
-				finally {
-					latch.countDown();
-				}
-			}
-		}).start();
-		
-		try {
-			if(!latch.await(20, TimeUnit.SECONDS)) {
-				ActivityInstrumentationTestCase2.fail("Timeout waiting for activity to start");
-			}
-			else if(holder.size() == 0) {
-				ActivityInstrumentationTestCase2.fail("Failed waiting for activity to start");
-			}
-			else {
-				activity = holder.iterator().next();
-			}
-		}
-		catch (InterruptedException e) {
-			e.printStackTrace();
-			ActivityInstrumentationTestCase2.fail("Error waiting for activity to start");
-		}
-		
-		return activity;
+		return getLastActivity();
+//		
+//		T activity = null;
+//		
+//		final CountDownLatch latch = new CountDownLatch(1);
+//		final Set<T> holder = new HashSet<T>();
+//		
+//		new Thread(new Runnable() {
+//			@Override
+//			public void run() {
+//				try {
+//					T activity = test.getActivity();
+//					holder.add(activity);
+//				}
+//				catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//				finally {
+//					latch.countDown();
+//				}
+//			}
+//		}).start();
+//		
+//		try {
+//			if(!latch.await(20, TimeUnit.SECONDS)) {
+//				ActivityInstrumentationTestCase2.fail("Timeout waiting for activity to start");
+//			}
+//			else if(holder.size() == 0) {
+//				ActivityInstrumentationTestCase2.fail("Failed waiting for activity to start");
+//			}
+//			else {
+//				activity = holder.iterator().next();
+//			}
+//		}
+//		catch (InterruptedException e) {
+//			e.printStackTrace();
+//			ActivityInstrumentationTestCase2.fail("Error waiting for activity to start");
+//		}
+//		
+//		return activity;
 	}
 	
 	public static Class<?> getActivityForIntent(Context context, Intent intent) throws ClassNotFoundException {

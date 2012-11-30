@@ -386,11 +386,15 @@ public class SharePanelView extends DialogPanelView {
 				
 				if(twOK) {
 					twitterShareCell = twitterShareCellFactory.getBean();
-					twitterShareCell.setPadding(padding, padding, padding, padding);
-					twitterShareCell.setLayoutParams(cellParams);
+					
+					if(twitterShareCell != null) {
+						twitterShareCell.setPadding(padding, padding, padding, padding);
+						twitterShareCell.setLayoutParams(cellParams);
+						twitterShareCell.setBackgroundData(twRadii, twStroke, Color.BLACK);
+					}
 					
 					facebookShareCell.setBackgroundData(fbRadii, fbStroke, Color.BLACK);
-					twitterShareCell.setBackgroundData(twRadii, twStroke, Color.BLACK);
+					
 				}
 			}
 		}

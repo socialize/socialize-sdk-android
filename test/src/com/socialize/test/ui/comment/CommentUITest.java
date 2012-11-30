@@ -315,6 +315,8 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		// Click on the first comment in list.
 		View view = TestUtils.clickInList(lastActivity, 0, comments);
 		
+		assertNotNull(view);
+		
 		TestUtils.waitForActivity(10000);
 		
 		// Make sure we have user name, comment, image and location

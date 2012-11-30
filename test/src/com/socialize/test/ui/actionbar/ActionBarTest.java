@@ -16,18 +16,18 @@ import com.socialize.test.ui.util.TestUtils;
 
 public abstract class ActionBarTest extends SocializeManagedActivityTest<ActionBarAutoActivity2> {
 
-	Entity entity = Entity.newInstance("http://entity1.com" + Math.random(), "no name");
+	protected Entity entity = Entity.newInstance("http://entity1.com" + Math.random(), "no name");
 	
-	CountDownLatch globalLatch = null;
+	protected CountDownLatch globalLatch = null;
 	
-	final SocializeLikeUtils mockLikeUtils = new SocializeLikeUtils() {
+	protected final SocializeLikeUtils mockLikeUtils = new SocializeLikeUtils() {
 		@Override
 		public void getLike(Activity context, String entityKey, LikeGetListener listener) {
 			listener.onGet(null); // not liked
 		}
 	};
 	
-	final SocializeEntityUtils mockEntityUtils = new SocializeEntityUtils() {
+	protected final SocializeEntityUtils mockEntityUtils = new SocializeEntityUtils() {
 		@Override
 		public void getEntity(Activity context, String key, final EntityGetListener listener) {
 			listener.onGet(entity);

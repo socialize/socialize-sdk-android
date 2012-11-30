@@ -1,7 +1,8 @@
-package com.socialize.test.ui.actionbar;
+package com.socialize.test.ui.actionbar.comment;
 
 import java.util.concurrent.TimeUnit;
 import android.app.Activity;
+import com.socialize.test.ui.actionbar.ActionBarTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.actionbar.ActionBarLayoutView;
 import com.socialize.ui.comment.CommentActivity;

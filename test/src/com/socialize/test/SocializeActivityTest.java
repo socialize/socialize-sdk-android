@@ -22,6 +22,7 @@
 package com.socialize.test;
 
 import java.util.List;
+import android.app.Activity;
 import com.socialize.sample.EmptyActivity;
 import com.socialize.test.ui.util.TestUtils;
 
@@ -75,7 +76,7 @@ public abstract class SocializeActivityTest extends SocializeManagedActivityTest
 		catch (InterruptedException ignore) {}
 	}
 
-	public EmptyActivity getContext() {
+	public Activity getContext() {
 		return TestUtils.getActivity(this);
 	}
 }

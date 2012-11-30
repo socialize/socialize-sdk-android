@@ -90,7 +90,7 @@ public class AuthRequestDialogFactoryTest extends SocializeManagedActivityTest<A
 
 	public void testAuthRequestDialog() throws Throwable {
 		
-		final ActionBarAutoActivity2 context = TestUtils.getActivity(this);
+		final ActionBarAutoActivity2 context = getActivity();
 		
 		assertTrue(context.launchLock.await(10, TimeUnit.SECONDS));
 		

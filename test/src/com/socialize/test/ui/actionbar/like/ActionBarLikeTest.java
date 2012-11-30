@@ -1,4 +1,4 @@
-package com.socialize.test.ui.actionbar;
+package com.socialize.test.ui.actionbar.like;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -23,6 +23,7 @@ import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
+import com.socialize.test.ui.actionbar.ActionBarTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.actionbar.ActionBarButton;
 import com.socialize.ui.actionbar.ActionBarItem;
