@@ -25,6 +25,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import org.json.JSONObject;
 import android.app.Activity;
+import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
@@ -292,6 +293,11 @@ public class ActionBarLayoutView extends BaseView {
 								@Override
 								public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
 									Toast.makeText(parent, localizationService.getString(I18NConstants.ACTIONBAR_SHARE_SUCCESS), Toast.LENGTH_SHORT).show();
+								}
+
+								@Override
+								public void onCancel(Dialog dialog) {
+									dialog.dismiss();
 								}
 							};
 						}
