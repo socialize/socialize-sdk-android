@@ -133,5 +133,6 @@ public class BeanContextCache {
 		if(map != null) {
 			map.clear();
 		}
+		cache.remove(context); 
 	}
 }
