@@ -37,14 +37,17 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import com.socialize.ShareUtils;
+import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.share.ShareOptions;
+import com.socialize.auth.facebook.FacebookService;
 import com.socialize.demo.DemoActivity;
 import com.socialize.demo.DemoUtils;
 import com.socialize.demo.R;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkPostListener;
@@ -88,66 +91,85 @@ public class PostPhotoActivity extends DemoActivity {
 				if(mImageBitmap != null) {
 					
 					final ProgressDialog progress = SafeProgressDialog.show(PostPhotoActivity.this);
+				
+					// First create a Socialize share object so we get the correct URLs
+					ShareOptions options = ShareUtils.getUserShareOptions(PostPhotoActivity.this);
 					
-					
-						// First create a Socialize share object so we get the correct URLs
-						ShareOptions options = ShareUtils.getUserShareOptions(PostPhotoActivity.this);
-						ShareUtils.registerShare(PostPhotoActivity.this, entity, options, new ShareAddListener() {
+					ShareUtils.registerShare(PostPhotoActivity.this, entity, options, new ShareAddListener() {
+						
+						@Override
+						public void onError(SocializeException error) {
+							progress.dismiss();
+							handleError(PostPhotoActivity.this, error);
+						}
+						
+						@Override
+						public void onCreate(final Share result) {
 							
-							@Override
-							public void onError(SocializeException error) {
-								progress.dismiss();
-								handleError(PostPhotoActivity.this, error);
-							}
-							
-							@Override
-							public void onCreate(Share result) {
+							FacebookUtils.link(PostPhotoActivity.this, new SocializeAuthListener() {
 								
-								// We have the result, use the URLs to add to the post
-								PropagationInfo propagationInfo = result.getPropagationInfoResponse().getPropagationInfo(ShareType.FACEBOOK);
-								String link = propagationInfo.getEntityUrl();
-
-								// Now post to Facebook.
-								try {
-									// Get the bytes for the image
-									byte[] image = FacebookUtils.getImageForPost(PostPhotoActivity.this, mImageBitmap, CompressFormat.JPEG);
-									
-									Map<String, Object> params = new HashMap<String, Object>();
-									String graphPath = "me/photos";
-									
-									params.put("caption", "A test photo of something " + link);
-									params.put("photo", image);
-									
-									FacebookUtils.post(PostPhotoActivity.this, graphPath, params, new SocialNetworkPostListener() {
-										
-										@Override
-										public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
-											progress.dismiss();
-											handleError(PostPhotoActivity.this, error);
-										}
-										
-										@Override
-										public void onCancel() {
-											progress.dismiss();
-											DemoUtils.showToast(PostPhotoActivity.this, "Cancelled");
-										}
-										
-										@Override
-										public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
-											progress.dismiss();
-											DemoUtils.showToast(parent, "Photo Shared!");
-										}
-									});									
-									
+								@Override
+								public void onError(SocializeException error) {
+									handleError(PostPhotoActivity.this, error);
 								}
-								catch (IOException e) {
-									handleError(PostPhotoActivity.this, e);
-								}	
 								
-							}
-						}, SocialNetwork.FACEBOOK);
+								@Override
+								public void onCancel() {
+									DemoUtils.showToast(PostPhotoActivity.this, "Cancelled");
+								}
+								
+								@Override
+								public void onAuthSuccess(SocializeSession session) {
+									// We have the result, use the URLs to add to the post
+									PropagationInfo propagationInfo = result.getPropagationInfoResponse().getPropagationInfo(ShareType.FACEBOOK);
+									String link = propagationInfo.getEntityUrl();
+
+									// Now post to Facebook.
+									try {
+										// Get the bytes for the image
+										byte[] image = FacebookUtils.getImageForPost(PostPhotoActivity.this, mImageBitmap, CompressFormat.JPEG);
+										
+										Map<String, Object> params = new HashMap<String, Object>();
+										String graphPath = getGraphPath();
+										
+										params.put("caption", "A test photo of something " + link);
+										params.put("photo", image);
+										
+										FacebookUtils.post(PostPhotoActivity.this, graphPath, params, new SocialNetworkPostListener() {
 											
-			
+											@Override
+											public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+												progress.dismiss();
+												handleError(PostPhotoActivity.this, error);
+											}
+											
+											@Override
+											public void onCancel() {
+												progress.dismiss();
+												DemoUtils.showToast(PostPhotoActivity.this, "Cancelled");
+											}
+											
+											@Override
+											public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+												progress.dismiss();
+												DemoUtils.showToast(parent, "Photo Shared!");
+											}
+										});									
+									}
+									catch (IOException e) {
+										handleError(PostPhotoActivity.this, e);
+									}										
+								}
+								
+								@Override
+								public void onAuthFail(SocializeException error) {
+									handleError(PostPhotoActivity.this, error);
+								}
+							}, getPermissions());
+							
+							
+						}
+					}, SocialNetwork.FACEBOOK);
 				}
 			}
 		});
@@ -168,7 +190,13 @@ public class PostPhotoActivity extends DemoActivity {
 				btnPostPhoto.setVisibility(View.GONE);
 			}
 		}
-		
+	}
+	
+	protected String getGraphPath() {
+		return "me/photos";
 	}
 
+	protected String[] getPermissions() {
+		return FacebookService.DEFAULT_PERMISSIONS;
+	}
 }

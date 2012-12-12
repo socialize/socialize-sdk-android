@@ -138,6 +138,7 @@
         <activity android:name=".implementations.facebook.ListCheckinsActivity"/> 
         <activity android:name=".implementations.facebook.PostToWallActivity"/> 
         <activity android:name=".implementations.facebook.PostPhotoActivity"/> 
+        <activity android:name=".implementations.facebook.PostPhotoToFanPageActivity"/> 
         <activity android:name=".implementations.facebook.GetTokenActivity"/> 
         <activity android:name=".implementations.facebook.GetPermissionsActivity"/> 
         <activity android:name=".implementations.facebook.OpenGraphActivity"/>
