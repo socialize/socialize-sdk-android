@@ -96,7 +96,7 @@ public class NotificationChecker {
 				}
 				
 				boolean c2DMRegistered = notificationRegistrationSystem.isRegisteredC2DM(context);
-				boolean socRegistered = notificationRegistrationSystem.isRegisteredSocialize(session.getUser());
+				boolean socRegistered = notificationRegistrationSystem.isRegisteredSocialize(context, session.getUser());
 				
 				if(!c2DMRegistered || !socRegistered) {
 					

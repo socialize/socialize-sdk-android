@@ -69,8 +69,8 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 	}
 
 	@Override
-	public boolean isRegisteredSocialize(User user) {
-		return notificationRegistrationState.isRegisteredSocialize(user);
+	public boolean isRegisteredSocialize(Context context, User user) {
+		return notificationRegistrationState.isRegisteredSocialize(context, user);
 	}
 	
 	@Override

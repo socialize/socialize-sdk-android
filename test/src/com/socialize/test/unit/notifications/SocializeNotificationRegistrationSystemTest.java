@@ -172,14 +172,14 @@ public class SocializeNotificationRegistrationSystemTest extends SocializeUnitTe
 		NotificationRegistrationState notificationRegistrationState = AndroidMock.createMock(NotificationRegistrationState.class);
 		
 		final User user = new User();
-		AndroidMock.expect(notificationRegistrationState.isRegisteredSocialize(user)).andReturn(true);
+		AndroidMock.expect(notificationRegistrationState.isRegisteredSocialize(getContext(), user)).andReturn(true);
 		AndroidMock.replay(notificationRegistrationState);
 		
 		SocializeNotificationRegistrationSystem system = new SocializeNotificationRegistrationSystem();
 		
 		system.setNotificationRegistrationState(notificationRegistrationState);
 		
-		assertTrue(system.isRegisteredSocialize(user));
+		assertTrue(system.isRegisteredSocialize(getContext(), user));
 		
 		AndroidMock.verify(notificationRegistrationState);
 	}

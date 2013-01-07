@@ -60,7 +60,7 @@ public class NotificationCheckerTest extends SocializeActivityTest {
 		final User user = AndroidMock.createMock(User.class);
 		
 		// Base mocks
-		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, true)).andReturn(true).anyTimes();
+		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.SOCIALIZE_CHECK_NOTIFICATIONS, true)).andReturn(true).anyTimes();
 		AndroidMock.expect(session.getUser()).andReturn(user).anyTimes();
 		AndroidMock.expect(appUtils.isNotificationsAvailable(context)).andReturn(true).anyTimes();
 		
@@ -75,7 +75,7 @@ public class NotificationCheckerTest extends SocializeActivityTest {
 
 		AndroidMock.expect(notificationRegistrationSystem.isRegisteredC2DM(context)).andReturn(false).anyTimes();
 		AndroidMock.expect(notificationRegistrationSystem.isRegistrationPending()).andReturn(false).anyTimes();
-		AndroidMock.expect(notificationRegistrationSystem.isRegisteredSocialize(user)).andReturn(false).anyTimes();
+		AndroidMock.expect(notificationRegistrationSystem.isRegisteredSocialize(context, user)).andReturn(false).anyTimes();
 		
 		notificationRegistrationState.load(context);
 		
@@ -110,7 +110,7 @@ public class NotificationCheckerTest extends SocializeActivityTest {
 		final String registrationId = "foobar";
 		
 		// Base mocks
-		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, true)).andReturn(true).anyTimes();
+		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.SOCIALIZE_CHECK_NOTIFICATIONS, true)).andReturn(true).anyTimes();
 		AndroidMock.expect(session.getUser()).andReturn(user).anyTimes();
 		AndroidMock.expect(appUtils.isNotificationsAvailable(context)).andReturn(true).anyTimes();
 		
@@ -125,7 +125,7 @@ public class NotificationCheckerTest extends SocializeActivityTest {
 
 		AndroidMock.expect(notificationRegistrationSystem.isRegisteredC2DM(context)).andReturn(true).anyTimes();
 		AndroidMock.expect(notificationRegistrationSystem.isSocializeRegistrationPending()).andReturn(false).anyTimes();
-		AndroidMock.expect(notificationRegistrationSystem.isRegisteredSocialize(user)).andReturn(false).anyTimes();
+		AndroidMock.expect(notificationRegistrationSystem.isRegisteredSocialize(context, user)).andReturn(false).anyTimes();
 		AndroidMock.expect(notificationRegistrationState.getC2DMRegistrationId()).andReturn(registrationId).anyTimes();
 		
 		notificationRegistrationState.load(context);

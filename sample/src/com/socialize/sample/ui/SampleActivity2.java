@@ -74,7 +74,7 @@ public class SampleActivity2 extends BaseActivity {
 				entity.setKey(txtEntity.getText().toString());
 				entity.setName(txtEntityName.getText().toString());				
 				Socialize.getSocialize().setEntityLoader(loader);
-				config.setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
+				config.setProperty(SocializeConfig.SOCIALIZE_CHECK_NOTIFICATIONS, String.valueOf(chkNotifications.isChecked()));
 				config.setProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_ENABLED, String.valueOf(chkNotifications.isChecked()));
 				config.setProperty(SocializeConfig.SOCIALIZE_LOCATION_ENABLED, String.valueOf(chkLocation.isChecked()));
 				config.setFacebookAppId(txtFB.getText().toString());
@@ -118,7 +118,7 @@ public class SampleActivity2 extends BaseActivity {
 				
 				intent.putExtra(Socialize.ENTITY_OBJECT, entity);
 				Socialize.getSocialize().setEntityLoader(loader);
-				config.setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
+				config.setProperty(SocializeConfig.SOCIALIZE_CHECK_NOTIFICATIONS, String.valueOf(chkNotifications.isChecked()));
 				config.setProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_ENABLED, String.valueOf(chkNotifications.isChecked()));
 				config.setProperty(SocializeConfig.SOCIALIZE_LOCATION_ENABLED, String.valueOf(chkLocation.isChecked()));
 				config.setFacebookAppId(txtFB.getText().toString());
@@ -142,7 +142,7 @@ public class SampleActivity2 extends BaseActivity {
 				intent.putExtra("manual", true);
 				
 				Socialize.getSocialize().setEntityLoader(loader);
-				config.setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
+				config.setProperty(SocializeConfig.SOCIALIZE_CHECK_NOTIFICATIONS, String.valueOf(chkNotifications.isChecked()));
 				config.setProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_ENABLED, String.valueOf(chkNotifications.isChecked()));
 				config.setProperty(SocializeConfig.SOCIALIZE_LOCATION_ENABLED, String.valueOf(chkLocation.isChecked()));
 				config.setFacebookAppId(txtFB.getText().toString());

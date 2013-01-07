@@ -17,7 +17,7 @@ public class MockNotificationRegistrationSystem implements NotificationRegistrat
 	}
 
 	@Override
-	public boolean isRegisteredSocialize(User user) {
+	public boolean isRegisteredSocialize(Context context, User user) {
 		return true;
 	}
 

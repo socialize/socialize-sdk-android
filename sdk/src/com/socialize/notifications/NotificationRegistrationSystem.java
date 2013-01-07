@@ -36,7 +36,7 @@ public interface NotificationRegistrationSystem {
 	
 	public boolean isSocializeRegistrationPending();
 	
-	public boolean isRegisteredSocialize(User user);
+	public boolean isRegisteredSocialize(Context context, User user);
 
 	public void registerC2DMFailed(Context context, String cause);
 	

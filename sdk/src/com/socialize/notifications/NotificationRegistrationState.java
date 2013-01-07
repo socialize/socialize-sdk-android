@@ -37,39 +37,53 @@ public class NotificationRegistrationState {
 	
 	private static final String PREFERENCES = "SocializeNotificationState";
 	
-	public static final long DEFAULT_NOTIFICATION_TIMEOUT = 24 * 60 * 60 * 1000; // 1 day
+	public static final long DEFAULT_SOCIALIZE_NOTIFICATION_TIMEOUT = 24 * 60 * 60 * 1000; // 1 day
+	public static final long DEFAULT_GCM_TIMEOUT = -1; // Don't check again
 	
 	private String c2DMRegistrationId;
 	private long registeredUserId;
 	private long pendingC2DMRequestTime = 0L;
 	private long pendingSocializeRequestTime = 0L;
 	private long lastC2DMRegistrationTime = 0L;
+	private long lastSocializeRegistrationTime = 0L;
 	
 	private SocializeLogger logger;
 	private SocializeConfig config;
 	
 	private boolean loaded = false;
 	
-	public boolean isRegisteredSocialize(User user) {
-		return registeredUserId == user.getId();
+	public boolean isRegisteredSocialize(Context context, User user) {
+		
+		load(context);
+		
+		long timeout = config.getLongProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_TIMEOUT, DEFAULT_SOCIALIZE_NOTIFICATION_TIMEOUT);
+		long timeSinceLast = (System.currentTimeMillis() - lastSocializeRegistrationTime);
+		
+		if(registeredUserId == user.getId() || (timeSinceLast > timeout && timeout >= 0)) {
+			return false;
+		}
+		
+		return true;
 	}
 
 	public boolean isRegisteredC2DM(Context context) {
-		if(!loaded) {
-			load(context);
-		}
 		
-		long timeout = config.getLongProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_TIMEOUT, DEFAULT_NOTIFICATION_TIMEOUT);
+		load(context);
 		
-		if(StringUtils.isEmpty(c2DMRegistrationId) || (System.currentTimeMillis() - lastC2DMRegistrationTime) < timeout) {
+		long timeout = config.getLongProperty(SocializeConfig.GCM_NOTIFICATIONS_TIMEOUT, DEFAULT_GCM_TIMEOUT);
+		long timeSinceLast = (System.currentTimeMillis() - lastSocializeRegistrationTime);
+		
+		if(StringUtils.isEmpty(c2DMRegistrationId) || (timeSinceLast > timeout && timeout >= 0)) {
 			return false;
 		}
+		
 		return true;
 	}
 	
 	public void setRegisteredSocialize(User user) {
 		this.registeredUserId = user.getId();
 		this.pendingSocializeRequestTime = 0;
+		this.lastSocializeRegistrationTime = System.currentTimeMillis();
 	}
 
 	public String getC2DMRegistrationId() {
@@ -99,21 +113,24 @@ public class NotificationRegistrationState {
 	}
 
 	public void load(Context context) {
-		SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
-		c2DMRegistrationId = prefs.getString("c2DMRegistrationId", null);
-		registeredUserId = prefs.getLong("registeredUserId", -1L);
-		pendingC2DMRequestTime = prefs.getLong("pendingC2DMRequestTime", 0);
-		pendingSocializeRequestTime = prefs.getLong("pendingSocializeRequestTime", 0);
-		lastC2DMRegistrationTime = prefs.getLong("lastC2DMRegistrationTime", 0);
-		
-		if(logger != null && logger.isDebugEnabled()) {
-			logger.debug("Loaded notification state with registration id [" +
-					c2DMRegistrationId +
-					"], user id [" +
-					registeredUserId +
-					"]");
-		}		
-		
+		if(!loaded) {
+			SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+			c2DMRegistrationId = prefs.getString("c2DMRegistrationId", null);
+			registeredUserId = prefs.getLong("registeredUserId", -1L);
+			pendingC2DMRequestTime = prefs.getLong("pendingC2DMRequestTime", 0);
+			pendingSocializeRequestTime = prefs.getLong("pendingSocializeRequestTime", 0);
+			lastC2DMRegistrationTime = prefs.getLong("lastC2DMRegistrationTime", 0);
+			lastSocializeRegistrationTime = prefs.getLong("lastSocializeRegistrationTime", 0);
+			
+			if(logger != null && logger.isDebugEnabled()) {
+				logger.debug("Loaded notification state with registration id [" +
+						c2DMRegistrationId +
+						"], user id [" +
+						registeredUserId +
+						"]");
+			}		
+		}
+
 		loaded = true;
 	}
 	
@@ -133,6 +150,8 @@ public class NotificationRegistrationState {
 		editor.putLong("pendingC2DMRequestTime", pendingC2DMRequestTime);
 		editor.putLong("pendingSocializeRequestTime", pendingSocializeRequestTime);
 		editor.putLong("lastC2DMRegistrationTime", lastC2DMRegistrationTime);
+		editor.putLong("lastSocializeRegistrationTime", lastSocializeRegistrationTime);
+		
 		editor.commit();
 	}
 
