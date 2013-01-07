@@ -303,6 +303,14 @@ public class SocializeConfig {
 		return defaultValue;
 	}
 	
+	public long getLongProperty(String key, long defaultValue) {
+		String val = getProperty(key);
+		if(!StringUtils.isEmpty(val)) {
+			return Long.parseLong(val);
+		}
+		return defaultValue;
+	}	
+	
 	public boolean getBooleanProperty(String key, boolean defaultValue) {
 		String val = getProperty(key);
 		if(!StringUtils.isEmpty(val)) {

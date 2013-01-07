@@ -149,31 +149,7 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 				builder.append(" ");
 				builder.append(urlSet.getAppUrl());
 			}
-			
-//			if(config.isBrandingEnabled()) {
-//				builder.append(" using ");
-				
-//				if(html) {
-//					builder.append("<a href=\"http://www.getsocialize.com\">Socialize for Android</a>.");
-//				}
-//				else {
-//					builder.append("Socialize for Android");//. http://www.getsocialize.com");
-//				}
-//			}
 		}
-//		else if(config.isBrandingEnabled()) {
-//			builder.append(getNewLine(html));
-//			builder.append(getNewLine(html));
-//			
-//			builder.append(" Sent using ");
-//			
-////			if(html) {
-////				builder.append("<a href=\"http://www.getsocialize.com\">Socialize for Android</a>.");
-////			}
-////			else {
-//				builder.append("Socialize for Android");//. http://www.getsocialize.com");
-////			}
-//		}
 		
 		return builder.toString();
 	}

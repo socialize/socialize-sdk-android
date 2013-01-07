@@ -136,31 +136,6 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 			catch (SocializeException e) {
 				logError(e);
 			}	
-			
-//			userSystem.authenticate(context, new SocializeAuthListener() {
-//				
-//				@Override
-//				public void onError(SocializeException error) {
-//					logError(error);
-//				}
-//				
-//				@Override
-//				public void onCancel() {
-//					if(logger != null) {
-//						logger.error("Authentication was cancelled during notification registration.  This should not happen!");
-//					}
-//				}
-//				
-//				@Override
-//				public void onAuthSuccess(SocializeSession session) {
-//					doRegistrationSocialize(context, session, registrationId);			
-//				}
-//				
-//				@Override
-//				public void onAuthFail(SocializeException error) {
-//					logError(error);
-//				}
-//			}, Socialize.getSocialize());
 		}
 	}
 	
@@ -187,26 +162,6 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 				logger.error("Error registering device with Socialize.  Will retry on next start", e);
 			}
 		}
-		
-//		deviceRegistrationSystem.registerDevice(session, registration,  new DeviceRegistrationListener() {
-//			@Override
-//			public void onError(SocializeException error) {
-//				if(logger != null) {
-//					logger.error("Error registering device with Socialize.  Will retry on next start", error);
-//				}
-//			}
-//			
-//			@Override
-//			public void onSuccess() {
-//				notificationRegistrationState.setC2DMRegistrationId(registrationId);
-//				notificationRegistrationState.setRegisteredSocialize(session.getUser());
-//				notificationRegistrationState.save(context);
-//				
-//				if(logger != null && logger.isInfoEnabled()) {
-//					logger.info("Registration with Socialize for GCM successful.");
-//				}
-//			}
-//		});
 	}
 	
 	protected void logError(Exception e) {

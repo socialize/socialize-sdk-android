@@ -37,6 +37,8 @@ public class NotificationRegistrationState {
 	
 	private static final String PREFERENCES = "SocializeNotificationState";
 	
+	public static final long DEFAULT_NOTIFICATION_TIMEOUT = 24 * 60 * 60 * 1000; // 1 day
+	
 	private String c2DMRegistrationId;
 	private long registeredUserId;
 	private long pendingC2DMRequestTime = 0L;
@@ -57,7 +59,8 @@ public class NotificationRegistrationState {
 			load(context);
 		}
 		
-		int timeout = config.getIntProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_TIMEOUT, -1);
+		long timeout = config.getLongProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_TIMEOUT, DEFAULT_NOTIFICATION_TIMEOUT);
+		
 		if(StringUtils.isEmpty(c2DMRegistrationId) || (System.currentTimeMillis() - lastC2DMRegistrationTime) < timeout) {
 			return false;
 		}

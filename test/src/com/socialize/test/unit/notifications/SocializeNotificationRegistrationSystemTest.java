@@ -230,19 +230,28 @@ public class SocializeNotificationRegistrationSystemTest extends SocializeUnitTe
 		assertTrue(latch.await(10, TimeUnit.SECONDS));
 	}
 	
-	
+	@UsesMocks ({SocializeSession.class, SocializeConfig.class})
 	public void test_registerSocialize() {
 		NotificationRegistrationState notificationRegistrationState = AndroidMock.createMock(NotificationRegistrationState.class);
 		notificationRegistrationState.setPendingSocializeRequestTime(AndroidMock.anyLong());
 		notificationRegistrationState.save(getContext());
 		
 		final SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
 		final String registrationId = "foobar";
+		
+		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn("foo");
+		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET)).andReturn("bar");
 		
 		SocializeUserSystem userSystem = new SocializeUserSystem(null) {
 			@Override
 			public void authenticate(Context context, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
-				listener.onAuthSuccess(session);
+				fail();
+			}
+
+			@Override
+			public SocializeSession authenticateSynchronous(Context ctx, String consumerKey, String consumerSecret) throws SocializeException {
+				return session;
 			}
 		};
 		
@@ -254,13 +263,15 @@ public class SocializeNotificationRegistrationSystemTest extends SocializeUnitTe
 		};
 		
 		system.setUserSystem(userSystem);
+		system.setConfig(config);
+		
 		system.setNotificationRegistrationState(notificationRegistrationState);
 		
-		AndroidMock.replay(notificationRegistrationState, session);
+		AndroidMock.replay(notificationRegistrationState, session, config);
 		
 		system.registerSocialize(getContext(), registrationId);
 		
-		AndroidMock.verify(notificationRegistrationState, session);
+		AndroidMock.verify(notificationRegistrationState, session, config);
 		
 		SocializeSession result = getResult(0);
 		
