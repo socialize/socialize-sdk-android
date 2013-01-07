@@ -70,6 +70,9 @@ public class SocializeNotificationRegistrationSystemTest extends SocializeUnitTe
 			public void registerDevice(SocializeSession session, DeviceRegistration registration, DeviceRegistrationListener listener) {
 				listener.onSuccess();
 			}
+
+			@Override
+			public void registerDeviceSynchronous(SocializeSession session, DeviceRegistration registration) throws SocializeException {}
 		};
 		
 		IBeanFactory<DeviceRegistration> deviceRegistrationFactory = AndroidMock.createMock(IBeanFactory.class);
@@ -124,7 +127,7 @@ public class SocializeNotificationRegistrationSystemTest extends SocializeUnitTe
 		
 		SocializeNotificationRegistrationSystem system = new SocializeNotificationRegistrationSystem() {
 			@Override
-			public boolean isRegisteredC2DM() {
+			public boolean isRegisteredC2DM(Context context) {
 				return false;
 			}
 
@@ -184,14 +187,14 @@ public class SocializeNotificationRegistrationSystemTest extends SocializeUnitTe
 	public void test_isRegisteredC2DM() {
 		NotificationRegistrationState notificationRegistrationState = AndroidMock.createMock(NotificationRegistrationState.class);
 		
-		AndroidMock.expect(notificationRegistrationState.isRegisteredC2DM()).andReturn(true);
+		AndroidMock.expect(notificationRegistrationState.isRegisteredC2DM(getContext())).andReturn(true);
 		AndroidMock.replay(notificationRegistrationState);
 		
 		SocializeNotificationRegistrationSystem system = new SocializeNotificationRegistrationSystem();
 		
 		system.setNotificationRegistrationState(notificationRegistrationState);
 		
-		assertTrue(system.isRegisteredC2DM());
+		assertTrue(system.isRegisteredC2DM(getContext()));
 		
 		AndroidMock.verify(notificationRegistrationState);
 	}

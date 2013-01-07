@@ -199,13 +199,9 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 
 			@Override
 			public void onUpdate(User savedUser) {
-				boolean resetC2DM = false;
 				UserSettings oldProfile = session.getUserSettings();
-				if(oldProfile.isNotificationsEnabled() != settings.isNotificationsEnabled()) {
-					resetC2DM = true;
-				}
-				if(resetC2DM) {
-					// Recreate c2dm registration
+				if(settings.isNotificationsEnabled() && oldProfile.isNotificationsEnabled() != settings.isNotificationsEnabled()) {
+					// If notifications was not previously enabled, we may need to register.
 					if(notificationRegistrationSystem != null) {
 						notificationRegistrationSystem.registerC2DMAsync(context);
 					}

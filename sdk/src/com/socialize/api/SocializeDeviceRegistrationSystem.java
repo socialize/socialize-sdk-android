@@ -24,6 +24,7 @@ package com.socialize.api;
 import java.util.ArrayList;
 import java.util.List;
 import com.socialize.entity.DeviceRegistration;
+import com.socialize.error.SocializeException;
 import com.socialize.provider.SocializeProvider;
 
 /**
@@ -45,5 +46,11 @@ public class SocializeDeviceRegistrationSystem extends SocializeApi<DeviceRegist
 		registrations.add(registration);
 		postAsync(session, ENDPOINT, registrations, listener);
 	}
-	
+
+	@Override
+	public void registerDeviceSynchronous(SocializeSession session, DeviceRegistration registration) throws SocializeException {
+		List<DeviceRegistration> registrations = new ArrayList<DeviceRegistration>(1);
+		registrations.add(registration);
+		post(session, ENDPOINT, registrations);
+	}
 }

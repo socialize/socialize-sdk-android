@@ -752,6 +752,7 @@
 	
 	<bean id="notificationRegistrationState" class="com.socialize.notifications.NotificationRegistrationState" context-aware="false">
 		<property name="logger" ref="logger"/>
+		<property name="config" ref="config"/>
 		<init-method name="load">
 			<arg type="context"/>
 		</init-method>	

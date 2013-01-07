@@ -50,6 +50,7 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_REGISTER_NOTIFICATION = "socialize.register.notification";
 	public static final String SOCIALIZE_NOTIFICATIONS_ENABLED = "socialize.notification.enabled";
+	public static final String SOCIALIZE_NOTIFICATIONS_TIMEOUT = "socialize.notification.timeout";
 	public static final String SOCIALIZE_NOTIFICATION_APP_ICON = "socialize.notification.app.icon";
 	
 	@Deprecated

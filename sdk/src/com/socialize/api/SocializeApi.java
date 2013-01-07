@@ -844,39 +844,47 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 					listener.onError(SocializeException.wrap(error));
 				}
 				else {
-					ListResult<T> results = result.getResults();
-					
-					if(results != null) {
-						List<T> items = results.getItems();
-						List<ActionError> errors = results.getErrors();
-						
-						if((items == null || items.size() == 0) && result.isResultsExpected()){
-							if(errors != null && errors.size() > 0) {
-								listener.onError(new SocializeException(errors.get(0).getMessage()));
-							}
-							else {
-								listener.onError(new SocializeException("No results found in response"));
-							}
-						}
-						else {
-							if(errors != null && errors.size() > 0) {
-								for (ActionError actionError : errors) {
-									if(logger != null) {
-										if(!StringUtils.isEmpty(actionError.getMessage())) {
-											logger.warn(actionError.getMessage());
-										}
-									}
-								}
-							}
-							
-							listener.onResult(requestType, result);
-						}
+					try {
+						handleResults(result, logger);
+						listener.onResult(requestType, result);
 					}
-					else if(result.isResultsExpected()) {
-						listener.onError(new SocializeException("No results found in response"));
+					catch (SocializeException e) {
+						listener.onError(e);
 					}
 				}
 			}
+		}
+	}
+	
+	public static final <T extends SocializeObject> void handleResults(SocializeEntityResponse<T> result, SocializeLogger logger) throws SocializeException {
+		ListResult<T> results = result.getResults();
+		
+		if(results != null) {
+			List<T> items = results.getItems();
+			List<ActionError> errors = results.getErrors();
+			
+			if((items == null || items.size() == 0) && result.isResultsExpected()){
+				if(errors != null && errors.size() > 0) {
+					throw new SocializeException(errors.get(0).getMessage());
+				}
+				else {
+					throw new SocializeException("No results found in response");
+				}
+			}
+			else {
+				if(errors != null && errors.size() > 0) {
+					for (ActionError actionError : errors) {
+						if(logger != null) {
+							if(!StringUtils.isEmpty(actionError.getMessage())) {
+								logger.warn(actionError.getMessage());
+							}
+						}
+					}
+				}
+			}
+		}
+		else if(result.isResultsExpected()) {
+			throw new SocializeException("No results found in response");
 		}
 	}
 

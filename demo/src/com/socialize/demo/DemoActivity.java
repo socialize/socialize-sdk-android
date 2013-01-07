@@ -56,13 +56,14 @@ public abstract class DemoActivity extends Activity implements DialogRegister {
 		ConfigUtils.getConfig(this).setProperty(SocializeConfig.SOCIALIZE_EVENTS_SHARE_ENABLED, "false");
 		
 		// Standard GCM Registration
+		// This is simply to verify that SmartAlerts work where there is already a GCM implementation
 		GCMRegistrar.checkDevice(this);
 		GCMRegistrar.checkManifest(this);
 		
 		final String regId = GCMRegistrar.getRegistrationId(this);
 		
 		if (regId.equals("")) {
-			GCMRegistrar.register(this, "199683618153");
+			GCMRegistrar.register(this, GCMIntentService.SENDER_ID);
 		} 
 	}
 	

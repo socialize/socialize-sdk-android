@@ -24,6 +24,7 @@ package com.socialize.notifications;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.User;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.StringUtils;
@@ -43,14 +44,24 @@ public class NotificationRegistrationState {
 	private long lastC2DMRegistrationTime = 0L;
 	
 	private SocializeLogger logger;
+	private SocializeConfig config;
+	
+	private boolean loaded = false;
 	
 	public boolean isRegisteredSocialize(User user) {
 		return registeredUserId == user.getId();
 	}
 
-	public boolean isRegisteredC2DM() {
-		// TODO: configure timeout.
-		return !StringUtils.isEmpty(c2DMRegistrationId) && (System.currentTimeMillis() - lastC2DMRegistrationTime) < 60000;
+	public boolean isRegisteredC2DM(Context context) {
+		if(!loaded) {
+			load(context);
+		}
+		
+		int timeout = config.getIntProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_TIMEOUT, -1);
+		if(StringUtils.isEmpty(c2DMRegistrationId) || (System.currentTimeMillis() - lastC2DMRegistrationTime) < timeout) {
+			return false;
+		}
+		return true;
 	}
 	
 	public void setRegisteredSocialize(User user) {
@@ -99,6 +110,8 @@ public class NotificationRegistrationState {
 					registeredUserId +
 					"]");
 		}		
+		
+		loaded = true;
 	}
 	
 	public void save(Context context) {
@@ -122,5 +135,9 @@ public class NotificationRegistrationState {
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
+	}
+	
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
 	}
 }

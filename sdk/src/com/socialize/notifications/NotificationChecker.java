@@ -94,12 +94,15 @@ public class NotificationChecker {
 					logger.debug("Checking GCM registration state");
 				}
 				
-				if(!notificationRegistrationSystem.isRegisteredC2DM() || !notificationRegistrationSystem.isRegisteredSocialize(session.getUser())) {
+				boolean c2DMRegistered = notificationRegistrationSystem.isRegisteredC2DM(context);
+				boolean socRegistered = notificationRegistrationSystem.isRegisteredSocialize(session.getUser());
+				
+				if(!c2DMRegistered|| !socRegistered) {
 					
 					// Reload
 					notificationRegistrationState.load(context);
 					
-					if(!notificationRegistrationSystem.isRegisteredC2DM()) {
+					if(!c2DMRegistered) {
 						
 						if(notificationRegistrationSystem.isRegistrationPending()) {
 							if(logger != null && logger.isDebugEnabled()) {
@@ -114,7 +117,7 @@ public class NotificationChecker {
 							notificationRegistrationSystem.registerC2DMAsync(context);
 						}
 					}
-					else if(!notificationRegistrationSystem.isRegisteredSocialize(session.getUser())) {
+					else if(!socRegistered) {
 						
 						if(notificationRegistrationSystem.isSocializeRegistrationPending()) {
 							if(logger != null && logger.isDebugEnabled()) {
