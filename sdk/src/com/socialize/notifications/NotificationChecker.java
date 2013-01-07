@@ -89,7 +89,7 @@ public class NotificationChecker {
 		
 		if(appUtils.isNotificationsAvailable(context)) {
 
-			if(config.getBooleanProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, true)) {
+			if(config.getBooleanProperty(SocializeConfig.SOCIALIZE_CHECK_NOTIFICATIONS, true)) {
 				if(logger != null && logger.isDebugEnabled()) {
 					logger.debug("Checking GCM registration state");
 				}

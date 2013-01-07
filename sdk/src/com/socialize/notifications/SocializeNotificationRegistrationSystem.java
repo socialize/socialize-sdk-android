@@ -92,7 +92,7 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 
 	@Override
 	public synchronized void registerC2DM(final Context context) {
-		if(!isRegisteredC2DM(context) && !notificationRegistrationState.isC2dmPending()) {
+		if(!isRegisteredC2DM(context) && !notificationRegistrationState.isC2dmPending() && config.getBooleanProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_REQUEST_ENABLED, true)) {
 			if(logger != null && logger.isDebugEnabled()) {
 				logger.debug("Registering with GCM");
 			}
@@ -116,7 +116,7 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 		}	
 		else {
 			if(logger != null && logger.isDebugEnabled()) {
-				logger.debug("GCM registration already in progress or complete");
+				logger.debug("GCM registration already in progress, complete or disabled");
 			}
 		}
 	}
