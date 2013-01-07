@@ -61,7 +61,7 @@ public class NotificationCheckerTest extends SocializeActivityTest {
 		
 		// Base mocks
 		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.SOCIALIZE_CHECK_NOTIFICATIONS, true)).andReturn(true).anyTimes();
-		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_REQUEST_ENABLED, true)).andReturn(true).anyTimes();
+		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.GCM_REGISTRATION_ENABLED, true)).andReturn(true).anyTimes();
 		AndroidMock.expect(session.getUser()).andReturn(user).anyTimes();
 		AndroidMock.expect(appUtils.isNotificationsAvailable(context)).andReturn(true).anyTimes();
 		

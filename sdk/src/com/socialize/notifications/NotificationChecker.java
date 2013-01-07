@@ -59,8 +59,13 @@ public class NotificationChecker {
 				}
 				
 				@Override
-				public void onAuthSuccess(SocializeSession session) {
-					checked = checkRegistrations(context, session);
+				public void onAuthSuccess(final SocializeSession session) {
+					new Thread() {
+						@Override
+						public void run() {
+							checked = checkRegistrations(context, session);
+						}
+					}.start();
 				}
 				
 				@Override
@@ -103,7 +108,7 @@ public class NotificationChecker {
 					// Reload
 					notificationRegistrationState.load(context);
 					
-					if(!c2DMRegistered && config.getBooleanProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_REQUEST_ENABLED, true)) {
+					if(!c2DMRegistered && config.getBooleanProperty(SocializeConfig.GCM_REGISTRATION_ENABLED, true)) {
 						
 						if(notificationRegistrationSystem.isRegistrationPending()) {
 							if(logger != null && logger.isDebugEnabled()) {

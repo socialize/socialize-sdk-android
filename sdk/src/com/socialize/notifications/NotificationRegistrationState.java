@@ -56,10 +56,10 @@ public class NotificationRegistrationState {
 		
 		load(context);
 		
-		long timeout = config.getLongProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_TIMEOUT, DEFAULT_SOCIALIZE_NOTIFICATION_TIMEOUT);
+		long timeout = config.getLongProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_INTERVAL, DEFAULT_SOCIALIZE_NOTIFICATION_TIMEOUT);
 		long timeSinceLast = (System.currentTimeMillis() - lastSocializeRegistrationTime);
 		
-		if(registeredUserId == user.getId() || (timeSinceLast > timeout && timeout >= 0)) {
+		if(registeredUserId != user.getId() || (timeSinceLast > timeout && timeout >= 0)) {
 			return false;
 		}
 		
@@ -70,7 +70,7 @@ public class NotificationRegistrationState {
 		
 		load(context);
 		
-		long timeout = config.getLongProperty(SocializeConfig.GCM_NOTIFICATIONS_TIMEOUT, DEFAULT_GCM_TIMEOUT);
+		long timeout = config.getLongProperty(SocializeConfig.GCM_REGISTRATION_INTERVAL, DEFAULT_GCM_TIMEOUT);
 		long timeSinceLast = (System.currentTimeMillis() - lastSocializeRegistrationTime);
 		
 		if(StringUtils.isEmpty(c2DMRegistrationId) || (timeSinceLast > timeout && timeout >= 0)) {

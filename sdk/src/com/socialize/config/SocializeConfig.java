@@ -47,13 +47,17 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_CONSUMER_KEY = "socialize.consumer.key";
 	public static final String SOCIALIZE_CONSUMER_SECRET = "socialize.consumer.secret";
-	
 	public static final String SOCIALIZE_CHECK_NOTIFICATIONS = "socialize.check.notifications";
-	public static final String SOCIALIZE_NOTIFICATIONS_ENABLED = "socialize.notification.enabled";
-	public static final String SOCIALIZE_NOTIFICATIONS_TIMEOUT = "socialize.notification.request.timeout";
-	public static final String GCM_NOTIFICATIONS_TIMEOUT = "gcm.request.timeout";
-	public static final String SOCIALIZE_NOTIFICATIONS_REQUEST_ENABLED = "socialize.notification.request.enabled";
 	public static final String SOCIALIZE_NOTIFICATION_APP_ICON = "socialize.notification.app.icon";
+	
+	/**
+	 * Time between duplicate gcm registration requests
+	 */
+	public static final String GCM_REGISTRATION_INTERVAL = "gcm.registration.interval";
+	public static final String GCM_REGISTRATION_ENABLED = "gcm.registration.enabled";
+	
+	public static final String SOCIALIZE_NOTIFICATIONS_INTERVAL = "socialize.notification.request.interval";
+	public static final String SOCIALIZE_NOTIFICATIONS_ENABLED = "socialize.notification.enabled";
 	
 	@Deprecated
 	public static final String SOCIALIZE_C2DM_SENDER_ID = "socialize.c2dm.sender.id";
