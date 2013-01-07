@@ -29,6 +29,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.AppUtils;
+import com.socialize.util.StringUtils;
 
 /**
  * Checks for notification registrations.
@@ -102,7 +103,7 @@ public class NotificationChecker {
 					// Reload
 					notificationRegistrationState.load(context);
 					
-					if(!c2DMRegistered) {
+					if(!c2DMRegistered && config.getBooleanProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_REQUEST_ENABLED, true)) {
 						
 						if(notificationRegistrationSystem.isRegistrationPending()) {
 							if(logger != null && logger.isDebugEnabled()) {
@@ -117,7 +118,7 @@ public class NotificationChecker {
 							notificationRegistrationSystem.registerC2DMAsync(context);
 						}
 					}
-					else if(!socRegistered) {
+					else if(!socRegistered && !StringUtils.isEmpty(notificationRegistrationState.getC2DMRegistrationId())) {
 						
 						if(notificationRegistrationSystem.isSocializeRegistrationPending()) {
 							if(logger != null && logger.isDebugEnabled()) {
