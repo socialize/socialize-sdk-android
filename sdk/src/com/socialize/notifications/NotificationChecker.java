@@ -29,6 +29,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.AppUtils;
+import com.socialize.util.StringUtils;
 
 /**
  * Checks for notification registrations.
@@ -58,8 +59,13 @@ public class NotificationChecker {
 				}
 				
 				@Override
-				public void onAuthSuccess(SocializeSession session) {
-					checked = checkRegistrations(context, session);
+				public void onAuthSuccess(final SocializeSession session) {
+					new Thread() {
+						@Override
+						public void run() {
+							checked = checkRegistrations(context, session);
+						}
+					}.start();
 				}
 				
 				@Override
@@ -89,17 +95,20 @@ public class NotificationChecker {
 		
 		if(appUtils.isNotificationsAvailable(context)) {
 
-			if(config.getBooleanProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, true)) {
+			if(config.getBooleanProperty(SocializeConfig.SOCIALIZE_CHECK_NOTIFICATIONS, true)) {
 				if(logger != null && logger.isDebugEnabled()) {
 					logger.debug("Checking GCM registration state");
 				}
 				
-				if(!notificationRegistrationSystem.isRegisteredC2DM() || !notificationRegistrationSystem.isRegisteredSocialize(session.getUser())) {
+				boolean c2DMRegistered = notificationRegistrationSystem.isRegisteredC2DM(context);
+				boolean socRegistered = notificationRegistrationSystem.isRegisteredSocialize(context, session.getUser());
+				
+				if(!c2DMRegistered || !socRegistered) {
 					
 					// Reload
 					notificationRegistrationState.load(context);
 					
-					if(!notificationRegistrationSystem.isRegisteredC2DM()) {
+					if(!c2DMRegistered && config.getBooleanProperty(SocializeConfig.GCM_REGISTRATION_ENABLED, true)) {
 						
 						if(notificationRegistrationSystem.isRegistrationPending()) {
 							if(logger != null && logger.isDebugEnabled()) {
@@ -114,7 +123,7 @@ public class NotificationChecker {
 							notificationRegistrationSystem.registerC2DMAsync(context);
 						}
 					}
-					else if(!notificationRegistrationSystem.isRegisteredSocialize(session.getUser())) {
+					else if(!socRegistered && !StringUtils.isEmpty(notificationRegistrationState.getC2DMRegistrationId())) {
 						
 						if(notificationRegistrationSystem.isSocializeRegistrationPending()) {
 							if(logger != null && logger.isDebugEnabled()) {

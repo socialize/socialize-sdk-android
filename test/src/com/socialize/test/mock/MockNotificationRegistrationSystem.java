@@ -7,17 +7,17 @@ import com.socialize.notifications.NotificationRegistrationSystem;
 public class MockNotificationRegistrationSystem implements NotificationRegistrationSystem {
 
 	@Override
-	public boolean isRegisteredC2DM() {
+	public boolean isRegisteredC2DM(Context context) {
 		return true;
 	}
-	
+
 	@Override
 	public boolean isSocializeRegistrationPending() {
 		return false;
 	}
 
 	@Override
-	public boolean isRegisteredSocialize(User user) {
+	public boolean isRegisteredSocialize(Context context, User user) {
 		return true;
 	}
 

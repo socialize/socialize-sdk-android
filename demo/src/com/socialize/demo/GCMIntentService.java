@@ -30,9 +30,15 @@ import com.socialize.SmartAlertUtils;
 
 /**
  * @author Jason Polites
- *
+ * Used in the demo app only. This is simply to verify that SmartAlerts work where there is already a GCM implementation as per Socialize docs.
  */
 public class GCMIntentService extends GCMBaseIntentService {
+	
+	public static final String SENDER_ID = "199683618153";
+	
+	public GCMIntentService() {
+		super(SENDER_ID);
+	}
 
 	@Override
 	protected void onError(Context context, String errorId) {

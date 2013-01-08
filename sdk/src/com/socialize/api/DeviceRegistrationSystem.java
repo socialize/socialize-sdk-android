@@ -38,4 +38,6 @@ public interface DeviceRegistrationSystem {
 	 * @throws SocializeException
 	 */
 	public void registerDevice(SocializeSession session, DeviceRegistration registration, DeviceRegistrationListener listener);
+	
+	public void registerDeviceSynchronous(SocializeSession session, DeviceRegistration registration) throws SocializeException;
 }

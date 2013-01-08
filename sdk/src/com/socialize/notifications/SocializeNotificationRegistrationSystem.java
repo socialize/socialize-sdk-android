@@ -25,9 +25,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.api.DeviceRegistrationListener;
 import com.socialize.api.DeviceRegistrationSystem;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.user.UserSystem;
@@ -35,7 +33,6 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.entity.DeviceRegistration;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.StringUtils;
 
@@ -62,8 +59,8 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 	}
 
 	@Override
-	public boolean isRegisteredC2DM() {
-		return notificationRegistrationState.isRegisteredC2DM();
+	public boolean isRegisteredC2DM(Context context) {
+		return notificationRegistrationState.isRegisteredC2DM(context);
 	}
 	
 	@Override
@@ -72,8 +69,8 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 	}
 
 	@Override
-	public boolean isRegisteredSocialize(User user) {
-		return notificationRegistrationState.isRegisteredSocialize(user);
+	public boolean isRegisteredSocialize(Context context, User user) {
+		return notificationRegistrationState.isRegisteredSocialize(context, user);
 	}
 	
 	@Override
@@ -95,7 +92,7 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 
 	@Override
 	public synchronized void registerC2DM(final Context context) {
-		if(!isRegisteredC2DM() && !notificationRegistrationState.isC2dmPending()) {
+		if(!isRegisteredC2DM(context) && !notificationRegistrationState.isC2dmPending() && config.getBooleanProperty(SocializeConfig.GCM_REGISTRATION_ENABLED, true)) {
 			if(logger != null && logger.isDebugEnabled()) {
 				logger.debug("Registering with GCM");
 			}
@@ -119,7 +116,7 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 		}	
 		else {
 			if(logger != null && logger.isDebugEnabled()) {
-				logger.debug("GCM registration already in progress or complete");
+				logger.debug("GCM registration already in progress, complete or disabled");
 			}
 		}
 	}
@@ -131,30 +128,14 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 		notificationRegistrationState.save(context);
 		
 		if(!StringUtils.isEmpty(registrationId)) {
-			userSystem.authenticate(context, new SocializeAuthListener() {
-				
-				@Override
-				public void onError(SocializeException error) {
-					logError(error);
-				}
-				
-				@Override
-				public void onCancel() {
-					if(logger != null) {
-						logger.error("Authentication was cancelled during notification registration.  This should not happen!");
-					}
-				}
-				
-				@Override
-				public void onAuthSuccess(SocializeSession session) {
-					doRegistrationSocialize(context, session, registrationId);			
-				}
-				
-				@Override
-				public void onAuthFail(SocializeException error) {
-					logError(error);
-				}
-			}, Socialize.getSocialize());
+			try {
+				// This should be synchronous.  We don't want to launch an async task off the main UI thread.
+				SocializeSession session = userSystem.authenticateSynchronous(context, config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY), config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET));
+				doRegistrationSocialize(context, session, registrationId);			
+			}
+			catch (SocializeException e) {
+				logError(e);
+			}	
 		}
 	}
 	
@@ -164,25 +145,23 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 		DeviceRegistration registration = deviceRegistrationFactory.getBean();
 		registration.setRegistrationId(registrationId);
 		
-		deviceRegistrationSystem.registerDevice(session, registration,  new DeviceRegistrationListener() {
-			@Override
-			public void onError(SocializeException error) {
-				if(logger != null) {
-					logger.error("Error registering device with Socialize.  Will retry on next start", error);
-				}
-			}
+		
+		try {
+			deviceRegistrationSystem.registerDeviceSynchronous(session, registration);
 			
-			@Override
-			public void onSuccess() {
-				notificationRegistrationState.setC2DMRegistrationId(registrationId);
-				notificationRegistrationState.setRegisteredSocialize(session.getUser());
-				notificationRegistrationState.save(context);
-				
-				if(logger != null && logger.isInfoEnabled()) {
-					logger.info("Registration with Socialize for GCM successful.");
-				}
+			notificationRegistrationState.setC2DMRegistrationId(registrationId);
+			notificationRegistrationState.setRegisteredSocialize(session.getUser());
+			notificationRegistrationState.save(context);
+			
+			if(logger != null && logger.isInfoEnabled()) {
+				logger.info("Registration with Socialize for GCM successful.");
+			}			
+		}
+		catch (SocializeException e) {
+			if(logger != null) {
+				logger.error("Error registering device with Socialize.  Will retry on next start", e);
 			}
-		});
+		}
 	}
 	
 	protected void logError(Exception e) {

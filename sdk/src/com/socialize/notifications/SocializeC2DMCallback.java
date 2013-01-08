@@ -33,7 +33,6 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.entity.JSONFactory;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.profile.UserSettings;
 import com.socialize.util.AppUtils;
@@ -93,35 +92,15 @@ public class SocializeC2DMCallback implements C2DMCallback {
 	 */
 	@Override
 	public void onMessage(final Context context, final Bundle data) {
-		
 		// DON'T Use Socialize instance here, we are using a different container!
-		userSystem.authenticate(
-				context, 
-				config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY), 
-				config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET), 
-				new SocializeAuthListener() {
-					
-					@Override
-					public void onError(SocializeException error) {
-						handleError("Failed to authenticate user for notification receipt", error);
-					}
-					
-					@Override
-					public void onCancel() {
-						// Ignore
-					}
-					
-					@Override
-					public void onAuthSuccess(SocializeSession session) {
-						handleNotification(context, data, session);
-					}
-					
-					@Override
-					public void onAuthFail(SocializeException error) {
-						handleError("Failed to authenticate user for notification receipt", error);
-					}
-				}, 
-				null);
+		try {
+			// This should be synchronous.  We don't want to launch an async task off the main UI thread.
+			SocializeSession session = userSystem.authenticateSynchronous(context, config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY), config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET));
+			handleNotification(context, data, session);
+		}
+		catch (SocializeException e) {
+			handleError("Failed to authenticate user for notification receipt", e);
+		}
 	}
 	
 	protected void handleNotification(final Context context, final Bundle data, final SocializeSession session) {

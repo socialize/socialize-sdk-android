@@ -149,9 +149,8 @@ public class UserApiTest extends SocializeUnitTest {
 		profile.setLastName(lastName);
 		profile.setAutoPostFacebook(true);
 		profile.setAutoPostTwitter(true);
-		profile.setNotificationsEnabled(false);
+		profile.setNotificationsEnabled(true);
 		profile.setLocationEnabled(true);
-				
 		
 		User user = AndroidMock.createMock(User.class);
 		UserSettings userSettings = AndroidMock.createMock(UserSettings.class);
@@ -162,8 +161,7 @@ public class UserApiTest extends SocializeUnitTest {
 		AndroidMock.expect(session.getUser()).andReturn(user).times(2);
 		AndroidMock.expect(session.getUserSettings()).andReturn(userSettings).times(2);
 		AndroidMock.expect(user.getId()).andReturn(id);
-		AndroidMock.expect(userSettings.isNotificationsEnabled()).andReturn(true);
-//		AndroidMock.expect(userSettings.isLocationEnabled()).andReturn(false);
+		AndroidMock.expect(userSettings.isNotificationsEnabled()).andReturn(false);
 		
 		notificationRegistrationSystem.registerC2DMAsync(context);
 		
@@ -197,7 +195,7 @@ public class UserApiTest extends SocializeUnitTest {
 		
 		assertNotNull(listenerFound);
 		
-		// Call each listener methods to check the behaviour
+		// Call each listener methods to check the behavior
 		listenerFound.onUpdate(user);
 		listenerFound.onError(exception);
 		

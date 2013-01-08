@@ -30,13 +30,13 @@ import com.socialize.entity.User;
  */
 public interface NotificationRegistrationSystem {
 	 
-	public boolean isRegisteredC2DM();
+	public boolean isRegisteredC2DM(Context context);
 	
 	public boolean isRegistrationPending();
 	
 	public boolean isSocializeRegistrationPending();
 	
-	public boolean isRegisteredSocialize(User user);
+	public boolean isRegisteredSocialize(Context context, User user);
 
 	public void registerC2DMFailed(Context context, String cause);
 	
