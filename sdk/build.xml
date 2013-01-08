@@ -90,6 +90,6 @@
 	<!--
     <import file="${sdk.dir}/tools/ant/build.xml" />
     -->
-	<import file="ant/android_r20_build.xml" />
+	<import file="ant/android_r21_build.xml" />
 
 </project>

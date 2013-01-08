@@ -87,6 +87,6 @@
          in order to avoid having your file be overridden by tools such as "android update project"
     -->
     <!-- version-tag: custom -->
-	<import file="../sdk/ant/android_r20_build.xml" />
+	<import file="../sdk/ant/android_r21_build.xml" />
 
 </project>

@@ -58,6 +58,13 @@
     -->
     <property name="aapt.ignore.assets" value="" />
 
+    <!-- dex force jumbo options, to be used when dex merging fails with
+         UNEXPECTED TOP-LEVEL EXCEPTION: com.android.dx.util.DexException: Cannot handle conversion to jumbo index!
+           at com.android.dx.merge.InstructionTransformer.jumboCheck(InstructionTransformer.java:103)
+           ...
+    -->
+    <property name="dex.force.jumbo" value="false" />
+
     <!-- compilation options -->
     <property name="java.encoding" value="UTF-8" />
     <property name="java.target" value="1.5" />
@@ -76,6 +83,17 @@
 
     <!-- Verbosity -->
     <property name="verbose" value="false" />
+
+    <!-- Output location of the HTML report for the "lint" target.
+         Ideally this would be specified as
+            value="${out.dir}/lint.html"
+         but we can't make a forward reference to the definition for
+         ${out.dir}, and it is not a configurable property (yet).
+     -->
+    <property name="lint.out.html" value="bin/lint.html" />
+
+    <!-- Output location of the XML report for the "lint" target -->
+    <property name="lint.out.xml" value="bin/lint.xml" />
 
     <!-- ******************************************************* -->
     <!-- ********************* Custom Tasks ******************** -->
@@ -125,6 +143,7 @@
     <property name="out.classes.absolute.dir" location="${out.dir}/classes" />
     <property name="out.res.absolute.dir" location="${out.dir}/res" />
     <property name="out.aidl.absolute.dir" location="${out.dir}/aidl" />
+    <property name="out.dexed.absolute.dir" location="${out.dir}/dexedLibs" />
     <property name="out.manifest.abs.file" location="${out.dir}/AndroidManifest.xml" />
 
     <!-- tools location -->
@@ -138,6 +157,7 @@
     <property name="aapt" location="${android.platform.tools.dir}/aapt${exe}" />
     <property name="dx" location="${android.platform.tools.dir}/dx${bat}" />
     <property name="renderscript" location="${android.platform.tools.dir}/llvm-rs-cc${exe}"/>
+    <property name="lint" location="${android.tools.dir}/lint${bat}" />
 
     <!-- Renderscript include Path -->
     <path id="android.renderscript.include.path">
@@ -262,7 +282,9 @@
 
             <dex executable="${dx}"
                     output="${intermediate.dex.file}"
+                    dexedlibs="${out.dexed.absolute.dir}"
                     nolocals="@{nolocals}"
+                    forceJumbo="${dex.force.jumbo}"
                     verbose="${verbose}">
                 <path path="${out.dex.input.absolute.dir}"/>
                 <path refid="out.dex.jar.input.ref" />
@@ -406,42 +428,6 @@
             </then>
         </if>
 
-        <!-- If the "debug" build type changed, clear out the compiled code.
-             This is to make sure the new BuildConfig.DEBUG value is picked up
-             as javac can't deal with this type of change in its dependency computation. -->
-        <if>
-            <condition>
-                <and>
-                    <length string="${build.last.is.packaging.debug}" trim="true" when="greater" length="0" />
-                    <not><equals
-                            arg1="${build.is.packaging.debug}"
-                            arg2="${build.last.is.packaging.debug}" /></not>
-                </and>
-            </condition>
-            <then>
-                <echo level="info">Switching between debug and non debug build: Deleting previous compilation output...</echo>
-                <delete dir="${out.classes.absolute.dir}" verbose="${verbose}" />
-            </then>
-            <else>
-                <!-- Else, we may still need to clean the code, for another reason.
-                     special case for instrumented: if the previous build was
-                     instrumented but not this one, clear out the compiled code -->
-                <if>
-                    <condition>
-                        <and>
-                            <istrue value="${build.last.is.instrumented}" />
-                            <isfalse value="${build.is.instrumented}" />
-                        </and>
-                    </condition>
-                    <then>
-                        <echo level="info">Switching from instrumented to non-instrumented build: Deleting previous compilation output...</echo>
-                        <delete dir="${out.classes.absolute.dir}" verbose="${verbose}" />
-                    </then>
-                </if>
-            </else>
-        </if>
-
-
         <!-- get the project manifest package -->
         <xpath input="${manifest.abs.file}"
                 expression="/manifest/@package" output="project.app.package" />
@@ -506,6 +492,41 @@
         <property name="build.last.is.packaging.debug" value="" />
         <property name="build.last.is.signing.debug" value="" />
 
+        <!-- If the "debug" build type changed, clear out the compiled code.
+             This is to make sure the new BuildConfig.DEBUG value is picked up
+             as javac can't deal with this type of change in its dependency computation. -->
+        <if>
+            <condition>
+                <and>
+                    <length string="${build.last.is.packaging.debug}" trim="true" when="greater" length="0" />
+                    <not><equals
+                            arg1="${build.is.packaging.debug}"
+                            arg2="${build.last.is.packaging.debug}" /></not>
+                </and>
+            </condition>
+            <then>
+                <echo level="info">Switching between debug and non debug build: Deleting previous compilation output...</echo>
+                <delete dir="${out.classes.absolute.dir}" verbose="${verbose}" />
+            </then>
+            <else>
+                <!-- Else, we may still need to clean the code, for another reason.
+                     special case for instrumented: if the previous build was
+                     instrumented but not this one, clear out the compiled code -->
+                <if>
+                    <condition>
+                        <and>
+                            <istrue value="${build.last.is.instrumented}" />
+                            <isfalse value="${build.is.instrumented}" />
+                        </and>
+                    </condition>
+                    <then>
+                        <echo level="info">Switching from instrumented to non-instrumented build: Deleting previous compilation output...</echo>
+                        <delete dir="${out.classes.absolute.dir}" verbose="${verbose}" />
+                    </then>
+                </if>
+            </else>
+        </if>
+
         <echo level="info">Resolving Build Target for ${ant.project.name}...</echo>
         <!-- load project properties, resolve Android target, library dependencies
              and set some properties with the results.
@@ -530,6 +551,7 @@
         <do-only-if-manifest-hasCode>
             <mkdir dir="${gen.absolute.dir}" />
             <mkdir dir="${out.classes.absolute.dir}" />
+            <mkdir dir="${out.dexed.absolute.dir}" />
         </do-only-if-manifest-hasCode>
 
         <echo level="info">----------</echo>
@@ -540,7 +562,7 @@
                 libraryManifestFilePathOut="project.library.manifest.file.path"
                 libraryResFolderPathOut="project.library.res.folder.path"
                 libraryBinAidlFolderPathOut="project.library.bin.aidl.folder.path"
-        		libraryRFilePathOut="project.library.bin.r.file.path"
+                libraryRFilePathOut="project.library.bin.r.file.path"
                 libraryNativeFolderPathOut="project.library.native.folder.path"
                 jarLibraryPathOut="project.all.jars.path"
                 targetApi="${project.target.apilevel}"
@@ -630,16 +652,11 @@
                 <source path="${source.absolute.dir}"/>
             </aidl>
 
-            <!-- renderscript generates resources so it must be called before aapt
+            <!-- renderscript generates resources so it must be called before aapt -->
+            <echo level="info">----------</echo>
             <echo level="info">Handling RenderScript files...</echo>
-        	
-        	<path id="android.renderscript.include.path">
-        	    <pathelement location="${android.platform.tools.dir}/renderscript/include" />
-        	    <pathelement location="${android.platform.tools.dir}/renderscript/clang-include" />
-        	</path>        	
-        	
             <renderscript executable="${renderscript}"
-            		includePathRefId="android.renderscript.include.path"
+                    includePathRefId="android.renderscript.include.path"
                     genFolder="${gen.absolute.dir}"
                     resFolder="${out.res.absolute.dir}/raw"
                     targetApi="${project.minSdkVersion}"
@@ -648,7 +665,6 @@
                     previousBuildType="${build.last.is.packaging.debug}">
                 <source path="${source.absolute.dir}"/>
             </renderscript>
-             -->
 
             <echo level="info">----------</echo>
             <echo level="info">Handling Resources...</echo>
@@ -660,10 +676,10 @@
                     rfolder="${gen.absolute.dir}"
                     nonConstantId="${android.library}"
                     libraryResFolderPathRefid="project.library.res.folder.path"
-                    libraryPackagesRefid="project.library.packages" 
-            		libraryRFileRefid="project.library.bin.r.file.path"
+                    libraryPackagesRefid="project.library.packages"
+                    libraryRFileRefid="project.library.bin.r.file.path"
                     ignoreAssets="${aapt.ignore.assets}"
-            		binFolder="${out.absolute.dir}"
+                    binFolder="${out.absolute.dir}"
                     proguardFile="${out.absolute.dir}/proguard.txt">
                 <res path="${out.res.absolute.dir}" />
                 <res path="${resource.absolute.dir}" />
@@ -753,7 +769,7 @@
                     <jar destfile="${out.library.jar.file}">
                         <fileset dir="${out.classes.absolute.dir}"
                                 includes="**/*.class"
-                                excludes="${project.app.package.path}/R.class ${project.app.package.path}/R$*.class ${project.app.package.path}/Manifest.class ${project.app.package.path}/Manifest$*.class ${project.app.package.path}/BuildConfig.class"/>
+                                excludes="${project.app.package.path}/R.class ${project.app.package.path}/R$*.class ${project.app.package.path}/BuildConfig.class"/>
                         <fileset dir="${source.absolute.dir}" excludes="**/*.java ${android.package.excludes}" />
                     </jar>
                 </then>
@@ -912,6 +928,7 @@
                     resourcefilter="${aapt.resource.filter}"
                     libraryResFolderPathRefid="project.library.res.folder.path"
                     libraryPackagesRefid="project.library.packages"
+                    libraryRFileRefid="project.library.bin.r.file.path"
                     previousBuildType="${build.last.target}"
                     buildType="${build.target}"
                     ignoreAssets="${aapt.ignore.assets}">
@@ -1239,7 +1256,7 @@
 
         <if condition="${emma.enabled}">
             <then>
-                <echo>WARNING: Code Coverage is currently only supported on the emulator and rooted devices.</echo>
+                <echo>Running tests...</echo>
                 <run-tests-helper emma.enabled="true">
                     <extra-instrument-args>
                         <arg value="-e" />
@@ -1247,6 +1264,17 @@
                            <arg value="${emma.dump.file}" />
                     </extra-instrument-args>
                 </run-tests-helper>
+
+                <echo level="info">Settting permission to download the coverage file...</echo>
+                <exec executable="${adb}" failonerror="true">
+                    <arg line="${adb.device.arg}" />
+                    <arg value="shell" />
+                    <arg value="run-as" />
+                    <arg value="${tested.project.app.package}" />
+                    <arg value="chmod" />
+                    <arg value="644" />
+                    <arg value="${emma.dump.file}" />
+                </exec>
                 <echo level="info">Downloading coverage file into project directory...</echo>
                 <exec executable="${adb}" failonerror="true">
                     <arg line="${adb.device.arg}" />
@@ -1254,7 +1282,6 @@
                     <arg value="${emma.dump.file}" />
                     <arg path="${out.absolute.dir}/coverage.ec" />
                 </exec>
-                <echo level="info">Extracting coverage report...</echo>
 
                 <pathconvert property="tested.project.lib.source.path.value" refid="tested.project.lib.source.path">
                     <firstmatchmapper>
@@ -1263,8 +1290,9 @@
                     </firstmatchmapper>
                 </pathconvert>
 
-
+                <echo level="info">Extracting coverage report...</echo>
                 <emma>
+                    <property name="report.html.out.encoding" value="UTF-8" />
                     <report sourcepath="${tested.project.source.absolute.dir}:${tested.project.lib.source.path.value}"
                             verbosity="${verbosity}">
                         <!-- TODO: report.dir or something like should be introduced if necessary -->
@@ -1272,12 +1300,22 @@
                         <infileset file="${tested.project.out.absolute.dir}/coverage.em" />
                         <!-- TODO: reports in other, indicated by user formats -->
                         <html outfile="${out.absolute.dir}/coverage.html" />
+                        <txt outfile="${out.absolute.dir}/coverage.txt" />
+                        <xml outfile="${out.absolute.dir}/coverage.xml" />
                    </report>
                 </emma>
                 <echo level="info">Cleaning up temporary files...</echo>
                 <delete file="${out.absolute.dir}/coverage.ec" />
-                <delete file="${out.absolute.dir}/coverage.em" />
-                <echo level="info">Saving the report file in ${out.absolute.dir}/coverage.html</echo>
+                <delete file="${tested.project.out.absolute.dir}/coverage.em" />
+                <exec executable="${adb}" failonerror="true">
+                    <arg line="${adb.device.arg}" />
+                    <arg value="shell" />
+                    <arg value="run-as" />
+                    <arg value="${tested.project.app.package}" />
+                    <arg value="rm" />
+                    <arg value="${emma.dump.file}" />
+                </exec>
+                <echo level="info">Saving the coverage reports in ${out.absolute.dir}</echo>
             </then>
             <else>
                 <run-tests-helper />
@@ -1285,6 +1323,18 @@
         </if>
     </target>
 
+    <!-- ******************************************************* -->
+    <!-- **********        Run Lint on the project     ********* -->
+    <!-- ******************************************************* -->
+
+    <target name="lint"
+            description="Runs lint on the project to look for potential bugs" >
+        <lint executable="${lint}"
+              html="${lint.out.html}"
+              xml="${lint.out.xml}"
+              src="${source.absolute.dir}:${gen.absolute.dir}"
+              classpath="${out.classes.absolute.dir}" />
+    </target>
 
     <!-- ******************************************************* -->
     <!-- ********** Install/uninstall specific targets ********* -->
