@@ -148,7 +148,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 
 		AndroidMock.expect(provider.authenticate("/authenticate/", "test_key", "test_secret", "test_uuid")).andReturn(mockSession);
 		
-		AndroidMock.expect(mockSession.isRestored()).andReturn(true);
+//		AndroidMock.expect(mockSession.isRestored()).andReturn(true);
 		
 		mockSessionConsumer.setSession(mockSession);
 

@@ -78,7 +78,7 @@ public class NotificationCheckerTest extends SocializeActivityTest {
 		AndroidMock.expect(notificationRegistrationSystem.isRegistrationPending()).andReturn(false).anyTimes();
 		AndroidMock.expect(notificationRegistrationSystem.isRegisteredSocialize(context, user)).andReturn(false).anyTimes();
 		
-		notificationRegistrationState.load(context);
+		notificationRegistrationState.reload(context);
 		
 		// Expect this once
 		notificationRegistrationSystem.registerC2DMAsync(context);
@@ -128,7 +128,7 @@ public class NotificationCheckerTest extends SocializeActivityTest {
 		AndroidMock.expect(notificationRegistrationSystem.isRegisteredSocialize(context, user)).andReturn(false).anyTimes();
 		AndroidMock.expect(notificationRegistrationState.getC2DMRegistrationId()).andReturn(registrationId).anyTimes();
 		
-		notificationRegistrationState.load(context);
+		notificationRegistrationState.reload(context);
 		
 		// Expect this once
 		notificationRegistrationSystem.registerSocialize(context, registrationId);
