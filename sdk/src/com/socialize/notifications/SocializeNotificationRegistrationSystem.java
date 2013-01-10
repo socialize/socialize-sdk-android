@@ -76,7 +76,7 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 	@Override
 	public void registerC2DMFailed(Context context, String cause) {
 		notificationRegistrationState.setC2dmPendingRequestTime(0);
-		notificationRegistrationState.save(context);
+//		notificationRegistrationState.save(context);
 	}
 
 	@Override
@@ -98,7 +98,7 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 			}
 			
 			notificationRegistrationState.setC2dmPendingRequestTime(System.currentTimeMillis());
-			notificationRegistrationState.save(context);
+//			notificationRegistrationState.save(context);
 			
 			@SuppressWarnings("deprecation")
 			String senderId = config.getProperty(SocializeConfig.SOCIALIZE_GCM_SENDER_ID, config.getProperty(SocializeConfig.SOCIALIZE_C2DM_SENDER_ID));

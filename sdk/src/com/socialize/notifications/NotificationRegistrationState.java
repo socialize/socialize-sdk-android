@@ -49,7 +49,6 @@ public class NotificationRegistrationState {
 	
 	private SocializeLogger logger;
 	private SocializeConfig config;
-	
 	private boolean loaded = false;
 	
 	public boolean isRegisteredSocialize(Context context, User user) {
@@ -71,7 +70,7 @@ public class NotificationRegistrationState {
 		load(context);
 		
 		long timeout = config.getLongProperty(SocializeConfig.GCM_REGISTRATION_INTERVAL, DEFAULT_GCM_TIMEOUT);
-		long timeSinceLast = (System.currentTimeMillis() - lastSocializeRegistrationTime);
+		long timeSinceLast = (System.currentTimeMillis() - lastC2DMRegistrationTime);
 		
 		if(StringUtils.isEmpty(c2DMRegistrationId) || (timeSinceLast > timeout && timeout >= 0)) {
 			return false;
@@ -112,6 +111,11 @@ public class NotificationRegistrationState {
 		this.pendingSocializeRequestTime = pendingSocializeRequestTime;
 	}
 
+	public void reload(Context context) {
+		loaded = false;
+		load(context);
+	}
+	
 	public void load(Context context) {
 		if(!loaded) {
 			SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);

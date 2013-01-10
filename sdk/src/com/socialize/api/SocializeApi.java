@@ -95,18 +95,18 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	
 	public SocializeSession authenticate(Context context, String endpoint, String key, String secret, String uuid) throws SocializeException {
 		SocializeSession session = provider.authenticate(endpoint, key, secret, uuid);
-		if(!session.isRestored()) {
+//		if(!session.isRestored()) {
 			checkNotifications(context, session);
-		}
+//		}
 		
 		return session;
 	}
 	
 	public SocializeSession authenticate(Context context, String endpoint, String key, String secret, AuthProviderData data, String udid) throws SocializeException {
 		SocializeSession session = provider.authenticate(endpoint, key, secret, data, udid);
-		if(!session.isRestored()) {
+//		if(!session.isRestored()) {
 			checkNotifications(context, session);
-		}
+//		}
 		return session;
 	}
 	
