@@ -94,6 +94,11 @@ public class ActionBarShareDialogListener extends Activity {
 					public void onLoad(ActionBarView actionBar) {
 						// Called when the action bar is loaded
 					}
+					
+					@Override
+					public void onLoadFail(Exception error) {
+						// Called when the action bar load failed
+					}					
 
 					@Override
 					public void onGetLike(ActionBarView actionBar, Like like) {

@@ -52,6 +52,8 @@ public class Socialize {
 	public static LogLevel DEFAULT_LOG_LEVEL = LogLevel.WARN;
 	
 	static final SocializeServiceImpl instance = new SocializeServiceImpl();
+	
+	static SocializeLifecycleListener socializeLifecycleListener;
 
 	private Socialize() {
 		super();
@@ -110,6 +112,10 @@ public class Socialize {
 	 */
 	public static void onPause(Activity context) {
 		instance.onPause(context);
+		
+		if(socializeLifecycleListener != null) {
+			socializeLifecycleListener.onPause(context);
+		}
 	}
 	
 	/**
@@ -118,6 +124,10 @@ public class Socialize {
 	 */
 	public static void onResume(Activity context) {
 		instance.onResume(context);
+		
+		if(socializeLifecycleListener != null) {
+			socializeLifecycleListener.onResume(context);
+		}
 	}
 	
 	/**
@@ -126,6 +136,10 @@ public class Socialize {
 	 */
 	public static void onCreate(Activity context, Bundle savedInstanceState) {
 		instance.onCreate(context, savedInstanceState);
+		
+		if(socializeLifecycleListener != null) {
+			socializeLifecycleListener.onCreate(context, savedInstanceState);
+		}
 	}
 
 	/**
@@ -134,5 +148,13 @@ public class Socialize {
 	 */
 	public static void onDestroy(Activity context) {
 		instance.onDestroy(context);
-	}	
+		
+		if(socializeLifecycleListener != null) {
+			socializeLifecycleListener.onDestroy(context);
+		}		
+	}
+	
+	public static void setSocializeLifecycleListener(SocializeLifecycleListener socializeLifecycleListener) {
+		Socialize.socializeLifecycleListener = socializeLifecycleListener;
+	}
 }

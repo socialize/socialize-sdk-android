@@ -414,6 +414,14 @@ public class ActionBarLayoutView extends BaseView {
 		}
 	}
 	
+	@Override
+	public void onViewError(Exception e) {
+		super.onViewError(e);
+		if(onActionBarEventListener != null) {
+			onActionBarEventListener.onLoadFail(e);
+		}
+	}
+
 	protected void updateEntity(final Entity entity, boolean reload, final OnActionBarReloadListener listener) {
 
 		CacheableEntity localEntity = getLocalEntity();
@@ -590,6 +598,10 @@ public class ActionBarLayoutView extends BaseView {
 						return;
 					}
 				}
+
+				if(onActionBarEventListener != null) {
+					onActionBarEventListener.onLoadFail(error);
+				}
 				
 				logError("Error retrieving entity data", error);
 			}
@@ -612,6 +624,10 @@ public class ActionBarLayoutView extends BaseView {
 			public void onError(SocializeException error) {
 				if(logger != null && logger.isDebugEnabled()) {
 					logger.debug("Error retrieving entity data.  This may be ok if the entity is new", error);
+				}
+				
+				if(onActionBarEventListener != null) {
+					onActionBarEventListener.onLoadFail(error);
 				}
 			}
 		});

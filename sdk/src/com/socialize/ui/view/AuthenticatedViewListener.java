@@ -45,14 +45,31 @@ public class AuthenticatedViewListener implements SocializeAuthListener {
 		this.context = context;
 		this.container = container;
 	}
+	
+	@Override
+	public void onAuthFail(SocializeException error) {
+		onError(error);
+	}
 
 	@Override
 	public void onError(SocializeException error) {
 		// Ensure we notify any pending dialogs
 		view.onAfterAuthenticate(container);
+		View v = view.getView();
 		view.removeAllViews();
+		if(v != null) {
+			view.addView(v);
+		}
+		else {
+			SocializeLogger.e(view.getClass().getSimpleName() + " failed to produce a view");
+		}
+		
 		view.showError(context, error);
 		SocializeLogger.e(error.getMessage(), error);
+		
+		if(view.getOnErrorListener() != null) {
+			view.getOnErrorListener().onError(error);
+		}
 	}
 	
 	@Override
@@ -78,11 +95,5 @@ public class AuthenticatedViewListener implements SocializeAuthListener {
 			SocializeLogger.e("", e);
 		}
 	}
-	
-	@Override
-	public void onAuthFail(SocializeException error) {
-		view.onAfterAuthenticate(container);
-		view.showError(context, error);
-		SocializeLogger.e(error.getMessage(), error);
-	}
+
 }

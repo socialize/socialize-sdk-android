@@ -110,6 +110,9 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 			}
 			
 			@Override
+			public void onLoadFail(Exception error) {}
+
+			@Override
 			public void onPostUnlike(ActionBarView actionBar) {}
 			
 			@Override

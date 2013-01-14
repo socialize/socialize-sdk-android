@@ -45,7 +45,7 @@ public class ActionBarActivity extends ListActivity {
 			"Autumn Action Bar",  
 			"Action Bar Top", 
 			"Action Bar on WebView",
-			"Action Bar With Button"};
+			"Action Bar With Network Detection"};
 	
 	final Class<?>[] activities = new Class<?>[] { 
 			DefaultActionBarActivity.class, 
@@ -56,7 +56,7 @@ public class ActionBarActivity extends ListActivity {
 			AutumnActionBarActivity.class, 
 			TopActionBarActivity.class, 
 			WebViewActionBarActivity.class,
-			ActionBarWithButtonActivity.class};
+			ActionBarWithMonitorActivity.class};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

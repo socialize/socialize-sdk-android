@@ -13,6 +13,9 @@
 	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" /> 
 	
+	<!-- Required for ActionBarWithMonitor -->
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> 
+	
 	<!-- Permissions required for Push Notifications -->
 	<permission android:name="com.socialize.demo.permission.C2D_MESSAGE" android:protectionLevel="signature" />
 	 
@@ -117,7 +120,7 @@
         <activity android:name=".implementations.actionbar.PhotoActionBarActivity"/>
         <activity android:name=".implementations.actionbar.ActionBarWithButtonActivity"/>
         <activity android:name=".implementations.actionbar.ActionBarAfterButtonActivity"/>
-        
+        <activity android:name=".implementations.actionbar.ActionBarWithMonitorActivity"/>
         
         <!-- User Activity -->
         <activity android:name=".implementations.action.ActionActivity"/>

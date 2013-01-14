@@ -19,46 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.actionbar;
+package com.socialize;
 
-import com.socialize.api.action.share.SocialNetworkDialogListener;
-import com.socialize.entity.Entity;
-import com.socialize.entity.Like;
-import com.socialize.entity.Share;
+import android.app.Activity;
+import android.os.Bundle;
 
 
 /**
+ * Allows clients to bind to socialize lifecycle events.
  * @author Jason Polites
+ *
  */
-public abstract class OnActionBarShareEventListener extends SocialNetworkDialogListener implements OnActionBarEventListener {
-
-	@Override
-	public void onGetLike(ActionBarView actionBar, Like like) {}
-
-	@Override
-	public void onPostLike(ActionBarView actionBar, Like like) {}
-
-	@Override
-	public void onPostUnlike(ActionBarView actionBar) {}
-
-	@Override
-	public void onPostShare(ActionBarView actionBar, Share share) {}
-
-	@Override
-	public void onGetEntity(ActionBarView actionBar, Entity entity) {}
-
-	@Override
-	public boolean onClick(ActionBarView actionBar, ActionBarEvent evt) {
-		return false;
-	}
-
-	@Override
-	public void onUpdate(ActionBarView actionBar) {}
-
-	@Override
-	public void onLoad(ActionBarView actionBar) {}
-
-	@Override
-	public void onLoadFail(Exception error) {}
-
+public interface SocializeLifecycleListener {
+	public void onCreate(Activity activity, Bundle savedInstanceState);
+	public void onDestroy(Activity activity);
+	public void onPause(Activity activity);
+	public void onResume(Activity activity);
 }

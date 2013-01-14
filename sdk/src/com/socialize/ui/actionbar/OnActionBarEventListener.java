@@ -54,4 +54,6 @@ public interface OnActionBarEventListener {
 	public void onUpdate(ActionBarView actionBar);
 	
 	public void onLoad(ActionBarView actionBar);
+	
+	public void onLoadFail(Exception error);
 }

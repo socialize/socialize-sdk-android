@@ -8,6 +8,7 @@ import com.socialize.android.ioc.IOCContainer;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.listener.SocializeListener;
 import com.socialize.ui.SocializeBaseView;
 
 public abstract class AuthenticatedView extends SocializeBaseView {
@@ -15,6 +16,7 @@ public abstract class AuthenticatedView extends SocializeBaseView {
 	private String consumerKey;
 	private String consumerSecret;
 	private String fbAppId;
+	private SocializeListener onErrorListener;
 
 	public AuthenticatedView(Context context) {
 		super(context);
@@ -100,6 +102,14 @@ public abstract class AuthenticatedView extends SocializeBaseView {
 
 	public String getFbAppId() {
 		return fbAppId;
+	}
+	
+	public void setOnErrorListener(SocializeListener onErrorListener) {
+		this.onErrorListener = onErrorListener;
+	}
+	
+	public SocializeListener getOnErrorListener() {
+		return onErrorListener;
 	}
 
 	// Subclasses override
