@@ -115,6 +115,9 @@
         <activity android:name=".implementations.actionbar.TopActionBarActivity"/>
         <activity android:name=".implementations.actionbar.WebViewActionBarActivity"/>
         <activity android:name=".implementations.actionbar.PhotoActionBarActivity"/>
+        <activity android:name=".implementations.actionbar.ActionBarWithButtonActivity"/>
+        <activity android:name=".implementations.actionbar.ActionBarAfterButtonActivity"/>
+        
         
         <!-- User Activity -->
         <activity android:name=".implementations.action.ActionActivity"/>

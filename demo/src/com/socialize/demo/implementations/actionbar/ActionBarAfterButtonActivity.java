@@ -21,59 +21,47 @@
  */
 package com.socialize.demo.implementations.actionbar;
 
-import android.app.ListActivity;
-import android.content.Intent;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import com.socialize.ActionBarUtils;
+import com.socialize.Socialize;
 import com.socialize.demo.R;
+import com.socialize.entity.Entity;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class ActionBarActivity extends ListActivity {
-	
-	final String[] values = new String[] { 
-			"Default Action Bar (Profiled)", 
-			"Custom Action Bar", 
-			"Multiple Action Bar", 
-			"Photo Action Bar", 
-			"Red Action Bar",  
-			"Autumn Action Bar",  
-			"Action Bar Top", 
-			"Action Bar on WebView",
-			"Action Bar With Button"};
-	
-	final Class<?>[] activities = new Class<?>[] { 
-			DefaultActionBarActivity.class, 
-			CustomActionBarActivity.class, 
-			MultiActionBarActivity.class, 
-			PhotoActionBarActivity.class, 
-			RedActionBarActivity.class, 
-			AutumnActionBarActivity.class, 
-			TopActionBarActivity.class, 
-			WebViewActionBarActivity.class,
-			ActionBarWithButtonActivity.class};
-	
+public class ActionBarAfterButtonActivity extends Activity {
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.demo_list);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
-		setListAdapter(adapter);
+		Socialize.onCreate(this, savedInstanceState); 
+		String entityKey = "foobar2"; 
+		Entity entity = Entity.newInstance(entityKey, "Foobar2"); 
+		View actionBar = ActionBarUtils.showActionBar(this, R.layout.actionbar, entity);
+		setContentView(actionBar);
 	}
-	
 
 	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		Class<?> activityClass = activities[position];
-		if(activityClass != null) {
-			Intent intent = new Intent(this, activityClass);
-			startActivity(intent);
-		}
-	}	
-	
+	protected void onPause() {
+		super.onPause();
+		Socialize.onPause(this);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Socialize.onResume(this);
+	}
+
+	@Override
+	protected void onDestroy() {
+		Socialize.onDestroy(this);
+		super.onDestroy();
+	}
+
 }
