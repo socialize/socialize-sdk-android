@@ -137,7 +137,9 @@ public class SocializeUserUtils extends SocializeActionUtilsBase implements User
 	}
 	
 	protected User getCurrentUser(Context context, boolean failOnError) throws SocializeException  {
-		SocializeSession session = getSocialize().getSession();
+		
+		SocializeService socialize = getSocialize();
+		SocializeSession session = socialize.getSession();
 		
 		if(session != null) {
 			User user = session.getUser();
@@ -151,10 +153,10 @@ public class SocializeUserUtils extends SocializeActionUtilsBase implements User
 			throw new SocializeException("No user returned from getCurrentUser after second attempt");
 		}
 		else {
-			if(!Socialize.getSocialize().isInitialized(context)) {
-				Socialize.getSocialize().init(context);
+			if(!socialize.isInitialized(context)) {
+				socialize.init(context);
 			}
-			Socialize.getSocialize().authenticateSynchronous(context);
+			socialize.authenticateSynchronous(context);
 			return getCurrentUser(context, true);
 		}
 	}

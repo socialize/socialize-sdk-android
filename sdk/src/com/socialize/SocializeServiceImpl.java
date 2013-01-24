@@ -626,7 +626,7 @@ public class SocializeServiceImpl implements SocializeService {
 			}.start();
 			
 			try {
-				if(!latch.await(10, TimeUnit.SECONDS)) {
+				if(!latch.await(20, TimeUnit.SECONDS)) {
 					throw new SocializeException("Timeout while authenticating");
 				}
 			}

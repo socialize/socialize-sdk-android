@@ -23,7 +23,6 @@ package com.socialize.networks.facebook;
 
 import android.content.Context;
 import android.widget.ImageView;
-
 import com.socialize.ui.view.ClickableSectionCell;
 
 /**

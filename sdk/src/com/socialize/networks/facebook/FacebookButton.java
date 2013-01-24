@@ -22,7 +22,6 @@
 package com.socialize.networks.facebook;
 
 import android.content.Context;
-
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.ui.view.SocializeButton;
 
