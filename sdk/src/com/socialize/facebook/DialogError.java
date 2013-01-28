@@ -21,6 +21,7 @@ package com.socialize.facebook;
  *
  * @author ssoneff@facebook.com
  */
+@Deprecated
 public class DialogError extends Throwable {
 
     private static final long serialVersionUID = 1L;

@@ -38,6 +38,7 @@ import com.socialize.listener.SocializeListener;
 /**
  * @author Jason Polites
  */
+@Deprecated
 public abstract class FacebookPermissionCallback implements SocializeListener, RequestListener {
 	
 	public abstract void onSuccess(String[] permissions);

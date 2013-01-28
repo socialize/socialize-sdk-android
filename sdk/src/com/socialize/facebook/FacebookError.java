@@ -22,6 +22,7 @@ package com.socialize.facebook;
  *
  * @author ssoneff@facebook.com
  */
+@Deprecated
 public class FacebookError extends RuntimeException {
 
     private static final long serialVersionUID = 1L;

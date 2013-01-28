@@ -36,6 +36,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import com.socialize.facebook.Facebook.DialogListener;
 
+@Deprecated
 public class FbDialog extends Dialog {
 
     static final int FB_BLUE = 0xFF6D84B4;

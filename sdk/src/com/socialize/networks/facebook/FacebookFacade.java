@@ -23,20 +23,44 @@ package com.socialize.networks.facebook;
 
 import java.util.Map;
 import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
+import com.socialize.api.action.share.SocialNetworkShareListener;
+import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.Share;
+import com.socialize.listener.AuthProviderListener;
+import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
+import com.socialize.networks.SocializeDeAuthListener;
 
 /**
  * @author Jason Polites
- *
  */
-@Deprecated
-public interface FacebookWallPoster {
+public interface FacebookFacade {
+	
+	public static final String[] DEFAULT_PERMISSIONS = {"publish_stream", "publish_actions", "photo_upload"};
+	
+	public void authenticate(Context context, FacebookAuthProviderInfo info, final AuthProviderListener listener);
+
+	public void link (Activity context, SocializeAuthListener listener);
+
+	public void link (Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener);
+	
+	public void link(Activity context, SocializeAuthListener listener, String...permissions);
+	
+	public void unlink (Context context, SocializeDeAuthListener listener);
+	
+	public boolean isLinked(Context context);
+	
+	public String getAccessToken(Context context);
+	
+	public void extendAccessToken(Activity context, SocializeAuthListener listener);
+	
+	public void postEntity(Activity context, Entity entity, String text, SocialNetworkShareListener listener);
 
 	public void postLike(Activity parent, Entity entity, PropagationInfo propInfo, SocialNetworkListener listener);
 
@@ -58,5 +82,7 @@ public interface FacebookWallPoster {
 	
 	public void delete(Activity parent, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener);
 	
-	public void getCurrentPermissions(Activity parent, String token, FacebookPermissionCallback callback);
+	public void getCurrentPermissions(Activity parent, String token, OnPermissionResult callback);	
+	
+	public void logout(Context context); 
 }

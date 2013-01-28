@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import com.socialize.facebook.Facebook;
 
+@Deprecated
 public class FacebookSessionStore {
 
 	public static final String TOKEN = "access_token";

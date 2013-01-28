@@ -35,6 +35,7 @@ import com.socialize.util.DialogFactory;
  * @author Jason Polites
  *
  */
+@Deprecated
 public class FacebookService {
 	
 	private Facebook facebook; 

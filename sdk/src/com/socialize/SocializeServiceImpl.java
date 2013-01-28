@@ -50,7 +50,6 @@ import com.socialize.auth.AuthProviders;
 import com.socialize.auth.SocializeAuthProviderInfo;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
-import com.socialize.auth.facebook.FacebookService;
 import com.socialize.concurrent.AsyncTaskManager;
 import com.socialize.concurrent.ManagedAsyncTask;
 import com.socialize.config.SocializeConfig;
@@ -67,6 +66,7 @@ import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.SocializeListener;
 import com.socialize.location.SocializeLocationProvider;
 import com.socialize.log.SocializeLogger;
+import com.socialize.networks.facebook.FacebookFacade;
 import com.socialize.networks.facebook.FacebookUtils;
 import com.socialize.notifications.C2DMCallback;
 import com.socialize.notifications.NotificationChecker;
@@ -649,11 +649,11 @@ public class SocializeServiceImpl implements SocializeService {
 		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 		
 		if(permissions.length > 0) {
-			if(!Arrays.equals(permissions, FacebookService.DEFAULT_PERMISSIONS)) {
+			if(!Arrays.equals(permissions, FacebookFacade.DEFAULT_PERMISSIONS)) {
 				// Ensure the requested permissions include the default permissions
 				Set<String> all = new HashSet<String>();
 				all.addAll(Arrays.asList(permissions));
-				all.addAll(Arrays.asList(FacebookService.DEFAULT_PERMISSIONS));
+				all.addAll(Arrays.asList(FacebookFacade.DEFAULT_PERMISSIONS));
 				permissions = all.toArray(new String[all.size()]);
 			}
 		}

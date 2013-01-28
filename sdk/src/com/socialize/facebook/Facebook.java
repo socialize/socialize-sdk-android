@@ -51,6 +51,7 @@ import android.webkit.CookieSyncManager;
  *          Yariv Sadan (yariv@facebook.com),
  *          Luke Shepard (lshepard@facebook.com)
  */
+@Deprecated
 public class Facebook {
 
     // Strings used in the authorization flow

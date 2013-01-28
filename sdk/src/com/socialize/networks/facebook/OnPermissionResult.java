@@ -19,30 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.auth;
+package com.socialize.networks.facebook;
 
-import android.content.Context;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.AuthProviderListener;
+import com.socialize.listener.SocializeListener;
 
 /**
- * An empty provider to replace a real one when we don't want the dependency.
  * @author Jason Polites
- *
  */
-public class EmptyAuthProvider implements AuthProvider<AuthProviderInfo> {
-
-
-	@Override
-	public void authenticate(Context context, AuthProviderInfo info, AuthProviderListener listener) {
-		listener.onAuthFail(new SocializeException("Empty auth provider used!"));
-	}
-
-	@Override
-	public void clearCache(Context context, AuthProviderInfo info) {}
-
-	@Override
-	public boolean validate(AuthProviderInfo info) {
-		return true;
-	}
+public abstract class OnPermissionResult implements SocializeListener {
+	public abstract void onSuccess(String[] permissions);
 }

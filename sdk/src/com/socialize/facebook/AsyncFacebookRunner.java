@@ -44,6 +44,7 @@ import android.os.Bundle;
  *          Yariv Sadan (yariv@fb.com),
  *          Luke Shepard (lshepard@fb.com)
  */
+@Deprecated
 public class AsyncFacebookRunner {
 
     Facebook fb;

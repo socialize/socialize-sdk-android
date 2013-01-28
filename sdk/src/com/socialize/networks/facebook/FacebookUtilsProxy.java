@@ -39,9 +39,12 @@ import com.socialize.networks.SocializeDeAuthListener;
 /**
  * @author Jason Polites
  */
+@SuppressWarnings("deprecation")
 public interface FacebookUtilsProxy {
 	public void link (Activity context, SocializeAuthListener listener);
+	
 	public void link (Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener);
+	
 	public void link(Activity context, SocializeAuthListener listener, String...permissions);
 	
 	public void unlink (Context context, SocializeDeAuthListener listener);
@@ -68,13 +71,16 @@ public interface FacebookUtilsProxy {
 	
 	public void delete(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener);
 	
+	@Deprecated
 	public void getCurrentPermissions(Activity context, String token, FacebookPermissionCallback callback);
+	
+	public void getCurrentPermissions(Activity context, String token, OnPermissionResult callback);
 
 	public byte[] getImageForPost(Activity context, Uri imagePath) throws IOException;
 	
 	public byte[] getImageForPost(Activity context, Bitmap image, CompressFormat format) throws IOException;
 	
+	@Deprecated
 	@Synchronous
 	public Facebook getFacebook(Context context);
-	
 }

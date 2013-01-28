@@ -358,7 +358,7 @@ public class FacebookUtils {
 	 * @param token The token for which we are going to retrieve permissions.
 	 * @param callback A callback to handle the response.
 	 */
-	public static void getCurrentPermissions(Activity context, String token, FacebookPermissionCallback callback) {
+	public static void getCurrentPermissions(Activity context, String token, OnPermissionResult callback) {
 		proxy.getCurrentPermissions(context, token, callback);
-	}
+	}	
 }

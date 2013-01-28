@@ -247,6 +247,7 @@ public class DefaultAppUtils implements AppUtils {
 	@Override
 	public void checkAndroidManifest(Context context) {
 		// Check the launch activity config
+		// TODO: Check for FacebookLogin (v3)
 		checkActivitiesExist(context, CommentActivity.class, ActionDetailActivity.class, ProfileActivity.class, FacebookActivity.class, SocializeLaunchActivity.class);
 		
 		ActivityInfo info = getActivityInfo(context, SocializeLaunchActivity.class);

@@ -22,18 +22,12 @@
 package com.socialize.auth.facebook;
 
 import android.content.Context;
-import android.content.Intent;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderInfoBuilder;
-import com.socialize.auth.AuthProviderResponse;
 import com.socialize.auth.AuthProviderType;
-import com.socialize.error.SocializeException;
-import com.socialize.facebook.Facebook;
 import com.socialize.listener.AuthProviderListener;
-import com.socialize.listener.ListenerHolder;
-import com.socialize.log.SocializeLogger;
-import com.socialize.networks.facebook.FacebookUtilsProxy;
+import com.socialize.networks.facebook.FacebookFacade;
 
 /**
  * @author Jason Polites
@@ -41,26 +35,13 @@ import com.socialize.networks.facebook.FacebookUtilsProxy;
  */
 public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderInfo> {
 	
-	private Context context;
-	private ListenerHolder holder; // This is a singleton
-	private SocializeLogger logger;
-	private FacebookSessionStore facebookSessionStore;
-	private FacebookUtilsProxy facebookUtils;
+	private FacebookFacade facebookFacade;
 	private AuthProviderInfoBuilder authProviderInfoBuilder;
-	
-	public FacebookAuthProvider() {
-		super();
-	}
-
-	public void init(Context context, ListenerHolder holder) {
-		this.context = context;
-		this.holder = holder;
-	}
 	
 	@Override
 	public boolean validate(FacebookAuthProviderInfo info) {
 		if(authProviderInfoBuilder != null) {
-			AuthProviderInfo expected = authProviderInfoBuilder.getFactory(AuthProviderType.FACEBOOK).getInstance(FacebookService.DEFAULT_PERMISSIONS);
+			AuthProviderInfo expected = authProviderInfoBuilder.getFactory(AuthProviderType.FACEBOOK).getInstance(FacebookFacade.DEFAULT_PERMISSIONS);
 			return info.matches(expected);
 		}
 		// Default to true
@@ -68,89 +49,17 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 	}
 
 	@Override
-	public void authenticate(FacebookAuthProviderInfo info, final AuthProviderListener listener) {
-
-		final String listenerKey = "auth";
-		
-		holder.push(listenerKey, new AuthProviderListener() {
-			
-			@Override
-			public void onError(SocializeException error) {
-				holder.remove(listenerKey);
-				listener.onError(error);
-			}
-			
-			@Override
-			public void onAuthSuccess(AuthProviderResponse response) {
-				holder.remove(listenerKey);
-				listener.onAuthSuccess(response);
-			}
-			
-			@Override
-			public void onAuthFail(SocializeException error) {
-				holder.remove(listenerKey);
-				listener.onAuthFail(error);
-			}
-
-			@Override
-			public void onCancel() {
-				holder.remove(listenerKey);
-				listener.onCancel();
-			}
-		});
-		
-		Intent i = new Intent(context, FacebookActivity.class);
-		i.putExtra("appId", info.getAppId());
-		
-		if(info.getPermissions() != null) {
-			i.putExtra("permissions", info.getPermissions());
-		}
-		
-		context.startActivity(i);		
+	public void authenticate(Context context, FacebookAuthProviderInfo info, final AuthProviderListener listener) {
+		facebookFacade.authenticate(context, info, listener);	
 	}
 
 	@Override
 	public void clearCache(Context context, FacebookAuthProviderInfo info) {
-		Facebook mFacebook = getFacebook(context);
-		
-		try {
-			if(mFacebook != null) {
-				mFacebook.logout(context);
-			}
-		}
-		catch (Exception e) {
-			if(logger != null) {
-				logger.error("Failed to log out of Facebook", e);
-			}
-			else {
-				SocializeLogger.e("Failed to log out of Facebook", e);
-			}
-		}
-		finally {
-			if(facebookSessionStore != null) {
-				facebookSessionStore.clear(context);
-			}
-		}
-	}
-	
-	protected Facebook getFacebook(Context context) {
-		return facebookUtils.getFacebook(context);
-	}
-	
-	public void setFacebookUtils(FacebookUtilsProxy facebookUtils) {
-		this.facebookUtils = facebookUtils;
+		facebookFacade.logout(context);
 	}
 
-	public SocializeLogger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(SocializeLogger logger) {
-		this.logger = logger;
-	}
-
-	public void setFacebookSessionStore(FacebookSessionStore facebookSessionStore) {
-		this.facebookSessionStore = facebookSessionStore;
+	public void setFacebookFacade(FacebookFacade facebookFacade) {
+		this.facebookFacade = facebookFacade;
 	}
 
 	public void setAuthProviderInfoBuilder(AuthProviderInfoBuilder authProviderInfoBuilder) {

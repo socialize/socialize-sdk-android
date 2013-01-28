@@ -34,7 +34,7 @@ import com.socialize.networks.SocialNetworkListener;
  */
 public class FacebookSharer extends AbstractSocialNetworkSharer {
 	
-	private FacebookWallPoster facebookWallPoster;
+	private FacebookFacade facebookFacade;
 	
 	@Override
 	protected SocialNetwork getNetwork() {
@@ -45,22 +45,20 @@ public class FacebookSharer extends AbstractSocialNetworkSharer {
 	protected void doShare(Activity context, Entity entity, PropagationInfo urlSet, String comment, SocialNetworkListener listener, ActionType type) {
 		switch (type) {
 			case COMMENT:
-				facebookWallPoster.postComment(context, entity, comment, urlSet, listener);
+				facebookFacade.postComment(context, entity, comment, urlSet, listener);
 				break;
 				
 			case SHARE:		
-//				String action = config.getProperty(SocializeConfig.FACEBOOK_OG_SHARE_ACTION, null);
-//				facebookWallPoster.postOG(context, entity, comment, action, urlSet, listener);
-				facebookWallPoster.post(context, entity, comment, urlSet, listener);
+				facebookFacade.post(context, entity, comment, urlSet, listener);
 				break;
 				
 			case LIKE:
-				facebookWallPoster.postLike(context, entity, urlSet, listener);
+				facebookFacade.postLike(context, entity, urlSet, listener);
 				break;			
 		}		
 	}
-
-	public void setFacebookWallPoster(FacebookWallPoster facebookWallPoster) {
-		this.facebookWallPoster = facebookWallPoster;
+	
+	public void setFacebookFacade(FacebookFacade facebookFacade) {
+		this.facebookFacade = facebookFacade;
 	}
 }

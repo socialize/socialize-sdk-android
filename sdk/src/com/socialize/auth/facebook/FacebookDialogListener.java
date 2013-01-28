@@ -38,6 +38,7 @@ import com.socialize.listener.AuthProviderListener;
  * @author Jason Polites
  *
  */
+@Deprecated
 public abstract class FacebookDialogListener implements DialogListener {
 
 	private FacebookSessionStore facebookSessionStore;

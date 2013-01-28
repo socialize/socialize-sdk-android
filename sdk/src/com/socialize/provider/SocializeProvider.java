@@ -52,8 +52,6 @@ public interface SocializeProvider<T> {
 	
 	public boolean validateSession(SocializeSession loaded, AuthProviderData data);
 	
-//	public void updateSession(SocializeSession loaded, AuthProviderData data);
-	
 	public void clearSession();
 	
 	public void clearSession(AuthProviderType type);

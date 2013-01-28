@@ -28,7 +28,9 @@ import com.socialize.ui.SocializeActivity;
 
 /**
  * @author Jason Polites
+ * @deprecated
  */
+@Deprecated
 public class FacebookActivity extends SocializeActivity {
 	
 	private FacebookActivityService service;

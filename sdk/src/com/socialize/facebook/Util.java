@@ -45,6 +45,7 @@ import android.webkit.CookieSyncManager;
  * @author ssoneff@facebook.com
  *
  */
+@Deprecated
 public final class Util {
 
     /**

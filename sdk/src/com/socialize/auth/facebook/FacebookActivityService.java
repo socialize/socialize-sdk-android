@@ -10,6 +10,7 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.networks.facebook.FacebookUtilsProxy;
 import com.socialize.util.DialogFactory;
 
+@Deprecated
 public class FacebookActivityService {
 
 	private Facebook facebook;
