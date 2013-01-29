@@ -19,20 +19,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.android.ioc;
+package com.socialize.networks.facebook;
+
+import com.socialize.android.ioc.Container;
+import com.socialize.android.ioc.IBeanMaker;
+
 
 /**
- * A bean factory allows beans to create new non-singleton beans without needing to know about the container.
+ * Determines which version of the facebook SDK the user is using and returns the appropriate facade.
  * @author Jason Polites
- *
  */
-public interface IBeanFactory<T> {
+public class FacebookFacadeFactory implements IBeanMaker {
 	
-	public void getBeanAsync(BeanCreationListener<T> listener);
-	
-	public void getBeanAsync(BeanCreationListener<T> listener, Object...args);
+	private String v2BeanName;
+	private String v3BeanName;
 
-	public T getBean();
+	/* (non-Javadoc)
+	 * @see com.socialize.android.ioc.IBeanMaker#getBeanName(java.lang.Object, com.socialize.android.ioc.Container)
+	 */
+	@Override
+	public String getBeanName(Object parent, Container container) {
+		try {
+			Class.forName("com.facebook.Session");
+			
+			// TODO: Change this!
+			// Just return v2 always for now
+			return v2BeanName;
+//			return v3BeanName;
+		}
+		catch (ClassNotFoundException e) {
+			return v2BeanName;
+		}
+	}
 	
-	public T getBean(Object...args);
+	public void setV2BeanName(String v2BeanName) {
+		this.v2BeanName = v2BeanName;
+	}
+	
+	public void setV3BeanName(String v3BeanName) {
+		this.v3BeanName = v3BeanName;
+	}
 }

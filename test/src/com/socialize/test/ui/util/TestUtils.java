@@ -966,7 +966,7 @@ public class TestUtils {
 				}).start();
 				
 				try {
-					if(!latch.await(20, TimeUnit.SECONDS)) {
+					if(!latch.await(40, TimeUnit.SECONDS)) {
 						ActivityInstrumentationTestCase2.fail("Timeout [20 seconds] waiting for activity to start");
 					}
 					else if(holder.size() == 0) {

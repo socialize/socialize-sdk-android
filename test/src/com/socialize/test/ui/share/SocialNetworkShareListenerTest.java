@@ -58,7 +58,7 @@ import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.DefaultFacebookWallPoster;
 import com.socialize.networks.facebook.FacebookSharer;
-import com.socialize.networks.facebook.FacebookWallPoster;
+import com.socialize.networks.facebook.v2.FacebookFacadeV2;
 import com.socialize.share.ShareHandler;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
@@ -202,9 +202,9 @@ public class SocialNetworkShareListenerTest extends SocializeActivityTest {
 		assertNotNull(postData);
 	}
 	
-	@UsesMocks ({FacebookWallPoster.class, SocializeService.class})
+	@UsesMocks ({FacebookFacadeV2.class, SocializeService.class})
 	public void testFacebookSharerCallsWallPoster() {
-		final FacebookWallPoster poster = AndroidMock.createMock(FacebookWallPoster.class);
+		final FacebookFacadeV2 poster = AndroidMock.createMock(FacebookFacadeV2.class);
 		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
 		
 		SocialNetworkShareListener listener = new SocialNetworkShareListener() {};
@@ -226,7 +226,7 @@ public class SocialNetworkShareListenerTest extends SocializeActivityTest {
 			}
 		};
 		
-		sharer.setFacebookWallPoster(poster);
+		sharer.setFacebookFacade(poster);
 		sharer.share(TestUtils.getActivity(this), entity, propInfo, mockText, true, ActionType.SHARE, listener);
 		
 		AndroidMock.verify(socialize, poster);

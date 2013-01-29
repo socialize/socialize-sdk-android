@@ -21,6 +21,8 @@
  */
 package com.socialize.test.integration.services.a;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +32,13 @@ import java.util.concurrent.TimeUnit;
 import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.Signature;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.ConfigUtils;
@@ -84,7 +92,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		// Stub in the FacebookAuthProvider
 		FacebookAuthProvider mockFacebookAuthProvider = new FacebookAuthProvider() {
 			@Override
-			public void authenticate(FacebookAuthProviderInfo info, AuthProviderListener listener) {
+			public void authenticate(Context context, FacebookAuthProviderInfo info, AuthProviderListener listener) {
 				addResult(0, info);
 				latch.countDown();
 			}
@@ -123,7 +131,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		// Stub in the FacebookAuthProvider to ensure we DON'T auth with FB
 		FacebookAuthProvider mockFacebookAuthProvider = new FacebookAuthProvider() {
 			@Override
-			public void authenticate(FacebookAuthProviderInfo info, AuthProviderListener listener) {
+			public void authenticate(Context context, FacebookAuthProviderInfo info, AuthProviderListener listener) {
 				fail();
 			}
 		};
@@ -177,13 +185,21 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 	
 	public void test_link_with_token_and_permission_check () throws Exception {
 		
+		PackageInfo info = getInstrumentation().getTargetContext().getPackageManager().getPackageInfo( "com.socialize.sample",  PackageManager.GET_SIGNATURES);
+		
+		for (Signature signature : info.signatures) {
+			MessageDigest md = MessageDigest.getInstance("SHA");
+			md.update(signature.toByteArray());
+			Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+		}
+		
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Activity context = TestUtils.getActivity(this);
 		
 		// Stub in the FacebookAuthProvider to ensure we DON'T auth with FB
 		FacebookAuthProvider mockFacebookAuthProvider = new FacebookAuthProvider() {
 			@Override
-			public void authenticate(FacebookAuthProviderInfo info, AuthProviderListener listener) {
+			public void authenticate(Context context, FacebookAuthProviderInfo info, AuthProviderListener listener) {
 				// We expect an auth to FB because out permissions will not match.
 				addResult(0, info);
 				
@@ -230,6 +246,8 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 				latch.countDown();
 			}
 		});
+		
+
 		
 		latch.await(20, TimeUnit.SECONDS);
 		
@@ -285,7 +303,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		// Stub in the FacebookAuthProvider
 		FacebookAuthProvider mockFacebookAuthProvider = new FacebookAuthProvider() {
 			@Override
-			public void authenticate(FacebookAuthProviderInfo info, AuthProviderListener listener) {
+			public void authenticate(Context context, FacebookAuthProviderInfo info, AuthProviderListener listener) {
 				AuthProviderResponse response = new AuthProviderResponse();
 				response.setToken(token);
 				listener.onAuthSuccess(response);
@@ -356,7 +374,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		// Stub in the FacebookAuthProvider
 		FacebookAuthProvider mockFacebookAuthProvider = new FacebookAuthProvider() {
 			@Override
-			public void authenticate(FacebookAuthProviderInfo info, AuthProviderListener listener) {
+			public void authenticate(Context context, FacebookAuthProviderInfo info, AuthProviderListener listener) {
 				AuthProviderResponse response = new AuthProviderResponse();
 				response.setToken(token);
 				listener.onAuthSuccess(response);

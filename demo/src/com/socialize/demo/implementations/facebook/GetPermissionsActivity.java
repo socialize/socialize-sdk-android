@@ -24,8 +24,8 @@ package com.socialize.demo.implementations.facebook;
 import java.util.Arrays;
 import com.socialize.demo.SDKDemoActivity;
 import com.socialize.error.SocializeException;
-import com.socialize.networks.facebook.FacebookPermissionCallback;
 import com.socialize.networks.facebook.FacebookUtils;
+import com.socialize.networks.facebook.OnPermissionResult;
 import com.socialize.util.StringUtils;
 
 
@@ -44,8 +44,7 @@ public class GetPermissionsActivity extends SDKDemoActivity {
 		String token = FacebookUtils.getAccessToken(this);
 		
 		if(!StringUtils.isEmpty(token)) {
-			FacebookUtils.getCurrentPermissions(this, token, new FacebookPermissionCallback() {
-				
+			FacebookUtils.getCurrentPermissions(this, token, new OnPermissionResult() {
 				@Override
 				public void onError(SocializeException error) {
 					handleError(GetPermissionsActivity.this, error);

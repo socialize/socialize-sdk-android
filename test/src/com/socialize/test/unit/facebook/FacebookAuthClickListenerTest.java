@@ -48,6 +48,7 @@ import com.socialize.networks.SocializeDeAuthListener;
 import com.socialize.networks.facebook.FacebookAuthClickListener;
 import com.socialize.networks.facebook.FacebookPermissionCallback;
 import com.socialize.networks.facebook.FacebookUtilsProxy;
+import com.socialize.networks.facebook.OnPermissionResult;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.ui.dialog.SimpleDialogFactory;
 
@@ -95,6 +96,9 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 		View view = AndroidMock.createMock(View.class, getContext());
 		FacebookUtilsProxy facebookUtils = new FacebookUtilsProxy() {
 			
+			@Override
+			public void getCurrentPermissions(Activity context, String token, OnPermissionResult callback) {}
+
 			@Override
 			public void unlink(Context context, SocializeDeAuthListener listener) {}
 			

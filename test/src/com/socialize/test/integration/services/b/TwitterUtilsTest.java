@@ -91,7 +91,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		// Stub in the TwitterAuthProvider
 		TwitterAuthProvider mockTwitterAuthProvider = new TwitterAuthProvider() {
 			@Override
-			public void authenticate(TwitterAuthProviderInfo info, AuthProviderListener listener) {
+			public void authenticate(Context context, TwitterAuthProviderInfo info, AuthProviderListener listener) {
 				addResult(0, info);
 				latch.countDown();
 			}
@@ -132,7 +132,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		// Stub in the TwitterAuthProvider to ensure we DON'T auth with TW
 		TwitterAuthProvider mockTwitterAuthProvider = new TwitterAuthProvider() {
 			@Override
-			public void authenticate(TwitterAuthProviderInfo info, AuthProviderListener listener) {
+			public void authenticate(Context context, TwitterAuthProviderInfo info, AuthProviderListener listener) {
 				addResult(1, "fail");
 			}
 		};
@@ -225,7 +225,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		// Stub in the TwitterAuthProvider
 		TwitterAuthProvider mockTwitterAuthProvider = new TwitterAuthProvider() {
 			@Override
-			public void authenticate(TwitterAuthProviderInfo info, AuthProviderListener listener) {
+			public void authenticate(Context context, TwitterAuthProviderInfo info, AuthProviderListener listener) {
 				AuthProviderResponse response = new AuthProviderResponse();
 				response.setToken(token);
 				response.setSecret(secret);
@@ -706,7 +706,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		// Stub in the TwitterAuthProvider
 		TwitterAuthProvider mockTwitterAuthProvider = new TwitterAuthProvider() {
 			@Override
-			public void authenticate(TwitterAuthProviderInfo info, AuthProviderListener listener) {
+			public void authenticate(Context context, TwitterAuthProviderInfo info, AuthProviderListener listener) {
 				AuthProviderResponse response = new AuthProviderResponse();
 				response.setToken(token);
 				response.setSecret(secret);

@@ -107,6 +107,8 @@
 	
 	<bean id="bitmapBuilder" class="com.socialize.util.BitmapBuilder"/>
 	
+	<bean id="imageUtils" class="com.socialize.util.ImageUtils"/>
+	
 	<bean id="bitmapUtils" class="com.socialize.util.BitmapUtils">
 		<property name="bitmapBuilder" ref="bitmapBuilder"/>
 		<property name="base64Utils" ref="base64Utils"/>
@@ -547,77 +549,77 @@
 	
 <!-- End Event API -->
 
-
-<!-- Facebook -->
-	<bean id="shareMessageBuilder" class="com.socialize.api.DefaultShareMessageBuilder">
-		<property name="appUtils" ref="appUtils"/>
-	</bean>	
-
-	<bean id="facebookSessionStore" class="com.socialize.auth.facebook.FacebookSessionStore"/>
-	
-	<bean id="facebookUrlBuilder" class="com.socialize.auth.facebook.FacebookUrlBuilder"/>
-	 
-	<bean id="facebookProvider" class="com.socialize.auth.facebook.FacebookAuthProvider">
-		<property name="logger" ref="logger"/>
-		<property name="facebookSessionStore" ref="facebookSessionStore"/>
-		<property name="facebookUtils" ref="facebookUtils"/>
-		<property name="authProviderInfoBuilder" ref="authProviderInfoBuilder"/>
-		<init-method name="init">
-			<arg type="context"/>
-			<arg ref="listenerHolder"/>
-		</init-method>
-	</bean>
-	
-	<bean 
-		id="facebook" 
-		class="com.socialize.facebook.Facebook"
-		singleton="false">
-	</bean>
-	
-	<bean id="facebookUtils" class="com.socialize.networks.facebook.FacebookUtilsImpl">
-		<property name="userSystem" ref="userSystem"/>
-		<property name="facebookWallPoster" ref="facebookWallPoster"/>
-		<property name="facebookAuthProvider" ref="facebookProvider"/>
-		<property name="imageUtils" ref="imageUtils"/>
-		<property name="logger" ref="logger"/>
-		<property name="config" ref="config"/>
-	</bean>
-	
-	<bean 
-		id="imageUtils" 
-		class="com.socialize.util.ImageUtils">
-	</bean>	
-	
-	<bean 
-		id="facebookRunner" 
-		class="com.socialize.facebook.AsyncFacebookRunner"
-		singleton="false"/>
-		
-	<factory id="facebookRunnerFactory" makes="facebookRunner"/>	
-	
-	<bean 
-		id="facebookWallPoster" 
-		class="com.socialize.networks.facebook.DefaultFacebookWallPoster">
-		<property name="logger" ref="logger"/>
-		<property name="config" ref="config"/>
-		<property name="imageUtils" ref="imageUtils"/>
-		<property name="facebookUtils" ref="facebookUtils"/>
-		<property name="facebookRunnerFactory" ref="facebookRunnerFactory"/>
-	</bean>	
-	
 	<bean 
 		id="socialNetworkSharer" 
 		abstract="true">
 		<property name="config" ref="config"/>
 		<property name="logger" ref="logger"/>
-	</bean>			
+	</bean>		
+
+<!-- Facebook -->
+
+	<bean id="shareMessageBuilder" class="com.socialize.api.DefaultShareMessageBuilder">
+		<property name="appUtils" ref="appUtils"/>
+	</bean>	
+	
+	<bean id="facebookUrlBuilder" class="com.socialize.auth.facebook.FacebookUrlBuilder"/>
+	 
+	<bean id="facebookProvider" class="com.socialize.auth.facebook.FacebookAuthProvider">
+		<property name="facebookFacade" ref="facebookFacadeFactory"/>
+		<property name="authProviderInfoBuilder" ref="authProviderInfoBuilder"/>
+	</bean>
+	
+	<bean id="facebookUtils" class="com.socialize.networks.facebook.FacebookUtilsImpl">
+		<property name="facebookFacade" ref="facebookFacadeFactory"/>
+		<property name="imageUtils" ref="imageUtils"/>
+		<property name="config" ref="config"/>
+	</bean>
+	
+	<!-- V2 Classes (Deprecated -->
+	<bean id="facebookSessionStore" class="com.socialize.auth.facebook.FacebookSessionStore"/>	
+	<bean id="facebook" class="com.socialize.facebook.Facebook" singleton="false"/>
+	<bean id="facebookRunner" class="com.socialize.facebook.AsyncFacebookRunner" singleton="false"/>
+	<factory id="facebookRunnerFactory" makes="facebookRunner"/>	
 	
 	<bean 
 		id="facebookSharer" 
 		class="com.socialize.networks.facebook.FacebookSharer"
 		extends="socialNetworkSharer">
-		<property name="facebookWallPoster" ref="facebookWallPoster"/>
+		<property name="facebookFacade" ref="facebookFacadeFactory"/>
 		<property name="authProviderInfoFactory" ref="facebookAuthProviderInfoFactory"/>
+	</bean>		
+	
+	<!-- Facebook Facades -->
+	<bean 
+		id="facebookFacadeFactory" 
+		class="com.socialize.networks.facebook.FacebookFacadeFactory">
+		<property name="v2BeanName" value="facebookV2Facade"/>
+		<property name="v3BeanName" value="facebookV3Facade"/>
+	</bean>	
+	
+	<bean 
+		id="facebookFacadeBase" 
+		abstract="true" 
+		class="com.socialize.networks.facebook.BaseFacebookFacade">
+		<property name="userSystem" ref="userSystem"/>
+		<property name="logger" ref="logger"/>
+		<property name="config" ref="config"/>
+	</bean>		
+	
+	<bean 
+		id="facebookV2Facade" 
+		extends="facebookFacadeBase"
+		class="com.socialize.networks.facebook.v2.FacebookFacadeV2">
+		<property name="holder" ref="listenerHolder"/>
+		<property name="imageUtils" ref="imageUtils"/>
+		<property name="facebookUtils" ref="facebookUtils"/>
+		<property name="facebookRunnerFactory" ref="facebookRunnerFactory"/>
+	</bean>					
+	
+	<bean 
+		id="facebookV3Facade" 
+		extends="facebookFacadeBase"
+		class="com.socialize.networks.facebook.v3.FacebookFacadeV3">
 	</bean>		
 	
 <!-- End Facebook -->
@@ -672,9 +674,6 @@
 	<bean id="twitterProvider" class="com.socialize.auth.twitter.TwitterAuthProvider">
 		<property name="twitterAuthUtils" ref="twitterAuthUtils"/>
 		<property name="authProviderInfoBuilder" ref="authProviderInfoBuilder"/>
-		<init-method name="init">
-			<arg type="context"/>
-		</init-method>
 	</bean>
 	
 	<bean id="twitterUtils" class="com.socialize.networks.twitter.TwitterUtilsImpl">

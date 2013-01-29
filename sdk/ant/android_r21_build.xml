@@ -1082,6 +1082,7 @@
     </target>
 
     <target name="-set-release-mode" depends="-set-mode-check">
+    	
         <property name="out.packaged.file" location="${out.absolute.dir}/${ant.project.name}-release-unsigned.apk" />
         <property name="out.final.file" location="${out.absolute.dir}/${ant.project.name}-release.apk" />
         <property name="build.is.mode.set" value="true" />

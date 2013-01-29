@@ -280,7 +280,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 		AuthProvider<AuthProviderInfo> authProvider = new AuthProvider<AuthProviderInfo>() {
 			
 			@Override
-			public void authenticate(AuthProviderInfo info, AuthProviderListener listener) {
+			public void authenticate(Context context, AuthProviderInfo info, AuthProviderListener listener) {
 				addResult(1, listener);
 			}
 
@@ -372,7 +372,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 
 		AuthProvider<AuthProviderInfo> authProvider = new AuthProvider<AuthProviderInfo>() {
 			@Override
-			public void authenticate(AuthProviderInfo info, AuthProviderListener listener) {
+			public void authenticate(Context context, AuthProviderInfo info, AuthProviderListener listener) {
 				addResult(1, listener);
 			}
 

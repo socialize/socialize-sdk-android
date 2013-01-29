@@ -40,11 +40,7 @@
 		
 	</target>	
 	
-	<target name="build">
-		<antcall target="clean"/>
-		<antcall target="jar"/>
-		<antcall target="package"/>
-	</target>
+	<target name="build" depends="clean, jar, package"/>
 	
 	<target name="jar" depends="compile-for-build, -jar"/>
 
@@ -66,8 +62,9 @@
 			</fileset>
 		</copy>
 		
-		<copy todir="${out.dir}/classes/res/" verbose="true" >
-			<fileset dir="src/res" includes="**/**"/>
+		<!-- Manually copy android-ioc classes -->		
+		<copy todir="${out.dir}/classes/" verbose="true" >
+			<fileset dir="../../android-ioc/core/bin/classes" includes="**/**"/>
 		</copy>
 		
 		<delete dir="${build.path}"/>
@@ -135,7 +132,7 @@
 		<delete file="doc/sphinx/source/conf.py"/>
 	</target>
 
-	<target name="javadoc" depends="-build-setup">
+	<target name="javadoc" depends="-set-release-mode, -build-setup">
 		<path id="javadoc.classpath">
 			<path refid="project.target.class.path" />
 			<pathelement path="libext/commons-codec-1.4.jar"/>
@@ -217,9 +214,11 @@
 	</target>
 	
 	<target name="compile-for-build">
+		<!--
 		<property name="build.is.instrumented" value="false" />
 		<property name="emma.enabled" value="false" />
-		<antcall target="-compile" inheritall="true" inheritrefs="true"/>
+		-->
+		<antcall target="release" inheritall="true" inheritrefs="true"/>
 	</target>	
 	
 </project>	

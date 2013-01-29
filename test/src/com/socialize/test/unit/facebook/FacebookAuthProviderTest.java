@@ -36,6 +36,7 @@ import com.socialize.facebook.Facebook;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.ListenerHolder;
 import com.socialize.listener.SocializeListener;
+import com.socialize.networks.facebook.v2.FacebookFacadeV2;
 import com.socialize.test.SocializeUnitTest;
 
 /**
@@ -81,12 +82,11 @@ public class FacebookAuthProviderTest extends SocializeUnitTest {
 		AndroidMock.replay(listener);
 		
 		FacebookAuthProvider provider = new FacebookAuthProvider();
-		provider.init(context, holder);
 		
 		FacebookAuthProviderInfo fb = new FacebookAuthProviderInfo();
 		fb.setAppId(appId);
 		
-		provider.authenticate(fb, listener);
+		provider.authenticate(context, fb, listener);
 		
 		// We should have a listener from the put method
 		AuthProviderListener wrapper = getNextResult();
@@ -124,19 +124,17 @@ public class FacebookAuthProviderTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(facebook);
 		
-		FacebookAuthProvider facebookAuthProvider = new FacebookAuthProvider() {
+		FacebookFacadeV2 facade = new FacebookFacadeV2() {
 			@Override
 			protected Facebook getFacebook(Context context) {
 				return facebook;
 			}
 		};
 		
-		facebookAuthProvider.init(getContext(), null);
-		
 		FacebookAuthProviderInfo fb = new FacebookAuthProviderInfo();
 		fb.setAppId(appId);
 		
-		facebookAuthProvider.clearCache(getContext(), fb);
+		facade.logout(getContext());
 		
 		AndroidMock.verify(facebook);
 	}

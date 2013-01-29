@@ -20,7 +20,7 @@ public class MockFacebookAuthProvider extends FacebookAuthProvider {
 	}
 
 	@Override
-	public void authenticate(FacebookAuthProviderInfo info, AuthProviderListener listener) {
+	public void authenticate(Context contex, FacebookAuthProviderInfo info, AuthProviderListener listener) {
 		AuthProviderResponse mockResponse = new AuthProviderResponse();
 		mockResponse.setUserId(userId);
 		mockResponse.setToken(token);
