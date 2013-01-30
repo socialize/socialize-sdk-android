@@ -12,6 +12,50 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v2.8
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Added support for Facebook SDK v3.0
+
+v2.7.8
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] ActionBar loading fails and is unrecoverable when network is unavailable
+
+v2.7.7
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] Device does not re-register for SmartAlerts after linking to FB/TW
+
+v2.7.6
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Developer can configure how the SDK registers devices for notifications
+
+v2.7.5
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] Activity leak in BeanContextCache
+
+v2.7.4
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] Share dialog lingers on Android v2.x
+
+v2.7.3
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] NPE on device rotate
+[bug] Facebook token extension incorrectly triggered when FB no used
+ 
+v2.7.2
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] Default localization file missing from JAR
+
+v2.7.1
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] NPE in comment view
+
+v2.7
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Socialize supports Google Cloud Messaging, C2DM deprecated
+[bug] Like count increments twice on action bar
+[feature] Developers can customize Strings within the SDK for localization
+[feature] Developer can learn about Localization in docs
+
 v2.6.1
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [feature] Developer can learn how to specify a share dialog listener on the action bar in docs
