@@ -47,14 +47,14 @@ v2.7.2
 
 v2.7.1
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-[bug] NPE in comment view
+- [bug] NPE in comment view
 
 v2.7
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-[feature] Socialize supports Google Cloud Messaging, C2DM deprecated
-[bug] Like count increments twice on action bar
-[feature] Developers can customize Strings within the SDK for localization
-[feature] Developer can learn about Localization in docs
+- [feature] Socialize supports Google Cloud Messaging, C2DM deprecated
+- [bug] Like count increments twice on action bar
+- [feature] Developers can customize Strings within the SDK for localization
+- [feature] Developer can learn about Localization in docs
 
 v2.6.1
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
