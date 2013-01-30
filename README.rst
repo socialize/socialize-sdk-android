@@ -12,7 +12,7 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-v2.8
+v2.8.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 - [feature] Added support for Facebook SDK v3.0
 
@@ -49,7 +49,7 @@ v2.7.1
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 - [bug] NPE in comment view
 
-v2.7
+v2.7.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 - [feature] Socialize supports Google Cloud Messaging, C2DM deprecated
 - [bug] Like count increments twice on action bar
@@ -100,7 +100,7 @@ v2.5.1
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 - [feature] Developers can programmatically disable the comment list header 
 
-v2.5
+v2.5.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 - [feature] Developer can learn how to implement a custom URL scheme in the documentation 
 for "deep linking" to content in their app
@@ -125,7 +125,7 @@ v2.4.1
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Internal release.
 
-v2.4
+v2.4.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 - [feature] Documentation includes examples of sharing to Google+ in screenshots
 - [bug] Crash in onDestroy
@@ -155,7 +155,7 @@ v2.3.1
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 - [bug] Changing the profile pic doesn't work
 
-v2.3
+v2.3.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 - [feature] Developer can make Facebook open graph calls for Like
 - [feature] Developer can customize colors for Action Bar 
@@ -182,7 +182,7 @@ v2.3
 - [bug] Changing facebook permissions causes re-auth even when permissions are already obtained
 - [bug] Opening notification on JB doesn't load entity
 
-v2.2
+v2.2.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 - [feature] Add Entities That Are Not URLs section in documentation
 - [feature] Developer can retrieve app-wide actions based on a type (Comment/Share/Like)
@@ -199,7 +199,7 @@ v2.1.1
 - [bug] Comment view displays unexpected divider when location is not enabled on device
 - [bug] User settings screen does not honor app level disabling of location
 
-v2.1
+v2.1.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 - [feature] Socialize internal staff can access pre-built APK for SDK Demo App
 - [feature] Documentation has updated screenshots for Facebook app configuration
@@ -216,7 +216,7 @@ v2.1
 - [feature] Developers can learn how to post photos to Facebook in docs
 - [feature] Developers can learn how to post photos to Twitter in docs
 
-v2.0
+v2.0.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 - [feature] Developer can access Socialize 2.0 using User interfaces
 - [feature] Developer can access Socialize 2.0 using Comment interfaces
@@ -344,7 +344,7 @@ v1.5.1
 - [bug] Developer notifications should not result in "action id not found"
 - [bug] Disabling notification in user settings does not disable notifications
 
-v1.5
+v1.5.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 - [feature] Developer can authenticate user with twitter in SDK
 - [feature] Share behavior for comment/like should match propagation spec
@@ -392,7 +392,7 @@ v1.4.1
 - [bug] Multiple notifications do not always open the app correctly
 - [bug] Like button does not load if entity does not exist
 
-v1.4
+v1.4.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 - [bug] Images on Galaxy Nexus do not render correctly
 - [feature] Add like button which can be easily customized with image and name
@@ -418,7 +418,7 @@ v1.3.1
 - [bug] scroll view does not fill width when action bar is inserted
 - [bug] NPE on profile save when notifications not enabled
 
-v1.3
+v1.3.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 - [bug] Comment, Share and Like from SDK should post to FB without ActionBar
 - [feature] Add redirect url for all share actions
@@ -449,7 +449,7 @@ v1.3
 - [feature] check in code to make sure that the device has the google API for sending notifications [ notifications ]
 
 
-v1.2
+v1.2.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 - [bug] Comments should be HTML encoded when rendering
 - [feature] User activity scrolls entire view
@@ -460,7 +460,7 @@ v1.2
 - [feature] Style of items in comment list matches activity list
 - [bug] postShare event on ActionBar doesn't fire on listener
 
-v1.1
+v1.1.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 - [feature] List Comments By User (SDK)
 - [bug] Session does not persist user auth data correctly
@@ -490,7 +490,7 @@ v1.0.1
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Internal release
 
-v1.0
+v1.0.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 - [feature] Add simple sample app to SDK download
