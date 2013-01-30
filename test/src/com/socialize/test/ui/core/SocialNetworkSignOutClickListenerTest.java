@@ -44,6 +44,7 @@ import com.socialize.test.ui.util.TestUtils;
  */
 public class SocialNetworkSignOutClickListenerTest extends SocializeActivityTest {
 
+
 	@Override
 	protected void tearDown() throws Exception {
 		TwitterAccess.revertTwitterUtilsProxy();

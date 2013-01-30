@@ -21,8 +21,6 @@
  */
 package com.socialize.test.integration.services.a;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -32,13 +30,7 @@ import java.util.concurrent.TimeUnit;
 import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.pm.Signature;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.ConfigUtils;
@@ -53,7 +45,6 @@ import com.socialize.auth.DefaultUserProviderCredentials;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.facebook.FacebookAuthProvider;
 import com.socialize.auth.facebook.FacebookAuthProviderInfo;
-import com.socialize.auth.facebook.FacebookService;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
@@ -69,11 +60,13 @@ import com.socialize.listener.share.ShareListListener;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkPostListener;
-import com.socialize.networks.facebook.DefaultFacebookWallPoster;
 import com.socialize.networks.facebook.FacebookAccess;
+import com.socialize.networks.facebook.FacebookFacade;
 import com.socialize.networks.facebook.FacebookPermissionCallback;
 import com.socialize.networks.facebook.FacebookUtils;
 import com.socialize.networks.facebook.FacebookUtilsImpl;
+import com.socialize.networks.facebook.OnPermissionResult;
+import com.socialize.networks.facebook.v2.FacebookFacadeV2;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 
@@ -183,21 +176,25 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		SocializeIOC.unregisterStub("facebookProvider");
 	}
 	
-	public void test_link_with_token_and_permission_check () throws Exception {
+	public void test_link_with_token_and_permission_check_v2 () throws Exception {
 		
-		PackageInfo info = getInstrumentation().getTargetContext().getPackageManager().getPackageInfo( "com.socialize.sample",  PackageManager.GET_SIGNATURES);
-		
-		for (Signature signature : info.signatures) {
-			MessageDigest md = MessageDigest.getInstance("SHA");
-			md.update(signature.toByteArray());
-			Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-		}
+//		PackageInfo info = getInstrumentation().getTargetContext().getPackageManager().getPackageInfo( "com.socialize.sample",  PackageManager.GET_SIGNATURES);
+//		
+//		for (Signature signature : info.signatures) {
+//			MessageDigest md = MessageDigest.getInstance("SHA");
+//			md.update(signature.toByteArray());
+//			Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+//		}
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Activity context = TestUtils.getActivity(this);
 		
-		// Stub in the FacebookAuthProvider to ensure we DON'T auth with FB
-		FacebookAuthProvider mockFacebookAuthProvider = new FacebookAuthProvider() {
+		// Stub in the facade to ensure we DON'T auth with FB
+		FacebookFacadeV2 facebookV2Facade = new FacebookFacadeV2() {
+			@Override
+			public void getCurrentPermissions(Activity parent, String token, OnPermissionResult callback) {
+				callback.onSuccess(new String[]{"foobar_permission"});
+			}
 			@Override
 			public void authenticate(Context context, FacebookAuthProviderInfo info, AuthProviderListener listener) {
 				// We expect an auth to FB because out permissions will not match.
@@ -205,18 +202,10 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 				
 				// Make sure we call the listener to move the test along.
 				listener.onAuthSuccess(null);
-			}
+			}			
 		};
 		
-		DefaultFacebookWallPoster mockWallPoster = new DefaultFacebookWallPoster() {
-			@Override
-			public void getCurrentPermissions(Activity parent, String token, FacebookPermissionCallback callback) {
-				callback.onSuccess(new String[]{"foobar_permission"});
-			}
-		};
-		
-		SocializeIOC.registerStub("facebookWallPoster", mockWallPoster);
-		SocializeIOC.registerStub("facebookProvider", mockFacebookAuthProvider);
+		SocializeIOC.registerStub("facebookV2Facade", facebookV2Facade);
 		
 		// Set a mock FB ID
 		FacebookUtils.setAppId(TestUtils.getActivity(this), "foobar");
@@ -247,8 +236,6 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 			}
 		});
 		
-
-		
 		latch.await(20, TimeUnit.SECONDS);
 		
 		FacebookAuthProviderInfo fbInfo = getResult(0);
@@ -271,7 +258,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		
 		Arrays.sort(permissions);
 		
-		for (String required : FacebookService.DEFAULT_PERMISSIONS) {
+		for (String required : FacebookFacade.DEFAULT_PERMISSIONS) {
 			assertTrue(Arrays.binarySearch(permissions, required) >= 0);
 		}
 		
@@ -345,6 +332,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		do_test_post();
 	}
 	
+	@Deprecated
 	protected void do_test_post() throws Exception {
 		String entityKeyRandom = "foobar" + Math.random();
 		Entity entity = Entity.newInstance(entityKeyRandom, "foobar");
@@ -654,7 +642,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		assertSame(params, getResult(1));
 	}		
 	
-	
+	@Deprecated
 	public void testExtendAccessToken() throws Exception {
 		
 		// We have to use a real token here because we will be REALLY authenticating
@@ -755,7 +743,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		assertEquals(newFBToken, creds.getAccessToken());
 	}
 	
-	
+	@Deprecated
 	public void testFacebookPermissionCallback() {
 		
 		// Taken from actual response:

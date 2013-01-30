@@ -70,6 +70,7 @@ import com.socialize.test.ui.util.TestUtils;
  */
 public class SocialNetworkShareListenerTest extends SocializeActivityTest {
 
+	@Deprecated
 	public void testFacebookWallPosterCallsListener() throws InterruptedException {
 		
 		final String dummyResponse = "{foo:bar}";

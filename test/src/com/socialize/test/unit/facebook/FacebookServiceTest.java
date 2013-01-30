@@ -48,6 +48,7 @@ import com.socialize.util.DialogFactory;
  * @author Jason Polites
  *
  */
+@Deprecated
 @UsesMocks ({
 	Activity.class, 
 	Facebook.class, 

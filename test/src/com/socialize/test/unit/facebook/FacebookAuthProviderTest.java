@@ -113,6 +113,7 @@ public class FacebookAuthProviderTest extends SocializeUnitTest {
 		AndroidMock.verify(listener);
 	}
 	
+	@Deprecated
 	@UsesMocks ({Facebook.class})
 	public void testClearCache() throws MalformedURLException, IOException {
 		

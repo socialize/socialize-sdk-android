@@ -73,6 +73,7 @@ import com.socialize.util.ImageUtils;
 	SocializeConfig.class,
 	PropagationInfo.class
 })
+@Deprecated
 public class FacebookWallPosterTest extends SocializeActivityTest {
 
 	

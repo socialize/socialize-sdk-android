@@ -36,6 +36,7 @@ import com.socialize.util.Drawables;
  * @author Jason Polites
  *
  */
+@Deprecated
 @UsesMocks ({Facebook.class, Activity.class, MockEditor.class, SharedPreferences.class, Drawables.class})
 public class FacebookSessionStoreTest extends SocializeActivityTest {
 

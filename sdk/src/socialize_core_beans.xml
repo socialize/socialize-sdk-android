@@ -609,7 +609,8 @@
 	<bean 
 		id="facebookV2Facade" 
 		extends="facebookFacadeBase"
-		class="com.socialize.networks.facebook.v2.FacebookFacadeV2">
+		class="com.socialize.networks.facebook.v2.FacebookFacadeV2"
+		lazy="true">
 		<property name="holder" ref="listenerHolder"/>
 		<property name="imageUtils" ref="imageUtils"/>
 		<property name="facebookUtils" ref="facebookUtils"/>
@@ -619,7 +620,8 @@
 	<bean 
 		id="facebookV3Facade" 
 		extends="facebookFacadeBase"
-		class="com.socialize.networks.facebook.v3.FacebookFacadeV3">
+		class="com.socialize.networks.facebook.v3.FacebookFacadeV3"
+		lazy="true">
 	</bean>		
 	
 <!-- End Facebook -->

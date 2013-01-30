@@ -98,7 +98,6 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 			}
 			
 			notificationRegistrationState.setC2dmPendingRequestTime(System.currentTimeMillis());
-//			notificationRegistrationState.save(context);
 			
 			@SuppressWarnings("deprecation")
 			String senderId = config.getProperty(SocializeConfig.SOCIALIZE_GCM_SENDER_ID, config.getProperty(SocializeConfig.SOCIALIZE_C2DM_SENDER_ID));

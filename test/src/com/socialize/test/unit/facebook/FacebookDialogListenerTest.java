@@ -42,6 +42,7 @@ import com.socialize.test.SocializeActivityTest;
  * @author Jason Polites
  *
  */
+@Deprecated
 @UsesMocks ({
 	Activity.class, 
 	Facebook.class, 

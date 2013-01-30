@@ -39,7 +39,6 @@ import com.socialize.networks.SocializeDeAuthListener;
 /**
  * @author Jason Polites
  */
-@SuppressWarnings("deprecation")
 public interface FacebookUtilsProxy {
 	public void link (Activity context, SocializeAuthListener listener);
 	

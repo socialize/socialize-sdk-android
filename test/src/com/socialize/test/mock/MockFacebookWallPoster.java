@@ -14,6 +14,7 @@ import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.facebook.FacebookPermissionCallback;
 import com.socialize.networks.facebook.FacebookWallPoster;
 
+@Deprecated
 public class MockFacebookWallPoster implements FacebookWallPoster {
 	
 	@Override

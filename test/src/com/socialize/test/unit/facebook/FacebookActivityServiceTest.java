@@ -42,6 +42,7 @@ import com.socialize.util.DialogFactory;
  * @author Jason Polites
  *
  */
+@Deprecated
 public class FacebookActivityServiceTest extends SocializeActivityTest {
 
 	@UsesMocks ({FacebookActivity.class, Intent.class})

@@ -31,6 +31,7 @@ import com.socialize.facebook.Facebook;
  * @author Jason Polites
  *
  */
+@Deprecated
 public class FacebookAccess {
 	private static FacebookUtilsProxy originalFacebookUtilsProxy = FacebookUtils.proxy;
 	

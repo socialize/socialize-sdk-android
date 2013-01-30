@@ -47,7 +47,6 @@ import com.socialize.util.ImageUtils;
  * @author Jason Polites
  *
  */
-@SuppressWarnings("deprecation")
 public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	
 	private FacebookFacade facebookFacade;

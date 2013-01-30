@@ -70,7 +70,7 @@ import com.socialize.util.StringUtils;
 /**
  * @author Jason Polites
  */
-@SuppressWarnings("deprecation")
+@Deprecated
 public class FacebookFacadeV2 extends BaseFacebookFacade {
 	
 	private ListenerHolder holder; // This is a singleton
