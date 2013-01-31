@@ -31,6 +31,7 @@ public class IdleConnectionMonitorThread extends Thread {
 	
     private final ClientConnectionManager connMgr;
     private volatile boolean shutdown;
+    private final long timeout = 30000; // milliseconds
     
     public IdleConnectionMonitorThread(ClientConnectionManager connMgr) {
         super("IdleConnectionMonitorThread");
@@ -42,12 +43,12 @@ public class IdleConnectionMonitorThread extends Thread {
         try {
             while (!shutdown) {
                 synchronized (this) {
-                    wait(5000);
+                    wait(timeout);
                     // Close expired connections
                     connMgr.closeExpiredConnections();
                     // Optionally, close connections
-                    // that have been idle longer than 30 sec
-                    connMgr.closeIdleConnections(30, TimeUnit.SECONDS);
+                    // that have been idle longer than [timeout] milliseconds
+                    connMgr.closeIdleConnections(timeout, TimeUnit.MILLISECONDS);
                 }
             }
         } 

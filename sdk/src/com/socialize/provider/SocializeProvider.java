@@ -24,6 +24,7 @@ package com.socialize.provider;
 import java.util.Collection;
 import java.util.Map;
 
+import android.content.Context;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.WritableSession;
 import com.socialize.api.action.ActionType;
@@ -39,15 +40,9 @@ import com.socialize.error.SocializeException;
  */
 public interface SocializeProvider<T> {
 	
-	/**
-	 * Loads a user's authentication session.
-	 * @param endpoint
-	 * @param key
-	 * @param secret
-	 * @param data
-	 * @return
-	 * @throws SocializeException
-	 */
+	
+	public void init(Context context);
+	
 	public WritableSession loadSession(String endpoint, String key, String secret) throws SocializeException;
 	
 	public boolean validateSession(SocializeSession loaded, AuthProviderData data);

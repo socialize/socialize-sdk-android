@@ -44,6 +44,16 @@ import com.socialize.util.Drawables;
  */
 @UsesMocks({ ClassLoaderProvider.class, ClassLoader.class, InputStream.class, CacheableDrawable.class, DrawableCache.class })
 public class DrawablesTest extends SocializeActivityTest {
+	
+//	public void testPreloadDrawables() throws Exception {
+//		Drawables drawables = new Drawables();
+//		drawables.setCache(new DrawableCache());
+//		drawables.setBitmapUtils(new BitmapUtils(new BitmapBuilder()));
+//		drawables.setClassLoaderProvider(new ClassLoaderProvider());
+//		drawables.setLogger(new SocializeLogger());
+//		drawables.init(getActivity());
+//		drawables.preloadDrawables();
+//	}
 
 	public void testGetDrawable() throws IOException {
 

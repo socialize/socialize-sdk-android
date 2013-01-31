@@ -91,7 +91,7 @@ public class ImageLoadAsyncTask extends Thread {
 											logger.debug("ImageLoadAsyncTask image loading from encoded data for: " + url);
 										}
 										
-										drawable = (SafeBitmapDrawable) drawables.getDrawable(url, base64Utils.decode(request.getEncodedImageData()), request.getScaleWidth(), request.getScaleHeight());
+										drawable = (SafeBitmapDrawable) drawables.getDrawableFromUrl(url, base64Utils.decode(request.getEncodedImageData()), request.getScaleWidth(), request.getScaleHeight());
 										break;
 	
 									default:

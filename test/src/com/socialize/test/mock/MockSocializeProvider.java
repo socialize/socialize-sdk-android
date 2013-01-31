@@ -51,10 +51,9 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 		super();
 	}
 
-	public MockSocializeProvider(Context context) {
-		super();
-	}
-	
+	@Override
+	public void init(Context context) {}
+
 	@Override
 	public WritableSession loadSession(String endpoint, String key, String secret) throws SocializeException {
 		return new MockSocializeSession();

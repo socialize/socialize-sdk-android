@@ -21,6 +21,8 @@
  */
 package com.socialize.i18n;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import android.content.Context;
 import com.socialize.log.SocializeLogger;
@@ -38,10 +40,12 @@ public class DefaultLocalizationService implements LocalizationService {
 	private SocializeLogger logger;
 	
 	public void init(Context context) {
+		InputStream in = null;
 		try {
 			properties = new Properties();
 			properties = createProperties();
-			properties.load(resourceLocator.locate(context, "i18n.properties"));
+			in = resourceLocator.locate(context, "i18n.properties");
+			properties.load(in);
 		}
 		catch (Exception e) {
 			if(logger != null) {
@@ -49,6 +53,16 @@ public class DefaultLocalizationService implements LocalizationService {
 			}
 			else {
 				e.printStackTrace();
+			}
+		}
+		finally {
+			if(in != null) {
+				try {
+					in.close();
+				}
+				catch (IOException ignore) {
+					ignore.printStackTrace();
+				}
 			}
 		}
 	}

@@ -51,6 +51,7 @@ public abstract class ActionBarTest extends SocializeManagedActivityTest<ActionB
 	
 	protected final void waitForActionBarLoad() {
 		try {
+			// TODO: revert this to 30
 			assertTrue(globalLatch.await(30, TimeUnit.SECONDS));
 		}
 		catch (InterruptedException e) {}

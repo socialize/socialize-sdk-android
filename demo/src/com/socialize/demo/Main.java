@@ -49,6 +49,8 @@ public class Main extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        StictModeUtils.enableDefaults();
+        
         final TextView version = (TextView) findViewById(R.id.txtVersion);
         final View viewContainer = findViewById(R.id.container);
         final Animation fadeOut = new AlphaAnimation(1, 0);

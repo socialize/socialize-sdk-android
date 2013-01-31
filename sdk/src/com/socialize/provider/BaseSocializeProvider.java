@@ -102,6 +102,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 		super();
 	}
 	
+	@Override
 	public void init(Context context) {
 		this.context = context;
 	}

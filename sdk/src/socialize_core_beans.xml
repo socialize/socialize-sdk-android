@@ -812,7 +812,7 @@
 	
 	<!-- i18n -->
 	
-	<bean id="defaultLocalizationService" class="com.socialize.i18n.DefaultLocalizationService">
+	<bean id="defaultLocalizationService" class="com.socialize.i18n.DefaultLocalizationService" context-aware="false">
 		<property name="logger" ref="logger"/>
 		<property name="resourceLocator" ref="resourceLocator"/>
 		<init-method name="init">
@@ -820,7 +820,7 @@
 		</init-method>
 	</bean>	
 	
-	<bean id="localizationService" class="com.socialize.i18n.CustomLocalizationService">
+	<bean id="localizationService" class="com.socialize.i18n.CustomLocalizationService" context-aware="false">
 		<property name="defaultLocalizationService" ref="defaultLocalizationService"/>
 		<init-method name="init">
 			<arg type="context"/>

@@ -21,13 +21,15 @@
  */
 package com.socialize.util;
 
-import java.io.IOException;
 import java.io.InputStream;
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
+import com.socialize.R;
 import com.socialize.log.SocializeLogger;
 
 /**
@@ -41,6 +43,9 @@ public class Drawables {
 	private DrawableCache cache;
 	private BitmapUtils bitmapUtils;
 	private SocializeLogger logger;
+	private Resources resources;
+	
+	private final BitmapFactory.Options options = new BitmapFactory.Options(); 
 	
 	public Drawables() {
 		super();
@@ -48,124 +53,99 @@ public class Drawables {
 
 	public void init(Activity context) {
 		metrics = new DisplayMetrics();
+		resources = context.getResources();
 		context.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-	}
-	
-	public Drawable getDrawable(String name, boolean tileX, boolean tileY, boolean eternal) {
-		return getDrawable(name, metrics.densityDpi, tileX, tileY, -1, -1, eternal);
+		options.inScaled = false;
 	}
 	
 	public Drawable getDrawable(String name) {
-		return getDrawable(name, -1, -1, true);
+		return getDrawable(name, false, false, true);
 	}
 	
-	public Drawable getDrawable(String name, boolean eternal) {
-		return getDrawable(name, false, false, -1, -1, eternal);
-	}
-	
-	public Drawable getDrawable(String name, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal) {
-		return getDrawable(name, metrics.densityDpi, tileX, tileY, scaleToWidth, scaleToHeight, eternal);
-	}
-	
-	public Drawable getDrawable(String name, int scaleToWidth, int scaleToHeight) {
-		return getDrawable(name, scaleToWidth, scaleToHeight, false);
-	}
-	
-	public Drawable getDrawable(String name, int scaleToWidth, int scaleToHeight, boolean eternal) {
-		return getDrawable(name, false, false, scaleToWidth, scaleToHeight, eternal);
-	}
-	
-	public Drawable getDrawable(String key, byte[] data) {
-		return getDrawable(key, data, -1, -1);
-	}
-	
-	public Drawable getDrawable(String key, byte[] data, int scaleToWidth, int scaleToHeight) {
+	public Drawable getDrawable(String name, boolean tileX, boolean tileY, boolean eternal) {
+		String extra = "";
+		int hashIndex = name.indexOf('#');
 		
-		CacheableDrawable drawable = cache.get(key);
+		if(hashIndex >= 0) {
+			extra = name.substring(hashIndex, name.length());
+			name = name.substring(0, hashIndex);
+		}
+		
+		int resourceId = getDrawableResourceId(name);
+		
+		if(resourceId > 0) {
+			return getDrawable(resourceId, extra, tileX, tileY, eternal);
+		}
+		return null;
+	}
+	
+	public Drawable getDrawable(int resourceId, String extra, boolean tileX, boolean tileY, boolean eternal) {
+		return getDrawable(resourceId, extra, tileX, tileY, -1, -1, eternal);
+	}
+	
+	public Drawable getDrawable(int resourceId, String extra) {
+		return getDrawable(resourceId, extra, false, false, -1, -1, true);
+	}
+	
+	public Drawable getDrawableFromUrl(String url, byte[] data, int scaleToWidth, int scaleToHeight) {
+		
+		CacheableDrawable drawable = cache.get(url);
 		
 		if(drawable == null) {
 			Bitmap bitmap = bitmapUtils.getScaledBitmap ( data, scaleToWidth, scaleToHeight );
-			drawable = createDrawable(bitmap, key);
-			addToCache(key, drawable, false);
+			drawable = createDrawable(bitmap, url);
+			addToCache(url, drawable, false);
 		}
 		
 		return drawable;
 	}
-
-	public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY, boolean eternal) {
-		return getDrawable(name, density, tileX, tileY, -1, -1, eternal);
+	
+	private final int getDrawableResourceId(String name) {
+		
+		if(name.endsWith(".png")) { // Legacy
+			name = name.substring(0, name.lastIndexOf("."));
+		}
+		
+		try {
+			Class<?> drawable = R.drawable.class;
+			Integer id = ReflectionUtils.getStaticField(name, drawable);
+			if(id != null) {
+				return id;
+			}
+			
+		}
+		catch (Exception e) {
+			logger.error("Failed to find drawable with name " + name, e);
+		}	
+		
+		return -1;
 	}
 	
-	public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal) {
+	public Drawable getDrawable(int resourceId, String extra, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal) {
 		
-		String densityPath = getPath(name, density);
-		String commonPath = getPath(name);
+		String key = String.valueOf(resourceId) + extra;
 		
-		CacheableDrawable drawable = cache.get(densityPath + name);
-		
-		if(drawable == null) {
-			// try default
-			drawable = cache.get(commonPath + name);
-		}
+		CacheableDrawable drawable = cache.get(key);
 		
 		if(drawable != null && !drawable.isRecycled()) {
 			return drawable;
 		}
 
-		InputStream in = null;
-			
-		try {
-			
-			ClassLoader loader = null;
-			
-			if(classLoaderProvider != null) {
-				loader = classLoaderProvider.getClassLoader();
-			}
-			else {
-				loader = Drawables.class.getClassLoader();
-			}
-			
-			String path = densityPath;
-			
-			in = loader.getResourceAsStream(path);
-			
-			if(in == null) {
-				
-				if(logger != null && logger.isDebugEnabled()) {
-					logger.debug("No drawable found in path [" +
-							path +
-							"].  Trying common path");
-				}
-				
-				// try default
-				path = commonPath;
-				in = loader.getResourceAsStream(path);
-			}
-			
-			if(in != null) {
-				drawable = createDrawable(in, path + name, tileX, tileY, scaleToWidth, scaleToHeight);
-				addToCache(path + name, drawable, eternal);
-			}
-			else {
-				if(logger != null && logger.isWarnEnabled()) {
-					logger.warn("No drawable found in path [" +
-							path +
-							"], returning null");
-				}
-			}
-			
-			return drawable;
+		Bitmap bmp = BitmapFactory.decodeResource(resources, resourceId, options);
+		
+		drawable = createDrawable(bmp, key);
+		
+		if(tileX) {
+			drawable.setTileModeX(Shader.TileMode.REPEAT);
 		}
-		finally {
-			if(in != null) {
-				try {
-					in.close();
-				}
-				catch (IOException e) {
-					SocializeLogger.w(e.getMessage(), e);
-				}
-			}
+		
+		if(tileY) {
+			drawable.setTileModeY(Shader.TileMode.REPEAT);
 		}
+		
+		addToCache(key, drawable, eternal);
+		
+		return drawable;			
 	}
 
 	public ClassLoaderProvider getClassLoaderProvider() {
@@ -205,6 +185,18 @@ public class Drawables {
 	}
 	
 	protected String getPath(String name, int density) {
+		String densityPath = getDensityRootPath(density);
+
+		int indexOf = name.indexOf('#');
+		
+		if(indexOf >= 0) {
+			name = name.substring(0, indexOf);
+		}
+		
+		return densityPath + "/" + name;
+	}
+	
+	protected String getDensityRootPath(int density) {
 		String densityPath = null;
 		
 		if (density > DisplayMetrics.DENSITY_LOW) {
@@ -223,19 +215,13 @@ public class Drawables {
 		else {
 			densityPath = "ldpi";
 		}
-
-		int indexOf = name.indexOf('#');
 		
-		if(indexOf >= 0) {
-			name = name.substring(0, indexOf);
-		}
-		
-		return "res/drawable/" + densityPath + "/" + name;
+		return "res/drawable/" + densityPath;
 	}
 	
 	protected CacheableDrawable createDrawable(InputStream in, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY) {
 		
-		Bitmap bitmap = bitmapUtils.getScaledBitmap ( in , pixelsX, pixelsY , DisplayMetrics.DENSITY_DEFAULT);
+		Bitmap bitmap = bitmapUtils.getScaledBitmap ( in, pixelsX, pixelsY, DisplayMetrics.DENSITY_DEFAULT);
 
 		CacheableDrawable drawable = createDrawable(bitmap, name);
 		

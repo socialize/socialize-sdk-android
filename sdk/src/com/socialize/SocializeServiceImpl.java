@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -91,6 +93,7 @@ import com.socialize.util.ResourceLocator;
 public class SocializeServiceImpl implements SocializeService {
 	
 	static final String receiver = SocializeC2DMReceiver.class.getName();
+	static final Lock initLock = new ReentrantReadWriteLock().writeLock();
 	
 	private SocializeLogger logger;
 	private IOCContainer container;
@@ -229,120 +232,128 @@ public class SocializeServiceImpl implements SocializeService {
 	}
 	
 	public synchronized IOCContainer initWithContainer(Context context, SocializeInitListener listener, String...paths) throws Exception {
-		boolean init = false;
 		
-		// Check socialize is supported on this device.
-		isSocializeSupported(context);
-		
-		String[] localPaths = getInitPaths();
-		
-		if(paths != null) {
+		try {
+			initLock.lock();
+			
+			boolean init = false;
+			
+			// Check socialize is supported on this device.
+			isSocializeSupported(context);
+			
+			String[] localPaths = getInitPaths();
+			
+			if(paths != null) {
 
-			if(isInitialized()) {
-				
-				if(localPaths != null) {
-					for (String path : paths) {
-						if(binarySearch(localPaths, path) < 0) {
-							
-							if(logger != null && logger.isInfoEnabled()) {
-								logger.info("New path found for beans [" +
-										path +
-										"].  Re-initializing Socialize");
-							}
-							
-							this.initCount = 0;
-							
-							// Destroy the container so we recreate bean references
-							if(container != null) {
-								if(logger != null && logger.isDebugEnabled()) {
-									logger.debug("Destroying IOC container");
+				if(isInitialized()) {
+					
+					if(localPaths != null) {
+						for (String path : paths) {
+							if(binarySearch(localPaths, path) < 0) {
+								
+								if(logger != null && logger.isInfoEnabled()) {
+									logger.info("New path found for beans [" +
+											path +
+											"].  Re-initializing Socialize");
 								}
-								container.destroy();
+								
+								this.initCount = 0;
+								
+								// Destroy the container so we recreate bean references
+								if(container != null) {
+									if(logger != null && logger.isDebugEnabled()) {
+										logger.debug("Destroying IOC container");
+									}
+									container.destroy();
+								}
+								
+								init = true;
+								
+								break;
 							}
-							
-							init = true;
-							
-							break;
 						}
+					}
+					else {
+						String msg = "Socialize reported as initialize, but no initPaths were found.  This should not happen!";
+						if(logger != null) {
+							logger.error(msg);
+						}
+						else {
+							System.err.println(msg);
+						}
+						
+						destroy();
+						init = true;
 					}
 				}
 				else {
-					String msg = "Socialize reported as initialize, but no initPaths were found.  This should not happen!";
-					if(logger != null) {
-						logger.error(msg);
-					}
-					else {
-						System.err.println(msg);
-					}
-					
-					destroy();
 					init = true;
 				}
-			}
-			else {
-				init = true;
-			}
-			
-			if(init) {
-				try {
-					Logger.LOG_KEY = Socialize.LOG_KEY;
-					Logger.logLevel = Log.WARN;
-					
-					this.initPaths = paths;
-					
-					sort(this.initPaths);
-					
-					if(container == null) {
-						container = newSocializeIOC();
-					}
-					
-					ResourceLocator locator = newResourceLocator();
-					
-					locator.setLogger(newLogger());
-					
-					ClassLoaderProvider provider = newClassLoaderProvider();
-					
-					locator.setClassLoaderProvider(provider);
-					
-					if(logger != null) {
+				
+				if(init) {
+					try {
+						Logger.LOG_KEY = Socialize.LOG_KEY;
+						Logger.logLevel = Log.WARN;
 						
-						if(logger.isDebugEnabled()) {
-							for (String path : paths) {
-								logger.debug("Initializing Socialize with path [" +
-										path +
-										"]");
-							}
+						this.initPaths = paths;
+						
+						sort(this.initPaths);
+						
+						if(container == null) {
+							container = newSocializeIOC();
+						}
+						
+						ResourceLocator locator = newResourceLocator();
+						
+						locator.setLogger(newLogger());
+						
+						ClassLoaderProvider provider = newClassLoaderProvider();
+						
+						locator.setClassLoaderProvider(provider);
+						
+						if(logger != null) {
 							
-							Logger.logLevel = Log.DEBUG;
-						}
-						else if(logger.isInfoEnabled()) {
-							Logger.logLevel = Log.INFO;
-						}
-					}	
-					
-					((SocializeIOC) container).init(context, locator, paths);
-					
-					init(context, container, listener); // initCount incremented here
+							if(logger.isDebugEnabled()) {
+								for (String path : paths) {
+									logger.debug("Initializing Socialize with path [" +
+											path +
+											"]");
+								}
+								
+								Logger.logLevel = Log.DEBUG;
+							}
+							else if(logger.isInfoEnabled()) {
+								Logger.logLevel = Log.INFO;
+							}
+						}	
+						
+						((SocializeIOC) container).init(context, locator, paths);
+						
+						init(context, container, listener); // initCount incremented here
+					}
+					catch (Exception e) {
+						throw e;
+					}
 				}
-				catch (Exception e) {
-					throw e;
+				else {
+					this.initCount++;
 				}
+				
+				// Always set the context on the container
+				setContext(context);
 			}
 			else {
-				this.initCount++;
-			}
-			
-			// Always set the context on the container
-			setContext(context);
+				String msg = "Attempt to initialize Socialize with null bean config paths";
+				if(logger != null) {
+					logger.error(msg);
+				}
+				else {
+					System.err.println(msg);
+				}
+			}			
 		}
-		else {
-			String msg = "Attempt to initialize Socialize with null bean config paths";
-			if(logger != null) {
-				logger.error(msg);
-			}
-			else {
-				System.err.println(msg);
-			}
+		finally {
+			initLock.unlock();
 		}
 		
 		return container;
