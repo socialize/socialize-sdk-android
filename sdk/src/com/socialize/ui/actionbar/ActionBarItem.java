@@ -70,7 +70,7 @@ public class ActionBarItem extends LinearLayout {
 	
 	public void init() {
 		
-		int leftMargin = displayUtils.getDIP(3);
+		int leftMargin = displayUtils.getDIP(6);
 		
 		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		masterParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
@@ -160,7 +160,7 @@ public class ActionBarItem extends LinearLayout {
 		
 		LayoutParams textLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
 		textLayoutParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
-		
+		textLayoutParams.setMargins(0, 0, 0, 0);
 		textLayout.setLayoutParams(textLayoutParams);
 
 		textView = new TextView(getContext());

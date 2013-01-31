@@ -22,6 +22,7 @@
 package com.socialize.util;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import com.socialize.cache.ICacheable;
 
@@ -40,6 +41,11 @@ public class CacheableDrawable extends SafeBitmapDrawable implements ICacheable<
 
 	public CacheableDrawable(Bitmap bitmap, String key) {
 		super(bitmap);
+		this.key = key;
+	}
+
+	public CacheableDrawable(Resources res, Bitmap bitmap, String key) {
+		super(res, bitmap);
 		this.key = key;
 	}
 

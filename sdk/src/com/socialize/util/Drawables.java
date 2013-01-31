@@ -45,7 +45,7 @@ public class Drawables {
 	private SocializeLogger logger;
 	private Resources resources;
 	
-	private final BitmapFactory.Options options = new BitmapFactory.Options(); 
+//	private final BitmapFactory.Options options = new BitmapFactory.Options(); 
 	
 	public Drawables() {
 		super();
@@ -55,7 +55,7 @@ public class Drawables {
 		metrics = new DisplayMetrics();
 		resources = context.getResources();
 		context.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		options.inScaled = false;
+//		options.inScaled = false;
 	}
 	
 	public Drawable getDrawable(String name) {
@@ -131,7 +131,7 @@ public class Drawables {
 			return drawable;
 		}
 
-		Bitmap bmp = BitmapFactory.decodeResource(resources, resourceId, options);
+		Bitmap bmp = BitmapFactory.decodeResource(resources, resourceId);
 		
 		drawable = createDrawable(bmp, key);
 		
@@ -175,49 +175,6 @@ public class Drawables {
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}
-
-	protected String getPath(String name) {
-		int indexOf = name.indexOf('#');
-		if(indexOf >= 0) {
-			name = name.substring(0, indexOf);
-		}
-		return "res/drawable/" + name;
-	}
-	
-	protected String getPath(String name, int density) {
-		String densityPath = getDensityRootPath(density);
-
-		int indexOf = name.indexOf('#');
-		
-		if(indexOf >= 0) {
-			name = name.substring(0, indexOf);
-		}
-		
-		return densityPath + "/" + name;
-	}
-	
-	protected String getDensityRootPath(int density) {
-		String densityPath = null;
-		
-		if (density > DisplayMetrics.DENSITY_LOW) {
-			if (density > DisplayMetrics.DENSITY_MEDIUM) {
-				if (density > DisplayMetrics.DENSITY_HIGH) {
-					densityPath = "xhdpi";
-				}
-				else {
-					densityPath = "hdpi";
-				}
-			}
-			else {
-				densityPath = "mdpi";
-			}
-		}
-		else {
-			densityPath = "ldpi";
-		}
-		
-		return "res/drawable/" + densityPath;
-	}
 	
 	protected CacheableDrawable createDrawable(InputStream in, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY) {
 		
@@ -237,7 +194,7 @@ public class Drawables {
 	}
 	
 	protected CacheableDrawable createDrawable(Bitmap bitmap, String name) {
-		return new CacheableDrawable(bitmap, name);
+		return new CacheableDrawable(resources, bitmap, name);
 	}
 	
 	protected void addToCache(String key, CacheableDrawable drawable, boolean eternal) {

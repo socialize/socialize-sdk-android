@@ -25,6 +25,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.util.FloatMath;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -71,16 +72,18 @@ public class ActionBarSliderHandle extends ActionBarSliderViewChild {
 		text.setTextColor(Color.WHITE);
 		text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
 		
+		Drawable drawable = drawables.getDrawable("toolbar_close.png");
+		
 		closeButton = new LinearLayout(getContext());
 		closeButton.setPadding(0, 0, 0, 0);
-		closeButton.setBackgroundDrawable(drawables.getDrawable("toolbar_close.png"));
+		closeButton.setBackgroundDrawable(drawable);
 		
 		icon = new ImageView(getContext());
 		
 		LayoutParams textParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		textParams.weight = 1.0f;
 		
-		LayoutParams closeImageParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
+		LayoutParams closeImageParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		closeImageParams.weight = 0.0f;
 		closeImageParams.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
 		closeImageParams.setMargins(0, 0, 0, 0);
