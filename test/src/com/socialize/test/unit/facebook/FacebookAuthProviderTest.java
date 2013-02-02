@@ -81,7 +81,8 @@ public class FacebookAuthProviderTest extends SocializeUnitTest {
 		AndroidMock.replay(context);
 		AndroidMock.replay(listener);
 		
-		FacebookAuthProvider provider = new FacebookAuthProvider();
+		FacebookFacadeV2 provider = new FacebookFacadeV2();
+		provider.setHolder(holder);
 		
 		FacebookAuthProviderInfo fb = new FacebookAuthProviderInfo();
 		fb.setAppId(appId);

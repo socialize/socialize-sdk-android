@@ -1266,7 +1266,7 @@
                     </extra-instrument-args>
                 </run-tests-helper>
 
-                <echo level="info">Settting permission to download the coverage file...</echo>
+                <echo level="info">Setting permission to download the coverage file...</echo>
                 <exec executable="${adb}" failonerror="true">
                     <arg line="${adb.device.arg}" />
                     <arg value="shell" />

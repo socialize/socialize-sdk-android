@@ -75,6 +75,10 @@ public abstract class SocializeUIRobotiumTest extends SocializeManagedActivityTe
 //		robotium.waitForActivity("SampleActivity", 5000);
 		TestUtils.setUp(this);
 		hideKeyboard();
+		
+		// Wait for init
+		getActivity().INIT_LOCK.lock();
+		getActivity().INIT_LOCK.unlock();
 	}
 	
 

@@ -65,8 +65,10 @@
             -post-package
             -post-build
             -pre-clean
+            
+        <import file="custom_rules.xml" optional="true" />
     -->
-    <import file="custom_rules.xml" optional="true" />
+  
 
     <!-- Import the actual build file.
 
@@ -86,7 +88,7 @@
          In all cases you must update the value of version-tag below to read 'custom' instead of an integer,
          in order to avoid having your file be overridden by tools such as "android update project"
     -->
-    <!-- version-tag: custom -->
+    <!-- version-tag: 1 -->
 	<import file="../sdk/ant/android_r21_build.xml" />
 
 </project>

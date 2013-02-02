@@ -73,6 +73,8 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		
 		Activity lastActivity = TestUtils.getLastActivity();
 		
+		assertNotNull(lastActivity);
+		
 		final ListView comments = TestUtils.findViewById(lastActivity, LoadingListView.LIST_VIEW_ID, 10000);
 		
 		assertNotNull(comments);
@@ -259,6 +261,8 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		TestUtils.waitForActivity(5000);
 		
 		Activity lastActivity = TestUtils.getLastActivity();
+		
+		assertNotNull(lastActivity);
 
 		final CountDownLatch latch = new CountDownLatch(1);
 		final CustomCheckbox chk = TestUtils.findCheckboxWithImageName(lastActivity, "icon_notify.png#large", 10000);

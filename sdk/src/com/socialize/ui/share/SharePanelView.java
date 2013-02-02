@@ -74,6 +74,7 @@ public class SharePanelView extends DialogPanelView {
 	private SocializeButton continueButton;
 	private SocializeButton cancelButton;
 	private TextView otherOptions;
+	private LinearLayout buttonLayout;
 	
 	private int displayOptions = ShareUtils.DEFAULT;
 	
@@ -141,7 +142,7 @@ public class SharePanelView extends DialogPanelView {
 		
 		makeShareButtons();
 		
-		View continueButtonLayout = makeContinueButton();
+		View continueButtonLayout = makeButtons();
 		View header = makeHeaderView(headerHeight, headerRadius);
 		
 		LinearLayout contentLayout = new LinearLayout(getContext());
@@ -363,7 +364,16 @@ public class SharePanelView extends DialogPanelView {
 			else {
 				googlePlusCell.setVisibility(View.GONE);
 			}
-		}			
+		}	
+		
+		if(buttonLayout != null) {
+			if((displayOptions & ShareUtils.MORE_OPTIONS) != 0) {
+				buttonLayout.setPadding(padding, 0, padding, padding);
+			}
+			else {
+				buttonLayout.setPadding(padding, padding, padding, padding);
+			}
+		}
 	}
 	
 
@@ -556,9 +566,9 @@ public class SharePanelView extends DialogPanelView {
 	}	
 
 	
-	protected View makeContinueButton() {
+	protected View makeButtons() {
 		
-		LinearLayout buttonLayout = new LinearLayout(getContext());
+		buttonLayout = new LinearLayout(getContext());
 		
 		if(continueButton != null) {
 

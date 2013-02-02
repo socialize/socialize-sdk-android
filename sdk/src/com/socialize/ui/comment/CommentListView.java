@@ -280,7 +280,11 @@ public class CommentListView extends BaseView {
 				
 				if(onCommentViewActionListener != null) {
 					onCommentViewActionListener.onError(error);
-				}						
+				}			
+				
+				if(commentEntrySliderItem != null) {
+					commentEntrySliderItem.getCommentEntryView().getPostCommentButton().setEnabled(true);
+				}				
 			}
 
 			@Override
@@ -319,6 +323,10 @@ public class CommentListView extends BaseView {
 				if(onCommentViewActionListener != null) {
 					onCommentViewActionListener.onPostComment(entity);
 				}
+				
+				if(commentEntrySliderItem != null) {
+					commentEntrySliderItem.getCommentEntryView().getPostCommentButton().setEnabled(true);
+				}	
 			}
 
 			@Override
@@ -326,6 +334,10 @@ public class CommentListView extends BaseView {
 				if(dialog != null) {
 					dialog.dismiss();
 				}
+				
+				if(commentEntrySliderItem != null) {
+					commentEntrySliderItem.getCommentEntryView().getPostCommentButton().setEnabled(true);
+				}	
 			}
 		};
 	}

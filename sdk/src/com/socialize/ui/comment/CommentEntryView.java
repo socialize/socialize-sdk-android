@@ -177,6 +177,7 @@ public class CommentEntryView extends BaseView {
 			postCommentButton.setCustomClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					postCommentButton.setEnabled(false);
 					keyboardUtils.hideKeyboard(commentField);
 					boolean shareLocation = false;
 					if(locationCheckBox != null) {
@@ -208,15 +209,15 @@ public class CommentEntryView extends BaseView {
 
 			// Notification layout
 			LinearLayout notificationMasterLayout = new LinearLayout(getContext());
-			LayoutParams notificationMasterLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+			LayoutParams notificationMasterLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
 					
 			notificationMasterLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 			notificationMasterLayoutParams.weight = 1.0f;
-			notificationMasterLayoutParams.setMargins(0, -displayUtils.getDIP(20), 0, 0);
+			notificationMasterLayoutParams.setMargins(0, displayUtils.getDIP(20), 0, 0);
 			notificationMasterLayout.setLayoutParams(notificationMasterLayoutParams);
 			
 			LinearLayout notificationContentLayout = new LinearLayout(getContext());
-			LayoutParams notificationContentLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+			LayoutParams notificationContentLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
 					
 			notificationContentLayout.setOrientation(LinearLayout.VERTICAL);
 			notificationContentLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
@@ -409,6 +410,10 @@ public class CommentEntryView extends BaseView {
 			notifyCheckBox.setChecked(notificationsEnabled);
 		}
 		
+		if(postCommentButton != null) {
+			postCommentButton.setEnabled(true);
+		}		
+		
 		SocializeSession session = Socialize.getSocialize().getSession();
 		
 		if(session != null) {
@@ -464,6 +469,10 @@ public class CommentEntryView extends BaseView {
 		return notifyCheckBox;
 	}
 	
+	protected SocializeButton getPostCommentButton() {
+		return postCommentButton;
+	}
+
 	protected void setNotifySubscribeState(boolean subscribed) {
 		if(subscribed) {
 			notificationsEnabled = subscribed;
@@ -474,4 +483,6 @@ public class CommentEntryView extends BaseView {
 			updateUI();
 		}
 	}
+	
+	
 }

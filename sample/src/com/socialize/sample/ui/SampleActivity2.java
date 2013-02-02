@@ -1,5 +1,7 @@
 package com.socialize.sample.ui;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -27,6 +29,8 @@ import com.socialize.ui.SocializeEntityLoader;
 import com.socialize.ui.dialog.SafeProgressDialog;
 
 public class SampleActivity2 extends BaseActivity {
+	
+	public final Lock INIT_LOCK = new ReentrantReadWriteLock().writeLock();
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -49,6 +53,8 @@ public class SampleActivity2 extends BaseActivity {
 		final Button btnActionViewManual = (Button) findViewById(R.id.btnActionViewManual);
 		
 		final SafeProgressDialog progress = SafeProgressDialog.show(this);
+		
+		INIT_LOCK.lock();
 		
 		Socialize.getSocialize().initAsync(this, new SocializeInitListener() {
 			
@@ -175,6 +181,8 @@ public class SampleActivity2 extends BaseActivity {
 				imm.hideSoftInputFromWindow( getWindow().getDecorView().getWindowToken(), 0);
 				
 				progress.dismiss();
+				
+				INIT_LOCK.unlock();
 			}
 		});
 	}

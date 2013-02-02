@@ -118,7 +118,7 @@
 	</target>
 	
 	<target name="build-all" depends="clean-all">
-		<ant dir="../sample" target="copy-library-src" inheritall="false" inheritrefs="false"/>
+		<!--<ant dir="../sample" target="copy-library-src" inheritall="false" inheritrefs="false"/>-->
 		<property name="build.is.instrumented" value="true" />
 		<property name="build.target" value="instrument" />  
 		<property name="emma.enabled" value="true" />
@@ -165,6 +165,7 @@
             	sourcepathref="emma.report.src.path" 
             	verbosity="${verbosity}">
             	<infileset dir="${emma.report.dir}" includes="**/*.em, **/*.ec"/>
+            	<infileset dir="${out.absolute.dir}" includes="**/*.em, **/*.ec"/>
 				<html outfile="${emma.report.dir}/coverage.html" />
 				<xml outfile="${emma.report.dir}/coverage.xml" />
            </report>

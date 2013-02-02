@@ -185,26 +185,26 @@ public class TestUtils {
 			SharedPreferences prefs = activity.getSharedPreferences("SocializeSession", Context.MODE_PRIVATE);
 			prefs.edit().clear().commit();		
 			
-			activity.finish();
+//			activity.finish();
 			activity = null;
 		}
 		
 		if(monitor != null) {
-			Activity lastActivity = monitor.getLastActivity();
-			if(lastActivity != null) {
-				lastActivity.finish();
-			}
+//			Activity lastActivity = monitor.getLastActivity();
+//			if(lastActivity != null) {
+//				lastActivity.finish();
+//			}
 			instrumentation.removeMonitor(monitor);
 			
 			monitor = null;
 		}
 		
 		if(allActivitiesMonitor != null) {
-			Activity lastActivity = allActivitiesMonitor.getLastActivity();
+//			Activity lastActivity = allActivitiesMonitor.getLastActivity();
 			
-			if(lastActivity != null) {
-				lastActivity.finish();
-			}
+//			if(lastActivity != null) {
+//				lastActivity.finish();
+//			}
 			
 			instrumentation.removeMonitor(allActivitiesMonitor);
 			
@@ -245,7 +245,6 @@ public class TestUtils {
 	@SuppressWarnings("unchecked")
 	public static <A extends Activity> A waitForActivity(long timeout) {
 		if(monitor != null) {
-			
 			return (A) monitor.waitForActivityWithTimeout(timeout);
 		}
 		return null;
