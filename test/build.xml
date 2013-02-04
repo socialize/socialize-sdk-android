@@ -49,10 +49,9 @@
     <loadproperties srcFile="project.properties" />
 
     <!-- quick check on sdk.dir -->
-    <fail
-            message="sdk.dir is missing. Make sure to generate local.properties using 'android update project' or to inject it through the ANDROID_HOME environment variable."
-            unless="sdk.dir"
-    />
+    <fail 
+    	message="sdk.dir is missing. Make sure to generate local.properties using 'android update project' or to inject it through the ANDROID_HOME environment variable." 
+    	unless="sdk.dir"/>
 
     <!--
         Import per project custom build rules if present at the root of the project.
@@ -66,9 +65,9 @@
             -post-build
             -pre-clean
             
-        <import file="custom_rules.xml" optional="true" />
+        
     -->
-  
+	<import file="custom_rules.xml" optional="true" />
 
     <!-- Import the actual build file.
 
@@ -88,7 +87,7 @@
          In all cases you must update the value of version-tag below to read 'custom' instead of an integer,
          in order to avoid having your file be overridden by tools such as "android update project"
     -->
-    <!-- version-tag: 1 -->
+    <!-- version-tag: custom -->
 	<import file="../sdk/ant/android_r21_build.xml" />
 
 </project>

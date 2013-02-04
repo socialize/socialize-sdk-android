@@ -138,7 +138,7 @@
 			<sequential>
 		    	<echo></echo>
 		    	<echo>##################################################################################################</echo>
-		    	<echo># EXECUTING TEST FOR PACKAGE @{test.package}</echo>
+		    	<echo>########################### EXECUTING TEST FOR PACKAGE @{test.package} ###########################</echo>
 		    	<echo>##################################################################################################</echo>
 		    	<echo></echo>    			
 				<antcall target="install-all" inheritall="true" inheritrefs="true"/>
@@ -165,7 +165,7 @@
             	sourcepathref="emma.report.src.path" 
             	verbosity="${verbosity}">
             	<infileset dir="${emma.report.dir}" includes="**/*.em, **/*.ec"/>
-            	<infileset dir="${tested.project.dir}/bin" includes="**/*.em, **/*.ec"/>
+            	<infileset dir="${out.absolute.dir}" includes="**/*.em, **/*.ec"/>
 				<html outfile="${emma.report.dir}/coverage.html" />
 				<xml outfile="${emma.report.dir}/coverage.xml" />
            </report>
