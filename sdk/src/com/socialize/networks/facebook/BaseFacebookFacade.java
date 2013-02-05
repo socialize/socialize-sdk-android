@@ -25,19 +25,19 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import com.facebook.HttpMethod;
 import com.socialize.ConfigUtils;
 import com.socialize.ShareUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.ShareType;
 import com.socialize.api.action.share.ShareOptions;
 import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.api.action.user.UserSystem;
@@ -46,35 +46,83 @@ import com.socialize.auth.AuthProviderResponse;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.DefaultUserProviderCredentials;
 import com.socialize.auth.UserProviderCredentials;
+import com.socialize.auth.facebook.FacebookActivity;
 import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
-import com.socialize.entity.PropagationInfoResponse;
-import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.AuthProviderListener;
+import com.socialize.listener.ListenerHolder;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.DefaultPostData;
+import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.SocializeDeAuthListener;
 import com.socialize.ui.profile.UserSettings;
-import com.socialize.util.StringUtils;
+import com.socialize.util.ImageUtils;
 
 
 /**
  * @author Jason Polites
- *
  */
 public abstract class BaseFacebookFacade implements FacebookFacade {
 	
+	protected ListenerHolder holder; // This is a singleton
 	protected UserSystem userSystem;
 	protected SocializeLogger logger;
 	protected SocializeConfig config;	
+	protected ImageUtils imageUtils;
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.networks.facebook.FacebookFacade#authenticate(android.app.Activity, com.socialize.auth.facebook.FacebookAuthProviderInfo, com.socialize.listener.AuthProviderListener)
+	 */
+	@Override
+	public void authenticate(Activity context, FacebookAuthProviderInfo info, final AuthProviderListener listener) {
+
+		final String listenerKey = "auth";
+		
+		holder.push(listenerKey, new AuthProviderListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				holder.remove(listenerKey);
+				listener.onError(error);
+			}
+			
+			@Override
+			public void onAuthSuccess(AuthProviderResponse response) {
+				holder.remove(listenerKey);
+				listener.onAuthSuccess(response);
+			}
+			
+			@Override
+			public void onAuthFail(SocializeException error) {
+				holder.remove(listenerKey);
+				listener.onAuthFail(error);
+			}
+
+			@Override
+			public void onCancel() {
+				holder.remove(listenerKey);
+				listener.onCancel();
+			}
+		});
+		
+		Intent i = new Intent(context, FacebookActivity.class);
+		i.putExtra("appId", info.getAppId());
+		
+		if(info.getPermissions() != null) {
+			i.putExtra("permissions", info.getPermissions());
+		}
+		
+		context.startActivity(i);		
+	}		
+	
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.facebook.FacebookFacade#link(android.app.Activity, com.socialize.listener.SocializeAuthListener)
 	 */
@@ -292,31 +340,31 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 		post(parent, entity, comment, propInfo, listener);
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.socialize.networks.facebook.FacebookFacade#postPhoto(android.app.Activity, com.socialize.entity.Share, java.lang.String, android.net.Uri, com.socialize.networks.SocialNetworkListener)
-	 */
-	@Override
-	public void postPhoto(Activity parent, Share share, String comment, Uri photoUri, SocialNetworkListener listener) {
-		PropagationInfoResponse propagationInfoResponse = share.getPropagationInfoResponse();
-		PropagationInfo propInfo = propagationInfoResponse.getPropagationInfo(ShareType.FACEBOOK);
-		
-		if(propInfo != null) {
-			String link = propInfo.getAppUrl();
-			String appId = getFacebookAppId();
-			
-			if(!StringUtils.isEmpty(appId)) {
-				postPhoto(parent, link, comment, photoUri, listener);
-			}
-			else {
-				String msg = "Cannot post message to Facebook.  No app id found.  Make sure you specify facebook.app.id in socialize.properties";
-				onError(parent, msg, new SocializeException(msg), listener);
-			}	
-		}
-		else {
-			String msg = "Cannot post message to Facebook.  No propagation info found";
-			onError(parent, msg, new SocializeException(msg), listener);
-		}
-	}	
+//	/* (non-Javadoc)
+//	 * @see com.socialize.networks.facebook.FacebookFacade#postPhoto(android.app.Activity, com.socialize.entity.Share, java.lang.String, android.net.Uri, com.socialize.networks.SocialNetworkListener)
+//	 */
+//	@Override
+//	public void postPhoto(Activity parent, Share share, String comment, Bitmap photo, SocialNetworkListener listener) {
+//		PropagationInfoResponse propagationInfoResponse = share.getPropagationInfoResponse();
+//		PropagationInfo propInfo = propagationInfoResponse.getPropagationInfo(ShareType.FACEBOOK);
+//		
+//		if(propInfo != null) {
+//			String link = propInfo.getAppUrl();
+//			String appId = getFacebookAppId();
+//			
+//			if(!StringUtils.isEmpty(appId)) {
+//				postPhoto(parent, link, comment, photo, listener);
+//			}
+//			else {
+//				String msg = "Cannot post message to Facebook.  No app id found.  Make sure you specify facebook.app.id in socialize.properties";
+//				onError(parent, msg, new SocializeException(msg), listener);
+//			}	
+//		}
+//		else {
+//			String msg = "Cannot post message to Facebook.  No propagation info found";
+//			onError(parent, msg, new SocializeException(msg), listener);
+//		}
+//	}	
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.facebook.FacebookFacade#postOG(android.app.Activity, com.socialize.entity.Entity, java.lang.String, java.lang.String, com.socialize.entity.PropagationInfo, com.socialize.networks.SocialNetworkListener)
@@ -352,13 +400,22 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 	public void post(Activity parent, Entity entity, String message, PropagationInfo propInfo, SocialNetworkListener listener) {
 		postOG(parent, entity, message, null, propInfo, listener);
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.networks.facebook.FacebookFacade#post(android.app.Activity, com.socialize.networks.SocialNetworkListener, com.socialize.networks.PostData)
+	 */
+	@Override
+	public void post(Activity parent, SocialNetworkListener listener, PostData postData) {
+		doFacebookCall(parent, postData.getPostValues(), "me/links", HttpMethod.POST, listener);
+	}	
 		
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.facebook.FacebookFacade#post(android.app.Activity, java.lang.String, java.util.Map, com.socialize.networks.SocialNetworkPostListener)
 	 */
 	@Override
 	public void post(Activity parent, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {
-		doFacebookCall(parent, postData, graphPath, "POST", listener);
+		doFacebookCall(parent, postData, graphPath, HttpMethod.POST, listener);
 	}
 
 	/* (non-Javadoc)
@@ -366,7 +423,7 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 	 */
 	@Override
 	public void get(Activity parent, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {
-		doFacebookCall(parent, postData, graphPath, "GET", listener);
+		doFacebookCall(parent, postData, graphPath, HttpMethod.GET, listener);
 	}
 
 	/* (non-Javadoc)
@@ -374,7 +431,7 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 	 */
 	@Override
 	public void delete(Activity parent, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {
-		doFacebookCall(parent, postData, graphPath, "DELETE", listener);
+		doFacebookCall(parent, postData, graphPath, HttpMethod.DELETE, listener);
 	}	
 	
 	protected void doSocializeAuthKnownUser(Context context, AuthProviderInfo fbInfo, String token, SocializeAuthListener listener) {
@@ -440,7 +497,7 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 		onError(parent, msg, e, listener);
 	}	
 	
-	protected void doFacebookCall(Activity parent, Map<String, Object> postData, String graphPath, String method, SocialNetworkPostListener listener) {
+	protected void doFacebookCall(Activity parent, Map<String, Object> postData, String graphPath, HttpMethod method, SocialNetworkPostListener listener) {
 		Bundle bundle = new Bundle();
 		
 		if(postData != null) {
@@ -461,7 +518,7 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 		doFacebookCall(parent, bundle, graphPath, method, listener);
 	}	
 	
-	protected abstract void doFacebookCall(Activity parent, Bundle data, String graphPath, String method, SocialNetworkPostListener listener);
+	protected abstract void doFacebookCall(Activity parent, Bundle data, String graphPath, HttpMethod method, SocialNetworkPostListener listener);
 	
 	// So we can mock
 	protected SocializeService getSocialize() {
@@ -481,6 +538,12 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 	}
 	public void setConfig(SocializeConfig config) {
 		this.config = config;
+	}
+	public void setImageUtils(ImageUtils imageUtils) {
+		this.imageUtils = imageUtils;
+	}
+	public void setHolder(ListenerHolder holder) {
+		this.holder = holder;
 	}
 	
 }

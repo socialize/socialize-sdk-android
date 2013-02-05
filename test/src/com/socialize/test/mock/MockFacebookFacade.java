@@ -24,14 +24,13 @@ package com.socialize.test.mock;
 import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.auth.AuthProviderResponse;
 import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
-import com.socialize.entity.Share;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.PostData;
@@ -63,11 +62,27 @@ public class MockFacebookFacade implements FacebookFacade {
 		token = config.getProperty("facebook.token");
 	}
 	
+	
+	
+	@Override
+	public void authenticate(Activity context, String appId, String[] permissions, boolean sso, AuthProviderListener listener) {
+		AuthProviderResponse mockResponse = new AuthProviderResponse();
+		mockResponse.setUserId(userId);
+		mockResponse.setToken(token);
+		listener.onAuthSuccess(mockResponse);
+		
+	}
+
+	@Override
+	public void onActivityResult(Activity context, int requestCode, int resultCode, Intent data) {
+		
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.facebook.FacebookFacade#authenticate(android.content.Context, com.socialize.auth.facebook.FacebookAuthProviderInfo, com.socialize.listener.AuthProviderListener)
 	 */
 	@Override
-	public void authenticate(Context context, FacebookAuthProviderInfo info, AuthProviderListener listener) {
+	public void authenticate(Activity context, FacebookAuthProviderInfo info, AuthProviderListener listener) {
 		AuthProviderResponse mockResponse = new AuthProviderResponse();
 		mockResponse.setUserId(userId);
 		mockResponse.setToken(token);
@@ -116,20 +131,19 @@ public class MockFacebookFacade implements FacebookFacade {
 		}
 	}
 
-	@Override
-	public void postPhoto(Activity parent, String link, String caption, Uri photoUri, SocialNetworkListener listener) {
-		if(listener != null) {
-			listener.onAfterPost(parent, SocialNetwork.FACEBOOK, null);
-		}
-	}
-
-	@Override
-	public void postPhoto(Activity parent, Share share, String comment, Uri photoUri, SocialNetworkListener listener) {
-		if(listener != null) {
-			listener.onAfterPost(parent, SocialNetwork.FACEBOOK, null);
-		}
-		
-	}
+//	@Override
+//	public void postPhoto(Activity parent, String link, String caption, Uri photoUri, SocialNetworkListener listener) {
+//		if(listener != null) {
+//			listener.onAfterPost(parent, SocialNetwork.FACEBOOK, null);
+//		}
+//	}
+//
+//	@Override
+//	public void postPhoto(Activity parent, Share share, String comment, Uri photoUri, SocialNetworkListener listener) {
+//		if(listener != null) {
+//			listener.onAfterPost(parent, SocialNetwork.FACEBOOK, null);
+//		}
+//	}
 
 	@Override
 	public void post(Activity parent, Entity entity, String message, PropagationInfo propInfo, SocialNetworkListener listener) {

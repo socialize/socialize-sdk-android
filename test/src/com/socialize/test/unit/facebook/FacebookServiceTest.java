@@ -32,12 +32,14 @@ import android.content.DialogInterface.OnClickListener;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.AuthProviderResponse;
+import com.socialize.auth.facebook.FacebookActivity;
 import com.socialize.auth.facebook.FacebookService;
 import com.socialize.auth.facebook.FacebookSessionStore;
 import com.socialize.error.SocializeException;
 import com.socialize.facebook.Facebook;
 import com.socialize.facebook.Facebook.DialogListener;
 import com.socialize.listener.AuthProviderListener;
+import com.socialize.networks.facebook.FacebookFacade;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.mock.MockAlertDialog;
 import com.socialize.test.mock.MockBuilder;
@@ -54,7 +56,8 @@ import com.socialize.util.DialogFactory;
 	Facebook.class, 
 	FacebookSessionStore.class, 
 	AuthProviderListener.class,
-	DialogFactory.class})
+	DialogFactory.class,
+	FacebookActivity.class})
 	public class FacebookServiceTest extends SocializeActivityTest {
 
 	public void testAuthenticate() {
@@ -62,7 +65,7 @@ import com.socialize.util.DialogFactory;
 		final String appId = "foobar";
 		final String[] permissions = new String[]{};
 
-		Activity context = AndroidMock.createMock(Activity.class);
+		FacebookActivity context = AndroidMock.createMock(FacebookActivity.class);
 		Facebook facebook = AndroidMock.createMock(Facebook.class, appId);
 		FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
 		AuthProviderListener authProviderListener = AndroidMock.createMock(AuthProviderListener.class);
@@ -86,7 +89,7 @@ import com.socialize.util.DialogFactory;
 
 		final String appId = "foobar";
 
-		Activity context = AndroidMock.createMock(Activity.class);
+		FacebookActivity context = AndroidMock.createMock(FacebookActivity.class);
 		Facebook facebook = AndroidMock.createMock(Facebook.class, appId);
 		FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
 		AuthProviderListener authProviderListener = AndroidMock.createMock(AuthProviderListener.class);
@@ -108,7 +111,7 @@ import com.socialize.util.DialogFactory;
 
 		final String appId = "foobar";
 
-		Activity context = AndroidMock.createMock(Activity.class);
+		FacebookActivity context = AndroidMock.createMock(FacebookActivity.class);
 		Facebook facebook = AndroidMock.createMock(Facebook.class, appId);
 		FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
 		AuthProviderListener authProviderListener = AndroidMock.createMock(AuthProviderListener.class);
@@ -132,7 +135,7 @@ import com.socialize.util.DialogFactory;
 		final String appId = "foobar";
 		final String errorMessage = "foobar_error";
 
-		Activity context = AndroidMock.createMock(Activity.class);
+		FacebookActivity context = AndroidMock.createMock(FacebookActivity.class);
 		Facebook facebook = AndroidMock.createMock(Facebook.class, appId);
 		FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
 		DialogFactory dialogFactory = AndroidMock.createMock(DialogFactory.class);
@@ -181,12 +184,12 @@ import com.socialize.util.DialogFactory;
 	public void testAuthenticateCallsAuthenticateWithCorrectPermissions() {
 		FacebookService service = new FacebookService(null, null, null, null, null) {
 			@Override
-			public void authenticate(Activity context, String[] permissions) {
+			public void authenticate(FacebookActivity context, String[] permissions) {
 				assertNotNull(permissions);
 				assertTrue(permissions.length == 3);
-				assertEquals(FacebookService.DEFAULT_PERMISSIONS[0], permissions[0]);
-				assertEquals(FacebookService.DEFAULT_PERMISSIONS[1], permissions[1]);
-				assertEquals(FacebookService.DEFAULT_PERMISSIONS[2], permissions[2]);
+				assertEquals(FacebookFacade.DEFAULT_PERMISSIONS[0], permissions[0]);
+				assertEquals(FacebookFacade.DEFAULT_PERMISSIONS[1], permissions[1]);
+				assertEquals(FacebookFacade.DEFAULT_PERMISSIONS[2], permissions[2]);
 				addResult(true);
 			}
 		};
@@ -205,7 +208,7 @@ import com.socialize.util.DialogFactory;
 		final String errorMessage = "foobar_error";
 		final String appId = "foobar";
 
-		Activity context = AndroidMock.createMock(Activity.class);
+		FacebookActivity context = AndroidMock.createMock(FacebookActivity.class);
 		MockAlertDialog dialog = AndroidMock.createMock(MockAlertDialog.class,TestUtils.getActivity(this));
 		Facebook facebook = AndroidMock.createMock(Facebook.class, appId);
 		FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
@@ -298,14 +301,14 @@ import com.socialize.util.DialogFactory;
 
 	}
 
-	@UsesMocks (DialogInterface.class)
+	@UsesMocks ({DialogInterface.class, FacebookActivity.class})
 	public void testMakeErrorDialogListener() {
 
 		final String appId = "foobar";
 		final String error = "foobar_error";
 		
 		DialogInterface dialog = AndroidMock.createMock(DialogInterface.class);
-		Activity context = AndroidMock.createMock(Activity.class);
+		FacebookActivity context = AndroidMock.createMock(FacebookActivity.class);
 		Facebook facebook = AndroidMock.createMock(Facebook.class, appId);
 		FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
 		AuthProviderListener authProviderListener = AndroidMock.createMock(AuthProviderListener.class);
@@ -344,12 +347,12 @@ import com.socialize.util.DialogFactory;
 		FacebookService service =  new FacebookService(facebook, facebookSessionStore, authProviderListener, dialogFactory, null) {
 			
 			@Override
-			public void authenticate(Activity context, String[] permissions, boolean sso) {
+			public void authenticate(FacebookActivity context, String[] permissions, boolean sso) {
 				addResult(3, "auth_called");
 			}
 
 			@Override
-			public void finish(Activity context) {
+			public void finish(FacebookActivity context) {
 				addResult(4, "finish_called");
 			}
 		};

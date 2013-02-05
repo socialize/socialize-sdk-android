@@ -44,8 +44,8 @@ public class FacebookFacadeFactory implements IBeanMaker {
 			
 			// TODO: Change this!
 			// Just return v2 always for now
-			return v2BeanName;
-//			return v3BeanName;
+//			return v2BeanName;
+			return v3BeanName;
 		}
 		catch (ClassNotFoundException e) {
 			return v2BeanName;

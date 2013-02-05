@@ -604,17 +604,18 @@
 		<property name="userSystem" ref="userSystem"/>
 		<property name="logger" ref="logger"/>
 		<property name="config" ref="config"/>
-	</bean>		
+		<property name="holder" ref="listenerHolder"/>
+		<property name="imageUtils" ref="imageUtils"/>		
+	</bean>
 	
 	<bean 
 		id="facebookV2Facade" 
 		extends="facebookFacadeBase"
 		class="com.socialize.networks.facebook.v2.FacebookFacadeV2"
 		lazy="true">
-		<property name="holder" ref="listenerHolder"/>
-		<property name="imageUtils" ref="imageUtils"/>
 		<property name="facebookUtils" ref="facebookUtils"/>
 		<property name="facebookRunnerFactory" ref="facebookRunnerFactory"/>
+		<property name="facebookSessionStore" ref="facebookSessionStore"/>
 	</bean>					
 	
 	<bean 

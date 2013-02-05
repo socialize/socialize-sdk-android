@@ -35,17 +35,15 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import com.facebook.HttpMethod;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
-import com.socialize.auth.AuthProviderResponse;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.DefaultUserProviderCredentials;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
-import com.socialize.auth.facebook.FacebookActivity;
-import com.socialize.auth.facebook.FacebookAuthProviderInfo;
+import com.socialize.auth.facebook.FacebookDialogListener;
 import com.socialize.auth.facebook.FacebookSessionStore;
 import com.socialize.error.SocializeException;
 import com.socialize.facebook.AsyncFacebookRunner;
@@ -64,7 +62,6 @@ import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.facebook.BaseFacebookFacade;
 import com.socialize.networks.facebook.FacebookUtilsProxy;
 import com.socialize.networks.facebook.OnPermissionResult;
-import com.socialize.util.ImageUtils;
 import com.socialize.util.StringUtils;
 
 /**
@@ -73,55 +70,46 @@ import com.socialize.util.StringUtils;
 @Deprecated
 public class FacebookFacadeV2 extends BaseFacebookFacade {
 	
-	private ListenerHolder holder; // This is a singleton
-	private ImageUtils imageUtils;
 	private FacebookUtilsProxy facebookUtils;
 	private IBeanFactory<AsyncFacebookRunner> facebookRunnerFactory;
-
 	private FacebookSessionStore facebookSessionStore;
 	
 	@Override
-	public void authenticate(Context context, FacebookAuthProviderInfo info, final AuthProviderListener listener) {
-
-		final String listenerKey = "auth";
-		
-		holder.push(listenerKey, new AuthProviderListener() {
-			
-			@Override
-			public void onError(SocializeException error) {
-				holder.remove(listenerKey);
-				listener.onError(error);
-			}
-			
-			@Override
-			public void onAuthSuccess(AuthProviderResponse response) {
-				holder.remove(listenerKey);
-				listener.onAuthSuccess(response);
-			}
-			
-			@Override
-			public void onAuthFail(SocializeException error) {
-				holder.remove(listenerKey);
-				listener.onAuthFail(error);
-			}
-
-			@Override
-			public void onCancel() {
-				holder.remove(listenerKey);
-				listener.onCancel();
-			}
-		});
-		
-		Intent i = new Intent(context, FacebookActivity.class);
-		i.putExtra("appId", info.getAppId());
-		
-		if(info.getPermissions() != null) {
-			i.putExtra("permissions", info.getPermissions());
-		}
-		
-		context.startActivity(i);		
+	public void onActivityResult(Activity context, int requestCode, int resultCode, Intent data) {
+		getFacebook(context).authorizeCallback(requestCode, resultCode, data);
 	}
 
+	@Override
+	public void authenticate(final Activity context, String appId, final String[] permissions, final boolean sso, final AuthProviderListener listener) {
+		Facebook facebook = getFacebook(context);
+		
+		facebookSessionStore.restore(facebook, context);
+		
+		FacebookDialogListener facebookDialogListener = new FacebookDialogListener(context, facebook, facebookSessionStore, listener) {
+			
+			@Override
+			public void onFinish() {
+				context.finish();
+			}
+			
+			@Override
+			public void handleError(Throwable error) {
+				if(listener != null) {
+					listener.onError(new SocializeException(error));
+				}
+				else {
+					error.printStackTrace();
+				}
+			}
+		};
+		
+		if(sso) {
+			facebook.authorize(context, permissions, facebookDialogListener);
+		}
+		else {
+			facebook.authorize(context, permissions, Facebook.FORCE_DIALOG_AUTH, facebookDialogListener);
+		}		
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.facebook.FacebookFacade#extendAccessToken(android.app.Activity, com.socialize.listener.SocializeAuthListener)
@@ -258,43 +246,42 @@ public class FacebookFacadeV2 extends BaseFacebookFacade {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.networks.facebook.FacebookFacade#postPhoto(android.app.Activity, java.lang.String, java.lang.String, android.net.Uri, com.socialize.networks.SocialNetworkListener)
-	 */
-	@Override
-	public void postPhoto(Activity parent, String link, String caption, Uri photoUri, SocialNetworkListener listener) {
-
-		try {
-			Bundle params = new Bundle();
-			params.putString("caption", caption + ": " + link);
-			params.putByteArray("photo", imageUtils.scaleImage(parent, photoUri));
-			
-			Facebook fb = getFacebook(parent);
-			
-			final FacebookSessionStore store = newFacebookSessionStore();
-			
-			store.restore(fb, parent);
-			
-			AsyncFacebookRunner runner = newAsyncFacebookRunner(fb);
-			
-			RequestListener requestListener = newRequestListener(parent, listener);
-			
-			runner.request("me/photos", params, "POST", requestListener, null);			
-		}
-		catch (IOException e) {
-			if(listener != null) {
-				listener.onNetworkError(parent, SocialNetwork.FACEBOOK, e);
-			}
-			 
-			if(logger != null) {
-				logger.error("Unable to scale image for upload", e);
-			}
-			else {
-				SocializeLogger.e(e.getMessage(), e);
-			}
-		}
-	}
-
+//	/* (non-Javadoc)
+//	 * @see com.socialize.networks.facebook.FacebookFacade#postPhoto(android.app.Activity, java.lang.String, java.lang.String, android.net.Uri, com.socialize.networks.SocialNetworkListener)
+//	 */
+//	@Override
+//	public void postPhoto(Activity parent, String link, String caption, Bitmap photo, SocialNetworkListener listener) {
+//
+//		try {
+//			Bundle params = new Bundle();
+//			params.putString("caption", caption + ": " + link);
+//			params.putByteArray("photo", imageUtils.scaleImage(parent, photoUri));
+//			
+//			Facebook fb = getFacebook(parent);
+//			
+//			final FacebookSessionStore store = newFacebookSessionStore();
+//			
+//			store.restore(fb, parent);
+//			
+//			AsyncFacebookRunner runner = newAsyncFacebookRunner(fb);
+//			
+//			RequestListener requestListener = newRequestListener(parent, listener);
+//			
+//			runner.request("me/photos", params, "POST", requestListener, null);			
+//		}
+//		catch (IOException e) {
+//			if(listener != null) {
+//				listener.onNetworkError(parent, SocialNetwork.FACEBOOK, e);
+//			}
+//			 
+//			if(logger != null) {
+//				logger.error("Unable to scale image for upload", e);
+//			}
+//			else {
+//				SocializeLogger.e(e.getMessage(), e);
+//			}
+//		}
+//	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.facebook.FacebookFacade#post(android.app.Activity, com.socialize.networks.SocialNetworkListener, com.socialize.networks.PostData)
@@ -552,18 +539,15 @@ public class FacebookFacadeV2 extends BaseFacebookFacade {
 		};
 	}	
 	
-	protected void doFacebookCall(Activity parent, Bundle data, String graphPath, String method, SocialNetworkPostListener listener) {
+	protected void doFacebookCall(Activity parent, Bundle data, String graphPath, HttpMethod method, SocialNetworkPostListener listener) {
 		Facebook fb = getFacebook(parent);
 		FacebookSessionStore store = newFacebookSessionStore();
 		store.restore(fb, parent);
 		AsyncFacebookRunner runner = newAsyncFacebookRunner(fb);
 		RequestListener requestListener = newRequestListener(parent, listener);
-		runner.request(graphPath, data, method, requestListener, null);			
+		runner.request(graphPath, data, method.toString(), requestListener, null);			
 	}
 	
-	public void setImageUtils(ImageUtils imageUtils) {
-		this.imageUtils = imageUtils;
-	}
 	public void setFacebookUtils(FacebookUtilsProxy facebookUtils) {
 		this.facebookUtils = facebookUtils;
 	}

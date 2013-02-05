@@ -196,7 +196,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 				callback.onSuccess(new String[]{"foobar_permission"});
 			}
 			@Override
-			public void authenticate(Context context, FacebookAuthProviderInfo info, AuthProviderListener listener) {
+			public void authenticate(Activity context, FacebookAuthProviderInfo info, AuthProviderListener listener) {
 				// We expect an auth to FB because out permissions will not match.
 				addResult(0, info);
 				

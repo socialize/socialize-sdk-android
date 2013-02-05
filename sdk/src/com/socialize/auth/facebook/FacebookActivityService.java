@@ -3,25 +3,18 @@ package com.socialize.auth.facebook;
 import android.content.Intent;
 import android.os.Bundle;
 import com.socialize.config.SocializeConfig;
-import com.socialize.facebook.Facebook;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.ListenerHolder;
 import com.socialize.log.SocializeLogger;
-import com.socialize.networks.facebook.FacebookUtilsProxy;
-import com.socialize.util.DialogFactory;
+import com.socialize.networks.facebook.FacebookFacade;
 
-@Deprecated
 public class FacebookActivityService {
 
-	private Facebook facebook;
-	private FacebookUtilsProxy facebookUtils;
-	private FacebookSessionStore facebookSessionStore;
+	private FacebookFacade facebookFacade;
 	private ListenerHolder listenerHolder;
 	private FacebookActivity activity;
-	private DialogFactory dialogFactory;
 	private SocializeConfig config;
 	private SocializeLogger logger;
-	
 	private FacebookService service;
 	
 	public FacebookActivityService(FacebookActivity activity) {
@@ -43,13 +36,10 @@ public class FacebookActivityService {
 			if(extras != null) {
 				String[] permissions = extras.getStringArray("permissions");
 				
-				facebookSessionStore = activity.getBean("facebookSessionStore");
 				listenerHolder = activity.getBean("listenerHolder");
-				dialogFactory = activity.getBean("dialogFactory");
 				logger = activity.getBean("logger");
 				config = activity.getBean("config");
-				facebookUtils = activity.getBean("facebookUtils");
-				facebook = facebookUtils.getFacebook(activity);
+				facebookFacade = activity.getBean("facebookFacadeFactory");
 				service = getFacebookService();
 				
 				boolean sso = config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true);
@@ -77,22 +67,18 @@ public class FacebookActivityService {
 	}
     
     public FacebookService getFacebookService() {
-    	service = new FacebookService(facebook, facebookSessionStore, (AuthProviderListener) listenerHolder.pop("auth"), dialogFactory, logger);
+    	service = new FacebookService(config.getProperty(SocializeConfig.FACEBOOK_APP_ID), facebookFacade, (AuthProviderListener) listenerHolder.pop("auth"), logger);
     	return service;
     }
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if(facebook != null) {
-			facebook.authorizeCallback(requestCode, resultCode, data);
+		if(facebookFacade != null) {
+			facebookFacade.onActivityResult(this.activity, requestCode, resultCode, data);
 		}
 	}
 	
 	public void setService(FacebookService service) {
 		this.service = service;
-	}
-
-	public void setFacebook(Facebook facebook) {
-		this.facebook = facebook;
 	}
 	
 	public void setActivity(FacebookActivity activity) {
@@ -101,5 +87,9 @@ public class FacebookActivityService {
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
+	}
+	
+	public void setFacebookFacade(FacebookFacade facebookFacade) {
+		this.facebookFacade = facebookFacade;
 	}
 }

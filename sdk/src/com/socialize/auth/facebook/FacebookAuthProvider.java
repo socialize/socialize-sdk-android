@@ -21,11 +21,13 @@
  */
 package com.socialize.auth.facebook;
 
+import android.app.Activity;
 import android.content.Context;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderInfoBuilder;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.networks.facebook.FacebookFacade;
 
@@ -50,7 +52,16 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 
 	@Override
 	public void authenticate(Context context, FacebookAuthProviderInfo info, final AuthProviderListener listener) {
-		facebookFacade.authenticate(context, info, listener);	
+		if(context instanceof Activity) {
+			facebookFacade.authenticate((Activity)context, info, listener);	
+		}
+		else {
+			if(listener != null) {
+				listener.onError(new SocializeException("Facebook authentication can only be performed from an activity.  The given context [" +
+						context.getClass().getName() +
+						"] is not an activity"));
+			}
+		}
 	}
 
 	@Override

@@ -25,35 +25,37 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.widget.Toast;
+import com.socialize.auth.AuthProviderResponse;
 import com.socialize.error.SocializeException;
 import com.socialize.facebook.Facebook;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.log.SocializeLogger;
+import com.socialize.networks.facebook.FacebookFacade;
 import com.socialize.util.DialogFactory;
 
 /**
  * @author Jason Polites
- *
  */
-@Deprecated
+@SuppressWarnings("deprecation")
 public class FacebookService {
 	
-	private Facebook facebook; 
-	private FacebookSessionStore facebookSessionStore; 
+	private FacebookFacade facebookFacade; 
 	private AuthProviderListener listener;
-	private DialogFactory dialogFactory;
 	private SocializeLogger logger;
-	
-	public static final String[] DEFAULT_PERMISSIONS = {"publish_stream", "publish_actions", "photo_upload"};
+	private String appId;
+	private FacebookSessionStore facebookSessionStore;
+	private Facebook facebook;
+	private DialogFactory dialogFactory;
 	
 	public FacebookService() {
 		super();
 	}
-
+	
+	@Deprecated
 	public FacebookService(
 			Facebook facebook, 
 			FacebookSessionStore facebookSessionStore, 
-			AuthProviderListener listener, 
+			AuthProviderListener listener,
 			DialogFactory dialogFactory,
 			SocializeLogger logger) {
 		super();
@@ -62,38 +64,83 @@ public class FacebookService {
 		this.listener = listener;
 		this.dialogFactory = dialogFactory;
 		this.logger = logger;
+	}	
+
+	public FacebookService(
+			String appId,
+			FacebookFacade facebookFacade, 
+			AuthProviderListener listener, 
+			SocializeLogger logger) {
+		super();
+		this.appId = appId;
+		this.facebookFacade = facebookFacade;
+		this.listener = listener;
+		this.logger = logger;
 	}
 	
 	/**
 	 * Authenticates with default permissions and Single Sign On.
 	 */
-	public void authenticate(Activity context) {
-		authenticate(context, DEFAULT_PERMISSIONS);
+	public void authenticate(FacebookActivity context) {
+		authenticate(context, FacebookFacade.DEFAULT_PERMISSIONS);
 	}
 	
-	public void authenticate(Activity context, boolean sso) {
-		authenticate(context, DEFAULT_PERMISSIONS, sso);
+	public void authenticate(FacebookActivity context, boolean sso) {
+		authenticate(context, FacebookFacade.DEFAULT_PERMISSIONS, sso);
 	}
 	
-	public void authenticate(Activity context, boolean sso, String...permissions) {
+	public void authenticate(FacebookActivity context, boolean sso, String...permissions) {
 		if(permissions != null && permissions.length > 0) {
 			authenticate(context, permissions, sso);
 		}
 		else {
-			authenticate(context, DEFAULT_PERMISSIONS, sso);
+			authenticate(context, FacebookFacade.DEFAULT_PERMISSIONS, sso);
 		}
 	}
-	
 	
 	/**
 	 * Authenticates with Single Sign On.
 	 * @param permissions
 	 */
-	public void authenticate(Activity context, String[] permissions) {
+	public void authenticate(FacebookActivity context, String[] permissions) {
 		authenticate(context, permissions, true);
 	}
 	
-	public void authenticate(final Activity context, final String[] permissions, final boolean sso) {
+	protected void authenticate(final FacebookActivity context, final String[] permissions, final boolean sso) {
+		if(facebookFacade != null) {
+			facebookFacade.authenticate(context, appId, permissions, sso, new AuthProviderListener() {
+				@Override
+				public void onError(SocializeException error) {
+					finish(context);
+					listener.onError(error);
+				}
+				
+				@Override
+				public void onCancel() {
+					finish(context);
+					listener.onCancel();
+				}
+				
+				@Override
+				public void onAuthSuccess(AuthProviderResponse response) {
+					finish(context);
+					listener.onAuthSuccess(response);
+				}
+				
+				@Override
+				public void onAuthFail(SocializeException error) {
+					finish(context);
+					listener.onAuthFail(error);
+				}
+			});
+		}
+		else {
+			authenticateLegacy(context, permissions, sso);
+		}
+	}
+	
+	@Deprecated
+	private void authenticateLegacy(final FacebookActivity context, final String[] permissions, final boolean sso) {
 		facebookSessionStore.restore(facebook, context);
 		
 		FacebookDialogListener facebookDialogListener = new FacebookDialogListener(context, facebook, facebookSessionStore, listener) {
@@ -102,7 +149,7 @@ public class FacebookService {
 			public void onFinish() {
 				finish(context);
 			}
-			
+
 			@Override
 			public void handleError(Throwable error) {
 				if(listener != null) {
@@ -110,7 +157,7 @@ public class FacebookService {
 				}
 				else {
 					doError(context, error, permissions, sso);
-				}
+				}				
 			}
 		};
 		
@@ -120,9 +167,14 @@ public class FacebookService {
 		else {
 			facebook.authorize(context, permissions, Facebook.FORCE_DIALOG_AUTH, facebookDialogListener);
 		}
+	}	
+	
+	// Mockable
+	public void finish(FacebookActivity context) {
+		context.finish();
 	}
 	
-	public void cancel(Activity context) {
+	public void cancel(FacebookActivity context) {
 		if(listener != null) {
 			listener.onCancel();
 		}
@@ -131,9 +183,9 @@ public class FacebookService {
 		}
 	}
 	
-	public void logout(Activity context) {
+	public void logout(FacebookActivity context) {
 		try {
-			facebook.logout(context);
+			facebookFacade.logout(context);
 		}
 		catch (Exception e) {
 			if(listener != null) {
@@ -150,6 +202,7 @@ public class FacebookService {
 		}
 	}
 	
+	@Deprecated
 	public void doError(final Activity context, final Throwable e, final String[] permissions, final boolean sso) {
 		context.runOnUiThread(new Runnable() {
 			public void run() {
@@ -165,6 +218,7 @@ public class FacebookService {
 		});
 	}
 	
+	@Deprecated
 	public void doErrorUI(final Activity context, String error, String[] permissions, boolean sso) {
 		try {
 			makeErrorDialog(context, error, permissions, sso).show();
@@ -180,10 +234,7 @@ public class FacebookService {
 		}
 	}
 	
-	public void finish(Activity context) {
-		context.finish();
-	}
-	
+	@Deprecated
 	public AlertDialog makeErrorDialog(final Activity context, String error, final String[] permissions, final boolean sso) {
 		AlertDialog.Builder builder = dialogFactory.getAlertDialogBuilder(context);
 		builder.setTitle("Oops!");
@@ -192,19 +243,18 @@ public class FacebookService {
 		builder.setPositiveButton("Try again", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				dialog.dismiss();
-				authenticate(context, permissions, sso);
+				authenticate((FacebookActivity) context, permissions, sso);
 			}
 		});	
 		builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				dialog.dismiss();
-				finish(context);
+				finish((FacebookActivity) context);
 			}
 		});	
 		
 		AlertDialog dialog = builder.create();
 		
 		return dialog;
-	}
-	
+	}	
 }

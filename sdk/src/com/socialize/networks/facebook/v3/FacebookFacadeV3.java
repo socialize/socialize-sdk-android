@@ -21,15 +21,31 @@
  */
 package com.socialize.networks.facebook.v3;
 
+import java.util.Arrays;
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
-import com.socialize.auth.facebook.FacebookAuthProviderInfo;
+import android.util.Log;
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenSource;
+import com.facebook.FacebookRequestError;
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.RequestAsyncTask;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.Session.StatusCallback;
+import com.facebook.SessionLoginBehavior;
+import com.facebook.SessionState;
+import com.facebook.model.GraphUser;
+import com.socialize.auth.AuthProviderResponse;
+import com.socialize.config.SocializeConfig;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.networks.PostData;
-import com.socialize.networks.SocialNetworkListener;
+import com.socialize.listener.SocializeListener;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.facebook.BaseFacebookFacade;
 import com.socialize.networks.facebook.OnPermissionResult;
@@ -37,36 +53,306 @@ import com.socialize.networks.facebook.OnPermissionResult;
 
 /**
  * @author Jason Polites
- *
  */
 public class FacebookFacadeV3 extends BaseFacebookFacade {
-
+	
 	@Override
-	public void authenticate(Context context, FacebookAuthProviderInfo info, AuthProviderListener listener) {
+	public void onActivityResult(Activity context, int requestCode, int resultCode, Intent data) {
+		Session activeSession = getActiveSession(context);
+		if(activeSession != null) {
+			activeSession.onActivityResult(context, requestCode, resultCode, data);
+		}		
 	}
+	
+	@Override
+	public void authenticate(Activity context, String appId, String[] permissions, boolean sso, final AuthProviderListener listener) {
+		// Clear current session
+		logout(context);
+		login(context, appId, permissions, sso, listener);
+	}
+	
+	private void login(Activity context, final AuthProviderListener listener) {
+		login(context, config.getProperty(SocializeConfig.FACEBOOK_APP_ID), DEFAULT_PERMISSIONS, config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true), listener);
+	}
+	
+	private void login(Activity context, String appId, String[] permissions, boolean sso, final AuthProviderListener listener) {
+
+		Session.OpenRequest auth = new Session.OpenRequest(context);
+		auth.setPermissions(Arrays.asList(permissions));
+		
+		if(sso) {
+			auth.setLoginBehavior(SessionLoginBehavior.SSO_WITH_FALLBACK);
+		}
+		else {
+			auth.setLoginBehavior(SessionLoginBehavior.SUPPRESS_SSO);
+		}
+	
+		auth.setCallback(new Session.StatusCallback() {
+
+			// callback when session changes state
+			@Override
+			public void call(final Session session, SessionState state, Exception exception) {
+				
+				switch(state) {
+				
+					case OPENED:
+						if (session.isOpened()) {
+							// make request to the /me API
+							Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
+								// callback after Graph API response with user object
+								@Override
+								public void onCompleted(GraphUser user, Response response) {
+									
+									if(response.getError() != null) {
+										handleError(response.getError().getException(), listener);
+									}
+									else if (user != null) {
+										handleResult(session, user, listener);
+									}
+								}
+							});
+						}						
+						
+						break;
+						
+					case CLOSED:
+						if(exception != null) {
+							handleError(exception, listener);
+						}
+						break;		
+						
+					case CLOSED_LOGIN_FAILED:
+						if(exception != null) {
+							handleAuthFail(exception, listener);
+						}
+						else {
+							handleCancel(listener);
+						}
+						break;							
+				}
+			}
+		});
+		
+		Session session = new Session.Builder(context).setApplicationId(appId).build();
+		Session.setActiveSession(session);
+		session.openForPublish(auth);		
+	}
+	
+	private void handleError(Exception exception, AuthProviderListener listener) {
+		if(listener != null) {
+			listener.onError(SocializeException.wrap(exception));
+		}
+	}
+	
+	private void handleAuthFail(Exception exception, AuthProviderListener listener) {
+		if(listener != null) {
+			listener.onAuthFail(SocializeException.wrap(exception));
+		}
+	}
+	
+	private void handleCancel(AuthProviderListener listener) {
+		if(listener != null) {
+			listener.onCancel();
+		}
+	}
+	
+	private void handleResult(Session session, GraphUser user, AuthProviderListener listener) {
+		if(listener != null) {
+			AuthProviderResponse response = new AuthProviderResponse();
+			response.setUserId(user.getId());
+			response.setToken(session.getAccessToken());
+			listener.onAuthSuccess(response);
+		}
+	}	
 
 	@Override
 	public void extendAccessToken(Activity context, SocializeAuthListener listener) {
+		// Do Nothing.  Session refreshes this automatically
 	}
+	
+//	@Override
+//	public void postPhoto(final Activity context, String link, String caption, Uri photoUri, final SocialNetworkListener listener) {
+//		Session activeSession = Session.getActiveSession();
+//		if(activeSession != null) {
+//			Request.newUploadPhotoRequest(activeSession, image, new Callback() {
+//				@Override
+//				public void onCompleted(Response response) {
+//					handleFBResponse(context, response, listener);
+//				}
+//			});
+//		}
+//		else {
+//			handleNotSignedIn(context, listener);
+//		}
+//	}
 
 	@Override
-	public void postPhoto(Activity parent, String link, String caption, Uri photoUri, SocialNetworkListener listener) {
-	}
-
-	@Override
-	public void post(Activity parent, SocialNetworkListener listener, PostData postData) {
-	}
-
-	@Override
-	public void getCurrentPermissions(Activity parent, String token, OnPermissionResult callback) {
+	public void getCurrentPermissions(Activity context, String token, final OnPermissionResult callback) {
+		Session activeSession = getActiveSession(context);
+		
+		if(activeSession != null) {
+			if(activeSession.getAccessToken().equals(token)) {
+				callback.onSuccess((String[])activeSession.getPermissions().toArray(new String[activeSession.getPermissions().size()]));
+			}
+			else {
+				AccessToken accessToken = AccessToken.createFromExistingAccessToken(
+						token, null, null, AccessTokenSource.FACEBOOK_APPLICATION_NATIVE, null);
+				
+				activeSession.open(accessToken, new StatusCallback() {
+					@Override
+					public void call(Session session, SessionState state, Exception exception) {
+						if(exception != null) {
+							if(callback != null) {
+								callback.onError(SocializeException.wrap(exception));
+							}
+							else if(logger != null) {
+								logger.error("Error accessing permissions for alternate token", exception);
+							}
+							else {
+								Log.e("Socialize", "Error accessing permissions for alternate token", exception);
+							}
+						}
+						else {
+							if(callback != null) {
+								callback.onSuccess((String[])session.getPermissions().toArray(new String[session.getPermissions().size()]));
+							}
+						}
+					}
+				});
+			}			
+		}
+		else {
+			handleNotSignedIn(context, callback);
+		}
 	}
 
 	@Override
 	public void logout(Context context) {
+		Session activeSession = getActiveSession(context);
+		if(activeSession != null) {
+			activeSession.closeAndClearTokenInformation();
+		}
+	}
+	
+	@Override
+	public boolean isLinked(Context context) {
+		return super.isLinked(context) && getActiveSession(context) != null;
 	}
 
 	@Override
-	protected void doFacebookCall(Activity parent, Bundle data, String graphPath, String method, SocialNetworkPostListener listener) {
+	protected void doFacebookCall(final Activity context, final Bundle data, final String graphPath, final HttpMethod method, final SocialNetworkPostListener listener) {
+		Session activeSession = getActiveSession(context);
+		
+		if(activeSession != null) {
+			if(activeSession.isOpened()) {
+				Request request = new Request(activeSession, graphPath, data, method, new Request.Callback() {
+					@Override
+					public void onCompleted(Response response) {
+						handleFBResponse(context, response, listener);
+					}
+				});
+				
+				RequestAsyncTask task = new RequestAsyncTask(request);
+				task.execute();		
+			}
+			else {
+				login(context, new AuthProviderListener() {
+					
+					@Override
+					public void onError(SocializeException error) {
+						if(listener != null) {
+							listener.onNetworkError(context, SocialNetwork.FACEBOOK, error);
+						}
+						else {
+							handleNonListenerError("", error);
+						}
+					}
+					
+					@Override
+					public void onCancel() {
+						if(listener != null) {
+							listener.onCancel();
+						}
+					}
+					
+					@Override
+					public void onAuthSuccess(AuthProviderResponse response) {
+						doFacebookCall(context, data, graphPath, method, listener);
+					}
+					
+					@Override
+					public void onAuthFail(SocializeException error) {
+						if(listener != null) {
+							listener.onNetworkError(context, SocialNetwork.FACEBOOK, error);
+						}
+						else {
+							handleNonListenerError("", error);
+						}
+					}
+				});
+			}
+		}
+		else {
+			handleNotSignedIn(context, listener);
+		}
 	}
 	
+	private final Session getActiveSession(Context context) {
+		Session activeSession = Session.getActiveSession();
+		if(activeSession == null) {
+			activeSession = new Session.Builder(context).setApplicationId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID)).build();
+			Session.setActiveSession(activeSession);
+		}
+		return activeSession;
+	}
+	
+	private final void handleFBResponse(final Activity context, Response response, final SocialNetworkPostListener listener) {
+		FacebookRequestError error = response.getError();
+		
+		if(error != null) {
+			if(listener != null) {
+				listener.onNetworkError(context, SocialNetwork.FACEBOOK, error.getException());
+			}
+			else if(logger != null) {
+				logger.error(error.getErrorMessage(), error.getException());
+			}
+			else {
+				Log.e("Socialize", error.getErrorMessage(), error.getException());
+			}
+		}
+		else if(listener != null) {
+			listener.onAfterPost(context, SocialNetwork.FACEBOOK, response
+                    .getGraphObject()
+                    .getInnerJSONObject());
+		}
+	}
+	
+	private final void handleNotSignedIn(final Activity context, SocializeListener listener) {
+		String msg = "Not signed into Facebook";
+		if(listener != null) {
+			listener.onError(new SocializeException(msg));
+		}
+		else {
+			handleNonListenerError(msg, new SocializeException(msg));
+		}
+	}	
+	
+	private final void handleNotSignedIn(final Activity context, SocialNetworkPostListener listener) {
+		String msg = "Not signed into Facebook";
+		if(listener != null) {
+			listener.onNetworkError(context, SocialNetwork.FACEBOOK, new SocializeException(msg));
+		}
+		else {
+			handleNonListenerError(msg, new SocializeException(msg));
+		}
+	}
+	
+	private final void handleNonListenerError(String msg, Exception error) {
+		if(logger != null) {
+			logger.error(msg, error);
+		}
+		else {
+			Log.e("Socialize", msg, error);
+		}
+	}
 }

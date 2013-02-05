@@ -27,7 +27,6 @@ import android.content.Context;
 /**
  * A very simple factory class which just allows us to mock the creation of Alert Dialogs for testing.
  * @author Jason Polites
- *
  */
 public class DialogFactory {
 	public Builder getAlertDialogBuilder(Context context) {

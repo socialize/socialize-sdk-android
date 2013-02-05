@@ -34,6 +34,7 @@ import com.socialize.facebook.Facebook;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.ListenerHolder;
 import com.socialize.log.SocializeLogger;
+import com.socialize.networks.facebook.FacebookFacade;
 import com.socialize.networks.facebook.FacebookUtilsProxy;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.util.DialogFactory;
@@ -84,23 +85,23 @@ public class FacebookActivityServiceTest extends SocializeActivityTest {
 	}
 	
 	
-	@UsesMocks ({Facebook.class, Intent.class})
+	@UsesMocks ({FacebookFacade.class, Intent.class})
 	public void testAuthorizeCallbackCalledInActivityOnActivityResult() {
 		
 		Intent intent = AndroidMock.createMock(Intent.class);
-		Facebook facebook = AndroidMock.createMock(Facebook.class, "foobar");
+		FacebookFacade facebook = AndroidMock.createMock(FacebookFacade.class);
 		
 		FacebookActivity activity = AndroidMock.createMock(FacebookActivity.class);
 
 		int requestCode = 69;
 		int resultCode = 96;
 		
-		facebook.authorizeCallback(requestCode, resultCode, intent);
+		facebook.onActivityResult(activity, requestCode, resultCode, intent);
 		
 		AndroidMock.replay(facebook);
 		
 		FacebookActivityService activityService = new FacebookActivityService(activity);
-		activityService.setFacebook(facebook);
+		activityService.setFacebookFacade(facebook);
 		
 		activityService.onActivityResult(requestCode, resultCode, intent);
 		

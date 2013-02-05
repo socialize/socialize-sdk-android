@@ -131,6 +131,7 @@ public class AuthButtonsActivity extends DemoActivity {
 						public void onAuthSuccess(SocializeSession session) {
 							btnFacebook.setText("Sign OUT of Facebook");
 							btnFacebook.setEnabled(true);
+							DemoUtils.showToast(AuthButtonsActivity.this, "Login Successful");
 						}
 						
 						@Override
@@ -139,7 +140,6 @@ public class AuthButtonsActivity extends DemoActivity {
 							btnFacebook.setEnabled(true);
 						}
 					});
-					
 				}
 				else {
 					FacebookUtils.unlink(AuthButtonsActivity.this);

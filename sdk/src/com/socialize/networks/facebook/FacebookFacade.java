@@ -24,12 +24,11 @@ package com.socialize.networks.facebook;
 import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
-import com.socialize.entity.Share;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.PostData;
@@ -44,7 +43,9 @@ public interface FacebookFacade {
 	
 	public static final String[] DEFAULT_PERMISSIONS = {"publish_stream", "publish_actions", "photo_upload"};
 	
-	public void authenticate(Context context, FacebookAuthProviderInfo info, final AuthProviderListener listener);
+	public void authenticate(Activity context, String appId, String[] permissions, boolean sso, AuthProviderListener listener);
+	
+	public void authenticate(Activity context, FacebookAuthProviderInfo info, final AuthProviderListener listener);
 
 	public void link (Activity context, SocializeAuthListener listener);
 
@@ -66,9 +67,9 @@ public interface FacebookFacade {
 
 	public void postComment(Activity parent, Entity entity, String comment, PropagationInfo propInfo, SocialNetworkListener listener);	
 		
-	public void postPhoto(Activity parent, Share share, String comment, Uri photoUri, SocialNetworkListener listener);
+//	public void postPhoto(Activity parent, Share share, String comment, Bitmap photo, SocialNetworkListener listener);
 	
-	public void postPhoto(Activity parent, String link, String caption, Uri photoUri, SocialNetworkListener listener);
+//	public void postPhoto(Activity parent, String link, String caption, Bitmap photo, SocialNetworkListener listener);
 	
 	public void postOG(Activity parent, Entity entity, String message, String action, PropagationInfo propInfo, SocialNetworkListener listener);
 	
@@ -85,4 +86,8 @@ public interface FacebookFacade {
 	public void getCurrentPermissions(Activity parent, String token, OnPermissionResult callback);	
 	
 	public void logout(Context context); 
+	
+	public void onActivityResult(Activity context, int requestCode, int resultCode, Intent data);
+
+
 }

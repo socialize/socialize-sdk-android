@@ -11,6 +11,7 @@ import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
+import com.socialize.networks.facebook.FacebookFacade;
 import com.socialize.networks.facebook.FacebookPermissionCallback;
 import com.socialize.networks.facebook.FacebookWallPoster;
 
@@ -91,7 +92,7 @@ public class MockFacebookWallPoster implements FacebookWallPoster {
 	@Override
 	public void getCurrentPermissions(Activity parent, String token, FacebookPermissionCallback callback) {
 		if(callback != null) {
-			callback.onSuccess(FacebookService.DEFAULT_PERMISSIONS);
+			callback.onSuccess(FacebookFacade.DEFAULT_PERMISSIONS);
 		}
 	}
 }

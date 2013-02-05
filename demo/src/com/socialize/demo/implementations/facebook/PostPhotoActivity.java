@@ -40,7 +40,6 @@ import com.socialize.ShareUtils;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.share.ShareOptions;
-import com.socialize.auth.facebook.FacebookService;
 import com.socialize.demo.DemoActivity;
 import com.socialize.demo.DemoUtils;
 import com.socialize.demo.R;
@@ -51,6 +50,7 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkPostListener;
+import com.socialize.networks.facebook.FacebookFacade;
 import com.socialize.networks.facebook.FacebookUtils;
 import com.socialize.ui.dialog.SafeProgressDialog;
 
@@ -197,6 +197,6 @@ public class PostPhotoActivity extends DemoActivity {
 	}
 
 	protected String[] getPermissions() {
-		return FacebookService.DEFAULT_PERMISSIONS;
+		return FacebookFacade.DEFAULT_PERMISSIONS;
 	}
 }

@@ -23,12 +23,12 @@ package com.socialize.demo.implementations.facebook;
 
 import java.util.Arrays;
 import android.content.Intent;
-//import com.facebook.Request;
-//import com.facebook.Response;
-//import com.facebook.Session;
-//import com.facebook.SessionLoginBehavior;
-//import com.facebook.SessionState;
-//import com.facebook.model.GraphUser;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionLoginBehavior;
+import com.facebook.SessionState;
+import com.facebook.model.GraphUser;
 import com.socialize.demo.SDKDemoActivity;
 
 
@@ -43,97 +43,96 @@ public class V3LoginActivity extends SDKDemoActivity {
 	 */
 	@Override
 	public void executeDemo(final String text) {
-//		// start Facebook Login
-//		Session.OpenRequest auth = new Session.OpenRequest(this);
-//		
-//		String[] permissions = {"publish_stream", "user_status"};
-//		
-//		auth.setPermissions(Arrays.asList(permissions));
-//		auth.setLoginBehavior(SessionLoginBehavior.SSO_WITH_FALLBACK);
-//		auth.setCallback(new Session.StatusCallback() {
-//
-//			// callback when session changes state
-//			@Override
-//			public void call(Session session, SessionState state, Exception exception) {
-//				
-//				switch(state) {
-//				
-//					case OPENING:
-//						System.out.println("OPENING");
-//						break;				
-//				
-//					case OPENED:
-//						System.out.println("OPENED");
-//						if (session.isOpened()) {
-//							// make request to the /me API
-//							Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
-//								// callback after Graph API response with user object
-//								@Override
-//								public void onCompleted(GraphUser user, Response response) {
-//									if(response.getError() != null) {
-//										handleError(V3LoginActivity.this, response.getError().getException());
-//									}
-//									else if (user != null) {
-//										handleResult("Success! " + user.getUsername());
-//									}
-//								}
-//							});
-//						}						
-//						
-//						break;
-//						
-//					case CREATED:
-//						System.out.println("CREATED");
-//						break;
-//						
-//					case CREATED_TOKEN_LOADED:
-//						System.out.println("CREATED_TOKEN_LOADED");
-//						break;
-//						
-//					case OPENED_TOKEN_UPDATED:
-//						System.out.println("OPENED_TOKEN_UPDATED");
-//						break;
-//						
-//					case CLOSED:
-//						System.out.println("CLOSED");
-//						if(exception != null) {
-//							handleError(V3LoginActivity.this, exception);
-//						}
-//						else {
-//							handleCancel();
-//						}
-//						break;		
-//						
-//					case CLOSED_LOGIN_FAILED:
-//						System.out.println("CLOSED_LOGIN_FAILED");
-//						if(exception != null) {
-//							handleError(V3LoginActivity.this, exception);
-//						}
-//						else {
-//							handleCancel();
-//						}
-//						break;							
-//				
-//				}
-//				
-//
-//			}
-//		});
-//		
-//		Session session = new Session.Builder(this).setApplicationId("268891373224435").build();
-//		Session.setActiveSession(session);
-//		session.openForPublish(auth);
-//	}
-//	
-//	@Override
-//	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//		super.onActivityResult(requestCode, resultCode, data);
-//		Session activeSession = Session.getActiveSession();
-//		if(activeSession != null) {
-//			activeSession.onActivityResult(this, requestCode, resultCode, data);
-//		}
+		// start Facebook Login
+		Session.OpenRequest auth = new Session.OpenRequest(this);
+		
+		String[] permissions = {"publish_stream", "user_status"};
+		
+		auth.setPermissions(Arrays.asList(permissions));
+		auth.setLoginBehavior(SessionLoginBehavior.SSO_WITH_FALLBACK);
+		auth.setCallback(new Session.StatusCallback() {
+
+			// callback when session changes state
+			@Override
+			public void call(Session session, SessionState state, Exception exception) {
+				
+				switch(state) {
+				
+					case OPENING:
+						System.out.println("OPENING");
+						break;				
+				
+					case OPENED:
+						System.out.println("OPENED");
+						if (session.isOpened()) {
+							// make request to the /me API
+							Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
+								// callback after Graph API response with user object
+								@Override
+								public void onCompleted(GraphUser user, Response response) {
+									if(response.getError() != null) {
+										handleError(V3LoginActivity.this, response.getError().getException());
+									}
+									else if (user != null) {
+										handleResult("Success! " + user.getUsername());
+									}
+								}
+							});
+						}						
+						
+						break;
+						
+					case CREATED:
+						System.out.println("CREATED");
+						break;
+						
+					case CREATED_TOKEN_LOADED:
+						System.out.println("CREATED_TOKEN_LOADED");
+						break;
+						
+					case OPENED_TOKEN_UPDATED:
+						System.out.println("OPENED_TOKEN_UPDATED");
+						break;
+						
+					case CLOSED:
+						System.out.println("CLOSED");
+						if(exception != null) {
+							handleError(V3LoginActivity.this, exception);
+						}
+						else {
+							handleCancel();
+						}
+						break;		
+						
+					case CLOSED_LOGIN_FAILED:
+						System.out.println("CLOSED_LOGIN_FAILED");
+						if(exception != null) {
+							handleError(V3LoginActivity.this, exception);
+						}
+						else {
+							handleCancel();
+						}
+						break;							
+				
+				}
+				
+
+			}
+		});
+		
+		Session session = new Session.Builder(this).setApplicationId("268891373224435").build();
+		Session.setActiveSession(session);
+		session.openForPublish(auth);
 	}
 
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		Session activeSession = Session.getActiveSession();
+		if(activeSession != null) {
+			activeSession.onActivityResult(this, requestCode, resultCode, data);
+		}
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.demo.SDKDemoActivity#getButtonText()
