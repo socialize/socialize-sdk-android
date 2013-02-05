@@ -34,7 +34,7 @@ import com.socialize.log.SocializeLogger.LogLevel;
 public class Socialize {
 	
 	// This will be set during the build process
-	public static final String VERSION = "3.0";
+	public static final String VERSION = "2.8";
 	
 	public static final String ENTITY_OBJECT = "socialize.entity";
 	public static final String ENTITY_ID = "socialize.entity.id";
@@ -107,7 +107,7 @@ public class Socialize {
 	}
 
 	/**
-	 * Called by containing Activity's in their onPause() method.
+	 * Called by containing Activities in their onPause() method.
 	 * @param context
 	 */
 	public static void onPause(Activity context) {
@@ -119,7 +119,7 @@ public class Socialize {
 	}
 	
 	/**
-	 * Called by containing Activity's in their onResume() method.
+	 * Called by containing Activities in their onResume() method.
 	 * @param context
 	 */
 	public static void onResume(Activity context) {
@@ -131,7 +131,7 @@ public class Socialize {
 	}
 	
 	/**
-	 * Called by containing Activity's in their onCreate() method.
+	 * Called by containing Activities in their onCreate() method.
 	 * @param context
 	 */
 	public static void onCreate(Activity context, Bundle savedInstanceState) {
@@ -143,7 +143,7 @@ public class Socialize {
 	}
 
 	/**
-	 * Called by containing Activity's in their onDestroy() method.
+	 * Called by containing Activities in their onDestroy() method.
 	 * @param context
 	 */
 	public static void onDestroy(Activity context) {

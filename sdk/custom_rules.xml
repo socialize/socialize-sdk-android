@@ -40,10 +40,11 @@
 		
 	</target>	
 	
-	<target name="build" depends="clean, jar, package"/>
+	<target name="build" depends="clean, package"/>
 	
+	<!-- Deprecated -->
 	<target name="jar" depends="compile-for-build, -jar"/>
-
+	<!-- Deprecated -->
 	<target name="-jar">
 		
 		<property name="build.path" value="build"/>
@@ -173,46 +174,55 @@
 		</javadoc>
 	</target>
 	
-	<target name="package" depends="javadoc, sphinx">
+	<target name="package" depends="javadoc, sphinx, zip">
 		
-		<!-- Copy sample to tmp -->
+	</target>
+	
+	<target name="zip">
 		
-		<property name="sample_dir" value="/tmp/sdk-sample"/>
-			
-		<delete dir="${sample_dir}"/>
-		<mkdir dir="${sample_dir}"/>
-		<copy todir="${sample_dir}">
-			<fileset dir="../demo/" excludes="gen/**,bin/**,build/**,codetemplates.xml"/>
+		<property name="tmp_dir" value="/tmp/sdk-build"/>
+	
+		<delete dir="${tmp_dir}"/>
+		<mkdir dir="${tmp_dir}"/>
+
+		<copy todir="${tmp_dir}/demo">
+			<fileset dir="../demo/" excludes="gen/**,bin/**,build/**,codetemplates.xml, local.properties"/>
 		</copy>
-		<copy todir="${sample_dir}/libs">
-			<fileset dir="build" includes="*.jar"/>
+		<copy todir="${tmp_dir}/sdk">
+			<fileset dir="../sdk/" excludes="gen/**,bin/**,build/**,codetemplates.xml, ant.properties, local.properties"/>
 		</copy>
-		<!-- Clean up sample app for packaging -->
-		<replaceregexp file="${sample_dir}/.classpath" match="&lt;classpathentry kind=&quot;src&quot; path=&quot;socialize-sdk_src&quot;/&gt;" replace="&lt;classpathentry kind=&quot;lib&quot; path=&quot;libs/socialize-${version}.jar&quot;/&gt;" byline="true"/>
-		<replaceregexp file="${sample_dir}/.classpath" match="&lt;classpathentry kind=&quot;src&quot; path=&quot;android-ioc_src&quot;/&gt;" replace=""  byline="true"/>
-		<replaceregexp file="${sample_dir}/ant.properties" match="android.library.reference.1=../sdk" replace="" byline="true"/>
-		<replaceregexp file="${sample_dir}/.project" flags="s" match="&lt;linkedResources&gt;.*&lt;/linkedResources&gt;" replace="" />
-		 
+		
+		<copy todir="${tmp_dir}/lib/android-ioc">
+			<fileset dir="../../android-ioc/core" excludes="gen/**,bin/**,build/**,codetemplates.xml"/>
+		</copy>
+	
+		<copy todir="${tmp_dir}/lib/facebook-android-sdk">
+			<fileset dir="../../facebook-android-sdk/facebook" excludes="gen/**,bin/**,build/**,codetemplates.xml"/>
+		</copy>		
+	
+		<replaceregexp file="${tmp_dir}/sdk/project.properties" match="android.library.reference.1=../../android-ioc/core" replace="android.library.reference.1=../lib/android-ioc" byline="true"/>
+		<replaceregexp file="${tmp_dir}/sdk/project.properties" match="android.library.reference.2=../../facebook-android-sdk/facebook" replace="android.library.reference.1=../lib/facebook-android-sdk" byline="true"/>
+		
 		<!-- Create the ZIP file for distribution -->
 		<zip destfile="build/socialize-sdk-android-${version}.zip">
-			<zipfileset dir="build" includes="**/*.jar" prefix="dist"/>
 			<zipfileset dir="icons" includes="**/*.psd" prefix="icons"/>
 			
 			<!-- Add the sample app as a raw eclipse project -->
-			<zipfileset dir="${sample_dir}" prefix="sample" excludes="gen/**,bin/**,build/**,codetemplates.xml,build-qa.xml,build-qa.properties,emma.properties,proguard.cfg,.DS_Store,assets/json/**,assets/socialize.sample.properties"/>
-			 
+			<zipfileset dir="${tmp_dir}/demo" prefix="demo" excludes="gen/**,bin/**,build/**,codetemplates.xml,build-qa.xml,build-qa.properties,emma.properties,proguard.cfg,.DS_Store,assets/json/**,assets/socialize.sample.properties"/>
+			<zipfileset dir="${tmp_dir}/sdk" prefix="sdk" excludes="gen/**,bin/**,build/**,codetemplates.xml,build-qa.xml,build-qa.properties,emma.properties,proguard.cfg,.DS_Store,assets/json/**,assets/socialize.sample.properties"/>
+			<zipfileset dir="${tmp_dir}/lib" prefix="lib" excludes="gen/**,bin/**,build/**,codetemplates.xml,build-qa.xml,build-qa.properties,emma.properties,proguard.cfg,.DS_Store,assets/json/**,assets/socialize.sample.properties"/>
+									 
 			<!-- Add Docs -->
 			<zipfileset dir="build/docs" prefix="docs"/>
 			<zipfileset dir="build" includes="read_me_first.html"/>
 		</zip>
 		
 		<!-- clean up -->
-		<delete dir="${sample_dir}"/>
-		 
+		<delete dir="${tmp_dir}"/>
 		<delete dir="build/docs"/>
 		<delete file="build/read_me_first.html"/>
-	</target>
-	
+	</target>	
+
 	<target name="compile-for-build">
 		<!--
 		<property name="build.is.instrumented" value="false" />
