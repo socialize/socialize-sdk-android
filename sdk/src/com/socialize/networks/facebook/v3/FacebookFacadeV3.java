@@ -28,7 +28,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import com.facebook.AccessToken;
-import com.facebook.AccessTokenSource;
+import com.facebook.FacebookOperationCanceledException;
 import com.facebook.FacebookRequestError;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
@@ -49,6 +49,7 @@ import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.facebook.BaseFacebookFacade;
 import com.socialize.networks.facebook.OnPermissionResult;
+import com.socialize.util.StringUtils;
 
 
 /**
@@ -75,6 +76,22 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 		login(context, config.getProperty(SocializeConfig.FACEBOOK_APP_ID), DEFAULT_PERMISSIONS, config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true), listener);
 	}
 	
+	@Override
+	public void onResume(Activity context, SocializeAuthListener listener) {
+		Session session = Session.getActiveSession();
+	    if (session == null) {
+	        session = new Session(context);
+			String strToken = getAccessToken(context);
+			if(!StringUtils.isEmpty(strToken)) {
+				AccessToken accessToken = AccessToken.createFromExistingAccessToken(
+						strToken,
+	                    null, null, null, null);
+				session.open(accessToken, null);
+	            Session.setActiveSession(session);
+			}
+	    }
+	}
+
 	private void login(Activity context, String appId, String[] permissions, boolean sso, final AuthProviderListener listener) {
 
 		Session.OpenRequest auth = new Session.OpenRequest(context);
@@ -117,13 +134,24 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 						
 					case CLOSED:
 						if(exception != null) {
-							handleError(exception, listener);
+							if(exception instanceof FacebookOperationCanceledException) {
+								handleCancel(listener);
+							}
+							else {
+								handleError(exception, listener);
+							}							
 						}
+						
 						break;		
 						
 					case CLOSED_LOGIN_FAILED:
 						if(exception != null) {
-							handleAuthFail(exception, listener);
+							if(exception instanceof FacebookOperationCanceledException) {
+								handleCancel(listener);
+							}
+							else {
+								handleAuthFail(exception, listener);
+							}
 						}
 						else {
 							handleCancel(listener);
@@ -196,7 +224,14 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 			}
 			else {
 				AccessToken accessToken = AccessToken.createFromExistingAccessToken(
-						token, null, null, AccessTokenSource.FACEBOOK_APPLICATION_NATIVE, null);
+						token,
+	                    null, null, null, null);
+				
+				// We must close the current session
+				if(activeSession.isOpened()) {
+					activeSession.close();
+					activeSession = new Session(context);
+				}
 				
 				activeSession.open(accessToken, new StatusCallback() {
 					@Override
@@ -213,6 +248,7 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 							}
 						}
 						else {
+							Session.setActiveSession(session);
 							if(callback != null) {
 								callback.onSuccess((String[])session.getPermissions().toArray(new String[session.getPermissions().size()]));
 							}

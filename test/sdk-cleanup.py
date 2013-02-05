@@ -26,8 +26,8 @@ def create_android_config(key,secret,url,fb_token):
 	text+= '\nsocialize.location.enabled=false'
 	text+= '\nfacebook.app.id=387684787937421'
 	text+= '\nfacebook.token='+fb_token
-	text+= '\ntwitter.token=581311757-Z6X9AreM0GeVrjeq4kNM7CFUCklDrw02tExmcw'
-	text+= '\ntwitter.secret=RMKoy5EE2Imnon0OXXKAbxl2OyzmVick0B4cr98Z6o'
+	text+= '\ntwitter.token=581311757-TyDpccRovig1o6dkOyUG68ZfApdjnulzPJ9Lt7Ni'
+	text+= '\ntwitter.secret=AFapqY8U5LZh4tOm11MS1xT4tVESziFqIwaiuVbKTS4'
 	text+= '\ntwitter.consumer.key=PPMPm13TgUiOfZJhagwncA' 
 	text+= '\ntwitter.consumer.secret=C9SvNWkIU6pawJOaMem9IufQLknkJQ4N6uLkBM3MU' 
 	text+= '\ntest_value=sample'

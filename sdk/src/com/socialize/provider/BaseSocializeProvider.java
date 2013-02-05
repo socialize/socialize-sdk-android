@@ -189,28 +189,6 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 		return null;
 	}
 	
-	
-//	@Override
-//	public void updateSession(SocializeSession loaded, AuthProviderData data) {
-//		AuthProviderInfo info = data.getAuthProviderInfo();
-//		if(info != null) {
-//			if(!info.getType().equals(AuthProviderType.SOCIALIZE)) {
-//				updateSessionAuthData(loaded, data, info);
-//			}
-//		}
-//	}
-	
-//	public void updateSessionAuthData(SocializeSession loaded, AuthProviderData data, AuthProviderInfo info) {
-//		UserProviderCredentialsMap userProviderCredentialsMap = loaded.getUserProviderCredentials();
-//		if(userProviderCredentialsMap != null) {
-//			UserProviderCredentials userProviderCredentials = userProviderCredentialsMap.get(info.getType());
-//			if(userProviderCredentials != null && !userProviderCredentials.getAuthProviderInfo().matches(info)) {
-//				// Merge the info
-//				userProviderCredentials.getAuthProviderInfo().merge(info);
-//			}
-//		}
-//	}
-	
 	@Override
 	public boolean validateSession(SocializeSession session, AuthProviderData data) {
 		AuthProviderInfo info = data.getAuthProviderInfo();

@@ -139,6 +139,13 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	}
 	
 	@Override
+	public void onResume(Activity context, SocializeAuthListener listener) {
+		if(isLinked(context)) {
+			facebookFacade.onResume(context, listener);
+		}
+	}
+
+	@Override
 	public void getCurrentPermissions(Activity context, String token, OnPermissionResult callback) {
 		facebookFacade.getCurrentPermissions(context, token, callback);
 	}

@@ -70,7 +70,7 @@ public class CommentView extends EntityView {
 		if(!Socialize.getSocialize().isInitialized(getContext()) || !Socialize.getSocialize().isAuthenticated()) {
 			try {
 				// Cannot use localization here.
-				progress = SafeProgressDialog.show(getContext(), "Loading", "Please wait...");
+				progress = SafeProgressDialog.show(getContext(), "Loading Comments", "Please wait...");
 			}
 			catch (Exception ignore) {}
 		}

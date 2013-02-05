@@ -19,6 +19,7 @@ public class CachedImageView extends View implements ImageLoadListener {
 	
 	private Drawables drawables;
 	private String imageName;
+	private String expectedImageName;
 	private boolean changed = false;
 	private boolean local = true;
 	private Drawable drawable;
@@ -111,7 +112,7 @@ public class CachedImageView extends View implements ImageLoadListener {
 	}
 	
 	public void setImageName(String imageName, boolean local) {
-		Message m = new Message();
+		Message m = Message.obtain();
 		Bundle data = new Bundle();
 		data.putString("imageName", imageName);
 		data.putBoolean("local", local);
@@ -138,7 +139,12 @@ public class CachedImageView extends View implements ImageLoadListener {
 	
 	@Override
 	public void onImageLoad(ImageLoadRequest request, SafeBitmapDrawable drawable) {
-		setImageName(request.getUrl());
+		if(expectedImageName == null || this.expectedImageName.equals(request.getUrl())) {
+			setImageName(request.getUrl());
+		}
+//		else {
+//			Log.e("Socialize", "Not setting image!, expected is " + expectedImageName + " url is " + request.getUrl());
+//		}
 	}
 
 	@Override
@@ -147,7 +153,9 @@ public class CachedImageView extends View implements ImageLoadListener {
 	}
 
 	public void setImageName(String imageName) {
-		setImageName(imageName, false);
+		if(this.imageName == null || !this.imageName.equals(imageName)) {
+			setImageName(imageName, false);
+		}
 	}
 	
 	public void redraw() {
@@ -161,4 +169,13 @@ public class CachedImageView extends View implements ImageLoadListener {
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}
+
+	public String getExpectedImageName() {
+		return expectedImageName;
+	}
+
+	public void setExpectedImageName(String expectedImageName) {
+		this.expectedImageName = expectedImageName;
+	}
+	
 }

@@ -59,6 +59,8 @@ public interface FacebookFacade {
 	
 	public String getAccessToken(Context context);
 	
+	public void onResume(Activity context, SocializeAuthListener listener);
+	
 	public void extendAccessToken(Activity context, SocializeAuthListener listener);
 	
 	public void postEntity(Activity context, Entity entity, String text, SocialNetworkShareListener listener);

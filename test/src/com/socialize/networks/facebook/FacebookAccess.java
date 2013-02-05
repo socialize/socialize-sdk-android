@@ -31,7 +31,7 @@ import com.socialize.facebook.Facebook;
  * @author Jason Polites
  *
  */
-@Deprecated
+@SuppressWarnings("deprecation")
 public class FacebookAccess {
 	private static FacebookUtilsProxy originalFacebookUtilsProxy = FacebookUtils.proxy;
 	
@@ -41,6 +41,10 @@ public class FacebookAccess {
 	
 	public static void setFacebookUtilsProxy(FacebookUtilsProxy proxy) {
 		FacebookUtils.proxy = proxy;
+	}
+	
+	public static void forceV2() {
+		FacebookFacadeFactory.FORCE_V2 = true;
 	}
 	
 	public static void setFacebook(Facebook proxy) {

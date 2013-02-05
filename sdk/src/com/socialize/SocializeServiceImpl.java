@@ -1084,7 +1084,7 @@ public class SocializeServiceImpl implements SocializeService {
 					
 					if(FacebookUtils.isAvailable(ctx)) {
 						try {
-							FacebookUtils.extendAccessToken(context, null);
+							FacebookUtils.onResume(context, null);
 						}
 						catch (Exception e) {
 							SocializeLogger.e("Error occurred on resume", e);
@@ -1096,7 +1096,7 @@ public class SocializeServiceImpl implements SocializeService {
 		else {
 			if(paused && FacebookUtils.isAvailable(context)) {
 				try {
-					FacebookUtils.extendAccessToken(context, null);
+					FacebookUtils.onResume(context, null);
 				}
 				catch (Exception e) {
 					SocializeLogger.e("Error occurred on resume", e);

@@ -178,23 +178,19 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 	
 	public void test_link_with_token_and_permission_check_v2 () throws Exception {
 		
-//		PackageInfo info = getInstrumentation().getTargetContext().getPackageManager().getPackageInfo( "com.socialize.sample",  PackageManager.GET_SIGNATURES);
-//		
-//		for (Signature signature : info.signatures) {
-//			MessageDigest md = MessageDigest.getInstance("SHA");
-//			md.update(signature.toByteArray());
-//			Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-//		}
+		FacebookAccess.forceV2();
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Activity context = TestUtils.getActivity(this);
 		
 		// Stub in the facade to ensure we DON'T auth with FB
 		FacebookFacadeV2 facebookV2Facade = new FacebookFacadeV2() {
+			
 			@Override
 			public void getCurrentPermissions(Activity parent, String token, OnPermissionResult callback) {
 				callback.onSuccess(new String[]{"foobar_permission"});
 			}
+			
 			@Override
 			public void authenticate(Activity context, FacebookAuthProviderInfo info, AuthProviderListener listener) {
 				// We expect an auth to FB because out permissions will not match.
@@ -202,7 +198,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 				
 				// Make sure we call the listener to move the test along.
 				listener.onAuthSuccess(null);
-			}			
+			}	
 		};
 		
 		SocializeIOC.registerStub("facebookV2Facade", facebookV2Facade);
@@ -262,8 +258,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 			assertTrue(Arrays.binarySearch(permissions, required) >= 0);
 		}
 		
-		SocializeIOC.unregisterStub("facebookProvider");
-		SocializeIOC.unregisterStub("facebookWallPoster");
+		SocializeIOC.unregisterStub("facebookV2Facade");
 	}	
 	
 	public void test_isAvailable() {
@@ -283,8 +278,9 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		assertEquals(appId, ConfigUtils.getConfig(getContext()).getProperty(SocializeConfig.FACEBOOK_APP_ID));
 	}
 	
-	
+	@Deprecated
 	public void test_post_authed() throws Exception {
+		FacebookAccess.forceV2();
 		final CountDownLatch latch = new CountDownLatch(1);
 		final String token = TestUtils.getDummyFBToken(getContext());
 		// Stub in the FacebookAuthProvider
@@ -328,7 +324,9 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		do_test_post();
 	}
 	
+	@Deprecated
 	public void test_post_not_authed() throws Exception {
+		FacebookAccess.forceV2();
 		do_test_post();
 	}
 	
@@ -644,6 +642,8 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 	
 	@Deprecated
 	public void testExtendAccessToken() throws Exception {
+		
+		FacebookAccess.forceV2();
 		
 		// We have to use a real token here because we will be REALLY authenticating
 		final Activity context = TestUtils.getActivity(this);

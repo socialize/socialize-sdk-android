@@ -97,6 +97,9 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 		FacebookUtilsProxy facebookUtils = new FacebookUtilsProxy() {
 			
 			@Override
+			public void onResume(Activity context, SocializeAuthListener listener) {}
+
+			@Override
 			public void getCurrentPermissions(Activity context, String token, OnPermissionResult callback) {}
 
 			@Override

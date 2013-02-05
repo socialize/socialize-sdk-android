@@ -246,4 +246,11 @@ public class MockFacebookFacade implements FacebookFacade {
 	@Override
 	public void logout(Context context) {}
 
+	@Override
+	public void onResume(Activity context, SocializeAuthListener listener) {
+		
+	}
+	
+	
+
 }

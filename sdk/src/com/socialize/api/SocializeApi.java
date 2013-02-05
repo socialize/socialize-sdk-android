@@ -112,7 +112,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		}
 	}
 	
-	
 	protected void setPropagationData(SocializeAction action, ActionOptions shareOptions, SocialNetwork...networks) {
 		
 		boolean selfManaged = (shareOptions == null) ? false : shareOptions.isSelfManaged();

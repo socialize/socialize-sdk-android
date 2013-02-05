@@ -13,6 +13,7 @@
 		<pathelement path="../test/bin/classes"/>
 		<pathelement path="../sdk/bin/classes"/>
 		<pathelement path="../sample/bin/classes"/>
+		<pathelement path="../../facebook-android-sdk/facebook/bin/classes"/>
 		<pathelement path="../../android-ioc/core/bin/classes"/>
 		<pathelement path="libs/AndroidMockRuntime-appmakr-modified.jar" />
 		<pathelement path="${sdk.dir}/platforms/android-10/android.jar" />

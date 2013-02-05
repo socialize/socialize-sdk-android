@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -70,12 +71,28 @@ public class CommentAdapter extends BaseAdapter {
 	private int totalCount = 0;
 	
 	private int iconSize = 64;
+	private int densitySize = 64;
 	
 	private int count = 0;
+	private int viewCacheCount = 15;
+	private int viewCacheIndex = 0;
+	
+	private final CommentListItem[] viewCache = new CommentListItem[viewCacheCount];
 
 	public void init(Activity context) {
 		this.context = context;
 		now = new Date();
+		if(displayUtils != null) {
+			densitySize = displayUtils.getDIP(iconSize);
+		}
+		
+		if(commentItemViewFactory != null) {
+			for (int i = 0; i < viewCacheCount; i++) {
+				viewCache[i] = commentItemViewFactory.getBean();
+			}
+		}
+		
+		viewCacheIndex = 0;
 	}
 	
 	public void reset() {
@@ -155,8 +172,14 @@ public class CommentAdapter extends BaseAdapter {
 
 		final User user = tmpUser;
 
-		if (view == null || !imageLoader.isEmpty()) {
-			view = commentItemViewFactory.getBean();
+		if (view == null) {
+			if(viewCacheIndex < viewCacheCount) {
+				view = viewCache[viewCacheIndex++];
+			}
+			else {
+				Log.e("Socialize", "Creating bean!");
+				view = commentItemViewFactory.getBean();
+			}
 		} 
 
 		if(view != null) {
@@ -250,12 +273,12 @@ public class CommentAdapter extends BaseAdapter {
 
 					if (userIcon != null && drawables != null) {
 
-						int densitySize = displayUtils.getDIP(iconSize);
-
 						if(user != null) {
 							userIcon.getBackground().setAlpha(255);
 
 							if(!StringUtils.isEmpty(imageUrl)) {
+								
+								userIcon.setExpectedImageName(imageUrl);
 								
 								try {
 									// Check the cache

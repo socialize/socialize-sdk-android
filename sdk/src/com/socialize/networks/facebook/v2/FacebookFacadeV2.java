@@ -110,6 +110,11 @@ public class FacebookFacadeV2 extends BaseFacebookFacade {
 			facebook.authorize(context, permissions, Facebook.FORCE_DIALOG_AUTH, facebookDialogListener);
 		}		
 	}
+	
+	@Override
+	public void onResume(Activity context, SocializeAuthListener listener) {
+		extendAccessToken(context, listener);
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.facebook.FacebookFacade#extendAccessToken(android.app.Activity, com.socialize.listener.SocializeAuthListener)

@@ -347,9 +347,21 @@ public class FacebookUtils {
 	 * Extends the user's Facebook access token if needed.
 	 * @param context The current context
 	 * @param listener A listener to handle the result after re-authentication with Socialize.
+	 * @deprecated Use onResume()
 	 */
+	@Deprecated
 	public static void extendAccessToken(Activity context, SocializeAuthListener listener) {
 		proxy.extendAccessToken(context, listener);
+	}
+	
+	/**
+	 * Should be called in the onResume method of any activities using Socialize.
+	 * This is called automatically by in the Socialize.onResume() method.
+	 * @param context
+	 * @param listener
+	 */
+	public static void onResume(Activity context, SocializeAuthListener listener) {
+		proxy.onResume(context, listener);
 	}
 	
 	/**

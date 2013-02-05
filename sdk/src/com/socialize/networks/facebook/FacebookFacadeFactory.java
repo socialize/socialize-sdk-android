@@ -24,7 +24,6 @@ package com.socialize.networks.facebook;
 import com.socialize.android.ioc.Container;
 import com.socialize.android.ioc.IBeanMaker;
 
-
 /**
  * Determines which version of the facebook SDK the user is using and returns the appropriate facade.
  * @author Jason Polites
@@ -33,23 +32,35 @@ public class FacebookFacadeFactory implements IBeanMaker {
 	
 	private String v2BeanName;
 	private String v3BeanName;
+	
+	private String beanName;
+	
+	/**
+	 * Set to true to force FB SDK v2.x
+	 */
+	static boolean FORCE_V2 = false;
 
 	/* (non-Javadoc)
 	 * @see com.socialize.android.ioc.IBeanMaker#getBeanName(java.lang.Object, com.socialize.android.ioc.Container)
 	 */
 	@Override
 	public String getBeanName(Object parent, Container container) {
-		try {
-			Class.forName("com.facebook.Session");
-			
-			// TODO: Change this!
-			// Just return v2 always for now
-//			return v2BeanName;
-			return v3BeanName;
-		}
-		catch (ClassNotFoundException e) {
+		if(FORCE_V2) {
 			return v2BeanName;
 		}
+		
+		if(beanName == null) {
+			try {
+				Class.forName("com.facebook.Session");
+				// We assume that if this class exists, we are v3+
+				beanName = v3BeanName;
+			}
+			catch (ClassNotFoundException e) {
+				beanName = v2BeanName;
+			}
+		}
+		
+		return beanName;
 	}
 	
 	public void setV2BeanName(String v2BeanName) {

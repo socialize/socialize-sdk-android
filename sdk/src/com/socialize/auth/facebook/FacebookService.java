@@ -112,25 +112,33 @@ public class FacebookService {
 				@Override
 				public void onError(SocializeException error) {
 					finish(context);
-					listener.onError(error);
+					if(listener != null) {
+						listener.onError(error);
+					}
 				}
 				
 				@Override
 				public void onCancel() {
 					finish(context);
-					listener.onCancel();
+					if(listener != null) {
+						listener.onCancel();
+					}
 				}
 				
 				@Override
 				public void onAuthSuccess(AuthProviderResponse response) {
 					finish(context);
-					listener.onAuthSuccess(response);
+					if(listener != null) {
+						listener.onAuthSuccess(response);
+					}
 				}
 				
 				@Override
 				public void onAuthFail(SocializeException error) {
 					finish(context);
-					listener.onAuthFail(error);
+					if(listener != null) {
+						listener.onAuthFail(error);
+					}
 				}
 			});
 		}
@@ -185,7 +193,12 @@ public class FacebookService {
 	
 	public void logout(FacebookActivity context) {
 		try {
-			facebookFacade.logout(context);
+			if(facebookFacade != null) {
+				facebookFacade.logout(context);
+			}
+			else if(facebook != null) { // Legacy
+				facebook.logout(context);
+			}
 		}
 		catch (Exception e) {
 			if(listener != null) {
