@@ -34,6 +34,7 @@ import com.socialize.facebook.Facebook;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.ListenerHolder;
 import com.socialize.log.SocializeLogger;
+import com.socialize.networks.facebook.FacebookAccess;
 import com.socialize.networks.facebook.FacebookFacade;
 import com.socialize.networks.facebook.FacebookUtilsProxy;
 import com.socialize.test.SocializeActivityTest;
@@ -120,11 +121,15 @@ public class FacebookActivityServiceTest extends SocializeActivityTest {
 		DialogFactory.class,
 		SocializeConfig.class,
 		FacebookUtilsProxy.class,
-		SocializeLogger.class})
+		SocializeLogger.class,
+		FacebookFacade.class})
 	public void testOnCreate() {
+		
+		FacebookAccess.forceV2();
 		
 		final String appId = "foobar";
 		final FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
+		final FacebookFacade facebookFacade = AndroidMock.createMock(FacebookFacade.class);
 		final ListenerHolder listenerHolder = AndroidMock.createMock(ListenerHolder.class);
 		final Facebook facebook = AndroidMock.createMock(Facebook.class, appId);
 		final FacebookUtilsProxy facebookUtils = AndroidMock.createMock(FacebookUtilsProxy.class);
@@ -150,11 +155,9 @@ public class FacebookActivityServiceTest extends SocializeActivityTest {
 		
 		AndroidMock.expect(context.getIntent()).andReturn(intent);
 		AndroidMock.expect(intent.getExtras()).andReturn(extras);
-		AndroidMock.expect(context.getBean("facebookSessionStore")).andReturn(facebookSessionStore);
+		AndroidMock.expect(context.getBean("facebookFacadeFactory")).andReturn(facebookFacade);
 		AndroidMock.expect(context.getBean("listenerHolder")).andReturn(listenerHolder);
-		AndroidMock.expect(context.getBean("dialogFactory")).andReturn(dialogFactory);
 		AndroidMock.expect(context.getBean("config")).andReturn(config);
-		AndroidMock.expect(context.getBean("facebookUtils")).andReturn(facebookUtils);
 		AndroidMock.expect(context.getBean("logger")).andReturn(logger);
 		AndroidMock.expect(facebookUtils.getFacebook(context)).andReturn(facebook);
 		
