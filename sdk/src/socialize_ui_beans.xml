@@ -574,7 +574,6 @@
 	<bean 
 		id="socialNetworkAuthClickListener" 
 		abstract="true">
-		<property name="dialogFactory" ref="progressDialogFactory"/>
 	</bean>
 	
 	<bean 

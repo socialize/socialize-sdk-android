@@ -196,5 +196,5 @@ public abstract class BaseView extends LinearLayout implements SocializeView {
 		}
 		
 		return ++lastId;
-	}	
+	}
 }

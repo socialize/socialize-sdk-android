@@ -123,7 +123,6 @@ public class ShareDialogFactory extends AsyncDialogFactory<SharePanelView, Share
 			}
 		});
 	}
-
 	
 	public void setConfig(SocializeConfig config) {
 		this.config = config;
@@ -143,34 +142,39 @@ public class ShareDialogFactory extends AsyncDialogFactory<SharePanelView, Share
 		}
 	}
 	
-	protected void recordEvent(String action, String...networks) {
-		if(eventSystem != null && config != null && config.getBooleanProperty(SocializeConfig.SOCIALIZE_EVENTS_SHARE_ENABLED, true)) {
-			try {
-				SocializeSession session = Socialize.getSocialize().getSession();
-				if(session != null) {
-					SocializeEvent event = new SocializeEvent();
-					event.setBucket("SHARE_DIALOG");
-					JSONObject json = new JSONObject();
-					json.put("action", action);
-					
-					if(networks != null && networks.length > 0) {
-						JSONArray array = new JSONArray();
-						for (String string : networks) {
-							array.put(string);
+	protected void recordEvent(final String action, final String...networks) {
+		new Thread() {
+			@Override
+			public void run() {
+				if(eventSystem != null && config != null && config.getBooleanProperty(SocializeConfig.SOCIALIZE_EVENTS_SHARE_ENABLED, true)) {
+					try {
+						SocializeSession session = Socialize.getSocialize().getSession();
+						if(session != null) {
+							SocializeEvent event = new SocializeEvent();
+							event.setBucket("SHARE_DIALOG");
+							JSONObject json = new JSONObject();
+							json.put("action", action);
+							
+							if(networks != null && networks.length > 0) {
+								JSONArray array = new JSONArray();
+								for (String string : networks) {
+									array.put(string);
+								}
+								json.put("network", array);
+							}
+							
+							event.setData(json);
+							eventSystem.addEvent(session, event, null);
 						}
-						json.put("network", array);
 					}
-					
-					event.setData(json);
-					eventSystem.addEvent(session, event, null);
+					catch (Throwable e) {
+						if(logger != null) {
+							logger.warn("Error recording share dialog event", e);
+						}
+					}
 				}
 			}
-			catch (Throwable e) {
-				if(logger != null) {
-					logger.warn("Error recording share dialog event", e);
-				}
-			}
-		}
+		}.start();
 	}
 
 	public void setEventSystem(EventSystem eventSystem) {
