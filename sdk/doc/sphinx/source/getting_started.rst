@@ -20,8 +20,25 @@ If you're a Socialize veteran, check out our :ref:`whats_new` section for latest
 
 1. Install the SDK 
 ==================
-The Socialize SDK is delivered as a single JAR file, simply copy the socialize-x.x.x.jar file 
-from the **dist** folder to the **libs** path of your Android project.
+The Socialize SDK is delivered as an Android Library Project, simply import the Socialize SDK project 
+into your development environment and link it to your project.
+
+The SDK contains the core Socialize project (named **sdk**) as well as two dependent projects:
+
+.. image:: images/file_system.png
+
+Using Eclipse
+~~~~~~~~~~~~~
+
+First import both the Socialize SDK project AND any dependent projects into eclipse.  The simplest way to do this is to 
+nominate the **root directory of the SDK download** when importing:
+
+=============================	=============================
+.. image:: images/import0.png	.. image:: images/import1.png
+=============================	=============================	
+
+Using Command Line
+~~~~~~~~~~~~~~~~~~
 
 If you're using eclipse, you'll need to add the socialize-x.x.x.jar as a referenced library:
 

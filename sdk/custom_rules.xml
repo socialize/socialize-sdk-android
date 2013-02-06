@@ -1,30 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="socialize-sdk-custom">
 	<target name="-pre-compile">
-		<!--
-		<copy todir="libs" verbose="true" failonerror="false">
-			<fileset dir="libext" includes="**/*.jar"/>
-		</copy>
-		-->
 		<!-- Set the version -->
 		<replaceregexp file="src/com/socialize/Socialize.java" match="public\s+static\s+final\s+String\s+VERSION\s*=\s*&quot;.*&quot;" replace="public static final String VERSION = &quot;${version}&quot;" />
-		
 	</target>
-	
-	<target name="-post-package">
-		<!--
-		<delete verbose="true" failonerror="false">
-			<fileset dir="libs" includes="**/*.jar"/>
-		</delete>
-		-->
-	</target>	
-	
-	
-	<!-- 
-		################################################################################################
-		SOCIALIZE TARGETS
-		################################################################################################
-	-->		
 	
 	<target name="check-paths">
 	
@@ -40,49 +19,8 @@
 		
 	</target>	
 	
+	<target name="package" depends="javadoc, sphinx, zip"/>
 	<target name="build" depends="clean, package"/>
-	
-	<!-- Deprecated -->
-	<target name="jar" depends="compile-for-build, -jar"/>
-	<!-- Deprecated -->
-	<target name="-jar">
-		
-		<property name="build.path" value="build"/>
-		
-		<!-- Manually copy config files -->
-		<echo>Out dir is [${out.dir}]</echo>
-
-		<copy todir="${out.dir}/classes" verbose="true" >
-			<fileset dir="src">
-				<include name="socialize_core_beans.xml"/>
-				<include name="socialize_notification_beans.xml"/>
-				<include name="socialize_ui_beans.xml"/>
-				<include name="socialize.errors.properties"/>
-				<include name="default.socialize.properties"/>
-				<include name="i18n.properties"/>
-			</fileset>
-		</copy>
-		
-		<!-- Manually copy android-ioc classes -->		
-		<copy todir="${out.dir}/classes/" verbose="true" >
-			<fileset dir="../../android-ioc/core/bin/classes" includes="**/**"/>
-		</copy>
-		
-		<delete dir="${build.path}"/>
-		<mkdir dir="${build.path}"/>
-		
-		<jar destfile="${build.path}/socialize-${version}.jar">
-			
-			<fileset dir="${out.dir}/classes" excludes="**/R.class **/R$*.class"/>
-			
-			<manifest>
-				<attribute name="Built-By" value="${vendor}" />
-				<attribute name="Implementation-Vendor" value="${vendor}" />
-				<attribute name="Implementation-Title" value="${title}" />
-				<attribute name="Implementation-Version" value="${version}" />
-			</manifest>
-		</jar>
-	</target>
 		
 	<target name="doc" description="Uses sphinx to generate SDK documentation" depends="sphinx"/>
 	
@@ -173,11 +111,7 @@
 			<link href="http://www.json.org/javadoc/"/>
 		</javadoc>
 	</target>
-	
-	<target name="package" depends="javadoc, sphinx, zip">
 		
-	</target>
-	
 	<target name="zip">
 		
 		<property name="tmp_dir" value="/tmp/sdk-build"/>
@@ -223,12 +157,4 @@
 		<delete file="build/read_me_first.html"/>
 	</target>	
 
-	<target name="compile-for-build">
-		<!--
-		<property name="build.is.instrumented" value="false" />
-		<property name="emma.enabled" value="false" />
-		-->
-		<antcall target="release" inheritall="true" inheritrefs="true"/>
-	</target>	
-	
 </project>	

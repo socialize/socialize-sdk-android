@@ -585,7 +585,15 @@
 
                 <echo level="info">----------</echo>
                 <echo level="info">Building Libraries with '${project.libraries.target}'...</echo>
-
+            	
+<!-- 
+	#####################################################################################################
+	SOCIALIZE CHANGES!  The emma.coverage.absolute.file should NOT be sent to subant otherwise it will 
+	overwrite the previous meta data file when building several library projects
+	The line: <property name="emma.coverage.absolute.file" location="${out.absolute.dir}/coverage.em" />
+	should be commented out.
+	#####################################################################################################
+-->		
                 <!-- no need to build the deps as we have already
                      the full list of libraries -->
                 <subant failonerror="true"
@@ -593,7 +601,7 @@
                         antfile="build.xml">
                     <target name="nodeps" />
                     <target name="${project.libraries.target}" />
-                    <property name="emma.coverage.absolute.file" location="${out.absolute.dir}/coverage.em" />
+                    <!--<property name="emma.coverage.absolute.file" location="${out.absolute.dir}/coverage.em" />-->
                 </subant>
             </then>
         </if>
@@ -738,6 +746,7 @@
                     <property name="emma.coverage.absolute.file" location="${out.absolute.dir}/coverage.em" />
 
                     <!-- It only instruments class files, not any external libs -->
+                	<echo>Generating EMMA coverage meta data into ${emma.coverage.absolute.file} using filters ${emma.filter}</echo>
                     <emma enabled="true">
                         <instr verbosity="${verbosity}"
                                mode="overwrite"

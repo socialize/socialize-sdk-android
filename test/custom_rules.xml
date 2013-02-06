@@ -51,8 +51,6 @@
 	</target>	
 	
 	<target name="clean-all">
-		<ant dir="../sample" target="clean" inheritall="false" inheritrefs="false"/>
-		
 		<antcall target="clean"/>
 		
         <echo>Cleaning up local coverage files...</echo>
@@ -118,7 +116,6 @@
 	</target>
 	
 	<target name="build-all" depends="clean-all">
-		<!--<ant dir="../sample" target="copy-library-src" inheritall="false" inheritrefs="false"/>-->
 		<property name="build.is.instrumented" value="true" />
 		<property name="build.target" value="instrument" />  
 		<property name="emma.enabled" value="true" />
@@ -129,7 +126,7 @@
 		<antcall target="uninstall" inheritall="true" inheritrefs="true"/>
 		<antcall target="installi" inheritall="true" inheritrefs="true"/>
 	</target>	
-	
+
 	<target name="test" depends="build-all">
 		<property name="build.is.instrumented" value="true" />
 		<property name="build.target" value="instrument" />  
@@ -140,12 +137,34 @@
 		    	<echo>##################################################################################################</echo>
 		    	<echo># EXECUTING TEST FOR PACKAGE @{test.package}</echo>
 		    	<echo>##################################################################################################</echo>
-		    	<echo></echo>    			
-				<antcall target="install-all" inheritall="true" inheritrefs="true"/>
-				<antcall target="-set-debug-mode" inheritall="true" inheritrefs="true"/>
-				<antcall target="-test" inheritall="true" inheritrefs="true">
-					 <param name="test.package" value="@{test.package}" />
-				</antcall>
+		    	<echo></echo>    	
+				
+		    		<trycatch>
+		    		  <try>
+						<antcall target="install-all" inheritall="true" inheritrefs="true"/>
+						<antcall target="-set-debug-mode" inheritall="true" inheritrefs="true"/>
+						<antcall target="-test" inheritall="true" inheritrefs="true">
+							 <param name="test.package" value="@{test.package}" />
+						</antcall>
+		    		  </try>
+
+		    		  <catch></catch>
+
+		    		  <finally>
+						<echo>Dumping and clearing log cat</echo>				
+						<exec executable="${adb}" failonerror="true">
+							<arg line="${adb.device.arg}" />
+							<arg value="logcat" />
+							<arg value="-d" />
+							<arg value="*:I" />
+						</exec>		
+						<exec executable="${adb}" failonerror="true">
+							<arg line="${adb.device.arg}" />
+							<arg value="logcat" />
+							<arg value="-c" />
+						</exec>	
+		    		  </finally>
+		    		</trycatch>				
 			</sequential>
 		</for>
 		<antcall target="generate-reports" inheritall="true" inheritrefs="true"/>
@@ -165,30 +184,24 @@
             	sourcepathref="emma.report.src.path" 
             	verbosity="${verbosity}">
             	<infileset dir="${emma.report.dir}" includes="**/*.em, **/*.ec"/>
-            	<infileset dir="${tested.project.dir}/bin" includes="**/*.em, **/*.ec"/>
+            	<infileset dir="${library.project.dir}/bin" includes="**/*.em, **/*.ec"/>
 				<html outfile="${emma.report.dir}/coverage.html" />
 				<xml outfile="${emma.report.dir}/coverage.xml" />
            </report>
         </emma>
       	
         <echo>Saving the coverage html report file in ${emma.report.dir}/coverage.html</echo>
-    	<echo>Saving the coverage xml report file in ${emma.report.dir}/coverage.html</echo>			
+    	<echo>Saving the coverage xml report file in ${emma.report.dir}/coverage.html</echo>
+		
 		
 	</target>	
 	
-
-	<!-- 
-		################################################################################################
-		OVERRIDE DEFAULT TEST TARGET FROM ANDROID TO ENABLE CREATION OF JUNIT OUTPUT 
-		################################################################################################
-	-->		
-	
-   	<target name="-test" depends="-test-project-check"
-                description="Runs tests from the package defined in test.package property">
+   	<target 
+   		name="-test" 
+   		depends="-test-project-check"
+		description="Runs tests from the package defined in test.package property">
 
         <property name="tested.project.absolute.dir" location="${tested.project.dir}" />
-
-        <property name="test.runner" value="android.test.InstrumentationTestRunner" />
 
         <!-- Application package of the tested project extracted from its manifest file -->
         <xpath 
@@ -196,11 +209,13 @@
             expression="/manifest/@package" 
         	output="tested.manifest.package" />
    		
+   		<!-- 
         <xpath 
         	input="AndroidManifest.xml"
             expression="/manifest/@package" 
         	output="manifest.package" />
-
+ 		-->
+   		
         <property name="emma.dump.path" value="/data/data/${tested.manifest.package}/" />
 
         <if condition="${emma.enabled}">
@@ -357,37 +372,6 @@
             	
             	<compilerarg value="-ARegenerateFrameworkMocks=true"/>
             </javac>  
-        	
-        	
-        	<!-- 
-        		################################################################################################
-        		DO NOT GENERATE EMMA METADATA OTHERWISE WE WILL REPORT COVERAGE ON TEST CLASSES! 
-        		################################################################################################
-        	
-            <if condition="${build.is.instrumented}">
-                <then>
-                    <echo level="info">Instrumenting classes from ${out.absolute.dir}/classes...</echo>
-
-                    <getemmafilter
-                            appPackage="${project.app.package}"
-                            libraryPackagesRefId="project.library.packages"
-                            filterOut="emma.default.filter"/>
-
-                    <property name="emma.coverage.absolute.file" location="${emma.report.dir}/coverage.em" />
-
-                    <emma enabled="true">
-                        <instr verbosity="${verbosity}"
-                               mode="overwrite"
-                               instrpath="${out.absolute.dir}/classes"
-                               outdir="${out.absolute.dir}/classes"
-                               metadatafile="${emma.coverage.absolute.file}">
-                            <filter excludes="${emma.default.filter}" />
-                            <filter value="${emma.filter}" />
-                        </instr>
-                    </emma>
-                </then>
-            </if>
-             -->
 
         </do-only-if-manifest-hasCode>
     </target>	
