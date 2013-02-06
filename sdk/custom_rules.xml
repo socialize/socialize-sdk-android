@@ -189,15 +189,15 @@
 			<fileset dir="../demo/" excludes="gen/**,bin/**,build/**,codetemplates.xml, local.properties"/>
 		</copy>
 		<copy todir="${tmp_dir}/sdk">
-			<fileset dir="../sdk/" excludes="gen/**,bin/**,build/**,codetemplates.xml, ant.properties, local.properties"/>
+			<fileset dir="../sdk/" excludes="gen/**,bin/**,build/**,doc/**,icons/**,classes/**,libs/**,codetemplates.xml, ant.properties, local.properties"/>
 		</copy>
 		
 		<copy todir="${tmp_dir}/lib/android-ioc">
-			<fileset dir="../../android-ioc/core" excludes="gen/**,bin/**,build/**,codetemplates.xml"/>
+			<fileset dir="../../android-ioc/core" excludes="gen/**,bin/**,build/**,doc/**,codetemplates.xml, local.properties"/>
 		</copy>
 	
 		<copy todir="${tmp_dir}/lib/facebook-android-sdk">
-			<fileset dir="../../facebook-android-sdk/facebook" excludes="gen/**,bin/**,build/**,codetemplates.xml"/>
+			<fileset dir="../../facebook-android-sdk/facebook" excludes="gen/**,bin/**,build/**,tests/**,TestApp/**,codetemplates.xml, local.properties"/>
 		</copy>		
 	
 		<replaceregexp file="${tmp_dir}/sdk/project.properties" match="android.library.reference.1=../../android-ioc/core" replace="android.library.reference.1=../lib/android-ioc" byline="true"/>
