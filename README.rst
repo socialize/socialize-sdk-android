@@ -15,7 +15,17 @@ Release Notes
 v2.8.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 - [feature] Socialize is now an Android Library Project
-- [feature] Added support for Facebook SDK v3.0
+- [feature] Socialize supports Facebook SDK v3.0
+- [bug] Multiple comments posted if comment button hit more than once
+- [bug] SDK Generates StrictMode violations due to disk access loading embedded images
+- [bug] Scrolling slow/laggy on comment list
+- [bug] Canceling FB auth when FB app is not installed does not trigger cancel in SDK
+- [feature] Socialize verified against Facebook February 2013 Breaking Changes
+- [feature] Socialize verified against Facebook March 2013 Breaking Changes
+- [feature] Socialize verified against Facebook April 2013 Breaking Changes
+- [bug] Facebook auth on Android 2.3.x leaves empty dialog after success
+- [bug] Memory leak on screen rotation
+- [feature] Developer can learn how to implement updated SDK in docs
 
 v2.7.8
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -307,7 +317,7 @@ v1.6
 - [feature] Add documentation for getting device token from logs 
 - [feature] User can receive direct_entity messages from developer as SmartAlert 
 - [feature] User can receive direct_url messages from developer as SmartAlert 
-- [feature] Add documentation for registering a C2DM account with google [ ]
+- [feature] Add documentation for registering a C2DM account with google
 - [bug] remove duplicate link to app in FB posts 
 
 v1.5.6
