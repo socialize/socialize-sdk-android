@@ -62,6 +62,15 @@ Once you have a twitter application, simply add your Twitter consumer key and se
 .. literalinclude:: snippets/props_twitter.txt
    :language: properties
    
+Next you need to add your Twitter Consumer Key and Twitter Consumer Secret to the Socialize Web Dashboard:
+
+Browse to the **App Settings** section of your app and scroll to the bottom where you can add your Twitter credentials:
+
+.. image:: images/twitter_web0.png
+
+.. image:: images/twitter_web1.png
+   
+   
 .. raw:: html
    :file: snippets/twitter_complete.html   
 
