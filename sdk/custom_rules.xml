@@ -19,8 +19,7 @@
 		
 	</target>	
 	
-	<target name="package" depends="javadoc, sphinx, zip"/>
-	<target name="build" depends="clean, package"/>
+	<target name="build" depends="javadoc, sphinx, zip"/>
 		
 	<target name="doc" description="Uses sphinx to generate SDK documentation" depends="sphinx"/>
 	
