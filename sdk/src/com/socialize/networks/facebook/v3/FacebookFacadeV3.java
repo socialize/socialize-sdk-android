@@ -198,22 +198,6 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 		// Do Nothing.  Session refreshes this automatically
 	}
 	
-//	@Override
-//	public void postPhoto(final Activity context, String link, String caption, Uri photoUri, final SocialNetworkListener listener) {
-//		Session activeSession = Session.getActiveSession();
-//		if(activeSession != null) {
-//			Request.newUploadPhotoRequest(activeSession, image, new Callback() {
-//				@Override
-//				public void onCompleted(Response response) {
-//					handleFBResponse(context, response, listener);
-//				}
-//			});
-//		}
-//		else {
-//			handleNotSignedIn(context, listener);
-//		}
-//	}
-
 	@Override
 	public void getCurrentPermissions(Activity context, String token, final OnPermissionResult callback) {
 		Session activeSession = getActiveSession(context);

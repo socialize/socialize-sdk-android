@@ -158,18 +158,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 						if(config.isOGLike()) {
 							ogAction = "like";
 						}
-//						else {
-//							ogAction = config.getProperty(SocializeConfig.FACEBOOK_OG_LIKE_ACTION, null);
-//						}
 						break;
-						
-//					case COMMENT:
-//							ogAction = config.getProperty(SocializeConfig.FACEBOOK_OG_COMMENT_ACTION, null);
-//						break;
-//						
-//					case SHARE:
-//							ogAction = config.getProperty(SocializeConfig.FACEBOOK_OG_SHARE_ACTION, null);
-//						break;					
 				}
 				
 				if(ogAction != null) {
@@ -579,10 +568,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 					
 					@Override
 					public void onAuthSuccess(AuthProviderResponse response) {
-						
-						// Update the local session, it will be saved after regular auth
-//						provider.updateSession(fSession, authProviderData);
-						
 						authProviderData.setUserId3rdParty(response.getUserId());
 						authProviderData.setToken3rdParty(response.getToken());
 						authProviderData.setSecret3rdParty(response.getSecret());

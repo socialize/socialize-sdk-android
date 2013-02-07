@@ -251,43 +251,6 @@ public class FacebookFacadeV2 extends BaseFacebookFacade {
 		}
 	}
 
-//	/* (non-Javadoc)
-//	 * @see com.socialize.networks.facebook.FacebookFacade#postPhoto(android.app.Activity, java.lang.String, java.lang.String, android.net.Uri, com.socialize.networks.SocialNetworkListener)
-//	 */
-//	@Override
-//	public void postPhoto(Activity parent, String link, String caption, Bitmap photo, SocialNetworkListener listener) {
-//
-//		try {
-//			Bundle params = new Bundle();
-//			params.putString("caption", caption + ": " + link);
-//			params.putByteArray("photo", imageUtils.scaleImage(parent, photoUri));
-//			
-//			Facebook fb = getFacebook(parent);
-//			
-//			final FacebookSessionStore store = newFacebookSessionStore();
-//			
-//			store.restore(fb, parent);
-//			
-//			AsyncFacebookRunner runner = newAsyncFacebookRunner(fb);
-//			
-//			RequestListener requestListener = newRequestListener(parent, listener);
-//			
-//			runner.request("me/photos", params, "POST", requestListener, null);			
-//		}
-//		catch (IOException e) {
-//			if(listener != null) {
-//				listener.onNetworkError(parent, SocialNetwork.FACEBOOK, e);
-//			}
-//			 
-//			if(logger != null) {
-//				logger.error("Unable to scale image for upload", e);
-//			}
-//			else {
-//				SocializeLogger.e(e.getMessage(), e);
-//			}
-//		}
-//	}
-
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.facebook.FacebookFacade#post(android.app.Activity, com.socialize.networks.SocialNetworkListener, com.socialize.networks.PostData)
 	 */

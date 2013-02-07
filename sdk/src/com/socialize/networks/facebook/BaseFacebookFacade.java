@@ -340,32 +340,6 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 		post(parent, entity, comment, propInfo, listener);
 	}
 	
-//	/* (non-Javadoc)
-//	 * @see com.socialize.networks.facebook.FacebookFacade#postPhoto(android.app.Activity, com.socialize.entity.Share, java.lang.String, android.net.Uri, com.socialize.networks.SocialNetworkListener)
-//	 */
-//	@Override
-//	public void postPhoto(Activity parent, Share share, String comment, Bitmap photo, SocialNetworkListener listener) {
-//		PropagationInfoResponse propagationInfoResponse = share.getPropagationInfoResponse();
-//		PropagationInfo propInfo = propagationInfoResponse.getPropagationInfo(ShareType.FACEBOOK);
-//		
-//		if(propInfo != null) {
-//			String link = propInfo.getAppUrl();
-//			String appId = getFacebookAppId();
-//			
-//			if(!StringUtils.isEmpty(appId)) {
-//				postPhoto(parent, link, comment, photo, listener);
-//			}
-//			else {
-//				String msg = "Cannot post message to Facebook.  No app id found.  Make sure you specify facebook.app.id in socialize.properties";
-//				onError(parent, msg, new SocializeException(msg), listener);
-//			}	
-//		}
-//		else {
-//			String msg = "Cannot post message to Facebook.  No propagation info found";
-//			onError(parent, msg, new SocializeException(msg), listener);
-//		}
-//	}	
-	
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.facebook.FacebookFacade#postOG(android.app.Activity, com.socialize.entity.Entity, java.lang.String, java.lang.String, com.socialize.entity.PropagationInfo, com.socialize.networks.SocialNetworkListener)
 	 */

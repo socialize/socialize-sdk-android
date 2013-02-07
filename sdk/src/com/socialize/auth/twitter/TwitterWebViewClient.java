@@ -114,6 +114,4 @@ public class TwitterWebViewClient extends WebViewClient {
 		}
 		return view.getContext();
 	}
-	
-	
 }

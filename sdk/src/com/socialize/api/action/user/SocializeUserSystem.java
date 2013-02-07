@@ -115,7 +115,6 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 		if(checkKeys(consumerKey, consumerSecret, listener)) {
 			String udid = deviceUtils.getUDID(ctx);
 			
-			// TODO: create test case for this
 			if(StringUtils.isEmpty(udid)) {
 				if(listener != null) {
 					listener.onError(new SocializeException("No UDID provided"));

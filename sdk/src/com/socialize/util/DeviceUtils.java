@@ -43,29 +43,6 @@ public class DeviceUtils {
 	private String deviceId;
 
 	public void init(Context context) {
-	
-//		if (context instanceof Activity) {
-//			DisplayMetrics metrics = new DisplayMetrics();
-//			Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
-//			display.getMetrics(metrics);
-////			density = metrics.density;
-//			
-//			displayHeight = display.getHeight();
-//			displayWidth = display.getWidth();
-//			
-//			if (displayWidth == displayHeight) {
-//				orientation = Configuration.ORIENTATION_SQUARE;
-//			} 
-//			else { 
-//				if (displayWidth < displayHeight) {
-//					orientation = Configuration.ORIENTATION_PORTRAIT;
-//				} 
-//				else { 
-//					orientation = Configuration.ORIENTATION_LANDSCAPE;
-//				}
-//			}
-//		}
-//		
 		if(appUtils != null) {
 			hasCamera = appUtils.isIntentAvailable(context, MediaStore.ACTION_IMAGE_CAPTURE);
 		}

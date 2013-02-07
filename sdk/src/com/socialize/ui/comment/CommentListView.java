@@ -47,7 +47,6 @@ import com.socialize.view.BaseView;
 public class CommentListView extends BaseView {
 
 	private int defaultGrabLength = 30;
-	// TODO: config this
 	private int iconSize = 100;
 	private CommentAdapter commentAdapter;
 	private boolean loading = true; // Default to true
@@ -776,10 +775,6 @@ public class CommentListView extends BaseView {
 		return commentAdapter.getTotalCount();
 	}
 
-//	public void setAuthDialogFactory(AuthDialogFactory authDialogFactory) {
-//		this.authDialogFactory = authDialogFactory;
-//	}
-	
 	/**
 	 * Called when the current logged in user updates their profile.
 	 */

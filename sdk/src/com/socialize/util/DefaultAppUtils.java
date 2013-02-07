@@ -247,7 +247,6 @@ public class DefaultAppUtils implements AppUtils {
 	@Override
 	public void checkAndroidManifest(Context context) {
 		// Check the launch activity config
-		// TODO: Check for FacebookLogin (v3)
 		checkActivitiesExist(context, CommentActivity.class, ActionDetailActivity.class, ProfileActivity.class, FacebookActivity.class, SocializeLaunchActivity.class);
 		
 		ActivityInfo info = getActivityInfo(context, SocializeLaunchActivity.class);
@@ -291,24 +290,6 @@ public class DefaultAppUtils implements AppUtils {
 		return context.getPackageManager().checkPermission(permission, context.getPackageName()) == PackageManager.PERMISSION_GRANTED;
 	}	
 	
-//	@Override
-//	public boolean isAppInBackground(Context context) {
-//		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-//		List<RunningAppProcessInfo> runningProcInfo = activityManager .getRunningAppProcesses();
-//		for(int i = 0; i < runningProcInfo.size(); i++){
-//			RunningAppProcessInfo runningAppProcessInfo = runningProcInfo.get(i);
-//	        if(runningAppProcessInfo.processName.equals(context.getPackageName())) {
-//                if (runningAppProcessInfo.importance==RunningAppProcessInfo.IMPORTANCE_FOREGROUND || runningAppProcessInfo.lru==RunningAppProcessInfo.IMPORTANCE_VISIBLE){
-//                	return false;
-//                }
-//                else {
-//                	return true;
-//                }
-//	        }
-//		}
-//		return true;
-//	}
-
 	public static boolean launchMainApp(Activity origin) {
 		Intent mainIntent = getMainAppIntent(origin);
 		if(mainIntent != null) {
@@ -383,11 +364,8 @@ public class DefaultAppUtils implements AppUtils {
 	public void setConfig(SocializeConfig config) {
 		this.config = config;
 	}
-
 	
 	void setNotificationsAssessed(boolean notificationsAssessed) {
 		this.notificationsAssessed = notificationsAssessed;
 	}
-	
-	
 }

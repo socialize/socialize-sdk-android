@@ -40,8 +40,6 @@ import com.socialize.networks.twitter.TwitterUtils;
 public abstract class SocialNetworkAuthClickListener implements OnClickListener {
 
 	private SocializeAuthListener listener;
-//	private SimpleDialogFactory<ProgressDialog> dialogFactory;
-//	private ProgressDialog dialog; 
 
 	@Override
 	public void onClick(final View view) {
@@ -52,7 +50,6 @@ public abstract class SocialNetworkAuthClickListener implements OnClickListener 
 		SocializeAuthListener authListener = getAuthListener(view);
 		
 		if(!getSocialize().isAuthenticated(AuthProviderType.valueOf(network))) {
-//			dialog = dialogFactory.show(view.getContext(), I18NConstants.DLG_AUTH, I18NConstants.DLG_AUTH_MESSAGE);
 			switch (network) {
 				case FACEBOOK:
 					FacebookUtils.link((Activity) view.getContext(), getAuthListener(view));
@@ -72,10 +69,6 @@ public abstract class SocialNetworkAuthClickListener implements OnClickListener 
 			
 			@Override
 			public void onError(SocializeException error) {
-//				if(dialog != null) {
-//					dialog.dismiss();
-//				}
-				
 				if(listener != null) {
 					listener.onError(error);
 				}
@@ -84,9 +77,6 @@ public abstract class SocialNetworkAuthClickListener implements OnClickListener 
 			
 			@Override
 			public void onAuthSuccess(SocializeSession session) {
-//				if(dialog != null) {
-//					dialog.dismiss();
-//				}
 				if(listener != null) {
 					listener.onAuthSuccess(session);
 				}
@@ -95,9 +85,6 @@ public abstract class SocialNetworkAuthClickListener implements OnClickListener 
 			
 			@Override
 			public void onAuthFail(SocializeException error) {
-//				if(dialog != null) {
-//					dialog.dismiss();
-//				}
 				if(listener != null) {
 					listener.onAuthFail(error);
 				}
@@ -106,9 +93,6 @@ public abstract class SocialNetworkAuthClickListener implements OnClickListener 
 
 			@Override
 			public void onCancel() {
-//				if(dialog != null) {
-//					dialog.dismiss();
-//				}
 				if(listener != null) {
 					listener.onCancel();
 				}
@@ -122,10 +106,6 @@ public abstract class SocialNetworkAuthClickListener implements OnClickListener 
 	protected SocializeService getSocialize() {
 		return Socialize.getSocialize();
 	}
-
-//	public void setDialogFactory(SimpleDialogFactory<ProgressDialog> dialogFactory) {
-//		this.dialogFactory = dialogFactory;
-//	}
 
 	public void setListener(SocializeAuthListener listener) {
 		this.listener = listener;
