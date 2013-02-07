@@ -6,6 +6,14 @@
 Getting Started
 ===============
 
+.. note:: Socialize supports **Android v2.2 and above and does not support LDPI devices.**
+
+**IMPORTANT NOTE FOR USERS UPGRADING**
+--------------------------------------
+If you are currently using an earlier version of Socialize (before v2.8) you will notice we no longer distribute a JAR file.
+
+**YOU MUST DELETE THE EXISTING socialize-xxx.jar FILE** before importing the new version, then follow the steps below
+
 Introduction
 ------------
 Socialize is a drop-in social platform for iOS and Android which allows developers to add social 
@@ -23,28 +31,44 @@ If you're a Socialize veteran, check out our :ref:`whats_new` section for latest
 The Socialize SDK is delivered as an Android Library Project, simply import the Socialize SDK project 
 into your development environment and link it to your project.
 
-The SDK contains the core Socialize project (named **sdk**) as well as two dependent projects:
-
-.. image:: images/file_system.png
-
 Using Eclipse
 ~~~~~~~~~~~~~
 
-First import both the Socialize SDK project AND any dependent projects into eclipse.  The simplest way to do this is to 
-nominate the **root directory of the SDK download** when importing:
+First import both the Socialize SDK project AND any dependent projects into eclipse.  
+
+The simplest way to do this is to nominate the **root directory of the SDK download** when importing:
 
 =============================	=============================
 .. image:: images/import0.png	.. image:: images/import1.png
 =============================	=============================	
 
-Using Command Line
+Once you have the projects imported into eclipse, you need to link them to your Android project.
+
+Right click on your project and select **Properties**, 
+then select **Android** and add the **socialize-sdk** project
+
+=====================================	==========================================================================
+.. image:: images/proj_properties.png	.. image:: images/add_library.png
+=====================================	==========================================================================	
+
+Required Libraries
 ~~~~~~~~~~~~~~~~~~
 
-If you're using eclipse, you'll need to add the socialize-x.x.x.jar as a referenced library:
+The Socialize SDK depends on 2 external libraries:
 
-.. image:: images/library_refs.png
+ - android-ioc
+ - facebook-android-sdk
+ 
+.. note:: 
+	You do not need to reference these projects directly.  Socialize already references them.  If you have compilation errors
+	immediately after linking to the library project, just try a "Clean" in eclipse.
+ 
+ 
+Both of these are Android Library Projects are are also included in the SDK however you can also reference these directly 
+from their respective source repositories:
 
-.. note:: Socialize supports Android v2.1 and above and does not support LDPI devices.
+ - https://github.com/socialize/android-ioc
+ - https://github.com/facebook/facebook-android-sdk
 
 2. Set up your Socialize Keys
 =============================

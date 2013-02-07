@@ -14,6 +14,7 @@ Release Notes
 
 v2.8.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+- [feature] Socialize is now an Android Library Project
 - [feature] Added support for Facebook SDK v3.0
 
 v2.7.8

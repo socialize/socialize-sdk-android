@@ -68,6 +68,13 @@
 			failonerror="true" 
 			overwrite="true"/>
 		
+		<copy 
+			file="doc/UPGRADING_README.txt" 
+			todir="build" 
+			verbose="true" 
+			failonerror="true" 
+			overwrite="true"/>
+		
 		<delete file="doc/sphinx/source/conf.py"/>
 	</target>
 
@@ -93,7 +100,7 @@
 			classpathref="javadoc.classpath"
 			destdir="build/docs/javadoc" 
 			doctitle="${vendor} SDK v${version} Documentation" 
-			excludepackagenames="com.google.*,com.socialize.oauth.signpost.*,com.socialize.google.*,com.socialize.facebook.*">
+			excludepackagenames="com.google.*,com.socialize.oauth.signpost.*,com.socialize.google.*,com.socialize.facebook.*,com.socialize.android.ioc.*">
 			
 			<header>
 				<![CDATA[${vendor} SDK v${version} Documentation<br/>Copyright ${year} ${vendor}<br/><a href="${website}">${website}</a>]]>
@@ -148,13 +155,15 @@
 									 
 			<!-- Add Docs -->
 			<zipfileset dir="build/docs" prefix="docs"/>
-			<zipfileset dir="build" includes="read_me_first.html"/>
+			<zipfileset dir="build" includes="read_me_first.html,UPGRADING_README.txt"/>
 		</zip>
 		
 		<!-- clean up -->
 		<delete dir="${tmp_dir}"/>
+		<delete dir="build/socialize-sdk-android-${version}"/>
 		<delete dir="build/docs"/>
 		<delete file="build/read_me_first.html"/>
+		<delete file="build/UPGRADING_README.txt"/>
 	</target>	
 
 </project>	

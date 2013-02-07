@@ -6,8 +6,27 @@
 What's New
 ==========
 
-In this version (v2.7)
+In this version (v2.8)
 ----------------------
+
+Socialize is now an Android Library Project
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Socialize was previously distributed as a single "jar" file with all external resources (images etc) embedded within the JAR.
+This has become increasingly difficult to maintain and has also caused several performance issues so as of v2.8 Socialize 
+will now be distributed as an Android Library Project.
+
+Facebook SDK v3.0
+~~~~~~~~~~~~~~~~~
+Facebook recently published a new version of their SDK which represents a complete overhaul of their previous SDK. 
+v2.8 of Socialize incorporates this new version of the Facebook SDK 
+
+Performance Improvements
+~~~~~~~~~~~~~~~~~~~~~~~~
+The comment list view has undergone some tweaking to improve performance on Android 4.x devices.
+
+
+v2.7
+----
 
 Support for Google Cloud Messaging
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
