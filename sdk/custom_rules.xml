@@ -141,7 +141,7 @@
 		</copy>		
 	
 		<replaceregexp file="${tmp_dir}/sdk/project.properties" match="android.library.reference.1=../../android-ioc/core" replace="android.library.reference.1=../lib/android-ioc" byline="true"/>
-		<replaceregexp file="${tmp_dir}/sdk/project.properties" match="android.library.reference.2=../../facebook-android-sdk/facebook" replace="android.library.reference.1=../lib/facebook-android-sdk" byline="true"/>
+		<replaceregexp file="${tmp_dir}/sdk/project.properties" match="android.library.reference.2=../../facebook-android-sdk/facebook" replace="android.library.reference.2=../lib/facebook-android-sdk" byline="true"/>
 		
 		<!-- Create the ZIP file for distribution -->
 		<zip destfile="build/socialize-sdk-android-${version}.zip">
