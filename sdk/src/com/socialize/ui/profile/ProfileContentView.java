@@ -202,12 +202,12 @@ public class ProfileContentView extends BaseView {
 	}
 	
 	protected void setupSocialButtons(ViewGroup group) {
-		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
+		if(getSocialize().isSupported(context, AuthProviderType.FACEBOOK)) {
 			facebookEnabledCheckbox = facebookEnabledCheckboxFactory.getBean();
 			autoPostFacebook = new CheckBox(getContext());
 			setupSocialButton(group, facebookEnabledCheckbox, autoPostFacebook, localizationService.getString(I18NConstants.AUTO_POST_FB));
 		}
-		if(getSocialize().isSupported(AuthProviderType.TWITTER)) {
+		if(getSocialize().isSupported(context, AuthProviderType.TWITTER)) {
 			twitterEnabledCheckbox = twitterEnabledCheckboxFactory.getBean();
 			autoPostTwitter = new CheckBox(getContext());
 			setupSocialButton(group, twitterEnabledCheckbox, autoPostTwitter, localizationService.getString(I18NConstants.AUTO_POST_TW));
@@ -365,14 +365,14 @@ public class ProfileContentView extends BaseView {
 		
 		setCurrentUser(currentUser);
 			
-		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
+		if(getSocialize().isSupported(context, AuthProviderType.FACEBOOK)) {
 			if(Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
 				facebookEnabledCheckbox.setChecked(true);
 				autoPostFacebook.setChecked(settings.isAutoPostFacebook());
 			}
 		}
 		
-		if(getSocialize().isSupported(AuthProviderType.TWITTER)) {
+		if(getSocialize().isSupported(context, AuthProviderType.TWITTER)) {
 			if(Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
 				twitterEnabledCheckbox.setChecked(true);
 				autoPostTwitter.setChecked(settings.isAutoPostTwitter());
@@ -394,7 +394,7 @@ public class ProfileContentView extends BaseView {
 	}	
 	
 	public void onNetworksChanged() {
-		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
+		if(getSocialize().isSupported(context, AuthProviderType.FACEBOOK)) {
 			
 			if(facebookEnabledCheckbox != null) {
 				facebookEnabledCheckbox.setVisibility(View.VISIBLE);
@@ -414,7 +414,7 @@ public class ProfileContentView extends BaseView {
 			if(autoPostFacebook != null) autoPostFacebook.setVisibility(View.GONE);
 		}
 		
-		if(getSocialize().isSupported(AuthProviderType.TWITTER)) {
+		if(getSocialize().isSupported(context, AuthProviderType.TWITTER)) {
 			
 			if(twitterEnabledCheckbox != null) {
 				twitterEnabledCheckbox.setVisibility(View.VISIBLE);

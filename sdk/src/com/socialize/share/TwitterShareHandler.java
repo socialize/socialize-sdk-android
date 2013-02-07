@@ -44,7 +44,7 @@ public class TwitterShareHandler extends AbstractShareHandler {
 	 */
 	@Override
 	public boolean isAvailableOnDevice(Context context) {
-		return getSocialize().isSupported(AuthProviderType.TWITTER);
+		return getSocialize().isSupported(context, AuthProviderType.TWITTER);
 	}
 
 	/* (non-Javadoc)

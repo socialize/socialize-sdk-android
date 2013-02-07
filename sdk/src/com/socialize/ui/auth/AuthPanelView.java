@@ -253,8 +253,8 @@ public class AuthPanelView extends DialogPanelView {
 		
 		LayoutParams cellParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		
-		boolean fbOK = getSocialize().isSupported(AuthProviderType.FACEBOOK) && facebookSignInCellFactory != null;
-		boolean twOK = getSocialize().isSupported(AuthProviderType.TWITTER) && twitterSignInCellFactory != null;
+		boolean fbOK = getSocialize().isSupported(getContext(), AuthProviderType.FACEBOOK) && facebookSignInCellFactory != null;
+		boolean twOK = getSocialize().isSupported(getContext(), AuthProviderType.TWITTER) && twitterSignInCellFactory != null;
 		boolean rememberOk = rememberAuthCellFactory != null && config.isAllowNeverAuth();
 		
 		if(fbOK) {

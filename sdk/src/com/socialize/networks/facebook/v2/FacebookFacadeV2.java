@@ -78,6 +78,11 @@ public class FacebookFacadeV2 extends BaseFacebookFacade {
 	public void onActivityResult(Activity context, int requestCode, int resultCode, Intent data) {
 		getFacebook(context).authorizeCallback(requestCode, resultCode, data);
 	}
+	
+	@Override
+	public int getSDKMajorVersion() {
+		return 2;
+	}
 
 	@Override
 	public void authenticate(final Activity context, String appId, final String[] permissions, final boolean sso, final AuthProviderListener listener) {

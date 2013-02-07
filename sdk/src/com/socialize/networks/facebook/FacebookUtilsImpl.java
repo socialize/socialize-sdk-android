@@ -32,6 +32,7 @@ import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.action.share.SocialNetworkShareListener;
+import com.socialize.auth.AuthProviderInfoBuilder;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.EmptyAuthProvider;
 import com.socialize.config.SocializeConfig;
@@ -40,6 +41,7 @@ import com.socialize.facebook.Facebook;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.SocializeDeAuthListener;
+import com.socialize.util.AppUtils;
 import com.socialize.util.ImageUtils;
 
 
@@ -53,6 +55,8 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	private ImageUtils imageUtils;
 	private Facebook facebook;
 	private SocializeConfig config;
+	private AppUtils appUtils;
+	private AuthProviderInfoBuilder authProviderInfoBuilder;
 
 	/**
 	 * DO NOT CALL
@@ -108,7 +112,8 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	 */
 	@Override
 	public boolean isAvailable(Context context) {
-		return getSocialize().isSupported(AuthProviderType.FACEBOOK);
+		return authProviderInfoBuilder.isSupported(AuthProviderType.FACEBOOK) && 
+				(facebookFacade.getSDKMajorVersion() == 2 || appUtils.isActivityAvailable(context, "com.facebook.LoginActivity"));
 	}
 
 	/* (non-Javadoc)
@@ -202,5 +207,9 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	
 	void setFacebook(Facebook facebook) {
 		this.facebook = facebook;
+	}
+
+	public void setAuthProviderInfoBuilder(AuthProviderInfoBuilder authProviderInfoBuilder) {
+		this.authProviderInfoBuilder = authProviderInfoBuilder;
 	}
 }

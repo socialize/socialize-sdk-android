@@ -66,6 +66,11 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 	}
 	
 	@Override
+	public int getSDKMajorVersion() {
+		return 3;
+	}
+	
+	@Override
 	public void authenticate(Activity context, String appId, String[] permissions, boolean sso, final AuthProviderListener listener) {
 		// Clear current session
 		logout(context);

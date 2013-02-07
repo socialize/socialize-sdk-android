@@ -62,8 +62,11 @@ public class MockFacebookFacade implements FacebookFacade {
 		token = config.getProperty("facebook.token");
 	}
 	
-	
-	
+	@Override
+	public int getSDKMajorVersion() {
+		return 2;
+	}
+
 	@Override
 	public void authenticate(Activity context, String appId, String[] permissions, boolean sso, AuthProviderListener listener) {
 		AuthProviderResponse mockResponse = new AuthProviderResponse();

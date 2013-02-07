@@ -571,7 +571,9 @@
 	
 	<bean id="facebookUtils" class="com.socialize.networks.facebook.FacebookUtilsImpl">
 		<property name="facebookFacade" ref="facebookFacadeFactory"/>
+		<property name="authProviderInfoBuilder" ref="authProviderInfoBuilder"/>
 		<property name="imageUtils" ref="imageUtils"/>
+		<property name="appUtils" ref="appUtils"/>
 		<property name="config" ref="config"/>
 	</bean>
 	
@@ -685,6 +687,7 @@
 		<property name="httpRequestProvider" ref="httpRequestProvider"/>
 		<property name="requestSigner" ref="oauthSigner"/>
 		<property name="imageUtils" ref="imageUtils"/>
+		<property name="authProviderInfoBuilder" ref="authProviderInfoBuilder"/>
 	</bean>		
 
 <!-- End Twitter -->

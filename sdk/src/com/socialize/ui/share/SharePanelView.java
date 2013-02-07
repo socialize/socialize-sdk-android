@@ -380,8 +380,8 @@ public class SharePanelView extends DialogPanelView {
 	protected void makeShareButtons() {
 		LayoutParams cellParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		
-		boolean fbOK = getSocialize().isSupported(AuthProviderType.FACEBOOK) && facebookShareCellFactory != null;
-		boolean twOK = getSocialize().isSupported(AuthProviderType.TWITTER) && twitterShareCellFactory != null;
+		boolean fbOK = getSocialize().isSupported(getContext(), AuthProviderType.FACEBOOK) && facebookShareCellFactory != null;
+		boolean twOK = getSocialize().isSupported(getContext(), AuthProviderType.TWITTER) && twitterShareCellFactory != null;
 		boolean emailOK = getSocialize().canShare(getContext(), ShareType.EMAIL) && emailCellFactory != null;
 		boolean smsOK = getSocialize().canShare(getContext(), ShareType.SMS) && smsCellFactory != null;
 		boolean rememberOk = rememberCellFactory != null;

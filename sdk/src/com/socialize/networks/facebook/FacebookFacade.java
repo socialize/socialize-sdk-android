@@ -57,6 +57,8 @@ public interface FacebookFacade {
 	
 	public boolean isLinked(Context context);
 	
+	public int getSDKMajorVersion();
+	
 	public String getAccessToken(Context context);
 	
 	public void onResume(Activity context, SocializeAuthListener listener);

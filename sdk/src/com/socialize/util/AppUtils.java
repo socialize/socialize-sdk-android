@@ -31,6 +31,8 @@ import android.content.pm.ActivityInfo;
  */
 public interface AppUtils {
 
+	public boolean isActivityAvailable(Context context, String activityClassName);
+	
 	public boolean isActivityAvailable(Context context, Class<?> activity);
 
 	public boolean isIntentAvailable(Context context, String action);

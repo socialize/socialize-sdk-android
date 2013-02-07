@@ -111,6 +111,17 @@ public class DefaultAppUtils implements AppUtils {
 		return null;
 	}
 	
+	@Override
+	public boolean isActivityAvailable(Context context, String activityClassName) {
+		try {
+			Class<?> activityClass = Class.forName(activityClassName);
+			return isActivityAvailable(context, activityClass);
+		}
+		catch (ClassNotFoundException e) {}
+		
+		return false;
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.util.IAppUtils#isActivityAvailable(android.content.Context, java.lang.Class)
 	 */

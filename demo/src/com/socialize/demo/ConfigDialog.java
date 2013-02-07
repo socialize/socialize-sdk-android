@@ -68,8 +68,8 @@ public class ConfigDialog {
 		chkFBSSO.setChecked(config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true));
 		chkPromptForShare.setChecked(config.isPromptForShare());
 		chkAllowSkipAuth.setChecked(config.isAllowNeverAuth());
-		chkFB.setChecked(Socialize.getSocialize().isSupported(AuthProviderType.FACEBOOK));
-		chkTW.setChecked(Socialize.getSocialize().isSupported(AuthProviderType.TWITTER));
+		chkFB.setChecked(Socialize.getSocialize().isSupported(mContext, AuthProviderType.FACEBOOK));
+		chkTW.setChecked(Socialize.getSocialize().isSupported(mContext, AuthProviderType.TWITTER));
 		chkDiagnostic.setChecked(config.isDiagnosticLoggingEnabled());
 		
 		chkFB.setOnCheckedChangeListener(new OnCheckedChangeListener() {

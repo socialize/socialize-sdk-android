@@ -9,6 +9,15 @@ What's New
 In this version (v2.8)
 ----------------------
 
+**IMPORTANT NOTE FOR USERS UPGRADING**
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If you are currently using an earlier version of Socialize (before v2.8) you will notice we no longer distribute a JAR file.
+
+**YOU MUST DELETE THE EXISTING socialize-xxx.jar FILE** before importing the new version.
+
+In addition, **a new activity definition is required in your AndroidManifest.xml for Facebook.**  Please refer to the getting started guide for more detail
+
+
 Socialize is now an Android Library Project
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Socialize was previously distributed as a single "jar" file with all external resources (images etc) embedded within the JAR.

@@ -12,7 +12,9 @@ Getting Started
 --------------------------------------
 If you are currently using an earlier version of Socialize (before v2.8) you will notice we no longer distribute a JAR file.
 
-**YOU MUST DELETE THE EXISTING socialize-xxx.jar FILE** before importing the new version, then follow the steps below
+**YOU MUST DELETE THE EXISTING socialize-xxx.jar FILE** before importing the new version.
+
+In addition, **a new activity definition is required in your AndroidManifest.xml for Facebook.** (see below)
 
 Introduction
 ------------

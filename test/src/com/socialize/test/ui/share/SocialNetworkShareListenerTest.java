@@ -208,13 +208,15 @@ public class SocialNetworkShareListenerTest extends SocializeActivityTest {
 		final FacebookFacadeV2 poster = AndroidMock.createMock(FacebookFacadeV2.class);
 		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
 		
+		final Activity context = TestUtils.getActivity(this);
+		
 		SocialNetworkShareListener listener = new SocialNetworkShareListener() {};
 		Entity entity = Entity.newInstance("Test", "Test");
 		String mockText = "foobar";
 		DefaultPropagationInfo propInfo = new DefaultPropagationInfo();
 		
 		// Expect
-		AndroidMock.expect(socialize.isSupported(AuthProviderType.FACEBOOK)).andReturn(true);
+		AndroidMock.expect(socialize.isSupported(context, AuthProviderType.FACEBOOK)).andReturn(true);
 		AndroidMock.expect(socialize.isAuthenticated(AuthProviderType.FACEBOOK)).andReturn(true);
 		poster.post(TestUtils.getActivity(this), entity, mockText, propInfo, listener);
 		
@@ -228,7 +230,7 @@ public class SocialNetworkShareListenerTest extends SocializeActivityTest {
 		};
 		
 		sharer.setFacebookFacade(poster);
-		sharer.share(TestUtils.getActivity(this), entity, propInfo, mockText, true, ActionType.SHARE, listener);
+		sharer.share(context, entity, propInfo, mockText, true, ActionType.SHARE, listener);
 		
 		AndroidMock.verify(socialize, poster);
 	}

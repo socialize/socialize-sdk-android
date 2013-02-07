@@ -54,6 +54,7 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.action.share.ShareOptions;
 import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.api.action.user.UserSystem;
+import com.socialize.auth.AuthProviderInfoBuilder;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.DefaultUserProviderCredentials;
 import com.socialize.auth.UserProviderCredentials;
@@ -86,6 +87,7 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 	private String photoEndpoint = "https://upload.twitter.com/1/";
 	private HttpRequestProvider httpRequestProvider;
 	private ImageUtils imageUtils;
+	private AuthProviderInfoBuilder authProviderInfoBuilder;
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.twitter.TwitterUtilsProxy#link(android.app.Activity, com.socialize.listener.SocializeAuthListener)
@@ -141,7 +143,7 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 	 */
 	@Override
 	public boolean isAvailable(Context context) {
-		return getSocialize().isSupported(AuthProviderType.TWITTER);
+		return authProviderInfoBuilder.isSupported(AuthProviderType.TWITTER);
 	}
 
 	/* (non-Javadoc)
@@ -444,5 +446,9 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 
 	public void setImageUtils(ImageUtils imageUtils) {
 		this.imageUtils = imageUtils;
+	}
+
+	public void setAuthProviderInfoBuilder(AuthProviderInfoBuilder authProviderInfoBuilder) {
+		this.authProviderInfoBuilder = authProviderInfoBuilder;
 	}
 }

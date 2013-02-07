@@ -50,7 +50,7 @@ public abstract class AbstractSocialNetworkSharer implements SocialNetworkSharer
 
 		AuthProviderType authProviderType = AuthProviderType.valueOf(getNetwork());
 		
-		if(getSocialize().isSupported(authProviderType)) {
+		if(getSocialize().isSupported(context, authProviderType)) {
 			
 			if(getSocialize().isAuthenticated(authProviderType)) {
 				doShare(context, entity, urlSet, comment, listener, type);

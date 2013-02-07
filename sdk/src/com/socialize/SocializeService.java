@@ -199,10 +199,11 @@ public interface SocializeService extends SocializeSessionConsumer {
 	
 	/**
 	 * Returns true if the given provider type is supported and has been configured correctly.
+	 * @param context TODO
 	 * @param type
 	 * @return True if the given provider type is supported and has been configured correctly.
 	 */
-	public boolean isSupported(AuthProviderType type);
+	public boolean isSupported(Context context, AuthProviderType type);
 	
 	/**
 	 * Returns true if Socialize is supported on this device.

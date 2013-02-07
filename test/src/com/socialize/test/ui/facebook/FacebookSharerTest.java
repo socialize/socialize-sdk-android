@@ -64,7 +64,7 @@ public class FacebookSharerTest extends SocializeActivityTest {
 		final String consumerSecret = "bar";
 		final boolean autoAuth = true;
 
-		AndroidMock.expect(socialize.isSupported(AuthProviderType.FACEBOOK)).andReturn(true);
+		AndroidMock.expect(socialize.isSupported(getContext(), AuthProviderType.FACEBOOK)).andReturn(true);
 		AndroidMock.expect(socialize.isAuthenticated(AuthProviderType.FACEBOOK)).andReturn(false);
 		
 		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn(consumerKey);
@@ -111,7 +111,7 @@ public class FacebookSharerTest extends SocializeActivityTest {
 			}
 
 			@Override
-			public boolean isSupported(AuthProviderType type) {
+			public boolean isSupported(Context context, AuthProviderType type) {
 				return true;
 			}
 

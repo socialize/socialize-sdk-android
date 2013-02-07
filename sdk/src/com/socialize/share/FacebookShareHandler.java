@@ -51,7 +51,7 @@ public class FacebookShareHandler extends AbstractShareHandler {
 
 	@Override
 	public boolean isAvailableOnDevice(Context parent) {
-		return getSocialize().isSupported(AuthProviderType.FACEBOOK);
+		return getSocialize().isSupported(parent, AuthProviderType.FACEBOOK);
 	}	
 
 	public void setFacebookSharer(FacebookSharer facebookSharer) {

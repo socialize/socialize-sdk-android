@@ -70,6 +70,7 @@ import com.socialize.location.SocializeLocationProvider;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.facebook.FacebookFacade;
 import com.socialize.networks.facebook.FacebookUtils;
+import com.socialize.networks.twitter.TwitterUtils;
 import com.socialize.notifications.C2DMCallback;
 import com.socialize.notifications.NotificationChecker;
 import com.socialize.notifications.SocializeC2DMReceiver;
@@ -167,8 +168,15 @@ public class SocializeServiceImpl implements SocializeService {
 	}
 
 	@Override
-	public boolean isSupported(AuthProviderType type) {
-		return authProviderInfoBuilder.isSupported(type);
+	public boolean isSupported(Context context, AuthProviderType type) {
+		switch(type) {
+			case FACEBOOK:
+				return FacebookUtils.isAvailable(context);
+			case TWITTER:
+				return TwitterUtils.isAvailable(context);
+			default:
+				return authProviderInfoBuilder.isSupported(type);
+		}
 	}
 
 	@Override
