@@ -70,6 +70,7 @@ public class CommentListView extends BaseView {
 	private SocializeConfig config;
 	
 	private IBeanFactory<SocializeHeader> commentHeaderFactory;
+
 	private IBeanFactory<CommentEditField> commentEditFieldFactory;
 	private IBeanFactory<LoadingListView> commentContentViewFactory;
 	private IBeanFactory<CustomCheckbox> notificationEnabledOptionFactory;
@@ -77,6 +78,8 @@ public class CommentListView extends BaseView {
 	private CommentEditField commentEntryField;
 	private SocializeHeader header;
 	private LoadingListView content;
+	private String customHeaderText;
+	private boolean showCommentCountInHeader = true;
 	
 	private IBeanFactory<CommentEntrySliderItem> commentEntryFactory;
 	
@@ -445,12 +448,19 @@ public class CommentListView extends BaseView {
 	
 	protected void setHeaderText() {
 		if(header != null) {
-			String name = entity.getName();
+			String name = (customHeaderText == null) ? entity.getName() : customHeaderText;
 			if(StringUtils.isEmpty(name)) {
-				header.setText(commentAdapter.getTotalCount() + " Comments");
+				if(showCommentCountInHeader) {
+					header.setText(commentAdapter.getTotalCount() + " Comments");
+				}
 			}
 			else {
-				header.setText(name + " (" + commentAdapter.getTotalCount() + ")");
+				if(showCommentCountInHeader) {
+					header.setText(name + " (" + commentAdapter.getTotalCount() + ")");
+				}
+				else {
+					header.setText(name);
+				}
 			}
 		}	
 	}
@@ -851,6 +861,26 @@ public class CommentListView extends BaseView {
 	
 	public CommentEditField getCommentEntryField() {
 		return commentEntryField;
+	}
+	
+	public String getCustomHeaderText() {
+		return customHeaderText;
+	}
+	
+	public void setCustomHeaderText(String customHeaderText) {
+		this.customHeaderText = customHeaderText;
+	}
+	
+	public boolean isShowCommentCountInHeader() {
+		return showCommentCountInHeader;
+	}
+
+	public void setShowCommentCountInHeader(boolean showCommentCountInHeader) {
+		this.showCommentCountInHeader = showCommentCountInHeader;
+	}
+	
+	public SocializeHeader getHeader() {
+		return header;
 	}
 
 	public void setHeaderDisplayed(boolean showHeader) {

@@ -45,7 +45,7 @@ import com.socialize.util.StringUtils;
 public class SocializeHeader extends LinearLayout {
 	
 	private TextView titleText;
-	
+	private ImageView titleImage;
 	private DisplayUtils displayUtils;
 	private Drawables drawables;
 	private Colors colors;
@@ -85,6 +85,14 @@ public class SocializeHeader extends LinearLayout {
 		this.titleText.setText(text);
 	}
 	
+	public ImageView getTitleImage() {
+		return titleImage;
+	}
+
+	public void setTitleImage(ImageView titleImage) {
+		this.titleImage = titleImage;
+	}
+
 	public void init() {
 		int four = displayUtils.getDIP(4);
 		int eight = displayUtils.getDIP(8);
@@ -127,7 +135,7 @@ public class SocializeHeader extends LinearLayout {
 		titleTextLayoutParams.gravity = Gravity.CENTER_VERTICAL;
 		titleText.setLayoutParams(titleTextLayoutParams);
 
-		ImageView titleImage = new ImageView(getContext());
+		titleImage = new ImageView(getContext());
 		titleImage.setImageDrawable(drawables.getDrawable("socialize_icon_white.png"));
 		titleImage.setPadding(0, 0, 0, 0);
 

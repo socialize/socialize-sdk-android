@@ -24,6 +24,7 @@ public class CachedImageView extends View implements ImageLoadListener {
 	private boolean local = true;
 	private Drawable drawable;
 	private SocializeLogger logger;
+	private CachedImageViewChangeListener changeListener;
 	
 	private int width;
 	private int height;
@@ -38,11 +39,21 @@ public class CachedImageView extends View implements ImageLoadListener {
 			switch(msg.what) {
 				case REDRAW: 
 					invalidate();
+					
+					if(changeListener != null) {
+						changeListener.onRedraw(CachedImageView.this);
+					}
+					
 					break;
 				case CHANGE: 
 					Bundle data = msg.getData();
 					setImageNameInternal(data.getString("imageName"), data.getBoolean("local"));
 					invalidate();
+					
+					if(changeListener != null) {
+						changeListener.onChange(CachedImageView.this);
+					}	
+					
 					break;	
 			}
 		}
@@ -177,5 +188,12 @@ public class CachedImageView extends View implements ImageLoadListener {
 	public void setExpectedImageName(String expectedImageName) {
 		this.expectedImageName = expectedImageName;
 	}
-	
+
+	public CachedImageViewChangeListener getChangeListener() {
+		return changeListener;
+	}
+
+	public void setChangeListener(CachedImageViewChangeListener changeListener) {
+		this.changeListener = changeListener;
+	}
 }

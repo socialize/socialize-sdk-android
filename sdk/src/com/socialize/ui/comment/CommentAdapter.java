@@ -25,7 +25,6 @@ import java.util.Date;
 import java.util.List;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -41,6 +40,7 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.ui.image.ImageLoader;
 import com.socialize.ui.util.DateUtils;
 import com.socialize.ui.view.CachedImageView;
+import com.socialize.ui.view.CachedImageViewChangeListener;
 import com.socialize.ui.view.ListItemLoadingView;
 import com.socialize.util.CacheableDrawable;
 import com.socialize.util.DisplayUtils;
@@ -50,7 +50,7 @@ import com.socialize.util.StringUtils;
 
 /**
  * Provides comments to the comment view.
-* @author Jason Polites
+ * @author Jason Polites
  */
 public class CommentAdapter extends BaseAdapter {
 
@@ -74,10 +74,21 @@ public class CommentAdapter extends BaseAdapter {
 	private int densitySize = 64;
 	
 	private int count = 0;
-	private int viewCacheCount = 15;
+	private int viewCacheCount = 20;
 	private int viewCacheIndex = 0;
 	
 	private final CommentListItem[] viewCache = new CommentListItem[viewCacheCount];
+	
+	private final CachedImageViewChangeListener imageChangeListener = new CachedImageViewChangeListener() {
+		@Override
+		public void onRedraw(CachedImageView view) {}
+		
+		@Override
+		public void onChange(CachedImageView view) {
+			CommentAdapter.this.notifyDataSetChanged();
+		}
+	};
+	
 
 	public void init(Activity context) {
 		this.context = context;
@@ -89,6 +100,7 @@ public class CommentAdapter extends BaseAdapter {
 		if(commentItemViewFactory != null) {
 			for (int i = 0; i < viewCacheCount; i++) {
 				viewCache[i] = commentItemViewFactory.getBean();
+				viewCache[i].getUserIcon().setChangeListener(imageChangeListener);
 			}
 		}
 		
@@ -177,8 +189,8 @@ public class CommentAdapter extends BaseAdapter {
 				view = viewCache[viewCacheIndex++];
 			}
 			else {
-				Log.e("Socialize", "Creating bean!");
 				view = commentItemViewFactory.getBean();
+				view.getUserIcon().setChangeListener(imageChangeListener);
 			}
 		} 
 
@@ -278,8 +290,6 @@ public class CommentAdapter extends BaseAdapter {
 
 							if(!StringUtils.isEmpty(imageUrl)) {
 								
-								userIcon.setExpectedImageName(imageUrl);
-								
 								try {
 									// Check the cache
 									CacheableDrawable cached = drawables.getCache().get(imageUrl);
@@ -315,7 +325,6 @@ public class CommentAdapter extends BaseAdapter {
 					if(onCommentViewActionListener != null) {
 						onCommentViewActionListener.onAfterSetComment(item, view);
 					}
-										
 				}
 			}
 		}

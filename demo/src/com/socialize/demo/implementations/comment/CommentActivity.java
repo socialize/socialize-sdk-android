@@ -43,8 +43,23 @@ import com.socialize.ui.comment.OnCommentViewActionListener;
  *
  */
 public class CommentActivity extends ListActivity {
-	final String[] values = new String[] { "Show Comment List","Show Comment List (No Header)", "Add Comment", "Add Comment Without Share", "Get Comments By Entity", "Get Comments By User", "Get Comment By ID"};
-	final Class<?>[] activities = new Class<?>[] { CommentViewEmbeddedActivity.class, AddCommentActivity.class, AddCommentWithoutShareActivity.class, GetCommentsByEntityActivity.class, GetCommentsByUserActivity.class, GetCommentsByIDActivity.class};
+	final String[] values = new String[] { 
+			"Show Comment List",
+			"Show Comment List (No Header)", 
+			"Show Comment List (Custom Header)", 
+			"Add Comment", 
+			"Add Comment Without Share", 
+			"Get Comments By Entity", 
+			"Get Comments By User", 
+			"Get Comment By ID"};
+	final Class<?>[] activities = new Class<?>[] { 
+			CommentViewEmbeddedActivity.class, 
+			CommentViewCustomHeaderActivity.class,
+			AddCommentActivity.class, 
+			AddCommentWithoutShareActivity.class, 
+			GetCommentsByEntityActivity.class, 
+			GetCommentsByUserActivity.class, 
+			GetCommentsByIDActivity.class};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
