@@ -150,13 +150,18 @@ public class SocializeUserUtils extends SocializeActionUtilsBase implements User
 		
 		// We couldn't get a user, this shouldn't happen
 		if(failOnError) {
+			if(logger != null) {
+				logger.error("No user returned from getCurrentUser after second attempt");
+			}
 			throw new SocializeException("No user returned from getCurrentUser after second attempt");
 		}
 		else {
 			if(!socialize.isInitialized(context)) {
 				socialize.init(context);
 			}
-			socialize.authenticateSynchronous(context);
+			if(!socialize.isAuthenticated()) {
+				socialize.authenticateSynchronous(context);
+			}
 			return getCurrentUser(context, true);
 		}
 	}
