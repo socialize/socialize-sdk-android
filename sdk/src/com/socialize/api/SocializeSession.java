@@ -57,7 +57,6 @@ public interface SocializeSession extends Serializable, OAuthAuthorizer {
 	
 	public UserProviderCredentials getUserProviderCredentials(AuthProviderType type);
 	
-	
 	public void clear(AuthProviderType type);
 	
 	/**

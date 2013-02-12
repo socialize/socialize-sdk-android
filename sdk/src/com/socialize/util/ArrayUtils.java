@@ -19,20 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.auth;
+package com.socialize.util;
 
 
 /**
- * Represents the data for a user's authenticated session with a 3rd party auth provider (e.g. Facebook, twitter etc)
  * @author Jason Polites
+ *
  */
-public interface UserProviderCredentials {
+public class ArrayUtils {
+
+	public static final <T> boolean isEmpty(T[] array) {
+		return array == null || array.length == 0;
+	}
 	
-	public String getUserId();
-	
-	public String getAccessToken();
-	
-	public String getTokenSecret();
-	
-	public AuthProviderInfo getAuthProviderInfo();
 }

@@ -41,16 +41,34 @@ import com.socialize.networks.SocializeDeAuthListener;
  */
 @SuppressWarnings("deprecation")
 public interface FacebookUtilsProxy {
+	@Deprecated
 	public void link (Activity context, SocializeAuthListener listener);
 	
+	@Deprecated
 	public void link (Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener);
 	
+	public void linkForRead (Activity context, SocializeAuthListener listener, String...permissions);
+	
+	public void linkForRead (Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener, String...permissions);
+	
+	public void linkForWrite (Activity context, SocializeAuthListener listener, String...permissions);
+	
+	public void linkForWrite (Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener, String...permissions);	
+	
+	@Deprecated
 	public void link(Activity context, SocializeAuthListener listener, String...permissions);
 	
 	public void unlink (Context context, SocializeDeAuthListener listener);
 	
+	@Deprecated
 	@Synchronous
 	public boolean isLinked(Context context);
+	
+	@Synchronous
+	public boolean isLinkedForRead(Context context, String...permissions);
+	
+	@Synchronous
+	public boolean isLinkedForWrite(Context context, String...permissions);
 	
 	@Synchronous
 	public boolean isAvailable(Context context);

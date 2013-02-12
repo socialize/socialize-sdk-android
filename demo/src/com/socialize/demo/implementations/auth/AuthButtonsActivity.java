@@ -91,7 +91,7 @@ public class AuthButtonsActivity extends DemoActivity {
 		
 		
 		// Check if we are signed into Facebook
-		if(FacebookUtils.isLinked(this)) {
+		if(FacebookUtils.isLinkedForRead(this)) {
 			btnFacebook.setText("Sign OUT of Facebook");
 		}
 		else {
@@ -113,7 +113,7 @@ public class AuthButtonsActivity extends DemoActivity {
 					
 					btnFacebook.setEnabled(false);
 					
-					FacebookUtils.link(AuthButtonsActivity.this, new SocializeAuthListener() {
+					FacebookUtils.linkForRead(AuthButtonsActivity.this, new SocializeAuthListener() {
 						
 						@Override
 						public void onError(SocializeException error) {

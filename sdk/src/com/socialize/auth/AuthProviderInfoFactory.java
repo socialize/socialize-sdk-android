@@ -28,6 +28,11 @@ package com.socialize.auth;
  */
 public interface AuthProviderInfoFactory<I extends AuthProviderInfo> {
 
+	@Deprecated
 	public I getInstance(String...permissions);
+	
+	public I getInstanceForRead(String...permissions);
+	
+	public I getInstanceForWrite(String...permissions);
 	
 }

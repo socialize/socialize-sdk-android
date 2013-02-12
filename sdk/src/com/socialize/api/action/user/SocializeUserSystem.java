@@ -96,7 +96,7 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	@Override
 	public void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
 		AuthProviderData authProviderData = authProviderDataFactory.getBean();
-		authProviderData.setAuthProviderInfo(socializeAuthProviderInfoFactory.getInstance());
+		authProviderData.setAuthProviderInfo(socializeAuthProviderInfoFactory.getInstanceForRead());
 		authenticate(context, consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, false);	
 	}
 	
@@ -105,7 +105,7 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	public void authenticate(Context context, AuthProviderType authProviderType, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
 		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
-		AuthProviderInfo authProviderInfo = authProviderInfoBuilder.getFactory(authProviderType).getInstance();
+		AuthProviderInfo authProviderInfo = authProviderInfoBuilder.getFactory(authProviderType).getInstanceForRead();
 		authenticate(context, consumerKey, consumerSecret, authProviderInfo, listener, sessionConsumer);
 	}
 	

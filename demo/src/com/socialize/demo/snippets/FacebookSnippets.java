@@ -55,7 +55,7 @@ public class FacebookSnippets extends Activity {
 public void linkFB() {
 // begin-snippet-0
 // The "this" argument refers to the current Activity
-FacebookUtils.link(this, new SocializeAuthListener() {
+FacebookUtils.linkForRead(this, new SocializeAuthListener() {
 
 	@Override
 	public void onCancel() {
@@ -87,7 +87,7 @@ String fbToken = "ABCDEF...GHIJKL";
 
 // The "this" argument refers to the current Activity
 // Specify "true" to verify that the permissions on this token are correct
-FacebookUtils.link(this, fbToken, true, new SocializeAuthListener() {
+FacebookUtils.linkForRead(this, fbToken, true, new SocializeAuthListener() {
 
 	@Override
 	public void onCancel() {

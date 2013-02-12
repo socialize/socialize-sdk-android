@@ -52,7 +52,7 @@ public abstract class AbstractSocialNetworkSharer implements SocialNetworkSharer
 		
 		if(getSocialize().isSupported(context, authProviderType)) {
 			
-			if(getSocialize().isAuthenticated(authProviderType)) {
+			if(getSocialize().isAuthenticatedForWrite(authProviderType)) {
 				doShare(context, entity, urlSet, comment, listener, type);
 			}
 			else if(autoAuth) {
@@ -60,7 +60,7 @@ public abstract class AbstractSocialNetworkSharer implements SocialNetworkSharer
 				String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 				String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 				
-				AuthProviderInfo authProviderInfo = authProviderInfoFactory.getInstance();
+				AuthProviderInfo authProviderInfo = authProviderInfoFactory.getInstanceForWrite();
 				
 				getSocialize().authenticate(context, consumerKey, consumerSecret, authProviderInfo, new SocializeAuthListener() {
 

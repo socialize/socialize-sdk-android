@@ -59,13 +59,55 @@ public class FacebookUtils {
 				new Class[]{FacebookUtilsProxy.class},
 				new SocializeActionProxy("facebookUtils")); // Bean name
 	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @param listener
+	 */
+	public static void linkForRead (Activity context, SocializeAuthListener listener, String...permissions) {
+		proxy.linkForRead(context, listener, permissions);
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @param token
+	 * @param verifyPermissions
+	 * @param listener
+	 */
+	public static void linkForRead (Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener, String...permissions) {
+		proxy.linkForRead(context, token, verifyPermissions, listener, permissions);
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @param listener
+	 */
+	public static void linkForWrite (Activity context, SocializeAuthListener listener, String...permissions) {
+		proxy.linkForWrite(context, listener, permissions);
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @param token
+	 * @param verifyPermissions
+	 * @param listener
+	 */
+	public static void linkForWrite (Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener, String...permissions) {
+		proxy.linkForWrite(context, token, verifyPermissions, listener, permissions);
+	}
+	
 
 	/**
 	 * Links the current user to a facebook account.  The user will be presented with the Facebook authentication dialog.
 	 * @param context The current context.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void link (Activity context, SocializeAuthListener listener){
+	@Deprecated
+	public static void link (Activity context, SocializeAuthListener listener) {
 		proxy.link(context, listener);
 	}
 	
@@ -75,7 +117,8 @@ public class FacebookUtils {
 	 * @param listener A listener to handle the result.
 	 * @param permissions One or more permissions defined by http://developers.facebook.com/docs/authentication/permissions/
 	 */
-	public static void link (Activity context, SocializeAuthListener listener, String...permissions){
+	@Deprecated
+	public static void link (Activity context, SocializeAuthListener listener, String...permissions) {
 		proxy.link(context, listener, permissions);
 	}	
 	
@@ -87,6 +130,7 @@ public class FacebookUtils {
 	 * If not an authentication with FB will be attempted.  If this parameter is false it is ASSUMED that permissions are valid.
 	 * @param listener A listener to handle the result.
 	 */
+	@Deprecated
 	public static void link (Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener){
 		proxy.link(context, token, verifyPermissions, listener);
 	}
@@ -113,8 +157,27 @@ public class FacebookUtils {
 	 * @param context The current context.
 	 * @return True if the current user has linked their Facebook account.
 	 */
+	@Deprecated
 	public static boolean isLinked(Context context){
 		return proxy.isLinked(context);
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public static boolean isLinkedForRead(Context context, String...permissions){
+		return proxy.isLinkedForRead(context);
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public static boolean isLinkedForWrite(Context context){
+		return proxy.isLinkedForRead(context);
 	}
 	
 	/**
@@ -153,11 +216,11 @@ public class FacebookUtils {
 	 */
 	public static void postEntity(final Activity context, final Entity entity, final String text, final SocialNetworkShareListener listener){
 		
-		if(proxy.isLinked(context)) {
+		if(proxy.isLinkedForWrite(context)) {
 			proxy.postEntity(context, entity, text, listener);	
 		}
 		else {
-			proxy.link(context, new SocializeAuthListener() {
+			proxy.linkForWrite(context, new SocializeAuthListener() {
 				
 				@Override
 				public void onError(SocializeException error) {
@@ -199,11 +262,11 @@ public class FacebookUtils {
 	 */
 	public static void post(final Activity context, final String graphPath, final Map<String, Object> params, final SocialNetworkPostListener listener) {
 		
-		if(proxy.isLinked(context)) {
+		if(proxy.isLinkedForWrite(context)) {
 			proxy.post(context, graphPath, params, listener);
 		}
 		else {
-			proxy.link(context, new SocializeAuthListener() {
+			proxy.linkForWrite(context, new SocializeAuthListener() {
 				
 				@Override
 				public void onError(SocializeException error) {
@@ -245,11 +308,11 @@ public class FacebookUtils {
 	 */
 	public static void get(final Activity context, final String graphPath, final Map<String, Object> params, final SocialNetworkPostListener listener) {
 		
-		if(proxy.isLinked(context)) {
+		if(proxy.isLinkedForRead(context)) {
 			proxy.get(context, graphPath, params, listener);
 		}
 		else {
-			proxy.link(context, new SocializeAuthListener() {
+			proxy.linkForRead(context, new SocializeAuthListener() {
 				
 				@Override
 				public void onError(SocializeException error) {
@@ -290,11 +353,11 @@ public class FacebookUtils {
 	 * @param listener A listener to handle the result.
 	 */
 	public static void delete(final Activity context, final String graphPath, final Map<String, Object> params, final SocialNetworkPostListener listener) {
-		if(proxy.isLinked(context)) {
+		if(proxy.isLinkedForWrite(context)) {
 			proxy.delete(context, graphPath, params, listener);
 		}
 		else {
-			proxy.link(context, new SocializeAuthListener() {
+			proxy.linkForWrite(context, new SocializeAuthListener() {
 				
 				@Override
 				public void onError(SocializeException error) {

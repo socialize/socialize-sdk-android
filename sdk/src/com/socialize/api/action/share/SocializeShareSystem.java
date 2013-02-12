@@ -109,11 +109,11 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 		
 		if(network != null) {
 			AuthProviderType authType = AuthProviderType.valueOf(network);
-			if(getSocialize().isAuthenticated(authType)) {
+			if(getSocialize().isAuthenticatedForWrite(authType)) {
 				addShare(session, entity, text, shareType, location, listener, network);
 			}
 			else {
-				getSocialize().authenticate(context, authType, new SocializeAuthListener() {
+				getSocialize().authenticateForWrite(context, authType, new SocializeAuthListener() {
 					@Override
 					public void onError(SocializeException error) {
 						if(listener != null) {

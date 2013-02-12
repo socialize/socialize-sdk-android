@@ -156,7 +156,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 			throw new SocializeException("Socialize not initialized");
 		}
 		
-		data.setAuthProviderInfo(authProviderInfoBuilder.getFactory(AuthProviderType.SOCIALIZE).getInstance());
+		data.setAuthProviderInfo(authProviderInfoBuilder.getFactory(AuthProviderType.SOCIALIZE).getInstanceForRead());
 		return authenticate(endpoint, key, secret, data, uuid);
 	}
 

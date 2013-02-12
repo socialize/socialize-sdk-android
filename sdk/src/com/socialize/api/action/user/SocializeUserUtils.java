@@ -117,15 +117,15 @@ public class SocializeUserUtils extends SocializeActionUtilsBase implements User
 		
 		SocialNetwork[] networks = null;
 		
-		if(user.isAutoPostFacebook() && socialize.isAuthenticated(AuthProviderType.FACEBOOK)) {
-			if(user.isAutoPostTwitter() && socialize.isAuthenticated(AuthProviderType.TWITTER)) {
+		if(user.isAutoPostFacebook() && socialize.isAuthenticatedForRead(AuthProviderType.FACEBOOK)) {
+			if(user.isAutoPostTwitter() && socialize.isAuthenticatedForRead(AuthProviderType.TWITTER)) {
 				networks = new SocialNetwork[]{SocialNetwork.FACEBOOK, SocialNetwork.TWITTER};
 			}
 			else {
 				networks = new SocialNetwork[]{SocialNetwork.FACEBOOK};
 			}
 		}
-		else if(user.isAutoPostTwitter() && socialize.isAuthenticated(AuthProviderType.TWITTER)) {
+		else if(user.isAutoPostTwitter() && socialize.isAuthenticatedForRead(AuthProviderType.TWITTER)) {
 			networks = new SocialNetwork[]{SocialNetwork.TWITTER};
 		}
 		return networks;

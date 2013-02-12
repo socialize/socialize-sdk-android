@@ -51,5 +51,10 @@ public interface AuthProvider<I extends AuthProviderInfo> {
 	 * @param info
 	 * @return
 	 */
+	@Deprecated
 	public boolean validate(I info);
+	
+	public boolean validateForRead(I info, String...permissions);
+	
+	public boolean validateForWrite(I info, String...permissions);
 }

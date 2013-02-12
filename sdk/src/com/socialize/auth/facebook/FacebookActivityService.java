@@ -2,11 +2,13 @@ package com.socialize.auth.facebook;
 
 import android.content.Intent;
 import android.os.Bundle;
+import com.socialize.auth.facebook.FacebookAuthProviderInfo.PermissionType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.ListenerHolder;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.facebook.FacebookFacade;
+import com.socialize.util.StringUtils;
 
 public class FacebookActivityService {
 
@@ -36,19 +38,31 @@ public class FacebookActivityService {
 			if(extras != null) {
 				String[] permissions = extras.getStringArray("permissions");
 				
+				
 				listenerHolder = activity.getBean("listenerHolder");
 				logger = activity.getBean("logger");
 				config = activity.getBean("config");
 				facebookFacade = activity.getBean("facebookFacadeFactory");
 				service = getFacebookService();
 				
-				boolean sso = config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true);
+				boolean sso = extras.getBoolean("sso");
+				
+				String type = extras.getString("type");
+				PermissionType pType = PermissionType.READ;
+				if(!StringUtils.isEmpty(type)) {
+					pType = PermissionType.valueOf(type);
+				}
 				
 				if(permissions != null && permissions.length > 0) {
-					service.authenticate(activity, sso, permissions);
+					if(pType.equals(PermissionType.READ)) {
+						service.authenticateForRead(activity, sso, permissions);
+					}
+					else {
+						service.authenticateForWrite(activity, sso, permissions);
+					}
 				}
 				else {
-					service.authenticate(activity, sso);
+					service.authenticateForRead(activity, sso, FacebookFacade.READ_PERMISSIONS);
 				}
 			}
 			else {

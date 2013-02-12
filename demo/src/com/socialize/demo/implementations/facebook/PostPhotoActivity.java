@@ -106,7 +106,7 @@ public class PostPhotoActivity extends DemoActivity {
 						@Override
 						public void onCreate(final Share result) {
 							
-							FacebookUtils.link(PostPhotoActivity.this, new SocializeAuthListener() {
+							FacebookUtils.linkForWrite(PostPhotoActivity.this, new SocializeAuthListener() {
 								
 								@Override
 								public void onError(SocializeException error) {
@@ -197,6 +197,6 @@ public class PostPhotoActivity extends DemoActivity {
 	}
 
 	protected String[] getPermissions() {
-		return FacebookFacade.DEFAULT_PERMISSIONS;
+		return FacebookFacade.WRITE_PERMISSIONS;
 	}
 }

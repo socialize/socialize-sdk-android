@@ -70,22 +70,28 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 		return 3;
 	}
 	
+	@Deprecated
 	@Override
 	public void authenticate(Activity context, String appId, String[] permissions, boolean sso, final AuthProviderListener listener) {
 		// Clear current session
 		logout(context);
-		login(context, appId, permissions, sso, listener);
+		login(context, appId, permissions, sso, true, listener);
 	}
 	
-	private void login(Activity context, final AuthProviderListener listener) {
-		login(context, config.getProperty(SocializeConfig.FACEBOOK_APP_ID), DEFAULT_PERMISSIONS, config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true), listener);
+	@Override
+	public void authenticate(Activity context, String appId, String[] permissions, boolean sso, boolean read, AuthProviderListener listener) {
+		login(context, appId, permissions, sso, read, listener);
+	}
+
+	private void login(Activity context, boolean read, final AuthProviderListener listener) {
+		login(context, config.getProperty(SocializeConfig.FACEBOOK_APP_ID), (read) ? READ_PERMISSIONS : WRITE_PERMISSIONS, config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true), read, listener);
 	}
 	
 	@Override
 	public void onResume(Activity context, SocializeAuthListener listener) {
 		Session session = Session.getActiveSession();
 	    if (session == null) {
-	        session = new Session(context);
+	        session = new Session.Builder(context).setApplicationId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID)).build();
 			String strToken = getAccessToken(context);
 			if(!StringUtils.isEmpty(strToken)) {
 				AccessToken accessToken = AccessToken.createFromExistingAccessToken(
@@ -97,10 +103,13 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 	    }
 	}
 
-	private void login(Activity context, String appId, String[] permissions, boolean sso, final AuthProviderListener listener) {
+	private void login(Activity context, String appId, String[] permissions, boolean sso, boolean read, final AuthProviderListener listener) {
 
 		Session.OpenRequest auth = new Session.OpenRequest(context);
-		auth.setPermissions(Arrays.asList(permissions));
+		
+		if(permissions != null) {
+			auth.setPermissions(Arrays.asList(permissions));
+		}
 		
 		if(sso) {
 			auth.setLoginBehavior(SessionLoginBehavior.SSO_WITH_FALLBACK);
@@ -115,6 +124,11 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 			@Override
 			public void call(final Session session, SessionState state, Exception exception) {
 				
+				if(exception != null && exception instanceof FacebookOperationCanceledException) {
+					handleCancel(listener);
+					return;
+				}				
+				
 				switch(state) {
 				
 					case OPENED:
@@ -124,7 +138,6 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 								// callback after Graph API response with user object
 								@Override
 								public void onCompleted(GraphUser user, Response response) {
-									
 									if(response.getError() != null) {
 										handleError(response.getError().getException(), listener);
 									}
@@ -139,27 +152,13 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 						
 					case CLOSED:
 						if(exception != null) {
-							if(exception instanceof FacebookOperationCanceledException) {
-								handleCancel(listener);
-							}
-							else {
-								handleError(exception, listener);
-							}							
+							handleError(exception, listener);						
 						}
-						
 						break;		
 						
 					case CLOSED_LOGIN_FAILED:
 						if(exception != null) {
-							if(exception instanceof FacebookOperationCanceledException) {
-								handleCancel(listener);
-							}
-							else {
-								handleAuthFail(exception, listener);
-							}
-						}
-						else {
-							handleCancel(listener);
+							handleAuthFail(exception, listener);
 						}
 						break;							
 				}
@@ -168,7 +167,13 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 		
 		Session session = new Session.Builder(context).setApplicationId(appId).build();
 		Session.setActiveSession(session);
-		session.openForPublish(auth);		
+		
+		if(read) {
+			session.openForRead(auth);
+		}
+		else {
+			session.openForPublish(auth);
+		}
 	}
 	
 	private void handleError(Exception exception, AuthProviderListener listener) {
@@ -218,8 +223,8 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 				
 				// We must close the current session
 				if(activeSession.isOpened()) {
-					activeSession.close();
-					activeSession = new Session(context);
+					activeSession.closeAndClearTokenInformation();
+					activeSession = new Session.Builder(context).setApplicationId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID)).build();
 				}
 				
 				activeSession.open(accessToken, new StatusCallback() {
@@ -259,6 +264,7 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 		}
 	}
 	
+	@Deprecated
 	@Override
 	public boolean isLinked(Context context) {
 		return super.isLinked(context) && getActiveSession(context) != null;
@@ -267,6 +273,8 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 	@Override
 	protected void doFacebookCall(final Activity context, final Bundle data, final String graphPath, final HttpMethod method, final SocialNetworkPostListener listener) {
 		Session activeSession = getActiveSession(context);
+		
+		boolean read = method.equals(HttpMethod.GET);
 		
 		if(activeSession != null) {
 			if(activeSession.isOpened()) {
@@ -281,7 +289,7 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 				task.execute();		
 			}
 			else {
-				login(context, new AuthProviderListener() {
+				login(context, read, new AuthProviderListener() {
 					
 					@Override
 					public void onError(SocializeException error) {

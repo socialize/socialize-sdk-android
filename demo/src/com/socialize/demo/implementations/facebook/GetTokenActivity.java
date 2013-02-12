@@ -42,7 +42,7 @@ public class GetTokenActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(String text) {
 		
-		FacebookUtils.link(this, new SocializeAuthListener() {
+		FacebookUtils.linkForRead(this, new SocializeAuthListener() {
 			
 			@Override
 			public void onError(SocializeException error) {

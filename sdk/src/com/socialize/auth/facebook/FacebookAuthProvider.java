@@ -27,6 +27,7 @@ import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderInfoBuilder;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.networks.facebook.FacebookFacade;
@@ -39,11 +40,12 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 	
 	private FacebookFacade facebookFacade;
 	private AuthProviderInfoBuilder authProviderInfoBuilder;
+	private SocializeConfig config;
 	
 	@Override
-	public boolean validate(FacebookAuthProviderInfo info) {
+	public boolean validateForRead(FacebookAuthProviderInfo info, String...permissions) {
 		if(authProviderInfoBuilder != null) {
-			AuthProviderInfo expected = authProviderInfoBuilder.getFactory(AuthProviderType.FACEBOOK).getInstance(FacebookFacade.DEFAULT_PERMISSIONS);
+			AuthProviderInfo expected = authProviderInfoBuilder.getFactory(AuthProviderType.FACEBOOK).getInstanceForRead(permissions);
 			return info.matches(expected);
 		}
 		// Default to true
@@ -51,9 +53,26 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 	}
 
 	@Override
+	public boolean validateForWrite(FacebookAuthProviderInfo info, String...permissions) {
+		if(authProviderInfoBuilder != null) {
+			AuthProviderInfo expected = authProviderInfoBuilder.getFactory(AuthProviderType.FACEBOOK).getInstanceForWrite(permissions);
+			return info.matches(expected);
+		}
+		// Default to true
+		return true;
+	}
+
+	@Deprecated
+	@Override
+	public boolean validate(FacebookAuthProviderInfo info) {
+		return validateForWrite(info, FacebookFacade.WRITE_PERMISSIONS);
+	}
+
+	@Override
 	public void authenticate(Context context, FacebookAuthProviderInfo info, final AuthProviderListener listener) {
 		if(context instanceof Activity) {
-			facebookFacade.authenticate((Activity)context, info, listener);	
+			final boolean sso = config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true);
+			facebookFacade.authenticateWithActivity((Activity)context, info, sso, listener);	
 		}
 		else {
 			if(listener != null) {
@@ -75,5 +94,9 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 
 	public void setAuthProviderInfoBuilder(AuthProviderInfoBuilder authProviderInfoBuilder) {
 		this.authProviderInfoBuilder = authProviderInfoBuilder;
+	}
+
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
 	}
 }

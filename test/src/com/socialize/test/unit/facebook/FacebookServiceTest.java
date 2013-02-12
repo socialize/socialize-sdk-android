@@ -79,7 +79,7 @@ import com.socialize.util.DialogFactory;
 		AndroidMock.replay(facebook);
 
 		FacebookService service = new FacebookService(facebook, facebookSessionStore, authProviderListener, dialogFactory, null);
-		service.authenticate(context, permissions);
+		service.authenticate(context, true, permissions);
 
 		AndroidMock.verify(facebookSessionStore);
 		AndroidMock.verify(facebook);
@@ -184,7 +184,7 @@ import com.socialize.util.DialogFactory;
 	public void testAuthenticateCallsAuthenticateWithCorrectPermissions() {
 		FacebookService service = new FacebookService(null, null, null, null, null) {
 			@Override
-			public void authenticate(FacebookActivity context, String[] permissions) {
+			public void authenticate(FacebookActivity context, boolean sso, String... permissions) {
 				assertNotNull(permissions);
 				assertTrue(permissions.length == 3);
 				assertEquals(FacebookFacade.DEFAULT_PERMISSIONS[0], permissions[0]);
@@ -347,7 +347,7 @@ import com.socialize.util.DialogFactory;
 		FacebookService service =  new FacebookService(facebook, facebookSessionStore, authProviderListener, dialogFactory, null) {
 			
 			@Override
-			public void authenticate(FacebookActivity context, String[] permissions, boolean sso) {
+			public void authenticate(FacebookActivity context, boolean sso, String... permissions) {
 				addResult(3, "auth_called");
 			}
 

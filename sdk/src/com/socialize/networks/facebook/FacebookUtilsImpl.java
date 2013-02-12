@@ -70,14 +70,52 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 		return facebook;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#linkForRead(android.app.Activity, com.socialize.listener.SocializeAuthListener)
+	 */
+	@Override
+	public void linkForRead(Activity context, SocializeAuthListener listener, String...permissions) {
+		facebookFacade.linkForRead(context, listener, permissions);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#linkForRead(android.app.Activity, java.lang.String, boolean, com.socialize.listener.SocializeAuthListener)
+	 */
+	@Override
+	public void linkForRead(Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener, String...permissions) {
+		facebookFacade.linkForRead(context, token, verifyPermissions, listener, permissions);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#linkForWrite(android.app.Activity, com.socialize.listener.SocializeAuthListener)
+	 */
+	@Override
+	public void linkForWrite(Activity context, SocializeAuthListener listener, String...permissions) {
+		facebookFacade.linkForWrite(context, listener, permissions);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#linkForWrite(android.app.Activity, java.lang.String, boolean, com.socialize.listener.SocializeAuthListener)
+	 */
+	@Override
+	public void linkForWrite(Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener, String...permissions) {
+		facebookFacade.linkForWrite(context, token, verifyPermissions, listener, permissions);
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#link(android.app.Activity, com.socialize.listener.SocializeAuthListener)
 	 */
+	@Deprecated
 	@Override
 	public void link(Activity context, SocializeAuthListener listener) {
 		facebookFacade.link(context, listener);
 	}
 	
+	@Deprecated
 	@Override
 	public void link(Activity context, SocializeAuthListener listener, String... permissions) {
 		facebookFacade.link(context, listener, permissions);
@@ -86,6 +124,7 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#link(android.app.Activity, java.lang.String, com.socialize.listener.SocializeAuthListener)
 	 */
+	@Deprecated
 	@Override
 	public void link(final Activity context, final String token, final boolean verifyPermissions, final SocializeAuthListener listener) {
 		facebookFacade.link(context, token, verifyPermissions, listener);
@@ -102,9 +141,28 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#isLinked(android.content.Context)
 	 */
+	@Deprecated
 	@Override
 	public boolean isLinked(Context context) {
 		return facebookFacade.isLinked(context);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#isLinkedForRead(android.content.Context)
+	 */
+	@Override
+	public boolean isLinkedForRead(Context context, String...permissions) {
+		return facebookFacade.isLinkedForRead(context, permissions);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#isLinkedForWrite(android.content.Context)
+	 */
+	@Override
+	public boolean isLinkedForWrite(Context context, String...permissions) {
+		return facebookFacade.isLinkedForWrite(context, permissions);
 	}
 
 	/* (non-Javadoc)
@@ -145,7 +203,7 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	
 	@Override
 	public void onResume(Activity context, SocializeAuthListener listener) {
-		if(isLinked(context)) {
+		if(isLinkedForRead(context)) {
 			facebookFacade.onResume(context, listener);
 		}
 	}

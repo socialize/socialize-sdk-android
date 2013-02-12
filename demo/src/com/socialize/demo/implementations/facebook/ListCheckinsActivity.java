@@ -46,9 +46,9 @@ public class ListCheckinsActivity extends SDKDemoActivity {
 	public void executeDemo(String text) {
 		
 		// We need additional permissions for this
-		String[] permissions = {"publish_stream", "user_status"};
+		String[] permissions = {"user_status"};
 		
-		FacebookUtils.link(this, new SocializeAuthListener() {
+		FacebookUtils.linkForRead(this, new SocializeAuthListener() {
 			
 			@Override
 			public void onError(SocializeException error) {

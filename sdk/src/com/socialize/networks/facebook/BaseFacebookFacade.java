@@ -48,6 +48,7 @@ import com.socialize.auth.DefaultUserProviderCredentials;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.facebook.FacebookActivity;
 import com.socialize.auth.facebook.FacebookAuthProviderInfo;
+import com.socialize.auth.facebook.FacebookAuthProviderInfo.PermissionType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
@@ -82,7 +83,7 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 	 * @see com.socialize.networks.facebook.FacebookFacade#authenticate(android.app.Activity, com.socialize.auth.facebook.FacebookAuthProviderInfo, com.socialize.listener.AuthProviderListener)
 	 */
 	@Override
-	public void authenticate(Activity context, FacebookAuthProviderInfo info, final AuthProviderListener listener) {
+	public void authenticateWithActivity(Activity context, FacebookAuthProviderInfo info, boolean sso, final AuthProviderListener listener) {
 
 		final String listenerKey = "auth";
 		
@@ -115,38 +116,80 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 		
 		Intent i = new Intent(context, FacebookActivity.class);
 		i.putExtra("appId", info.getAppId());
+		i.putExtra("sso", sso);
+		i.putExtra("type", info.getPermissionType().toString());
 		
-		if(info.getPermissions() != null) {
-			i.putExtra("permissions", info.getPermissions());
+		switch(info.getPermissionType()) {
+			case READ:
+				if(info.getReadPermissions() != null) {
+					i.putExtra("permissions", info.getReadPermissions());
+				}
+				break;
+				
+			case WRITE:
+				if(info.getWritePermissions() != null) {
+					i.putExtra("permissions", info.getWritePermissions());
+				}
+				break;
 		}
 		
-		context.startActivity(i);		
+		context.startActivity(i);	
 	}		
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.facebook.FacebookFacade#link(android.app.Activity, com.socialize.listener.SocializeAuthListener)
 	 */
+	@Deprecated
 	@Override
 	public void link(Activity context, SocializeAuthListener listener) {
-		getSocialize().authenticate(context, AuthProviderType.FACEBOOK, listener, DEFAULT_PERMISSIONS);
+		linkForRead(context, listener);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.facebook.FacebookFacade#link(android.app.Activity, com.socialize.listener.SocializeAuthListener, java.lang.String[])
 	 */
+	@Deprecated
 	@Override
 	public void link(Activity context, SocializeAuthListener listener, String... permissions) {
 		getSocialize().authenticate(context, AuthProviderType.FACEBOOK, listener, permissions);
 	}	
 	
-	/* (non-Javadoc)
-	 * @see com.socialize.networks.facebook.FacebookFacade#link(android.app.Activity, java.lang.String, boolean, com.socialize.listener.SocializeAuthListener)
-	 */
+	@Deprecated
 	@Override
-	public void link(final Activity context, final String token, final boolean verifyPermissions, final SocializeAuthListener listener) {
+	public void link(Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener) {
+		linkForRead(context, token, verifyPermissions, listener);
+	}
+
+	@Override
+	public void linkForRead(Activity context, SocializeAuthListener listener, String...permissions) {
+		getSocialize().authenticateForRead(context, AuthProviderType.FACEBOOK, listener, permissions);
+	}
+
+	@Override
+	public void linkForWrite(Activity context, SocializeAuthListener listener, String...permissions) {
+		getSocialize().authenticateForWrite(context, AuthProviderType.FACEBOOK, listener, permissions);
+	}
+
+	@Override
+	public void linkForRead(Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener, String...permissions) {
+		doLink(context, token, verifyPermissions, true, listener, permissions);
+	}
+
+	@Override
+	public void linkForWrite(Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener, String...permissions) {
+		doLink(context, token, verifyPermissions, false, listener, permissions);
+	}
+
+	private void doLink(final Activity context, final String token, final boolean verifyPermissions, final boolean read, final SocializeAuthListener listener, String...permissions) {
 		SocializeConfig config = ConfigUtils.getConfig(context);
 		final FacebookAuthProviderInfo fbInfo = new FacebookAuthProviderInfo();
 		fbInfo.setAppId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID));
+		
+		if(read) {
+			fbInfo.setPermissionType(PermissionType.READ);
+		}
+		
+		final boolean sso = config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true);
 		
 		if(verifyPermissions) {
 			// Get the permissions for this token
@@ -163,10 +206,15 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 				public void onSuccess(String[] current) {
 					
 					// Set the permissions on the session to the REAL permissions.
-					fbInfo.setPermissions(current);
+					if(read) {
+						fbInfo.setReadPermissions(current);
+					}
+					else {
+						fbInfo.setWritePermissions(current);
+					}
 					
 					// Ensure the user has the required permissions
-					String[] required = DEFAULT_PERMISSIONS;
+					String[] required = (read) ? READ_PERMISSIONS : WRITE_PERMISSIONS;
 					
 					boolean authRequired = false;
 					
@@ -179,8 +227,6 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 					}
 					
 					if(authRequired) {
-						
-
 						// We need to merge in the default permissions...
 						// Just add to a set
 						Set<String> allPermissions = new HashSet<String>();
@@ -188,10 +234,15 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 						allPermissions.addAll(Arrays.asList(required));
 						
 						// Now set the merged permissions.  This is the final set
-						fbInfo.setPermissions(allPermissions.toArray(new String[allPermissions.size()]));
+						if(read) {
+							fbInfo.setReadPermissions(allPermissions.toArray(new String[allPermissions.size()]));
+						}
+						else {
+							fbInfo.setWritePermissions(allPermissions.toArray(new String[allPermissions.size()]));
+						}						
 						
 						// Now try to auth
-						authenticate(context, fbInfo, new AuthProviderListener() {
+						authenticateWithActivity(context, fbInfo, sso, new AuthProviderListener() {
 							
 							@Override
 							public void onError(SocializeException error) {
@@ -220,7 +271,6 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 								}
 							}
 						});
-						
 					}
 					else {
 						doSocializeAuthKnownUser(context, fbInfo, token, listener);
@@ -230,7 +280,8 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 		}
 		else {
 			// Assume default permissions
-			fbInfo.setPermissions(DEFAULT_PERMISSIONS);
+			fbInfo.setReadPermissions(READ_PERMISSIONS);
+			fbInfo.setWritePermissions(WRITE_PERMISSIONS);
 			doSocializeAuthKnownUser(context, fbInfo, token, listener);
 		}		
 	}	
@@ -238,9 +289,20 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.facebook.FacebookFacade#isLinked(android.content.Context)
 	 */
+	@Deprecated
 	@Override
 	public boolean isLinked(Context context) {
 		return getSocialize().isAuthenticated(AuthProviderType.FACEBOOK);
+	}
+	
+	@Override
+	public boolean isLinkedForRead(Context context, String...permissions) {
+		return getSocialize().isAuthenticatedForRead(AuthProviderType.FACEBOOK, permissions);
+	}
+
+	@Override
+	public boolean isLinkedForWrite(Context context, String...permissions) {
+		return getSocialize().isAuthenticatedForWrite(AuthProviderType.FACEBOOK, permissions);
 	}
 
 	/*

@@ -661,6 +661,7 @@ public class SocializeServiceImpl implements SocializeService {
 		throw new SocializeException("Socialize not initialized");
 	}
 	
+	@Deprecated
 	@Override
 	public void authenticate(Context context, AuthProviderType authProviderType, SocializeAuthListener authListener, String... permissions) {
 		SocializeConfig config = getConfig();
@@ -668,17 +669,35 @@ public class SocializeServiceImpl implements SocializeService {
 		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 		
 		if(permissions.length > 0) {
-			if(!Arrays.equals(permissions, FacebookFacade.DEFAULT_PERMISSIONS)) {
+			if(!Arrays.equals(permissions, FacebookFacade.READ_PERMISSIONS)) {
 				// Ensure the requested permissions include the default permissions
 				Set<String> all = new HashSet<String>();
 				all.addAll(Arrays.asList(permissions));
-				all.addAll(Arrays.asList(FacebookFacade.DEFAULT_PERMISSIONS));
+				all.addAll(Arrays.asList(FacebookFacade.READ_PERMISSIONS));
 				permissions = all.toArray(new String[all.size()]);
 			}
 		}
 
 		AuthProviderInfo authProviderInfo = authProviderInfoBuilder.getFactory(authProviderType).getInstance(permissions);
 		
+		authenticate(context, consumerKey, consumerSecret, authProviderInfo,  authListener);
+	}
+
+	@Override
+	public void authenticateForRead(Context context, AuthProviderType authProviderType, SocializeAuthListener authListener, String... permissions) {
+		SocializeConfig config = getConfig();
+		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+		AuthProviderInfo authProviderInfo = authProviderInfoBuilder.getFactory(authProviderType).getInstanceForRead(permissions);
+		authenticate(context, consumerKey, consumerSecret, authProviderInfo,  authListener);		
+	}
+
+	@Override
+	public void authenticateForWrite(Context context, AuthProviderType authProviderType, SocializeAuthListener authListener, String... permissions) {
+		SocializeConfig config = getConfig();
+		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+		AuthProviderInfo authProviderInfo = authProviderInfoBuilder.getFactory(authProviderType).getInstanceForWrite(permissions);
 		authenticate(context, consumerKey, consumerSecret, authProviderInfo,  authListener);
 	}
 
@@ -743,35 +762,61 @@ public class SocializeServiceImpl implements SocializeService {
 	
 	/*
 	 * (non-Javadoc)
-	 * @see com.socialize.SocializeService#isAuthenticated(com.socialize.auth.AuthProviderType)
+	 * @see com.socialize.SocializeService#isAuthenticatedForRead(com.socialize.auth.AuthProviderType)
 	 */
 	@Override
-	public boolean isAuthenticated(AuthProviderType providerType) {
+	public boolean isAuthenticatedForRead(AuthProviderType providerType, String...permissions) {
+		return isAuthenticated(providerType, true, permissions);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#isAuthenticatedForWrite(com.socialize.auth.AuthProviderType)
+	 */
+	@Override
+	public boolean isAuthenticatedForWrite(AuthProviderType providerType, String...permissions) {
+		return isAuthenticated(providerType, false, permissions);
+	}
+	
+	private boolean isAuthenticated(AuthProviderType providerType, boolean readOnly, String...permissions) {
 		if(isAuthenticated()) {
-			
+
 			if(providerType.equals(AuthProviderType.SOCIALIZE)) {
 				return true;
 			}
-			
+
 			UserProviderCredentials userProviderCredentials = session.getUserProviderCredentials(providerType);
-			
+
 			if(userProviderCredentials != null) {
 				// Validate the credentials
 				AuthProviderInfo authProviderInfo = userProviderCredentials.getAuthProviderInfo();
-				
+
 				if(authProviderInfo != null) {
 					AuthProvider<AuthProviderInfo> provider = authProviders.getProvider(providerType);
-					
-					boolean valid = provider.validate(authProviderInfo);
-					
-					return valid;
+
+					if(readOnly) {
+						return provider.validateForRead(authProviderInfo, permissions);
+					}
+					else {
+						return provider.validateForWrite(authProviderInfo, permissions);
+					}
 				}
-				
+
 				return false;
 			}
 		}
-		
+
 		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#isAuthenticated(com.socialize.auth.AuthProviderType)
+	 */
+	@Deprecated
+	@Override
+	public boolean isAuthenticated(AuthProviderType providerType) {
+		return isAuthenticated(providerType, false);
 	}
 
 	protected boolean assertAuthenticated(SocializeListener listener) {

@@ -555,8 +555,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			
 			if(authProvider != null) {
 				
-//				final SocializeSession fSession = session;
-				
 				AuthProviderListener authProviderListener = new AuthProviderListener() {
 					
 					@Override

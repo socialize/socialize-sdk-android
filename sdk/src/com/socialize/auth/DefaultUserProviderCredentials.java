@@ -53,6 +53,7 @@ public class DefaultUserProviderCredentials implements UserProviderCredentials {
 	 * @see com.socialize.auth.UserProviderCredentials#getAuthProviderInfo()
 	 */
 	@Override
+	@Deprecated
 	public AuthProviderInfo getAuthProviderInfo() {
 		return authProviderInfo;
 	}

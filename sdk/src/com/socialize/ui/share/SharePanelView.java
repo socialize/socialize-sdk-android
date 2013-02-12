@@ -673,19 +673,19 @@ public class SharePanelView extends DialogPanelView {
 	
 	public void updateNetworkButtonState() {
 		if(facebookShareCell != null) {
-			facebookShareCell.setToggled(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK));
+			facebookShareCell.setToggled(getSocialize().isAuthenticatedForRead(AuthProviderType.FACEBOOK));
 		}
 		if(twitterShareCell != null) {
-			twitterShareCell.setToggled(getSocialize().isAuthenticated(AuthProviderType.TWITTER));
+			twitterShareCell.setToggled(getSocialize().isAuthenticatedForRead(AuthProviderType.TWITTER));
 		}
 	}
 	
 	public void checkSupportedNetworkButtonState() {
 		if(facebookShareCell != null && facebookShareCell.isToggled()) {
-			facebookShareCell.setToggled(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK));
+			facebookShareCell.setToggled(getSocialize().isAuthenticatedForRead(AuthProviderType.FACEBOOK));
 		}
 		if(twitterShareCell != null && twitterShareCell.isToggled()) {
-			twitterShareCell.setToggled(getSocialize().isAuthenticated(AuthProviderType.TWITTER));
+			twitterShareCell.setToggled(getSocialize().isAuthenticatedForRead(AuthProviderType.TWITTER));
 		}
 	}	
 

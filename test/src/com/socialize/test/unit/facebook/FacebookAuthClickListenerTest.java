@@ -129,6 +129,36 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 			}
 			
 			@Override
+			public void linkForRead(Activity context, SocializeAuthListener listener, String... permissions) {
+				
+			}
+
+			@Override
+			public void linkForRead(Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener, String... permissions) {
+				
+			}
+
+			@Override
+			public void linkForWrite(Activity context, SocializeAuthListener listener, String... permissions) {
+				
+			}
+
+			@Override
+			public void linkForWrite(Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener, String... permissions) {
+				
+			}
+
+			@Override
+			public boolean isLinkedForRead(Context context, String... permissions) {
+				return false;
+			}
+
+			@Override
+			public boolean isLinkedForWrite(Context context, String... permissions) {
+				return false;
+			}
+
+			@Override
 			public boolean isAvailable(Context context) {
 				return true;
 			}

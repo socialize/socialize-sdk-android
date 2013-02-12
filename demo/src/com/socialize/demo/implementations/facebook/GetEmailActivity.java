@@ -68,8 +68,8 @@ public class GetEmailActivity extends SDKDemoActivity {
 	// ######################################################################
 	private void onFacebookBtnClicked() {
 		// defaults found in:   com.socialize.networks.facebook.BaseFacebookFacade
-		String[] permissions = {"publish_stream", "publish_actions", "photo_upload", "email"};
-		FacebookUtils.link(this, new SocializeAuthListener() {
+		String[] permissions = {"email"};
+		FacebookUtils.linkForRead(this, new SocializeAuthListener() {
 			@Override
 			public void onCancel() {
 				Toast.makeText(GetEmailActivity.this, "Facebook login cancelled", Toast.LENGTH_SHORT).show();

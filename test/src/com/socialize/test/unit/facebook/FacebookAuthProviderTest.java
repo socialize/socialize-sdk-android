@@ -87,7 +87,7 @@ public class FacebookAuthProviderTest extends SocializeUnitTest {
 		FacebookAuthProviderInfo fb = new FacebookAuthProviderInfo();
 		fb.setAppId(appId);
 		
-		provider.authenticate(context, fb, listener);
+		provider.authenticateWithActivity(context, fb, true, listener);
 		
 		// We should have a listener from the put method
 		AuthProviderListener wrapper = getNextResult();

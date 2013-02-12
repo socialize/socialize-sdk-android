@@ -81,11 +81,16 @@ public class MockFacebookFacade implements FacebookFacade {
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.networks.facebook.FacebookFacade#authenticate(android.content.Context, com.socialize.auth.facebook.FacebookAuthProviderInfo, com.socialize.listener.AuthProviderListener)
-	 */
 	@Override
-	public void authenticate(Activity context, FacebookAuthProviderInfo info, AuthProviderListener listener) {
+	public void authenticateWithActivity(Activity context, FacebookAuthProviderInfo info, boolean sso, AuthProviderListener listener) {
+		AuthProviderResponse mockResponse = new AuthProviderResponse();
+		mockResponse.setUserId(userId);
+		mockResponse.setToken(token);
+		listener.onAuthSuccess(mockResponse);
+	}
+
+	@Override
+	public void authenticate(Activity context, String appId, String[] permissions, boolean sso, boolean read, AuthProviderListener listener) {
 		AuthProviderResponse mockResponse = new AuthProviderResponse();
 		mockResponse.setUserId(userId);
 		mockResponse.setToken(token);
@@ -196,6 +201,46 @@ public class MockFacebookFacade implements FacebookFacade {
 		if(listener != null) {
 			listener.onSuccess();
 		}
+	}
+	
+	
+
+	@Override
+	public void linkForRead(Activity context, SocializeAuthListener listener, String... permissions) {
+		if(listener != null) {
+			listener.onAuthSuccess(new MockSocializeSession());
+		}
+	}
+
+	@Override
+	public void linkForWrite(Activity context, SocializeAuthListener listener, String... permissions) {
+		if(listener != null) {
+			listener.onAuthSuccess(new MockSocializeSession());
+		}
+	}
+
+	@Override
+	public void linkForRead(Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener, String... permissions) {
+		if(listener != null) {
+			listener.onAuthSuccess(new MockSocializeSession());
+		}
+	}
+
+	@Override
+	public void linkForWrite(Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener, String... permissions) {
+		if(listener != null) {
+			listener.onAuthSuccess(new MockSocializeSession());
+		}
+	}
+
+	@Override
+	public boolean isLinkedForRead(Context context, String... permissions) {
+		return false;
+	}
+
+	@Override
+	public boolean isLinkedForWrite(Context context, String... permissions) {
+		return false;
 	}
 
 	/* (non-Javadoc)

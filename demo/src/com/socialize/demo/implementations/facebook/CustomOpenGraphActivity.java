@@ -49,7 +49,7 @@ public class CustomOpenGraphActivity extends SDKDemoActivity {
 	public void executeDemo(final String text) {
 		
 		// Link if we need to
-		FacebookUtils.link(this, new SocializeAuthListener() {
+		FacebookUtils.linkForWrite(this, new SocializeAuthListener() {
 			
 			@Override
 			public void onError(SocializeException error) {

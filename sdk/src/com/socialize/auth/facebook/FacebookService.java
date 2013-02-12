@@ -81,20 +81,23 @@ public class FacebookService {
 	/**
 	 * Authenticates with default permissions and Single Sign On.
 	 */
+	@Deprecated
 	public void authenticate(FacebookActivity context) {
-		authenticate(context, FacebookFacade.DEFAULT_PERMISSIONS);
+		authenticate(context, FacebookFacade.DEFAULT_PERMISSIONS, true, false);
 	}
 	
+	@Deprecated
 	public void authenticate(FacebookActivity context, boolean sso) {
-		authenticate(context, FacebookFacade.DEFAULT_PERMISSIONS, sso);
+		authenticate(context, FacebookFacade.DEFAULT_PERMISSIONS, sso, false);
 	}
 	
+	@Deprecated
 	public void authenticate(FacebookActivity context, boolean sso, String...permissions) {
 		if(permissions != null && permissions.length > 0) {
-			authenticate(context, permissions, sso);
+			authenticate(context, permissions, sso, false);
 		}
 		else {
-			authenticate(context, FacebookFacade.DEFAULT_PERMISSIONS, sso);
+			authenticate(context, FacebookFacade.DEFAULT_PERMISSIONS, sso, false);
 		}
 	}
 	
@@ -102,13 +105,18 @@ public class FacebookService {
 	 * Authenticates with Single Sign On.
 	 * @param permissions
 	 */
-	public void authenticate(FacebookActivity context, String[] permissions) {
-		authenticate(context, permissions, true);
+	public void authenticateForRead(FacebookActivity context, boolean sso, String[] permissions) {
+		authenticate(context, permissions, sso, true);
 	}
 	
-	protected void authenticate(final FacebookActivity context, final String[] permissions, final boolean sso) {
+	public void authenticateForWrite(FacebookActivity context, boolean sso, String[] permissions) {
+		authenticate(context, permissions, sso, false);
+	}	
+	
+	protected void authenticate(final FacebookActivity context, final String[] permissions, final boolean sso, final boolean read) {
 		if(facebookFacade != null) {
-			facebookFacade.authenticate(context, appId, permissions, sso, new AuthProviderListener() {
+			
+			facebookFacade.authenticate(context, appId, permissions, sso, read, new AuthProviderListener() {
 				@Override
 				public void onError(SocializeException error) {
 					finish(context);
@@ -256,7 +264,7 @@ public class FacebookService {
 		builder.setPositiveButton("Try again", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				dialog.dismiss();
-				authenticate((FacebookActivity) context, permissions, sso);
+				authenticate((FacebookActivity) context, permissions, sso, false);
 			}
 		});	
 		builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

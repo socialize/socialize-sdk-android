@@ -133,7 +133,29 @@ public interface SocializeService extends SocializeSessionConsumer {
 	 * @param authListener The callback for authentication outcomes.
 	 * @param permissions One or more custom permissions used by the call.  (Currently only used by FACEBOOK)
 	 */
+	@Deprecated
 	public void authenticate(Context context, AuthProviderType authProvider, SocializeAuthListener authListener, String...permissions);
+	
+	/**
+	 * Authenticates the application against the API.
+	 * NOTE:  This assumes the consumer key/secret have been specified in assets/socialize.properties
+	 * @param context The current context.
+	 * @param authProvider The authentication provider.  Use AuthProviderType.SOCIALIZE for anonymous user auth.
+	 * @param authListener The callback for authentication outcomes.
+	 * @param permissions One or more custom permissions used by the call.  (Currently only used by FACEBOOK)
+	 */
+	public void authenticateForRead(Context context, AuthProviderType authProvider, SocializeAuthListener authListener, String...permissions);
+	
+	/**
+	 * Authenticates the application against the API.
+	 * NOTE:  This assumes the consumer key/secret have been specified in assets/socialize.properties
+	 * @param context The current context.
+	 * @param authProvider The authentication provider.  Use AuthProviderType.SOCIALIZE for anonymous user auth.
+	 * @param authListener The callback for authentication outcomes.
+	 * @param permissions One or more custom permissions used by the call.  (Currently only used by FACEBOOK)
+	 */
+	public void authenticateForWrite(Context context, AuthProviderType authProvider, SocializeAuthListener authListener, String...permissions);
+	
 	
 	/**
 	 * Authenticates the application against the API.
@@ -171,7 +193,22 @@ public interface SocializeService extends SocializeSessionConsumer {
 	 * @param providerType
 	 * @return true if the current user is already authenticated using the provider specified.
 	 */
+	@Deprecated
 	public boolean isAuthenticated(AuthProviderType providerType);
+	
+	/**
+	 * Returns true if the current user is already authenticated using the provider specified for READ operations.
+	 * @param providerType
+	 * @return
+	 */
+	public boolean isAuthenticatedForRead(AuthProviderType providerType, String...permissions);
+	
+	/**
+	 * Returns true if the current user is already authenticated using the provider specified for WRITE operations.
+	 * @param providerType
+	 * @return
+	 */
+	public boolean isAuthenticatedForWrite(AuthProviderType providerType, String...permissions);	
 	
 	/**
 	 * Returns a reference to the current session.

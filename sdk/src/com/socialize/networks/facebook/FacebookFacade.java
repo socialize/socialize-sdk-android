@@ -41,21 +41,28 @@ import com.socialize.networks.SocializeDeAuthListener;
  */
 public interface FacebookFacade {
 	
-	public static final String[] DEFAULT_PERMISSIONS = {"publish_stream", "publish_actions", "photo_upload"};
+	public static final String[] READ_PERMISSIONS = {};
 	
-	public void authenticate(Activity context, String appId, String[] permissions, boolean sso, AuthProviderListener listener);
+	public static final String[] WRITE_PERMISSIONS = {"publish_stream", "publish_actions"};
 	
-	public void authenticate(Activity context, FacebookAuthProviderInfo info, final AuthProviderListener listener);
+	@Deprecated
+	public static final String[] DEFAULT_PERMISSIONS = WRITE_PERMISSIONS;
 
-	public void link (Activity context, SocializeAuthListener listener);
+	public void authenticateWithActivity(Activity context, FacebookAuthProviderInfo info, boolean sso, final AuthProviderListener listener);
 
-	public void link (Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener);
+	public void linkForRead (Activity context, SocializeAuthListener listener, String...permissions);
 	
-	public void link(Activity context, SocializeAuthListener listener, String...permissions);
+	public void linkForWrite (Activity context, SocializeAuthListener listener, String...permissions);
+
+	public void linkForRead (Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener, String...permissions);	
+	
+	public void linkForWrite (Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener, String...permissions);	
 	
 	public void unlink (Context context, SocializeDeAuthListener listener);
 	
-	public boolean isLinked(Context context);
+	public boolean isLinkedForRead(Context context, String...permissions);
+	
+	public boolean isLinkedForWrite(Context context, String...permissions);
 	
 	public int getSDKMajorVersion();
 	
@@ -71,10 +78,6 @@ public interface FacebookFacade {
 
 	public void postComment(Activity parent, Entity entity, String comment, PropagationInfo propInfo, SocialNetworkListener listener);	
 		
-//	public void postPhoto(Activity parent, Share share, String comment, Bitmap photo, SocialNetworkListener listener);
-	
-//	public void postPhoto(Activity parent, String link, String caption, Bitmap photo, SocialNetworkListener listener);
-	
 	public void postOG(Activity parent, Entity entity, String message, String action, PropagationInfo propInfo, SocialNetworkListener listener);
 	
 	public void post(Activity parent, Entity entity, String message, PropagationInfo propInfo, SocialNetworkListener listener);
@@ -93,5 +96,20 @@ public interface FacebookFacade {
 	
 	public void onActivityResult(Activity context, int requestCode, int resultCode, Intent data);
 
+	@Deprecated
+	public void link (Activity context, SocializeAuthListener listener);
 
+	@Deprecated
+	public void link (Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener);
+	
+	@Deprecated
+	public void link(Activity context, SocializeAuthListener listener, String...permissions);
+	
+	@Deprecated
+	public void authenticate(Activity context, String appId, String[] permissions, boolean sso, AuthProviderListener listener);
+	
+	public void authenticate(Activity context, String appId, String[] permissions, boolean sso, boolean read, AuthProviderListener listener);
+	
+	@Deprecated
+	public boolean isLinked(Context context);	
 }

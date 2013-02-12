@@ -47,7 +47,7 @@ public class DefaultAuthProviderInfoBuilder implements AuthProviderInfoBuilder {
 		boolean valid = true;
 		Collection<AuthProviderInfoFactory<?>> values = factories.values();
 		for (AuthProviderInfoFactory<?> factory : values) {
-			AuthProviderInfo instance = factory.getInstance();
+			AuthProviderInfo instance = factory.getInstanceForRead();
 			try {
 				instance.validate();
 			} 
@@ -68,7 +68,7 @@ public class DefaultAuthProviderInfoBuilder implements AuthProviderInfoBuilder {
 	public boolean isSupported(AuthProviderType type) {
 		AuthProviderInfoFactory<AuthProviderInfo> factory = getFactory(type);
 		if(factory != null) {
-			return factory.getInstance().isValid();
+			return factory.getInstanceForRead().isValid();
 		}
 		return false;
 	}

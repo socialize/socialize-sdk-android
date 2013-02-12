@@ -45,4 +45,15 @@ public class EmptyAuthProvider implements AuthProvider<AuthProviderInfo> {
 	public boolean validate(AuthProviderInfo info) {
 		return true;
 	}
+
+	@Override
+	public boolean validateForRead(AuthProviderInfo info, String... permissions) {
+		return true;
+	}
+
+	@Override
+	public boolean validateForWrite(AuthProviderInfo info, String... permissions) {
+		return true;
+		
+	}
 }

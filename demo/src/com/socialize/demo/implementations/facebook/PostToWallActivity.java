@@ -46,8 +46,7 @@ public class PostToWallActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(final String text) {
 		
-		
-		FacebookUtils.link(this, new SocializeAuthListener() {
+		FacebookUtils.linkForWrite(this, new SocializeAuthListener() {
 			
 			@Override
 			public void onError(SocializeException error) {

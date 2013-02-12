@@ -36,16 +36,51 @@ public abstract class BaseAuthProviderInfoFactory<I extends AuthProviderInfo> im
 		this.config = config;
 	}
 
+	@Deprecated
 	@Override
 	public I getInstance(String...permissions) {
 		if(instance == null) {
-			instance = initInstance(permissions);
+			instance = initInstanceForWrite(permissions);
 		}
-		update(instance, permissions);
+		updateForWrite(instance, permissions);
 		return instance;
 	}
 	
-	protected abstract I initInstance(String...permissions);
+	@Override
+	public I getInstanceForRead(String... permissions) {
+		return getInstance(true, permissions);
+	}
+
+	@Override
+	public I getInstanceForWrite(String... permissions) {
+		return getInstance(false, permissions);
+	}
+
+	private I getInstance(boolean readOnly, String...permissions) {
+		if(instance == null) {
+			if(readOnly) {
+				instance = initInstanceForRead(permissions);
+			}
+			else {
+				instance = initInstanceForWrite(permissions);
+			}
+		}
+		
+		if(readOnly) {
+			updateForRead(instance, permissions);	
+		}
+		else {
+			updateForWrite(instance, permissions);	
+		}		
+		
+		return instance;
+	}
 	
-	protected abstract void update(I instance, String... permissions);
+	protected abstract I initInstanceForRead(String...permissions);
+	
+	protected abstract I initInstanceForWrite(String...permissions);
+	
+	protected abstract void updateForRead(I instance, String... permissions);
+	
+	protected abstract void updateForWrite(I instance, String... permissions);
 }

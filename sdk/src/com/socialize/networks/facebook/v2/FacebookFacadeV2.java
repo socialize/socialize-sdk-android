@@ -83,7 +83,13 @@ public class FacebookFacadeV2 extends BaseFacebookFacade {
 	public int getSDKMajorVersion() {
 		return 2;
 	}
+	
+	@Override
+	public void authenticate(Activity context, String appId, String[] permissions, boolean sso, boolean read, AuthProviderListener listener) {
+		authenticate(context, appId, permissions, sso, listener);
+	}
 
+	@Deprecated
 	@Override
 	public void authenticate(final Activity context, String appId, final String[] permissions, final boolean sso, final AuthProviderListener listener) {
 		Facebook facebook = getFacebook(context);

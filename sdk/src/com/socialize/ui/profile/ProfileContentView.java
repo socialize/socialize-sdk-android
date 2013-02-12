@@ -366,14 +366,14 @@ public class ProfileContentView extends BaseView {
 		setCurrentUser(currentUser);
 			
 		if(getSocialize().isSupported(context, AuthProviderType.FACEBOOK)) {
-			if(Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+			if(Socialize.getSocialize().isAuthenticatedForRead(AuthProviderType.FACEBOOK)) {
 				facebookEnabledCheckbox.setChecked(true);
 				autoPostFacebook.setChecked(settings.isAutoPostFacebook());
 			}
 		}
 		
 		if(getSocialize().isSupported(context, AuthProviderType.TWITTER)) {
-			if(Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
+			if(Socialize.getSocialize().isAuthenticatedForRead(AuthProviderType.TWITTER)) {
 				twitterEnabledCheckbox.setChecked(true);
 				autoPostTwitter.setChecked(settings.isAutoPostTwitter());
 			}
@@ -401,7 +401,7 @@ public class ProfileContentView extends BaseView {
 			}
 			
 			if(autoPostFacebook != null) {
-				if(Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+				if(Socialize.getSocialize().isAuthenticatedForRead(AuthProviderType.FACEBOOK)) {
 					autoPostFacebook.setVisibility(View.VISIBLE);
 				}
 				else {
@@ -421,7 +421,7 @@ public class ProfileContentView extends BaseView {
 			}
 			
 			if(autoPostTwitter != null) {
-				if(Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
+				if(Socialize.getSocialize().isAuthenticatedForRead(AuthProviderType.TWITTER)) {
 					autoPostTwitter.setVisibility(View.VISIBLE);
 				}
 				else {

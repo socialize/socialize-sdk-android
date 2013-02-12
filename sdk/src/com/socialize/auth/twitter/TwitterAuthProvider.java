@@ -47,13 +47,25 @@ public class TwitterAuthProvider implements AuthProvider<TwitterAuthProviderInfo
 		 twitterAuthUtils.showAuthDialog(context, info, newTwitterAuthListener(listener));
 	}
 	
+	
 	@Override
-	public boolean validate(TwitterAuthProviderInfo info) {
+	public boolean validateForRead(TwitterAuthProviderInfo info, String...permissions) {
 		if(authProviderInfoBuilder != null) {
-			AuthProviderInfo expected = authProviderInfoBuilder.getFactory(AuthProviderType.TWITTER).getInstance();
+			AuthProviderInfo expected = authProviderInfoBuilder.getFactory(AuthProviderType.TWITTER).getInstanceForRead();
 			return info.matches(expected);
 		}
-		return true;
+		return true;		
+	}
+
+	@Override
+	public boolean validateForWrite(TwitterAuthProviderInfo info, String...permissions) {
+		return validateForRead(info, permissions);
+	}
+
+	@Deprecated
+	@Override
+	public boolean validate(TwitterAuthProviderInfo info) {
+		return validateForWrite(info);
 	}
 
 	protected TwitterAuthListener newTwitterAuthListener(final AuthProviderListener listener) {

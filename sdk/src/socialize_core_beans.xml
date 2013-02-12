@@ -567,6 +567,7 @@
 	<bean id="facebookProvider" class="com.socialize.auth.facebook.FacebookAuthProvider">
 		<property name="facebookFacade" ref="facebookFacadeFactory"/>
 		<property name="authProviderInfoBuilder" ref="authProviderInfoBuilder"/>
+		<property name="config" ref="config"/>
 	</bean>
 	
 	<bean id="facebookUtils" class="com.socialize.networks.facebook.FacebookUtilsImpl">

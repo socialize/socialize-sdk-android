@@ -23,7 +23,10 @@ package com.socialize.auth.facebook;
 
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.auth.BaseAuthProviderInfoFactory;
+import com.socialize.auth.facebook.FacebookAuthProviderInfo.PermissionType;
 import com.socialize.config.SocializeConfig;
+import com.socialize.networks.facebook.FacebookFacade;
+import com.socialize.util.ArrayUtils;
 
 /**
  * @author Jason Polites
@@ -34,18 +37,55 @@ public class FacebookAuthProviderInfoFactory extends BaseAuthProviderInfoFactory
 	private IBeanFactory<FacebookAuthProviderInfo> facebookAuthProviderInfoInstanceFactory;
 	
 	@Override
-	protected FacebookAuthProviderInfo initInstance(String...permissions) {
+	protected FacebookAuthProviderInfo initInstanceForRead(String... permissions) {
+		
+		if(ArrayUtils.isEmpty(permissions)) {
+			permissions = FacebookFacade.READ_PERMISSIONS;
+		}
+		
 		FacebookAuthProviderInfo info = facebookAuthProviderInfoInstanceFactory.getBean();
-		info.setPermissions(permissions);
+		info.setReadPermissions(permissions);
+		info.setPermissionType(PermissionType.READ);
 		return info;
 	}
 
 	@Override
-	protected void update(FacebookAuthProviderInfo info, String... permissions) {
-		info.setAppId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID));
-		// Merge the permissions
-		info.merge(permissions);
+	protected FacebookAuthProviderInfo initInstanceForWrite(String... permissions) {
+		
+		if(ArrayUtils.isEmpty(permissions)) {
+			permissions = FacebookFacade.WRITE_PERMISSIONS;
+		}		
+		
+		FacebookAuthProviderInfo info = facebookAuthProviderInfoInstanceFactory.getBean();
+		info.setWritePermissions(permissions);
+		info.setPermissionType(PermissionType.WRITE);
+		return info;
 	}
+
+	@Override
+	protected void updateForRead(FacebookAuthProviderInfo info, String... permissions) {
+		
+		if(ArrayUtils.isEmpty(permissions)) {
+			permissions = FacebookFacade.READ_PERMISSIONS;
+		}		
+		
+		info.setAppId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID));
+		info.mergeForRead(permissions);
+		info.setPermissionType(PermissionType.READ);
+	}
+
+	@Override
+	protected void updateForWrite(FacebookAuthProviderInfo info, String... permissions) {
+		
+		if(ArrayUtils.isEmpty(permissions)) {
+			permissions = FacebookFacade.WRITE_PERMISSIONS;
+		}			
+		
+		info.setAppId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID));
+		info.mergeForWrite(permissions);
+		info.setPermissionType(PermissionType.WRITE);
+	}
+
 
 	public void setFacebookAuthProviderInfoInstanceFactory(IBeanFactory<FacebookAuthProviderInfo> facebookAuthProviderInfoInstanceFactory) {
 		this.facebookAuthProviderInfoInstanceFactory = facebookAuthProviderInfoInstanceFactory;
