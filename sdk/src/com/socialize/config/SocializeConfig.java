@@ -93,6 +93,8 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_PROMPT_SHARE = "socialize.prompt.share";
 	
+	public static final String SOCIALIZE_ALLOW_DELETE_COMMENT = "socialize.allow.delete.comment";
+	
 	public static final String GOOGLE_PLUS_ENABLED = "googleplus.enabled";
 	
 	/**
@@ -401,6 +403,10 @@ public class SocializeConfig {
 	public boolean isAllowNeverAuth() {
 		return getBooleanProperty(SOCIALIZE_ALLOW_NEVER_AUTH, false);
 	}
+	
+	public boolean isAllowDeleteComment() {
+		return getBooleanProperty(SOCIALIZE_ALLOW_DELETE_COMMENT, false);
+	}	
 	
 	public boolean isShowCommentHeader() {
 		return getBooleanProperty(SOCIALIZE_SHOW_COMMENT_HEADER, true);

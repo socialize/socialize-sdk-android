@@ -153,9 +153,6 @@ public class CachedImageView extends View implements ImageLoadListener {
 		if(expectedImageName == null || this.expectedImageName.equals(request.getUrl())) {
 			setImageName(request.getUrl());
 		}
-//		else {
-//			Log.e("Socialize", "Not setting image!, expected is " + expectedImageName + " url is " + request.getUrl());
-//		}
 	}
 
 	@Override

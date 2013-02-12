@@ -100,6 +100,7 @@ public class ImageLoader {
 	public void loadImage(final ImageLoadRequest request, final ImageLoadListener listener) {
 		// Look in cache
 		final String url = request.getUrl();
+		
 		CacheableDrawable drawable = drawables.getCache().get(url);
 		
 		if(drawable != null && !drawable.isRecycled()) {

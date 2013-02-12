@@ -35,6 +35,8 @@ import com.socialize.networks.SocialNetwork;
 public interface CommentSystem {
 	
 	public static final String ENDPOINT = "/comment/";
+	
+	public void deleteComment(SocializeSession session, long commentId, CommentListener listener);
 
 	public void addComment(SocializeSession session, Comment comment, CommentOptions commentOptions, CommentListener listener, SocialNetwork... networks);
 

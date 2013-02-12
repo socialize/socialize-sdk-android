@@ -83,7 +83,7 @@ public class LinkifyCommentViewActionListener implements OnCommentViewActionList
 	 */
 	@Override
 	public void onAfterSetComment(Comment comment, CommentListItem item) {
-		Linkify.addLinks(item.getComment(), mask);
+		Linkify.addLinks(item.getCommentText(), mask);
 	}
 
 	/* (non-Javadoc)

@@ -95,6 +95,9 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	@Override
 	public void showShareDialog(final Activity context, final Entity entity, int options, final SocialNetworkShareListener socialNetworkListener, final ShareDialogListener dialogListener) {
 		shareDialogFactory.show(context, entity, socialNetworkListener, new ShareDialogListener() {
+			
+			SharePanelView dialogView;
+			
 			@Override
 			public void onCancel(Dialog dialog) {
 				if(dialogListener != null) {
@@ -107,6 +110,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 				if(dialogListener != null) {
 					dialogListener.onShow(dialog, dialogView);
 				}				
+				this.dialogView = dialogView;
 			}
 			
 			@Override
@@ -147,6 +151,11 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 
 							@Override
 							public void onCancel() {
+								
+								if(dialogView != null) {
+									dialogView.getContinueButton().setEnabled(true);
+								}
+								
 								if(dialogListener != null) {
 									dialogListener.onCancel(dialog);
 								}

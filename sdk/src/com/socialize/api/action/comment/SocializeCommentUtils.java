@@ -39,6 +39,7 @@ import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.ListenerHolder;
 import com.socialize.listener.comment.CommentAddListener;
+import com.socialize.listener.comment.CommentDeleteListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.log.SocializeLogger;
@@ -115,6 +116,11 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 		return options;		
 	}
 	
+	@Override
+	public void deleteComment(Activity context, long id, CommentDeleteListener listener) {
+		commentSystem.deleteComment(getSocialize().getSession(), id, listener);
+	}
+
 	@Override
 	public void addComment(Activity context, Entity entity, String text, CommentAddListener listener) {
 		addComment(context, entity, text, getUserCommentOptions(context), listener);

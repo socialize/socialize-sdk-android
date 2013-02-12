@@ -40,7 +40,6 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.ui.image.ImageLoader;
 import com.socialize.ui.util.DateUtils;
 import com.socialize.ui.view.CachedImageView;
-import com.socialize.ui.view.CachedImageViewChangeListener;
 import com.socialize.ui.view.ListItemLoadingView;
 import com.socialize.util.CacheableDrawable;
 import com.socialize.util.DisplayUtils;
@@ -63,32 +62,20 @@ public class CommentAdapter extends BaseAdapter {
 	private View loadingView;
 	private DisplayUtils displayUtils;
 	private DateUtils dateUtils;
-	private boolean last = false;
 	private ImageLoader imageLoader;
 	private Activity context;
+	
+	private boolean last = false;
 	private Date now;
-
 	private int totalCount = 0;
+	private int count = 0;
+	private int viewCacheCount = 20;
+	private int viewCacheIndex = 0;	
 	
 	private int iconSize = 64;
 	private int densitySize = 64;
 	
-	private int count = 0;
-	private int viewCacheCount = 20;
-	private int viewCacheIndex = 0;
-	
 	private final CommentListItem[] viewCache = new CommentListItem[viewCacheCount];
-	
-	private final CachedImageViewChangeListener imageChangeListener = new CachedImageViewChangeListener() {
-		@Override
-		public void onRedraw(CachedImageView view) {}
-		
-		@Override
-		public void onChange(CachedImageView view) {
-			CommentAdapter.this.notifyDataSetChanged();
-		}
-	};
-	
 
 	public void init(Activity context) {
 		this.context = context;
@@ -100,7 +87,6 @@ public class CommentAdapter extends BaseAdapter {
 		if(commentItemViewFactory != null) {
 			for (int i = 0; i < viewCacheCount; i++) {
 				viewCache[i] = commentItemViewFactory.getBean();
-				viewCache[i].getUserIcon().setChangeListener(imageChangeListener);
 			}
 		}
 		
@@ -113,6 +99,9 @@ public class CommentAdapter extends BaseAdapter {
 		}
 		last = false;
 		now = new Date();
+		viewCacheIndex = 0;
+		totalCount = 0;
+		count = 0;
 	}
 
 	@Override
@@ -159,7 +148,7 @@ public class CommentAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(final int position, View oldView, ViewGroup parent) {
-
+		
 		View returnView = null;
 		CommentListItem view = null;
 		
@@ -190,11 +179,16 @@ public class CommentAdapter extends BaseAdapter {
 			}
 			else {
 				view = commentItemViewFactory.getBean();
-				view.getUserIcon().setChangeListener(imageChangeListener);
 			}
 		} 
 
 		if(view != null) {
+			
+			view.setCommentObject(item);
+			view.setDeleteOk(false);
+			view.setOnClickListener(null);
+			view.setOnCreateContextMenuListener(null);			
+			
 			returnView = view;
 			
 			if(position >= comments.size()) {
@@ -226,6 +220,7 @@ public class CommentAdapter extends BaseAdapter {
 							}
 						}
 						
+						view.setDeleteOk(user.getId() == currentUser.getId());
 						view.setOnClickListener(new OnClickListener() {
 
 							@Override
@@ -239,7 +234,7 @@ public class CommentAdapter extends BaseAdapter {
 									}
 								}
 							}
-						});						
+						});		
 					}
 					else {
 						displayName = "Anonymous";
@@ -249,7 +244,7 @@ public class CommentAdapter extends BaseAdapter {
 						onCommentViewActionListener.onBeforeSetComment(item, view);
 					}
 					
-					TextView comment = view.getComment();
+					TextView comment = view.getCommentText();
 					TextView userName = view.getAuthor();
 					TextView time = view.getTime();
 					ImageView locationIcon = view.getLocationIcon();
@@ -287,8 +282,10 @@ public class CommentAdapter extends BaseAdapter {
 
 						if(user != null) {
 							userIcon.getBackground().setAlpha(255);
-
+							userIcon.setExpectedImageName(null);
+							
 							if(!StringUtils.isEmpty(imageUrl)) {
+								userIcon.setExpectedImageName(imageUrl);
 								
 								try {
 									// Check the cache

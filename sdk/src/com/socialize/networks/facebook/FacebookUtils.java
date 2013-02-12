@@ -23,12 +23,18 @@ package com.socialize.networks.facebook;
 
 import java.io.IOException;
 import java.lang.reflect.Proxy;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
+import android.util.Base64;
 import com.socialize.SocializeActionProxy;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.share.SocialNetworkShareListener;
@@ -373,4 +379,35 @@ public class FacebookUtils {
 	public static void getCurrentPermissions(Activity context, String token, OnPermissionResult callback) {
 		proxy.getCurrentPermissions(context, token, callback);
 	}	
+	
+	/**
+	 * Returns the hash key used to authenticate this application with Facebook.  Useful for debugging.
+	 * @param context
+	 * @return
+	 * @throws NoSuchAlgorithmException 
+	 */
+	public static String[] getHashKeys(Activity context) throws NoSuchAlgorithmException {
+        PackageInfo packageInfo = null;
+        String[] keys = null;
+        try {
+            packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
+            
+            if(packageInfo != null && packageInfo.signatures != null && packageInfo.signatures.length > 0) {
+            	
+            	keys = new String[packageInfo.signatures.length];
+            	for (int i = 0; i < packageInfo.signatures.length; i++) {
+            		Signature signature = packageInfo.signatures[i];
+            		MessageDigest md = MessageDigest.getInstance("SHA1");
+            		md.update(signature.toByteArray());
+            		String hash = new String(Base64.encode(md.digest(), 0));
+            		keys[i] = hash;
+				}
+            }
+        } 
+        catch (PackageManager.NameNotFoundException e) {
+        	e.printStackTrace();
+        }
+        
+        return keys;
+	}
 }

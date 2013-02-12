@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.socialize.Socialize;
+import com.socialize.entity.Comment;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.view.CachedImageView;
@@ -20,7 +21,7 @@ import com.socialize.util.Drawables;
 
 public class CommentListItem extends LinearLayout {
 	
-	private TextView comment;
+	private TextView commentText;
 	private TextView time;
 	private TextView author;
 	private CachedImageView userIcon;
@@ -29,12 +30,12 @@ public class CommentListItem extends LinearLayout {
 	private Colors colors;
 	private Drawables drawables;
 	private SocializeLogger logger;
+	private Comment commentObject;
+	private boolean deleteOk = false;
 	
 	@SuppressWarnings("unused")
 	private CommentListItemBackgroundFactory backgroundFactory;
 	
-//	private Drawable bg;
-
 	public CommentListItem(Context context) {
 		super(context);
 	}
@@ -87,11 +88,10 @@ public class CommentListItem extends LinearLayout {
 		
 		LinearLayout.LayoutParams commentLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
-		comment = new TextView(getContext());
-		comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-		comment.setTextColor(textColor);
-		comment.setLayoutParams(commentLayoutParams);
-//		comment.setMaxLines(2);
+		commentText = new TextView(getContext());
+		commentText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+		commentText.setTextColor(textColor);
+		commentText.setLayoutParams(commentLayoutParams);
 
 		LinearLayout.LayoutParams timeLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
@@ -125,7 +125,7 @@ public class CommentListItem extends LinearLayout {
 		contentHeaderLayout.addView(meta);
 		
 		contentLayout.addView(contentHeaderLayout);
-		contentLayout.addView(comment);
+		contentLayout.addView(commentText);
 		
 		LinearLayout iconLayout = new LinearLayout(getContext());
 		
@@ -152,8 +152,8 @@ public class CommentListItem extends LinearLayout {
 		addView(contentLayout);
 	}
 	
-	public TextView getComment() {
-		return comment;
+	public TextView getCommentText() {
+		return commentText;
 	}
 
 	public TextView getTime() {
@@ -191,4 +191,22 @@ public class CommentListItem extends LinearLayout {
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}
+	
+	public Comment getCommentObject() {
+		return commentObject;
+	}
+	
+	public void setCommentObject(Comment commentObject) {
+		this.commentObject = commentObject;
+	}
+	
+	public boolean isDeleteOk() {
+		return deleteOk;
+	}
+
+	public void setDeleteOk(boolean deleteOk) {
+		this.deleteOk = deleteOk;
+	}
+	
+	
 }

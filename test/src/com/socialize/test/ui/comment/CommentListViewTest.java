@@ -350,7 +350,7 @@ public class CommentListViewTest extends SocializeActivityTest {
 		};
 		
 		PublicCommentListView view = new PublicCommentListView(getContext()) {
-			@Override
+//			@Override
 			protected void preLoadImages(List<Comment> comments) {
 				// Do nothing.
 			}
@@ -419,7 +419,7 @@ public class CommentListViewTest extends SocializeActivityTest {
 		};
 		
 		PublicCommentListView view = new PublicCommentListView(getContext()) {
-			@Override
+//			@Override
 			protected void preLoadImages(List<Comment> comments) {
 				// Do nothing.
 			}

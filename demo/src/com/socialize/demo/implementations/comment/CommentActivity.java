@@ -45,6 +45,8 @@ import com.socialize.ui.comment.OnCommentViewActionListener;
 public class CommentActivity extends ListActivity {
 	final String[] values = new String[] { 
 			"Show Comment List",
+			"Show Comment List (Alt #1)",
+			"Show Comment List (Alt #2)",
 			"Show Comment List (No Header)", 
 			"Show Comment List (Custom Header)", 
 			"Add Comment", 
@@ -71,8 +73,24 @@ public class CommentActivity extends ListActivity {
 	
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		if(position == 0) {
-			CommentUtils.showCommentView(this, Entity.newInstance("http://getsocialize.com", "Socialize"), new OnCommentViewActionListener() {
+		
+		if(position <= 2) {
+			
+			String entity = null;
+			
+			switch (position) {
+			case 0:
+				entity = "http://getsocialize.com";
+				break;
+			case 1:
+				entity = "http://testentity0.com";
+				break;
+			case 2:
+				entity = "http://testentity1.com";
+				break;				
+			}
+			
+			CommentUtils.showCommentView(this, Entity.newInstance(entity, "Socialize"), new OnCommentViewActionListener() {
 				
 				@Override
 				public void onError(SocializeException error) {
@@ -106,8 +124,6 @@ public class CommentActivity extends ListActivity {
 				@Override
 				public void onAfterSetComment(Comment comment, CommentListItem item) {
 				}
-				
-				
 			});
 		}
 		else {

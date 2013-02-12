@@ -29,6 +29,7 @@ import com.socialize.api.action.comment.CommentUtilsProxy;
 import com.socialize.entity.Entity;
 import com.socialize.entity.User;
 import com.socialize.listener.comment.CommentAddListener;
+import com.socialize.listener.comment.CommentDeleteListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.networks.SocialNetwork;
@@ -68,6 +69,16 @@ public class CommentUtils {
 	public static void addComment (Activity context, Entity entity, String text, CommentAddListener listener) {
 		proxy.addComment(context, entity, text, listener);
 	}
+	
+	/**
+	 * Deletes a comment.  Only the person that created the comment can delete it.
+	 * @param context The current context.
+	 * @param id The ID of the comment to be deleted.
+	 * @param listener A listener to handle the result.
+	 */
+	public static void deleteComment (Activity context, long id, CommentDeleteListener listener) {
+		proxy.deleteComment(context, id, listener);
+	}	
 	
 	/**
 	 * Adds a comment to the given entity.  This method will NOT prompt the user to share their comment as the desired networks are passed as a parameter.

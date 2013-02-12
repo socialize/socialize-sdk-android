@@ -26,6 +26,12 @@ public class MockCommentSystem extends MockSystem<Comment> implements CommentSys
 		super(comment);
 	}
 	
+	
+	@Override
+	public void deleteComment(SocializeSession session, long commentId, CommentListener listener) {
+		if(listener != null) listener.onDelete();
+	}
+
 	@Override
 	public void addComment(SocializeSession session, Comment comment, CommentOptions commentOptions, CommentListener listener, SocialNetwork... networks) {
 		if(listener != null) listener.onCreate(comment);

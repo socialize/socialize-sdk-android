@@ -5,15 +5,24 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Toast;
+import com.socialize.CommentUtils;
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IOCContainer;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
+import com.socialize.error.SocializeException;
 import com.socialize.i18n.LocalizationService;
 import com.socialize.listener.ListenerHolder;
+import com.socialize.listener.comment.CommentDeleteListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.ui.slider.ActionBarSliderView;
@@ -25,6 +34,7 @@ public class CommentView extends EntityView {
 	private CommentListView commentListView;
 	private boolean headerDisplayed = true;
 	private Entity entity;
+	private SocializeConfig config;
 	
 	public static final String COMMENT_LISTENER = "socialize.comment.listener";
 	
@@ -48,6 +58,7 @@ public class CommentView extends EntityView {
 				}
 				
 				commentListView = container.getBean("commentList");
+				config = container.getBean("config");
 				commentListView.setEntity(entity);
 				commentListView.setHeaderDisplayed(headerDisplayed);
 				ListenerHolder holder = container.getBean("listenerHolder");
@@ -55,6 +66,9 @@ public class CommentView extends EntityView {
 					OnCommentViewActionListener onCommentViewActionListener = holder.pop(COMMENT_LISTENER);
 					commentListView.setOnCommentViewActionListener(onCommentViewActionListener);
 				}	
+				
+				// Register for the delete comment menu
+				((Activity)getContext()).registerForContextMenu(commentListView.getContent().getMainView());
 			}
 			
 			return commentListView;
@@ -160,6 +174,70 @@ public class CommentView extends EntityView {
 				return true;
 			}
 		});
+	}
+
+	/**
+	 * @param commentActivity
+	 * @param menu
+	 * @param v
+	 * @param menuInfo
+	 * @return
+	 */
+	public void onCreateContextMenu(CommentActivity commentActivity, ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		if(config.isAllowDeleteComment()) {
+			AdapterView.AdapterContextMenuInfo info; 
+	        try { 
+	             info = (AdapterView.AdapterContextMenuInfo) menuInfo; 
+	             CommentListItem item = (CommentListItem) info.targetView;
+	             if(item != null) {
+	            	 if(item.isDeleteOk()) {
+	            		  menu.setHeaderTitle("Delete");
+	            		  menu.add(Menu.NONE, 0, 0, "Delete this comment");
+	            	 }
+	             }
+	        } 
+	        catch (ClassCastException e) {} 
+		}
+	}
+
+	/**
+	 * @param commentActivity
+	 * @param item
+	 * @return
+	 */
+	public boolean onContextItemSelected(final CommentActivity commentActivity, MenuItem item) {
+		if(config.isAllowDeleteComment()) {
+			AdapterView.AdapterContextMenuInfo info; 
+			try { 
+				info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo(); 
+				CommentListItem cli = (CommentListItem) info.targetView;
+				if(cli != null) {
+					if(cli.isDeleteOk()) {
+
+						final SafeProgressDialog progress = SafeProgressDialog.show(commentActivity);
+
+						CommentUtils.deleteComment(commentActivity, cli.getCommentObject().getId(), new CommentDeleteListener() {
+
+							@Override
+							public void onError(SocializeException error) {
+								progress.dismiss();
+								Toast.makeText(commentActivity, "Failed to delete comment", Toast.LENGTH_SHORT).show();
+								Log.e("Socialize", "Failed to delete comment", error);
+							}
+
+							@Override
+							public void onDelete() {
+								progress.dismiss();
+								Toast.makeText(commentActivity, "Comment deleted", Toast.LENGTH_SHORT).show();
+								reload();
+							}
+						});
+					}
+				}
+			} 
+			catch (ClassCastException e) {} 		
+		}
 		
+		return false;
 	}
 }

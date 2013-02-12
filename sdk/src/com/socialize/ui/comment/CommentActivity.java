@@ -23,8 +23,12 @@ package com.socialize.ui.comment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import com.socialize.Socialize;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeUIActivity;
@@ -97,4 +101,19 @@ public class CommentActivity extends SocializeUIActivity {
 		}
 		return false;
 	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		if(view != null) {
+			view.onCreateContextMenu(this, menu, v, menuInfo);
+		}
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		if(view != null) {
+			return view.onContextItemSelected(this, item);
+		}		
+		return super.onContextItemSelected(item);
+	}	
 }

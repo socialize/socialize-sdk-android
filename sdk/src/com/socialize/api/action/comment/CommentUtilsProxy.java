@@ -28,6 +28,7 @@ import com.socialize.annotations.Synchronous;
 import com.socialize.entity.Entity;
 import com.socialize.entity.User;
 import com.socialize.listener.comment.CommentAddListener;
+import com.socialize.listener.comment.CommentDeleteListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.networks.SocialNetwork;
@@ -42,6 +43,8 @@ public interface CommentUtilsProxy extends ContainerAware {
 	
 	@Synchronous
 	public CommentOptions getUserCommentOptions(Context context);
+	
+	public void deleteComment (Activity context, long id, CommentDeleteListener listener);
 
 	public void addComment (Activity context, Entity entity, String text, CommentAddListener listener);
 	

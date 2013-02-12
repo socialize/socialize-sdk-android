@@ -57,7 +57,10 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 		postAsync(session, ENDPOINT, list, listener);
 	}
 	
-
+	@Override
+	public void deleteComment(SocializeSession session, long id, CommentListener listener) {
+		deleteAsync(session, ENDPOINT, String.valueOf(id), listener);
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.api.action.CommentSystem#addComment(com.socialize.api.SocializeSession, com.socialize.entity.Entity, java.lang.String, android.location.Location, com.socialize.networks.ShareOptions, com.socialize.listener.comment.CommentListener)

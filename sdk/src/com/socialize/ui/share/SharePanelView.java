@@ -584,6 +584,9 @@ public class SharePanelView extends DialogPanelView {
 				@Override
 				public void onClick(View v) {
 					
+					// Disable to prevent multiple clicks
+					continueButton.setEnabled(false);
+					
 					SocialNetwork[] networks = null;
 					
 					// Get the number of networks enabled
@@ -604,7 +607,7 @@ public class SharePanelView extends DialogPanelView {
 					if(rememberCell != null) {
 						remember = rememberCell.isToggled();
 					}
-					
+
 					shareDialogListener.onContinue(dialog, remember, networks);
 				}
 			});
@@ -764,6 +767,14 @@ public class SharePanelView extends DialogPanelView {
 	
 	public void setLocalizationService(LocalizationService localizationService) {
 		this.localizationService = localizationService;
+	}
+	
+	public SocializeButton getContinueButton() {
+		return continueButton;
+	}
+	
+	public SocializeButton getCancelButton() {
+		return cancelButton;
 	}
 
 	protected SocializeAuthListener getAuthClickListener(final ClickableSectionCell cell, final SocialNetwork network) {
