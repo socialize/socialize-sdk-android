@@ -161,9 +161,9 @@ public class FacebookActivityServiceTest extends SocializeActivityTest {
 		AndroidMock.expect(context.getBean("logger")).andReturn(logger);
 		AndroidMock.expect(facebookUtils.getFacebook(context)).andReturn(facebook);
 		
-		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true)).andReturn(true);
+//		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true)).andReturn(true);
 		
-		service.authenticateForRead(context, true, FacebookFacade.READ_PERMISSIONS);
+		service.authenticateForRead(context, false, FacebookFacade.READ_PERMISSIONS);
 		
 		AndroidMock.replay(config);
 		AndroidMock.replay(context);

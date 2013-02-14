@@ -531,7 +531,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		AndroidMock.expect(session.getUserProviderCredentials(AuthProviderType.FACEBOOK)).andReturn(data);
 		AndroidMock.expect(data.getAuthProviderInfo()).andReturn(info);
 		AndroidMock.expect(providers.getProvider(AuthProviderType.FACEBOOK)).andReturn(provider);
-		AndroidMock.expect(provider.validateForWrite(info, FacebookFacade.WRITE_PERMISSIONS)).andReturn(true);
+		AndroidMock.expect(provider.validateForWrite(info, FacebookFacade.DEFAULT_PERMISSIONS)).andReturn(true);
 		
 		AndroidMock.replay(session, data, providers, provider);
 

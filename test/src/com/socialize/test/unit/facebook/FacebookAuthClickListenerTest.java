@@ -85,7 +85,6 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 		doOnClickTest(AUTH_REPSONSE.CANCEL);
 	}
 	
-	@SuppressWarnings("unchecked")
 	protected void doOnClickTest(final AUTH_REPSONSE response) throws Exception {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
@@ -119,8 +118,7 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 
 			@Override
 			public void link(Activity context, SocializeAuthListener listener) {
-				addResult(0, listener);
-				latch.countDown();
+		
 			}
 			
 			@Override
@@ -130,7 +128,8 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 			
 			@Override
 			public void linkForRead(Activity context, SocializeAuthListener listener, String... permissions) {
-				
+				addResult(0, listener);
+				latch.countDown();
 			}
 
 			@Override

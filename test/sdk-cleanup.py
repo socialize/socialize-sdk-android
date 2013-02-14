@@ -228,7 +228,7 @@ def main(key,secret,url):
     req_url = url+like_url 
     make_request(client, req_url,method='POST', data=likes, outfile='likes.json')
     
-## Not create 3 entities for the purposes of testing entity sorting
+## Now create 3 entities for the purposes of testing entity sorting
 
     print '#'*20
     print '## CREATE ADDITIONAL ENTITIES ##'
@@ -266,7 +266,6 @@ def main(key,secret,url):
     req_url = url+share_url 
     make_request(client, req_url,method='POST', data=shares, outfile='shares.json')
 
-
     print '#'*20
     print '## CREATE VIEWS ##'
     print '#'*20  
@@ -286,9 +285,6 @@ if __name__ == "__main__":
     key = args[1]
     secret = args[2]
     url = args[3]             
-#    if len(args)>=6:
-#        fb_user_id = args[4]
-#        fb_token = args[5]
     create_android_config(key, secret, url, get_fb_user_access_token())
     key, secret, url = read_android_config()
     if url[-1]!='/':

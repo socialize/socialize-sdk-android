@@ -641,6 +641,140 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		assertSame(params, getResult(1));
 	}		
 	
+
+	public void testLinkIsLinkedForRead() throws Exception {
+		
+		// We have to use a real token here because we will be REALLY authenticating
+		final Activity context = TestUtils.getActivity(this);
+		final String newFBToken = TestUtils.getDummyFBToken(context);
+		
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		// We have to be initialized to set fb
+		Socialize.getSocialize().init(context);	
+		
+		FacebookUtils.linkForRead(context, newFBToken, false, new SocializeAuthListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				latch.countDown();
+			}
+			
+			@Override
+			public void onCancel() {
+				latch.countDown();
+			}
+			
+			@Override
+			public void onAuthSuccess(SocializeSession session) {
+				latch.countDown();
+			}
+			
+			@Override
+			public void onAuthFail(SocializeException error) {
+				error.printStackTrace();
+				latch.countDown();
+			}
+		});		
+		
+		boolean result = latch.await(10, TimeUnit.SECONDS);
+		
+		assertTrue(result);		
+		
+		assertTrue(FacebookUtils.isLinkedForRead(context));
+	}	
+	
+
+	public void testLinkIsLinkedForWrite() throws Exception {
+		
+		// We have to use a real token here because we will be REALLY authenticating
+		final Activity context = TestUtils.getActivity(this);
+		final String newFBToken = TestUtils.getDummyFBToken(context);
+		
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		// We have to be initialized to set fb
+		Socialize.getSocialize().init(context);	
+		
+		FacebookUtils.linkForWrite(context, newFBToken, false, new SocializeAuthListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				latch.countDown();
+			}
+			
+			@Override
+			public void onCancel() {
+				latch.countDown();
+			}
+			
+			@Override
+			public void onAuthSuccess(SocializeSession session) {
+				latch.countDown();
+			}
+			
+			@Override
+			public void onAuthFail(SocializeException error) {
+				error.printStackTrace();
+				latch.countDown();
+			}
+		});		
+		
+		boolean result = latch.await(10, TimeUnit.SECONDS);
+		
+		assertTrue(result);		
+		
+		assertTrue(FacebookUtils.isLinkedForWrite(context));
+	}	
+		
+	
+	@Deprecated
+	public void testLinkIsLinkedV2() throws Exception {
+		FacebookAccess.forceV2();
+		
+		// We have to use a real token here because we will be REALLY authenticating
+		final Activity context = TestUtils.getActivity(this);
+		final String newFBToken = TestUtils.getDummyFBToken(context);
+		
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		// We have to be initialized to set fb
+		Socialize.getSocialize().init(context);	
+		
+		FacebookUtils.link(context, newFBToken, false, new SocializeAuthListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				latch.countDown();
+			}
+			
+			@Override
+			public void onCancel() {
+				latch.countDown();
+			}
+			
+			@Override
+			public void onAuthSuccess(SocializeSession session) {
+				latch.countDown();
+			}
+			
+			@Override
+			public void onAuthFail(SocializeException error) {
+				error.printStackTrace();
+				latch.countDown();
+			}
+		});		
+		
+		boolean result = latch.await(10, TimeUnit.SECONDS);
+		
+		assertTrue(result);		
+		
+		assertTrue(FacebookUtils.isLinked(context));
+	}
+	
 	@Deprecated
 	public void testExtendAccessToken() throws Exception {
 		
@@ -732,7 +866,9 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 			}
 		});
 		
-		assertTrue(latch.await(10, TimeUnit.SECONDS));
+		boolean result = latch.await(10, TimeUnit.SECONDS);
+		
+		assertTrue(result);
 		
 		SocializeSession session = getResult(0);
 		assertNotNull(session);

@@ -180,7 +180,7 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 		doLink(context, token, verifyPermissions, false, listener, permissions);
 	}
 
-	private void doLink(final Activity context, final String token, final boolean verifyPermissions, final boolean read, final SocializeAuthListener listener, String...permissions) {
+	private void doLink(final Activity context, final String token, final boolean verifyPermissions, final boolean read, final SocializeAuthListener listener, final String...permissions) {
 		SocializeConfig config = ConfigUtils.getConfig(context);
 		final FacebookAuthProviderInfo fbInfo = new FacebookAuthProviderInfo();
 		fbInfo.setAppId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID));
@@ -230,6 +230,7 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 						// We need to merge in the default permissions...
 						// Just add to a set
 						Set<String> allPermissions = new HashSet<String>();
+						allPermissions.addAll(Arrays.asList(permissions));
 						allPermissions.addAll(Arrays.asList(current));
 						allPermissions.addAll(Arrays.asList(required));
 						
@@ -279,9 +280,13 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 			});
 		}
 		else {
-			// Assume default permissions
-			fbInfo.setReadPermissions(READ_PERMISSIONS);
-			fbInfo.setWritePermissions(WRITE_PERMISSIONS);
+			if(read) {
+				fbInfo.setReadPermissions(permissions);
+			}
+			else {
+				fbInfo.setWritePermissions(permissions);
+			}
+			
 			doSocializeAuthKnownUser(context, fbInfo, token, listener);
 		}		
 	}	
