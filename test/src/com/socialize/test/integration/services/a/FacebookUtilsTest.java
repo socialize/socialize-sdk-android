@@ -191,7 +191,6 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 				callback.onSuccess(new String[]{"foobar_permission"});
 			}
 			
-
 			@Override
 			public void authenticateWithActivity(Activity context, FacebookAuthProviderInfo info, boolean sso, AuthProviderListener listener) {
 				// We expect an auth to FB because out permissions will not match.
@@ -473,12 +472,12 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 			}
 
 			@Override
-			public boolean isLinked(Context context) {
+			public boolean isLinkedForWrite(Context context, String... permissions) {
 				return false;
 			}
 
 			@Override
-			public void link(Activity context, SocializeAuthListener listener) {
+			public void linkForWrite(Activity context, SocializeAuthListener listener, String... permissions) {
 				listener.onError(mockError);
 				listener.onAuthFail(mockError);
 				listener.onCancel();
@@ -520,17 +519,18 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 			}
 
 			@Override
-			public boolean isLinked(Context context) {
+			public boolean isLinkedForWrite(Context context, String... permissions) {
 				return false;
 			}
 
 			@Override
-			public void link(Activity context, SocializeAuthListener listener) {
+			public void linkForWrite(Activity context, SocializeAuthListener listener, String... permissions) {
 				listener.onError(mockError);
 				listener.onAuthFail(mockError);
 				listener.onCancel();
 				listener.onAuthSuccess(null);
-			}
+			}			
+			
 		};
 		
 		FacebookAccess.setFacebookUtilsProxy(mockFacebookUtils);
@@ -566,14 +566,14 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 				addResult(0, graphPath);
 				addResult(1, postData);
 			}
-
+			
 			@Override
-			public boolean isLinked(Context context) {
+			public boolean isLinkedForRead(Context context, String... permissions) {
 				return false;
 			}
 
 			@Override
-			public void link(Activity context, SocializeAuthListener listener) {
+			public void linkForRead(Activity context, SocializeAuthListener listener, String... permissions) {
 				listener.onError(mockError);
 				listener.onAuthFail(mockError);
 				listener.onCancel();
@@ -610,18 +610,18 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		FacebookUtilsImpl mockFacebookUtils = new FacebookUtilsImpl() {
 
 			@Override
-			public void delete(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {
-				addResult(0, graphPath);
-				addResult(1, postData);
-			}
-
-			@Override
-			public boolean isLinked(Context context) {
+			public boolean isLinkedForWrite(Context context, String... permissions) {
 				return false;
 			}
 
 			@Override
-			public void link(Activity context, SocializeAuthListener listener) {
+			public void delete(Activity context, String graphPath, Map<String, Object> postData, SocialNetworkPostListener listener) {
+				addResult(0, graphPath);
+				addResult(1, postData);
+			}
+			
+			@Override
+			public void linkForWrite(Activity context, SocializeAuthListener listener, String... permissions) {
 				listener.onError(mockError);
 				listener.onAuthFail(mockError);
 				listener.onCancel();
@@ -680,7 +680,6 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCancel() {
 				latch.countDown();
-				
 			}
 			
 			@Override
@@ -699,6 +698,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 						
 						@Override
 						public void onError(SocializeException error) {
+							error.printStackTrace();
 							latch.countDown();
 						}
 						
@@ -715,10 +715,10 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 						
 						@Override
 						public void onAuthFail(SocializeException error) {
+							error.printStackTrace();
 							latch.countDown();
 						}
 					});
-					
 				}
 				else {
 					latch.countDown();
@@ -731,7 +731,6 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 				latch.countDown();
 			}
 		});
-		
 		
 		assertTrue(latch.await(10, TimeUnit.SECONDS));
 		

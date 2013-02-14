@@ -142,7 +142,7 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 	@Deprecated
 	@Override
 	public void link(Activity context, SocializeAuthListener listener) {
-		linkForRead(context, listener);
+		linkForWrite(context, listener);
 	}
 
 	/* (non-Javadoc)
@@ -157,7 +157,7 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 	@Deprecated
 	@Override
 	public void link(Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener) {
-		linkForRead(context, token, verifyPermissions, listener);
+		doLink(context, token, verifyPermissions, false, listener, DEFAULT_PERMISSIONS);
 	}
 
 	@Override

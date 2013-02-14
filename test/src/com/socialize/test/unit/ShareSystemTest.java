@@ -52,13 +52,14 @@ public class ShareSystemTest extends SocializeActivityTest {
 		
 		final SocializeServiceImpl socialize = new SocializeServiceImpl() {
 			@Override
-			public boolean isAuthenticated(AuthProviderType providerType) {
-				return false;
-			}
-			
-			public void authenticate(Context context, AuthProviderType authProvider, SocializeAuthListener authListener, String...permissions) {
+			public void authenticateForWrite(Context context, AuthProviderType authProviderType, SocializeAuthListener authListener, String... permissions) {
 				// Call authenticated
 				authListener.onAuthSuccess(null);
+			}
+
+			@Override
+			public boolean isAuthenticatedForWrite(AuthProviderType providerType, String... permissions) {
+				return false;
 			}
 		};
 		

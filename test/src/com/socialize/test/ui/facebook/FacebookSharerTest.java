@@ -65,11 +65,11 @@ public class FacebookSharerTest extends SocializeActivityTest {
 		final boolean autoAuth = true;
 
 		AndroidMock.expect(socialize.isSupported(getContext(), AuthProviderType.FACEBOOK)).andReturn(true);
-		AndroidMock.expect(socialize.isAuthenticated(AuthProviderType.FACEBOOK)).andReturn(false);
+		AndroidMock.expect(socialize.isAuthenticatedForWrite(AuthProviderType.FACEBOOK)).andReturn(false);
 		
 		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn(consumerKey);
 		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET)).andReturn(consumerSecret);
-		AndroidMock.expect(authProviderInfoFactory.getInstance()).andReturn(authProviderInfo);
+		AndroidMock.expect(authProviderInfoFactory.getInstanceForWrite()).andReturn(authProviderInfo);
 		
 		socialize.authenticate(
 				AndroidMock.eq ( getContext() ), 
@@ -131,7 +131,7 @@ public class FacebookSharerTest extends SocializeActivityTest {
 		
 		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn(consumerKey);
 		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET)).andReturn(consumerSecret);
-		AndroidMock.expect(authProviderInfoFactory.getInstance()).andReturn(authProviderInfo);
+		AndroidMock.expect(authProviderInfoFactory.getInstanceForWrite()).andReturn(authProviderInfo);
 		
 		PublicFacebookSharer sharer = new PublicFacebookSharer() {
 			

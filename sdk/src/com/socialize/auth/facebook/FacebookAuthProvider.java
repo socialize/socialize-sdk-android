@@ -65,7 +65,7 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 	@Deprecated
 	@Override
 	public boolean validate(FacebookAuthProviderInfo info) {
-		return validateForWrite(info, FacebookFacade.WRITE_PERMISSIONS);
+		return validateForRead(info, FacebookFacade.DEFAULT_PERMISSIONS);
 	}
 
 	@Override

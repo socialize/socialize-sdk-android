@@ -27,6 +27,7 @@ import java.util.Set;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.error.SocializeException;
+import com.socialize.util.ArrayUtils;
 import com.socialize.util.StringUtils;
 
 /**
@@ -39,9 +40,6 @@ public class FacebookAuthProviderInfo implements AuthProviderInfo {
 	public static enum PermissionType {READ, WRITE}
 	
 	private String appId;
-	
-	@Deprecated
-	private String[] permissions;
 	
 	private String[] readPermissions;
 	private String[] writePermissions;
@@ -89,12 +87,12 @@ public class FacebookAuthProviderInfo implements AuthProviderInfo {
 	
 	@Deprecated
 	public String[] getPermissions() {
-		return permissions;
+		return getWritePermissions();
 	}
 	
 	@Deprecated
 	public void setPermissions(String[] permissions) {
-		this.permissions = permissions;
+		this.setWritePermissions(permissions);
 	}
 	
 	public String[] getReadPermissions() {
@@ -195,15 +193,17 @@ public class FacebookAuthProviderInfo implements AuthProviderInfo {
 		return false;
 	}
 	
-	boolean matches(String[] newPermissions, String[] oldPermissions) {
-		if(Arrays.equals(oldPermissions, newPermissions)) {
+	boolean matches(String[] expected, String[] actual) {
+		if(Arrays.equals(actual, expected)) {
 			return true;
 		}
-		else if (oldPermissions != null && newPermissions != null){
-			Arrays.sort(oldPermissions);
-			
-			for (int i = 0; i < newPermissions.length; i++) {
-				if(Arrays.binarySearch(oldPermissions, newPermissions[i]) < 0) {
+		else if(ArrayUtils.isEmpty(expected) && ArrayUtils.isEmpty(actual)) {
+			return true;
+		}
+		else if (actual != null && expected != null){
+			Arrays.sort(actual);
+			for (int i = 0; i < expected.length; i++) {
+				if(Arrays.binarySearch(actual, expected[i]) < 0) {
 					return false;
 				}
 			}

@@ -94,7 +94,7 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 	 */
 	@Override
 	public void link(Activity context, SocializeAuthListener listener) {
-		getSocialize().authenticateForRead(context, AuthProviderType.TWITTER, listener);
+		getSocialize().authenticateForWrite(context, AuthProviderType.TWITTER, listener);
 	}
 
 	/* (non-Javadoc)

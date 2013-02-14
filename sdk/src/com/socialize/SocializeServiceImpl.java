@@ -32,12 +32,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.Logger;
 import com.socialize.api.SocializeSession;
@@ -56,13 +54,9 @@ import com.socialize.concurrent.AsyncTaskManager;
 import com.socialize.concurrent.ManagedAsyncTask;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
-import com.socialize.entity.Entity;
-import com.socialize.entity.SocializeAction;
-import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.init.SocializeInitializationAsserter;
 import com.socialize.ioc.SocializeIOC;
-import com.socialize.listener.ListenerHolder;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.SocializeListener;
@@ -77,11 +71,6 @@ import com.socialize.notifications.SocializeC2DMReceiver;
 import com.socialize.notifications.WakeLock;
 import com.socialize.ui.ActivityIOCProvider;
 import com.socialize.ui.SocializeEntityLoader;
-import com.socialize.ui.actionbar.ActionBarListener;
-import com.socialize.ui.actionbar.ActionBarOptions;
-import com.socialize.ui.comment.CommentActivity;
-import com.socialize.ui.comment.CommentView;
-import com.socialize.ui.comment.OnCommentViewActionListener;
 import com.socialize.util.AppUtils;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.DisplayUtils;
@@ -113,7 +102,6 @@ public class SocializeServiceImpl implements SocializeService {
 	private SocializeConfig config = new SocializeConfig();
 	
 	private SocializeEntityLoader entityLoader;
-	private ListenerHolder listenerHolder;
 	
 	private String[] initPaths = null;
 	private int initCount = 0;
@@ -437,7 +425,6 @@ public class SocializeServiceImpl implements SocializeService {
 				this.notificationChecker = container.getBean("notificationChecker");
 				this.appUtils = container.getBean("appUtils");
 				this.locationProvider = container.getBean("locationProvider");
-				this.listenerHolder = container.getBean("listenerHolder");
 				
 				SocializeConfig mainConfig = container.getBean("config");
 				
@@ -669,11 +656,11 @@ public class SocializeServiceImpl implements SocializeService {
 		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 		
 		if(permissions.length > 0) {
-			if(!Arrays.equals(permissions, FacebookFacade.READ_PERMISSIONS)) {
+			if(!Arrays.equals(permissions, FacebookFacade.DEFAULT_PERMISSIONS)) {
 				// Ensure the requested permissions include the default permissions
 				Set<String> all = new HashSet<String>();
 				all.addAll(Arrays.asList(permissions));
-				all.addAll(Arrays.asList(FacebookFacade.READ_PERMISSIONS));
+				all.addAll(Arrays.asList(FacebookFacade.DEFAULT_PERMISSIONS));
 				permissions = all.toArray(new String[all.size()]);
 			}
 		}
@@ -816,7 +803,7 @@ public class SocializeServiceImpl implements SocializeService {
 	@Deprecated
 	@Override
 	public boolean isAuthenticated(AuthProviderType providerType) {
-		return isAuthenticated(providerType, false);
+		return isAuthenticated(providerType, false, FacebookFacade.DEFAULT_PERMISSIONS);
 	}
 
 	protected boolean assertAuthenticated(SocializeListener listener) {
@@ -1017,96 +1004,6 @@ public class SocializeServiceImpl implements SocializeService {
 		this.entityLoader = entityLoader;
 	}
 	
-
-	@Deprecated
-	@Override
-	public View showActionBar(Activity parent, int resId, Entity entity) {
-		return ActionBarUtils.showActionBar(parent, resId, entity, null, null);
-	}
-
-
-	@Deprecated
-	@Override
-	public View showActionBar(Activity parent, int resId, Entity entity, ActionBarOptions options) {
-		return ActionBarUtils.showActionBar(parent, resId, entity, options);
-	}
-
-	@Deprecated
-	@Override
-	public View showActionBar(Activity parent, int resId, Entity entity, ActionBarOptions options, ActionBarListener listener) {
-		return ActionBarUtils.showActionBar(parent, resId, entity, options, listener);
-	}
-
-	@Deprecated
-	@Override
-	public View showActionBar(Activity parent, View original, Entity entity) {
-		return ActionBarUtils.showActionBar(parent, original, entity);
-	}
-	
-	@Deprecated
-	@Override
-	public View showActionBar(Activity parent, View original, Entity entity, ActionBarOptions options) {
-		return ActionBarUtils.showActionBar(parent, original, entity, options);
-	}
-
-	@Deprecated
-	@Override
-	public View showActionBar(Activity parent, View original, Entity entity, ActionBarOptions options, ActionBarListener listener) {
-		return ActionBarUtils.showActionBar(parent, original, entity, options, listener);
-	}
-	
-	@Deprecated
-	@Override
-	public void showActionDetailView(Activity context, User user, SocializeAction action) {
-		UserUtils.showUserProfileWithAction(context, user, action);
-	}
-
-	/**
-	 * Shows the comments list for the given entity.
-	 * @param context
-	 * @param entity
-	 */
-	@Deprecated
-	@Override
-	public void showCommentView(Activity context, Entity entity) {
-		showCommentView(context, entity, null);
-	}
-
-	/**
-	 * Shows the comments list for the given entity.
-	 * @param context
-	 * @param entity
-	 * @param listener
-	 */
-	@Deprecated
-	@Override
-	public void showCommentView(Activity context, Entity entity, OnCommentViewActionListener listener) {
-		if(listener != null) {
-			listenerHolder.push(CommentView.COMMENT_LISTENER, listener);
-		}
-
-		try {
-			Intent i = newIntent(context, CommentActivity.class);
-			i.putExtra(Socialize.ENTITY_OBJECT, entity);
-			context.startActivity(i);
-		} 
-		catch (ActivityNotFoundException e) {
-			Log.e(Socialize.LOG_KEY, "Could not find CommentActivity.  Make sure you have added this to your AndroidManifest.xml");
-		} 
-	}
-
-	@Deprecated
-	@Override
-	public void showUserProfileView(Activity context, Long userId) {
-		UserUtils.showUserSettings(context);
-	}
-
-	@Deprecated
-	@Override
-	public void showUserProfileViewForResult(Activity context, Long userId, int requestCode) {
-		UserUtils.showUserSettingsForResult(context, requestCode);
-	}
-
 	@Override
 	public SocializeLogger getLogger() {
 		return logger;

@@ -217,7 +217,7 @@ public class SocialNetworkShareListenerTest extends SocializeActivityTest {
 		
 		// Expect
 		AndroidMock.expect(socialize.isSupported(context, AuthProviderType.FACEBOOK)).andReturn(true);
-		AndroidMock.expect(socialize.isAuthenticated(AuthProviderType.FACEBOOK)).andReturn(true);
+		AndroidMock.expect(socialize.isAuthenticatedForWrite(AuthProviderType.FACEBOOK)).andReturn(true);
 		poster.post(TestUtils.getActivity(this), entity, mockText, propInfo, listener);
 		
 		AndroidMock.replay(socialize, poster);

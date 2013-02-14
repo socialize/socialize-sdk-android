@@ -211,7 +211,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.expect(sessionPersister.load(mockContext)).andReturn(null); 
 		
 		AndroidMock.expect(authProviderInfoBuilder.getFactory(AuthProviderType.SOCIALIZE)).andReturn(authProviderInfoFactory); 
-		AndroidMock.expect(authProviderInfoFactory.getInstance()).andReturn(authProviderInfo); 
+		AndroidMock.expect(authProviderInfoFactory.getInstanceForRead()).andReturn(authProviderInfo); 
 		authProviderData.setAuthProviderInfo(authProviderInfo);
 
 		AndroidMock.expect(session.getHost()).andReturn(host);
@@ -294,7 +294,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		
 		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
 		AndroidMock.expect(authProviderInfoBuilder.getFactory(AuthProviderType.SOCIALIZE)).andReturn(authProviderInfoFactory); 
-		AndroidMock.expect(authProviderInfoFactory.getInstance()).andReturn(authProviderInfo); 
+		AndroidMock.expect(authProviderInfoFactory.getInstanceForRead()).andReturn(authProviderInfo); 
 		AndroidMock.expect(sessionPersister.load(mockContext)).andReturn(session);
 	
 		AndroidMock.expect(authProviderData.getAuthProviderInfo()).andReturn(authProviderInfo).anyTimes();

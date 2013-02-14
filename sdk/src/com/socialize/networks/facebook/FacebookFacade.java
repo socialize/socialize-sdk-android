@@ -48,6 +48,8 @@ public interface FacebookFacade {
 	@Deprecated
 	public static final String[] DEFAULT_PERMISSIONS = WRITE_PERMISSIONS;
 
+	public void authenticate(Activity context, String appId, String[] permissions, boolean sso, boolean read, AuthProviderListener listener);
+	
 	public void authenticateWithActivity(Activity context, FacebookAuthProviderInfo info, boolean sso, final AuthProviderListener listener);
 
 	public void linkForRead (Activity context, SocializeAuthListener listener, String...permissions);
@@ -70,6 +72,7 @@ public interface FacebookFacade {
 	
 	public void onResume(Activity context, SocializeAuthListener listener);
 	
+	@Deprecated
 	public void extendAccessToken(Activity context, SocializeAuthListener listener);
 	
 	public void postEntity(Activity context, Entity entity, String text, SocialNetworkShareListener listener);
@@ -107,8 +110,6 @@ public interface FacebookFacade {
 	
 	@Deprecated
 	public void authenticate(Activity context, String appId, String[] permissions, boolean sso, AuthProviderListener listener);
-	
-	public void authenticate(Activity context, String appId, String[] permissions, boolean sso, boolean read, AuthProviderListener listener);
 	
 	@Deprecated
 	public boolean isLinked(Context context);	

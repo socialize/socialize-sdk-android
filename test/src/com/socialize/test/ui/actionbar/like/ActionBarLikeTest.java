@@ -194,7 +194,7 @@ public class ActionBarLikeTest extends ActionBarTest {
 		
 		AndroidMock.expect(creds.getAuthProviderInfo()).andReturn(info);
 		AndroidMock.expect(authProviders.getProvider(AuthProviderType.TWITTER)).andReturn(provider);
-		AndroidMock.expect(provider.validate(info)).andReturn(true);
+		AndroidMock.expect(provider.validateForRead(info)).andReturn(true);
 		
 		SocializeAccess.setAuthProviders(authProviders);
 
