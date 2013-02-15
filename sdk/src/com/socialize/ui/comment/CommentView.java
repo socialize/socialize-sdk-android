@@ -199,6 +199,10 @@ public class CommentView extends EntityView {
 	        catch (ClassCastException e) {} 
 		}
 	}
+	
+	public CommentListView getCommentListView() {
+		return commentListView;
+	}
 
 	/**
 	 * @param commentActivity

@@ -3,7 +3,6 @@ package com.socialize.ui.comment;
 import java.util.List;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -20,6 +19,7 @@ import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.Subscription;
+import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.i18n.I18NConstants;
 import com.socialize.listener.comment.CommentAddListener;
@@ -30,6 +30,7 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.notifications.SubscriptionType;
 import com.socialize.ui.dialog.SimpleDialogFactory;
 import com.socialize.ui.header.SocializeHeader;
+import com.socialize.ui.image.ImageLoader;
 import com.socialize.ui.profile.UserSettings;
 import com.socialize.ui.slider.ActionBarSliderFactory;
 import com.socialize.ui.slider.ActionBarSliderFactory.ZOrder;
@@ -37,6 +38,7 @@ import com.socialize.ui.slider.ActionBarSliderView;
 import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.ui.view.LoadingListView;
 import com.socialize.util.AppUtils;
+import com.socialize.util.CacheableDrawable;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
@@ -88,7 +90,7 @@ public class CommentListView extends BaseView {
 	private RelativeLayout layoutAnchor;
 	private ViewGroup sliderAnchor;
 	private CustomCheckbox notifyBox;
-//	private ImageLoader imageLoader;
+	private ImageLoader imageLoader;
 	
 	private CommentEntrySliderItem commentEntrySliderItem;
 	
@@ -394,8 +396,6 @@ public class CommentListView extends BaseView {
 					if(entities != null) {
 						int totalCount = entities.getTotalCount();
 						
-						Log.e("Socialize", "Total is " + totalCount);
-						
 						List<Comment> items = entities.getItems();
 						commentAdapter.setComments(items);
 						commentAdapter.setTotalCount(totalCount);
@@ -607,7 +607,7 @@ public class CommentListView extends BaseView {
 			public void onList(ListResult<Comment> entities) {
 				List<Comment> comments = commentAdapter.getComments();
 				comments.addAll(entities.getItems());
-//				preLoadImages(comments);
+				preLoadImages(comments);
 				commentAdapter.setComments(comments);
 				commentAdapter.notifyDataSetChanged();
 				loading = false;
@@ -615,22 +615,22 @@ public class CommentListView extends BaseView {
 		});
 	}
 	
-//	protected void preLoadImages(List<Comment> comments) {
-//		if(comments != null) {
-//			for (Comment comment : comments) {
-//				User user = comment.getUser();
-//				if(user != null) {
-//					String imageUrl = user.getSmallImageUri();
-//					if(!StringUtils.isEmpty(imageUrl)) {
-//						CacheableDrawable cached = drawables.getCache().get(imageUrl);
-//						if(cached == null || cached.isRecycled()) {
-//							imageLoader.loadImageByUrl(imageUrl, iconSize, iconSize, null);
-//						}
-//					}
-//				}
-//			}
-//		}
-//	}
+	protected void preLoadImages(List<Comment> comments) {
+		if(comments != null) {
+			for (Comment comment : comments) {
+				User user = comment.getUser();
+				if(user != null) {
+					String imageUrl = user.getSmallImageUri();
+					if(!StringUtils.isEmpty(imageUrl)) {
+						CacheableDrawable cached = drawables.getCache().get(imageUrl);
+						if(cached == null || cached.isRecycled()) {
+							imageLoader.loadImageByUrl(imageUrl, iconSize, iconSize, null);
+						}
+					}
+				}
+			}
+		}
+	}
 	
 	@Override
 	public void onViewLoad() {
@@ -835,9 +835,9 @@ public class CommentListView extends BaseView {
 		return commentEntrySlider;
 	}
 	
-//	public void setImageLoader(ImageLoader imageLoader) {
-//		this.imageLoader = imageLoader;
-//	}
+	public void setImageLoader(ImageLoader imageLoader) {
+		this.imageLoader = imageLoader;
+	}
 
 	public void setDisplayUtils(DisplayUtils displayUtils) {
 		this.displayUtils = displayUtils;

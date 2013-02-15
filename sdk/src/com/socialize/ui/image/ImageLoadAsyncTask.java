@@ -108,7 +108,17 @@ public class ImageLoadAsyncTask extends Thread {
 								}
 							}
 							
-							request.notifyListeners(drawable);
+							
+							int notified = request.notifyListeners(drawable);
+							
+							if(logger != null && logger.isDebugEnabled()) {
+								logger.debug("Notified [" +
+										notified +
+										"] listeners for image load of url [" +
+										url +
+										"]");
+							}	
+							
 						}
 						catch (Exception e) {
 							request.notifyListeners(e);
@@ -177,7 +187,7 @@ public class ImageLoadAsyncTask extends Thread {
 		}
 		else {
 			if(logger != null) {
-				logger.warn("Image load task is not running.  Enqeueu request ignored");
+				logger.warn("Image load task is not running.  Enqueue request ignored");
 			}
 		}
 	}

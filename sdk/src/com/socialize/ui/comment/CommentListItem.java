@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.socialize.Socialize;
 import com.socialize.entity.Comment;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.util.Colors;
@@ -137,7 +136,7 @@ public class CommentListItem extends LinearLayout {
 		userIcon = new CachedImageView(getContext());
 		userIcon.setDrawables(drawables);
 		userIcon.setLogger(logger);
-		userIcon.setImageName(Socialize.DEFAULT_USER_ICON, true);
+		userIcon.setDefaultImage();
 		userIcon.setLayoutParams(iconLayoutParams);
 		userIcon.setPadding(imagePadding, imagePadding, imagePadding, imagePadding);
 		
@@ -207,6 +206,4 @@ public class CommentListItem extends LinearLayout {
 	public void setDeleteOk(boolean deleteOk) {
 		this.deleteOk = deleteOk;
 	}
-	
-	
 }

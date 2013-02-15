@@ -24,7 +24,6 @@ package com.socialize.ui.comment;
 import java.util.Date;
 import java.util.List;
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -44,7 +43,6 @@ import com.socialize.ui.view.ListItemLoadingView;
 import com.socialize.util.CacheableDrawable;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
-import com.socialize.util.SafeBitmapDrawable;
 import com.socialize.util.StringUtils;
 
 /**
@@ -282,10 +280,8 @@ public class CommentAdapter extends BaseAdapter {
 
 						if(user != null) {
 							userIcon.getBackground().setAlpha(255);
-							userIcon.setExpectedImageName(null);
 							
 							if(!StringUtils.isEmpty(imageUrl)) {
-								userIcon.setExpectedImageName(imageUrl);
 								
 								try {
 									// Check the cache
@@ -296,9 +292,11 @@ public class CommentAdapter extends BaseAdapter {
 											logger.debug("CommentAdpater setting image icon to cached image " + cached);
 										}
 										
-										userIcon.setImageName(imageUrl);
+										userIcon.setExpectedImageName(imageUrl);
+										userIcon.setImageUrlImmediate(imageUrl);
 									}
 									else {
+										userIcon.setExpectedImageName(imageUrl);
 										userIcon.setDefaultImage();
 										imageLoader.loadImageByUrl(imageUrl, densitySize, densitySize, userIcon);										
 									}
@@ -306,14 +304,17 @@ public class CommentAdapter extends BaseAdapter {
 								catch (Exception e) {
 									String errorMsg = "Not a valid image uri [" + imageUrl + "]";
 									logError(errorMsg, e);
+									userIcon.setExpectedImageName(Socialize.DEFAULT_USER_ICON);
 									userIcon.setDefaultImage();
 								}
 							}
 							else if(!StringUtils.isEmpty(user.getProfilePicData())) {
 								userIcon.setDefaultImage();
+								userIcon.setExpectedImageName("user_" + user.getId());
 								imageLoader.loadImageByData("user_" + user.getId(), user.getProfilePicData(),  densitySize, densitySize, userIcon);		
 							}
 							else {
+								userIcon.setExpectedImageName(Socialize.DEFAULT_USER_ICON);
 								userIcon.setDefaultImage();
 							}
 						}
@@ -333,34 +334,6 @@ public class CommentAdapter extends BaseAdapter {
 		return returnView;
 	}
 	
-	protected void setImageIcon(User user, int position, ImageView userIcon, SafeBitmapDrawable drawable, Drawable defaultImage) {
-		
-		try {
-			if(logger != null && logger.isDebugEnabled()) {
-				logger.debug("CommentAdapter setting image icon [" +
-						userIcon +
-						"] at row [" +
-						position +
-						"] for user [" +
-						user.getId() +
-						"] to " + drawable);
-			}		
-			
-			userIcon.setImageDrawable(drawable);
-			userIcon.getBackground().setAlpha(255);
-		}
-		catch (Exception e) {
-			logError("Error setting user icon image", e);
-			try {
-				userIcon.setImageDrawable(defaultImage);
-				userIcon.getBackground().setAlpha(255);
-			}
-			catch (Exception e2) {
-				logError("Error setting default icon image", e2);
-			}
-		}
-	}
-
 	@Override
 	public void notifyDataSetChanged() {
 		super.notifyDataSetChanged();

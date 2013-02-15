@@ -64,7 +64,8 @@ public class ImageLoadRequest {
 		this.canceled = canceled;
 	}
 	
-	public void notifyListeners(SafeBitmapDrawable drawable) {
+	public int notifyListeners(SafeBitmapDrawable drawable) {
+		int notified = 0;
 		listenersNotified = true;
 		if(listeners != null) {
 			while(!listeners.isEmpty()) {
@@ -74,9 +75,10 @@ public class ImageLoadRequest {
 				}
 				ImageLoadListener listener = listeners.poll();
 				listener.onImageLoad(this, drawable);
+				notified++;
 			}
 		}
-
+		return notified;
 	}
 	
 	public void notifyListeners(Exception error) {
