@@ -296,9 +296,8 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 						if(listener != null) {
 							listener.onNetworkError(context, SocialNetwork.FACEBOOK, error);
 						}
-						else {
-							handleNonListenerError("", error);
-						}
+							
+						handleNonListenerError("", error);
 					}
 					
 					@Override
@@ -318,9 +317,10 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 						if(listener != null) {
 							listener.onNetworkError(context, SocialNetwork.FACEBOOK, error);
 						}
-						else {
-							handleNonListenerError("", error);
-						}
+							
+						handleNonListenerError("", error);
+						
+						unlink(context, null);
 					}
 				});
 			}
@@ -346,12 +346,29 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 			if(listener != null) {
 				listener.onNetworkError(context, SocialNetwork.FACEBOOK, error.getException());
 			}
-			else if(logger != null) {
+			 
+			if(logger != null) {
 				logger.error(error.getErrorMessage(), error.getException());
 			}
 			else {
 				Log.e("Socialize", error.getErrorMessage(), error.getException());
 			}
+			
+			switch(error.getCategory()) {
+			
+				case AUTHENTICATION_REOPEN_SESSION:
+					unlink(context, null);
+					break;
+					
+				case AUTHENTICATION_RETRY:
+					unlink(context, null);
+					break;
+					
+				case PERMISSION:
+					unlink(context, null);
+					break;
+			}
+			
 		}
 		else if(listener != null) {
 			listener.onAfterPost(context, SocialNetwork.FACEBOOK, response

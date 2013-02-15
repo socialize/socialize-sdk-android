@@ -104,8 +104,6 @@ public class ImageLoadAsyncTaskTest extends SocializeActivityTest {
 		AndroidMock.expect(request.isCanceled()).andReturn(false).once();
 		AndroidMock.expect(request.getUrl()).andReturn(url).once();
 		
-
-		
 		if(imageInCache) {
 			AndroidMock.expect(cache.get(url)).andReturn(drawable).once();
 		}
@@ -118,8 +116,7 @@ public class ImageLoadAsyncTaskTest extends SocializeActivityTest {
 		}
 		
 		AndroidMock.expect(pendingRequests.remove(url)).andReturn(request);
-		
-		request.notifyListeners(drawable);
+		AndroidMock.expect(request.notifyListeners(drawable)).andReturn(1);
 		
 		requests.clear();
 		pendingRequests.clear();
@@ -293,7 +290,5 @@ public class ImageLoadAsyncTaskTest extends SocializeActivityTest {
 		public void onStart() {
 			super.onStart();
 		}
-		
-		
 	}
 }

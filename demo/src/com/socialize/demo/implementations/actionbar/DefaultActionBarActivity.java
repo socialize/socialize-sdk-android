@@ -33,6 +33,7 @@ import com.socialize.demo.Debug;
 import com.socialize.demo.DemoActivity;
 import com.socialize.demo.R;
 import com.socialize.entity.Comment;
+import com.socialize.error.SocializeException;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarView;
@@ -95,8 +96,16 @@ public class DefaultActionBarActivity extends DemoActivity {
 							android.os.Debug.stopMethodTracing();
 						}
 					}
-					
-					
+
+					@Override
+					public void onError(SocializeException error) {
+						Toast.makeText(DefaultActionBarActivity.this, "Share failed!", Toast.LENGTH_SHORT).show();
+					}
+
+					@Override
+					public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+						Toast.makeText(DefaultActionBarActivity.this, "Share failed!", Toast.LENGTH_SHORT).show();
+					}
 
 					@Override
 					public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
