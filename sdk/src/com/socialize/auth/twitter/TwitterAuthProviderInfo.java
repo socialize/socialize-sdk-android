@@ -77,7 +77,13 @@ public class TwitterAuthProviderInfo implements AuthProviderInfo {
 	 */
 	@Override
 	public boolean merge(AuthProviderInfo info) {
-		return true;
+		if(info instanceof TwitterAuthProviderInfo) {
+			TwitterAuthProviderInfo that = (TwitterAuthProviderInfo) info;
+			this.consumerKey = that.consumerKey;
+			this.consumerSecret = that.consumerSecret;
+			return true;
+		}
+		return false;		
 	}
 
 	public String getConsumerKey() {

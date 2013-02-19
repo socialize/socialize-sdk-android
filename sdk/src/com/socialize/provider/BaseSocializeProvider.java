@@ -372,7 +372,21 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 			userProviderCredentials.setAccessToken(data.getToken3rdParty());
 			userProviderCredentials.setTokenSecret(data.getSecret3rdParty());
 			userProviderCredentials.setUserId(data.getUserId3rdParty());
-			userProviderCredentials.setAuthProviderInfo(data.getAuthProviderInfo());
+			
+			UserProviderCredentials current = session.getUserProviderCredentials().get(info.getType());
+			
+			if(current != null) {
+				AuthProviderInfo authProviderInfo = current.getAuthProviderInfo();
+				
+				if(authProviderInfo != null) {
+					authProviderInfo.merge(data.getAuthProviderInfo());
+				}
+				
+				userProviderCredentials.setAuthProviderInfo(authProviderInfo);
+			}
+			else {
+				userProviderCredentials.setAuthProviderInfo(data.getAuthProviderInfo());
+			}
 			
 			session.getUserProviderCredentials().put(info.getType(), userProviderCredentials);
 		}

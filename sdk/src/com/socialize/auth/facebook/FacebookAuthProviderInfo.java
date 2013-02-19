@@ -174,6 +174,11 @@ public class FacebookAuthProviderInfo implements AuthProviderInfo {
 				this.writePermissions = merge(that.writePermissions, this.writePermissions);
 			}			
 			
+			// Only overwrite if we are READ
+			if(this.permissionType.equals(PermissionType.READ)) {
+				this.permissionType = that.permissionType;
+			}
+			
 			return true;
 		}
 		
@@ -185,9 +190,13 @@ public class FacebookAuthProviderInfo implements AuthProviderInfo {
 		if(this.equals(info)) {
 			if(info instanceof FacebookAuthProviderInfo) {
 				FacebookAuthProviderInfo that = (FacebookAuthProviderInfo) info;
-				if(this.getPermissionType().equals(PermissionType.WRITE) || this.getPermissionType().equals(that.getPermissionType())) {
-					// Ensure THIS object contains all permissions of other object
-					return matches(that.readPermissions, this.readPermissions) && matches(that.writePermissions, this.writePermissions);
+				if(that.getPermissionType().equals(PermissionType.WRITE)) {
+					if(this.getPermissionType().equals(that.getPermissionType())) {
+						return matches(that.writePermissions, this.writePermissions);
+					}
+				}
+				else {
+					return matches(that.readPermissions, this.readPermissions);
 				}
 			}
 		}

@@ -683,6 +683,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		assertTrue(result);		
 		
 		assertTrue(FacebookUtils.isLinkedForRead(context));
+		assertFalse(FacebookUtils.isLinkedForWrite(context));
 	}	
 	
 
@@ -726,6 +727,155 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		
 		assertTrue(result);		
 		
+		assertTrue(FacebookUtils.isLinkedForWrite(context));
+		assertTrue(FacebookUtils.isLinkedForRead(context));
+	}	
+	
+	public void testLinkIsLinkedForReadAndWrite() throws Exception {
+		
+		// We have to use a real token here because we will be REALLY authenticating
+		final Activity context = TestUtils.getActivity(this);
+		final String newFBToken = TestUtils.getDummyFBToken(context);
+		
+		final CountDownLatch latch = new CountDownLatch(1);
+		final CountDownLatch latch2 = new CountDownLatch(1);
+		
+		// We have to be initialized to set fb
+		Socialize.getSocialize().init(context);	
+		
+		FacebookUtils.linkForWrite(context, newFBToken, false, new SocializeAuthListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				latch.countDown();
+			}
+			
+			@Override
+			public void onCancel() {
+				latch.countDown();
+			}
+			
+			@Override
+			public void onAuthSuccess(SocializeSession session) {
+				latch.countDown();
+			}
+			
+			@Override
+			public void onAuthFail(SocializeException error) {
+				error.printStackTrace();
+				latch.countDown();
+			}
+		});		
+		
+		boolean result = latch.await(10, TimeUnit.SECONDS);
+		
+		assertTrue(result);		
+		
+		FacebookUtils.linkForRead(context, newFBToken, false, new SocializeAuthListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				latch2.countDown();
+			}
+			
+			@Override
+			public void onCancel() {
+				latch2.countDown();
+			}
+			
+			@Override
+			public void onAuthSuccess(SocializeSession session) {
+				latch2.countDown();
+			}
+			
+			@Override
+			public void onAuthFail(SocializeException error) {
+				error.printStackTrace();
+				latch2.countDown();
+			}
+		});				
+		
+		result = latch2.await(10, TimeUnit.SECONDS);
+		
+		assertTrue(result);		
+		
+		assertTrue(FacebookUtils.isLinkedForRead(context));
+		assertTrue(FacebookUtils.isLinkedForWrite(context));
+	}	
+	
+	public void testLinkIsLinkedForWriteAndRead() throws Exception {
+		
+		// We have to use a real token here because we will be REALLY authenticating
+		final Activity context = TestUtils.getActivity(this);
+		final String newFBToken = TestUtils.getDummyFBToken(context);
+		
+		final CountDownLatch latch = new CountDownLatch(1);
+		final CountDownLatch latch2 = new CountDownLatch(1);
+		
+		// We have to be initialized to set fb
+		Socialize.getSocialize().init(context);	
+		
+		FacebookUtils.linkForRead(context, newFBToken, false, new SocializeAuthListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				latch.countDown();
+			}
+			
+			@Override
+			public void onCancel() {
+				latch.countDown();
+			}
+			
+			@Override
+			public void onAuthSuccess(SocializeSession session) {
+				latch.countDown();
+			}
+			
+			@Override
+			public void onAuthFail(SocializeException error) {
+				error.printStackTrace();
+				latch.countDown();
+			}
+		});		
+		
+		boolean result = latch.await(10, TimeUnit.SECONDS);
+		
+		assertTrue(result);		
+		
+		FacebookUtils.linkForWrite(context, newFBToken, false, new SocializeAuthListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				latch2.countDown();
+			}
+			
+			@Override
+			public void onCancel() {
+				latch2.countDown();
+			}
+			
+			@Override
+			public void onAuthSuccess(SocializeSession session) {
+				latch2.countDown();
+			}
+			
+			@Override
+			public void onAuthFail(SocializeException error) {
+				error.printStackTrace();
+				latch2.countDown();
+			}
+		});				
+		
+		result = latch2.await(10, TimeUnit.SECONDS);
+		
+		assertTrue(result);		
+		
+		assertTrue(FacebookUtils.isLinkedForRead(context));
 		assertTrue(FacebookUtils.isLinkedForWrite(context));
 	}	
 		

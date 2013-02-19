@@ -201,6 +201,9 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 		if(read) {
 			fbInfo.setPermissionType(PermissionType.READ);
 		}
+		else {
+			fbInfo.setPermissionType(PermissionType.WRITE);
+		}
 		
 		final boolean sso = config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true);
 		
