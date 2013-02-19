@@ -129,72 +129,82 @@ FacebookUtils.unlink(this);
 
 public void postEntity() {
 // begin-snippet-4
-Entity entity = Entity.newInstance("http://myentity.com", "My Name");
+if(FacebookUtils.isLinkedForWrite(this)) {
+	Entity entity = Entity.newInstance("http://myentity.com", "My Name");
 	
-// The "this" argument refers to the current Activity
-FacebookUtils.postEntity(this, entity, "Text to be posted", new SocialNetworkShareListener() {
-	
-	@Override
-	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
-		// Handle error
-	}
-	
-	@Override
-	public void onCancel() {
-		// The user cancelled the operation.
-	}
-	
-	@Override
-	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
-		// Called after the post returned from Facebook.
-		// responseObject contains the raw JSON response from Facebook.
-	}
-	
-	@Override
-	public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
-		// Called just prior to the post.
-		// postData contains the dictionary (map) of data to be posted.  
-		// You can change this here to customize the post.
-		// Return true to prevent the post from occurring.
-		return false;
-	}
-});
+	// The "this" argument refers to the current Activity
+	FacebookUtils.postEntity(this, entity, "Text to be posted", new SocialNetworkShareListener() {
+		
+		@Override
+		public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+			// Handle error
+		}
+		
+		@Override
+		public void onCancel() {
+			// The user cancelled the operation.
+		}
+		
+		@Override
+		public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+			// Called after the post returned from Facebook.
+			// responseObject contains the raw JSON response from Facebook.
+		}
+		
+		@Override
+		public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+			// Called just prior to the post.
+			// postData contains the dictionary (map) of data to be posted.  
+			// You can change this here to customize the post.
+			// Return true to prevent the post from occurring.
+			return false;
+		}
+	});
+}
+else {
+	// Handle non-linked case
+}	
 // end-snippet-4
 }
 
 
 public void post() {
 // begin-snippet-5
-// The graph API path to be called
-String graphPath = "me/links";
+if(FacebookUtils.isLinkedForWrite(this)) {
+	// The graph API path to be called
+	String graphPath = "me/links";
 
-// The data to be posted. This is based on the graphPath
-// See http://developers.facebook.com/docs/reference/api/
-Map<String, Object> postData = new HashMap<String, Object>();
-postData.put("message", "A message to post");
-postData.put("link", "http://getsocialize.com");
-postData.put("name", "Socialize SDK!");
-	
-// Execute a POST on facebook
-// The "this" argument refers to the current Activity
-FacebookUtils.post(this, graphPath, postData, new SocialNetworkPostListener() {
-	
-	@Override
-	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
-		// Handle error
-	}
-	
-	@Override
-	public void onCancel() {
-		// The user cancelled the operation.
-	}
-	
-	@Override
-	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
-		// Called after the post returned from Facebook.
-		// responseObject contains the raw JSON response from Facebook.
-	}
-});
+	// The data to be posted. This is based on the graphPath
+	// See http://developers.facebook.com/docs/reference/api/
+	Map<String, Object> postData = new HashMap<String, Object>();
+	postData.put("message", "A message to post");
+	postData.put("link", "http://getsocialize.com");
+	postData.put("name", "Socialize SDK!");
+		
+	// Execute a POST on facebook
+	// The "this" argument refers to the current Activity
+	FacebookUtils.post(this, graphPath, postData, new SocialNetworkPostListener() {
+		
+		@Override
+		public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+			// Handle error
+		}
+		
+		@Override
+		public void onCancel() {
+			// The user cancelled the operation.
+		}
+		
+		@Override
+		public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+			// Called after the post returned from Facebook.
+			// responseObject contains the raw JSON response from Facebook.
+		}
+	});
+}
+else {
+	// Handle non-linked case
+}	
 // end-snippet-5
 }
 
@@ -226,156 +236,85 @@ FacebookUtils.get(this, graphPath, null, new SocialNetworkPostListener() {
 // end-snippet-6
 }
 
-
 public void delete() {
 // begin-snippet-7
-// The graph API path to be called
-String graphPath = "me/links/1234";
+if(FacebookUtils.isLinkedForWrite(this)) {
+	
+	// The graph API path to be called
+	String graphPath = "me/links/1234";
 
-// Execute a DELETE on facebook
-// The "this" argument refers to the current Activity
-FacebookUtils.delete(this, graphPath, null, new SocialNetworkListener() {
-	
-	@Override
-	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
-		// Handle error
-	}
-	
-	@Override
-	public void onCancel() {
-		// The user cancelled the operation.
-	}
-	
-	@Override
-	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
-		// Called after the post returned from Facebook.
-		// responseObject contains the raw JSON response from Facebook.
-	}
-	
-	@Override
-	public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
-		// Called before the post to the given network is made
-		// Return true to prevent the post from occurring
-		return false;
-	}
-});
+	// Execute a DELETE on facebook
+	// The "this" argument refers to the current Activity
+	FacebookUtils.delete(this, graphPath, null, new SocialNetworkListener() {
+		
+		@Override
+		public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+			// Handle error
+		}
+		
+		@Override
+		public void onCancel() {
+			// The user cancelled the operation.
+		}
+		
+		@Override
+		public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+			// Called after the post returned from Facebook.
+			// responseObject contains the raw JSON response from Facebook.
+		}
+		
+		@Override
+		public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+			// Called before the post to the given network is made
+			// Return true to prevent the post from occurring
+			return false;
+		}
+	});
+}
+else {
+	// Handle non-linked case
+}	
 // end-snippet-7
 }
-
-
 
 
 public void postWithUrl() {
 final Activity context = this;
 // begin-snippet-8
-// Create a simple share object to get the propagation data
-final Entity entity = Entity.newInstance("http://myentity.com", "My Name");
+if(FacebookUtils.isLinkedForWrite(this)) {
+	// Create a simple share object to get the propagation data
+	final Entity entity = Entity.newInstance("http://myentity.com", "My Name");
 
-ShareOptions options = ShareUtils.getUserShareOptions(this);
+	ShareOptions options = ShareUtils.getUserShareOptions(this);
 
-// The "this" argument refers to the current Activity
-ShareUtils.registerShare(this, entity, options, new ShareAddListener() {
-	
-	@Override
-	public void onError(SocializeException error) {
-		// Handle error
-	}
-	
-	@Override
-	public void onCreate(Share share) {
+	// The "this" argument refers to the current Activity
+	ShareUtils.registerShare(this, entity, options, new ShareAddListener() {
 		
-		// Get the propagation info from the result
-		PropagationInfoResponse propagationInfoResponse = share.getPropagationInfoResponse();
+		@Override
+		public void onError(SocializeException error) {
+			// Handle error
+		}
 		
-		PropagationInfo propagationInfo = propagationInfoResponse.getPropagationInfo(SocialNetwork.FACEBOOK);
-		
-		// The graph API path to be called
-		String graphPath = "me/links";
+		@Override
+		public void onCreate(Share share) {
+			
+			// Get the propagation info from the result
+			PropagationInfoResponse propagationInfoResponse = share.getPropagationInfoResponse();
+			
+			PropagationInfo propagationInfo = propagationInfoResponse.getPropagationInfo(SocialNetwork.FACEBOOK);
+			
+			// The graph API path to be called
+			String graphPath = "me/links";
 
-		// The data to be posted. This is based on the graphPath
-		// See http://developers.facebook.com/docs/reference/api/
-		Map<String, Object> postData = new HashMap<String, Object>();
-		postData.put("message", "A message to post");
-		postData.put("link", propagationInfo.getEntityUrl()); // Use the SmartDownload URL
-		postData.put("name", entity.getDisplayName());
-			
-		// Execute a POST on facebook
-		FacebookUtils.post(context, graphPath, postData, new SocialNetworkListener() {
-			
-			@Override
-			public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
-				// Handle error
-			}
-			
-			@Override
-			public void onCancel() {
-				// The user cancelled the operation.
-			}
-			
-			@Override
-			public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
-				// Called after the post returned from Facebook.
-				// responseObject contains the raw JSON response from Facebook.
-			}
-			
-			@Override
-			public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
-				// Called before the post to the given network is made
-				// Return true to prevent the post from occurring
-				return false;
-			}
-		});		
-	}
-}, SocialNetwork.FACEBOOK);
-// end-snippet-8
-}
-
-public void postPhoto() throws IOException {
-// begin-snippet-9
-//The "this" argument refers to the current Activity
-final Activity context = this;
-	
-final Entity entity = Entity.newInstance("http://myentity.com", "My Name");	
-	
-// First create a Socialize share object so we get the correct URLs
-ShareOptions options = ShareUtils.getUserShareOptions(context);
-
-ShareUtils.registerShare(context, entity, options, new ShareAddListener() {
-	
-	@Override
-	public void onError(SocializeException error) {
-		// Handle error
-	}
-	
-	@Override
-	public void onCreate(Share result) {
-		
-		// We have the result, use the URLs to add to the post
-		PropagationInfo propagationInfo = result.getPropagationInfoResponse().getPropagationInfo(ShareType.FACEBOOK);
-		String link = propagationInfo.getEntityUrl();
-
-		// Now post to Facebook.
-		Map<String, Object> postData = new HashMap<String, Object>();
-		
-		// TODO: Get the URI of your image from the local device.
-		// TODO: ***** DON'T FORGET TO USE YOUR OWN IMAGE HERE (See the sample app for a working example) ****
-		Uri photoUri = null;
-		
-		try {
-			
-			// Format the picture for Facebook
-			byte[] imageData = FacebookUtils.getImageForPost(context, photoUri);
-			
-			// Add the photo to the post
-			postData.put("photo", imageData);
-			
-			// Add the link returned from Socialize to use SmartDownloads
-			postData.put("caption", "A test photo of something " + link);
-			
-			// Add other fields to postData as necessary
-			
-			// Post to me/photos
-			FacebookUtils.post(context, "me/photos", postData, new SocialNetworkPostListener() {
+			// The data to be posted. This is based on the graphPath
+			// See http://developers.facebook.com/docs/reference/api/
+			Map<String, Object> postData = new HashMap<String, Object>();
+			postData.put("message", "A message to post");
+			postData.put("link", propagationInfo.getEntityUrl()); // Use the SmartDownload URL
+			postData.put("name", entity.getDisplayName());
+				
+			// Execute a POST on facebook
+			FacebookUtils.post(context, graphPath, postData, new SocialNetworkListener() {
 				
 				@Override
 				public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
@@ -384,20 +323,105 @@ ShareUtils.registerShare(context, entity, options, new ShareAddListener() {
 				
 				@Override
 				public void onCancel() {
-					// The user cancelled the auth process
+					// The user cancelled the operation.
 				}
 				
 				@Override
 				public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
-					// The post was successful
+					// Called after the post returned from Facebook.
+					// responseObject contains the raw JSON response from Facebook.
 				}
-			});			
+				
+				@Override
+				public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+					// Called before the post to the given network is made
+					// Return true to prevent the post from occurring
+					return false;
+				}
+			});		
 		}
-		catch (IOException e) {
+	}, SocialNetwork.FACEBOOK);	
+}
+else {
+	// Handle non-linked case
+}
+// end-snippet-8
+}
+
+public void postPhoto() throws IOException {
+// begin-snippet-9
+//The "this" argument refers to the current Activity
+final Activity context = this;
+
+if(FacebookUtils.isLinkedForWrite(this)) {
+	final Entity entity = Entity.newInstance("http://myentity.com", "My Name");	
+	
+	// First create a Socialize share object so we get the correct URLs
+	ShareOptions options = ShareUtils.getUserShareOptions(context);
+
+	ShareUtils.registerShare(context, entity, options, new ShareAddListener() {
+		
+		@Override
+		public void onError(SocializeException error) {
 			// Handle error
 		}
-	}
-}, SocialNetwork.FACEBOOK); // This is a Facebook-only share	
+		
+		@Override
+		public void onCreate(Share result) {
+			
+			// We have the result, use the URLs to add to the post
+			PropagationInfo propagationInfo = result.getPropagationInfoResponse().getPropagationInfo(ShareType.FACEBOOK);
+			String link = propagationInfo.getEntityUrl();
+
+			// Now post to Facebook.
+			Map<String, Object> postData = new HashMap<String, Object>();
+			
+			// TODO: Get the URI of your image from the local device.
+			// TODO: ***** DON'T FORGET TO USE YOUR OWN IMAGE HERE (See the sample app for a working example) ****
+			Uri photoUri = null;
+			
+			try {
+				
+				// Format the picture for Facebook
+				byte[] imageData = FacebookUtils.getImageForPost(context, photoUri);
+				
+				// Add the photo to the post
+				postData.put("photo", imageData);
+				
+				// Add the link returned from Socialize to use SmartDownloads
+				postData.put("caption", "A test photo of something " + link);
+				
+				// Add other fields to postData as necessary
+				
+				// Post to me/photos
+				FacebookUtils.post(context, "me/photos", postData, new SocialNetworkPostListener() {
+					
+					@Override
+					public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+						// Handle error
+					}
+					
+					@Override
+					public void onCancel() {
+						// The user cancelled the auth process
+					}
+					
+					@Override
+					public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+						// The post was successful
+					}
+				});			
+			}
+			catch (IOException e) {
+				// Handle error
+			}
+		}
+	}, SocialNetwork.FACEBOOK); // This is a Facebook-only share
+}
+else {
+	// Handle non-linked case
+}
+	
 //end-snippet-9
 }
 
@@ -412,138 +436,222 @@ entity.setType("video.movie");
 
 public void postOG() {
 // begin-snippet-11
-Entity entity = Entity.newInstance("http://myentity.com", "My Entity Name");
+	
+if(FacebookUtils.isLinkedForWrite(this)) {
+	Entity entity = Entity.newInstance("http://myentity.com", "My Entity Name");
 
-// MUST be a valid OG type
-entity.setType("video.movie");
-	
-// The "this" argument refers to the current Activity
-FacebookUtils.postEntity(this, entity, "Text to be posted", new SocialNetworkShareListener() {
-	
-	@Override
-	public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
-		// Change the post data to force an Open Graph call
-		postData.setPath("me/video.watches");
+	// MUST be a valid OG type
+	entity.setType("video.movie");
 		
-		// me/video.watches requires a movie object type
-		postData.getPostValues().put("movie", postData.getPropagationInfo().getEntityUrl());
+	// The "this" argument refers to the current Activity
+	FacebookUtils.postEntity(this, entity, "Text to be posted", new SocialNetworkShareListener() {
 		
-		return false;
-	}	
-	
-	@Override
-	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
-		// Handle error
-	}
-	
-	@Override
-	public void onCancel() {
-		// The user cancelled the operation.
-	}
-	
-	@Override
-	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
-		// Called after the post returned from Facebook.
-		// responseObject contains the raw JSON response from Facebook.
-	}
+		@Override
+		public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+			// Change the post data to force an Open Graph call
+			postData.setPath("me/video.watches");
+			
+			// me/video.watches requires a movie object type
+			postData.getPostValues().put("movie", postData.getPropagationInfo().getEntityUrl());
+			
+			return false;
+		}	
+		
+		@Override
+		public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+			// Handle error
+		}
+		
+		@Override
+		public void onCancel() {
+			// The user cancelled the operation.
+		}
+		
+		@Override
+		public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+			// Called after the post returned from Facebook.
+			// responseObject contains the raw JSON response from Facebook.
+		}
 
-});
+	});
+}
+else {
+	// Handle non-linked case
+}	
 // end-snippet-11
 }
 
 
 public void postOGCustom() {
 // begin-snippet-12
-Entity entity = Entity.newInstance("http://myentity.com", "My Entity Name");
-
-// Set the type of the entity to include the namespace.
-entity.setType("yournamespace:yourtype");
 	
-ShareOptions options = ShareUtils.getUserShareOptions(this);
-options.setText("Text to be posted");
+if(FacebookUtils.isLinkedForWrite(this)) {
+	Entity entity = Entity.newInstance("http://myentity.com", "My Entity Name");
 
-// The "this" argument refers to the current Activity
-ShareUtils.shareViaSocialNetworks(this, entity, options, new SocialNetworkShareListener() {
-	
-	@Override
-	public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+	// Set the type of the entity to include the namespace.
+	entity.setType("yournamespace:yourtype");
 		
-		if(socialNetwork.equals(SocialNetwork.FACEBOOK)) {
-			// Change the post data to force an Open Graph call
-			postData.setPath("me/yournamespace:youraction");
+	ShareOptions options = ShareUtils.getUserShareOptions(this);
+	options.setText("Text to be posted");
+
+	// The "this" argument refers to the current Activity
+	ShareUtils.shareViaSocialNetworks(this, entity, options, new SocialNetworkShareListener() {
+		
+		@Override
+		public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
 			
-			// Set the type to be the entity URL
-			postData.getPostValues().put("yourtype", postData.getPropagationInfo().getEntityUrl());
+			if(socialNetwork.equals(SocialNetwork.FACEBOOK)) {
+				// Change the post data to force an Open Graph call
+				postData.setPath("me/yournamespace:youraction");
+				
+				// Set the type to be the entity URL
+				postData.getPostValues().put("yourtype", postData.getPropagationInfo().getEntityUrl());
+			}
+			
+			return false;
+		}	
+		
+		@Override
+		public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+			// Handle error
 		}
 		
-		return false;
-	}	
-	
-	@Override
-	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
-		// Handle error
-	}
-	
-	@Override
-	public void onCancel() {
-		// The user cancelled the operation.
-	}
-	
-	@Override
-	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
-		// Called after the post returned from Facebook.
-		// responseObject contains the raw JSON response from Facebook.
-	}
+		@Override
+		public void onCancel() {
+			// The user cancelled the operation.
+		}
+		
+		@Override
+		public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+			// Called after the post returned from Facebook.
+			// responseObject contains the raw JSON response from Facebook.
+		}
 
-}, SocialNetwork.FACEBOOK);
+	}, SocialNetwork.FACEBOOK);
+}
+else {
+	// Handle non-linked case
+}		
 // end-snippet-12
 }
 
 public void postOGShare() {
 // begin-snippet-13
-Entity entity = Entity.newInstance("http://myentity.com", "My Entity Name");
-
-// MUST be a valid OG type
-entity.setType("video.movie");
-
-ShareOptions options = ShareUtils.getUserShareOptions(this);
-options.setText("Text to be posted");
-
-// The "this" argument refers to the current Activity
-ShareUtils.shareViaSocialNetworks(this, entity, options, new SocialNetworkShareListener() {
 	
-	@Override
-	public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+if(FacebookUtils.isLinkedForWrite(this)) {
+	Entity entity = Entity.newInstance("http://myentity.com", "My Entity Name");
+
+	// MUST be a valid OG type
+	entity.setType("video.movie");
+
+	ShareOptions options = ShareUtils.getUserShareOptions(this);
+	options.setText("Text to be posted");
+
+	// The "this" argument refers to the current Activity
+	ShareUtils.shareViaSocialNetworks(this, entity, options, new SocialNetworkShareListener() {
 		
-		if(socialNetwork.equals(SocialNetwork.FACEBOOK)) {
-			// Change the post data to force an Open Graph call
-			postData.setPath("me/video.watches");
+		@Override
+		public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
 			
-			// me/video.watches requires a movie object type
-			postData.getPostValues().put("movie", postData.getPropagationInfo().getEntityUrl());
+			if(socialNetwork.equals(SocialNetwork.FACEBOOK)) {
+				// Change the post data to force an Open Graph call
+				postData.setPath("me/video.watches");
+				
+				// me/video.watches requires a movie object type
+				postData.getPostValues().put("movie", postData.getPropagationInfo().getEntityUrl());
+			}
+			
+			return false;
+		}	
+		
+		@Override
+		public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+			// Handle error
 		}
 		
-		return false;
-	}	
-	
-	@Override
-	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
-		// Handle error
-	}
-	
-	@Override
-	public void onCancel() {
-		// The user cancelled the operation.
-	}
-	
-	@Override
-	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
-		// Called after the post returned from Facebook.
-		// responseObject contains the raw JSON response from Facebook.
-	}
+		@Override
+		public void onCancel() {
+			// The user cancelled the operation.
+		}
+		
+		@Override
+		public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+			// Called after the post returned from Facebook.
+			// responseObject contains the raw JSON response from Facebook.
+		}
 
-}, SocialNetwork.FACEBOOK);
+	}, SocialNetwork.FACEBOOK);
+}
+else {
+	// Handle non-linked case
+}		
 // end-snippet-13
 }
 
+public void linkFBWrite() {
+// begin-snippet-14
+// The "this" argument refers to the current Activity	
+if(FacebookUtils.isLinkedForWrite(this)) {
+	// Perform direct Facebook operation.
+} 
+else {
+	// Request write access
+	FacebookUtils.linkForWrite(this, new SocializeAuthListener() {
+	
+		@Override
+		public void onCancel() {
+			// The user cancelled the operation.
+		}
+		
+		@Override
+		public void onAuthSuccess(SocializeSession session) {
+			// Perform direct Facebook operation.
+		}
+		
+		@Override
+		public void onAuthFail(SocializeException error) {
+			// Handle error
+		}
+		
+		@Override
+		public void onError(SocializeException error) {
+			// Handle error
+		}
+	});	
+}
+// end-snippet-14
+}
+public void linkFBWrite2() {
+// begin-snippet-15
+// The "this" argument refers to the current Activity	
+if(FacebookUtils.isLinkedForWrite(this, "publish_stream", "create_event")) {
+	// Perform direct Facebook operation.
+} 
+else {
+	// Request write access
+	FacebookUtils.linkForWrite(this, new SocializeAuthListener() {
+	
+		@Override
+		public void onCancel() {
+			// The user cancelled the operation.
+		}
+		
+		@Override
+		public void onAuthSuccess(SocializeSession session) {
+			// Perform direct Facebook operation.
+		}
+		
+		@Override
+		public void onAuthFail(SocializeException error) {
+			// Handle error
+		}
+		
+		@Override
+		public void onError(SocializeException error) {
+			// Handle error
+		}
+	}, "publish_stream", "create_event");	
+}
+// end-snippet-15
+}
 }

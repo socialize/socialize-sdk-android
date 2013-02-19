@@ -36,6 +36,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.socialize.api.action.ActionType;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeAction;
@@ -99,6 +100,7 @@ public abstract class SDKDemoActivity extends DemoActivity {
 		if(progress != null) {
 			progress.dismiss();
 		}
+		Toast.makeText(this, "Operation Canceled", Toast.LENGTH_SHORT);
 	}
 	
 	protected void handleError(Activity context, Exception error) {

@@ -125,6 +125,9 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 			public void call(final Session session, SessionState state, Exception exception) {
 				
 				if(exception != null && exception instanceof FacebookOperationCanceledException) {
+					if(logger != null) {
+						logger.error("Facebook operation failed", exception);
+					}
 					handleCancel(listener);
 					return;
 				}				

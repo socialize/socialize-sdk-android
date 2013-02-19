@@ -168,7 +168,7 @@ public class FacebookUtils {
 	 * @return
 	 */
 	public static boolean isLinkedForRead(Context context, String...permissions){
-		return proxy.isLinkedForRead(context);
+		return proxy.isLinkedForRead(context, permissions);
 	}
 	
 	/**
@@ -176,8 +176,8 @@ public class FacebookUtils {
 	 * @param context
 	 * @return
 	 */
-	public static boolean isLinkedForWrite(Context context){
-		return proxy.isLinkedForRead(context);
+	public static boolean isLinkedForWrite(Context context, String...permissions){
+		return proxy.isLinkedForWrite(context, permissions);
 	}
 	
 	/**

@@ -579,7 +579,7 @@
 	</bean>
 	
 	<!-- V2 Classes (Deprecated -->
-	<bean id="facebookSessionStore" class="com.socialize.auth.facebook.FacebookSessionStore"/>	
+	<bean id="facebookSessionStore" class="com.socialize.auth.facebook.FacebookSessionStore" lazy="true"/>	
 	<bean id="facebook" class="com.socialize.facebook.Facebook" singleton="false"/>
 	<bean id="facebookRunner" class="com.socialize.facebook.AsyncFacebookRunner" singleton="false"/>
 	<factory id="facebookRunnerFactory" makes="facebookRunner"/>	

@@ -31,6 +31,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkPostListener;
+import com.socialize.networks.facebook.FacebookFacade;
 import com.socialize.networks.facebook.FacebookUtils;
 
 
@@ -46,6 +47,36 @@ public class PostToWallActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(final String text) {
 		
+		if(!FacebookUtils.isLinkedForRead(this, FacebookFacade.READ_PERMISSIONS)) {
+			FacebookUtils.linkForRead(this, new SocializeAuthListener() {
+				
+				@Override
+				public void onError(SocializeException error) {
+					handleError(PostToWallActivity.this, error);
+				}
+				
+				@Override
+				public void onCancel() {
+					handleCancel();
+				}
+				
+				@Override
+				public void onAuthSuccess(SocializeSession session) {
+					doPost(text);
+				}
+				
+				@Override
+				public void onAuthFail(SocializeException error) {
+					handleError(PostToWallActivity.this, error);
+				}
+			}, FacebookFacade.READ_PERMISSIONS);
+		}
+		else {
+			doPost(text);
+		}
+	}
+	
+	private void doPost(final String text) {
 		FacebookUtils.linkForWrite(this, new SocializeAuthListener() {
 			
 			@Override

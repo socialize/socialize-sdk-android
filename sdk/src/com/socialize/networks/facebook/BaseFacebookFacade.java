@@ -64,6 +64,7 @@ import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.SocializeDeAuthListener;
 import com.socialize.ui.profile.UserSettings;
+import com.socialize.util.ArrayUtils;
 import com.socialize.util.ImageUtils;
 
 
@@ -162,21 +163,33 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 
 	@Override
 	public void linkForRead(Activity context, SocializeAuthListener listener, String...permissions) {
+		if(ArrayUtils.isEmpty(permissions)) {
+			permissions = FacebookFacade.READ_PERMISSIONS;
+		}			
 		getSocialize().authenticateForRead(context, AuthProviderType.FACEBOOK, listener, permissions);
 	}
 
 	@Override
 	public void linkForWrite(Activity context, SocializeAuthListener listener, String...permissions) {
+		if(ArrayUtils.isEmpty(permissions)) {
+			permissions = FacebookFacade.WRITE_PERMISSIONS;
+		}			
 		getSocialize().authenticateForWrite(context, AuthProviderType.FACEBOOK, listener, permissions);
 	}
 
 	@Override
 	public void linkForRead(Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener, String...permissions) {
+		if(ArrayUtils.isEmpty(permissions)) {
+			permissions = FacebookFacade.READ_PERMISSIONS;
+		}				
 		doLink(context, token, verifyPermissions, true, listener, permissions);
 	}
 
 	@Override
 	public void linkForWrite(Activity context, String token, boolean verifyPermissions, SocializeAuthListener listener, String...permissions) {
+		if(ArrayUtils.isEmpty(permissions)) {
+			permissions = FacebookFacade.WRITE_PERMISSIONS;
+		}				
 		doLink(context, token, verifyPermissions, false, listener, permissions);
 	}
 
@@ -302,11 +315,17 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 	
 	@Override
 	public boolean isLinkedForRead(Context context, String...permissions) {
+		if(ArrayUtils.isEmpty(permissions)) {
+			permissions = FacebookFacade.READ_PERMISSIONS;
+		}			
 		return getSocialize().isAuthenticatedForRead(AuthProviderType.FACEBOOK, permissions);
 	}
 
 	@Override
 	public boolean isLinkedForWrite(Context context, String...permissions) {
+		if(ArrayUtils.isEmpty(permissions)) {
+			permissions = FacebookFacade.WRITE_PERMISSIONS;
+		}			
 		return getSocialize().isAuthenticatedForWrite(AuthProviderType.FACEBOOK, permissions);
 	}
 

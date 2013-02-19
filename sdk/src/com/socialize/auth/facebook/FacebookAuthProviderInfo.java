@@ -185,8 +185,10 @@ public class FacebookAuthProviderInfo implements AuthProviderInfo {
 		if(this.equals(info)) {
 			if(info instanceof FacebookAuthProviderInfo) {
 				FacebookAuthProviderInfo that = (FacebookAuthProviderInfo) info;
-				// Ensure THIS object contains all permissions of other object
-				return matches(that.readPermissions, this.readPermissions) && matches(that.writePermissions, this.writePermissions);
+				if(this.getPermissionType().equals(PermissionType.WRITE) || this.getPermissionType().equals(that.getPermissionType())) {
+					// Ensure THIS object contains all permissions of other object
+					return matches(that.readPermissions, this.readPermissions) && matches(that.writePermissions, this.writePermissions);
+				}
 			}
 		}
 		
