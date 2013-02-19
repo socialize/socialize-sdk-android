@@ -10,11 +10,35 @@ Advanced Facebook
 Linking Users with Facebook
 ---------------------------
 
-If you are not using the ActionBar or want to manually link a user to their Facebook account you can do so with the **link** method
+When connecting users in your app to their Facebook account it is important to understand the distinction between READ permissions and WRITE permissions.
+
+Facebook makes a clear distinction between those operations required READ access and those requiring WRITE (publish) access. 
+
+It is important to observe the following policy conventions from Facebook:
+
+- READ permissions must be requested **BEFORE** WRITE permissions
+- It is invalid to request READ permissions at the same time as WRITE permissions (this will cause an error)
+
+The default behavior of the Socialize Action Bar means that Facebook permissions are requested in the correct order so you should not 
+need to worry if you are simply using the Action Bar, however if you want to perform any direct interaction with Facebook you will need to be mindful 
+of these rules. 
+
+By default Socialize requests no additional permissions for READ access, and requests the following permissions for WRITE access:
+
+	"publish_stream", "publish_actions"
+	
+When performing a direct Facebook operation you must first check to see whether the appropriate permissions have been linked:
 
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/FacebookSnippets.java
-	:start-after: begin-snippet-0
-	:end-before: end-snippet-0
+	:start-after: begin-snippet-14
+	:end-before: end-snippet-14
+	
+If you want to include additional permissions not included in the default list you can just specify these as additional 
+parameters to the **isLinked** and **link** methods
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/FacebookSnippets.java
+	:start-after: begin-snippet-15
+	:end-before: end-snippet-15
 
 If you already have Facebook integration in your app and do not wish to replace this with the Socialize implementation you 
 can still link the user to Facebook within Socialize by providing the user's Facebook auth token
