@@ -22,6 +22,7 @@
 package com.socialize.test.unit.facebook;
 
 import com.socialize.auth.facebook.FacebookAuthProviderInfo;
+import com.socialize.auth.facebook.FacebookAuthProviderInfo.PermissionType;
 import com.socialize.test.SocializeUnitTest;
 
 
@@ -45,7 +46,7 @@ public class FacebookAuthProviderInfoTest extends SocializeUnitTest {
 		assertFalse(info0.equals(info2));
 	}
 	
-	public void testMatches() {
+	public void testMatchesRead() {
 		FacebookAuthProviderInfo info0 = new FacebookAuthProviderInfo();
 		FacebookAuthProviderInfo info1 = new FacebookAuthProviderInfo();
 		FacebookAuthProviderInfo info2 = new FacebookAuthProviderInfo();
@@ -54,9 +55,9 @@ public class FacebookAuthProviderInfoTest extends SocializeUnitTest {
 		info1.setAppId("abc");
 		info2.setAppId("abc");
 		
-		info0.setPermissions(new String[]{"a","b","c"});
-		info1.setPermissions(new String[]{"b","c"});
-		info2.setPermissions(new String[]{"c","a","b"});
+		info0.setReadPermissions(new String[]{"a","b","c"});
+		info1.setReadPermissions(new String[]{"b","c"});
+		info2.setReadPermissions(new String[]{"c","a","b"});
 		
 		
 		assertTrue(info0.matches(info1));
@@ -68,5 +69,32 @@ public class FacebookAuthProviderInfoTest extends SocializeUnitTest {
 		assertFalse(info1.matches(info2));
 		assertFalse(info1.matches(info0));
 	}
+	
+	public void testMatchesWrite() {
+		FacebookAuthProviderInfo info0 = new FacebookAuthProviderInfo();
+		FacebookAuthProviderInfo info1 = new FacebookAuthProviderInfo();
+		FacebookAuthProviderInfo info2 = new FacebookAuthProviderInfo();
+		
+		info0.setAppId("abc");
+		info1.setAppId("abc");
+		info2.setAppId("abc");
+		
+		info0.setWritePermissions(new String[]{"a","b","c"});
+		info1.setWritePermissions(new String[]{"b","c"});
+		info2.setReadPermissions(new String[]{"c","a","b"});
+		
+		info0.setPermissionType(PermissionType.WRITE);
+		info1.setPermissionType(PermissionType.WRITE);
+		info2.setPermissionType(PermissionType.READ);
+		
+		assertTrue(info0.matches(info1));
+		assertFalse(info0.matches(info2));
+		
+		assertFalse(info2.matches(info1));
+		assertFalse(info2.matches(info0));
+		
+		assertFalse(info1.matches(info2));
+		assertFalse(info1.matches(info0));
+	}	
 	
 }
