@@ -22,6 +22,7 @@
 package com.socialize.ui.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -52,6 +53,7 @@ public class LoadingListView extends BaseLoadingView<ListView> {
 	}
 
 	public void scrollToTop() {
+		getMainView().requestFocusFromTouch();
 		getMainView().setSelection(0); // scroll to top
 	}
 
@@ -63,7 +65,8 @@ public class LoadingListView extends BaseLoadingView<ListView> {
 		listView.setId(LIST_VIEW_ID);
 		listView.setLayoutParams(listViewLayoutParams);
 		listView.setDrawingCacheEnabled(true);
-		listView.setCacheColorHint(0);
+		listView.setCacheColorHint(Color.TRANSPARENT);
+		listView.setScrollingCacheEnabled(false);
 		listView.setDividerHeight(1);
 		listView.setSmoothScrollbarEnabled(true);
 		listView.setVerticalFadingEdgeEnabled(false);

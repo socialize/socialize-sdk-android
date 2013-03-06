@@ -100,6 +100,8 @@ public class CommentAdapter extends BaseAdapter {
 		viewCacheIndex = 0;
 		totalCount = 0;
 		count = 0;
+		notifyDataSetChanged();
+		notifyDataSetInvalidated();
 	}
 
 	@Override

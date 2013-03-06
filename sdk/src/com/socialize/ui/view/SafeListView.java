@@ -27,7 +27,7 @@ public class SafeListView extends ListView {
 		}
 		catch (Exception e) {
 			// Don't crash
-			SocializeLogger.e(e.getMessage(), e);
+			SocializeLogger.w(e.getMessage(), e);
 		}
 	}
 }

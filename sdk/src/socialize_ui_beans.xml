@@ -777,6 +777,8 @@
 		</init-method>			
 	</bean>
 	
+	<factory id="commentAdapterFactory" makes="commentAdapter"/>	
+	
 	<bean 
 		id="commentListItemBackgroundFactory" 
 		class="com.socialize.ui.comment.CommentListItemBackgroundFactory">
@@ -841,7 +843,7 @@
 
 		<init-method name="init"/>
 		
-		<property name="commentAdapter" ref="commentAdapter"/>
+		<property name="commentAdapterFactory" ref="commentAdapterFactory"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="appUtils" ref="appUtils"/>
 		<property name="config" ref="config"/>

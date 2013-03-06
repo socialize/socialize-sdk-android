@@ -48,6 +48,8 @@ public class CommentListView extends BaseView {
 
 	private int defaultGrabLength = 30;
 	private int iconSize = 100;
+	
+	private IBeanFactory<CommentAdapter> commentAdapterFactory;
 	private CommentAdapter commentAdapter;
 	private boolean loading = true; // Default to true
 	
@@ -101,6 +103,8 @@ public class CommentListView extends BaseView {
 	}
 	
 	public void init() {
+		
+		commentAdapter = commentAdapterFactory.getBean();
 
 		LayoutParams fill = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
 
@@ -348,9 +352,13 @@ public class CommentListView extends BaseView {
 		content.showLoading();
 		commentAdapter.reset();
 		
+		// We have to re-set the adapter.. otherwise we get crazy scrolling behavior
+		// http://support.getsocialize.com/socialize/topics/problems_rendering_of_chat_room_using_android_2_8_2?utm_content=topic_link&utm_medium=email&utm_source=reply_notification
+		content.setListAdapter(commentAdapter);
+		
 		if(onCommentViewActionListener != null) {
 			onCommentViewActionListener.onReload(this);
-		}
+		}		
 		
 		doListComments(true);
 	}
@@ -406,10 +414,11 @@ public class CommentListView extends BaseView {
 							commentAdapter.setLast(true);
 						}
 
-						if(update || comments == null) {
-							commentAdapter.notifyDataSetChanged();
+						if(update || comments == null || comments.size() == 0) {
 							content.scrollToTop();
 						}
+						
+						commentAdapter.notifyDataSetChanged();
 					}
 					
 					content.showList();
@@ -879,6 +888,10 @@ public class CommentListView extends BaseView {
 		this.showCommentCountInHeader = showCommentCountInHeader;
 	}
 	
+	public void setCommentAdapterFactory(IBeanFactory<CommentAdapter> commentAdapterFactory) {
+		this.commentAdapterFactory = commentAdapterFactory;
+	}
+
 	public SocializeHeader getHeader() {
 		return header;
 	}
