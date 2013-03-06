@@ -241,7 +241,7 @@ public class SocializeServiceImpl implements SocializeService {
 			
 			if(paths != null) {
 
-				if(isInitialized()) {
+				if(isInitialized(context)) {
 					
 					if(localPaths != null) {
 						for (String path : paths) {
@@ -411,7 +411,7 @@ public class SocializeServiceImpl implements SocializeService {
 	}
 	
 	public synchronized void init(Context context, final IOCContainer container, SocializeInitListener listener) {
-		if(!isInitialized()) {
+		if(!isInitialized(context)) {
 			try {
 				this.container = container;
 				
@@ -730,6 +730,7 @@ public class SocializeServiceImpl implements SocializeService {
 		return new Comment();
 	}
 	
+	@Deprecated
 	public boolean isInitialized() {
 		return this.initCount > 0;
 	}
@@ -839,7 +840,7 @@ public class SocializeServiceImpl implements SocializeService {
 			return asserter.assertInitialized(context, this, listener);
 		}
 		
-		if(!isInitialized()) {
+		if(!isInitialized(context)) {
 			if(listener != null) {
 				if(logger != null && logger.isInitialized()) {
 					listener.onError(new SocializeException(logger.getMessage(SocializeLogger.NOT_INITIALIZED)));
@@ -856,9 +857,10 @@ public class SocializeServiceImpl implements SocializeService {
 					logger.error("Socialize Not initialized!");
 				}
 			}
+			
+			return false;
 		}
-		
-		return isInitialized();		
+		return true;
 	}
 	
 	
