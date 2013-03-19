@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../facebook-android-sdk/facebook/FacebookSDK.iml" filepath="$PROJECT_DIR$/../facebook-android-sdk/facebook/FacebookSDK.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../android-ioc/core/android-ioc.iml" filepath="$PROJECT_DIR$/../android-ioc/core/android-ioc.iml" group="android-ioc" />
+      <module fileurl="file://$PROJECT_DIR$/../android-ioc/sample/android-ioc-sample.iml" filepath="$PROJECT_DIR$/../android-ioc/sample/android-ioc-sample.iml" group="android-ioc" />
+      <module fileurl="file://$PROJECT_DIR$/../android-ioc/test/android-ioc-test.iml" filepath="$PROJECT_DIR$/../android-ioc/test/android-ioc-test.iml" group="android-ioc" />
+      <module fileurl="file://$PROJECT_DIR$/gh-pages/gh-pages.iml" filepath="$PROJECT_DIR$/gh-pages/gh-pages.iml" group="socialize" />
+      <module fileurl="file://$PROJECT_DIR$/demo/socialize-demo.iml" filepath="$PROJECT_DIR$/demo/socialize-demo.iml" group="socialize" />
+      <module fileurl="file://$PROJECT_DIR$/sdk/socialize-sdk.iml" filepath="$PROJECT_DIR$/sdk/socialize-sdk.iml" group="socialize" />
+      <module fileurl="file://$PROJECT_DIR$/sample/socialize-sdk-sample.iml" filepath="$PROJECT_DIR$/sample/socialize-sdk-sample.iml" group="socialize" />
+      <module fileurl="file://$PROJECT_DIR$/test/socialize-sdk-test.iml" filepath="$PROJECT_DIR$/test/socialize-sdk-test.iml" group="socialize" />
+    </modules>
+  </component>
+</project>
+

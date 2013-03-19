@@ -285,7 +285,7 @@ public class SocializeServiceImpl implements SocializeService {
 				else {
 					init = true;
 				}
-				
+
 				if(init) {
 					try {
 						Logger.LOG_KEY = Socialize.LOG_KEY;
@@ -298,7 +298,7 @@ public class SocializeServiceImpl implements SocializeService {
 						if(container == null) {
 							container = newSocializeIOC();
 						}
-						
+
 						ResourceLocator locator = newResourceLocator();
 						
 						locator.setLogger(newLogger());
@@ -334,9 +334,9 @@ public class SocializeServiceImpl implements SocializeService {
 				else {
 					this.initCount++;
 				}
-				
-				// Always set the context on the container
-				setContext(context);
+
+                // Always set the context on the container
+                setContext(context);
 			}
 			else {
 				String msg = "Attempt to initialize Socialize with null bean config paths";

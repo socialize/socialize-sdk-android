@@ -75,10 +75,10 @@ public abstract class BaseAuthProviderInfoFactory<I extends AuthProviderInfo> im
 		
 		return instance;
 	}
-	
-	protected abstract I initInstanceForRead(String...permissions);
-	
-	protected abstract I initInstanceForWrite(String...permissions);
+
+    public abstract I initInstanceForRead(String...permissions);
+
+    public abstract I initInstanceForWrite(String...permissions);
 	
 	protected abstract void updateForRead(I instance, String... permissions);
 	

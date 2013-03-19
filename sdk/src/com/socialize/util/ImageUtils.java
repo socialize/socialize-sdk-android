@@ -107,10 +107,11 @@ public class ImageUtils {
 
 		String type = context.getContentResolver().getType(photoUri);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		if (type.equals("image/png")) {
+		if (type != null && type.equals("image/png")) {
 			bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
 		}
-		else if (type.equals("image/jpg") || type.equals("image/jpeg")) {
+		else {
+            // (type.equals("image/jpg") || type.equals("image/jpeg"))
 			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 		}
 		byte[] bMapArray = baos.toByteArray();

@@ -45,7 +45,7 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 	@Override
 	public boolean validateForRead(FacebookAuthProviderInfo info, String...permissions) {
 		if(authProviderInfoBuilder != null) {
-			AuthProviderInfo expected = authProviderInfoBuilder.getFactory(AuthProviderType.FACEBOOK).getInstanceForRead(permissions);
+			AuthProviderInfo expected = authProviderInfoBuilder.getFactory(AuthProviderType.FACEBOOK).initInstanceForRead(permissions);
 			return info.matches(expected);
 		}
 		// Default to true
@@ -55,7 +55,7 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 	@Override
 	public boolean validateForWrite(FacebookAuthProviderInfo info, String...permissions) {
 		if(authProviderInfoBuilder != null) {
-			AuthProviderInfo expected = authProviderInfoBuilder.getFactory(AuthProviderType.FACEBOOK).getInstanceForWrite(permissions);
+			AuthProviderInfo expected = authProviderInfoBuilder.getFactory(AuthProviderType.FACEBOOK).initInstanceForWrite(permissions);
 			return info.matches(expected);
 		}
 		// Default to true

@@ -41,12 +41,12 @@ public class TwitterAuthProviderInfoFactory extends BaseAuthProviderInfoFactory<
 	}
 
 	@Override
-	protected TwitterAuthProviderInfo initInstanceForRead(String... permissions) {
+    public TwitterAuthProviderInfo initInstanceForRead(String... permissions) {
 		return initInstance(permissions);
 	}
 
 	@Override
-	protected TwitterAuthProviderInfo initInstanceForWrite(String... permissions) {
+    public TwitterAuthProviderInfo initInstanceForWrite(String... permissions) {
 		return initInstance(permissions);
 	}
 

@@ -34,5 +34,9 @@ public interface AuthProviderInfoFactory<I extends AuthProviderInfo> {
 	public I getInstanceForRead(String...permissions);
 	
 	public I getInstanceForWrite(String...permissions);
+
+    public I initInstanceForRead(String...permissions);
+
+    public I initInstanceForWrite(String...permissions);
 	
 }

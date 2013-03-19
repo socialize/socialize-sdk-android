@@ -37,26 +37,28 @@ public class FacebookAuthProviderInfoFactory extends BaseAuthProviderInfoFactory
 	private IBeanFactory<FacebookAuthProviderInfo> facebookAuthProviderInfoInstanceFactory;
 	
 	@Override
-	protected FacebookAuthProviderInfo initInstanceForRead(String... permissions) {
+    public FacebookAuthProviderInfo initInstanceForRead(String... permissions) {
 		
 		if(ArrayUtils.isEmpty(permissions)) {
 			permissions = FacebookFacade.READ_PERMISSIONS;
 		}
 		
 		FacebookAuthProviderInfo info = facebookAuthProviderInfoInstanceFactory.getBean();
+        info.setAppId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID));
 		info.setReadPermissions(permissions);
 		info.setPermissionType(PermissionType.READ);
 		return info;
 	}
 
 	@Override
-	protected FacebookAuthProviderInfo initInstanceForWrite(String... permissions) {
+	public FacebookAuthProviderInfo initInstanceForWrite(String... permissions) {
 		
 		if(ArrayUtils.isEmpty(permissions)) {
 			permissions = FacebookFacade.WRITE_PERMISSIONS;
 		}		
 		
 		FacebookAuthProviderInfo info = facebookAuthProviderInfoInstanceFactory.getBean();
+        info.setAppId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID));
 		info.setWritePermissions(permissions);
 		info.setPermissionType(PermissionType.WRITE);
 		return info;

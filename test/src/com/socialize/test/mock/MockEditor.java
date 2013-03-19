@@ -21,7 +21,10 @@
  */
 package com.socialize.test.mock;
 
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+
+import java.util.Set;
 
 /**
  * AndroidMock won't mock out static inner-interfaces, just need to create an empty instance to be mocked.
@@ -85,9 +88,14 @@ public class MockEditor implements Editor {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see android.content.SharedPreferences.Editor#remove(java.lang.String)
-	 */
+    @Override
+    public Editor putStringSet(String s, Set<String> strings) {
+        return null;
+    }
+
+    /* (non-Javadoc)
+     * @see android.content.SharedPreferences.Editor#remove(java.lang.String)
+     */
 	@Override
 	public Editor remove(String key) {
 		return null;
