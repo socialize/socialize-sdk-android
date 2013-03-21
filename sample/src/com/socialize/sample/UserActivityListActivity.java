@@ -1,6 +1,5 @@
 package com.socialize.sample;
 
-import java.util.ArrayList;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -13,6 +12,8 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.activity.ActionListListener;
 import com.socialize.sample.util.ErrorHandler;
 import com.socialize.ui.dialog.SafeProgressDialog;
+
+import java.util.ArrayList;
 
 public class UserActivityListActivity extends ListActivity {
 
@@ -83,7 +84,7 @@ public class UserActivityListActivity extends ListActivity {
 					@Override
 					public void onError(SocializeException error) {
 						progress.dismiss();
-						new AlertDialog.Builder(UserActivityListActivity.this).setMessage("Error " + ErrorHandler.handleApiError(UserActivityListActivity.this, error)).create().show();
+                        new AlertDialog.Builder(UserActivityListActivity.this).setMessage("Error " + ErrorHandler.handleApiError(UserActivityListActivity.this, error)).create().show();
 					}
 				});
 			}

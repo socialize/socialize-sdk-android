@@ -44,9 +44,7 @@ public class Drawables {
 	private BitmapUtils bitmapUtils;
 	private SocializeLogger logger;
 	private Resources resources;
-	
-//	private final BitmapFactory.Options options = new BitmapFactory.Options(); 
-	
+
 	public Drawables() {
 		super();
 	}
@@ -55,7 +53,6 @@ public class Drawables {
 		metrics = new DisplayMetrics();
 		resources = context.getResources();
 		context.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-//		options.inScaled = false;
 	}
 	
 	public Drawable getDrawable(String name) {

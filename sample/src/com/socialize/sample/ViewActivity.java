@@ -28,7 +28,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.socialize.Socialize;
 import com.socialize.ViewUtils;
 import com.socialize.entity.Entity;
@@ -76,7 +75,7 @@ public class ViewActivity extends SocializeActivity {
 							
 							@Override
 							public void onError(SocializeException error) {
-								txtViewCreateResult.setText("FAIL: " + ErrorHandler.handleApiError(ViewActivity.this, error));
+                                txtViewCreateResult.setText("FAIL: " + ErrorHandler.handleApiError(ViewActivity.this, error));
 								btnViewCreate.setEnabled(true);
 								progress.dismiss();
 							}

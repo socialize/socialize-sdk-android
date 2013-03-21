@@ -17,9 +17,7 @@
 		android:name="pl.polidea.instrumentation.PolideaInstrumentationTestRunner"
 		android:label="Tests for com.socialize.sample" />
 	
-	<application
-		android:icon="@drawable/icon"
-		android:label="@string/app_name">
+	<application>
 		<uses-library android:name="android.test.runner" />
 	</application>
 	

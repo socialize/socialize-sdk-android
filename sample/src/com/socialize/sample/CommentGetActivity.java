@@ -36,12 +36,13 @@ import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.sample.util.ErrorHandler;
 import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.util.StringUtils;
+import com.socialize.sample.R;
 
 public class CommentGetActivity extends CommentBaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.comment_get);
+        setContentView(R.layout.comment_get);
 		
 		Socialize.init(this);
 		

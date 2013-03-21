@@ -21,7 +21,6 @@
  */
 package com.socialize.sample;
 
-import java.util.List;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
@@ -33,15 +32,17 @@ import com.socialize.LikeUtils;
 import com.socialize.Socialize;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
+import com.socialize.sample.util.ErrorHandler;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
-import com.socialize.sample.util.ErrorHandler;
 import com.socialize.ui.SocializeActivity;
 import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.util.StringUtils;
+
+import java.util.List;
 
 public class LikeActivity extends SocializeActivity {
 	@Override

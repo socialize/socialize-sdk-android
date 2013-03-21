@@ -1,7 +1,5 @@
 package com.socialize.test.ui.actionbar;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import android.app.Activity;
 import android.content.Intent;
 import com.socialize.Socialize;
@@ -12,11 +10,13 @@ import com.socialize.api.action.share.SocializeShareUtils;
 import com.socialize.entity.Entity;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.like.LikeGetListener;
-import com.socialize.sample.ui.ActionBarAutoActivity2;
 import com.socialize.test.SocializeManagedActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 
-public abstract class ActionBarTest extends SocializeManagedActivityTest<ActionBarAutoActivity2> {
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
+public abstract class ActionBarTest extends SocializeManagedActivityTest<ActionBarActivity> {
 
 	protected Entity entity = Entity.newInstance("http://entity1.com" + Math.random(), "no name");
 	
@@ -54,11 +54,11 @@ public abstract class ActionBarTest extends SocializeManagedActivityTest<ActionB
 			// TODO: revert this to 30
 			assertTrue(globalLatch.await(30, TimeUnit.SECONDS));
 		}
-		catch (InterruptedException e) {}
+        catch (InterruptedException e) {}
 	}
 	
 	public ActionBarTest() {
-		super("com.socialize.sample.ui", ActionBarAutoActivity2.class);
+		super("com.socialize.sample.ui", ActionBarActivity.class);
 	}
 	
 	@Override

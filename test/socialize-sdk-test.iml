@@ -49,7 +49,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/gen" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="Android 4.2.2 Platform" jdkType="Android SDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
       <library name="polidea_test_runner_1.1.jar">
@@ -93,7 +93,6 @@
         </SOURCES>
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="socialize-sdk-sample" scope="PROVIDED" />
     <orderEntry type="module" module-name="socialize-sdk" />
     <orderEntry type="module" module-name="android-ioc" />
     <orderEntry type="module" module-name="FacebookSDK" />

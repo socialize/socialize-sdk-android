@@ -40,6 +40,7 @@ import com.socialize.sample.util.ErrorHandler;
 import com.socialize.ui.SocializeActivity;
 import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.util.StringUtils;
+import com.socialize.sample.R;
 
 public class EntityActivity extends SocializeActivity {
 	@Override

@@ -1,0 +1,71 @@
+{
+    "errors": [],
+    "items": [
+        {
+            "application": {
+                "id": 449791,
+                "name": "Stage Server Integration Tests"
+            },
+            "date": "2013-02-19 20:44:46+0000",
+            "entity": {
+                "comments": 0,
+                "id": 13339668,
+                "key": "http://entity1.com",
+                "likes": 1,
+                "meta": null,
+                "name": "First Entity",
+                "shares": 0,
+                "total_activity": 1,
+                "type": "article",
+                "views": 0
+            },
+            "id": 2021342,
+            "lat": 64.32738369309078,
+            "lng": 68.91068253636597,
+            "propagation_info_response": {},
+            "share_location": true,
+            "user": {
+                "first_name": null,
+                "id": 66285614,
+                "last_name": null,
+                "location": null,
+                "meta": null,
+                "small_image_uri": null,
+                "username": "User66285614"
+            }
+        },
+        {
+            "application": {
+                "id": 449791,
+                "name": "Stage Server Integration Tests"
+            },
+            "date": "2013-02-19 20:44:46+0000",
+            "entity": {
+                "comments": 0,
+                "id": 13339669,
+                "key": "http://entity2.com",
+                "likes": 1,
+                "meta": null,
+                "name": "Second Entity",
+                "shares": 0,
+                "total_activity": 1,
+                "type": "article",
+                "views": 0
+            },
+            "id": 2021343,
+            "lat": 89.66295395114473,
+            "lng": 28.67163857037522,
+            "propagation_info_response": {},
+            "share_location": true,
+            "user": {
+                "first_name": null,
+                "id": 66285614,
+                "last_name": null,
+                "location": null,
+                "meta": null,
+                "small_image_uri": null,
+                "username": "User66285614"
+            }
+        }
+    ]
+}

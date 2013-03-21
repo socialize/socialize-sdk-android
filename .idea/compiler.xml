@@ -12,6 +12,10 @@
       <directory url="file://$PROJECT_DIR$/../android-ioc/core/gen" includeSubdirectories="true" />
       <directory url="file://$PROJECT_DIR$/../facebook-android-sdk/facebook/gen" includeSubdirectories="true" />
       <directory url="file://$PROJECT_DIR$/gh-pages/gen" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/test2/gen" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/test-app/gen" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/testapp/gen" includeSubdirectories="true" />
+      <directory url="file://$USER_HOME$/dev/workspace/socialize-sdk-android/test2/gen" includeSubdirectories="true" />
     </excludeFromCompile>
     <resourceExtensions />
     <wildcardResourcePatterns>
@@ -26,7 +30,18 @@
     </wildcardResourcePatterns>
     <annotationProcessing>
       <profile default="true" name="Default" enabled="false">
+        <sourceOutputDir name="bin" />
+        <sourceTestOutputDir name="bin" />
+        <option name="RegenerateFrameworkMocks" value="true" />
         <processorPath useClasspath="true" />
+      </profile>
+      <profile default="false" name="Annotated" enabled="true">
+        <sourceOutputDir name="bin" />
+        <sourceTestOutputDir name="bin" />
+        <option name="RegenerateFrameworkMocks" value="true" />
+        <processorPath useClasspath="true" />
+        <module name="socialize-sdk-test2" />
+        <module name="test2" />
       </profile>
     </annotationProcessing>
   </component>

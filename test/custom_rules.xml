@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="socialize-sdk-test-custom">
-	
+
 	<!-- Setup for tests -->
 	<property name="test-output" value="test-output"/>
 	<property file="${library.project.dir}/ant.properties" prefix="socialize.sdk."/>
-	
-	<property 
-		name="test.runner" 
-		value="pl.polidea.instrumentation.PolideaInstrumentationTestRunner" /> 	
-	
+
+	<property
+		name="test.runner"
+		value="pl.polidea.instrumentation.PolideaInstrumentationTestRunner" />
+
 	<taskdef resource="net/sf/antcontrib/antlib.xml">
 		<classpath>
 			<pathelement location="libext/ant-contrib.jar"/>
 		</classpath>
-	</taskdef>		
+	</taskdef>
 	
 	<!-- 
 		################################################################################################
@@ -209,13 +209,6 @@
             expression="/manifest/@package" 
         	output="tested.manifest.package" />
    		
-   		<!-- 
-        <xpath 
-        	input="AndroidManifest.xml"
-            expression="/manifest/@package" 
-        	output="manifest.package" />
- 		-->
-   		
         <property name="emma.dump.path" value="/data/data/${tested.manifest.package}/" />
 
         <if condition="${emma.enabled}">
@@ -378,13 +371,10 @@
 	
 	<!-- Overrides for http://code.google.com/p/android/issues/detail?id=21640-->
 		
-	<!-- Converts this project's .class files into .dex files -->
+	<!-- Converts this project's .class files into .dex files
     <target name="-dex" depends="-compile, -post-compile, -obfuscate">
         <do-only-if-manifest-hasCode elseText="hasCode = false. Skipping...">
-            <!-- only convert to dalvik bytecode is *not* a library -->
             <do-only-if-not-library elseText="Library project: do not convert bytecode..." >
-                <!-- special case for instrumented builds: need to use no-locals and need
-                     to pass in the emma jar. -->
                 <if condition="${build.is.instrumented}">
                     <then>
                     	<if condition="${project.is.test}">
@@ -408,10 +398,9 @@
             </do-only-if-not-library>
         </do-only-if-manifest-hasCode>
     </target>
-	
-    <!-- Packages the application. -->
+	 -->
+    <!-- Packages the application.
     <target name="-package" depends="-dex, -package-resources">
-        <!-- only package apk if *not* a library project -->
         <do-only-if-not-library elseText="Library project: do not package apk..." >
             <if condition="${build.is.instrumented}">
                 <then>
@@ -423,7 +412,6 @@
     	                  	<echo>Adding emma_device.jar during PACKAGE</echo>
     	                    <package-helper>
     	                        <extra-jars>
-    	                            <!-- Injected from external file -->
     	                            <jarfile path="${emma.dir}/emma_device.jar" />
     	                        </extra-jars>
     	                    </package-helper>                		
@@ -436,5 +424,5 @@
             </if>
         </do-only-if-not-library>
     </target>
-	
+    -->
 </project>

@@ -1,0 +1,24 @@
+{
+    "errors": [],
+    "items": [
+        {
+            "attach_token": "yDvD4Go4QOFQbNXanQ9kL68sTjgEGbDh5V5aElPZXvCdDHTI3ndtfxnAHsMKShYw",
+            "attachments": [],
+            "comments": 0,
+            "id": 13339672,
+            "key": "http://entityC.com",
+            "likes": 0,
+            "meta": null,
+            "name": "C Entity",
+            "shares": 0,
+            "total_activity": 0,
+            "type": "article",
+            "user_action_summary": {
+                "comments": 0,
+                "likes": 0,
+                "shares": 0
+            },
+            "views": 0
+        }
+    ]
+}

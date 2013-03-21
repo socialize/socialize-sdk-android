@@ -7,8 +7,10 @@ sdk/doc/html
 sdk/local.properties
 sample/src_ext
 gh-pages
+**/*.idea
 *.pyc
 *.DS_Store
+*.iml
 demo/.settings
 demo/gen
 demo/bin

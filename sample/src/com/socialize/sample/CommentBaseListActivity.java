@@ -41,6 +41,7 @@ import com.socialize.listener.comment.CommentListListener;
 import com.socialize.sample.util.ErrorHandler;
 import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.util.StringUtils;
+import com.socialize.sample.R;
 
 public abstract class CommentBaseListActivity extends ListActivity {
 
