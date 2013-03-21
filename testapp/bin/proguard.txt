@@ -1,9 +1,0 @@
-# view res/layout/com_facebook_usersettingsfragment.xml #generated:48
--keep class com.facebook.widget.LoginButton { <init>(...); }
-
-# view AndroidManifest.xml #generated:11
--keep class com.socialize.testapp.EmptyActivity { <init>(...); }
-
-# view AndroidManifest.xml #generated:19
--keep class com.socialize.testapp.Main { <init>(...); }
-
