@@ -32,7 +32,6 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		TestUtils.setUp(this);
 		TestUtils.setUpActivityMonitor(ActionBarListenerActivity.class);
 		
 		if(latch != null) {

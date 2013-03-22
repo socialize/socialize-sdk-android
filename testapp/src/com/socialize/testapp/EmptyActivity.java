@@ -32,6 +32,7 @@ public class EmptyActivity extends Activity implements DialogRegister {
         super.onCreate(savedInstanceState);
 
         // Force async tasks static handler to be created on the main UI thread
+        // This becomes an issue if AsyncTasks are created in unit tests.
         try {
             Class.forName("android.os.AsyncTask");
         }

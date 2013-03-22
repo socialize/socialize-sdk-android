@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.os.Bundle;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import com.socialize.ioc.SocializeIOC;
 import com.socialize.networks.facebook.FacebookAccess;
 import com.socialize.networks.twitter.TwitterAccess;
 import com.socialize.test.SocializeManagedActivityTest;
+import com.socialize.testapp.Main;
 import com.socialize.ui.dialog.DialogRegister;
 import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.util.IOUtils;
@@ -52,7 +54,7 @@ public class TestUtils {
 	private static String tw_secret = null;
 	private static Activity activity;
 	
-	public static final String getDummyTwitterToken(Context context) throws IOException {
+	public static String getDummyTwitterToken(Context context) throws IOException {
 		if(tw_token == null) {
 			InputStream in = null;
 			try {
@@ -71,7 +73,7 @@ public class TestUtils {
 		return tw_token;
 	}
 	
-	public static final String getDummyTwitterSecret(Context context) throws IOException {
+	public static String getDummyTwitterSecret(Context context) throws IOException {
 		if(tw_secret == null) {
 			InputStream in = null;
 			try {
@@ -90,7 +92,7 @@ public class TestUtils {
 		return tw_secret;
 	}
 	
-	public static final String getDummyFBToken(Context context) throws IOException {
+	public static String getDummyFBToken(Context context) throws IOException {
 		if(fb_token == null) {
 			InputStream in = null;
 			try {
@@ -170,9 +172,6 @@ public class TestUtils {
 		if(activity != null) {
 			SharedPreferences prefs = activity.getSharedPreferences("SocializeSession", Context.MODE_PRIVATE);
 			prefs.edit().clear().commit();		
-			
-			activity.finish();
-			activity = null;
 		}
 		
 		if(monitor != null) {
@@ -195,9 +194,32 @@ public class TestUtils {
 			instrumentation.removeMonitor(allActivitiesMonitor);
 			
 			allActivitiesMonitor = null;
-		}		
+		}
+
+        if(activity != null) {
+            clearAndExit(activity);
+            activity = null;
+        }
 	}
-	
+
+    public static void clearAndExit(final Activity ctx) {
+        // On JellyBean the tests hang sometimes because the previous activity did not finish cleanly
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        ctx.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ctx.finishAffinity();
+                latch.countDown();
+            }
+        });
+
+        try {
+            latch.await(5, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {}
+
+    }
+
 	public static void setUpActivityMonitor(Class<?> activityClass) {
 		monitor = new ActivityMonitor(activityClass.getName(), null, false);
 		instrumentation.addMonitor(monitor);
@@ -265,7 +287,7 @@ public class TestUtils {
 		}
 	}
 	
-	public static final long sleep(long milliseconds) {
+	public static long sleep(long milliseconds) {
 		try {
 			Thread.sleep(milliseconds);
 		}
@@ -274,7 +296,7 @@ public class TestUtils {
 		return milliseconds;
 	}
 	
-	public static final long sleepUntil(long milliseconds, ExitSleep until) {
+	public static long sleepUntil(long milliseconds, ExitSleep until) {
 		int num = 10;
 		long slept = 0;
 		for (int i = 0; i < num; i++) {
@@ -852,7 +874,7 @@ public class TestUtils {
 		}
 	}
 	
-	public static final JSONObject getJSON(Context context, String path)  {
+	public static JSONObject getJSON(Context context, String path)  {
 		InputStream in = null;
 		
 		path = path.trim();

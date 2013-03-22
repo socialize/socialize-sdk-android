@@ -22,6 +22,10 @@ public abstract class ActionBarTest extends SocializeManagedActivityTest<ActionB
 	protected Entity entity = Entity.newInstance("http://entity1.com" + Math.random(), "no name");
 	
 	protected CountDownLatch globalLatch = null;
+
+    public ActionBarTest() {
+        super("com.socialize.testapp", ActionBarActivity.class);
+    }
 	
 	protected final SocializeLikeUtils mockLikeUtils = new SocializeLikeUtils() {
 		@Override
@@ -50,16 +54,16 @@ public abstract class ActionBarTest extends SocializeManagedActivityTest<ActionB
 	};
 	
 	protected final void waitForActionBarLoad() {
+
+        // Make sure the activity has launched
+        TestUtils.getActivity(this);
+
 		try {
-			// TODO: revert this to 30
-			assertTrue(globalLatch.await(30, TimeUnit.SECONDS));
+			assertTrue("Timeout waiting for action bar to load", globalLatch.await(30, TimeUnit.SECONDS));
 		}
 		catch (InterruptedException e) {}
 	}
-	
-	public ActionBarTest() {
-		super("com.socialize.testapp", ActionBarActivity.class);
-	}
+
 	
 	@Override
 	protected void setUp() throws Exception {
@@ -80,10 +84,9 @@ public abstract class ActionBarTest extends SocializeManagedActivityTest<ActionB
 			SocializeAccess.setShareUtilsProxy(mockShareUtils);
 		}
 		
-		
 		TestUtils.setUp(this);
-		
-		waitForActionBarLoad();
+
+        waitForActionBarLoad();
 	}
 	
 	protected boolean overrideShareUtils() {

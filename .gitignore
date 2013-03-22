@@ -8,6 +8,7 @@ sdk/local.properties
 sample/src_ext
 gh-pages
 testapp/gen
+out
 testapp/bin
 **/*.idea
 *.pyc

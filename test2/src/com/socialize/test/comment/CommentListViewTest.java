@@ -121,7 +121,8 @@ public class CommentListViewTest extends SocializeActivityTest {
 		SocializeHeader.class,
 		LoadingListView.class,
 		SocializeSession.class,
-		Entity.class})
+		Entity.class,
+        CommentEditField.class})
 	public void testPostCommentSuccess() {
 		
 		final String title = "socialize_comment_dialog";
@@ -391,14 +392,17 @@ public class CommentListViewTest extends SocializeActivityTest {
 		final ListResult<Comment> entities = AndroidMock.createMock(ListResult.class);
 		
 		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
-		AndroidMock.expect(comments.size()).andReturn(0); // Empty comments
+		AndroidMock.expect(comments.size()).andReturn(0).anyTimes(); // Empty comments
 		AndroidMock.expect(entities.getItems()).andReturn(listResultComments);
 		AndroidMock.expect(entities.getTotalCount()).andReturn(totalCount).anyTimes();
 		AndroidMock.expect(commentAdapter.getTotalCount()).andReturn(totalCount).anyTimes();
 
+
+        content.scrollToTop();
 		commentAdapter.setComments(listResultComments);
 		commentAdapter.setLast(true);
 		commentAdapter.setTotalCount(totalCount);
+        commentAdapter.notifyDataSetChanged();
 		header.setText(totalCount + " Comments");
 		content.showList();
 		

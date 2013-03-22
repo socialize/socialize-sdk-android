@@ -1,0 +1,18 @@
+<beans>
+	<bean id="activitySystem" class="com.socialize.testapp.mock.MockActivitySystem" />
+	<bean id="deviceRegistrationSystem" class="com.socialize.testapp.mock.MockDeviceRegistrationSystem" />
+	<proxy ref="activitySystem" />
+	<proxy ref="deviceRegistrationSystem" />
+	<proxy ref="notificationAuthenticator" />
+	<proxy ref="notificationAuthenticator" />
+	<proxy ref="notificationManagerFacade" />
+	<proxy ref="entityLoaderUtils" />
+
+	<proxy ref="homeLauncher" />
+	<proxy ref="actionLauncher" />
+	<proxy ref="actionLauncherDelegate" />
+	<proxy ref="commentListLauncher" />
+	<proxy ref="urlLauncher" />
+	<proxy ref="entityLauncher" />
+
+</beans>

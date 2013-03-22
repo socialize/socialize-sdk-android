@@ -61,7 +61,6 @@ public class ActionBarReloadTest extends ActionBarTest {
 		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, "");
 		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
-		
 		final Like like = new Like();
 		like.setId(-1L);
 		

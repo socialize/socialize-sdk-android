@@ -55,18 +55,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class CommentActivityLoadTest extends SocializeActivityTest {
 	
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-        TestUtils.setUp(this);
-	}
-	
-	@Override
-	protected void tearDown() throws Exception {
-		TestUtils.tearDown(this);
-		super.tearDown();
-	}
-
 	public void testCommentActivityLoadsCorrectData() throws Throwable {
 		
 		TestUtils.setupSocializeProxies();
@@ -164,8 +152,8 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 			public void onAfterSetComment(Comment comment, CommentListItem item) {}
 			
 		});
-		
-				
+
+
 		Activity waitForActivity = TestUtils.waitForActivity(20000);
 		
 		assertNotNull(waitForActivity);
@@ -180,6 +168,8 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 		final CountDownLatch lock2 = new CountDownLatch(1);
 		
 		lr.setItems(dummyResults2);
+
+        waitForActivity.finish();
 		
 		CommentUtils.showCommentView(TestUtils.getActivity(this), entity2, new OnCommentViewActionListener() {
 			@Override
