@@ -15,6 +15,7 @@ test/local.properties
 test/private
 testapp/assets/existing-data/
 test/junit-results
+test/coverage-results
 build
 test/findbugs-output
 **/*.swp
