@@ -6,9 +6,6 @@
 	<bean id="cache" class="com.socialize.util.DrawableCache">
 		<constructor-arg type="integer" value="10"/> <!-- Min size -->
 		<constructor-arg type="integer" value="100"/> <!-- Max size -->
-		<init-method name="init">
-			<arg type="context"/>
-		</init-method>		
 		<destroy-method name="destroy"/>
 	</bean>
 	

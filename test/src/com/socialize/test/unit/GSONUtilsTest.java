@@ -21,14 +21,11 @@
  */
 package com.socialize.test.unit;
 
-import com.socialize.auth.AuthProviderType;
-import com.socialize.auth.DefaultUserProviderCredentials;
-import com.socialize.auth.DefaultUserProviderCredentialsMap;
-import com.socialize.auth.SocializeAuthProviderInfo;
-import com.socialize.auth.UserProviderCredentials;
+import com.socialize.auth.*;
 import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.test.SocializeUnitTest;
 import com.socialize.util.GSONUtils;
+
 /**
  * @author Jason Polites
  *

@@ -21,9 +21,11 @@
  */
 package com.socialize.ui.comment;
 
+import java.lang.ref.WeakReference;
 import java.util.Date;
 import java.util.List;
 import android.app.Activity;
+import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -61,8 +63,8 @@ public class CommentAdapter extends BaseAdapter {
 	private DisplayUtils displayUtils;
 	private DateUtils dateUtils;
 	private ImageLoader imageLoader;
-	private Activity context;
-	
+	private WeakReference<Context> context;
+
 	private boolean last = false;
 	private Date now;
 	private int totalCount = 0;
@@ -75,8 +77,8 @@ public class CommentAdapter extends BaseAdapter {
 	
 	private final CommentListItem[] viewCache = new CommentListItem[viewCacheCount];
 
-	public void init(Activity context) {
-		this.context = context;
+	public void init(Context context) {
+		this.context = new WeakReference<Context>(context);
 		now = new Date();
 		if(displayUtils != null) {
 			densitySize = displayUtils.getDIP(iconSize);
@@ -226,7 +228,10 @@ public class CommentAdapter extends BaseAdapter {
 							@Override
 							public void onClick(View v) {
 								if(user != null && user.getId() != null) {
-									UserUtils.showUserProfileWithAction(context, user, item);
+									Context ctx = context.get();
+									if(ctx instanceof Activity) {
+										UserUtils.showUserProfileWithAction((Activity) ctx, user, item);
+									}
 								}
 								else {
 									if(logger != null) {
@@ -293,9 +298,9 @@ public class CommentAdapter extends BaseAdapter {
 										if(logger != null && logger.isDebugEnabled()) {
 											logger.debug("CommentAdpater setting image icon to cached image " + cached);
 										}
-										
+
 										userIcon.setExpectedImageName(imageUrl);
-										userIcon.setImageUrlImmediate(imageUrl);
+										userIcon.setImageUrlImmediate(imageUrl, false);
 									}
 									else {
 										userIcon.setExpectedImageName(imageUrl);

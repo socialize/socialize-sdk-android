@@ -21,9 +21,6 @@
  */
 package com.socialize.test.unit.notifications;
 
-import java.util.Map;
-import org.json.JSONException;
-import org.json.JSONObject;
 import android.app.Notification;
 import android.content.Context;
 import android.os.Bundle;
@@ -34,15 +31,13 @@ import com.socialize.api.SocializeSession;
 import com.socialize.entity.JSONFactory;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
-import com.socialize.notifications.C2DMCallback;
-import com.socialize.notifications.NotificationMessage;
-import com.socialize.notifications.NotificationMessageBuilder;
-import com.socialize.notifications.NotificationRegistrationState;
-import com.socialize.notifications.NotificationRegistrationSystem;
-import com.socialize.notifications.NotificationType;
-import com.socialize.notifications.SocializeC2DMCallback;
+import com.socialize.notifications.*;
 import com.socialize.test.SocializeUnitTest;
 import com.socialize.ui.profile.UserSettings;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Map;
 
 /**
  * @author Jason Polites

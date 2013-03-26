@@ -21,13 +21,6 @@
  */
 package com.socialize.test.integration.notification;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -52,8 +45,16 @@ import com.socialize.notifications.NotificationManagerFacade;
 import com.socialize.notifications.NotificationsAccess;
 import com.socialize.notifications.SocializeC2DMReceiverHandler;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.test.ui.util.TestUtils;
+import com.socialize.test.util.TestUtils;
 import com.socialize.ui.SocializeLaunchActivity;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -235,8 +236,8 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 	/**
 	 * Loads an entity from the JSON file written to disk after the initial python setup script (sdk-cleanup.py)
 	 * @return
-	 * @throws IOException 
-	 * @throws JSONException 
+	 * @throws java.io.IOException
+	 * @throws org.json.JSONException
 	 */
 	protected long getEntityId() throws IOException, JSONException {
 		if(entityId < 0) {
@@ -256,7 +257,7 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 		}
 		
 		return entityId;
-	}
+    }
 	
 	protected long getCommentId() throws IOException, JSONException {
 		if(commentId < 0) {

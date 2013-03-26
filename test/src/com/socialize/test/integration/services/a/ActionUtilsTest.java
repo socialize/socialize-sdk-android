@@ -21,33 +21,28 @@
  */
 package com.socialize.test.integration.services.a;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import com.socialize.ActionUtils;
 import com.socialize.CommentUtils;
 import com.socialize.LikeUtils;
 import com.socialize.UserUtils;
 import com.socialize.api.action.comment.CommentOptions;
 import com.socialize.api.action.like.LikeOptions;
-import com.socialize.entity.Comment;
-import com.socialize.entity.Entity;
-import com.socialize.entity.Like;
-import com.socialize.entity.ListResult;
-import com.socialize.entity.Share;
-import com.socialize.entity.SocializeAction;
-import com.socialize.entity.User;
+import com.socialize.entity.*;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.activity.ActionListListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.test.ui.util.TestUtils;
+import com.socialize.test.util.TestUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 
 /**

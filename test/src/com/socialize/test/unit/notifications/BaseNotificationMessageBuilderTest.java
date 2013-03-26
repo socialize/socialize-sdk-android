@@ -31,13 +31,9 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.error.SocializeException;
 import com.socialize.launcher.LaunchAction;
-import com.socialize.notifications.BaseNotificationMessageBuilder;
-import com.socialize.notifications.MessageTranslator;
-import com.socialize.notifications.NotificationMessage;
-import com.socialize.notifications.NotificationType;
-import com.socialize.notifications.SimpleNotificationMessage;
-import com.socialize.sample.EmptyActivity;
+import com.socialize.notifications.*;
 import com.socialize.test.SocializeUnitTest;
+import com.socialize.testapp.EmptyActivity;
 import com.socialize.ui.SocializeLaunchActivity;
 import com.socialize.util.AppUtils;
 
@@ -88,7 +84,7 @@ public class BaseNotificationMessageBuilderTest extends SocializeUnitTest {
 		final Bundle bundle = new Bundle();
 		bundle.putBoolean("test_value", true);
 		
-		final PendingIntent mockIntent = PendingIntent.getActivity(context, 0, new Intent(context, EmptyActivity.class), 0);
+        final PendingIntent mockIntent = PendingIntent.getActivity(context, 0, new Intent(context, EmptyActivity.class), 0);
 		
 		AndroidMock.expect(appUtils.isActivityAvailable(context, SocializeLaunchActivity.class)).andReturn(true);
 		

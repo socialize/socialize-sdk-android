@@ -21,11 +21,6 @@
  */
 package com.socialize.test.integration.services.a;
 
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import android.app.Activity;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
@@ -41,9 +36,15 @@ import com.socialize.listener.entity.EntityAddListener;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.entity.EntityListListener;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.test.ui.util.TestUtils;
+import com.socialize.test.util.TestUtils;
 import com.socialize.ui.SocializeEntityLoader;
 import com.socialize.util.EntityLoaderUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -122,7 +123,7 @@ public class EntityUtilsTest extends SocializeActivityTest {
 			public void onError(SocializeException error) {
 				error.printStackTrace();
 				addResult(0, error);
-				latch.countDown();
+                latch.countDown();
 			}
 			
 			@Override

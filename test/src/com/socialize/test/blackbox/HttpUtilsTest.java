@@ -21,10 +21,6 @@
  */
 package com.socialize.test.blackbox;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
 import android.test.mock.MockContext;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
@@ -32,10 +28,15 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeApiError;
 import com.socialize.log.SocializeLogger;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.test.ui.util.TestUtils;
+import com.socialize.test.util.TestUtils;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.HttpUtils;
 import com.socialize.util.ResourceLocator;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 
 /**

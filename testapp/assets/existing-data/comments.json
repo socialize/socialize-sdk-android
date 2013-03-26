@@ -6,33 +6,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:45+0000",
+            "date": "2013-03-26 20:27:26+0000",
             "entity": {
                 "comments": 1,
-                "id": 13339668,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781962,
-            "lat": 53.494885684454104,
-            "lng": 82.32420218155721,
+            "id": 783091,
+            "lat": 46.39556768438067,
+            "lng": 85.73798608458638,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #0",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -40,33 +40,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:45+0000",
+            "date": "2013-03-26 20:27:26+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 2,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781963,
-            "lat": 31.922082124341422,
-            "lng": 43.142493021311665,
+            "id": 783092,
+            "lat": 68.4282885757904,
+            "lng": 69.49065603373552,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #1",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -74,33 +74,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:45+0000",
+            "date": "2013-03-26 20:27:27+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 3,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781964,
-            "lat": 11.245260670870406,
-            "lng": 38.35502145418006,
+            "id": 783093,
+            "lat": 88.41553669346999,
+            "lng": 2.7286147074276257,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #2",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -108,33 +108,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:45+0000",
+            "date": "2013-03-26 20:27:27+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 4,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781965,
-            "lat": 17.741949718895313,
-            "lng": 26.606669747973612,
+            "id": 783094,
+            "lat": 15.388071168851653,
+            "lng": 81.90532920335662,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #3",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -142,33 +142,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:45+0000",
+            "date": "2013-03-26 20:27:27+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 5,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781966,
-            "lat": 65.79192174378633,
-            "lng": 11.94242151481313,
+            "id": 783095,
+            "lat": 14.851737565516052,
+            "lng": 73.9110123402791,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #4",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -176,33 +176,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:45+0000",
+            "date": "2013-03-26 20:27:27+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 6,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781967,
-            "lat": 62.93885295044969,
-            "lng": 74.41881108318064,
+            "id": 783096,
+            "lat": 87.11077297737556,
+            "lng": 30.403441197106805,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #5",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -210,33 +210,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:45+0000",
+            "date": "2013-03-26 20:27:27+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 7,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781968,
-            "lat": 88.16360431893283,
-            "lng": 89.40181003081578,
+            "id": 783097,
+            "lat": 33.589805028304305,
+            "lng": 27.881538843191507,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #6",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -244,33 +244,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:45+0000",
+            "date": "2013-03-26 20:27:27+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 8,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781969,
-            "lat": 18.820991189155595,
-            "lng": 17.72036189497238,
+            "id": 783098,
+            "lat": 71.5654125670907,
+            "lng": 26.150667658082952,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #7",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -278,33 +278,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:45+0000",
+            "date": "2013-03-26 20:27:27+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 9,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781970,
-            "lat": 26.310010023506376,
-            "lng": 15.506481254829902,
+            "id": 783099,
+            "lat": 14.80850979425165,
+            "lng": 54.7328732011826,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #8",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -312,33 +312,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:45+0000",
+            "date": "2013-03-26 20:27:27+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 10,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781971,
-            "lat": 16.1436413547238,
-            "lng": 46.494563061284396,
+            "id": 783100,
+            "lat": 54.67358098371183,
+            "lng": 72.21931795283639,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #9",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -346,33 +346,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:45+0000",
+            "date": "2013-03-26 20:27:27+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 11,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781972,
-            "lat": 10.22398693416476,
-            "lng": 12.447851880581274,
+            "id": 783101,
+            "lat": 29.66300357963922,
+            "lng": 26.41012660901218,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #10",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -380,33 +380,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:45+0000",
+            "date": "2013-03-26 20:27:27+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 12,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781973,
-            "lat": 27.641980323920947,
-            "lng": 36.44187260571495,
+            "id": 783102,
+            "lat": 2.873171429837412,
+            "lng": 39.069830679978644,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #11",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -414,33 +414,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:45+0000",
+            "date": "2013-03-26 20:27:27+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 13,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781974,
-            "lat": 40.44569409526679,
-            "lng": 21.440012451347652,
+            "id": 783103,
+            "lat": 2.5674831668414564,
+            "lng": 38.02662486827263,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #12",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -448,33 +448,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:45+0000",
+            "date": "2013-03-26 20:27:27+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 14,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781975,
-            "lat": 26.062474492151495,
-            "lng": 80.71351092518724,
+            "id": 783104,
+            "lat": 11.599717105490527,
+            "lng": 74.89702193507966,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #13",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -482,33 +482,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:45+0000",
+            "date": "2013-03-26 20:27:27+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 15,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781976,
-            "lat": 57.35776749258727,
-            "lng": 47.63119870631536,
+            "id": 783105,
+            "lat": 60.203474001414776,
+            "lng": 28.06991317146396,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #14",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -516,33 +516,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:45+0000",
+            "date": "2013-03-26 20:27:27+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 16,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781977,
-            "lat": 37.87173630287357,
-            "lng": 75.48393101568884,
+            "id": 783106,
+            "lat": 49.856743344501524,
+            "lng": 72.85267041663681,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #15",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -550,33 +550,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:46+0000",
+            "date": "2013-03-26 20:27:27+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 17,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781978,
-            "lat": 17.61262302748986,
-            "lng": 44.19785511806715,
+            "id": 783107,
+            "lat": 2.6336334943960535,
+            "lng": 30.792233390507935,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #16",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -584,33 +584,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:46+0000",
+            "date": "2013-03-26 20:27:27+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 18,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781979,
-            "lat": 69.7318836339573,
-            "lng": 71.23812340858717,
+            "id": 783108,
+            "lat": 81.02279483092137,
+            "lng": 58.810020628098215,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #17",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -618,33 +618,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:46+0000",
+            "date": "2013-03-26 20:27:27+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 19,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781980,
-            "lat": 19.6927879635492,
-            "lng": 21.375975100520414,
+            "id": 783109,
+            "lat": 61.24545434696288,
+            "lng": 76.85766825981561,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #18",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -652,33 +652,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:46+0000",
+            "date": "2013-03-26 20:27:27+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 20,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781981,
-            "lat": 9.555206503232261,
-            "lng": 48.64692160445364,
+            "id": 783110,
+            "lat": 45.38832157454201,
+            "lng": 85.0410947694188,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #19",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -686,33 +686,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:46+0000",
+            "date": "2013-03-26 20:27:27+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 21,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781982,
-            "lat": 57.59679487119966,
-            "lng": 24.50998793616305,
+            "id": 783111,
+            "lat": 70.35794882458178,
+            "lng": 25.054736106481336,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #20",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -720,33 +720,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:46+0000",
+            "date": "2013-03-26 20:27:27+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 22,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781983,
-            "lat": 83.37865859449192,
-            "lng": 81.87375571922429,
+            "id": 783112,
+            "lat": 11.231500880802779,
+            "lng": 21.68225864424537,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #21",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -754,33 +754,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:46+0000",
+            "date": "2013-03-26 20:27:27+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 23,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781984,
-            "lat": 84.1382193900388,
-            "lng": 4.9384399178523015,
+            "id": 783113,
+            "lat": 86.15099676366421,
+            "lng": 25.092977547656957,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #22",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -788,33 +788,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:46+0000",
+            "date": "2013-03-26 20:27:27+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 24,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781985,
-            "lat": 49.293004377993945,
-            "lng": 66.08092951549187,
+            "id": 783114,
+            "lat": 73.30273009421096,
+            "lng": 67.18141484100212,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #23",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -822,33 +822,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:46+0000",
+            "date": "2013-03-26 20:27:27+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 25,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781986,
-            "lat": 18.037654429329535,
-            "lng": 55.068276284157974,
+            "id": 783115,
+            "lat": 26.82277486320227,
+            "lng": 53.55614590983621,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #24",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -856,33 +856,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:46+0000",
+            "date": "2013-03-26 20:27:28+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 26,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781987,
-            "lat": 20.114656590353185,
-            "lng": 88.01726029891499,
+            "id": 783116,
+            "lat": 30.96147089545796,
+            "lng": 51.392599237106644,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #25",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -890,33 +890,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:46+0000",
+            "date": "2013-03-26 20:27:28+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 27,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781988,
-            "lat": 87.10058070092339,
-            "lng": 83.47447070906527,
+            "id": 783117,
+            "lat": 21.653830714590832,
+            "lng": 38.948275197050776,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #26",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -924,33 +924,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:46+0000",
+            "date": "2013-03-26 20:27:28+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 28,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781989,
-            "lat": 56.741491410886724,
-            "lng": 32.627043543758845,
+            "id": 783118,
+            "lat": 29.75960781454285,
+            "lng": 21.743013269902963,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #27",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -958,33 +958,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:46+0000",
+            "date": "2013-03-26 20:27:28+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 29,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781990,
-            "lat": 52.81090418340467,
-            "lng": 13.348270502596927,
+            "id": 783119,
+            "lat": 3.9313712316460068,
+            "lng": 47.03561184935927,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #28",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -992,33 +992,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:46+0000",
+            "date": "2013-03-26 20:27:28+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339668,
+                "comments": 30,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 0,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 781991,
-            "lat": 48.584914574618075,
-            "lng": 73.71222117886614,
+            "id": 783120,
+            "lat": 86.68131009766469,
+            "lng": 23.696484693732422,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #29",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         }
     ]

@@ -21,12 +21,12 @@
  */
 package com.socialize.test.unit.notifications;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import com.socialize.notifications.DeveloperNotificationMessageFactory;
 import com.socialize.notifications.NotificationMessage;
 import com.socialize.notifications.NotificationType;
 import com.socialize.test.SocializeUnitTest;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 /**

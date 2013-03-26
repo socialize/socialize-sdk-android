@@ -21,6 +21,7 @@
     <application
             android:label="@string/app_name"
             android:icon="@drawable/ic_launcher">
+
         <activity android:name=".Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -34,7 +35,7 @@
         <activity android:name=".ActionBarListenerActivity"/>
 
         <!-- Activities Required by Socialize -->
-        <activity android:name="com.socialize.ui.comment.CommentActivity" android:configChanges="orientation|keyboardHidden|screenSize"/>
+        <activity android:name="com.socialize.ui.comment.CommentActivity" android:configChanges="orientation|keyboardHidden"/>
         <activity android:name="com.socialize.ui.action.ActionDetailActivity"/>
         <activity android:name="com.socialize.ui.profile.ProfileActivity"/>
         <activity android:name="com.socialize.auth.facebook.FacebookActivity"/>

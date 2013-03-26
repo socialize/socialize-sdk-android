@@ -21,11 +21,11 @@
  */
 package com.socialize.test.blackbox;
 
-import java.io.IOException;
-import java.io.InputStream;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.test.ui.util.TestUtils;
+import com.socialize.test.util.TestUtils;
 import com.socialize.util.IOUtils;
+
+import java.io.InputStream;
 
 /**
  * @author Jason Polites
@@ -46,7 +46,7 @@ public abstract class AbstractFactoryBlackBoxTest extends SocializeActivityTest 
 	 * Gets the JSON string from the set of sample data based on filename.
 	 * @param filename
 	 * @return
-	 * @throws IOException 
+	 * @throws java.io.IOException
 	 */
 	protected String getSampleJSON(String filename) throws Throwable {
 		

@@ -21,10 +21,10 @@
  */
 package com.socialize.test.integration.notification;
 
-import org.json.JSONObject;
 import android.os.Bundle;
 import com.socialize.launcher.LaunchAction;
 import com.socialize.notifications.NotificationType;
+import org.json.JSONObject;
 
 
 /**

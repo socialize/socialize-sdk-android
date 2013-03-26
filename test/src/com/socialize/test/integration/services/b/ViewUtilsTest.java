@@ -21,8 +21,6 @@
  */
 package com.socialize.test.integration.services.b;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import com.socialize.EntityUtils;
 import com.socialize.Socialize;
 import com.socialize.ViewUtils;
@@ -32,7 +30,10 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.test.ui.util.TestUtils;
+import com.socialize.test.util.TestUtils;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -55,7 +56,7 @@ public class ViewUtilsTest extends SocializeActivityTest {
 		
 		EntityUtils.getEntity(TestUtils.getActivity(this), randomKey, new EntityGetListener() {
 			
-			@Override
+            @Override
 			public void onGet(Entity entity) {
 				addResult(0, entity.getEntityStats().getViews());
 				entityLatch.countDown();

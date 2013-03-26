@@ -21,8 +21,15 @@
  */
 package com.socialize.test.blackbox;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.android.testing.mocking.AndroidMock;
+import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.api.DefaultSocializeRequestFactory;
+import com.socialize.api.SocializeSession;
+import com.socialize.entity.*;
+import com.socialize.error.SocializeException;
+import com.socialize.oauth.OAuthRequestSigner;
+import com.socialize.oauth.OAuthSignListener;
+import com.socialize.test.util.JsonAssert;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.NameValuePair;
@@ -30,20 +37,9 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.json.JSONArray;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.api.DefaultSocializeRequestFactory;
-import com.socialize.api.SocializeSession;
-import com.socialize.entity.ApplicationFactory;
-import com.socialize.entity.Comment;
-import com.socialize.entity.CommentFactory;
-import com.socialize.entity.Entity;
-import com.socialize.entity.EntityFactory;
-import com.socialize.entity.UserFactory;
-import com.socialize.error.SocializeException;
-import com.socialize.oauth.OAuthRequestSigner;
-import com.socialize.oauth.OAuthSignListener;
-import com.socialize.test.util.JsonAssert;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Jason Polites

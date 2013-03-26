@@ -22,6 +22,7 @@
 package com.socialize.provider;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -96,15 +97,15 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	private IOUtils ioUtils;
 	private SocializeSessionPersister sessionPersister;
 	private SocializeConfig config;
-	private Context context;
-	
+	private WeakReference<Context> context;
+
 	public BaseSocializeProvider() {
 		super();
 	}
 	
 	@Override
 	public void init(Context context) {
-		this.context = context;
+		this.context = new WeakReference<Context>(context);
 	}
 
 	public void setUserFactory(SocializeObjectFactory<User> userFactory) {
@@ -164,7 +165,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	public WritableSession loadSession(String endpoint, String key, String secret) throws SocializeException {
 		
 		if(sessionPersister != null) {
-			WritableSession loaded = sessionPersister.load(context);
+			WritableSession loaded = sessionPersister.load(context.get());
 			
 			// Verify that the key/secret matches
 			if(loaded != null) {
@@ -236,20 +237,20 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	@Override
 	public void clearSession(AuthProviderType type) {
 		if(sessionPersister != null) {
-			sessionPersister.delete(context, type);
+			sessionPersister.delete(context.get(), type);
 		}
 	}
 
 	@Override
 	public void clearSession() {
 		if(sessionPersister != null) {
-			sessionPersister.delete(context);
+			sessionPersister.delete(context.get());
 		}
 	}
 
 	public void saveSession(SocializeSession session) {
 		if(sessionPersister != null) {
-			sessionPersister.save(context, session);
+			sessionPersister.save(context.get(), session);
 		}
 	}
 
@@ -302,7 +303,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 					if(httpUtils.isHttpError(response)) {
 						
 						if(sessionPersister != null && httpUtils.isAuthError(response)) {
-							sessionPersister.delete(context);
+							sessionPersister.delete(context.get());
 						}
 						
 						String msg = ioUtils.readSafe(entity.getContent());
@@ -461,7 +462,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 				if(httpUtils.isHttpError(response)) {
 					
 					if(sessionPersister != null && httpUtils.isAuthError(response)) {
-						sessionPersister.delete(context);
+						sessionPersister.delete(context.get());
 					}
 					
 					String msg = ioUtils.readSafe(entity.getContent());
@@ -559,7 +560,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 				if(httpUtils.isHttpError(response)) {
 					
 					if(sessionPersister != null && httpUtils.isAuthError(response)) {
-						sessionPersister.delete(context);
+						sessionPersister.delete(context.get());
 					}
 					
 					String msg = ioUtils.readSafe(entity.getContent());
@@ -656,7 +657,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 				if(httpUtils.isHttpError(response)) {
 					
 					if(sessionPersister != null && httpUtils.isAuthError(response)) {
-						sessionPersister.delete(context);
+						sessionPersister.delete(context.get());
 					}
 					
 					String msg = ioUtils.readSafe(entity.getContent());

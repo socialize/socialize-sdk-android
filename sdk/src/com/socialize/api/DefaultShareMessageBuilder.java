@@ -26,6 +26,8 @@ import com.socialize.SocializeService;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.User;
+import com.socialize.i18n.I18NConstants;
+import com.socialize.i18n.LocalizationService;
 import com.socialize.util.AppUtils;
 import com.socialize.util.StringUtils;
 
@@ -36,6 +38,7 @@ import com.socialize.util.StringUtils;
 public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 	
 	private AppUtils appUtils;
+	private LocalizationService localizationService;
 
 	public DefaultShareMessageBuilder() {
 		super();
@@ -58,19 +61,26 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 		if(session != null) {
 			currentUser = session.getUser();
 		}
+
+		String sharingText = localizationService.getString(I18NConstants.SHARE_TEXT_SHARING);
+		String sharedText = localizationService.getString(I18NConstants.SHARE_TEXT_SHARED);
 		
 		if(currentUser != null) {
 			String name = currentUser.getDisplayName();
 			if(StringUtils.isEmpty(name)) {
-				builder.append("Sharing ");
+				builder.append(sharingText);
+				builder.append(" ");
 			}
 			else {
 				builder.append(name);
-				builder.append(" shared ");
+				builder.append(" ");
+				builder.append(sharedText);
+				builder.append(" ");
 			}
 		}
 		else {
-			builder.append("Sharing ");
+			builder.append(sharingText);
+			builder.append(" ");
 		}
 		
 		if(!StringUtils.isEmpty(entityName)) {
@@ -131,11 +141,14 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 		}
 		
 		builder.append(getEntityLink(entity, urlSet, html));
+
+		String sentFromText = localizationService.getString(I18NConstants.SHARE_TEXT_SENT_FROM);
 		
 		if(includeAppLink) {
 			builder.append(getNewLine(html));
 			builder.append(getNewLine(html));
-			builder.append("Sent from ");
+			builder.append(sentFromText);
+			builder.append(" ");
 			
 			if(html) {
 				builder.append("<a href=\"");
@@ -167,4 +180,7 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 		}
 	}
 
+	public void setLocalizationService(LocalizationService localizationService) {
+		this.localizationService = localizationService;
+	}
 }

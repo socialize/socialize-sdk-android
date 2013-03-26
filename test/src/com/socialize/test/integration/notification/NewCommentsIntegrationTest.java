@@ -21,8 +21,6 @@
  */
 package com.socialize.test.integration.notification;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -34,6 +32,9 @@ import com.socialize.error.SocializeException;
 import com.socialize.launcher.BaseLauncher;
 import com.socialize.launcher.Launcher;
 import com.socialize.listener.SocializeInitListener;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 
 /**

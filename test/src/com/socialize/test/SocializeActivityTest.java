@@ -21,16 +21,16 @@
  */
 package com.socialize.test;
 
-import java.util.List;
 import android.app.Activity;
-import com.socialize.sample.EmptyActivity;
-import com.socialize.test.ui.util.TestUtils;
+import com.socialize.test.util.TestUtils;
+import com.socialize.testapp.EmptyActivity;
+
+import java.util.List;
 
 public abstract class SocializeActivityTest extends SocializeManagedActivityTest<EmptyActivity> {
 	
-	
 	public SocializeActivityTest() {
-		super("com.socialize.sample", EmptyActivity.class);
+		super("com.socialize.testapp", EmptyActivity.class);
 	}
 
 	@Override

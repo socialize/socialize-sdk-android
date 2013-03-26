@@ -31,7 +31,7 @@ import com.socialize.notifications.NotificationChecker;
 import com.socialize.notifications.NotificationRegistrationState;
 import com.socialize.notifications.NotificationRegistrationSystem;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.test.ui.util.TestUtils;
+import com.socialize.test.util.TestUtils;
 import com.socialize.util.AppUtils;
 
 
@@ -52,7 +52,7 @@ public class NotificationCheckerTest extends SocializeActivityTest {
 		
 		final Activity context = TestUtils.getActivity(this);
 		
-		final AppUtils appUtils = AndroidMock.createMock(AppUtils.class);
+        final AppUtils appUtils = AndroidMock.createMock(AppUtils.class);
 		final NotificationRegistrationSystem notificationRegistrationSystem = AndroidMock.createMock(NotificationRegistrationSystem.class);
 		final NotificationRegistrationState notificationRegistrationState = AndroidMock.createMock(NotificationRegistrationState.class);
 		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);

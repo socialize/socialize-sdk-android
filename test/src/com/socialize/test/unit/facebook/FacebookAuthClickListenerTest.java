@@ -21,10 +21,6 @@
  */
 package com.socialize.test.unit.facebook;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -51,6 +47,11 @@ import com.socialize.networks.facebook.FacebookUtilsProxy;
 import com.socialize.networks.facebook.OnPermissionResult;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.ui.dialog.SimpleDialogFactory;
+
+import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Jason Polites
@@ -90,8 +91,6 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		
 		SocializeAuthListener listener = null;
-//		SimpleDialogFactory<ProgressDialog> dialogFactory = AndroidMock.createMock(SimpleDialogFactory.class);
-//		ProgressDialog dialog = AndroidMock.createMock(ProgressDialog.class, getContext());
 		View view = AndroidMock.createMock(View.class, getContext());
 		FacebookUtilsProxy facebookUtils = new FacebookUtilsProxy() {
 			
@@ -206,21 +205,17 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 		
 		view.setEnabled(false);
 		
-//		AndroidMock.expect(dialogFactory.show(getContext(), "socialize_auth_dialog", "socialize_auth_dialog_message")).andReturn(dialog);
-		
-//		dialog.dismiss();
-		
+
 		view.setEnabled(true);
-		
-//		AndroidMock.replay(dialogFactory,dialog,view);
 		AndroidMock.replay(view);
 			
 		FacebookAuthClickListener facebookAuthClickListener = new FacebookAuthClickListener();
-//		facebookAuthClickListener.setDialogFactory(dialogFactory);
 		facebookAuthClickListener.setListener(listener);
 		facebookAuthClickListener.onClick(view);
 
-		assertTrue(latch.await(20, TimeUnit.SECONDS));
+        boolean ok = latch.await(20, TimeUnit.SECONDS);
+
+		assertTrue(ok);
 		
 		listener = getResult(0);
 		
@@ -241,7 +236,6 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 				break;					
 		}		
 			
-//		AndroidMock.verify(dialogFactory,dialog,view);
 		AndroidMock.verify(view);
 	}
 	

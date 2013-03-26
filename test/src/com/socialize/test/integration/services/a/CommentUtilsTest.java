@@ -21,9 +21,6 @@
  */
 package com.socialize.test.integration.services.a;
 
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import android.app.Activity;
 import android.content.Context;
 import com.socialize.CommentUtils;
@@ -48,7 +45,11 @@ import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.notifications.SubscriptionType;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.test.ui.util.TestUtils;
+import com.socialize.test.util.TestUtils;
+
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 
 /**

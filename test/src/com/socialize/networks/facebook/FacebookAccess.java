@@ -25,8 +25,6 @@ import com.socialize.SocializeAccess;
 import com.socialize.facebook.Facebook;
 
 
-
-
 /**
  * @author Jason Polites
  *

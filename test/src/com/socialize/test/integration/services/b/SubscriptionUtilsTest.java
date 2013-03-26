@@ -21,8 +21,6 @@
  */
 package com.socialize.test.integration.services.b;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import android.app.Activity;
 import com.socialize.SubscriptionUtils;
 import com.socialize.entity.Entity;
@@ -32,7 +30,10 @@ import com.socialize.listener.subscription.SubscriptionCheckListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.notifications.SubscriptionType;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.test.ui.util.TestUtils;
+import com.socialize.test.util.TestUtils;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -54,7 +55,7 @@ public class SubscriptionUtilsTest extends SocializeActivityTest {
 		Activity context = TestUtils.getActivity(this);
 		Entity entity = Entity.newInstance("http://www.entity1.com" + Math.random(), "");
 		
-		final CountDownLatch latch = new CountDownLatch(1);
+        final CountDownLatch latch = new CountDownLatch(1);
 		
 		SubscriptionUtils.isSubscribed(context, entity, type, new SubscriptionCheckListener() {
 			

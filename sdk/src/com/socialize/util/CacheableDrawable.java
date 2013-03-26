@@ -21,7 +21,6 @@
  */
 package com.socialize.util;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import com.socialize.cache.ICacheable;
@@ -53,7 +52,7 @@ public class CacheableDrawable extends SafeBitmapDrawable implements ICacheable<
 	 * @see com.socialize.cache.ICacheable#getSizeInBytes(android.content.Context)
 	 */
 	@Override
-	public long getSizeInBytes(Context context) {
+	public long getSizeInBytes() {
 		// No size restrictions??
 		return 0;
 	}
@@ -62,7 +61,7 @@ public class CacheableDrawable extends SafeBitmapDrawable implements ICacheable<
 	 * @see com.socialize.cache.ICacheable#onRemove(android.content.Context, boolean)
 	 */
 	@Override
-	public boolean onRemove(Context context, boolean destroy) {
+	public boolean onRemove(boolean destroy) {
 		if(destroy && !isRecycled()) {
 			recycle();
 			return true;
@@ -74,7 +73,7 @@ public class CacheableDrawable extends SafeBitmapDrawable implements ICacheable<
 	 * @see com.socialize.cache.ICacheable#onPut(android.content.Context, java.lang.Comparable)
 	 */
 	@Override
-	public boolean onPut(Context context, String key) {
+	public boolean onPut(String key) {
 		return true;
 	}
 
@@ -82,7 +81,7 @@ public class CacheableDrawable extends SafeBitmapDrawable implements ICacheable<
 	 * @see com.socialize.cache.ICacheable#onGet(android.content.Context)
 	 */
 	@Override
-	public boolean onGet(Context context) {
+	public boolean onGet() {
 		return true;
 	}
 

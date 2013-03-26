@@ -21,8 +21,6 @@
  */
 package com.socialize.test.unit.api;
 
-import java.util.List;
-import java.util.Map;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
@@ -36,6 +34,9 @@ import com.socialize.listener.entity.EntityListListener;
 import com.socialize.listener.entity.EntityListener;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeUnitTest;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Jason Polites

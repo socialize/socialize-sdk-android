@@ -6,33 +6,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:50+0000",
+            "date": "2013-03-26 20:27:32+0000",
             "entity": {
                 "comments": 1,
-                "id": 13339672,
+                "id": 13340729,
                 "key": "http://entityC.com",
                 "likes": 0,
                 "meta": null,
                 "name": "C Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 782007,
-            "lat": 9.360099066130147,
-            "lng": 86.24625949337744,
+            "id": 783136,
+            "lat": 32.720128360885035,
+            "lng": 52.27491595731099,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #0",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -40,33 +40,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:50+0000",
+            "date": "2013-03-26 20:27:32+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339672,
+                "comments": 2,
+                "id": 13340729,
                 "key": "http://entityC.com",
                 "likes": 0,
                 "meta": null,
                 "name": "C Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 782008,
-            "lat": 50.89057938566647,
-            "lng": 37.879538705979385,
+            "id": 783137,
+            "lat": 74.12248190690245,
+            "lng": 15.37969571222516,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #1",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -74,33 +74,33 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:50+0000",
+            "date": "2013-03-26 20:27:32+0000",
             "entity": {
-                "comments": 1,
-                "id": 13339672,
+                "comments": 3,
+                "id": 13340729,
                 "key": "http://entityC.com",
                 "likes": 0,
                 "meta": null,
                 "name": "C Entity",
                 "shares": 0,
-                "total_activity": 1,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 782009,
-            "lat": 82.07337333869081,
-            "lng": 2.6609654827265574,
+            "id": 783138,
+            "lat": 25.24115589852505,
+            "lng": 78.73328961765549,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #2",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         }
     ]

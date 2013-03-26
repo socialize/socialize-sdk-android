@@ -15,7 +15,8 @@
       <directory url="file://$PROJECT_DIR$/test2/gen" includeSubdirectories="true" />
       <directory url="file://$PROJECT_DIR$/test-app/gen" includeSubdirectories="true" />
       <directory url="file://$PROJECT_DIR$/testapp/gen" includeSubdirectories="true" />
-      <directory url="file://$USER_HOME$/dev/workspace/socialize-sdk-android/test2/gen" includeSubdirectories="true" />
+      <directory url="file://$USER_HOME$/dev/workspace/socialize-sdk-android/test/gen" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/vanilla/gen" includeSubdirectories="true" />
     </excludeFromCompile>
     <resourceExtensions />
     <wildcardResourcePatterns>

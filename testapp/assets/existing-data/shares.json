@@ -6,22 +6,22 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:51+0000",
+            "date": "2013-03-26 20:27:33+0000",
             "entity": {
                 "comments": 30,
-                "id": 13339668,
+                "id": 13340725,
                 "key": "http://entity1.com",
                 "likes": 1,
                 "meta": null,
                 "name": "First Entity",
                 "shares": 1,
-                "total_activity": 32,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 517290,
-            "lat": 23.170971926174985,
-            "lng": 81.89085694282156,
+            "id": 517443,
+            "lat": 27.713265516086317,
+            "lng": 70.13392066433474,
             "medium": {
                 "id": 1,
                 "medium": "Twitter"
@@ -31,12 +31,12 @@
             "text": "POST SHARE on Twitter",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         },
         {
@@ -44,22 +44,22 @@
                 "id": 449791,
                 "name": "Stage Server Integration Tests"
             },
-            "date": "2013-02-19 20:44:51+0000",
+            "date": "2013-03-26 20:27:33+0000",
             "entity": {
                 "comments": 0,
-                "id": 13339669,
+                "id": 13340726,
                 "key": "http://entity2.com",
                 "likes": 1,
                 "meta": null,
                 "name": "Second Entity",
                 "shares": 1,
-                "total_activity": 2,
+                "total_activity": 0,
                 "type": "article",
                 "views": 0
             },
-            "id": 517291,
-            "lat": 67.31825675764169,
-            "lng": 54.26564201277696,
+            "id": 517444,
+            "lat": 43.677117222773106,
+            "lng": 14.01738327318615,
             "medium": {
                 "id": 2,
                 "medium": "Facebook"
@@ -69,12 +69,12 @@
             "text": "POST SHARE on Facebook",
             "user": {
                 "first_name": null,
-                "id": 66285614,
+                "id": 66316718,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66285614"
+                "username": "User66316718"
             }
         }
     ]

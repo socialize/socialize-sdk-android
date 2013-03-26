@@ -21,9 +21,6 @@
  */
 package com.socialize.test.integration.services.a;
 
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import android.app.Activity;
 import android.content.Context;
 import android.widget.CompoundButton;
@@ -47,21 +44,20 @@ import com.socialize.entity.Like;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.like.IsLikedListener;
-import com.socialize.listener.like.LikeAddListener;
-import com.socialize.listener.like.LikeDeleteListener;
-import com.socialize.listener.like.LikeGetListener;
-import com.socialize.listener.like.LikeListListener;
-import com.socialize.listener.like.LikeListener;
+import com.socialize.listener.like.*;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.test.ui.util.TestUtils;
+import com.socialize.test.util.TestUtils;
 import com.socialize.ui.actionbutton.LikeButtonListener;
 import com.socialize.ui.profile.UserSettings;
 import com.socialize.ui.share.IShareDialogFactory;
 import com.socialize.ui.share.ShareDialogListener;
+
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -81,7 +77,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		LikeUtils.like(TestUtils.getActivity(this), entityKey, options, new LikeAddListener() {
 			
 			@Override
-			public void onError(SocializeException error) {
+            public void onError(SocializeException error) {
 				error.printStackTrace();
 				addResult(0, error);
 				latch.countDown();

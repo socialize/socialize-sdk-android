@@ -21,19 +21,20 @@
  */
 package com.socialize.test.blackbox;
 
+import com.google.android.testing.mocking.AndroidMock;
+import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.config.SocializeConfig;
+import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.util.TestUtils;
+import com.socialize.util.ClassLoaderProvider;
+import com.socialize.util.ResourceLocator;
+import junit.framework.Assert;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
-import junit.framework.Assert;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.config.SocializeConfig;
-import com.socialize.test.SocializeActivityTest;
-import com.socialize.test.ui.util.TestUtils;
-import com.socialize.util.ClassLoaderProvider;
-import com.socialize.util.ResourceLocator;
 
 public class SocializeConfigTest extends SocializeActivityTest {
 
@@ -51,41 +52,40 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		locator.setClassLoaderProvider(provider);
 		
 		config.setResourceLocator(locator);
-		
 	}
 
 	/**
 	 * tests that the config object loads correctly based on the props file.
-	 * @throws IOException 
+	 * @throws java.io.IOException
 	 */
 	public void testConfigLoad() throws IOException {
-		
+
 		Properties props = new Properties();
 
 		InputStream in = null;
-		
+
 		try {
 			// Load the file manually...
-			in = Thread.currentThread().getContextClassLoader().getResourceAsStream(SocializeConfig.DEFAULT_PROPERTIES_PATH); 
-			
+			in = Thread.currentThread().getContextClassLoader().getResourceAsStream(SocializeConfig.DEFAULT_PROPERTIES_PATH);
+
 			props.load(in);
-			
-			config.init(TestUtils.getActivity(this), false); // Don't override
-			
+
+            config.init(TestUtils.getActivity(this), false); // Don't override
+
 			Properties confProps = config.getProperties();
-			
+
 			Set<Object> keySet = props.keySet();
 			Set<Object> confKeySet = confProps.keySet();
-			
+
 			assertEquals(keySet.size(), confKeySet.size());
-			
+
 			for (Object key : keySet) {
-				
+
 				assertTrue(confKeySet.contains(key));
-				
+
 				Object propsValue = props.get(key);
 				Object confValue = confProps.get(key);
-				
+
 				Assert.assertNotNull(confValue);
 				Assert.assertNotNull(propsValue);
 			}
@@ -96,17 +96,17 @@ public class SocializeConfigTest extends SocializeActivityTest {
 			}
 		}
 	}
-	
+
 	public void testConfigLoadWithOverride() throws IOException {
 		config.init(TestUtils.getActivity(this));
 		Assert.assertNotNull(config.getProperties());
 		Assert.assertNotNull(config.getProperties().getProperty("test_value"));
-		Assert.assertEquals("sample", config.getProperties().getProperty("test_value"));
+		Assert.assertEquals("testapp", config.getProperties().getProperty("test_value"));
 	}
-	
+
 	/**
 	 * tests that config load fails when no props file found
-	 * @throws IOException 
+	 * @throws java.io.IOException
 	 */
 	@UsesMocks({ResourceLocator.class})
 	public void testConfigLoadFail() throws IOException { 

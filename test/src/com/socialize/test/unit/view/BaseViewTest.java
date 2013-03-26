@@ -30,7 +30,7 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.test.ui.util.TestUtils;
+import com.socialize.test.util.TestUtils;
 import com.socialize.view.BaseView;
 
 /**
@@ -44,7 +44,7 @@ public class BaseViewTest extends SocializeActivityTest {
 		SocializeErrorHandler handler = AndroidMock.createMock(SocializeErrorHandler.class);
 		Exception error = AndroidMock.createMock(Exception.class);
 		
-		handler.handleError(TestUtils.getActivity(this), error);
+        handler.handleError(TestUtils.getActivity(this), error);
 		
 		AndroidMock.replay(handler);
 		

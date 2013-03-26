@@ -21,15 +21,12 @@
  */
 package com.socialize.test.unit.facebook;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.AuthProviderResponse;
-import com.socialize.auth.facebook.FacebookAuthProvider;
 import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.error.SocializeException;
 import com.socialize.facebook.Facebook;
@@ -38,6 +35,9 @@ import com.socialize.listener.ListenerHolder;
 import com.socialize.listener.SocializeListener;
 import com.socialize.networks.facebook.v2.FacebookFacadeV2;
 import com.socialize.test.SocializeUnitTest;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
 
 /**
  * @author Jason Polites

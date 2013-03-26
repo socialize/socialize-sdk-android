@@ -34,6 +34,8 @@ import com.socialize.facebook.Facebook.DialogListener;
 import com.socialize.facebook.FacebookError;
 import com.socialize.listener.AuthProviderListener;
 
+import java.lang.ref.WeakReference;
+
 /**
  * @author Jason Polites
  *
@@ -43,12 +45,12 @@ public abstract class FacebookDialogListener implements DialogListener {
 
 	private FacebookSessionStore facebookSessionStore;
 	private Facebook facebook;
-	private Context context;
+	private WeakReference<Context> context;
 	private AuthProviderListener listener;
 
 	public FacebookDialogListener(Context context, Facebook facebook, FacebookSessionStore facebookSessionStore, AuthProviderListener listener) {
 		super();
-		this.context = context;
+		this.context = new WeakReference<Context>(context);
 		this.facebook = facebook;
 		this.facebookSessionStore = facebookSessionStore;
 		this.listener = listener;
@@ -56,7 +58,7 @@ public abstract class FacebookDialogListener implements DialogListener {
 
 	@Override
 	public void onComplete(final Bundle values) {
-		facebookSessionStore.save(facebook, context);
+		facebookSessionStore.save(facebook, context.get());
 		
 		new AsyncTask<Void, Void, Void>() {
 			
@@ -133,7 +135,7 @@ public abstract class FacebookDialogListener implements DialogListener {
 			listener.onCancel();
 		}
 		else {
-			Toast.makeText(context, "Request cancelled", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context.get(), "Request cancelled", Toast.LENGTH_SHORT).show();
 		}
 		
 		onFinish();

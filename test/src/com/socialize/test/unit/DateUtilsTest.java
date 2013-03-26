@@ -1,12 +1,12 @@
 package com.socialize.test.unit;
 
 import com.socialize.i18n.DefaultLocalizationService;
-import com.socialize.test.ui.SocializeUITestCase;
+import com.socialize.test.SocializeUnitTest;
 import com.socialize.ui.util.DateUtils;
 import com.socialize.util.ResourceLocator;
 
 
-public class DateUtilsTest extends SocializeUITestCase {
+public class DateUtilsTest extends SocializeUnitTest {
 
 	// Just integration tests
 	public void testTimeUtils() {

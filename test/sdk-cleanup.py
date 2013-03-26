@@ -5,8 +5,8 @@ import os,sys
 import urllib
 import time
 
-config_file_path='../sample/assets/socialize.properties'
-assets_file_path='../sample/assets/existing-data/'
+config_file_path='../testapp/assets/socialize.properties'
+assets_file_path='../testapp/assets/existing-data/'
 
 def create_android_config(key,secret,url,fb_token):
 	print '#'*20
@@ -16,7 +16,7 @@ def create_android_config(key,secret,url,fb_token):
 	f = open(config_file_path,'w')
 	text = 'socialize.consumer.key='+key
 	text+= '\nsocialize.consumer.secret='+secret
-	text+= '\nsocialize.entity.loader=com.socialize.sample.ui.EntityLoader'
+	text+= '\nsocialize.entity.loader=com.socialize.testapp.EntityLoader'
 	text+= '\nsocialize.allow.anon=true'
 	text+= '\napi.host='+url
 	text+= '\nredirect.host=http://stage.getsocialize.com'
@@ -30,7 +30,7 @@ def create_android_config(key,secret,url,fb_token):
 	text+= '\ntwitter.secret=AFapqY8U5LZh4tOm11MS1xT4tVESziFqIwaiuVbKTS4'
 	text+= '\ntwitter.consumer.key=PPMPm13TgUiOfZJhagwncA' 
 	text+= '\ntwitter.consumer.secret=C9SvNWkIU6pawJOaMem9IufQLknkJQ4N6uLkBM3MU' 
-	text+= '\ntest_value=sample'
+	text+= '\ntest_value=testapp'
 	text+= '\nuntrimmed=value '
 	text+= '\n'
 	f.write(text)
@@ -39,7 +39,7 @@ def create_android_config(key,secret,url,fb_token):
 
 def read_android_config():
     file = open(config_file_path,'r')
-#file = open('../sample/assets/sample-app.conf','r')
+#file = open('../testapp/assets/testapp-app.conf','r')
 
     for line in file :
         li=line.strip()

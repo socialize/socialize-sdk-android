@@ -31,13 +31,15 @@ import com.socialize.networks.twitter.TwitterUtils;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.util.IAsyncTask;
 
+import java.lang.ref.WeakReference;
+
 /**
  * @author Jason Polites
  *
  */
 public class SocialNetworkSignOutTask extends ManagedAsyncTask<Void, Void, Void> implements IAsyncTask<Void, Void, Void> {
 
-	private Context context;
+	private WeakReference<Context> context;
 	private ProgressDialogFactory dialogFactory;
 	private SocialNetworkSignOutListener signOutListener;
 	
@@ -47,12 +49,12 @@ public class SocialNetworkSignOutTask extends ManagedAsyncTask<Void, Void, Void>
 	
 	public SocialNetworkSignOutTask(Context context) {
 		super();
-		this.context = context;
+		this.context = new WeakReference<Context>(context);
 	}
 
 	@Override
 	protected void onPreExecute() {
-		dialog = dialogFactory.show(context, I18NConstants.DLG_AUTH_SIGNOUT, I18NConstants.PLEASE_WAIT);
+		dialog = dialogFactory.show(context.get(), I18NConstants.DLG_AUTH_SIGNOUT, I18NConstants.PLEASE_WAIT);
 	}
 
 	@Override
@@ -67,10 +69,10 @@ public class SocialNetworkSignOutTask extends ManagedAsyncTask<Void, Void, Void>
 	protected Void doInBackground(Void... args) {
 		switch (type) {
 		case FACEBOOK:
-			FacebookUtils.unlink(context);
+			FacebookUtils.unlink(context.get());
 			break;
 		case TWITTER:
-			TwitterUtils.unlink(context);
+			TwitterUtils.unlink(context.get());
 			break;
 		}
 		return null;

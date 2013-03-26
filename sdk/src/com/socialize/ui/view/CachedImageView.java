@@ -20,7 +20,7 @@ public class CachedImageView extends View implements ImageLoadListener {
 	private Drawables drawables;
 	private String imageName;
 	private String expectedImageName;
-	private boolean dirty = false;
+	private int changes = 0;
 	private boolean local = true;
 	private Drawable drawable;
 	private SocializeLogger logger;
@@ -45,13 +45,11 @@ public class CachedImageView extends View implements ImageLoadListener {
 					break;
 				case CHANGE: 
 					Bundle data = msg.getData();
-					if(setImageNameInternal(data.getString("imageName"), data.getBoolean("local"))) {
-						invalidate();
-						if(changeListener != null) {
-							changeListener.onChange(CachedImageView.this);
-						}	
+					setImageUrlImmediate(data.getString("imageName"), data.getBoolean("local"));
+					if(changeListener != null) {
+						changeListener.onChange(CachedImageView.this);
 					}
-					break;	
+					break;
 			}
 		}
 	};
@@ -84,8 +82,8 @@ public class CachedImageView extends View implements ImageLoadListener {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-		if(drawable == null || dirty) {
-			dirty = false;
+		if(drawable == null || changes > 0) {
+			changes--;
 			if(imageName != null) {
 				if(local) {
 					drawable = drawables.getDrawable(imageName);
@@ -105,6 +103,11 @@ public class CachedImageView extends View implements ImageLoadListener {
 		}
 		
 		if(drawable != null) {
+
+			if(logger != null && logger.isDebugEnabled()) {
+				logger.debug("Image view is drawing " + imageName);
+			}
+
 			drawable.setBounds(x, y, width, height);
 			drawable.draw(canvas);
 		}
@@ -115,15 +118,24 @@ public class CachedImageView extends View implements ImageLoadListener {
 	}
 	
 	public void setDefaultImage() {
-		setImageNameInternal(Socialize.DEFAULT_USER_ICON, true);
+		setImageUrlImmediate(Socialize.DEFAULT_USER_ICON, true);
 	}
 	
-	public void setImageUrlImmediate(String url) {
-		setImageNameInternal(url, false);
+	public void setImageUrlImmediate(String url, boolean local) {
+		this.imageName = url;
+		this.local = local;
+		changes++;
+		invalidate();
+
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("Setting image to drawable name [" +
+					url +
+					"], draw should follow");
+		}
 	}
 	
 	void setImageName(String imageName, boolean local) {
-		if(expectedImageName == null || this.expectedImageName.equals(imageName)) { 
+		if(expectedImageName == null || this.expectedImageName.equals(imageName)) {
 			Message m = Message.obtain();
 			Bundle data = new Bundle();
 			data.putString("imageName", imageName);
@@ -139,44 +151,11 @@ public class CachedImageView extends View implements ImageLoadListener {
 						"] does not match requested image name [" +
 						imageName +
 						"]");
-			}	
+			}
 		}
 	}
 	
-	boolean setImageNameInternal(String newImageName, boolean local) {
-		
-		boolean isChanged = false;
-		
-		if(this.imageName == null || (newImageName != null && !newImageName.equals(this.imageName))) {
-			// Mark for redraw
-			dirty = true;
-			
-			isChanged = true;
-			
-			this.imageName = newImageName;
-			this.local = local;
-			
-			if(isChanged) {
-				if(logger != null && logger.isDebugEnabled()) {
-					logger.debug("Setting image to drawable name [" +
-							newImageName +
-							"], draw should follow");
-				}			
-			}		
-		}
-		else {
-			if(logger != null && logger.isDebugEnabled()) {
-				logger.debug("Image view was not updated.  Current image name [" +
-						this.imageName +
-						"] is the same as requested image name [" +
-						newImageName +
-						"]");
-			}				
-		}
-		
-		return isChanged;
-	}
-	
+
 	@Override
 	public synchronized void onImageLoad(ImageLoadRequest request, SafeBitmapDrawable drawable) {
 		setImageName(request.getUrl(), false);
@@ -196,7 +175,7 @@ public class CachedImageView extends View implements ImageLoadListener {
 	}
 	
 	public void notifyImageChange() {
-		dirty = true;
+		changes++;
 	}
 	
 	public void setLogger(SocializeLogger logger) {

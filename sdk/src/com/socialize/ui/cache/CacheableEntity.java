@@ -21,8 +21,6 @@
  */
 package com.socialize.ui.cache;
 
-import android.content.Context;
-
 import com.socialize.cache.ICacheable;
 import com.socialize.entity.Entity;
 
@@ -42,22 +40,22 @@ public class CacheableEntity implements ICacheable<String> {
 	}
 
 	@Override
-	public long getSizeInBytes(Context context) {
+	public long getSizeInBytes() {
 		return 0;
 	}
 
 	@Override
-	public boolean onRemove(Context context, boolean destroy) {
+	public boolean onRemove(boolean destroy) {
 		return true;
 	}
 
 	@Override
-	public boolean onPut(Context context, String key) {
+	public boolean onPut(String key) {
 		return true;
 	}
 
 	@Override
-	public boolean onGet(Context context) {
+	public boolean onGet() {
 		return true;
 	}
 

@@ -21,8 +21,6 @@
  */
 package com.socialize.test.unit.notifications;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -43,6 +41,9 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.notifications.NotificationRegistrationState;
 import com.socialize.notifications.SocializeNotificationRegistrationSystem;
 import com.socialize.test.SocializeUnitTest;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Jason Polites

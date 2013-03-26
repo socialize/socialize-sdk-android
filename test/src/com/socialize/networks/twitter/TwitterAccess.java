@@ -22,8 +22,6 @@
 package com.socialize.networks.twitter;
 
 
-
-
 /**
  * @author Jason Polites
  *

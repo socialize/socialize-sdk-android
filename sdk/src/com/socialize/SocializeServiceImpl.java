@@ -21,6 +21,7 @@
  */
 package com.socialize;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -891,7 +892,7 @@ public class SocializeServiceImpl implements SocializeService {
 	}
 	
 	public static class InitTask extends ManagedAsyncTask<Void, Void, IOCContainer> {
-		private Context context;
+		private WeakReference<Context> context;
 		private String[] paths;
 		private Exception error;
 		private SocializeInitListener listener;
@@ -905,7 +906,7 @@ public class SocializeServiceImpl implements SocializeService {
 				SocializeInitListener listener, 
 				SocializeLogger logger) {
 			super();
-			this.context = context;
+			this.context = new WeakReference<Context>(context);
 			this.paths = paths;
 			this.listener = listener;
 			this.service = service;
@@ -916,7 +917,7 @@ public class SocializeServiceImpl implements SocializeService {
 		public IOCContainer doInBackground(Void... params) {
 			try {
 				// Force null listener.  This will be called in postExecute
-				return service.initWithContainer(context, null, paths);
+				return service.initWithContainer(context.get(), null, paths);
 			}
 			catch (Exception e) {
 				error = e;
@@ -958,7 +959,7 @@ public class SocializeServiceImpl implements SocializeService {
 			}
 			else {
 				if(listener != null) {
-					listener.onInit(context, result);
+					listener.onInit(context.get(), result);
 				}
 			}
 		}

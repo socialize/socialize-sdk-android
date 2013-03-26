@@ -72,7 +72,7 @@ public abstract class AuthenticatedView extends SocializeBaseView {
 	}
 
 	public SocializeAuthListener getAuthListener(IOCContainer container) {
-		return new AuthenticatedViewListener(getContext(), this, container);
+		return new AuthenticatedViewListener(this, container);
 	}
 
 	// Wrapped so it can be mocked.

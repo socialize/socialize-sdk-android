@@ -21,8 +21,6 @@
  */
 package com.socialize.test.integration.notification;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import android.app.Activity;
 import android.content.Context;
 import com.google.android.testing.mocking.AndroidMock;
@@ -35,6 +33,9 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.ui.SocializeEntityLoader;
 import com.socialize.util.EntityLoaderUtils;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 
 /**

@@ -21,13 +21,6 @@
  */
 package com.socialize.test.integration.services.a;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -60,15 +53,18 @@ import com.socialize.listener.share.ShareListListener;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkPostListener;
-import com.socialize.networks.facebook.FacebookAccess;
-import com.socialize.networks.facebook.FacebookFacade;
-import com.socialize.networks.facebook.FacebookPermissionCallback;
-import com.socialize.networks.facebook.FacebookUtils;
-import com.socialize.networks.facebook.FacebookUtilsImpl;
-import com.socialize.networks.facebook.OnPermissionResult;
+import com.socialize.networks.facebook.*;
 import com.socialize.networks.facebook.v2.FacebookFacadeV2;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.test.ui.util.TestUtils;
+import com.socialize.test.util.TestUtils;
+import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -76,7 +72,8 @@ import com.socialize.test.ui.util.TestUtils;
  *
  */
 public class FacebookUtilsTest extends SocializeActivityTest {
-	
+
+	@Deprecated
 	public void test_link () throws Throwable {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
@@ -115,7 +112,8 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		
 		SocializeIOC.unregisterStub("facebookProvider");
 	}
-	
+
+	@Deprecated
 	public void test_link_with_token () throws Exception {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
@@ -175,7 +173,8 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		
 		SocializeIOC.unregisterStub("facebookProvider");
 	}
-	
+
+	@Deprecated
 	public void test_link_with_token_and_permission_check_v2 () throws Exception {
 		
 		FacebookAccess.forceV2();
@@ -746,7 +745,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		FacebookUtils.linkForWrite(context, newFBToken, false, new SocializeAuthListener() {
 			
 			@Override
-			public void onError(SocializeException error) {
+			public void onError(SocializeException error)   {
 				error.printStackTrace();
 				latch.countDown();
 			}

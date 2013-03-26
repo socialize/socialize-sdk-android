@@ -31,6 +31,8 @@ import android.webkit.WebViewClient;
 import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.util.StringUtils;
 
+import java.lang.ref.WeakReference;
+
 /**
  * @author Jason Polites
  *
@@ -41,15 +43,9 @@ public class TwitterWebViewClient extends WebViewClient {
 	private boolean called = false;
 	private boolean close = false;
 	private Dialog progress;
-	private Context context;
-	
+
 	public TwitterWebViewClient() {
 		super();
-	}
-	
-	public TwitterWebViewClient(Context context) {
-		super();
-		this.context = context;
 	}
 
 	public void setOauthRequestListener(OAuthRequestListener oAuthRequestListener) {
@@ -72,7 +68,7 @@ public class TwitterWebViewClient extends WebViewClient {
 		
 		if(url.trim().toLowerCase().startsWith(TwitterOAuthProvider.OAUTH_CALLBACK_URL.toLowerCase())) {
 		
-			progress = SafeProgressDialog.show(getContext(view));
+			progress = SafeProgressDialog.show(view.getContext());
 			
 			if(!called) {
 				called = true;
@@ -106,12 +102,5 @@ public class TwitterWebViewClient extends WebViewClient {
 		else {
 			super.onPageStarted(view, url, favicon);
 		}
-	}
-	
-	protected Context getContext(WebView view) {
-		if(context != null) {
-			return context;
-		}
-		return view.getContext();
 	}
 }

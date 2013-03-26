@@ -21,23 +21,20 @@
  */
 package com.socialize.test.unit.api;
 
-import java.util.List;
-import java.util.Map;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.like.SocializeLikeSystem;
-import com.socialize.entity.ActionError;
-import com.socialize.entity.Entity;
-import com.socialize.entity.Like;
-import com.socialize.entity.ListResult;
-import com.socialize.entity.User;
+import com.socialize.entity.*;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.like.LikeListener;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeUnitTest;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Jason Polites

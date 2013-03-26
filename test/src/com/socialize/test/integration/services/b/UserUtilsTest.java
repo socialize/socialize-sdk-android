@@ -21,17 +21,18 @@
  */
 package com.socialize.test.integration.services.b;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.test.ui.util.TestUtils;
+import com.socialize.test.util.TestUtils;
 import com.socialize.ui.profile.ProfileActivity;
 import com.socialize.ui.profile.UserSettings;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -42,7 +43,7 @@ public class UserUtilsTest extends SocializeActivityTest {
 	
 	public void testGetCurrentUser() throws Exception {
 		
-		User user = UserUtils.getCurrentUser(TestUtils.getActivity(this));
+        User user = UserUtils.getCurrentUser(TestUtils.getActivity(this));
 		
 		assertNotNull(user);
 		

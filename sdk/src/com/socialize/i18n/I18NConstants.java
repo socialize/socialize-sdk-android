@@ -41,7 +41,11 @@ public class I18NConstants {
 	public static final String COMMENT_HINT = "socialize_comment_hint";
 	public static final String SHARE_MORE_OPTIONS = "socialize_share_more_options";
 	public static final String SHARE_HEADER = "socialize_share_header";
-	
+
+	public static final String SHARE_TEXT_SHARING = "socialize_share_text_sharing";
+	public static final String SHARE_TEXT_SHARED = "socialize_share_text_shared";
+	public static final String SHARE_TEXT_SENT_FROM = "socialize_share_text_sent_from";
+
 	public static final String SETTINGS_HEADER = "socialize_settings_header";
 	public static final String SETTINGS_LABEL_FIRST_NAME = "socialize_settings_label_firstname";
 	public static final String SETTINGS_LABEL_LAST_NAME = "socialize_settings_label_lastname";

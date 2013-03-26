@@ -8,7 +8,7 @@ public class Main extends Activity {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
         if(extras != null && extras.getBoolean("exit")) {
-            finishAffinity();
+            finish();
         }
     }
 }

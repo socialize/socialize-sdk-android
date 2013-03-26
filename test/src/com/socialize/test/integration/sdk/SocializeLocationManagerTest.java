@@ -30,7 +30,7 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.location.SocializeLocationManager;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.test.ui.util.TestUtils;
+import com.socialize.test.util.TestUtils;
 import com.socialize.util.AppUtils;
 
 /**
@@ -53,7 +53,7 @@ public class SocializeLocationManagerTest extends SocializeActivityTest {
 		SocializeLocationManager manager = new SocializeLocationManager(appUtils);
 		manager.init(TestUtils.getActivity(this));
 		
-		Criteria criteria = new Criteria();
+        Criteria criteria = new Criteria();
 		criteria.setAccuracy(Criteria.ACCURACY_COARSE);
 		
 		String bestProvider = manager.getBestProvider(criteria, true);

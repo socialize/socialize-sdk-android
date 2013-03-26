@@ -21,10 +21,6 @@
  */
 package com.socialize.test.integration.services.b;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -49,13 +45,13 @@ import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.FacebookShareCell;
 import com.socialize.networks.twitter.TwitterShareCell;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.test.ui.util.TestUtils;
-import com.socialize.ui.share.DialogFlowController;
-import com.socialize.ui.share.EmailCell;
-import com.socialize.ui.share.IShareDialogFactory;
-import com.socialize.ui.share.SMSCell;
-import com.socialize.ui.share.ShareDialogListener;
-import com.socialize.ui.share.SharePanelView;
+import com.socialize.test.util.TestUtils;
+import com.socialize.ui.share.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -66,7 +62,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 	
 	public void testGetShareExists() throws Exception {
 		
-		JSONObject json = TestUtils.getJSON(getContext(), "shares.json");
+        JSONObject json = TestUtils.getJSON(getContext(), "shares.json");
 		JSONArray jsonArray = json.getJSONArray("items");
 		JSONObject jsonObject = (JSONObject) jsonArray.get(0);
 		String id = jsonObject.getString("id");

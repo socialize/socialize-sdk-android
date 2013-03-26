@@ -24,7 +24,6 @@ package com.socialize.test.unit.launcher;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.launcher.ActivityLauncher;

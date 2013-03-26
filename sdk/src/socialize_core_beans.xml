@@ -51,12 +51,8 @@
 		<init-method name="init"/>
 	</bean>		
 	
-	<bean id="beanBuilder" class="com.socialize.android.ioc.BeanBuilder">
-		<init-method name="initForSafeAllocations">
-			<arg type="context"/>
-		</init-method>
-	</bean>
-	
+	<bean id="beanBuilder" class="com.socialize.android.ioc.BeanBuilder"/>
+
 	<bean id="objectUtils" class="com.socialize.util.DefaultObjectUtils">
 		<property name="builder" ref="beanBuilder"/>
 	</bean>
@@ -564,6 +560,7 @@
 
 	<bean id="shareMessageBuilder" class="com.socialize.api.DefaultShareMessageBuilder">
 		<property name="appUtils" ref="appUtils"/>
+        <property name="localizationService" ref="localizationService"/>
 	</bean>	
 	
 	<bean id="facebookUrlBuilder" class="com.socialize.auth.facebook.FacebookUrlBuilder"/>

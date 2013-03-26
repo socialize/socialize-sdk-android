@@ -21,7 +21,6 @@
  */
 package com.socialize.test.unit.api;
 
-import java.util.List;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
@@ -33,6 +32,8 @@ import com.socialize.listener.subscription.SubscriptionListener;
 import com.socialize.notifications.NotificationType;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeUnitTest;
+
+import java.util.List;
 
 /**
  * @author Jason Polites

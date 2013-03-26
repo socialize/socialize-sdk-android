@@ -21,13 +21,14 @@
  */
 package com.socialize.test.integration.notification;
 
-import java.io.IOException;
-import org.json.JSONException;
-import org.json.JSONObject;
 import android.os.Bundle;
 import com.socialize.Socialize;
 import com.socialize.launcher.LaunchAction;
 import com.socialize.notifications.NotificationType;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 
 /**

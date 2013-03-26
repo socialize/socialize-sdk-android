@@ -28,10 +28,10 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
 import com.socialize.config.SocializeConfig;
 import com.socialize.log.SocializeLogger;
-import com.socialize.sample.Main;
-import com.socialize.sample.R;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.test.ui.util.TestUtils;
+import com.socialize.test.util.TestUtils;
+import com.socialize.testapp.Main;
+import com.socialize.testapp.R;
 import com.socialize.util.DefaultAppUtils;
 
 /**
@@ -43,7 +43,7 @@ public class AppUtilsTest extends SocializeActivityTest {
 	public void testGetAppIconId() {
 		DefaultAppUtils utils = new DefaultAppUtils();
 		int appIconId = utils.getAppIconId(getContext());
-		assertEquals(R.drawable.ic_icon, appIconId);
+		assertEquals(R.drawable.ic_launcher, appIconId);
 	}
 	
 	public void testLaunchMainApp() {
@@ -52,7 +52,7 @@ public class AppUtilsTest extends SocializeActivityTest {
 		
 		DefaultAppUtils.launchMainApp(getContext());
 		
-		Activity activity = TestUtils.waitForActivity(20000);
+		Activity activity = TestUtils.waitForActivity(10000);
 		
 		assertNotNull(activity);
 		activity.finish();

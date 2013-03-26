@@ -21,8 +21,6 @@
  */
 package com.socialize.test.integration.notification;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import android.content.Context;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
@@ -31,6 +29,9 @@ import com.socialize.launcher.UrlLauncher;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.ui.notifications.DirectUrlListener;
 import com.socialize.ui.notifications.DirectUrlWebView;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 
 /**

@@ -21,7 +21,6 @@
  */
 package com.socialize.test.unit;
 
-import java.util.Locale;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.test.mock.MockContext;
@@ -30,15 +29,18 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.Socialize;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.test.ui.util.TestUtils;
+import com.socialize.test.SocializeUnitTest;
+import com.socialize.test.util.TestUtils;
 import com.socialize.util.AppUtils;
 import com.socialize.util.DefaultAppUtils;
+
+import java.util.Locale;
 
 /**
  * @author jasonpolites
  * 
  */
-public class DeviceUtilsTest extends SocializeActivityTest {
+public class DeviceUtilsTest extends SocializeUnitTest {
 
 	@UsesMocks({ MockContext.class, MockPackageManager.class })
 	public void testDeviceUtilsHasPermission() {
@@ -66,9 +68,9 @@ public class DeviceUtilsTest extends SocializeActivityTest {
 
 	public void testDeviceUtilsUserAgentString() {
 		DefaultAppUtils appUtils = new DefaultAppUtils();
-		appUtils.init(TestUtils.getActivity(this));
+		appUtils.init(getContext());
 		String userAgentString = appUtils.getUserAgentString();
-		String expected = "Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + "; " + Locale.getDefault().getLanguage() + "_" + Locale.getDefault().getCountry() + "; BundleID/com.socialize.sample;";
+		String expected = "Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + "; " + Locale.getDefault().getLanguage() + "_" + Locale.getDefault().getCountry() + "; BundleID/com.socialize.testapp;";
 		assertEquals(expected, userAgentString);
 	}
 

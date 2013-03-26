@@ -9,8 +9,9 @@
       <module fileurl="file://$PROJECT_DIR$/gh-pages/gh-pages.iml" filepath="$PROJECT_DIR$/gh-pages/gh-pages.iml" group="socialize" />
       <module fileurl="file://$PROJECT_DIR$/demo/socialize-demo.iml" filepath="$PROJECT_DIR$/demo/socialize-demo.iml" group="socialize" />
       <module fileurl="file://$PROJECT_DIR$/sdk/socialize-sdk.iml" filepath="$PROJECT_DIR$/sdk/socialize-sdk.iml" group="socialize" />
-      <module fileurl="file://$USER_HOME$/dev/workspace/socialize-sdk-android/test2/test2.iml" filepath="$USER_HOME$/dev/workspace/socialize-sdk-android/test2/test2.iml" group="socialize" />
+      <module fileurl="file://$USER_HOME$/dev/workspace/socialize-sdk-android/test/test2.iml" filepath="$USER_HOME$/dev/workspace/socialize-sdk-android/test/test2.iml" group="socialize" />
       <module fileurl="file://$PROJECT_DIR$/testapp/testapp.iml" filepath="$PROJECT_DIR$/testapp/testapp.iml" group="socialize" />
+      <module fileurl="file://$PROJECT_DIR$/vanilla/vanilla.iml" filepath="$PROJECT_DIR$/vanilla/vanilla.iml" group="socialize" />
     </modules>
   </component>
 </project>

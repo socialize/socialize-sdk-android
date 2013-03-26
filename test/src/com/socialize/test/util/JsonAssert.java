@@ -21,13 +21,13 @@
  */
 package com.socialize.test.util;
 
-import static junit.framework.Assert.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import static junit.framework.Assert.*;
 
 /**
  * @author Jason Polites

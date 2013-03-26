@@ -22,8 +22,7 @@
 package com.socialize.test;
 
 import android.test.AndroidTestCase;
-
-import com.socialize.test.ui.ResultHolder;
+import com.socialize.test.util.ResultHolder;
 
 /**
  * @author Jason Polites

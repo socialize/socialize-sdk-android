@@ -21,8 +21,6 @@
  */
 package com.socialize.test.integration.sdk;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import android.app.Activity;
 import com.socialize.Socialize;
 import com.socialize.api.SocializeSession;
@@ -33,7 +31,10 @@ import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.test.ui.util.TestUtils;
+import com.socialize.test.util.TestUtils;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -92,7 +93,7 @@ public class AuthenticateSDKTest extends SDKIntegrationTest {
 		
 		Socialize.getSocialize().init(context);
 		
-		final String token = TestUtils.getDummyFBToken(getContext());
+        final String token = TestUtils.getDummyFBToken(getContext());
 		
 		runTestOnUiThread(new Runnable() {
 			
