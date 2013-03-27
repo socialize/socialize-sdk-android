@@ -63,7 +63,7 @@ public class CommentViewCustomHeaderActivity extends DemoActivity {
 			public void onCreate(CommentListView view) {
 				view.setCustomHeaderText("Custom Header Text");
 				view.setShowCommentCountInHeader(false);
-				view.getHeader().setBackground(new ColorDrawable(Color.LTGRAY));
+				view.getHeader().setBackgroundDrawable(new ColorDrawable(Color.LTGRAY));
 				view.getHeader().getTitleText().setTextColor(Color.BLACK);
 			}
 			

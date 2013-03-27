@@ -45,8 +45,8 @@ import com.socialize.ui.comment.OnCommentViewActionListener;
 public class CommentActivity extends ListActivity {
 	final String[] values = new String[] { 
 			"Show Comment List",
-			"Show Comment List (No Header)", 
-			"Show Comment List (Custom Header)", 
+			"Show Comment List (No Header)",
+			"Show Comment List (Custom Header)",
 			"Add Comment", 
 			"Add Comment Without Share", 
 			"Get Comments By Entity", 
@@ -72,7 +72,7 @@ public class CommentActivity extends ListActivity {
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		
-		if(position <= 1) {
+		if(position < 1) {
 			
 			String entity = null;
 			

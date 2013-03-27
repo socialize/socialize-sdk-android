@@ -42,6 +42,7 @@
         <option name="RegenerateFrameworkMocks" value="true" />
         <processorPath useClasspath="true" />
         <module name="socialize-sdk-test2" />
+        <module name="test" />
         <module name="test2" />
       </profile>
     </annotationProcessing>
