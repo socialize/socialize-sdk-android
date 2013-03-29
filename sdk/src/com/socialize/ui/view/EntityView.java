@@ -43,15 +43,15 @@ public abstract class EntityView extends AuthenticatedView {
 					return getView(bundle, values);
 				}
 			}
-			
+
 			return getView(bundle, (Object[]) null);
-		} 
+		}
 		catch (Throwable e) {
 			SocializeLogger.e("", e);
 			return getErrorView();
 		}
 	}
-	
+
 	protected View getErrorView() {
 		
 		FrameLayout view = new FrameLayout(getContext());

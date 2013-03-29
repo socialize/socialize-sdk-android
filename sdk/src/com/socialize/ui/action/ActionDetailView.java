@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import com.socialize.Socialize;
 import com.socialize.entity.SocializeAction;
+import com.socialize.listener.ListenerHolder;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.view.EntityView;
 import com.socialize.util.Drawables;
@@ -38,6 +39,7 @@ import com.socialize.util.Drawables;
 public class ActionDetailView extends EntityView {
 
 	private ActionDetailLayoutView actionLayoutView;
+
 	private View view;
 	
 	public ActionDetailView(Context context) {
@@ -52,7 +54,7 @@ public class ActionDetailView extends EntityView {
 		if (bundleKeys != null) {
 			if(actionLayoutView == null) {
 				actionLayoutView = container.getBean("actionDetailLayoutView", bundleKeys);
-				
+
 				LayoutParams scrollViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
 				LayoutParams childViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
 				
@@ -101,7 +103,7 @@ public class ActionDetailView extends EntityView {
 			actionLayoutView.reload();
 		}
 	}
-	
+
 	public SocializeAction getCurrentAction() {
 		return (actionLayoutView == null) ? null : actionLayoutView.getCurrentAction();
 	}

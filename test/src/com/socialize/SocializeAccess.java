@@ -4,6 +4,7 @@ import android.content.Context;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.activity.ActionUtilsProxy;
 import com.socialize.api.action.comment.CommentUtilsProxy;
 import com.socialize.api.action.entity.EntityUtilsProxy;
 import com.socialize.api.action.like.LikeUtilsProxy;
@@ -15,14 +16,15 @@ import com.socialize.config.ConfigUtilsProxy;
 import com.socialize.listener.SocializeInitListener;
 
 public class SocializeAccess {
-	
-	private static final CommentUtilsProxy originalCommentUtilsProxy = CommentUtils.proxy;
-	private static final LikeUtilsProxy originalLikeUtilsProxy = LikeUtils.proxy;
-	private static final ShareUtilsProxy originalShareUtilsProxy = ShareUtils.proxy;
-	private static final ViewUtilsProxy originalViewUtilsProxy = ViewUtils.proxy;
-	private static final UserUtilsProxy originalUserUtilsProxy = UserUtils.proxy;
-	private static final ConfigUtilsProxy originalConfigUtilsProxy = ConfigUtils.proxy;
-	private static final EntityUtilsProxy originalEntityUtilsProxy = EntityUtils.proxy;
+
+	public static final CommentUtilsProxy originalCommentUtilsProxy = CommentUtils.proxy;
+	public static final LikeUtilsProxy originalLikeUtilsProxy = LikeUtils.proxy;
+	public static final ShareUtilsProxy originalShareUtilsProxy = ShareUtils.proxy;
+	public static final ViewUtilsProxy originalViewUtilsProxy = ViewUtils.proxy;
+	public static final UserUtilsProxy originalUserUtilsProxy = UserUtils.proxy;
+	public static final ConfigUtilsProxy originalConfigUtilsProxy = ConfigUtils.proxy;
+	public static final EntityUtilsProxy originalEntityUtilsProxy = EntityUtils.proxy;
+	public static final ActionUtilsProxy originalActionUtilsProxy = ActionUtils.proxy;
 	
 	public static <T extends Object> T getBean(String beanName, Object...args) {
 		return getBean(Socialize.getSocialize(), beanName, args);
@@ -83,7 +85,10 @@ public class SocializeAccess {
 	public static void setSession(SocializeSession session) {
 		Socialize.instance.setSession(session);
 	}
-	
+	public static void setActionUtilsProxy(ActionUtilsProxy proxy) {
+		ActionUtils.proxy = proxy;
+	}
+
 	public static void setCommentUtilsProxy(CommentUtilsProxy proxy) {
 		CommentUtils.proxy = proxy;
 	}
@@ -126,8 +131,12 @@ public class SocializeAccess {
 	
 	public static void revertViewUtilsProxy() {
 		ViewUtils.proxy = originalViewUtilsProxy;
-	}	
-	
+	}
+
+	public static void revertActionUtilsProxy() {
+		ActionUtils.proxy = originalActionUtilsProxy;
+	}
+
 	public static void setConfigUtilsProxy(ConfigUtilsProxy proxy) {
 		ConfigUtils.proxy = proxy;
 	}
@@ -148,6 +157,6 @@ public class SocializeAccess {
 		revertUserUtilsProxy();
 		revertConfigUtilsProxy();
 		revertEntityUtilsProxy();
+		revertActionUtilsProxy();
 	}
-	
 }

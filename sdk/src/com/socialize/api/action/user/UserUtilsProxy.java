@@ -30,6 +30,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.ui.action.OnActionDetailViewListener;
 import com.socialize.ui.profile.UserSettings;
 
 
@@ -59,7 +60,7 @@ public interface UserUtilsProxy {
 	public void showUserSettingsViewForResult(Activity context, Long userId, int requestCode);
 	
 	@Synchronous
-	public void showUserProfileView(Activity context, User user, SocializeAction action);
+	public void showUserProfileView(Activity context, User user, SocializeAction action, OnActionDetailViewListener onActionDetailViewListener);
 	
 	@Synchronous
 	public void clearSession(Context context);

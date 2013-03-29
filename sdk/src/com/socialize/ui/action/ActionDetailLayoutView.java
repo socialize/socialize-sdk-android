@@ -36,6 +36,7 @@ import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.i18n.I18NConstants;
+import com.socialize.listener.ListenerHolder;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.log.SocializeLogger;
@@ -55,11 +56,14 @@ public class ActionDetailLayoutView extends BaseView {
 
 	private String userId; // may be null
 	private String actionId;
-	private ActionDetailContentView content;
+
 	private ProgressDialog dialog = null;
+
 	private Drawable defaultProfilePicture;
-	
 	private SocializeAction currentAction;
+	private ActionDetailContentView content;
+
+	private OnActionDetailViewListener onActionDetailViewListener;
 	private User currentUser;
 	private int count = 0;
 	
@@ -68,6 +72,7 @@ public class ActionDetailLayoutView extends BaseView {
 	private IBeanFactory<ActionDetailContentView> actionDetailContentViewFactory;
 	private ProgressDialogFactory progressDialogFactory;
 	private ImageLoader imageLoader;
+	private ListenerHolder listenerHolder;
 	// End injected
 	
 	public ActionDetailLayoutView(Activity context, String userId) {
@@ -99,6 +104,7 @@ public class ActionDetailLayoutView extends BaseView {
 
 		content = actionDetailContentViewFactory.getBean();
 		defaultProfilePicture = drawables.getDrawable(Socialize.DEFAULT_USER_ICON);
+		onActionDetailViewListener = listenerHolder.pop("action_view");
 		
 		addView(content);
 	}
@@ -106,9 +112,20 @@ public class ActionDetailLayoutView extends BaseView {
 	@Override
 	public void onViewLoad() {
 		super.onViewLoad();
+		if(onActionDetailViewListener != null) {
+			onActionDetailViewListener.onCreate(this);
+		}
 		reload();
 	}
-	
+
+	@Override
+	public void onViewRendered(int width, int height) {
+		super.onViewRendered(width, height);
+		if(onActionDetailViewListener != null) {
+			onActionDetailViewListener.onRender(this);
+		}
+	}
+
 	public void reload() {
 		if(getSocialize().isAuthenticated()) {
 			
@@ -274,5 +291,9 @@ public class ActionDetailLayoutView extends BaseView {
 		count = 1;
 		currentUser = null;
 		doGetUserProfile(currentAction);
+	}
+
+	public ActionDetailContentView getContent() {
+		return content;
 	}
 }

@@ -21,16 +21,16 @@
  */
 package com.socialize.api.action.view;
 
-import java.util.ArrayList;
-import java.util.List;
 import android.location.Location;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.Entity;
 import com.socialize.entity.View;
-import com.socialize.error.SocializeException;
 import com.socialize.listener.view.ViewListener;
 import com.socialize.provider.SocializeProvider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Jason Polites
@@ -55,33 +55,6 @@ public class SocializeViewSystem extends SocializeApi<View, SocializeProvider<Vi
 		list.add(c);
 		
 		postAsync(session, ENDPOINT, list, listener);
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.socialize.api.action.ViewSystem#getViewsByEntity(com.socialize.api.SocializeSession, java.lang.String, int, int, com.socialize.listener.view.ViewListener)
-	 */
-	@Override
-	public void getViewsByEntity(SocializeSession session, String key, int startIndex, int endIndex, ViewListener listener) {
-		if(listener != null) {
-			listener.onError(new SocializeException("Method not supported"));
-		}
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.socialize.api.action.ViewSystem#getViewsByUser(com.socialize.api.SocializeSession, long, com.socialize.listener.view.ViewListener)
-	 */
-	@Override
-	public void getViewsByUser(SocializeSession session, long userId, int startIndex, int endIndex, ViewListener listener) {
-		if(listener != null) {
-			listener.onError(new SocializeException("Method not supported"));
-		}
-	}
-
-	@Override
-	public void getView(SocializeSession session, Entity entity, final ViewListener listener) {
-		if(listener != null) {
-			listener.onError(new SocializeException("Method not supported"));
-		}		
 	}
 
 	@Override

@@ -611,7 +611,7 @@
 		<property name="holder" ref="listenerHolder"/>
 		<property name="imageUtils" ref="imageUtils"/>		
 	</bean>
-	
+
 	<bean 
 		id="facebookV2Facade" 
 		extends="facebookFacadeBase"
@@ -620,7 +620,7 @@
 		<property name="facebookUtils" ref="facebookUtils"/>
 		<property name="facebookRunnerFactory" ref="facebookRunnerFactory"/>
 		<property name="facebookSessionStore" ref="facebookSessionStore"/>
-	</bean>					
+	</bean>
 	
 	<bean 
 		id="facebookV3Facade" 

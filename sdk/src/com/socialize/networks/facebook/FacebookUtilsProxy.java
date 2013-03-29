@@ -35,6 +35,7 @@ import com.socialize.facebook.Facebook;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.SocializeDeAuthListener;
+import com.socialize.networks.facebook.v2.FacebookPermissionCallback;
 
 /**
  * @author Jason Polites

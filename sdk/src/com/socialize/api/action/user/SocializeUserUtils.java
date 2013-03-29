@@ -33,11 +33,13 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.ListenerHolder;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.action.ActionDetailActivity;
+import com.socialize.ui.action.OnActionDetailViewListener;
 import com.socialize.ui.comment.CommentDetailActivity;
 import com.socialize.ui.profile.ProfileActivity;
 import com.socialize.ui.profile.UserSettings;
@@ -51,6 +53,7 @@ public class SocializeUserUtils extends SocializeActionUtilsBase implements User
 
 	private UserSystem userSystem;
 	private SocializeLogger logger;
+	private ListenerHolder listenerHolder;
 
 	@Override
 	public UserSettings getUserSettings(Context context) {
@@ -83,7 +86,14 @@ public class SocializeUserUtils extends SocializeActionUtilsBase implements User
 	}
 	
 	@Override
-	public void showUserProfileView(Activity context, User user, SocializeAction action) {
+	public void showUserProfileView(Activity context, User user, SocializeAction action, OnActionDetailViewListener onActionDetailViewListener) {
+
+		final String listenerKey = "action_view";
+
+		if(onActionDetailViewListener != null) {
+			listenerHolder.push(listenerKey, onActionDetailViewListener);
+		}
+
 		Intent i = newIntent(context, ActionDetailActivity.class);
 		i.putExtra(Socialize.USER_ID, user.getId().toString());
 		

@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.networks.facebook;
+package com.socialize.networks.facebook.v2;
 
 import java.util.Map;
 import android.app.Activity;
@@ -30,6 +30,7 @@ import com.socialize.entity.Share;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
+import com.socialize.networks.facebook.v2.FacebookPermissionCallback;
 
 /**
  * @author Jason Polites

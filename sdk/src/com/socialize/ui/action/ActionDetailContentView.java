@@ -295,7 +295,10 @@ public class ActionDetailContentView extends BaseView {
 				GradientDrawable.Orientation.BOTTOM_TOP,
 				new int[] { bottom, top });
 	}
-	
+
+	public UserActivityView getUserActivityView() {
+		return userActivityView;
+	}
 
 	public void setAction(final SocializeAction action) {
 		if(actionView != null) {

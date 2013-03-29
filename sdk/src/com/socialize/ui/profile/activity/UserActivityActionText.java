@@ -148,8 +148,14 @@ public class UserActivityActionText extends TextView implements UserActivityActi
 		String textSoFar = builder.toString();
 		
 		String entityName = StringUtils.ellipsis(action.getEntityDisplayName(), 30);
-		entityName = StringUtils.encodeUtf8(entityName);
-		
+
+		if(!StringUtils.isEmpty(entityName)) {
+			entityName = StringUtils.encodeUtf8(entityName);
+		}
+		else {
+			entityName = "";
+		}
+
 		int entityNameStartIndex = textSoFar.length();
 		int entityNameEndIndex = entityNameStartIndex + entityName.length();
 		int actionTextStartIndex = 0;

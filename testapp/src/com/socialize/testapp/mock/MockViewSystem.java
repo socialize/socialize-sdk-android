@@ -20,22 +20,7 @@ public class MockViewSystem  extends MockSystem<View> implements ViewSystem {
 	}
 
 	@Override
-	public void getViewsByEntity(SocializeSession session, String entityKey, int startIndex, int endIndex, ViewListener listener) {
-		if(listener != null) listener.onList(actionList);
-	}
-	
-	@Override
-	public void getView(SocializeSession session, Entity entity, ViewListener listener) {
-		if(listener != null) listener.onGet(action);
-	}
-	
-	@Override
 	public void getView(SocializeSession session, long id, ViewListener listener) {
 		if(listener != null) listener.onGet(action);
-	}
-
-	@Override
-	public void getViewsByUser(SocializeSession session, long userId, int startIndex, int endIndex, ViewListener listener) {
-		if(listener != null) listener.onList(actionList);
 	}
 }

@@ -31,6 +31,8 @@ import android.widget.LinearLayout;
  */
 public class LoadingItemView<V extends View> extends BaseLoadingView<StaticItemList<V>> {
 
+	private List<V> items;
+
 	public LoadingItemView(Context context) {
 		super(context);
 	}
@@ -51,7 +53,12 @@ public class LoadingItemView<V extends View> extends BaseLoadingView<StaticItemL
 	}
 	
 	public void setItems(List<V> items) {
+		this.items = items;
 		getMainView().setItems(items);
 		getMainView().notifyDataSetChanged();
+	}
+
+	public List<V> getItems() {
+		return items;
 	}
 }

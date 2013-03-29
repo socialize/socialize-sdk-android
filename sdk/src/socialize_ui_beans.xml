@@ -992,6 +992,7 @@
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
 		<property name="actionDetailContentViewFactory" ref="actionDetailContentViewFactory"/>
 		<property name="imageLoader" ref="imageLoader"/>
+        <property name="listenerHolder" ref="listenerHolder"/>
 	</bean> 	
 	
 	<bean 
@@ -1575,6 +1576,7 @@
 	<bean id="userUtils" class="com.socialize.api.action.user.SocializeUserUtils" extends="utilsBase">
 		<property name="userSystem" ref="userSystem"/>
 		<property name="logger" ref="logger"/>
+        <property name="listenerHolder" ref="listenerHolder"/>
 	</bean>
 	
 	<bean id="actionUtils" class="com.socialize.api.action.activity.SocializeActionUtils">

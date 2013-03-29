@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.networks.facebook;
+package com.socialize.networks.facebook.v2;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -28,6 +28,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import com.socialize.networks.facebook.FacebookUtilsProxy;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.Activity;

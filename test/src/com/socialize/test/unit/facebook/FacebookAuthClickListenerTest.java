@@ -42,7 +42,7 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.SocializeDeAuthListener;
 import com.socialize.networks.facebook.FacebookAuthClickListener;
-import com.socialize.networks.facebook.FacebookPermissionCallback;
+import com.socialize.networks.facebook.v2.FacebookPermissionCallback;
 import com.socialize.networks.facebook.FacebookUtilsProxy;
 import com.socialize.networks.facebook.OnPermissionResult;
 import com.socialize.test.SocializeActivityTest;

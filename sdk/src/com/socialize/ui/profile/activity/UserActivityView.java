@@ -116,7 +116,11 @@ public class UserActivityView extends BaseView {
 			}
 		});
 	}
-	
+
+	public LoadingItemView<UserActivityListItem> getItemView() {
+		return itemView;
+	}
+
 	public void setNumItems(int numItems) {
 		this.numItems = numItems;
 	}

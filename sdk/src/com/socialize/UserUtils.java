@@ -32,6 +32,7 @@ import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.ui.action.OnActionDetailViewListener;
 import com.socialize.ui.profile.UserSettings;
 
 
@@ -94,7 +95,7 @@ public class UserUtils {
 	 * @param user The user for whom the profile will be shown.
 	 */
 	public static void showUserProfile (Activity context, User user) {
-		proxy.showUserProfileView(context, user, null);
+		proxy.showUserProfileView(context, user, null, null);
 	}
 	
 	/**
@@ -104,9 +105,32 @@ public class UserUtils {
 	 * @param action The action (comment/share/like) that was performed.
 	 */
 	public static void showUserProfileWithAction (Activity context, User user, SocializeAction action) {
-		proxy.showUserProfileView(context, user, action);
-	}	
-	
+		proxy.showUserProfileView(context, user, action, null);
+	}
+
+
+	/**
+	 * Shows the user profile UI for the given user.
+	 * @param context The current context.
+	 * @param user The user for whom the profile will be shown.
+	 * @param onActionDetailViewListener A listener to handle UI view events.
+	 */
+	public static void showUserProfile (Activity context, User user, OnActionDetailViewListener onActionDetailViewListener) {
+		proxy.showUserProfileView(context, user, null, onActionDetailViewListener);
+	}
+
+	/**
+	 * Shows the user profile UI for the given user.
+	 * @param context The current context.
+	 * @param user The user for whom the profile will be shown.
+	 * @param action The action (comment/share/like) that was performed.
+	 * @param onActionDetailViewListener A listener to handle UI view events.
+	 */
+	public static void showUserProfileWithAction (Activity context, User user, SocializeAction action, OnActionDetailViewListener onActionDetailViewListener) {
+		proxy.showUserProfileView(context, user, action, onActionDetailViewListener);
+	}
+
+
 	/**
 	 * Shows the settings UI for the current user.
 	 * @param context The current context.

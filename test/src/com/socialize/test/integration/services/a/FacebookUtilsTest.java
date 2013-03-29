@@ -55,6 +55,7 @@ import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.facebook.*;
 import com.socialize.networks.facebook.v2.FacebookFacadeV2;
+import com.socialize.networks.facebook.v2.FacebookPermissionCallback;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.util.TestUtils;
 import org.json.JSONObject;

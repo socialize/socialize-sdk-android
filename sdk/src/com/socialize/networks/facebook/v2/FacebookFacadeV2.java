@@ -322,7 +322,7 @@ public class FacebookFacadeV2 extends BaseFacebookFacade {
 
 
 	/* (non-Javadoc)
-	 * @see com.socialize.networks.facebook.FacebookFacade#getCurrentPermissions(android.app.Activity, java.lang.String, com.socialize.networks.facebook.FacebookPermissionCallback)
+	 * @see com.socialize.networks.facebook.FacebookFacade#getCurrentPermissions(android.app.Activity, java.lang.String, com.socialize.networks.facebook.v2.FacebookPermissionCallback)
 	 */
 	@Override
 	public void getCurrentPermissions(final Activity parent, String token, final OnPermissionResult callback) {
