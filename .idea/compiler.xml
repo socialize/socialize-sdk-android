@@ -41,6 +41,7 @@
         <sourceTestOutputDir name="bin" />
         <option name="RegenerateFrameworkMocks" value="true" />
         <processorPath useClasspath="true" />
+        <module name="android-ioc-test" />
         <module name="socialize-sdk-test2" />
         <module name="test" />
         <module name="test2" />

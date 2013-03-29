@@ -99,8 +99,7 @@
         <!-- View -->
         <activity android:name=".implementations.view.ViewActivity"/>
         <activity android:name=".implementations.view.AddViewActivity"/>
-        <activity android:name=".implementations.view.GetViewsByUserActivity"/> 
-        
+
         <!-- Like -->
         <activity android:name=".implementations.like.LikeActivity"/>
         <activity android:name=".implementations.like.LikeButtonsActivity"/>

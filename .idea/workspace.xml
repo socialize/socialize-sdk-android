@@ -41,73 +41,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3a25f51c-6f90-4dbe-a079-8072483f3aed" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/test/src/com/socialize/test/action/ActionDetailTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/src/com/socialize/test/action/ActionDetailTest.java" />
-      <change type="NEW" beforePath="" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/com/socialize/ui/action/OnActionDetailViewListener.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sdk/src/com/socialize/ui/action/OnActionDetailViewListener.java" />
+      <change type="DELETED" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/demo/src/com/socialize/demo/implementations/view/GetViewsByUserActivity.java" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../android-ioc/core/src/com/socialize/android/ioc/SafeAllocator.java" afterPath="" />
-      <change type="MOVED" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/com/socialize/networks/facebook/DefaultFacebookWallPoster.java" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/com/socialize/networks/facebook/v2/DefaultFacebookWallPoster.java" />
-      <change type="MOVED" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/com/socialize/networks/facebook/FacebookPermissionCallback.java" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/com/socialize/networks/facebook/v2/FacebookPermissionCallback.java" />
-      <change type="MOVED" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/com/socialize/networks/facebook/FacebookWallPoster.java" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/com/socialize/networks/facebook/v2/FacebookWallPoster.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/sdk/src/com/socialize/networks/facebook/DefaultFacebookWallPoster.java" afterPath="$PROJECT_DIR$/sdk/src/com/socialize/networks/facebook/v2/DefaultFacebookWallPoster.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/sdk/src/com/socialize/networks/facebook/FacebookPermissionCallback.java" afterPath="$PROJECT_DIR$/sdk/src/com/socialize/networks/facebook/v2/FacebookPermissionCallback.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/sdk/src/com/socialize/networks/facebook/FacebookWallPoster.java" afterPath="$PROJECT_DIR$/sdk/src/com/socialize/networks/facebook/v2/FacebookWallPoster.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/demo/src/com/socialize/demo/implementations/view/GetViewsByUserActivity.java" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../facebook-android-sdk/libs/android-support-v4.jar" afterPath="$PROJECT_DIR$/../facebook-android-sdk/libs/android-support-v4.jar" />
-      <change type="MODIFICATION" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/com/socialize/ui/action/ActionDetailActivity.java" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/com/socialize/ui/action/ActionDetailActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/com/socialize/ui/action/ActionDetailActivity.java" afterPath="$PROJECT_DIR$/sdk/src/com/socialize/ui/action/ActionDetailActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/com/socialize/ui/action/ActionDetailContentView.java" afterPath="$PROJECT_DIR$/sdk/src/com/socialize/ui/action/ActionDetailContentView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/com/socialize/ui/action/ActionDetailLayoutView.java" afterPath="$PROJECT_DIR$/sdk/src/com/socialize/ui/action/ActionDetailLayoutView.java" />
-      <change type="MODIFICATION" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/com/socialize/ui/action/ActionDetailView.java" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/com/socialize/ui/action/ActionDetailView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/com/socialize/ui/action/ActionDetailView.java" afterPath="$PROJECT_DIR$/sdk/src/com/socialize/ui/action/ActionDetailView.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/core/src/com/socialize/android/ioc/Allocator.java" afterPath="$PROJECT_DIR$/../android-ioc/core/src/com/socialize/android/ioc/Allocator.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/core/src/com/socialize/android/ioc/AndroidIOC.java" afterPath="$PROJECT_DIR$/../android-ioc/core/src/com/socialize/android/ioc/AndroidIOC.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/test/src/com/socialize/android/ioc/test/AndroidIOCTest.java" afterPath="$PROJECT_DIR$/../android-ioc/test/src/com/socialize/android/ioc/test/AndroidIOCTest.java" />
+      <change type="MODIFICATION" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/demo/AndroidManifest.xml" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/demo/AndroidManifest.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/AndroidManifest.xml" afterPath="$PROJECT_DIR$/demo/AndroidManifest.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/core/src/com/socialize/android/ioc/BeanBuilder.java" afterPath="$PROJECT_DIR$/../android-ioc/core/src/com/socialize/android/ioc/BeanBuilder.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/core/src/com/socialize/android/ioc/BeanContextCache.java" afterPath="$PROJECT_DIR$/../android-ioc/core/src/com/socialize/android/ioc/BeanContextCache.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/core/src/com/socialize/android/ioc/Container.java" afterPath="$PROJECT_DIR$/../android-ioc/core/src/com/socialize/android/ioc/Container.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/core/src/com/socialize/android/ioc/ContainerBuilder.java" afterPath="$PROJECT_DIR$/../android-ioc/core/src/com/socialize/android/ioc/ContainerBuilder.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/test/src/com/socialize/android/ioc/test/ContainerBuilderTest.java" afterPath="$PROJECT_DIR$/../android-ioc/test/src/com/socialize/android/ioc/test/ContainerBuilderTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/core/src/com/socialize/android/ioc/DefaultAllocator.java" afterPath="$PROJECT_DIR$/../android-ioc/core/src/com/socialize/android/ioc/DefaultAllocator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/com/socialize/ui/view/EntityView.java" afterPath="$PROJECT_DIR$/sdk/src/com/socialize/ui/view/EntityView.java" />
-      <change type="MODIFICATION" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/test/src/com/socialize/test/unit/facebook/FacebookAuthClickListenerTest.java" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/test/src/com/socialize/test/unit/facebook/FacebookAuthClickListenerTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/src/com/socialize/test/unit/facebook/FacebookAuthClickListenerTest.java" afterPath="$PROJECT_DIR$/test/src/com/socialize/test/unit/facebook/FacebookAuthClickListenerTest.java" />
-      <change type="MODIFICATION" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/com/socialize/networks/facebook/v2/FacebookFacadeV2.java" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/com/socialize/networks/facebook/v2/FacebookFacadeV2.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/com/socialize/networks/facebook/v2/FacebookFacadeV2.java" afterPath="$PROJECT_DIR$/sdk/src/com/socialize/networks/facebook/v2/FacebookFacadeV2.java" />
-      <change type="MODIFICATION" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/com/socialize/networks/facebook/FacebookUtilsImpl.java" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/com/socialize/networks/facebook/FacebookUtilsImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/com/socialize/networks/facebook/FacebookUtilsImpl.java" afterPath="$PROJECT_DIR$/sdk/src/com/socialize/networks/facebook/FacebookUtilsImpl.java" />
-      <change type="MODIFICATION" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/com/socialize/networks/facebook/FacebookUtilsProxy.java" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/com/socialize/networks/facebook/FacebookUtilsProxy.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/com/socialize/networks/facebook/FacebookUtilsProxy.java" afterPath="$PROJECT_DIR$/sdk/src/com/socialize/networks/facebook/FacebookUtilsProxy.java" />
-      <change type="MODIFICATION" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/test/src/com/socialize/test/integration/services/a/FacebookUtilsTest.java" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/test/src/com/socialize/test/integration/services/a/FacebookUtilsTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/src/com/socialize/test/integration/services/a/FacebookUtilsTest.java" afterPath="$PROJECT_DIR$/test/src/com/socialize/test/integration/services/a/FacebookUtilsTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/com/socialize/ui/view/LoadingItemView.java" afterPath="$PROJECT_DIR$/sdk/src/com/socialize/ui/view/LoadingItemView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testapp/src/com/socialize/testapp/mock/MockViewSystem.java" afterPath="$PROJECT_DIR$/testapp/src/com/socialize/testapp/mock/MockViewSystem.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/core/src/com/socialize/android/ioc/ResourceLocator.java" afterPath="$PROJECT_DIR$/../android-ioc/core/src/com/socialize/android/ioc/ResourceLocator.java" />
-      <change type="MODIFICATION" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/test/src/com/socialize/SocializeAccess.java" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/test/src/com/socialize/SocializeAccess.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/src/com/socialize/SocializeAccess.java" afterPath="$PROJECT_DIR$/test/src/com/socialize/SocializeAccess.java" />
-      <change type="MODIFICATION" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/com/socialize/api/action/user/SocializeUserUtils.java" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/com/socialize/api/action/user/SocializeUserUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/com/socialize/api/action/user/SocializeUserUtils.java" afterPath="$PROJECT_DIR$/sdk/src/com/socialize/api/action/user/SocializeUserUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/com/socialize/api/action/view/SocializeViewSystem.java" afterPath="$PROJECT_DIR$/sdk/src/com/socialize/api/action/view/SocializeViewSystem.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/com/socialize/api/action/view/SocializeViewUtils.java" afterPath="$PROJECT_DIR$/sdk/src/com/socialize/api/action/view/SocializeViewUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/com/socialize/ui/profile/activity/UserActivityActionText.java" afterPath="$PROJECT_DIR$/sdk/src/com/socialize/ui/profile/activity/UserActivityActionText.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/com/socialize/ui/profile/activity/UserActivityView.java" afterPath="$PROJECT_DIR$/sdk/src/com/socialize/ui/profile/activity/UserActivityView.java" />
-      <change type="MODIFICATION" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/com/socialize/UserUtils.java" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/com/socialize/UserUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/com/socialize/UserUtils.java" afterPath="$PROJECT_DIR$/sdk/src/com/socialize/UserUtils.java" />
-      <change type="MODIFICATION" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/com/socialize/api/action/user/UserUtilsProxy.java" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/com/socialize/api/action/user/UserUtilsProxy.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/com/socialize/api/action/user/UserUtilsProxy.java" afterPath="$PROJECT_DIR$/sdk/src/com/socialize/api/action/user/UserUtilsProxy.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/com/socialize/api/action/view/ViewSystem.java" afterPath="$PROJECT_DIR$/sdk/src/com/socialize/api/action/view/ViewSystem.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/com/socialize/ViewUtils.java" afterPath="$PROJECT_DIR$/sdk/src/com/socialize/ViewUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/com/socialize/api/action/view/ViewUtilsProxy.java" afterPath="$PROJECT_DIR$/sdk/src/com/socialize/api/action/view/ViewUtilsProxy.java" />
-      <change type="MODIFICATION" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/test/global.properties" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/test/global.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/global.properties" afterPath="$PROJECT_DIR$/test/global.properties" />
+      <change type="MODIFICATION" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/demo/src/com/socialize/demo/snippets/ViewSnippets.java" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/demo/src/com/socialize/demo/snippets/ViewSnippets.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/src/com/socialize/demo/snippets/ViewSnippets.java" afterPath="$PROJECT_DIR$/demo/src/com/socialize/demo/snippets/ViewSnippets.java" />
+      <change type="MODIFICATION" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/.idea/compiler.xml" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/.idea/compiler.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/core/project.properties" afterPath="$PROJECT_DIR$/../android-ioc/core/project.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/sample/project.properties" afterPath="$PROJECT_DIR$/../android-ioc/sample/project.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/test/project.properties" afterPath="$PROJECT_DIR$/../android-ioc/test/project.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../facebook-android-sdk/facebook/project.properties" afterPath="$PROJECT_DIR$/../facebook-android-sdk/facebook/project.properties" />
-      <change type="MODIFICATION" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/testapp/assets/socialize.properties" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/testapp/assets/socialize.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testapp/assets/socialize.properties" afterPath="$PROJECT_DIR$/testapp/assets/socialize.properties" />
-      <change type="MODIFICATION" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/socialize_core_beans.xml" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/src/socialize_core_beans.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/socialize_core_beans.xml" afterPath="$PROJECT_DIR$/sdk/src/socialize_core_beans.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/socialize_ui_beans.xml" afterPath="$PROJECT_DIR$/sdk/src/socialize_ui_beans.xml" />
       <change type="MODIFICATION" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/.idea/workspace.xml" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -179,7 +136,6 @@
     <file path="/SocialNetworkSignOutTask.java" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1364339267183" ignored="false" />
     <file path="/BaseSocializeProvider.java" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1364339319099" ignored="false" />
     <file path="/CommentViewCustomHeaderActivity.java" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1364341254779" ignored="false" />
-    <file path="$PROJECT_DIR$/demo/project.properties" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1364486414809" ignored="false" />
     <file path="$PROJECT_DIR$/vanilla/project.properties" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1364486414811" ignored="false" />
     <file path="/FacebookFacadeFactory.java" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1364505258456" ignored="false" />
     <file path="/ActionDetailTest.java" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1364575743308" ignored="false" />
@@ -1643,10 +1599,28 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MockViewSystem.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="MockViewSystem.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/testapp/src/com/socialize/testapp/mock/MockViewSystem.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="4" selection-start="615" selection-end="615" vertical-scroll-proportion="0.4827586">
+            <state line="21" column="4" selection-start="615" selection-end="615" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ViewSnippets.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/demo/src/com/socialize/demo/snippets/ViewSnippets.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="60" column="0" selection-start="2017" selection-end="2017" vertical-scroll-proportion="0.8460039">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AndroidManifest.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/demo/bin/AndroidManifest.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="101" column="0" selection-start="5498" selection-end="5498" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -1677,8 +1651,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/sdk/src/com/socialize/ui/view/EntityView.java" />
-        <option value="$PROJECT_DIR$/sdk/src/com/socialize/ui/action/OnActionDetailViewListener.java" />
         <option value="$PROJECT_DIR$/sdk/src/com/socialize/ui/action/ActionDetailView.java" />
         <option value="$PROJECT_DIR$/sdk/src/socialize_ui_beans.xml" />
         <option value="$PROJECT_DIR$/sdk/src/com/socialize/ui/action/ActionDetailLayoutView.java" />
@@ -1693,6 +1665,8 @@
         <option value="$PROJECT_DIR$/sdk/src/com/socialize/api/action/view/ViewUtilsProxy.java" />
         <option value="$PROJECT_DIR$/sdk/src/com/socialize/ViewUtils.java" />
         <option value="$PROJECT_DIR$/testapp/src/com/socialize/testapp/mock/MockViewSystem.java" />
+        <option value="$PROJECT_DIR$/demo/src/com/socialize/demo/snippets/ViewSnippets.java" />
+        <option value="$PROJECT_DIR$/demo/bin/AndroidManifest.xml" />
       </list>
     </option>
   </component>
@@ -1906,16 +1880,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="socialize-sdk-android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="socialize" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
       <pane id="Scope">
@@ -1983,8 +1947,8 @@
     <property name="options.splitter.main.proportions" value="0.16003184" />
     <property name="recentsLimit" value="5" />
     <property name="MemberChooser.sorted" value="false" />
-    <property name="options.lastSelected" value="project.propDebugger" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/test/libs/polidea_test_runner_1.1.jar!/" />
+    <property name="options.lastSelected" value="reference.projectsettings.compiler.annotationProcessors" />
+    <property name="last_opened_file_path" value="/android/platforms/android-9/android.jar!/" />
     <property name="AndroidLayoutSelectedEditor" value="text-editor" />
     <property name="project.structure.side.proportion" value="0.13636364" />
     <property name="MemberChooser.copyJavadoc" value="false" />
@@ -2381,15 +2345,15 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4893868" sideWeight="0.33108935" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3604651" sideWeight="0.35023585" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900944" sideWeight="0.49265605" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3620283" sideWeight="0.5740514" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3620283" sideWeight="0.5740514" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3101415" sideWeight="0.49510404" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28335375" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" x="608" y="82" width="463" height="848" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.30905753" sideWeight="0.5801887" order="1" side_tool="false" content_ui="combo" x="27" y="101" width="589" height="569" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.30905753" sideWeight="0.6379717" order="1" side_tool="false" content_ui="combo" x="27" y="101" width="589" height="569" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18849449" sideWeight="0.6686321" order="5" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4198113" sideWeight="0.66462666" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4198113" sideWeight="0.66462666" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27172583" sideWeight="0.6709906" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Thumbnails" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900944" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
@@ -2486,27 +2450,6 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/sdk/src/com/socialize/ui/view/LoadingItemView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="0" selection-start="2101" selection-end="2101" vertical-scroll-proportion="0.9767442">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sdk/src/com/socialize/util/StringUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="43" column="0" selection-start="1620" selection-end="1620" vertical-scroll-proportion="0.3005566">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sdk/src/com/socialize/entity/SocializeObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="0" selection-start="1499" selection-end="1499" vertical-scroll-proportion="0.2857143">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sdk/src/com/socialize/ui/action/ActionDetailLayoutView.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="204" column="0" selection-start="6322" selection-end="6322" vertical-scroll-proportion="0.2851711">
@@ -2597,7 +2540,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/testapp/src/com/socialize/testapp/mock/MockViewSystem.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="4" selection-start="615" selection-end="615" vertical-scroll-proportion="0.4827586">
+        <state line="21" column="4" selection-start="615" selection-end="615" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/demo/bin/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="101" column="0" selection-start="5498" selection-end="5498" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/demo/src/com/socialize/demo/snippets/ViewSnippets.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="60" column="0" selection-start="2017" selection-end="2017" vertical-scroll-proportion="0.8460039">
           <folding />
         </state>
       </provider>
@@ -2654,7 +2611,7 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>vanilla|socialize</last-edited>
+          <last-edited>test|socialize</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
