@@ -83,7 +83,8 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 		login(context, appId, permissions, sso, read, listener);
 	}
 
-	private void login(Activity context, boolean read, final AuthProviderListener listener) {
+	// Protected so we can mock
+	protected void login(Activity context, boolean read, final AuthProviderListener listener) {
 		login(context, config.getProperty(SocializeConfig.FACEBOOK_APP_ID), (read) ? READ_PERMISSIONS : WRITE_PERMISSIONS, config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true), read, listener);
 	}
 	
@@ -91,19 +92,45 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 	public void onResume(Activity context, SocializeAuthListener listener) {
 		Session session = Session.getActiveSession();
 	    if (session == null) {
-	        session = new Session.Builder(context).setApplicationId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID)).build();
+	        session = createNewSession(context, config.getProperty(SocializeConfig.FACEBOOK_APP_ID));
 			String strToken = getAccessToken(context);
 			if(!StringUtils.isEmpty(strToken)) {
 				AccessToken accessToken = AccessToken.createFromExistingAccessToken(
 						strToken,
-	                    null, null, null, null);
-				session.open(accessToken, null);
-	            Session.setActiveSession(session);
+	                    null,
+						null,
+						null,
+						null);
+
+				openSessionWithToken(session, accessToken);
+
+				Session.setActiveSession(session);
 			}
 	    }
 	}
 
-	private void login(Activity context, String appId, String[] permissions, boolean sso, boolean read, final AuthProviderListener listener) {
+	// So we can mock
+	protected Session createNewSession(Activity context, String appId) {
+		return new Session.Builder(context).setApplicationId(appId).build();
+	}
+
+	// So we can mock
+	protected void openSessionWithToken(Session session, AccessToken token) {
+		session.open(token, null);
+	}
+
+	// So we can mock
+	protected void openSessionForRead(Session session, Session.OpenRequest auth) {
+		session.openForRead(auth);
+	}
+
+	// So we can mock
+	protected void openSessionForPublish(Session session, Session.OpenRequest auth) {
+		session.openForPublish(auth);
+	}
+
+	// Protected so we can mock
+	protected void login(Activity context, String appId, String[] permissions, boolean sso, boolean read, final AuthProviderListener listener) {
 
 		Session.OpenRequest auth = new Session.OpenRequest(context);
 		
@@ -118,86 +145,105 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 			auth.setLoginBehavior(SessionLoginBehavior.SUPPRESS_SSO);
 		}
 	
-		auth.setCallback(new Session.StatusCallback() {
+		auth.setCallback(createLoginCallback(listener));
+		
+		Session session = createNewSession(context, appId);
+		Session.setActiveSession(session);
+		
+		if(read) {
+			openSessionForRead(session ,auth);
+		}
+		else {
+			openSessionForPublish(session ,auth);
+		}
+	}
+
+	// So we can mock
+	protected Session.StatusCallback createLoginCallback(final AuthProviderListener listener) {
+
+		return new Session.StatusCallback() {
 
 			// callback when session changes state
 			@Override
 			public void call(final Session session, SessionState state, Exception exception) {
-				
+
 				if(exception != null && exception instanceof FacebookOperationCanceledException) {
 					if(logger != null) {
 						logger.error("Facebook operation failed", exception);
 					}
 					handleCancel(listener);
 					return;
-				}				
-				
+				}
+
 				switch(state) {
-				
+
 					case OPENED:
-						if (session.isOpened()) {
+						if (isSessionOpen(session)) {
 							// make request to the /me API
-							Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
-								// callback after Graph API response with user object
-								@Override
-								public void onCompleted(GraphUser user, Response response) {
-									if(response.getError() != null) {
-										handleError(response.getError().getException(), listener);
-									}
-									else if (user != null) {
-										handleResult(session, user, listener);
-									}
-								}
-							});
-						}						
-						
+							getUser(session, listener);
+						}
+
 						break;
-						
+
 					case CLOSED:
 						if(exception != null) {
-							handleError(exception, listener);						
+							handleError(exception, listener);
 						}
-						break;		
-						
+						break;
+
 					case CLOSED_LOGIN_FAILED:
 						if(exception != null) {
 							handleAuthFail(exception, listener);
 						}
-						break;							
+						break;
+				}
+			}
+		};
+	}
+
+	protected boolean isSessionOpen(Session session) {
+		return session.isOpened();
+	}
+
+	// so we can mock
+	protected void getUser(final Session session, final AuthProviderListener listener) {
+		Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
+			// callback after Graph API response with user object
+			@Override
+			public void onCompleted(GraphUser user, Response response) {
+				if(response.getError() != null) {
+					handleError(response.getError().getException(), listener);
+				}
+				else if (user != null) {
+					handleResult(session, user, listener);
 				}
 			}
 		});
-		
-		Session session = new Session.Builder(context).setApplicationId(appId).build();
-		Session.setActiveSession(session);
-		
-		if(read) {
-			session.openForRead(auth);
-		}
-		else {
-			session.openForPublish(auth);
-		}
 	}
-	
-	private void handleError(Exception exception, AuthProviderListener listener) {
+
+	// Protected so we can mock
+	protected void handleError(Exception exception, SocializeListener listener) {
 		if(listener != null) {
 			listener.onError(SocializeException.wrap(exception));
 		}
 	}
-	
-	private void handleAuthFail(Exception exception, AuthProviderListener listener) {
+
+	// Protected so we can mock
+	protected void handleAuthFail(Exception exception, AuthProviderListener listener) {
 		if(listener != null) {
 			listener.onAuthFail(SocializeException.wrap(exception));
 		}
 	}
-	
-	private void handleCancel(AuthProviderListener listener) {
+
+	// Protected so we can mock
+	protected void handleCancel(AuthProviderListener listener) {
 		if(listener != null) {
 			listener.onCancel();
 		}
 	}
-	
-	private void handleResult(Session session, GraphUser user, AuthProviderListener listener) {
+
+	// Protected so we can mock
+	protected void handleResult(Session session, GraphUser user, AuthProviderListener listener) {
 		if(listener != null) {
 			AuthProviderResponse response = new AuthProviderResponse();
 			response.setUserId(user.getId());
@@ -332,8 +378,9 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 			handleNotSignedIn(context, listener);
 		}
 	}
-	
-	private final Session getActiveSession(Context context) {
+
+	// Protected so we can mock
+	protected Session getActiveSession(Context context) {
 		Session activeSession = Session.getActiveSession();
 		if(activeSession == null) {
 			activeSession = new Session.Builder(context).setApplicationId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID)).build();
@@ -341,8 +388,9 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 		}
 		return activeSession;
 	}
-	
-	private final void handleFBResponse(final Activity context, Response response, final SocialNetworkPostListener listener) {
+
+	// Protected so we can mock
+	protected void handleFBResponse(final Activity context, Response response, final SocialNetworkPostListener listener) {
 		FacebookRequestError error = response.getError();
 		
 		if(error != null) {
@@ -379,8 +427,9 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
                     .getInnerJSONObject());
 		}
 	}
-	
-	private final void handleNotSignedIn(final Activity context, SocializeListener listener) {
+
+	// Protected so we can mock
+	protected void handleNotSignedIn(final Activity context, SocializeListener listener) {
 		String msg = "Not signed into Facebook";
 		if(listener != null) {
 			listener.onError(new SocializeException(msg));
@@ -388,9 +437,10 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 		else {
 			handleNonListenerError(msg, new SocializeException(msg));
 		}
-	}	
-	
-	private final void handleNotSignedIn(final Activity context, SocialNetworkPostListener listener) {
+	}
+
+	// Protected so we can mock
+	protected void handleNotSignedIn(final Activity context, SocialNetworkPostListener listener) {
 		String msg = "Not signed into Facebook";
 		if(listener != null) {
 			listener.onNetworkError(context, SocialNetwork.FACEBOOK, new SocializeException(msg));
@@ -399,8 +449,9 @@ public class FacebookFacadeV3 extends BaseFacebookFacade {
 			handleNonListenerError(msg, new SocializeException(msg));
 		}
 	}
-	
-	private final void handleNonListenerError(String msg, Exception error) {
+
+	// Protected so we can mock
+	protected void handleNonListenerError(String msg, Exception error) {
 		if(logger != null) {
 			logger.error(msg, error);
 		}
