@@ -27,25 +27,35 @@ import com.socialize.CommentUtils;
 import com.socialize.SocializeAccess;
 import com.socialize.SubscriptionUtils;
 import com.socialize.UserUtils;
+import com.socialize.android.ioc.IOCContainer;
+import com.socialize.android.ioc.ProxyObject;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ActionOptions;
 import com.socialize.api.action.ShareableActionOptions;
 import com.socialize.api.action.comment.CommentOptions;
 import com.socialize.api.action.comment.SocializeCommentUtils;
+import com.socialize.api.action.comment.SocializeSubscriptionUtils;
+import com.socialize.api.action.comment.SubscriptionUtilsProxy;
 import com.socialize.api.action.user.SocializeUserUtils;
-import com.socialize.entity.Comment;
-import com.socialize.entity.Entity;
-import com.socialize.entity.ListResult;
-import com.socialize.entity.Subscription;
+import com.socialize.entity.*;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.listener.subscription.SubscriptionCheckListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.notifications.NotificationRegistrationSystem;
+import com.socialize.notifications.SocializeNotificationRegistrationSystem;
 import com.socialize.notifications.SubscriptionType;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.util.TestUtils;
+import com.socialize.ui.comment.*;
+import com.socialize.ui.slider.ActionBarSliderView;
+import com.socialize.ui.slider.OnActionBarSliderMoveListener;
+import com.socialize.util.AppUtils;
+import com.socialize.util.DefaultAppUtils;
+import com.socialize.util.EntityLoaderUtils;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -57,6 +67,223 @@ import java.util.concurrent.TimeUnit;
  *
  */
 public class CommentUtilsTest extends SocializeActivityTest {
+
+	public void testCommentViewDisplaysCorrectData() throws InterruptedException {
+
+		// The data we assert is taken from the default data created sdk-cleanup.py
+		Activity context = TestUtils.getActivity(this);
+
+		// Setup the comment Activity for monitoring
+		TestUtils.setUpActivityMonitor(CommentActivity.class);
+
+		final int grabLength = 3;
+
+		SocializeAccess.setBeanOverrides("socialize_proxy_beans.xml");
+
+		// Stub out app utils to ensure notifications are marked as enabled
+		final DefaultAppUtils defaultAppUtilsMock = new DefaultAppUtils() {
+			@Override
+			public boolean isNotificationsAvailable(Context context) {
+				return true;
+			}
+
+			@Override
+			public boolean isLocationAvailable(Context context) {
+				return true;
+			}
+		};
+
+		// We want notifications enabled, but we don't want to try to register
+		final NotificationRegistrationSystem notificationRegistrationSystem = new SocializeNotificationRegistrationSystem() {
+			@Override
+			public boolean isRegisteredSocialize(Context context, User user) {
+				return true;
+			}
+
+			@Override
+			public boolean isRegisteredC2DM(Context context) {
+				return true;
+			}
+
+			@Override
+			public void registerC2DMAsync(Context context) {
+				// Do nothing
+			}
+
+			@Override
+			public synchronized void registerC2DM(Context context) {
+				// Do nothing
+			}
+
+			@Override
+			public void registerSocialize(Context context, String registrationId) {
+				// Do nothing
+			}
+
+			@Override
+			public void registerC2DMFailed(Context context, String cause) {
+				// Do nothing
+			}
+		};
+
+		final SocializeSubscriptionUtils socializeSubscriptionUtils = new SocializeSubscriptionUtils() {
+			@Override
+			public void isSubscribed(Activity context, Entity e, SubscriptionType type, SubscriptionCheckListener listener) {
+				listener.onNotSubscribed();
+			}
+		};
+
+		// Setup the proxies
+		SocializeAccess.setInitListener(new SocializeInitListener() {
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				fail();
+			}
+			@Override
+			public void onInit(Context context, IOCContainer container) {
+				ProxyObject<AppUtils> appUtils = SocializeAccess.getProxy("appUtils");
+				ProxyObject<NotificationRegistrationSystem> registrationSystem = SocializeAccess.getProxy("notificationRegistrationSystem");
+				ProxyObject<SubscriptionUtilsProxy> subscriptionUtils = SocializeAccess.getProxy("subscriptionUtils");
+
+				appUtils.setDelegate(defaultAppUtilsMock);
+				registrationSystem.setDelegate(notificationRegistrationSystem);
+				subscriptionUtils.setDelegate(socializeSubscriptionUtils);
+			}
+		});
+
+		final CountDownLatch latch = new CountDownLatch(1);
+
+		CommentUtils.showCommentView(context, entity, new OnCommentViewActionListener() {
+			@Override
+			public void onCreate(CommentListView view) {
+				view.setDefaultGrabLength(grabLength);
+			}
+
+			@Override
+			public void onRender(CommentListView view) {}
+
+			@Override
+			public void onCommentList(CommentListView view, List<Comment> comments, int start, int end) {
+				addResult(0, view);
+				latch.countDown();
+			}
+
+			@Override
+			public void onBeforeSetComment(Comment comment, CommentListItem item) {}
+
+			@Override
+			public void onAfterSetComment(Comment comment, CommentListItem item) {}
+
+			@Override
+			public void onReload(CommentListView view) {}
+
+			@Override
+			public void onPostComment(Comment comment) {}
+
+			@Override
+			public void onError(SocializeException error) {}
+		});
+
+
+		Activity commentActivity = TestUtils.waitForActivity(10000);
+
+		assertTrue(latch.await(20, TimeUnit.SECONDS));
+
+		final CommentListView view = getResult(0);
+
+		assertNotNull(view);
+
+		CommentAdapter commentAdapter = view.getCommentAdapter();
+
+		assertNotNull(commentAdapter);
+
+		List<Comment> comments = commentAdapter.getComments();
+
+		assertNotNull(comments);
+		assertEquals(grabLength, comments.size());
+
+		int count = commentAdapter.getCount();
+
+		if(commentAdapter.isDisplayLoading()) {
+			count--;
+		}
+
+		assertEquals(grabLength, count);
+
+		for (int i = 0; i < count; i++) {
+			assertNotNull(commentAdapter.getItem(i));
+		}
+
+		// Get next set
+		final CountDownLatch latch2 = new CountDownLatch(1);
+		view.setDefaultGrabLength(grabLength*2);
+		view.setOnCommentViewActionListener(new OnCommentViewActionListener() {
+			@Override
+			public void onCreate(CommentListView view) {}
+
+			@Override
+			public void onRender(CommentListView view) {}
+
+			@Override
+			public void onCommentList(CommentListView view, List<Comment> comments, int start, int end) {
+				addResult(0, view);
+				latch2.countDown();
+			}
+
+			@Override
+			public void onBeforeSetComment(Comment comment, CommentListItem item) {}
+
+			@Override
+			public void onAfterSetComment(Comment comment, CommentListItem item) {}
+
+			@Override
+			public void onReload(CommentListView view) {}
+
+			@Override
+			public void onPostComment(Comment comment) {}
+
+			@Override
+			public void onError(SocializeException error) {}
+		});
+
+		view.getNextSet();
+
+		assertTrue(latch2.await(20, TimeUnit.SECONDS));
+
+		comments = commentAdapter.getComments();
+
+		assertNotNull(comments);
+		assertEquals(grabLength*3, comments.size());
+
+		final CountDownLatch latch3 = new CountDownLatch(1);
+
+		view.getCommentEntryViewSlider().onActionBarSliderMoveListener = new OnActionBarSliderMoveListener() {
+			@Override
+			public void onOpen(ActionBarSliderView view) {
+				latch3.countDown();
+			}
+
+			@Override
+			public void onClose(ActionBarSliderView view) {
+
+			}
+		};
+
+		context.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				view.getCommentEntryField().performClick();
+			}
+		});
+
+		assertTrue(latch3.await(20, TimeUnit.SECONDS));
+
+		// Check the comment entry slider
+		assertEquals(ActionBarSliderView.DisplayState.MAXIMIZE, view.getCommentEntryViewSlider().getDisplayState());
+
+		commentActivity.finish();
+	}
 
 	public void test_getComments() throws Exception {
 

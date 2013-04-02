@@ -55,10 +55,10 @@ public interface SocializeToolsProxy {
 	
 	@Synchronous
 	public AppUtils getAppUtils(Context context);
-	
+
 	@Synchronous
 	public Set<Uri> getExternalLogFilePaths(Context context);
-	
+
 	@Synchronous
 	public void deleteExternalLogFiles(Context context);
 }

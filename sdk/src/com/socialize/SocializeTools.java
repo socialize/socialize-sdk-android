@@ -72,7 +72,7 @@ public class SocializeTools {
 	public static AppUtils getAppUtils(Context context) {
 		return proxy.getAppUtils(context);
 	}		
-	
+
 	public static boolean sendExternalLogs(Activity context) {
 		Set<Uri> urls = proxy.getExternalLogFilePaths(context);
 		if(urls != null && urls.size() > 0) {
@@ -85,7 +85,7 @@ public class SocializeTools {
 		}
 		return false;
 	}
-	
+
 	public static void deleteExternalLogs(Context context) {
 		proxy.deleteExternalLogFiles(context);
 	}

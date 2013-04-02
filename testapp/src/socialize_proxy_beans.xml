@@ -13,4 +13,7 @@
 	<proxy ref="authDialogFactory" />
 	<proxy ref="shareDialogFactory" />
 	<proxy ref="userProvider" />
+    <proxy ref="appUtils" />
+    <proxy ref="notificationRegistrationSystem" />
+    <proxy ref="subscriptionUtils" />
 </beans>

@@ -51,6 +51,8 @@ public class TestUtils {
 	private static String tw_token = null;
 	private static String tw_secret = null;
 	private static Activity activity;
+
+	private static int count = 0;
 	
 	public static String getDummyTwitterToken(Context context) throws IOException {
 		if(tw_token == null) {
@@ -122,9 +124,12 @@ public class TestUtils {
 	}
 	
 	public static void addResult(int index, Object obj) {
+		if(holder == null) {
+			return;
+		}
 		holder.addResult(index, obj);
 	}
-	
+
 	public static <T> T getResult(int index) {
 		return holder.getResult(index);
 	}
@@ -135,6 +140,18 @@ public class TestUtils {
 	
 	public static void clear() {
 		holder.clear();
+	}
+
+	public static void incrementCount() {
+		count++;
+	}
+
+	public static void resetCount() {
+		count = 0;
+	}
+
+	public static int getCount() {
+		return count;
 	}
 	
 	public static void setUp(SocializeManagedActivityTest<?> test)  {
@@ -199,6 +216,8 @@ public class TestUtils {
             clearAndExit(activity);
             activity = null;
         }
+
+		resetCount();
 	}
 
     public static void clearAndExit(final Activity ctx) {
@@ -208,10 +227,10 @@ public class TestUtils {
         ctx.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-	            for (int i = 0; i < 10; i++) {
-		            ctx.finish();
-	            }
-	            latch.countDown();
+            for (int i = 0; i < 10; i++) {
+	            ctx.finish();
+            }
+            latch.countDown();
             }
         });
 

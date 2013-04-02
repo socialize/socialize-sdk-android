@@ -66,6 +66,8 @@ public class ActionBarSliderView extends BaseView {
 	private boolean moving = false;
 	
 	private ActionBarSliderItem currentItem;
+
+	public OnActionBarSliderMoveListener onActionBarSliderMoveListener;
 	
 	public ActionBarSliderView(Context context) {
 		super(context);
@@ -274,8 +276,6 @@ public class ActionBarSliderView extends BaseView {
 				break;
 		}			
 		
-
-		
 		displayState = DisplayState.CLOSE;
 	}
 	
@@ -283,11 +283,19 @@ public class ActionBarSliderView extends BaseView {
 		if(currentItem != null) {
 			currentItem.onClose(this);
 		}
+
+		if(onActionBarSliderMoveListener != null) {
+			onActionBarSliderMoveListener.onClose(this);
+		}
 	}
 	
 	public void onOpen() {
 		if(currentItem != null) {
 			currentItem.onOpen(this);
+		}
+
+		if(onActionBarSliderMoveListener != null) {
+			onActionBarSliderMoveListener.onOpen(this);
 		}
 	}
 	

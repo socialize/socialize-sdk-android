@@ -166,7 +166,11 @@ public class CommentAdapter extends BaseAdapter {
 			tmpUser = item.getUser();
 		}
 
-		User currentUser = Socialize.getSocialize().getSession().getUser();
+		User currentUser = null;
+
+		if(Socialize.getSocialize().getSession() != null) {
+			currentUser = Socialize.getSocialize().getSession().getUser();
+		}
 
 		if(currentUser != null && tmpUser != null && currentUser.getId().equals(tmpUser.getId())) {
 			// Use this user as we may have been updated
@@ -206,7 +210,7 @@ public class CommentAdapter extends BaseAdapter {
 
 				if(item != null) {
 					
-					String displayName = "";
+					String displayName;
 					String imageUrl = null;
 					
 					if(user != null) {
@@ -221,8 +225,11 @@ public class CommentAdapter extends BaseAdapter {
 								displayName = "Anonymous";
 							}
 						}
-						
-						view.setDeleteOk(user.getId() == currentUser.getId());
+
+						if(currentUser != null) {
+							view.setDeleteOk(user.getId() == currentUser.getId());
+						}
+
 						view.setOnClickListener(new OnClickListener() {
 
 							@Override
@@ -275,7 +282,7 @@ public class CommentAdapter extends BaseAdapter {
 					if (time != null) {
 						Long date = item.getDate();
 						if(date != null && date > 0) {
-							long diff = (now.getTime() - date.longValue());
+							long diff = (now.getTime() - date);
 							time.setText(dateUtils.getTimeString(diff) + " ");
 						}
 						else {

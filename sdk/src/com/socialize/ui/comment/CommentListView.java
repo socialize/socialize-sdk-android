@@ -567,7 +567,7 @@ public class CommentListView extends BaseView {
 		}		
 	}
 	
-	protected void getNextSet() {
+	public void getNextSet() {
 		
 		if(logger != null && logger.isDebugEnabled()) {
 			logger.debug("getNextSet called on CommentListView");
@@ -575,7 +575,7 @@ public class CommentListView extends BaseView {
 		
 		loading = true; // Prevent continuous load
 
-		startIndex+=defaultGrabLength;
+		startIndex = endIndex;
 		endIndex+=defaultGrabLength;
 
 		if(endIndex > commentAdapter.getTotalCount()) {
@@ -615,11 +615,19 @@ public class CommentListView extends BaseView {
 			@Override
 			public void onList(ListResult<Comment> entities) {
 				List<Comment> comments = commentAdapter.getComments();
-				comments.addAll(entities.getItems());
-				preLoadImages(comments);
+
+				if(entities != null) {
+					comments.addAll(entities.getItems());
+					preLoadImages(comments);
+				}
+
 				commentAdapter.setComments(comments);
 				commentAdapter.notifyDataSetChanged();
 				loading = false;
+
+				if(onCommentViewActionListener != null && entities != null) {
+					onCommentViewActionListener.onCommentList(CommentListView.this, comments, startIndex, endIndex);
+				}
 			}
 		});
 	}
