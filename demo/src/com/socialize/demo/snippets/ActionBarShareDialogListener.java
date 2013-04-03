@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 package com.socialize.demo.snippets;
-import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -39,6 +39,7 @@ import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarShareEventListener;
 import com.socialize.ui.share.DialogFlowController;
 import com.socialize.ui.share.SharePanelView;
+import org.json.JSONObject;
 
 //begin-snippet-0
 public class ActionBarShareDialogListener extends Activity {

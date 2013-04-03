@@ -21,17 +21,6 @@
  */
 package com.socialize.networks.facebook.v2;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -63,6 +52,18 @@ import com.socialize.networks.facebook.BaseFacebookFacade;
 import com.socialize.networks.facebook.FacebookUtilsProxy;
 import com.socialize.networks.facebook.OnPermissionResult;
 import com.socialize.util.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * @author Jason Polites

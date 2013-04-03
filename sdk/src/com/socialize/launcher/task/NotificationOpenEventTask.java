@@ -21,7 +21,6 @@
  */
 package com.socialize.launcher.task;
 
-import org.json.JSONObject;
 import android.content.Context;
 import android.os.Bundle;
 import com.socialize.api.SocializeSession;
@@ -34,6 +33,7 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.notifications.C2DMCallback;
 import com.socialize.notifications.NotificationAuthenticator;
+import org.json.JSONObject;
 
 
 /**

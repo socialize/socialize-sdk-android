@@ -21,9 +21,6 @@
  */
 package com.socialize.demo.implementations.facebook;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import android.app.Activity;
 import com.socialize.api.SocializeSession;
 import com.socialize.demo.SDKDemoActivity;
@@ -32,6 +29,9 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.facebook.FacebookUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 /**

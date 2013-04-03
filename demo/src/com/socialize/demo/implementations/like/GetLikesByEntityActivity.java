@@ -21,12 +21,13 @@
  */
 package com.socialize.demo.implementations.like;
 
-import java.util.List;
 import com.socialize.LikeUtils;
 import com.socialize.demo.SDKDemoActivity;
 import com.socialize.entity.Like;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.like.LikeListListener;
+
+import java.util.List;
 
 
 /**

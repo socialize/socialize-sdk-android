@@ -21,10 +21,10 @@
  */
 package com.socialize.notifications;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import com.socialize.entity.JSONFactory;
 import com.socialize.log.SocializeLogger;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * @author Jason Polites

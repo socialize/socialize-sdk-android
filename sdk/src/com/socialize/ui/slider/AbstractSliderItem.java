@@ -22,7 +22,6 @@
 package com.socialize.ui.slider;
 
 import android.app.Activity;
-
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
 

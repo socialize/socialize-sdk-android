@@ -28,7 +28,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import com.socialize.Socialize;
 import com.socialize.entity.SocializeAction;
-import com.socialize.listener.ListenerHolder;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.view.EntityView;
 import com.socialize.util.Drawables;

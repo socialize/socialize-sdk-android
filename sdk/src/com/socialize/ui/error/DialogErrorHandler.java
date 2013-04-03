@@ -5,7 +5,6 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
-
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.log.SocializeLogger;

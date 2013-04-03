@@ -21,11 +21,6 @@
  */
 package com.socialize.networks.facebook;
 
-import java.io.IOException;
-import java.lang.reflect.Proxy;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -44,6 +39,12 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.SocializeDeAuthListener;
+
+import java.io.IOException;
+import java.lang.reflect.Proxy;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 
 
 /**

@@ -21,17 +21,6 @@
  */
 package com.socialize;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -43,14 +32,7 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.share.ShareSystem;
 import com.socialize.api.action.user.UserSystem;
-import com.socialize.auth.AuthProvider;
-import com.socialize.auth.AuthProviderInfo;
-import com.socialize.auth.AuthProviderInfoBuilder;
-import com.socialize.auth.AuthProviderType;
-import com.socialize.auth.AuthProviders;
-import com.socialize.auth.SocializeAuthProviderInfo;
-import com.socialize.auth.UserProviderCredentials;
-import com.socialize.auth.UserProviderCredentialsMap;
+import com.socialize.auth.*;
 import com.socialize.concurrent.AsyncTaskManager;
 import com.socialize.concurrent.ManagedAsyncTask;
 import com.socialize.config.SocializeConfig;
@@ -72,11 +54,14 @@ import com.socialize.notifications.SocializeC2DMReceiver;
 import com.socialize.notifications.WakeLock;
 import com.socialize.ui.ActivityIOCProvider;
 import com.socialize.ui.SocializeEntityLoader;
-import com.socialize.util.AppUtils;
-import com.socialize.util.ClassLoaderProvider;
-import com.socialize.util.DisplayUtils;
-import com.socialize.util.EntityLoaderUtils;
-import com.socialize.util.ResourceLocator;
+import com.socialize.util.*;
+
+import java.lang.ref.WeakReference;
+import java.util.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * @author Jason Polites

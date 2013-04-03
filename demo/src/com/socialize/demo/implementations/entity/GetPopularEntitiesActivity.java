@@ -21,9 +21,6 @@
  */
 package com.socialize.demo.implementations.entity;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import com.socialize.EntityUtils;
 import com.socialize.EntityUtils.SortOrder;
 import com.socialize.demo.SDKDemoActivity;
@@ -31,6 +28,10 @@ import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.entity.EntityListListener;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 /**

@@ -21,8 +21,6 @@
  */
 package com.socialize.ui.slider;
 
-import java.util.Map;
-import java.util.TreeMap;
 import android.content.Context;
 import android.view.View;
 import android.view.animation.Animation;
@@ -31,6 +29,9 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.util.DisplayUtils;
 import com.socialize.view.BaseView;
+
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @author Jason Polites

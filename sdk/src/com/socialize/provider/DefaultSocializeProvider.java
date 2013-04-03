@@ -21,12 +21,11 @@
  */
 package com.socialize.provider;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.socialize.api.action.ActionType;
 import com.socialize.entity.SocializeObject;
 import com.socialize.entity.SocializeObjectFactory;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * @author Jason Polites

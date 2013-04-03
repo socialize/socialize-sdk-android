@@ -21,11 +21,12 @@
  */
 package com.socialize.entity;
 
-import java.util.List;
+import com.socialize.util.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.socialize.util.StringUtils;
+
+import java.util.List;
 
 
 /**

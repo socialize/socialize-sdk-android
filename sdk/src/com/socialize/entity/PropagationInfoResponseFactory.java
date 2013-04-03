@@ -1,10 +1,10 @@
 package com.socialize.entity;
 
+import com.socialize.api.action.ShareType;
+import com.socialize.log.SocializeLogger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.socialize.api.action.ShareType;
-import com.socialize.log.SocializeLogger;
 
 
 public class PropagationInfoResponseFactory extends JSONFactory<PropagationInfoResponse> {

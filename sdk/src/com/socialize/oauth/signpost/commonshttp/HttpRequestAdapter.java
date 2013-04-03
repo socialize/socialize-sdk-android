@@ -1,13 +1,14 @@
 package com.socialize.oauth.signpost.commonshttp;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.client.methods.HttpUriRequest;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HttpRequestAdapter implements com.socialize.oauth.signpost.http.HttpRequest {
 

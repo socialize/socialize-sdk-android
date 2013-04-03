@@ -21,27 +21,16 @@
  */
 package com.socialize.api;
 
-import java.util.List;
-import java.util.Map;
 import android.content.Context;
 import android.location.Location;
 import com.socialize.Socialize;
 import com.socialize.api.action.ActionOptions;
 import com.socialize.api.action.ActionType;
 import com.socialize.api.action.ShareType;
-import com.socialize.auth.AuthProvider;
-import com.socialize.auth.AuthProviderData;
-import com.socialize.auth.AuthProviderInfo;
-import com.socialize.auth.AuthProviderResponse;
-import com.socialize.auth.AuthProviderType;
-import com.socialize.auth.AuthProviders;
+import com.socialize.auth.*;
 import com.socialize.concurrent.ManagedAsyncTask;
 import com.socialize.config.SocializeConfig;
-import com.socialize.entity.ActionError;
-import com.socialize.entity.ListResult;
-import com.socialize.entity.Propagation;
-import com.socialize.entity.SocializeAction;
-import com.socialize.entity.SocializeObject;
+import com.socialize.entity.*;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.SocializeActionListener;
@@ -55,6 +44,9 @@ import com.socialize.ui.profile.UserSettings;
 import com.socialize.util.AppUtils;
 import com.socialize.util.HttpUtils;
 import com.socialize.util.StringUtils;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Jason Polites

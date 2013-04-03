@@ -1,8 +1,7 @@
 package com.socialize.auth.twitter;
 
-import com.socialize.error.SocializeException;
-
 import android.app.Dialog;
+import com.socialize.error.SocializeException;
 
 public abstract class TwitterAuthDialogListener implements TwitterAuthListener {
 	

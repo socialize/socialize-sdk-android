@@ -26,7 +26,6 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
-
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.log.SocializeLogger;
 

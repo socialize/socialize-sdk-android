@@ -21,10 +21,11 @@
  */
 package com.socialize;
 
-import java.lang.reflect.Proxy;
 import android.app.Activity;
 import com.socialize.api.action.activity.ActionUtilsProxy;
 import com.socialize.listener.activity.ActionListListener;
+
+import java.lang.reflect.Proxy;
 
 
 /**

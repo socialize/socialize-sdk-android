@@ -21,11 +21,12 @@
  */
 package com.socialize;
 
-import java.lang.reflect.Proxy;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import com.socialize.location.LocationUtilsProxy;
+
+import java.lang.reflect.Proxy;
 
 
 /**

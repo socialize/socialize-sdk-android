@@ -21,8 +21,9 @@
  */
 package com.socialize.ui.dialog;
 
-import java.util.Collection;
 import android.app.Dialog;
+
+import java.util.Collection;
 
 /**
  * Allows activities to dismiss dialogs on destroy to prevent window leaking.

@@ -21,9 +21,9 @@
  */
 package com.socialize.entity;
 
+import com.socialize.api.event.SocializeEvent;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.socialize.api.event.SocializeEvent;
 
 
 /**

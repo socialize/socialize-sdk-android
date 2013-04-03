@@ -21,9 +21,10 @@
  */
 package com.socialize.api;
 
+import com.socialize.entity.ListResult;
+
 import java.util.LinkedList;
 import java.util.List;
-import com.socialize.entity.ListResult;
 
 /**
  * @author Jason Polites

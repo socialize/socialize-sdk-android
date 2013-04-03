@@ -21,7 +21,6 @@
  */
 package com.socialize.api.action.comment;
 
-import java.util.List;
 import android.app.Activity;
 import com.socialize.api.action.SocializeActionUtilsBase;
 import com.socialize.entity.Entity;
@@ -33,6 +32,8 @@ import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.notifications.NotificationType;
 import com.socialize.notifications.SubscriptionType;
+
+import java.util.List;
 
 
 /**

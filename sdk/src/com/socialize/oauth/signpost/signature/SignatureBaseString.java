@@ -10,14 +10,15 @@
  */
 package com.socialize.oauth.signpost.signature;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Iterator;
 import com.socialize.oauth.signpost.OAuth;
 import com.socialize.oauth.signpost.exception.OAuthMessageSignerException;
 import com.socialize.oauth.signpost.http.HttpParameters;
 import com.socialize.oauth.signpost.http.HttpRequest;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Iterator;
 
 
 public class SignatureBaseString {

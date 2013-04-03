@@ -1,10 +1,11 @@
 package com.socialize.oauth.signpost.http;
 
+import com.socialize.oauth.signpost.OAuthConsumer;
+import com.socialize.oauth.signpost.basic.HttpURLConnectionRequestAdapter;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
-import com.socialize.oauth.signpost.OAuthConsumer;
-import com.socialize.oauth.signpost.basic.HttpURLConnectionRequestAdapter;
 
 
 /**

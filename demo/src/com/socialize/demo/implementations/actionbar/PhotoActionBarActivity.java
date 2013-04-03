@@ -21,11 +21,6 @@
  */
 package com.socialize.demo.implementations.actionbar;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import org.json.JSONObject;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -48,6 +43,12 @@ import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarOptions;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 
 /**

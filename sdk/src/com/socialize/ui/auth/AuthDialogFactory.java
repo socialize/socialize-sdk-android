@@ -21,7 +21,6 @@
  */
 package com.socialize.ui.auth;
 
-import org.json.JSONObject;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -33,6 +32,7 @@ import com.socialize.api.event.SocializeEvent;
 import com.socialize.config.SocializeConfig;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.dialog.AsyncDialogFactory;
+import org.json.JSONObject;
 
 /**
  * @author Jason Polites

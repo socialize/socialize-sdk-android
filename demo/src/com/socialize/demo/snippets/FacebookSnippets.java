@@ -21,10 +21,6 @@
  */
 package com.socialize.demo.snippets;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import org.json.JSONObject;
 import android.app.Activity;
 import android.net.Uri;
 import com.socialize.ConfigUtils;
@@ -45,6 +41,11 @@ import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.facebook.FacebookUtils;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**

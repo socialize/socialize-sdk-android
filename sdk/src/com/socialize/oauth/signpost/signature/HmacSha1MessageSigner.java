@@ -14,17 +14,17 @@
  */
 package com.socialize.oauth.signpost.signature;
 
-import java.io.UnsupportedEncodingException;
-import java.security.GeneralSecurityException;
-
-import javax.crypto.Mac;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import com.socialize.oauth.OAuthSignListener;
 import com.socialize.oauth.signpost.OAuth;
 import com.socialize.oauth.signpost.exception.OAuthMessageSignerException;
 import com.socialize.oauth.signpost.http.HttpParameters;
 import com.socialize.oauth.signpost.http.HttpRequest;
+
+import javax.crypto.Mac;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 
 
 @SuppressWarnings("serial")

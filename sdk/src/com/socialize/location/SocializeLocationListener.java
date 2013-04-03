@@ -1,9 +1,9 @@
 package com.socialize.location;
 
-import com.socialize.log.SocializeLogger;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import com.socialize.log.SocializeLogger;
 
 public class SocializeLocationListener implements LocationListener {
 	

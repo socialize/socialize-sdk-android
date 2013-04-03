@@ -21,10 +21,6 @@
  */
 package com.socialize.api.action.entity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import com.socialize.EntityUtils.SortOrder;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
@@ -36,6 +32,11 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.entity.EntityListListener;
 import com.socialize.listener.entity.EntityListener;
 import com.socialize.provider.SocializeProvider;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Jason Polites

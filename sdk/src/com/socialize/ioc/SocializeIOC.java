@@ -21,12 +21,13 @@
  */
 package com.socialize.ioc;
 
-import java.io.InputStream;
 import android.content.Context;
 import com.socialize.android.ioc.AndroidIOC;
 import com.socialize.android.ioc.BeanMappingSource;
 import com.socialize.config.SocializeConfig;
 import com.socialize.util.ResourceLocator;
+
+import java.io.InputStream;
 
 /**
  * @author Jason Polites

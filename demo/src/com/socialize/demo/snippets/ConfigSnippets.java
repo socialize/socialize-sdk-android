@@ -21,9 +21,9 @@
  */
 package com.socialize.demo.snippets;
 
+import android.app.Activity;
 import com.socialize.ConfigUtils;
 import com.socialize.SocializeTools;
-import android.app.Activity;
 
 
 /**

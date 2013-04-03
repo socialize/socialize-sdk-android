@@ -21,11 +21,8 @@ import com.socialize.google.gson.internal.bind.JsonTreeWriter;
 import com.socialize.google.gson.stream.JsonReader;
 import com.socialize.google.gson.stream.JsonToken;
 import com.socialize.google.gson.stream.JsonWriter;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
+
+import java.io.*;
 
 /**
  * Converts Java objects to and from JSON.

@@ -21,16 +21,13 @@
  */
 package com.socialize.ui.image;
 
+import com.socialize.log.SocializeLogger;
+import com.socialize.util.*;
+
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import com.socialize.log.SocializeLogger;
-import com.socialize.util.Base64Utils;
-import com.socialize.util.CacheableDrawable;
-import com.socialize.util.DrawableCache;
-import com.socialize.util.Drawables;
-import com.socialize.util.SafeBitmapDrawable;
 
 /**
  * @author Jason Polites

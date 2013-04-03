@@ -18,6 +18,7 @@ package com.socialize.google.gson.reflect;
 
 import com.socialize.google.gson.internal.$Gson$Preconditions;
 import com.socialize.google.gson.internal.$Gson$Types;
+
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

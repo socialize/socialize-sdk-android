@@ -21,13 +21,14 @@
  */
 package com.socialize;
 
-import java.lang.reflect.Proxy;
 import android.app.Activity;
 import com.socialize.api.action.entity.EntityUtilsProxy;
 import com.socialize.entity.Entity;
 import com.socialize.listener.entity.EntityAddListener;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.entity.EntityListListener;
+
+import java.lang.reflect.Proxy;
 
 
 /**

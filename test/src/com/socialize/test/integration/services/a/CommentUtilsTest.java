@@ -55,7 +55,6 @@ import com.socialize.ui.slider.ActionBarSliderView;
 import com.socialize.ui.slider.OnActionBarSliderMoveListener;
 import com.socialize.util.AppUtils;
 import com.socialize.util.DefaultAppUtils;
-import com.socialize.util.EntityLoaderUtils;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;

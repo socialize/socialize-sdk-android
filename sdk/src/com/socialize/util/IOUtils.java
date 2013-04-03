@@ -22,11 +22,12 @@
 package com.socialize.util;
 
 
+import com.socialize.log.SocializeLogger;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import com.socialize.log.SocializeLogger;
 
 /**
  * @author Jason Polites

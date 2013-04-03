@@ -21,9 +21,6 @@
  */
 package com.socialize.demo;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -33,6 +30,10 @@ import com.socialize.Socialize;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.ui.dialog.DialogRegister;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 /**

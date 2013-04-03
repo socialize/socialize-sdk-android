@@ -21,16 +21,12 @@
  */
 package com.socialize.demo.snippets;
 
-import java.util.List;
 import android.app.Activity;
-import com.socialize.UserUtils;
 import com.socialize.ViewUtils;
 import com.socialize.entity.Entity;
-import com.socialize.entity.User;
 import com.socialize.entity.View;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.view.ViewAddListener;
-import com.socialize.listener.view.ViewListListener;
 
 
 /**

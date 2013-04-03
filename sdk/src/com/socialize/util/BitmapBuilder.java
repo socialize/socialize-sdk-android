@@ -21,9 +21,10 @@
  */
 package com.socialize.util;
 
-import java.io.InputStream;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import java.io.InputStream;
 
 /**
  * Wrapper around the BitmapFactory used to externalize bitmap creation.

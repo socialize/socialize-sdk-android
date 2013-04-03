@@ -21,7 +21,6 @@
  */
 package com.socialize.demo.implementations.comment;
 
-import java.util.List;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -32,6 +31,8 @@ import com.socialize.error.SocializeException;
 import com.socialize.ui.comment.CommentListItem;
 import com.socialize.ui.comment.CommentListView;
 import com.socialize.ui.comment.OnCommentViewActionListener;
+
+import java.util.List;
 
 
 /**

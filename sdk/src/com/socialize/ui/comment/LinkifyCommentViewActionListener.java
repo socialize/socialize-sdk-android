@@ -21,10 +21,11 @@
  */
 package com.socialize.ui.comment;
 
-import java.util.List;
 import android.text.util.Linkify;
 import com.socialize.entity.Comment;
 import com.socialize.error.SocializeException;
+
+import java.util.List;
 
 
 /**

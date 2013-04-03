@@ -21,9 +21,10 @@
  */
 package com.socialize.listener.view;
 
-import java.util.List;
-import com.socialize.entity.View;
 import com.socialize.entity.ListResult;
+import com.socialize.entity.View;
+
+import java.util.List;
 
 
 /**

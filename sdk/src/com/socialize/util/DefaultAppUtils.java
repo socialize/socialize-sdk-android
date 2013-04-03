@@ -21,8 +21,6 @@
  */
 package com.socialize.util;
 
-import java.util.List;
-import java.util.Locale;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -42,6 +40,9 @@ import com.socialize.ui.SocializeLaunchActivity;
 import com.socialize.ui.action.ActionDetailActivity;
 import com.socialize.ui.comment.CommentActivity;
 import com.socialize.ui.profile.ProfileActivity;
+
+import java.util.List;
+import java.util.Locale;
 
 /**
  * @author Jason Polites

@@ -21,7 +21,6 @@
  */
 package com.socialize.networks.facebook;
 
-import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -35,6 +34,8 @@ import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.SocializeDeAuthListener;
+
+import java.util.Map;
 
 /**
  * @author Jason Polites

@@ -27,12 +27,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.ViewFlipper;
+import android.widget.*;
 import com.socialize.ui.view.SafeViewFlipper;
 import com.socialize.util.DisplayUtils;
 

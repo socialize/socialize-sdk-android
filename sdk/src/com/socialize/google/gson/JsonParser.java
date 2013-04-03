@@ -19,6 +19,7 @@ import com.socialize.google.gson.internal.Streams;
 import com.socialize.google.gson.stream.JsonReader;
 import com.socialize.google.gson.stream.JsonToken;
 import com.socialize.google.gson.stream.MalformedJsonException;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.Reader;

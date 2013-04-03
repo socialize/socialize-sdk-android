@@ -21,13 +21,12 @@
  */
 package com.socialize.test.util;
 
-import java.io.PrintWriter;
-
 import android.content.Context;
-
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
 import com.socialize.util.StringUtils;
+
+import java.io.PrintWriter;
 
 public final class ErrorHandler {
 	

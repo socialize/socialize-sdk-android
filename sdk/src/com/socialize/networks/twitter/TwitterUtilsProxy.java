@@ -21,8 +21,6 @@
  */
 package com.socialize.networks.twitter;
 
-import java.io.IOException;
-import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -34,6 +32,9 @@ import com.socialize.entity.Entity;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
+
+import java.io.IOException;
+import java.util.Map;
 
 
 /**

@@ -21,20 +21,16 @@
  */
 package com.socialize.log;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashSet;
-import java.util.Set;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 import com.socialize.log.SocializeLogger.LogLevel;
+
+import java.io.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Jason Polites

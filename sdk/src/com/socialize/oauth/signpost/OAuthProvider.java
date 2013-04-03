@@ -10,8 +10,6 @@
  */
 package com.socialize.oauth.signpost;
 
-import java.io.Serializable;
-import java.util.Map;
 import com.socialize.oauth.signpost.basic.DefaultOAuthConsumer;
 import com.socialize.oauth.signpost.basic.DefaultOAuthProvider;
 import com.socialize.oauth.signpost.exception.OAuthCommunicationException;
@@ -19,6 +17,9 @@ import com.socialize.oauth.signpost.exception.OAuthExpectationFailedException;
 import com.socialize.oauth.signpost.exception.OAuthMessageSignerException;
 import com.socialize.oauth.signpost.exception.OAuthNotAuthorizedException;
 import com.socialize.oauth.signpost.http.HttpParameters;
+
+import java.io.Serializable;
+import java.util.Map;
 
 
 /**

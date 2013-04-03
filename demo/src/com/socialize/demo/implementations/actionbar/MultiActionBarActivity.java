@@ -21,7 +21,6 @@
  */
 package com.socialize.demo.implementations.actionbar;
 
-import java.util.List;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -46,6 +45,8 @@ import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.dialog.SafeProgressDialog;
+
+import java.util.List;
 
 
 /**

@@ -3,8 +3,6 @@
  */
 package com.socialize.cache;
 
-import android.content.Context;
-
 /**
  * Represents an object that can be cached.
  * @author Jason

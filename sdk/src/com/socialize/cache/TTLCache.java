@@ -1,17 +1,8 @@
 package com.socialize.cache;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.TreeMap;
-
-import android.content.Context;
-
 import com.socialize.log.SocializeLogger;
+
+import java.util.*;
 
 /**
  * Simple cache object backed by a synchronized map which allows a TTL (Time To Live) for objects in cache.

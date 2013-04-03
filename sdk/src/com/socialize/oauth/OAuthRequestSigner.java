@@ -22,9 +22,9 @@
 package com.socialize.oauth;
 
 
-import org.apache.http.client.methods.HttpUriRequest;
 import com.socialize.api.SocializeSession;
 import com.socialize.error.SocializeException;
+import org.apache.http.client.methods.HttpUriRequest;
 
 public interface OAuthRequestSigner {
 

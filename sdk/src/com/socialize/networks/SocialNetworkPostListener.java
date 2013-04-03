@@ -21,8 +21,8 @@
  */
 package com.socialize.networks;
 
-import org.json.JSONObject;
 import android.app.Activity;
+import org.json.JSONObject;
 
 /**
  * Handles callbacks from posts to social networks like facebook.

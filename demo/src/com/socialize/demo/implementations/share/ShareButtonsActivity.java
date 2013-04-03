@@ -21,7 +21,6 @@
  */
 package com.socialize.demo.implementations.share;
 
-import org.json.JSONObject;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -46,6 +45,7 @@ import com.socialize.networks.facebook.FacebookUtils;
 import com.socialize.networks.twitter.TwitterUtils;
 import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.ui.share.DialogFlowController;
+import org.json.JSONObject;
 
 
 /**

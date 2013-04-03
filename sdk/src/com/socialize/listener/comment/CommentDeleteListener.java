@@ -22,7 +22,6 @@
 package com.socialize.listener.comment;
 
 
-import org.json.JSONObject;
 import android.app.Activity;
 import com.socialize.entity.Comment;
 import com.socialize.entity.ListResult;
@@ -30,6 +29,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
+import org.json.JSONObject;
 
 
 /**

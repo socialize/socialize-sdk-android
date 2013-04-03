@@ -21,8 +21,6 @@
  */
 package com.socialize.api.action.comment;
 
-import java.util.ArrayList;
-import java.util.List;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
@@ -31,6 +29,9 @@ import com.socialize.entity.Entity;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.provider.SocializeProvider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Jason Polites

@@ -21,8 +21,9 @@
  */
 package com.socialize.share;
 
-import java.util.Map;
 import com.socialize.api.action.ShareType;
+
+import java.util.Map;
 
 
 /**

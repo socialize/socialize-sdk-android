@@ -21,8 +21,8 @@
  */
 package com.socialize.api.event;
 
-import org.json.JSONObject;
 import com.socialize.entity.SocializeObject;
+import org.json.JSONObject;
 
 
 /**

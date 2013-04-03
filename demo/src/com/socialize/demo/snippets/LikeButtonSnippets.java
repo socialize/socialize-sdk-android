@@ -21,15 +21,15 @@
  */
 package com.socialize.demo.snippets;
 
-import com.socialize.LikeUtils;
-import com.socialize.demo.R;
-import com.socialize.entity.Entity;
-import com.socialize.ui.actionbutton.LikeButtonListener;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import com.socialize.LikeUtils;
+import com.socialize.demo.R;
+import com.socialize.entity.Entity;
+import com.socialize.ui.actionbutton.LikeButtonListener;
 
 
 /**

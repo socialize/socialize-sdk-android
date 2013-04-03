@@ -21,12 +21,13 @@
  */
 package com.socialize.demo.implementations.facebook;
 
-import java.util.Arrays;
 import com.socialize.demo.SDKDemoActivity;
 import com.socialize.error.SocializeException;
 import com.socialize.networks.facebook.FacebookUtils;
 import com.socialize.networks.facebook.OnPermissionResult;
 import com.socialize.util.StringUtils;
+
+import java.util.Arrays;
 
 
 /**

@@ -21,23 +21,20 @@
  */
 package com.socialize.demo.snippets;
 
-import java.util.List;
-import org.json.JSONException;
-import org.json.JSONObject;
 import android.app.Activity;
 import com.socialize.CommentUtils;
 import com.socialize.EntityUtils;
 import com.socialize.EntityUtils.SortOrder;
-import com.socialize.entity.Comment;
-import com.socialize.entity.Entity;
-import com.socialize.entity.EntityStats;
-import com.socialize.entity.ListResult;
-import com.socialize.entity.UserEntityStats;
+import com.socialize.entity.*;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.entity.EntityAddListener;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.entity.EntityListListener;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
 
 
 /**

@@ -21,9 +21,9 @@
  */
 package com.socialize.auth;
 
-import java.io.Serializable;
-
 import com.socialize.error.SocializeException;
+
+import java.io.Serializable;
 
 /**
  * @author Jason Polites

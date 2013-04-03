@@ -21,10 +21,10 @@
  */
 package com.socialize.entity;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.log.SocializeLogger;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * @author Jason Polites

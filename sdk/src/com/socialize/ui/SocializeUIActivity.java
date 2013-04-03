@@ -21,15 +21,16 @@
  */
 package com.socialize.ui;
 
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.dialog.DialogRegister;
+
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * @author Jason Polites

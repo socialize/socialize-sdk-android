@@ -3,9 +3,10 @@
  */
 package com.socialize.ui.comment;
 
-import java.util.List;
 import com.socialize.entity.Comment;
 import com.socialize.listener.SocializeListener;
+
+import java.util.List;
 
 /**
  * Provides a callback for comment view events.

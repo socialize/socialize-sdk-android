@@ -21,18 +21,11 @@
  */
 package com.socialize.api;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import com.socialize.Socialize;
-import com.socialize.auth.AuthProviderType;
-import com.socialize.auth.DefaultUserProviderCredentials;
-import com.socialize.auth.DefaultUserProviderCredentialsMap;
-import com.socialize.auth.SocializeAuthProviderInfo;
-import com.socialize.auth.UserProviderCredentials;
-import com.socialize.auth.UserProviderCredentialsMap;
+import com.socialize.auth.*;
 import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.entity.User;
 import com.socialize.entity.UserFactory;
@@ -41,6 +34,8 @@ import com.socialize.ui.profile.UserSettings;
 import com.socialize.ui.profile.UserSettingsFactory;
 import com.socialize.util.JSONUtils;
 import com.socialize.util.StringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Persists session data to private preferences.

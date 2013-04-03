@@ -21,11 +21,12 @@
  */
 package com.socialize.ui.util;
 
+import com.socialize.i18n.I18NConstants;
+import com.socialize.i18n.LocalizationService;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import com.socialize.i18n.I18NConstants;
-import com.socialize.i18n.LocalizationService;
 
 
 /**

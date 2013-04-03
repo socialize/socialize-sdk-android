@@ -1,6 +1,5 @@
 package com.socialize.ui.comment;
 
-import java.util.List;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.View;
@@ -15,11 +14,7 @@ import com.socialize.api.action.comment.CommentUtilsProxy;
 import com.socialize.api.action.comment.SubscriptionUtilsProxy;
 import com.socialize.api.action.user.UserUtilsProxy;
 import com.socialize.config.SocializeConfig;
-import com.socialize.entity.Comment;
-import com.socialize.entity.Entity;
-import com.socialize.entity.ListResult;
-import com.socialize.entity.Subscription;
-import com.socialize.entity.User;
+import com.socialize.entity.*;
 import com.socialize.error.SocializeException;
 import com.socialize.i18n.I18NConstants;
 import com.socialize.listener.comment.CommentAddListener;
@@ -37,12 +32,10 @@ import com.socialize.ui.slider.ActionBarSliderFactory.ZOrder;
 import com.socialize.ui.slider.ActionBarSliderView;
 import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.ui.view.LoadingListView;
-import com.socialize.util.AppUtils;
-import com.socialize.util.CacheableDrawable;
-import com.socialize.util.DisplayUtils;
-import com.socialize.util.Drawables;
-import com.socialize.util.StringUtils;
+import com.socialize.util.*;
 import com.socialize.view.BaseView;
+
+import java.util.List;
 
 public class CommentListView extends BaseView {
 

@@ -21,9 +21,6 @@
  */
 package com.socialize.ui.actionbar;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import org.json.JSONObject;
 import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.Color;
@@ -61,6 +58,10 @@ import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
+import org.json.JSONObject;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 /**
  * @author Jason Polites

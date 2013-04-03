@@ -16,12 +16,12 @@
 
 package com.socialize.facebook;
 
+import android.content.Context;
+import android.os.Bundle;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
-
-import android.content.Context;
-import android.os.Bundle;
 
 /**
  * A sample implementation of asynchronous API requests. This class provides

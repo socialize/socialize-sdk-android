@@ -1,11 +1,12 @@
 package com.socialize.util;
 
-import java.io.InputStream;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import com.socialize.log.SocializeLogger;
+
+import java.io.InputStream;
 
 
 /**

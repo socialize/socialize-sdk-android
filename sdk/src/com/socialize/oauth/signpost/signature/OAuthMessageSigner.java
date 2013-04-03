@@ -14,15 +14,14 @@
  */
 package com.socialize.oauth.signpost.signature;
 
-import java.io.IOException;
-import java.io.Serializable;
-
-
-import org.apache.commons.codec.binary.Base64;
 import com.socialize.oauth.OAuthSignListener;
 import com.socialize.oauth.signpost.exception.OAuthMessageSignerException;
 import com.socialize.oauth.signpost.http.HttpParameters;
 import com.socialize.oauth.signpost.http.HttpRequest;
+import org.apache.commons.codec.binary.Base64;
+
+import java.io.IOException;
+import java.io.Serializable;
 
 public abstract class OAuthMessageSigner implements Serializable {
 

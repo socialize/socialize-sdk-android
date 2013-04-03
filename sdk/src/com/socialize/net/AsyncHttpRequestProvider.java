@@ -21,10 +21,10 @@
  */
 package com.socialize.net;
 
+import com.socialize.android.ioc.IBeanFactory;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
-import com.socialize.android.ioc.IBeanFactory;
 
 
 /**

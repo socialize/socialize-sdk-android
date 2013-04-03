@@ -16,13 +16,10 @@
 
 package com.socialize.google.gson.internal.bind;
 
-import com.socialize.google.gson.JsonArray;
-import com.socialize.google.gson.JsonElement;
-import com.socialize.google.gson.JsonNull;
-import com.socialize.google.gson.JsonObject;
-import com.socialize.google.gson.JsonPrimitive;
+import com.socialize.google.gson.*;
 import com.socialize.google.gson.stream.JsonReader;
 import com.socialize.google.gson.stream.JsonToken;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;

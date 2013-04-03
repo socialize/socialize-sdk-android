@@ -3,7 +3,6 @@ package com.socialize.testapp;
 import android.app.Activity;
 import android.content.Context;
 import android.widget.Toast;
-
 import com.socialize.entity.Entity;
 import com.socialize.ui.SocializeEntityLoader;
 

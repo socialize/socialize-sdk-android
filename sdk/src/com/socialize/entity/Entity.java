@@ -21,8 +21,9 @@
  */
 package com.socialize.entity;
 
-import java.io.Serializable;
 import com.socialize.util.StringUtils;
+
+import java.io.Serializable;
 
 
 /**

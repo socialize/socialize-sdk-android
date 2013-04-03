@@ -22,11 +22,7 @@
 package com.socialize.auth.twitter;
 
 import android.content.Context;
-import com.socialize.auth.AuthProvider;
-import com.socialize.auth.AuthProviderInfo;
-import com.socialize.auth.AuthProviderInfoBuilder;
-import com.socialize.auth.AuthProviderResponse;
-import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.*;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.AuthProviderListener;
 

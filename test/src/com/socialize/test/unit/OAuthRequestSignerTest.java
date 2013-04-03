@@ -24,7 +24,6 @@ package com.socialize.test.unit;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
-import com.socialize.error.SocializeException;
 import com.socialize.oauth.DefaultOauthRequestSigner;
 import com.socialize.oauth.OAuthConsumerFactory;
 import com.socialize.oauth.signpost.OAuthConsumer;

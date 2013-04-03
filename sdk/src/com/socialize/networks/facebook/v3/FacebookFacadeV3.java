@@ -21,23 +21,13 @@
  */
 package com.socialize.networks.facebook.v3;
 
-import java.util.Arrays;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import com.facebook.AccessToken;
-import com.facebook.FacebookOperationCanceledException;
-import com.facebook.FacebookRequestError;
-import com.facebook.HttpMethod;
-import com.facebook.Request;
-import com.facebook.RequestAsyncTask;
-import com.facebook.Response;
-import com.facebook.Session;
+import com.facebook.*;
 import com.facebook.Session.StatusCallback;
-import com.facebook.SessionLoginBehavior;
-import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
 import com.socialize.auth.AuthProviderResponse;
 import com.socialize.config.SocializeConfig;
@@ -50,6 +40,8 @@ import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.facebook.BaseFacebookFacade;
 import com.socialize.networks.facebook.OnPermissionResult;
 import com.socialize.util.StringUtils;
+
+import java.util.Arrays;
 
 
 /**

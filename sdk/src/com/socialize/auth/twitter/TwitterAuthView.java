@@ -25,7 +25,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.RelativeLayout;
-
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.error.SocializeException;
 

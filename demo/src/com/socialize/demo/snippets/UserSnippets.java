@@ -21,7 +21,6 @@
  */
 package com.socialize.demo.snippets;
 
-import java.util.List;
 import android.app.Activity;
 import com.socialize.ActionUtils;
 import com.socialize.UserUtils;
@@ -33,6 +32,8 @@ import com.socialize.listener.activity.ActionListListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.ui.profile.UserSettings;
+
+import java.util.List;
 
 
 /**

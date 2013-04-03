@@ -21,9 +21,6 @@
  */
 package com.socialize.ui;
 
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -31,6 +28,10 @@ import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.ui.dialog.DialogRegister;
+
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * @author Jason Polites

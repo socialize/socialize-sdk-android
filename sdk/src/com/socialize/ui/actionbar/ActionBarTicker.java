@@ -21,8 +21,6 @@
  */
 package com.socialize.ui.actionbar;
 
-import java.util.ArrayList;
-import java.util.List;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -31,6 +29,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import com.socialize.ui.animation.RotatingFadeViewAnimator;
 import com.socialize.util.DisplayUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The ticker shows a rolling display of stats for an entity.

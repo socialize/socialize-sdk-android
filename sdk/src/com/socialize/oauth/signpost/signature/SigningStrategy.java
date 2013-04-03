@@ -1,8 +1,9 @@
 package com.socialize.oauth.signpost.signature;
 
-import java.io.Serializable;
 import com.socialize.oauth.signpost.http.HttpParameters;
 import com.socialize.oauth.signpost.http.HttpRequest;
+
+import java.io.Serializable;
 
 
 /**

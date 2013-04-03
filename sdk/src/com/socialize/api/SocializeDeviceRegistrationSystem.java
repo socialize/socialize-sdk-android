@@ -21,11 +21,12 @@
  */
 package com.socialize.api;
 
-import java.util.ArrayList;
-import java.util.List;
 import com.socialize.entity.DeviceRegistration;
 import com.socialize.error.SocializeException;
 import com.socialize.provider.SocializeProvider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Jason Polites

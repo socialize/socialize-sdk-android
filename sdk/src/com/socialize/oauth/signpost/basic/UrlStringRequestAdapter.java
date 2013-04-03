@@ -1,10 +1,11 @@
 package com.socialize.oauth.signpost.basic;
 
+import com.socialize.oauth.signpost.http.HttpRequest;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.Map;
-import com.socialize.oauth.signpost.http.HttpRequest;
 
 
 public class UrlStringRequestAdapter implements HttpRequest {

@@ -21,7 +21,6 @@
  */
 package com.socialize.ui.view;
 
-import android.content.Context;
 import android.view.View;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;

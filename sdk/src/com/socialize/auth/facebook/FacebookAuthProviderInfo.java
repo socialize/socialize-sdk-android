@@ -21,14 +21,15 @@
  */
 package com.socialize.auth.facebook;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.error.SocializeException;
 import com.socialize.util.ArrayUtils;
 import com.socialize.util.StringUtils;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Jason Polites

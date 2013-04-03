@@ -21,17 +21,6 @@
  */
 package com.socialize.networks.facebook.v2;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import com.socialize.networks.facebook.FacebookUtilsProxy;
-import org.json.JSONException;
-import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
@@ -53,13 +42,20 @@ import com.socialize.facebook.AsyncFacebookRunner.RequestListener;
 import com.socialize.facebook.Facebook;
 import com.socialize.facebook.FacebookError;
 import com.socialize.log.SocializeLogger;
-import com.socialize.networks.DefaultPostData;
-import com.socialize.networks.PostData;
-import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkListener;
-import com.socialize.networks.SocialNetworkPostListener;
+import com.socialize.networks.*;
+import com.socialize.networks.facebook.FacebookUtilsProxy;
 import com.socialize.util.ImageUtils;
 import com.socialize.util.StringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * Posts to the Facebook wall.

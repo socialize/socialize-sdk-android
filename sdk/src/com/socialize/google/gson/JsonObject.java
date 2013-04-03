@@ -17,6 +17,7 @@
 package com.socialize.google.gson;
 
 import com.socialize.google.gson.internal.$Gson$Preconditions;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;

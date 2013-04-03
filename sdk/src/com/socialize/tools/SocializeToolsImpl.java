@@ -21,7 +21,6 @@
  */
 package com.socialize.tools;
 
-import java.util.Set;
 import android.content.Context;
 import android.net.Uri;
 import com.socialize.log.SDCardExternalLogger;
@@ -31,6 +30,8 @@ import com.socialize.ui.util.KeyboardUtils;
 import com.socialize.util.AppUtils;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.IOUtils;
+
+import java.util.Set;
 
 
 /**

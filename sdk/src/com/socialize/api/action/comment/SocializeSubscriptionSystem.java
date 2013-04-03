@@ -21,8 +21,6 @@
  */
 package com.socialize.api.action.comment;
 
-import java.util.ArrayList;
-import java.util.List;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.Entity;
@@ -30,6 +28,9 @@ import com.socialize.entity.Subscription;
 import com.socialize.listener.subscription.SubscriptionListener;
 import com.socialize.notifications.NotificationType;
 import com.socialize.provider.SocializeProvider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Jason Polites

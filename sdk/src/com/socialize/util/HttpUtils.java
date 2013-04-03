@@ -21,11 +21,6 @@
  */
 package com.socialize.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-import java.util.Set;
-import org.apache.http.HttpResponse;
 import android.content.Context;
 import android.net.Uri;
 import android.util.SparseArray;
@@ -33,6 +28,12 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
+import org.apache.http.HttpResponse;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * @author Jason Polites

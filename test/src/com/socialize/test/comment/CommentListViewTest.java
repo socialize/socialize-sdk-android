@@ -22,8 +22,6 @@ import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.test.SocializeUnitTest;
-import com.socialize.test.util.TestUtils;
 import com.socialize.ui.comment.*;
 import com.socialize.ui.dialog.SimpleDialogFactory;
 import com.socialize.ui.header.SocializeHeader;

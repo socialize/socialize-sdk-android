@@ -14,9 +14,10 @@
  */
 package com.socialize.oauth.signpost.basic;
 
-import java.net.HttpURLConnection;
 import com.socialize.oauth.signpost.AbstractOAuthConsumer;
 import com.socialize.oauth.signpost.http.HttpRequest;
+
+import java.net.HttpURLConnection;
 
 
 /**

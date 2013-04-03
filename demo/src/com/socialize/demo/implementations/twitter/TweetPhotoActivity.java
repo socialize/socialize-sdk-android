@@ -21,8 +21,6 @@
  */
 package com.socialize.demo.implementations.twitter;
 
-import java.io.IOException;
-import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -49,6 +47,9 @@ import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.twitter.PhotoTweet;
 import com.socialize.networks.twitter.TwitterUtils;
 import com.socialize.ui.dialog.SafeProgressDialog;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 
 /**

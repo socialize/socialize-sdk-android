@@ -21,16 +21,17 @@
  */
 package com.socialize.entity;
 
+import com.socialize.api.action.ShareType;
+import com.socialize.util.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import com.socialize.api.action.ShareType;
-import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites

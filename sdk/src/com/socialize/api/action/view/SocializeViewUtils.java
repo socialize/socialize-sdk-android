@@ -24,10 +24,8 @@ package com.socialize.api.action.view;
 import android.app.Activity;
 import com.socialize.Socialize;
 import com.socialize.entity.Entity;
-import com.socialize.entity.User;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.listener.view.ViewGetListener;
-import com.socialize.listener.view.ViewListListener;
 
 
 /**

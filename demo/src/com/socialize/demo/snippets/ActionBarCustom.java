@@ -21,16 +21,17 @@
  */
 package com.socialize.demo.snippets;
 
-import com.socialize.demo.R;
-//begin-snippet-0
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import com.socialize.ActionBarUtils;
 import com.socialize.Socialize;
+import com.socialize.demo.R;
 import com.socialize.entity.Entity;
 import com.socialize.ui.actionbar.ActionBarOptions;
+
+//begin-snippet-0
 
 public class ActionBarCustom extends Activity {
 	

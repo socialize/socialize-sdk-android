@@ -2,7 +2,6 @@ package com.socialize.testapp;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import com.socialize.ui.dialog.DialogRegister;
 

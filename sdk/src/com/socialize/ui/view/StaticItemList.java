@@ -21,10 +21,11 @@
  */
 package com.socialize.ui.view;
 
-import java.util.List;
 import android.content.Context;
 import android.view.View;
 import com.socialize.view.BaseView;
+
+import java.util.List;
 
 /**
  * @author Jason Polites

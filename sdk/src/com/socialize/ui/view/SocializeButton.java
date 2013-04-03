@@ -21,8 +21,6 @@
  */
 package com.socialize.ui.view;
 
-import java.util.ArrayList;
-import java.util.List;
 import android.R;
 import android.content.Context;
 import android.graphics.Color;
@@ -42,6 +40,9 @@ import com.socialize.ui.util.Colors;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Jason Polites

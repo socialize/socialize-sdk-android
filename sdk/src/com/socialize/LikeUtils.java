@@ -21,7 +21,6 @@
  */
 package com.socialize;
 
-import java.lang.reflect.Proxy;
 import android.app.Activity;
 import android.content.Context;
 import android.widget.CompoundButton;
@@ -29,13 +28,11 @@ import com.socialize.api.action.like.LikeOptions;
 import com.socialize.api.action.like.LikeUtilsProxy;
 import com.socialize.entity.Entity;
 import com.socialize.entity.User;
-import com.socialize.listener.like.IsLikedListener;
-import com.socialize.listener.like.LikeAddListener;
-import com.socialize.listener.like.LikeDeleteListener;
-import com.socialize.listener.like.LikeGetListener;
-import com.socialize.listener.like.LikeListListener;
+import com.socialize.listener.like.*;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.actionbutton.LikeButtonListener;
+
+import java.lang.reflect.Proxy;
 
 
 /**

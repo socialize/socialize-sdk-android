@@ -21,9 +21,6 @@
  */
 package com.socialize.ui.profile.activity;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import android.content.Context;
 import com.socialize.ActionUtils;
 import com.socialize.android.ioc.IBeanFactory;
@@ -33,6 +30,10 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.activity.ActionListListener;
 import com.socialize.ui.view.LoadingItemView;
 import com.socialize.view.BaseView;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Renders a list of recent user activity.

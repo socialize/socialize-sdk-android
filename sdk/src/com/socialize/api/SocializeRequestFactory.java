@@ -21,13 +21,14 @@
  */
 package com.socialize.api;
 
-import java.util.Collection;
-import java.util.Map;
-import org.apache.http.client.methods.HttpUriRequest;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeException;
+import org.apache.http.client.methods.HttpUriRequest;
+
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * @author Jason Polites

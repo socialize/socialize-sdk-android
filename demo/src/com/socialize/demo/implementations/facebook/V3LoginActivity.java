@@ -21,15 +21,12 @@
  */
 package com.socialize.demo.implementations.facebook;
 
-import java.util.Arrays;
 import android.content.Intent;
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.SessionLoginBehavior;
-import com.facebook.SessionState;
+import com.facebook.*;
 import com.facebook.model.GraphUser;
 import com.socialize.demo.SDKDemoActivity;
+
+import java.util.Arrays;
 
 
 /**

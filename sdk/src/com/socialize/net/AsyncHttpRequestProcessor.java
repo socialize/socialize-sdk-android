@@ -21,19 +21,20 @@
  */
 package com.socialize.net;
 
-import java.io.IOException;
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
 import com.socialize.concurrent.ManagedAsyncTask;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.HttpUtils;
 import com.socialize.util.IOUtils;
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
+
+import java.io.IOException;
 
 
 /**

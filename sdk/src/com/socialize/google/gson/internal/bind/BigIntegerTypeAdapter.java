@@ -21,6 +21,7 @@ import com.socialize.google.gson.TypeAdapter;
 import com.socialize.google.gson.stream.JsonReader;
 import com.socialize.google.gson.stream.JsonToken;
 import com.socialize.google.gson.stream.JsonWriter;
+
 import java.io.IOException;
 import java.math.BigInteger;
 

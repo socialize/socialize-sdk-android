@@ -21,9 +21,6 @@
  */
 package com.socialize.ui.comment;
 
-import java.lang.ref.WeakReference;
-import java.util.Date;
-import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
@@ -46,6 +43,10 @@ import com.socialize.util.CacheableDrawable;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
+
+import java.lang.ref.WeakReference;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Provides comments to the comment view.

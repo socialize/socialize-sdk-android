@@ -24,6 +24,7 @@ import com.socialize.google.gson.reflect.TypeToken;
 import com.socialize.google.gson.stream.JsonReader;
 import com.socialize.google.gson.stream.JsonToken;
 import com.socialize.google.gson.stream.JsonWriter;
+
 import java.io.IOException;
 import java.sql.Time;
 import java.text.DateFormat;

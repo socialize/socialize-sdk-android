@@ -21,7 +21,6 @@
  */
 package com.socialize.ui.profile.activity;
 
-import java.util.Date;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -31,11 +30,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
+import android.widget.*;
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.SocializeAction;
@@ -44,6 +39,8 @@ import com.socialize.ui.util.Colors;
 import com.socialize.ui.util.DateUtils;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
+
+import java.util.Date;
 
 /**
  * @author Jason Polites

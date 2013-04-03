@@ -21,15 +21,21 @@
  */
 package com.socialize.provider;
 
-import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
+import android.content.Context;
+import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.api.*;
+import com.socialize.api.action.ActionType;
+import com.socialize.auth.*;
+import com.socialize.config.SocializeConfig;
+import com.socialize.entity.*;
+import com.socialize.error.SocializeApiError;
+import com.socialize.error.SocializeException;
+import com.socialize.log.SocializeLogger;
+import com.socialize.net.HttpClientFactory;
+import com.socialize.util.HttpUtils;
+import com.socialize.util.IOUtils;
+import com.socialize.util.JSONParser;
+import com.socialize.util.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -40,38 +46,11 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import android.content.Context;
-import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.api.SessionLock;
-import com.socialize.api.SocializeRequestFactory;
-import com.socialize.api.SocializeSession;
-import com.socialize.api.SocializeSessionFactory;
-import com.socialize.api.SocializeSessionPersister;
-import com.socialize.api.WritableSession;
-import com.socialize.api.action.ActionType;
-import com.socialize.auth.AuthProviderData;
-import com.socialize.auth.AuthProviderInfo;
-import com.socialize.auth.AuthProviderInfoBuilder;
-import com.socialize.auth.AuthProviderType;
-import com.socialize.auth.DefaultUserProviderCredentials;
-import com.socialize.auth.UserProviderCredentials;
-import com.socialize.auth.UserProviderCredentialsMap;
-import com.socialize.config.SocializeConfig;
-import com.socialize.entity.ActionError;
-import com.socialize.entity.ErrorFactory;
-import com.socialize.entity.ListResult;
-import com.socialize.entity.SocializeObject;
-import com.socialize.entity.SocializeObjectFactory;
-import com.socialize.entity.User;
-import com.socialize.entity.UserAuthData;
-import com.socialize.error.SocializeApiError;
-import com.socialize.error.SocializeException;
-import com.socialize.log.SocializeLogger;
-import com.socialize.net.HttpClientFactory;
-import com.socialize.util.HttpUtils;
-import com.socialize.util.IOUtils;
-import com.socialize.util.JSONParser;
-import com.socialize.util.StringUtils;
+
+import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * @author Jason Polites

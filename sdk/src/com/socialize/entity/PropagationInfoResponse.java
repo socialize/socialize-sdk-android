@@ -1,10 +1,11 @@
 package com.socialize.entity;
 
+import com.socialize.api.action.ShareType;
+import com.socialize.networks.SocialNetwork;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import com.socialize.api.action.ShareType;
-import com.socialize.networks.SocialNetwork;
 
 
 public class PropagationInfoResponse implements Serializable {

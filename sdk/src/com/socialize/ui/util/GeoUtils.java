@@ -21,14 +21,15 @@
  */
 package com.socialize.ui.util;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.StringUtils;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * @author Jason Polites

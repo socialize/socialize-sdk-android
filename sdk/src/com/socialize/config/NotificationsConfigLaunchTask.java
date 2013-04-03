@@ -23,7 +23,6 @@ package com.socialize.config;
 
 import android.content.Context;
 import android.os.Bundle;
-
 import com.socialize.error.SocializeException;
 import com.socialize.launcher.LaunchTask;
 

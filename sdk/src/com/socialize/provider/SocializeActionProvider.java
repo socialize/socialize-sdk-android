@@ -1,15 +1,9 @@
 package com.socialize.provider;
 
+import com.socialize.api.action.ActionType;
+import com.socialize.entity.*;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.socialize.api.action.ActionType;
-import com.socialize.entity.Comment;
-import com.socialize.entity.Like;
-import com.socialize.entity.Share;
-import com.socialize.entity.SocializeAction;
-import com.socialize.entity.SocializeObjectFactory;
-import com.socialize.entity.View;
 
 public class SocializeActionProvider extends DefaultSocializeProvider<SocializeAction> {
 

@@ -21,13 +21,13 @@
  */
 package com.socialize.gson;
 
-import java.lang.reflect.Type;
-
 import com.socialize.auth.AuthProviderType;
 import com.socialize.google.gson.JsonDeserializationContext;
 import com.socialize.google.gson.JsonDeserializer;
 import com.socialize.google.gson.JsonElement;
 import com.socialize.google.gson.JsonParseException;
+
+import java.lang.reflect.Type;
 
 /**
  * @author Jason Polites

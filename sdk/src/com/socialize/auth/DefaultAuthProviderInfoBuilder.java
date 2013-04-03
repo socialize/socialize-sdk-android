@@ -21,10 +21,11 @@
  */
 package com.socialize.auth;
 
-import java.util.Collection;
-import java.util.Map;
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
+
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * @author Jason Polites

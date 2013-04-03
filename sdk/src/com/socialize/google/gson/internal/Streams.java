@@ -16,15 +16,12 @@
 
 package com.socialize.google.gson.internal;
 
-import com.socialize.google.gson.JsonElement;
-import com.socialize.google.gson.JsonIOException;
-import com.socialize.google.gson.JsonNull;
-import com.socialize.google.gson.JsonParseException;
-import com.socialize.google.gson.JsonSyntaxException;
+import com.socialize.google.gson.*;
 import com.socialize.google.gson.internal.bind.TypeAdapters;
 import com.socialize.google.gson.stream.JsonReader;
 import com.socialize.google.gson.stream.JsonWriter;
 import com.socialize.google.gson.stream.MalformedJsonException;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.Writer;

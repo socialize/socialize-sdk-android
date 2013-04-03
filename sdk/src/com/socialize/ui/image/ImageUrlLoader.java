@@ -21,13 +21,14 @@
  */
 package com.socialize.ui.image;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import com.socialize.util.CacheableDrawable;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import com.socialize.util.CacheableDrawable;
 
 /**
  * @author Jason Polites

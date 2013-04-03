@@ -21,8 +21,6 @@
  */
 package com.socialize.api.action.share;
 
-import java.util.ArrayList;
-import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
@@ -45,6 +43,9 @@ import com.socialize.networks.SocialNetworkListener;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.share.ShareHandler;
 import com.socialize.share.ShareHandlers;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Jason Polites

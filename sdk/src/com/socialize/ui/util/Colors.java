@@ -21,13 +21,14 @@
  */
 package com.socialize.ui.util;
 
+import android.graphics.Color;
+import com.socialize.log.SocializeLogger;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
-import android.graphics.Color;
-import com.socialize.log.SocializeLogger;
 
 /**
  * @author Jason Polites

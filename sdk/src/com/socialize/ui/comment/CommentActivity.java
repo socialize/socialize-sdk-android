@@ -23,12 +23,8 @@ package com.socialize.ui.comment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.ContextMenu;
+import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import com.socialize.Socialize;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeUIActivity;

@@ -21,9 +21,10 @@
  */
 package com.socialize.networks;
 
-import java.util.Map;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
+
+import java.util.Map;
 
 
 /**

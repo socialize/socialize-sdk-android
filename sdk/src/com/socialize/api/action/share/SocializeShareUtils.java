@@ -21,7 +21,6 @@
  */
 package com.socialize.api.action.share;
 
-import org.json.JSONObject;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -48,6 +47,7 @@ import com.socialize.ui.share.DialogFlowController;
 import com.socialize.ui.share.IShareDialogFactory;
 import com.socialize.ui.share.ShareDialogListener;
 import com.socialize.ui.share.SharePanelView;
+import org.json.JSONObject;
 
 /**
  * @author Jason Polites

@@ -21,7 +21,6 @@
  */
 package com.socialize.util;
 
-import java.io.InputStream;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -31,6 +30,8 @@ import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import com.socialize.R;
 import com.socialize.log.SocializeLogger;
+
+import java.io.InputStream;
 
 /**
  * Convenience class for getting drawables from raw images.

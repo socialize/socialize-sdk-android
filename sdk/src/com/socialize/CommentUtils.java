@@ -21,7 +21,6 @@
  */
 package com.socialize;
 
-import java.lang.reflect.Proxy;
 import android.app.Activity;
 import android.content.Context;
 import com.socialize.api.action.comment.CommentOptions;
@@ -34,6 +33,8 @@ import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.comment.OnCommentViewActionListener;
+
+import java.lang.reflect.Proxy;
 
 /**
  * @author Jason Polites

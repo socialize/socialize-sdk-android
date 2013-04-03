@@ -16,38 +16,21 @@
 
 package com.socialize.google.gson.internal.bind;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.sql.Timestamp;
-import java.util.BitSet;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.UUID;
-
-import com.socialize.google.gson.Gson;
-import com.socialize.google.gson.JsonArray;
-import com.socialize.google.gson.JsonElement;
-import com.socialize.google.gson.JsonIOException;
-import com.socialize.google.gson.JsonNull;
-import com.socialize.google.gson.JsonObject;
-import com.socialize.google.gson.JsonPrimitive;
-import com.socialize.google.gson.JsonSyntaxException;
-import com.socialize.google.gson.TypeAdapter;
-import com.socialize.google.gson.TypeAdapterFactory;
+import com.socialize.google.gson.*;
 import com.socialize.google.gson.annotations.SerializedName;
 import com.socialize.google.gson.internal.LazilyParsedNumber;
 import com.socialize.google.gson.reflect.TypeToken;
 import com.socialize.google.gson.stream.JsonReader;
 import com.socialize.google.gson.stream.JsonToken;
 import com.socialize.google.gson.stream.JsonWriter;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.sql.Timestamp;
+import java.util.*;
 
 /**
  * Type adapters for basic types.

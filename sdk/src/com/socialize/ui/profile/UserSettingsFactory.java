@@ -21,10 +21,10 @@
  */
 package com.socialize.ui.profile;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import com.socialize.entity.JSONFactory;
 import com.socialize.util.BitmapUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 /**

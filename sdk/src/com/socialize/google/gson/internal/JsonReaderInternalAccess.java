@@ -17,6 +17,7 @@
 package com.socialize.google.gson.internal;
 
 import com.socialize.google.gson.stream.JsonReader;
+
 import java.io.IOException;
 
 /**

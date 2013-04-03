@@ -21,7 +21,6 @@
  */
 package com.socialize.demo.implementations.twitter;
 
-import org.json.JSONObject;
 import android.app.Activity;
 import com.socialize.LocationUtils;
 import com.socialize.api.SocializeSession;
@@ -33,6 +32,7 @@ import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.twitter.Tweet;
 import com.socialize.networks.twitter.TwitterUtils;
+import org.json.JSONObject;
 
 
 /**

@@ -21,7 +21,6 @@
  */
 package com.socialize;
 
-import java.lang.reflect.Proxy;
 import android.app.Activity;
 import android.content.Context;
 import com.socialize.api.action.user.UserUtilsProxy;
@@ -34,6 +33,8 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.action.OnActionDetailViewListener;
 import com.socialize.ui.profile.UserSettings;
+
+import java.lang.reflect.Proxy;
 
 
 /**

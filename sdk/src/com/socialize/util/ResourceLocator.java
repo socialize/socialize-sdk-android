@@ -21,11 +21,12 @@
  */
 package com.socialize.util;
 
+import android.content.Context;
+import com.socialize.log.SocializeLogger;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import android.content.Context;
-import com.socialize.log.SocializeLogger;
 
 /**
  * @author Jason Polites

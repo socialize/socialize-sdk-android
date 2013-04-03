@@ -21,7 +21,6 @@
  */
 package com.socialize.api.action.share;
 
-import org.json.JSONObject;
 import android.app.Activity;
 import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
@@ -29,6 +28,7 @@ import com.socialize.listener.share.ShareAddListener;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
+import org.json.JSONObject;
 
 
 /**

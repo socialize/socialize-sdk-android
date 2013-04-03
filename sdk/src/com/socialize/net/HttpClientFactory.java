@@ -21,9 +21,9 @@
  */
 package com.socialize.net;
 
-import org.apache.http.client.HttpClient;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
+import org.apache.http.client.HttpClient;
 
 /**
  * @author Jason Polites

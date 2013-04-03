@@ -21,12 +21,13 @@
  */
 package com.socialize.entity;
 
-import java.text.ParseException;
+import com.socialize.log.SocializeLogger;
+import com.socialize.util.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.socialize.log.SocializeLogger;
-import com.socialize.util.StringUtils;
+
+import java.text.ParseException;
 
 /**
  * @author Jason Polites

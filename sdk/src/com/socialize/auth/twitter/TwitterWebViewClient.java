@@ -22,7 +22,6 @@
 package com.socialize.auth.twitter;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.View;
@@ -30,8 +29,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.util.StringUtils;
-
-import java.lang.ref.WeakReference;
 
 /**
  * @author Jason Polites

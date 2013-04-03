@@ -10,13 +10,14 @@
  */
 package com.socialize.oauth.signpost.basic;
 
+import com.socialize.oauth.signpost.AbstractOAuthProvider;
+import com.socialize.oauth.signpost.http.HttpRequest;
+import com.socialize.oauth.signpost.http.HttpResponse;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import com.socialize.oauth.signpost.AbstractOAuthProvider;
-import com.socialize.oauth.signpost.http.HttpRequest;
-import com.socialize.oauth.signpost.http.HttpResponse;
 
 
 /**

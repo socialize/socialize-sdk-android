@@ -22,13 +22,12 @@
 package com.socialize.auth.twitter;
 
 
-import org.apache.http.client.HttpClient;
+import android.os.AsyncTask;
 import com.socialize.oauth.signpost.OAuthConsumer;
 import com.socialize.oauth.signpost.OAuthTokenListener;
 import com.socialize.oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 import com.socialize.oauth.signpost.http.HttpParameters;
-
-import android.os.AsyncTask;
+import org.apache.http.client.HttpClient;
 
 /**
  * @author Jason Polites

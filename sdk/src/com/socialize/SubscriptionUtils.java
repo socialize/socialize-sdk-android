@@ -21,13 +21,14 @@
  */
 package com.socialize;
 
-import java.lang.reflect.Proxy;
 import android.app.Activity;
 import com.socialize.api.action.comment.SubscriptionUtilsProxy;
 import com.socialize.entity.Entity;
 import com.socialize.listener.subscription.SubscriptionCheckListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.notifications.SubscriptionType;
+
+import java.lang.reflect.Proxy;
 
 
 /**

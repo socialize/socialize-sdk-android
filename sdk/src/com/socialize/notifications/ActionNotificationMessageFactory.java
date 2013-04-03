@@ -21,10 +21,10 @@
  */
 package com.socialize.notifications;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import com.socialize.api.action.ActionType;
 import com.socialize.util.StringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * @author Jason Polites

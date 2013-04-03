@@ -21,10 +21,6 @@
  */
 package com.socialize.demo.implementations.facebook;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -53,6 +49,11 @@ import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.facebook.FacebookFacade;
 import com.socialize.networks.facebook.FacebookUtils;
 import com.socialize.ui.dialog.SafeProgressDialog;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**

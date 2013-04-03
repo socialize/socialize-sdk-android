@@ -21,8 +21,6 @@
  */
 package com.socialize.ui.share;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import android.app.Dialog;
 import android.content.Context;
 import com.socialize.Socialize;
@@ -36,6 +34,8 @@ import com.socialize.entity.Entity;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.ui.dialog.AsyncDialogFactory;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 
 /**

@@ -10,16 +10,17 @@
  */
 package com.socialize.oauth.signpost.commonshttp;
 
-import java.io.IOException;
+import com.socialize.log.SocializeLogger;
+import com.socialize.oauth.signpost.AbstractOAuthProvider;
+import com.socialize.oauth.signpost.http.HttpRequest;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
-import com.socialize.log.SocializeLogger;
-import com.socialize.oauth.signpost.AbstractOAuthProvider;
-import com.socialize.oauth.signpost.http.HttpRequest;
+
+import java.io.IOException;
 
 /**
  * This implementation uses the Apache Commons {@link HttpClient} 4.x HTTP

@@ -26,9 +26,10 @@
  */
 package com.socialize.apache.http.entity.mime.content;
 
+import com.socialize.apache.http.entity.mime.MIME;
+
 import java.io.IOException;
 import java.io.OutputStream;
-import com.socialize.apache.http.entity.mime.MIME;
 
 /**
  * Body part that is built using a byte array containing a file.

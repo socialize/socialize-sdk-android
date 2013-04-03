@@ -1,16 +1,10 @@
 package com.socialize.gson;
 
-import java.lang.reflect.Type;
-
 import com.socialize.auth.DefaultUserProviderCredentialsMap;
 import com.socialize.auth.UserProviderCredentialsMap;
-import com.socialize.google.gson.InstanceCreator;
-import com.socialize.google.gson.JsonDeserializationContext;
-import com.socialize.google.gson.JsonDeserializer;
-import com.socialize.google.gson.JsonElement;
-import com.socialize.google.gson.JsonParseException;
-import com.socialize.google.gson.JsonSerializationContext;
-import com.socialize.google.gson.JsonSerializer;
+import com.socialize.google.gson.*;
+
+import java.lang.reflect.Type;
 
 public class UserProviderCredentialsMapSerializer implements JsonDeserializer<UserProviderCredentialsMap>, JsonSerializer<UserProviderCredentialsMap>, InstanceCreator<UserProviderCredentialsMap> {
 	@Override

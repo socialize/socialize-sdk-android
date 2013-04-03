@@ -22,9 +22,10 @@
 package com.socialize.demo.snippets;
 
 //begin-snippet-0
-import com.socialize.Socialize;
+
 import android.app.Activity;
 import android.os.Bundle;
+import com.socialize.Socialize;
 
 public class SampleActivity extends Activity {
 

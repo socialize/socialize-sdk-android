@@ -21,11 +21,12 @@
  */
 package com.socialize.i18n;
 
-import java.util.Map;
-import java.util.TreeMap;
 import android.content.Context;
 import android.content.res.Resources;
 import com.socialize.util.StringUtils;
+
+import java.util.Map;
+import java.util.TreeMap;
 
 
 /**

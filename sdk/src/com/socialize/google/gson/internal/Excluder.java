@@ -16,17 +16,14 @@
 
 package com.socialize.google.gson.internal;
 
-import com.socialize.google.gson.ExclusionStrategy;
-import com.socialize.google.gson.FieldAttributes;
-import com.socialize.google.gson.Gson;
-import com.socialize.google.gson.TypeAdapter;
-import com.socialize.google.gson.TypeAdapterFactory;
+import com.socialize.google.gson.*;
 import com.socialize.google.gson.annotations.Expose;
 import com.socialize.google.gson.annotations.Since;
 import com.socialize.google.gson.annotations.Until;
 import com.socialize.google.gson.reflect.TypeToken;
 import com.socialize.google.gson.stream.JsonReader;
 import com.socialize.google.gson.stream.JsonWriter;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

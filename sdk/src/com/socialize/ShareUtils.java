@@ -21,7 +21,6 @@
  */
 package com.socialize;
 
-import java.lang.reflect.Proxy;
 import android.app.Activity;
 import android.content.Context;
 import com.socialize.api.action.share.ShareOptions;
@@ -35,6 +34,8 @@ import com.socialize.listener.share.ShareGetListener;
 import com.socialize.listener.share.ShareListListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.auth.AuthDialogListener;
+
+import java.lang.reflect.Proxy;
 
 
 /**

@@ -21,11 +21,7 @@
  */
 package com.socialize.api;
 
-import com.socialize.auth.AuthProviderData;
-import com.socialize.auth.AuthProviderInfo;
-import com.socialize.auth.DefaultUserProviderCredentials;
-import com.socialize.auth.UserProviderCredentials;
-import com.socialize.auth.UserProviderCredentialsMap;
+import com.socialize.auth.*;
 import com.socialize.config.SocializeConfig;
 import com.socialize.ui.profile.UserSettings;
 

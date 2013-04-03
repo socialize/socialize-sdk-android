@@ -21,10 +21,11 @@
  */
 package com.socialize.ui.view;
 
-import java.util.List;
 import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import java.util.List;
 
 /**
  * @author Jason Polites

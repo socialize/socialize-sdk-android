@@ -16,9 +16,9 @@
 
 package com.socialize.google.gdata.util.common.base;
 
-import static com.socialize.google.gdata.util.common.base.Preconditions.checkNotNull;
-
 import java.io.IOException;
+
+import static com.socialize.google.gdata.util.common.base.Preconditions.checkNotNull;
 
 /**
  * An {@link Escaper} that converts literal text into a format safe for

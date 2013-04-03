@@ -21,9 +21,6 @@
  */
 package com.socialize;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import org.apache.http.MethodNotSupportedException;
 import android.app.Activity;
 import android.content.Context;
 import com.socialize.android.ioc.IOCContainer;
@@ -36,6 +33,10 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.SocializeListener;
 import com.socialize.log.SocializeLogger;
+import org.apache.http.MethodNotSupportedException;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 
 
 /**

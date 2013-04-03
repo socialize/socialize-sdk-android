@@ -21,7 +21,6 @@
  */
 package com.socialize.auth.facebook;
 
-import org.json.JSONObject;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,6 +32,7 @@ import com.socialize.facebook.Facebook;
 import com.socialize.facebook.Facebook.DialogListener;
 import com.socialize.facebook.FacebookError;
 import com.socialize.listener.AuthProviderListener;
+import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 

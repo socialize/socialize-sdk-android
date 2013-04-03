@@ -21,10 +21,11 @@
  */
 package com.socialize.ui.image;
 
+import com.socialize.util.SafeBitmapDrawable;
+
 import java.util.Collection;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import com.socialize.util.SafeBitmapDrawable;
 
 
 /**

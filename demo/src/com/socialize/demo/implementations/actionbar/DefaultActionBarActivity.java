@@ -21,8 +21,6 @@
  */
 package com.socialize.demo.implementations.actionbar;
 
-import java.util.List;
-import org.json.JSONObject;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -41,6 +39,9 @@ import com.socialize.ui.actionbar.OnActionBarShareEventListener;
 import com.socialize.ui.comment.CommentListView;
 import com.socialize.ui.comment.LinkifyCommentViewActionListener;
 import com.socialize.ui.share.SharePanelView;
+import org.json.JSONObject;
+
+import java.util.List;
 
 
 /**

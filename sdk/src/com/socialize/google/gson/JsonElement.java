@@ -18,6 +18,7 @@ package com.socialize.google.gson;
 
 import com.socialize.google.gson.internal.Streams;
 import com.socialize.google.gson.stream.JsonWriter;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.math.BigDecimal;

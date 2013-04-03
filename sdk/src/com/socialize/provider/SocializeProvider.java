@@ -21,9 +21,6 @@
  */
 package com.socialize.provider;
 
-import java.util.Collection;
-import java.util.Map;
-
 import android.content.Context;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.WritableSession;
@@ -32,6 +29,9 @@ import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;
+
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * @author Jason Polites

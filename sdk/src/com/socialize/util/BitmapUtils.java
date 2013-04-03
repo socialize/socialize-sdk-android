@@ -21,10 +21,11 @@
  */
 package com.socialize.util;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
+
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 /**
  * @author Jason Polites

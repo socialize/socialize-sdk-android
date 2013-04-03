@@ -23,7 +23,6 @@ package com.socialize.networks.twitter;
 
 import android.content.Context;
 import android.widget.ImageView;
-
 import com.socialize.ui.view.ClickableSectionCell;
 
 /**

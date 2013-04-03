@@ -21,9 +21,10 @@
  */
 package com.socialize.listener.like;
 
-import java.util.List;
 import com.socialize.entity.Like;
 import com.socialize.entity.ListResult;
+
+import java.util.List;
 
 
 /**

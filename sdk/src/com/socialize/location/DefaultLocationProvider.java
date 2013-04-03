@@ -25,7 +25,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
-
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.config.SocializeConfig;
 import com.socialize.log.SocializeLogger;

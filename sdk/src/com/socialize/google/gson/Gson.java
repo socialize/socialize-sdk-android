@@ -20,38 +20,18 @@ import com.socialize.google.gson.internal.ConstructorConstructor;
 import com.socialize.google.gson.internal.Excluder;
 import com.socialize.google.gson.internal.Primitives;
 import com.socialize.google.gson.internal.Streams;
-import com.socialize.google.gson.internal.bind.ArrayTypeAdapter;
-import com.socialize.google.gson.internal.bind.BigDecimalTypeAdapter;
-import com.socialize.google.gson.internal.bind.BigIntegerTypeAdapter;
-import com.socialize.google.gson.internal.bind.CollectionTypeAdapterFactory;
-import com.socialize.google.gson.internal.bind.DateTypeAdapter;
-import com.socialize.google.gson.internal.bind.JsonTreeReader;
-import com.socialize.google.gson.internal.bind.JsonTreeWriter;
-import com.socialize.google.gson.internal.bind.MapTypeAdapterFactory;
-import com.socialize.google.gson.internal.bind.ObjectTypeAdapter;
-import com.socialize.google.gson.internal.bind.ReflectiveTypeAdapterFactory;
-import com.socialize.google.gson.internal.bind.SqlDateTypeAdapter;
-import com.socialize.google.gson.internal.bind.TimeTypeAdapter;
-import com.socialize.google.gson.internal.bind.TypeAdapters;
+import com.socialize.google.gson.internal.bind.*;
 import com.socialize.google.gson.reflect.TypeToken;
 import com.socialize.google.gson.stream.JsonReader;
 import com.socialize.google.gson.stream.JsonToken;
 import com.socialize.google.gson.stream.JsonWriter;
 import com.socialize.google.gson.stream.MalformedJsonException;
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
+
+import java.io.*;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This is the main class for using Gson. Gson is typically used by first constructing a

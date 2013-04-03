@@ -21,9 +21,6 @@
  */
 package com.socialize.notifications;
 
-import java.util.Map;
-import org.json.JSONException;
-import org.json.JSONObject;
 import android.app.Notification;
 import android.content.Context;
 import android.os.Bundle;
@@ -37,6 +34,10 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.ui.profile.UserSettings;
 import com.socialize.util.AppUtils;
 import com.socialize.util.StringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Map;
 
 /**
  * @author Jason Polites

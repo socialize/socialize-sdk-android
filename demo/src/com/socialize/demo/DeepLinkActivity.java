@@ -21,12 +21,12 @@
  */
 package com.socialize.demo;
 
+import android.net.Uri;
+import android.os.Bundle;
 import com.socialize.EntityUtils;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.entity.EntityGetListener;
-import android.net.Uri;
-import android.os.Bundle;
 
 
 /**

@@ -21,8 +21,6 @@
  */
 package com.socialize.demo.snippets;
 
-import java.util.List;
-import org.json.JSONObject;
 import android.app.Activity;
 import com.socialize.CommentUtils;
 import com.socialize.UserUtils;
@@ -41,6 +39,9 @@ import com.socialize.ui.comment.CommentListItem;
 import com.socialize.ui.comment.CommentListView;
 import com.socialize.ui.comment.LinkifyCommentViewActionListener;
 import com.socialize.ui.comment.OnCommentViewActionListener;
+import org.json.JSONObject;
+
+import java.util.List;
 
 
 /**

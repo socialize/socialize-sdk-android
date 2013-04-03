@@ -14,9 +14,6 @@
  */
 package com.socialize.oauth.signpost;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Random;
 import com.socialize.oauth.OAuthSignListener;
 import com.socialize.oauth.signpost.basic.UrlStringRequestAdapter;
 import com.socialize.oauth.signpost.exception.OAuthCommunicationException;
@@ -24,11 +21,11 @@ import com.socialize.oauth.signpost.exception.OAuthExpectationFailedException;
 import com.socialize.oauth.signpost.exception.OAuthMessageSignerException;
 import com.socialize.oauth.signpost.http.HttpParameters;
 import com.socialize.oauth.signpost.http.HttpRequest;
-import com.socialize.oauth.signpost.signature.AuthorizationHeaderSigningStrategy;
-import com.socialize.oauth.signpost.signature.HmacSha1MessageSigner;
-import com.socialize.oauth.signpost.signature.OAuthMessageSigner;
-import com.socialize.oauth.signpost.signature.QueryStringSigningStrategy;
-import com.socialize.oauth.signpost.signature.SigningStrategy;
+import com.socialize.oauth.signpost.signature.*;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Random;
 
 
 /**

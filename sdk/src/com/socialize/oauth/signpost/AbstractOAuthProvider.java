@@ -10,10 +10,6 @@
  */
 package com.socialize.oauth.signpost;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
 import com.socialize.oauth.signpost.exception.OAuthCommunicationException;
 import com.socialize.oauth.signpost.exception.OAuthExpectationFailedException;
 import com.socialize.oauth.signpost.exception.OAuthMessageSignerException;
@@ -21,6 +17,11 @@ import com.socialize.oauth.signpost.exception.OAuthNotAuthorizedException;
 import com.socialize.oauth.signpost.http.HttpParameters;
 import com.socialize.oauth.signpost.http.HttpRequest;
 import com.socialize.oauth.signpost.http.HttpResponse;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**

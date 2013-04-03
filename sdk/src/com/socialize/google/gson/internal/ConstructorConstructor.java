@@ -18,20 +18,11 @@ package com.socialize.google.gson.internal;
 
 import com.socialize.google.gson.InstanceCreator;
 import com.socialize.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * Returns a function that can construct an instance of a requested type.

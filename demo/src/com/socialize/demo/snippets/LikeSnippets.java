@@ -21,8 +21,6 @@
  */
 package com.socialize.demo.snippets;
 
-import java.util.List;
-import org.json.JSONObject;
 import android.app.Activity;
 import com.socialize.LikeUtils;
 import com.socialize.UserUtils;
@@ -36,6 +34,9 @@ import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
+import org.json.JSONObject;
+
+import java.util.List;
 
 
 /**

@@ -27,7 +27,6 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-
 import com.socialize.util.AppUtils;
 
 /**

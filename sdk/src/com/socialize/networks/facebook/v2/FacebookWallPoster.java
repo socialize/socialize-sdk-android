@@ -21,7 +21,6 @@
  */
 package com.socialize.networks.facebook.v2;
 
-import java.util.Map;
 import android.app.Activity;
 import android.net.Uri;
 import com.socialize.entity.Entity;
@@ -30,7 +29,8 @@ import com.socialize.entity.Share;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
-import com.socialize.networks.facebook.v2.FacebookPermissionCallback;
+
+import java.util.Map;
 
 /**
  * @author Jason Polites

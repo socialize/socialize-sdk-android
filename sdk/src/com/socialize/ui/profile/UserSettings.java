@@ -21,10 +21,11 @@
  */
 package com.socialize.ui.profile;
 
-import java.io.Serializable;
 import android.graphics.Bitmap;
 import com.socialize.entity.User;
 import com.socialize.networks.SocialNetwork;
+
+import java.io.Serializable;
 
 /**
  * @author Jason Polites

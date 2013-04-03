@@ -18,6 +18,7 @@ package com.socialize.google.gson.stream;
 
 import com.socialize.google.gson.internal.JsonReaderInternalAccess;
 import com.socialize.google.gson.internal.bind.JsonTreeReader;
+
 import java.io.Closeable;
 import java.io.EOFException;
 import java.io.IOException;

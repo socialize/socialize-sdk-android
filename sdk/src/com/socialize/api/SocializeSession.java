@@ -21,13 +21,14 @@
  */
 package com.socialize.api;
 
-import java.io.Serializable;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.entity.User;
 import com.socialize.oauth.OAuthAuthorizer;
 import com.socialize.ui.profile.UserSettings;
+
+import java.io.Serializable;
 
 /**
  * @author Jason Polites

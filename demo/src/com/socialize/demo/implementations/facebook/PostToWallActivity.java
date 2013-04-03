@@ -21,9 +21,6 @@
  */
 package com.socialize.demo.implementations.facebook;
 
-import java.util.HashMap;
-import java.util.Map;
-import org.json.JSONObject;
 import android.app.Activity;
 import com.socialize.api.SocializeSession;
 import com.socialize.demo.SDKDemoActivity;
@@ -33,6 +30,10 @@ import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.facebook.FacebookFacade;
 import com.socialize.networks.facebook.FacebookUtils;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**

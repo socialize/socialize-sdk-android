@@ -21,10 +21,6 @@
  */
 package com.socialize.demo.snippets;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import org.json.JSONObject;
 import android.app.Activity;
 import android.net.Uri;
 import com.socialize.ShareUtils;
@@ -46,6 +42,11 @@ import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.twitter.PhotoTweet;
 import com.socialize.networks.twitter.Tweet;
 import com.socialize.networks.twitter.TwitterUtils;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**

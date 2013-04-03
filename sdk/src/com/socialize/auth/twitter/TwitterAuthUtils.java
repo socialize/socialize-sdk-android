@@ -28,7 +28,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
-
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;

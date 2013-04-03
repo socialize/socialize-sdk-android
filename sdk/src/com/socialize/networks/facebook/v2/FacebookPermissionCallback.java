@@ -21,18 +21,19 @@
  */
 package com.socialize.networks.facebook.v2;
 
+import com.socialize.error.SocializeException;
+import com.socialize.facebook.AsyncFacebookRunner.RequestListener;
+import com.socialize.facebook.FacebookError;
+import com.socialize.listener.SocializeListener;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import com.socialize.error.SocializeException;
-import com.socialize.facebook.AsyncFacebookRunner.RequestListener;
-import com.socialize.facebook.FacebookError;
-import com.socialize.listener.SocializeListener;
 
 
 /**

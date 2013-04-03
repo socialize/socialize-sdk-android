@@ -33,7 +33,6 @@ import android.view.MotionEvent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 

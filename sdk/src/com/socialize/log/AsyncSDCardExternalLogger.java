@@ -21,10 +21,11 @@
  */
 package com.socialize.log;
 
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import android.content.Context;
 import com.socialize.log.SocializeLogger.LogLevel;
+
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 /**

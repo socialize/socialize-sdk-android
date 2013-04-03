@@ -21,12 +21,6 @@
  */
 package com.socialize.networks.facebook;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -41,11 +35,7 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.action.share.ShareOptions;
 import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.api.action.user.UserSystem;
-import com.socialize.auth.AuthProviderInfo;
-import com.socialize.auth.AuthProviderResponse;
-import com.socialize.auth.AuthProviderType;
-import com.socialize.auth.DefaultUserProviderCredentials;
-import com.socialize.auth.UserProviderCredentials;
+import com.socialize.auth.*;
 import com.socialize.auth.facebook.FacebookActivity;
 import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.auth.facebook.FacebookAuthProviderInfo.PermissionType;
@@ -57,15 +47,13 @@ import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.ListenerHolder;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
-import com.socialize.networks.DefaultPostData;
-import com.socialize.networks.PostData;
-import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkListener;
-import com.socialize.networks.SocialNetworkPostListener;
-import com.socialize.networks.SocializeDeAuthListener;
+import com.socialize.networks.*;
 import com.socialize.ui.profile.UserSettings;
 import com.socialize.util.ArrayUtils;
 import com.socialize.util.ImageUtils;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 
 /**

@@ -28,9 +28,7 @@ import android.test.mock.MockPackageManager;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.Socialize;
-import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.SocializeUnitTest;
-import com.socialize.test.util.TestUtils;
 import com.socialize.util.AppUtils;
 import com.socialize.util.DefaultAppUtils;
 

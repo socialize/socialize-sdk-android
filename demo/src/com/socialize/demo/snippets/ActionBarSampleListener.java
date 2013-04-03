@@ -20,12 +20,12 @@
  * THE SOFTWARE.
  */
 package com.socialize.demo.snippets;
-import com.socialize.demo.R;
-//begin-snippet-0
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import com.socialize.ActionBarUtils;
+import com.socialize.demo.R;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.Share;
@@ -33,6 +33,8 @@ import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarOptions;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
+
+//begin-snippet-0
 
 public class ActionBarSampleListener extends Activity {
 	

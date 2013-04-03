@@ -16,27 +16,18 @@
 
 package com.socialize.google.gson.internal.bind;
 
+import com.socialize.google.gson.*;
+import com.socialize.google.gson.internal.*;
+import com.socialize.google.gson.reflect.TypeToken;
+import com.socialize.google.gson.stream.JsonReader;
+import com.socialize.google.gson.stream.JsonToken;
+import com.socialize.google.gson.stream.JsonWriter;
+
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import com.socialize.google.gson.Gson;
-import com.socialize.google.gson.JsonElement;
-import com.socialize.google.gson.JsonPrimitive;
-import com.socialize.google.gson.JsonSyntaxException;
-import com.socialize.google.gson.TypeAdapter;
-import com.socialize.google.gson.TypeAdapterFactory;
-import com.socialize.google.gson.internal.$Gson$Types;
-import com.socialize.google.gson.internal.ConstructorConstructor;
-import com.socialize.google.gson.internal.JsonReaderInternalAccess;
-import com.socialize.google.gson.internal.ObjectConstructor;
-import com.socialize.google.gson.internal.Streams;
-import com.socialize.google.gson.reflect.TypeToken;
-import com.socialize.google.gson.stream.JsonReader;
-import com.socialize.google.gson.stream.JsonToken;
-import com.socialize.google.gson.stream.JsonWriter;
 
 /**
  * Adapts maps to either JSON objects or JSON arrays.

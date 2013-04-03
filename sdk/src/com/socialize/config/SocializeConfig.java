@@ -21,16 +21,17 @@
  */
 package com.socialize.config;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.Set;
 import android.content.Context;
 import com.socialize.log.ExternalLogger;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.ResourceLocator;
 import com.socialize.util.StringUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * @author Jason Polites

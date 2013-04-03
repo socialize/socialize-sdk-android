@@ -21,7 +21,6 @@
  */
 package com.socialize.api.action;
 
-import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
 import com.socialize.ConfigUtils;
@@ -40,6 +39,7 @@ import com.socialize.networks.twitter.TwitterUtils;
 import com.socialize.share.ShareHandler;
 import com.socialize.share.ShareHandlers;
 import com.socialize.ui.profile.UserSettings;
+import org.json.JSONObject;
 
 
 /**

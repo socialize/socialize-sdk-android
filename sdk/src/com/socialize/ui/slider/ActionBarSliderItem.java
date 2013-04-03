@@ -22,7 +22,6 @@
 package com.socialize.ui.slider;
 
 import android.view.View;
-
 import com.socialize.ui.slider.ActionBarSliderView.DisplayState;
 
 /**

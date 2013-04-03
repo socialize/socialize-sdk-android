@@ -21,9 +21,6 @@
  */
 package com.socialize.demo.implementations.location;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -36,6 +33,10 @@ import android.widget.Toast;
 import com.socialize.LocationUtils;
 import com.socialize.demo.DemoActivity;
 import com.socialize.demo.R;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 
 /**

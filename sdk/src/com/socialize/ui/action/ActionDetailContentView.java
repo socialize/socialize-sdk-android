@@ -21,7 +21,6 @@
  */
 package com.socialize.ui.action;
 
-import java.util.Date;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -51,6 +50,8 @@ import com.socialize.ui.util.GeoUtils;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
+
+import java.util.Date;
 
 /**
  * @author Jason Polites

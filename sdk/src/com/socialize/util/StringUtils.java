@@ -21,8 +21,9 @@
  */
 package com.socialize.util;
 
-import java.io.UnsupportedEncodingException;
 import com.socialize.log.SocializeLogger;
+
+import java.io.UnsupportedEncodingException;
 
 /**
  * @author Jason Polites

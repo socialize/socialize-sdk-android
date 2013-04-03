@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 package com.socialize.demo.snippets;
-import java.util.List;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -35,6 +35,8 @@ import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.comment.CommentListItem;
 import com.socialize.ui.comment.CommentListView;
 import com.socialize.ui.comment.OnCommentViewActionListener;
+
+import java.util.List;
 
 //begin-snippet-0
 public class ActionBarCommentListener extends Activity {

@@ -16,21 +16,16 @@
 
 package com.socialize.google.gson;
 
-import java.lang.reflect.Type;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.socialize.google.gson.internal.$Gson$Preconditions;
 import com.socialize.google.gson.internal.Excluder;
 import com.socialize.google.gson.internal.Primitives;
 import com.socialize.google.gson.internal.bind.TypeAdapters;
 import com.socialize.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.util.*;
 
 /**
  * <p>Use this builder to construct a {@link Gson} instance when you need to set configuration
