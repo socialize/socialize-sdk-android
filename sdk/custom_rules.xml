@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="socialize-sdk-custom">
-	<target name="-pre-compile">
-		<!-- Set the version -->
-		<replaceregexp file="src/com/socialize/Socialize.java" match="public\s+static\s+final\s+String\s+VERSION\s*=\s*&quot;.*&quot;" replace="public static final String VERSION = &quot;${version}&quot;" />
-	</target>
-	
+
 	<target name="check-paths">
 	
 		<property environment="env"/> 
@@ -126,26 +122,33 @@
 		<mkdir dir="${tmp_dir}"/>
 
 		<copy todir="${tmp_dir}/demo">
-			<fileset dir="../demo/" excludes="gen/**,bin/**,build/**,codetemplates.xml, local.properties"/>
+			<fileset dir="../demo/" excludes="*.iml,gen/**,bin/**,build/**,codetemplates.xml, local.properties"/>
 		</copy>
 		<copy todir="${tmp_dir}/sdk">
-			<fileset dir="../sdk/" excludes="gen/**,bin/**,build/**,doc/**,icons/**,classes/**,libs/**,codetemplates.xml, ant.properties, local.properties"/>
+			<fileset dir="../sdk/" excludes="*.iml,gen/**,bin/**,build/**,doc/**,icons/**,classes/**, codetemplates.xml, ant.properties, local.properties"/>
 		</copy>
 		
 		<copy todir="${tmp_dir}/lib/android-ioc">
-			<fileset dir="../../android-ioc/core" excludes="gen/**,bin/**,build/**,doc/**,codetemplates.xml, local.properties"/>
+			<fileset dir="../../android-ioc/core" excludes="*.iml,gen/**,bin/**,build/**,doc/**,codetemplates.xml, local.properties"/>
 		</copy>
 	
 		<copy todir="${tmp_dir}/lib/facebook-android-sdk">
-			<fileset dir="../../facebook-android-sdk/facebook" excludes="gen/**,bin/**,build/**,tests/**,TestApp/**,codetemplates.xml, local.properties"/>
+			<fileset dir="../../facebook-android-sdk/facebook" excludes="*.iml,gen/**,bin/**,build/**,tests/**,TestApp/**,codetemplates.xml, local.properties"/>
 		</copy>		
 	
 		<!-- Set the version -->
+        <echo>Setting verson in Socialize.java to ${version}</echo>
 		<replaceregexp file="${tmp_dir}/sdk/src/com/socialize/Socialize.java" match="public\s+static\s+final\s+String\s+VERSION\s*=\s*&quot;.*&quot;" replace="public static final String VERSION = &quot;${version}&quot;" />
-		<replaceregexp file="${tmp_dir}/sdk/project.properties" match="android.library.reference.1=../../android-ioc/core" replace="android.library.reference.1=../lib/android-ioc" byline="true"/>
+
+        <!-- Adjust project reference paths -->
+        <replaceregexp file="${tmp_dir}/sdk/project.properties" match="android.library.reference.1=../../android-ioc/core" replace="android.library.reference.1=../lib/android-ioc" byline="true"/>
 		<replaceregexp file="${tmp_dir}/sdk/project.properties" match="android.library.reference.2=../../facebook-android-sdk/facebook" replace="android.library.reference.2=../lib/facebook-android-sdk" byline="true"/>
-		
-		<!-- Create the ZIP file for distribution -->
+
+        <replaceregexp file="${tmp_dir}/demo/project.properties" match="android.library.reference.2=../../android-ioc/core" replace="android.library.reference.2=../lib/android-ioc" byline="true"/>
+        <replaceregexp file="${tmp_dir}/demo/project.properties" match="android.library.reference.3=../../facebook-android-sdk/facebook" replace="android.library.reference.3=../lib/facebook-android-sdk" byline="true"/>
+
+
+        <!-- Create the ZIP file for distribution -->
 		<zip destfile="build/socialize-sdk-android-${version}.zip">
 			<zipfileset dir="icons" includes="**/*.psd" prefix="icons"/>
 			

@@ -90,9 +90,6 @@ public class ActionBarWithMonitorActivity extends Activity {
 
 					@Override
 					public void onLoadFail(Exception error) {
-						
-						Logger.i("ActionBarWithMonitorActivity", "ActionBar load failed. Scheduling retry");
-						
 						ActionBarNetworkMonitor monitor = new ActionBarNetworkMonitor(ActionBarWithMonitorActivity.this, actionBar, 5000);
 						monitor.reloadOnNetworkAvailable(ActionBarWithMonitorActivity.this);
 					}

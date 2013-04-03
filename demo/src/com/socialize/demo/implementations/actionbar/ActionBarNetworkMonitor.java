@@ -21,21 +21,22 @@
  */
 package com.socialize.demo.implementations.actionbar;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import com.socialize.Socialize;
 import com.socialize.SocializeLifecycleListener;
-import com.socialize.android.ioc.Logger;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.Share;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -64,21 +65,21 @@ public class ActionBarNetworkMonitor {
 
 				@Override
 				public void onUpdate(ActionBarView actionBar) {
-					Logger.i("ActionBarWithMonitorActivity", "ActionBar loaded. Releasing lifecycle listener");
+					Log.i("ActionBarWithMonitorActivity", "ActionBar loaded. Releasing lifecycle listener");
 					Socialize.setSocializeLifecycleListener(null);
 					timer.cancel();
 				}
 				
 				@Override
 				public void onLoad(ActionBarView actionBar) {
-					Logger.i("ActionBarWithMonitorActivity", "ActionBar loaded. Releasing lifecycle listener");
+					Log.i("ActionBarWithMonitorActivity", "ActionBar loaded. Releasing lifecycle listener");
 					Socialize.setSocializeLifecycleListener(null);
 					timer.cancel();
 				}
 
 				@Override
 				public void onLoadFail(Exception error) {
-					Logger.i("ActionBarWithMonitorActivity", "ActionBar load failed. Scheduling retry");
+					Log.i("ActionBarWithMonitorActivity", "ActionBar load failed. Scheduling retry");
 				}
 
 				@Override
@@ -109,14 +110,12 @@ public class ActionBarNetworkMonitor {
 
 				@Override
 				public void onDestroy(Activity activity) {
-					Logger.i("ActionBarWithMonitorActivity", "onDestroy caught.  Cancelling scheduled reload");
 					timer.cancel();
 					Socialize.setSocializeLifecycleListener(null);
 				}
 
 				@Override
 				public void onPause(Activity activity) {
-					Logger.i("ActionBarWithMonitorActivity", "onPause caught.  Cancelling scheduled reload");
 					timer.cancel();
 				}
 
