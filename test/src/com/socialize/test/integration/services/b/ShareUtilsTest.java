@@ -24,28 +24,36 @@ package com.socialize.test.integration.services.b;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.location.Location;
 import android.view.View;
+import com.google.android.testing.mocking.AndroidMock;
+import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.ShareUtils;
 import com.socialize.SocializeAccess;
+import com.socialize.SocializeService;
+import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ActionOptions;
 import com.socialize.api.action.ShareType;
-import com.socialize.api.action.share.ShareOptions;
-import com.socialize.api.action.share.SocialNetworkDialogListener;
-import com.socialize.api.action.share.SocialNetworkShareListener;
-import com.socialize.api.action.share.SocializeShareUtils;
-import com.socialize.entity.Entity;
-import com.socialize.entity.ListResult;
-import com.socialize.entity.Share;
-import com.socialize.entity.User;
+import com.socialize.api.action.share.*;
+import com.socialize.config.SocializeConfig;
+import com.socialize.entity.*;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.share.ShareGetListener;
 import com.socialize.listener.share.ShareListListener;
+import com.socialize.listener.share.ShareListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.FacebookShareCell;
 import com.socialize.networks.twitter.TwitterShareCell;
+import com.socialize.test.PublicShareSystem;
+import com.socialize.test.PublicShareUtils;
+import com.socialize.test.PublicSocialize;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.util.TestUtils;
+import com.socialize.ui.auth.AuthDialogFactory;
+import com.socialize.ui.auth.AuthDialogListener;
 import com.socialize.ui.share.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -471,6 +479,192 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		assertNotNull(result);
 		
 		assertEquals("success", result);
-	}	
-	
+	}
+
+	public void testShareViaEmail() {
+
+		SocializeShareUtils socializeShareUtils = prepShareTest();
+		socializeShareUtils.shareViaEmail(TestUtils.getActivity(this), entity, new ShareAddListener() {
+			@Override
+			public void onCreate(Share result) {
+				addResult(3, result);
+			}
+
+			@Override
+			public void onError(SocializeException error) {
+				addResult(4, error);
+			}
+		});
+
+		assertEquals(ShareType.EMAIL, getResult(0));
+		assertNotNull(getResult(3));
+		assertSame(getResult(3), getResult(1));
+	}
+
+	public void testShareViaGooglePlus() {
+
+		SocializeShareUtils socializeShareUtils = prepShareTest();
+		socializeShareUtils.shareViaGooglePlus(TestUtils.getActivity(this), entity, new ShareAddListener() {
+			@Override
+			public void onCreate(Share result) {
+				addResult(3, result);
+			}
+
+			@Override
+			public void onError(SocializeException error) {
+				addResult(4, error);
+			}
+		});
+
+		assertEquals(ShareType.GOOGLE_PLUS, getResult(0));
+		assertNotNull(getResult(3));
+		assertSame(getResult(3), getResult(1));
+	}
+
+	public void testShareViaSMS() {
+
+		SocializeShareUtils socializeShareUtils = prepShareTest();
+		socializeShareUtils.shareViaSMS(TestUtils.getActivity(this), entity, new ShareAddListener() {
+			@Override
+			public void onCreate(Share result) {
+				addResult(3, result);
+			}
+
+			@Override
+			public void onError(SocializeException error) {
+				addResult(4, error);
+			}
+		});
+
+		assertEquals(ShareType.SMS, getResult(0));
+		assertNotNull(getResult(3));
+		assertSame(getResult(3), getResult(1));
+	}
+
+
+	public void testShareViaOther() {
+
+		SocializeShareUtils socializeShareUtils = prepShareTest();
+		socializeShareUtils.shareViaOther(TestUtils.getActivity(this), entity, new ShareAddListener() {
+			@Override
+			public void onCreate(Share result) {
+				addResult(3, result);
+			}
+
+			@Override
+			public void onError(SocializeException error) {
+				addResult(4, error);
+			}
+		});
+
+		assertEquals(ShareType.OTHER, getResult(0));
+		assertNotNull(getResult(3));
+		assertSame(getResult(3), getResult(1));
+	}
+
+	public void testShareViaSocialNetworks() {
+
+		SocialNetwork n = SocialNetwork.TWITTER;
+		SocializeShareUtils socializeShareUtils = prepShareTest(true, n);
+
+		socializeShareUtils.shareViaSocialNetworks(TestUtils.getActivity(this), entity, null, new SocialNetworkShareListener() {
+			@Override
+			public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+				addResult(3, socialNetwork);
+			}
+		}, n);
+
+		assertEquals(ShareType.TWITTER, getResult(0));
+		assertNotNull(getResult(3));
+		assertEquals(SocialNetwork.TWITTER, getResult(3));
+
+	}
+
+	SocializeShareUtils prepShareTest() {
+		return prepShareTest(false, null);
+	}
+
+	@UsesMocks({SocializeService.class, SocializeSession.class, SocializeConfig.class})
+	SocializeShareUtils prepShareTest(final boolean displayAuth, final SocialNetwork socialNetwork) {
+
+		final Activity context = TestUtils.getActivity(this);
+
+		final Dialog mockDialog = new Dialog(context) {
+			@Override
+			public void dismiss() {}
+		};
+
+		final SocializeException mockException = new SocializeException("TEST - IGNORE THIS ERROR");
+		final SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		final SocializeService socialize = new PublicSocialize() {
+			@Override
+			public SocializeSession getSession() {
+				return session;
+			}
+		};
+
+		final AuthDialogFactory authDialogFactory = new AuthDialogFactory() {
+			@Override
+			public void show(Context ctx, AuthDialogListener listener, boolean required) {
+				listener.onAuthenticate(context, mockDialog, socialNetwork);
+			}
+		};
+
+		final SocializeConfig config = new SocializeConfig() {
+			@Override
+			public boolean isAllowSkipAuthOnAllActions() {
+				return true;
+			}
+		};
+
+		final Share share = new Share();
+
+		final ShareSystem shareSystem = new PublicShareSystem() {
+			@Override
+			public void addShare(Context context, SocializeSession session, Entity entity, String text, ShareType shareType, SocialNetwork network, Location location, ShareListener listener) {
+				// Just call the listener
+				listener.onError(mockException);
+				listener.onCreate(share);
+
+				addResult(0, shareType);
+				addResult(1, share);
+			}
+
+			@Override
+			public void addShare(SocializeSession session, Entity entity, String text, ShareType shareType, Location location, ShareListener listener, SocialNetwork...network) {
+				// Just call the listener
+				listener.onError(mockException);
+				listener.onCreate(share);
+
+				addResult(0, shareType);
+				addResult(1, share);
+			}
+
+				@Override
+			public void share(Activity context, SocializeSession session, SocializeAction action, String comment, Location location, ShareType destination, SocialNetworkListener listener) {
+				// Just call the listener
+				listener.onNetworkError(null, null, mockException);
+				listener.onCancel();
+				listener.onAfterPost(context, SocialNetwork.valueOf(destination), null);
+			}
+		};
+
+		PublicShareUtils utils = new PublicShareUtils() {
+			@Override
+			public SocializeService getSocialize() {
+				return socialize;
+			}
+
+			@Override
+			public boolean isDisplayAuthDialog(Context context, SocializeSession session, ActionOptions options, SocialNetwork... networks) {
+				return displayAuth;
+			}
+		};
+
+		utils.setShareSystem(shareSystem);
+		utils.setAuthDialogFactory(authDialogFactory);
+		utils.setConfig(config);
+
+		return utils;
+	}
 }

@@ -72,12 +72,9 @@ public interface ShareSystem {
 	 * Shares the given action to the given social network.
 	 * @param context The current context.
 	 * @param session The current user session.
-	 * @param entity The entity to be shared.
-	 * @param urlSet The set of urls to be used in the share.
 	 * @param comment The comment provided by the user.
 	 * @param location The location of the user (may be null).
 	 * @param destination The network on which to post the share.
-	 * @param actionType The type of action being shared.
 	 * @param listener A listener to handle callbacks from the post.
 	 */
 	public void share(Activity context, SocializeSession session, SocializeAction action, String comment, Location location, ShareType destination, SocialNetworkListener listener);

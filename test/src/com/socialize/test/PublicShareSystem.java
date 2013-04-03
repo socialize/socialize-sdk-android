@@ -40,6 +40,10 @@ import com.socialize.share.ShareHandler;
  */
 public class PublicShareSystem extends SocializeShareSystem {
 
+	public PublicShareSystem() {
+		this(null);
+	}
+
 	public PublicShareSystem(SocializeProvider<Share> provider) {
 		super(provider);
 	}
