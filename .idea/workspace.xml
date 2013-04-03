@@ -36,41 +36,21 @@
     </option>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_LOG_LEVEL" value="WARN" />
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="DEBUG" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Socialize" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3a25f51c-6f90-4dbe-a079-8072483f3aed" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../android-ioc/test/global.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../android-ioc/sample/local.properties" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../android-ioc/core/custom_rules_old.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../android-ioc/sample/custom_rules_old.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../android-ioc/sample/emma.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../android-ioc/test/.classpath" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../android-ioc/test/.project" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../android-ioc/test/build-mocks.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../android-ioc/test/build_old.xml" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../facebook-android-sdk/libs/android-support-v4.jar" afterPath="$PROJECT_DIR$/../facebook-android-sdk/libs/android-support-v4.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/sample/ant.properties" afterPath="$PROJECT_DIR$/../android-ioc/sample/ant.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/test/ant.properties" afterPath="$PROJECT_DIR$/../android-ioc/test/ant.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/ant.properties" afterPath="$PROJECT_DIR$/sdk/ant.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/ant.xml" afterPath="$PROJECT_DIR$/.idea/ant.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/sample/build.xml" afterPath="$PROJECT_DIR$/../android-ioc/sample/build.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/test/build.xml" afterPath="$PROJECT_DIR$/../android-ioc/test/build.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/build.xml" afterPath="$PROJECT_DIR$/sdk/build.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/test/custom_rules.xml" afterPath="$PROJECT_DIR$/../android-ioc/test/custom_rules.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/custom_rules.xml" afterPath="$PROJECT_DIR$/sdk/custom_rules.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/test/local.properties" afterPath="$PROJECT_DIR$/../android-ioc/test/local.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/sample/project.properties" afterPath="$PROJECT_DIR$/../android-ioc/sample/project.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/test/project.properties" afterPath="$PROJECT_DIR$/../android-ioc/test/project.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../facebook-android-sdk/facebook/project.properties" afterPath="$PROJECT_DIR$/../facebook-android-sdk/facebook/project.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testapp/assets/socialize.properties" afterPath="$PROJECT_DIR$/testapp/assets/socialize.properties" />
     </list>
     <ignored path="socialize-sdk-android.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored mask="*.iml" />
     <file path="/Dummy.txt" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1364918161801" ignored="false" />
     <file path="/a.xml" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1363630304053" ignored="false" />
-    <file path="/a.dummy" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1364941443729" ignored="false" />
+    <file path="/a.dummy" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365017381264" ignored="false" />
     <file path="/FacebookAuthProvider.java" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1363714450294" ignored="false" />
     <file path="/FacebookAuthProviderInfoFactory.java" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1363710719785" ignored="false" />
     <file path="/fragment.java" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1364940162806" ignored="false" />
@@ -99,7 +79,7 @@
     <file path="/socialize_ui_mock_beans.xml" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1363972616495" ignored="false" />
     <file path="/ActionBarTest.java" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1364250071719" ignored="false" />
     <file path="/EmptyActivity.java" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1363976541086" ignored="false" />
-    <file path="/socialize.properties" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1364944785328" ignored="false" />
+    <file path="/socialize.properties" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365017413216" ignored="false" />
     <file path="/CommentListViewTest.java" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1364229975502" ignored="false" />
     <file path="/CommentActivityLoadTest.java" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1363981705936" ignored="false" />
     <file path="/TestUtils.java" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1364940086119" ignored="false" />
@@ -174,6 +154,19 @@
     <file path="/PublicShareSystem.java" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365004258403" ignored="false" />
     <file path="$PROJECT_DIR$/vanilla/project.properties" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365013905547" ignored="false" />
     <file path="$PROJECT_DIR$/demo/project.properties" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365013905547" ignored="false" />
+    <file path="$PROJECT_DIR$/../android-ioc/sample/ant.properties" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365017403838" ignored="false" />
+    <file path="$PROJECT_DIR$/../android-ioc/sample/build.xml" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365017403838" ignored="false" />
+    <file path="$PROJECT_DIR$/../android-ioc/sample/local.properties" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365017403838" ignored="false" />
+    <file path="$PROJECT_DIR$/../android-ioc/test/src/com/socialize/android/ioc/test/AndroidIOCTest.java" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365017403838" ignored="false" />
+    <file path="$PROJECT_DIR$/../android-ioc/test/ant.properties" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365017403838" ignored="false" />
+    <file path="$PROJECT_DIR$/../android-ioc/test/src/com/socialize/android/ioc/test/ContainerBuilderTest.java" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365017403838" ignored="false" />
+    <file path="$PROJECT_DIR$/../android-ioc/sample/project.properties" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365017403838" ignored="false" />
+    <file path="$PROJECT_DIR$/../android-ioc/test/build.xml" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365017403838" ignored="false" />
+    <file path="$PROJECT_DIR$/../android-ioc/core/build.xml" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365017403838" ignored="false" />
+    <file path="$PROJECT_DIR$/../android-ioc/test/global.properties" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365017403838" ignored="false" />
+    <file path="$PROJECT_DIR$/../android-ioc/test/custom_rules.xml" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365017403838" ignored="false" />
+    <file path="$PROJECT_DIR$/../android-ioc/test/local.properties" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365017403838" ignored="false" />
+    <file path="$PROJECT_DIR$/../android-ioc/test/project.properties" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365017403838" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1605,28 +1598,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ant.properties" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sdk/ant.properties">
+      <file leaf-file-name="socialize.properties" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/testapp/assets/socialize.properties">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="19" selection-start="806" selection-end="806" vertical-scroll-proportion="0.0">
+            <state line="6" column="15" selection-start="313" selection-end="313" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="build.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sdk/build.xml">
+      <file leaf-file-name="EntityUtilsTest.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$USER_HOME$/dev/workspace/socialize-sdk-android/test/src/com/socialize/test/integration/services/a/EntityUtilsTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="67" column="0" selection-start="2949" selection-end="2949" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="custom_rules.xml" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/sdk/custom_rules.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="152" column="76" selection-start="5842" selection-end="5842" vertical-scroll-proportion="0.708798">
+            <state line="257" column="20" selection-start="7346" selection-end="7346" vertical-scroll-proportion="1.2616279">
               <folding />
             </state>
           </provider>
@@ -1642,7 +1626,7 @@
   <component name="Git.Settings">
     <option name="UPDATE_TYPE" value="MERGE" />
     <option name="SYNC_SETTING" value="DONT" />
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$USER_HOME$/dev/workspace/socialize-sdk-android" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
         <entry key="$PROJECT_DIR$/gh-pages" value="develop" />
@@ -1664,7 +1648,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$USER_HOME$/dev/workspace/socialize-sdk-android/test/src/com/socialize/test/integration/services/b/ShareUtilsTest.java" />
         <option value="$PROJECT_DIR$/../android-ioc/test/build.xml" />
         <option value="$PROJECT_DIR$/../android-ioc/test/ant.properties" />
         <option value="$PROJECT_DIR$/../android-ioc/test/local.properties" />
@@ -1680,6 +1663,7 @@
         <option value="$PROJECT_DIR$/../android-ioc/core/ant.properties" />
         <option value="$PROJECT_DIR$/sdk/build.xml" />
         <option value="$PROJECT_DIR$/sdk/custom_rules.xml" />
+        <option value="$PROJECT_DIR$/testapp/assets/socialize.properties" />
       </list>
     </option>
   </component>
@@ -1751,6 +1735,302 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="socialize-sdk-android" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize-sdk-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize-sdk-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="testapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize-sdk-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="testapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize-sdk-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="testapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="assets" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize-sdk-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize-sdk-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize-sdk-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize-sdk-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="unit" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize-sdk-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="integration" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="services" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize-sdk-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="integration" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="services" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="a" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize-sdk-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="integration" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="services" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="a" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="EntityUtilsTest" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ClassTreeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize-sdk-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socialize" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="integration" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -2017,26 +2297,7 @@
       <recent name="com.socialize.test" />
     </key>
   </component>
-  <component name="RunManager" selected="Android Tests.android-ioc-test">
-    <configuration default="false" name="ShareUtilsTest.testShareViaEmail" type="AndroidTestRunConfigurationType" factoryName="Android Tests" temporary="true">
-      <module name="test" />
-      <option name="TESTING_TYPE" value="3" />
-      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
-      <option name="METHOD_NAME" value="testShareViaEmail" />
-      <option name="CLASS_NAME" value="com.socialize.test.integration.services.b.ShareUtilsTest" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TARGET_SELECTION_MODE" value="USB_DEVICE" />
-      <option name="PREFERRED_AVD" value="" />
-      <option name="COMMAND_LINE" value="" />
-      <option name="WIPE_USER_DATA" value="false" />
-      <option name="DISABLE_BOOT_ANIMATION" value="false" />
-      <option name="NETWORK_SPEED" value="full" />
-      <option name="NETWORK_LATENCY" value="none" />
-      <option name="CLEAR_LOGCAT" value="false" />
-      <RunnerSettings RunnerId="AndroidDebugRunner" />
-      <ConfigurationWrapper RunnerId="AndroidDebugRunner" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Android Tests.EntityUtilsTest.testGetEntities">
     <configuration default="false" name="ShareUtilsTest.testShareViaGooglePlus" type="AndroidTestRunConfigurationType" factoryName="Android Tests" temporary="true">
       <module name="test" />
       <option name="TESTING_TYPE" value="3" />
@@ -2100,6 +2361,25 @@
       <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
       <option name="METHOD_NAME" value="" />
       <option name="CLASS_NAME" value="" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TARGET_SELECTION_MODE" value="USB_DEVICE" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="COMMAND_LINE" value="" />
+      <option name="WIPE_USER_DATA" value="false" />
+      <option name="DISABLE_BOOT_ANIMATION" value="false" />
+      <option name="NETWORK_SPEED" value="full" />
+      <option name="NETWORK_LATENCY" value="none" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <RunnerSettings RunnerId="AndroidDebugRunner" />
+      <ConfigurationWrapper RunnerId="AndroidDebugRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="EntityUtilsTest.testGetEntities" type="AndroidTestRunConfigurationType" factoryName="Android Tests" temporary="true">
+      <module name="test" />
+      <option name="TESTING_TYPE" value="3" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
+      <option name="METHOD_NAME" value="testGetEntities" />
+      <option name="CLASS_NAME" value="com.socialize.test.integration.services.a.EntityUtilsTest" />
       <option name="PACKAGE_NAME" value="" />
       <option name="TARGET_SELECTION_MODE" value="USB_DEVICE" />
       <option name="PREFERRED_AVD" value="" />
@@ -2313,19 +2593,19 @@
       <item index="1" class="java.lang.String" itemvalue="Android Application.vanilla" />
       <item index="2" class="java.lang.String" itemvalue="Android Tests.Android IOC Tests" />
       <item index="3" class="java.lang.String" itemvalue="Android Tests.Socialize SDK Tests" />
-      <item index="4" class="java.lang.String" itemvalue="Android Tests.ShareUtilsTest.testShareViaEmail" />
-      <item index="5" class="java.lang.String" itemvalue="Android Tests.ShareUtilsTest.testShareViaGooglePlus" />
-      <item index="6" class="java.lang.String" itemvalue="Android Tests.ShareUtilsTest.testShareViaSocialNetworks" />
-      <item index="7" class="java.lang.String" itemvalue="Android Tests.ShareUtilsTest" />
-      <item index="8" class="java.lang.String" itemvalue="Android Tests.android-ioc-test" />
+      <item index="4" class="java.lang.String" itemvalue="Android Tests.ShareUtilsTest.testShareViaGooglePlus" />
+      <item index="5" class="java.lang.String" itemvalue="Android Tests.ShareUtilsTest.testShareViaSocialNetworks" />
+      <item index="6" class="java.lang.String" itemvalue="Android Tests.ShareUtilsTest" />
+      <item index="7" class="java.lang.String" itemvalue="Android Tests.android-ioc-test" />
+      <item index="8" class="java.lang.String" itemvalue="Android Tests.EntityUtilsTest.testGetEntities" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Android Tests.android-ioc-test" />
-        <item index="1" class="java.lang.String" itemvalue="Android Tests.ShareUtilsTest" />
-        <item index="2" class="java.lang.String" itemvalue="Android Tests.ShareUtilsTest.testShareViaSocialNetworks" />
+        <item index="0" class="java.lang.String" itemvalue="Android Tests.EntityUtilsTest.testGetEntities" />
+        <item index="1" class="java.lang.String" itemvalue="Android Tests.android-ioc-test" />
+        <item index="2" class="java.lang.String" itemvalue="Android Tests.ShareUtilsTest" />
         <item index="3" class="java.lang.String" itemvalue="Android Tests.ShareUtilsTest.testShareViaSocialNetworks" />
-        <item index="4" class="java.lang.String" itemvalue="Android Tests.ShareUtilsTest.testShareViaGooglePlus" />
+        <item index="4" class="java.lang.String" itemvalue="Android Tests.ShareUtilsTest.testShareViaSocialNetworks" />
       </list>
     </recent_temporary>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
@@ -2367,19 +2647,19 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3278302" sideWeight="0.49265605" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32986537" sideWeight="0.6474057" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.19929245" sideWeight="0.4877601" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.46226415" sideWeight="0.4877601" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3962264" sideWeight="0.4902081" order="14" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4009434" sideWeight="0.49510404" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3231132" sideWeight="0.3372093" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3604651" sideWeight="0.35023585" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900944" sideWeight="0.49265605" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3596698" sideWeight="0.5740514" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31839624" sideWeight="0.49510404" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.7641509" sideWeight="0.49510404" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28335375" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" x="608" y="82" width="463" height="848" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.30905753" sideWeight="0.6403302" order="1" side_tool="false" content_ui="combo" x="27" y="101" width="589" height="569" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.30905753" sideWeight="0.23584905" order="1" side_tool="false" content_ui="combo" x="27" y="101" width="589" height="569" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21848226" sideWeight="0.5990566" order="3" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5" sideWeight="0.65850675" order="9" side_tool="false" content_ui="tabs" x="0" y="22" width="1680" height="968" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27172583" sideWeight="0.6709906" order="0" side_tool="false" content_ui="tabs" />
@@ -2469,20 +2749,6 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../android-ioc/sample/project.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="35" selection-start="395" selection-end="395" vertical-scroll-proportion="0.2990291">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../android-ioc/test/project.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="16" selection-start="359" selection-end="359" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../android-ioc/test/custom_rules.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
@@ -2576,7 +2842,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sdk/custom_rules.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="152" column="76" selection-start="5842" selection-end="5842" vertical-scroll-proportion="0.708798">
+        <state line="118" column="13" selection-start="4027" selection-end="4027" vertical-scroll-proportion="0.11895911">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testapp/assets/socialize.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="15" selection-start="313" selection-end="313" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/dev/workspace/socialize-sdk-android/test/src/com/socialize/test/integration/services/a/EntityUtilsTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="257" column="20" selection-start="7346" selection-end="7346" vertical-scroll-proportion="1.2616279">
           <folding />
         </state>
       </provider>
