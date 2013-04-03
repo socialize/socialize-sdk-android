@@ -50,20 +50,19 @@
       <change type="DELETED" beforePath="$PROJECT_DIR$/../android-ioc/test/build-mocks.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../android-ioc/test/build_old.xml" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../facebook-android-sdk/libs/android-support-v4.jar" afterPath="$PROJECT_DIR$/../facebook-android-sdk/libs/android-support-v4.jar" />
-      <change type="MODIFICATION" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/ant.properties" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/sdk/ant.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/sample/ant.properties" afterPath="$PROJECT_DIR$/../android-ioc/sample/ant.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/test/ant.properties" afterPath="$PROJECT_DIR$/../android-ioc/test/ant.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/ant.properties" afterPath="$PROJECT_DIR$/sdk/ant.properties" />
-      <change type="MODIFICATION" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/.idea/ant.xml" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/.idea/ant.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/ant.xml" afterPath="$PROJECT_DIR$/.idea/ant.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/sample/build.xml" afterPath="$PROJECT_DIR$/../android-ioc/sample/build.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/test/build.xml" afterPath="$PROJECT_DIR$/../android-ioc/test/build.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/build.xml" afterPath="$PROJECT_DIR$/sdk/build.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/test/custom_rules.xml" afterPath="$PROJECT_DIR$/../android-ioc/test/custom_rules.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/custom_rules.xml" afterPath="$PROJECT_DIR$/sdk/custom_rules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/test/local.properties" afterPath="$PROJECT_DIR$/../android-ioc/test/local.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/sample/project.properties" afterPath="$PROJECT_DIR$/../android-ioc/sample/project.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../android-ioc/test/project.properties" afterPath="$PROJECT_DIR$/../android-ioc/test/project.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../facebook-android-sdk/facebook/project.properties" afterPath="$PROJECT_DIR$/../facebook-android-sdk/facebook/project.properties" />
-      <change type="MODIFICATION" beforePath="$USER_HOME$/dev/workspace/socialize-sdk-android/.idea/workspace.xml" afterPath="$USER_HOME$/dev/workspace/socialize-sdk-android/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="socialize-sdk-android.iws" />
@@ -78,7 +77,7 @@
     <file path="/ImageUtils.java" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1363711884880" ignored="false" />
     <file path="/Container.java" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1364339701905" ignored="false" />
     <file path="/BeanContextCache.java" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1364340061824" ignored="false" />
-    <file path="/custom_rules.xml" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1364327221085" ignored="false" />
+    <file path="/custom_rules.xml" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365016807739" ignored="false" />
     <file path="/project.properties" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365013950504" ignored="false" />
     <file path="$PROJECT_DIR$/test/src/com/socialize/sample/util/ErrorHandler.java" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1363802911611" ignored="false" />
     <file path="/build.xml" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1363813596285" ignored="false" />
@@ -174,7 +173,6 @@
     <file path="/PublicShareUtils.java" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365003858234" ignored="false" />
     <file path="/PublicShareSystem.java" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365004258403" ignored="false" />
     <file path="$PROJECT_DIR$/vanilla/project.properties" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365013905547" ignored="false" />
-    <file path="$PROJECT_DIR$/sdk/project.properties" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365013905547" ignored="false" />
     <file path="$PROJECT_DIR$/demo/project.properties" changelist="3a25f51c-6f90-4dbe-a079-8072483f3aed" time="1365013905547" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -1606,7 +1604,35 @@
     </favorites_list>
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="ant.properties" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sdk/ant.properties">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="20" column="19" selection-start="806" selection-end="806" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="build.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sdk/build.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="67" column="0" selection-start="2949" selection-end="2949" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="custom_rules.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/sdk/custom_rules.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="152" column="76" selection-start="5842" selection-end="5842" vertical-scroll-proportion="0.708798">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -1616,7 +1642,7 @@
   <component name="Git.Settings">
     <option name="UPDATE_TYPE" value="MERGE" />
     <option name="SYNC_SETTING" value="DONT" />
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../android-ioc" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
         <entry key="$PROJECT_DIR$/gh-pages" value="develop" />
@@ -1638,8 +1664,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$USER_HOME$/dev/workspace/socialize-sdk-android/test/src/com/socialize/test/PublicShareSystem.java" />
-        <option value="$PROJECT_DIR$/sdk/src/com/socialize/api/action/share/ShareSystem.java" />
         <option value="$USER_HOME$/dev/workspace/socialize-sdk-android/test/src/com/socialize/test/integration/services/b/ShareUtilsTest.java" />
         <option value="$PROJECT_DIR$/../android-ioc/test/build.xml" />
         <option value="$PROJECT_DIR$/../android-ioc/test/ant.properties" />
@@ -1654,6 +1678,8 @@
         <option value="$PROJECT_DIR$/../android-ioc/test/junit-results/com.socialize.android.ioc.test-TEST.xml" />
         <option value="$PROJECT_DIR$/../android-ioc/core/project.properties" />
         <option value="$PROJECT_DIR$/../android-ioc/core/ant.properties" />
+        <option value="$PROJECT_DIR$/sdk/build.xml" />
+        <option value="$PROJECT_DIR$/sdk/custom_rules.xml" />
       </list>
     </option>
   </component>
@@ -2347,7 +2373,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3231132" sideWeight="0.3372093" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3604651" sideWeight="0.35023585" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900944" sideWeight="0.49265605" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3596698" sideWeight="0.5740514" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3596698" sideWeight="0.5740514" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31839624" sideWeight="0.49510404" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -2443,27 +2469,6 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/testapp/ant.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testapp/project.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="0" selection-start="562" selection-end="596" vertical-scroll-proportion="0.3805825">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/dev/workspace/socialize-sdk-android/test/project.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="0" selection-start="563" selection-end="563" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../android-ioc/sample/project.properties">
       <provider selected="true" editor-type-id="text-editor">
         <state line="11" column="35" selection-start="395" selection-end="395" vertical-scroll-proportion="0.2990291">
@@ -2551,6 +2556,27 @@
     <entry file="file://$PROJECT_DIR$/../android-ioc/core/ant.properties">
       <provider selected="true" editor-type-id="text-editor">
         <state line="19" column="15" selection-start="1176" selection-end="1176" vertical-scroll-proportion="0.5165049">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sdk/ant.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="19" selection-start="806" selection-end="806" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sdk/build.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="67" column="0" selection-start="2949" selection-end="2949" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sdk/custom_rules.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="152" column="76" selection-start="5842" selection-end="5842" vertical-scroll-proportion="0.708798">
           <folding />
         </state>
       </provider>

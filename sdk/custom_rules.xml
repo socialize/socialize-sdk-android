@@ -150,9 +150,9 @@
 			<zipfileset dir="icons" includes="**/*.psd" prefix="icons"/>
 			
 			<!-- Add the sample app as a raw eclipse project -->
-			<zipfileset dir="${tmp_dir}/demo" prefix="demo" excludes="gen/**,bin/**,build/**,codetemplates.xml,build-qa.xml,build-qa.properties,emma.properties,proguard.cfg,.DS_Store,assets/json/**,assets/socialize.sample.properties"/>
-			<zipfileset dir="${tmp_dir}/sdk" prefix="sdk" excludes="gen/**,bin/**,build/**,codetemplates.xml,build-qa.xml,build-qa.properties,emma.properties,proguard.cfg,.DS_Store,assets/json/**,assets/socialize.sample.properties"/>
-			<zipfileset dir="${tmp_dir}/lib" prefix="lib" excludes="gen/**,bin/**,build/**,codetemplates.xml,build-qa.xml,build-qa.properties,emma.properties,proguard.cfg,.DS_Store,assets/json/**,assets/socialize.sample.properties"/>
+			<zipfileset dir="${tmp_dir}/demo" prefix="demo" excludes="*.iml,gen/**,bin/**,build/**,codetemplates.xml,build-qa.xml,build-qa.properties,emma.properties,proguard.cfg,.DS_Store,assets/json/**,assets/socialize.sample.properties"/>
+			<zipfileset dir="${tmp_dir}/sdk" prefix="sdk" excludes="*.iml,gen/**,bin/**,build/**,codetemplates.xml,build-qa.xml,build-qa.properties,emma.properties,proguard.cfg,.DS_Store,assets/json/**,assets/socialize.sample.properties"/>
+			<zipfileset dir="${tmp_dir}/lib" prefix="lib" excludes="*.iml,gen/**,bin/**,build/**,codetemplates.xml,build-qa.xml,build-qa.properties,emma.properties,proguard.cfg,.DS_Store,assets/json/**,assets/socialize.sample.properties"/>
 									 
 			<!-- Add Docs -->
 			<zipfileset dir="build/docs" prefix="docs"/>
