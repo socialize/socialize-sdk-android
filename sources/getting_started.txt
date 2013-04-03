@@ -36,22 +36,41 @@ into your development environment and link it to your project.
 Using Eclipse
 ~~~~~~~~~~~~~
 
-First import both the Socialize SDK project AND any dependent projects into eclipse.  
+The project folders contains in the SDK download are **not eclipse projects**, but you can easily create new projects
+from the source.
 
-The simplest way to do this is to nominate the **root directory of the SDK download** when importing:
+In eclipse, select File->New->Other...
 
-=============================	=============================
-.. image:: images/import0.png	.. image:: images/import1.png
-=============================	=============================	
+.. image:: images/2.8.4/setup0.png
 
-Once you have the projects imported into eclipse, you need to link them to your Android project.
+Then select "Android Project from Existing Code"
 
-Right click on your project and select **Properties**, 
-then select **Android** and add the **socialize-sdk** project
+.. image:: images/2.8.4/setup1.png
 
-=====================================	==========================================================================
-.. image:: images/proj_properties.png	.. image:: images/add_library.png
-=====================================	==========================================================================	
+Browse to the location into which you unzipped the SDK
+
+.. image:: images/2.8.4/setup2.png
+
+You may want to change the names of the imported projects as the defaults are often less than ideal
+
+.. image:: images/2.8.4/setup3.png
+
+.. note::
+    **If** you check the "Copy projects into workspace" option you will need to re-create the links to library projects as
+    these will be broken during the import.
+
+Occasionally Eclipse will not correctly build the projects immediately after they are imported, if this happens just do
+a full "clean" of these projects:
+
+.. image:: images/2.8.4/setup4.png
+
+|
+
+.. image:: images/2.8.4/setup5.png
+
+|
+
+.. image:: images/2.8.4/setup6.png
 
 Required Libraries
 ~~~~~~~~~~~~~~~~~~
@@ -60,12 +79,7 @@ The Socialize SDK depends on 2 external libraries:
 
  - android-ioc
  - facebook-android-sdk
- 
-.. note:: 
-	You do not need to reference these projects directly.  Socialize already references them.  If you have compilation errors
-	immediately after linking to the library project, just try a "Clean" in eclipse.
- 
- 
+
 Both of these are Android Library Projects are are also included in the SDK however you can also reference these directly 
 from their respective source repositories:
 

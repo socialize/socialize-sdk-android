@@ -8,11 +8,21 @@ We know you love sample code so included in your SDK download is a demonstration
 
 .. note:: The Demo app is located in the **/demo** folder of your SDK download
 
-============================	============================
-.. image:: images/import.png	.. image:: images/demo.png
-============================	============================	
+Import the Project
+~~~~~~~~~~~~~~~~~~
 
-The demonstration app is located in the **/demo** folder of your SDK download and is 
-provided as an Android Eclipse Project will full source code.  Simply *import* the project into your Eclipse environment.
+First import the project into eclipse...
+
+==================================	============================
+.. image:: images/2.8.4/setup1.png	.. image:: images/demo.png
+==================================	============================
+
+Setting up Facebook
+~~~~~~~~~~~~~~~~~~~
+
+If you want to test the Facebook integration in the demo app you will need to setup the demo app with your
+Facebook credentials.
+
+Refer to :doc:`facebook` for more information
 
 .. include:: footer.inc
