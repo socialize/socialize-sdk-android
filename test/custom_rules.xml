@@ -6,7 +6,7 @@
     Socialize Tasks
     ====================================================================================================================
     -->
-    <target name="socialize-test" depends="clean,socialize-setup,emma,debug,install,test-safe,report"/>
+    <target name="socialize-test" depends="clean,uninstall,socialize-setup,emma,debug,install,test-safe,report"/>
 
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
         <classpath>
@@ -16,6 +16,8 @@
 
     <!-- Setup Custom Paths -->
     <target name="socialize-setup">
+
+        <echo>Removing applications from device</echo>
 
         <echo>Removing junit files from device at ${junit.device.path}</echo>
         <exec executable="${adb}" failonerror="false">
