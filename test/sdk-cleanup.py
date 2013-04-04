@@ -81,8 +81,7 @@ def print_json(item, fname=None):
         fname = assets_file_path+fname
         print '\t**generate outfile:',fname
         if not os.path.exists(assets_file_path):
-            
-            os.makedirs(dir)
+            os.makedirs(assets_file_path)
         
         f = open(fname, 'w')
         f.write(simplejson.dumps(item,sort_keys=True, indent=4))
