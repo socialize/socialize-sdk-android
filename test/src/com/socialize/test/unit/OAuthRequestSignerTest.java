@@ -26,6 +26,7 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
 import com.socialize.oauth.DefaultOauthRequestSigner;
 import com.socialize.oauth.OAuthConsumerFactory;
+import com.socialize.oauth.OAuthSignListener;
 import com.socialize.oauth.signpost.OAuthConsumer;
 import com.socialize.oauth.signpost.signature.SigningStrategy;
 import com.socialize.test.SocializeUnitTest;
@@ -39,10 +40,11 @@ import org.apache.http.client.methods.HttpUriRequest;
 @UsesMocks ({
 	OAuthConsumerFactory.class, 
 	OAuthConsumer.class,
-		SigningStrategy.class,
+	SigningStrategy.class,
 	SocializeSession.class,
 	HttpUriRequest.class,
-	DeviceUtils.class})
+	DeviceUtils.class,
+	OAuthSignListener.class})
 public class OAuthRequestSignerTest extends SocializeUnitTest {
 
 	public void testDefaultOauthRequestSigner() throws Exception {
@@ -58,6 +60,7 @@ public class OAuthRequestSignerTest extends SocializeUnitTest {
 		SigningStrategy strategy = AndroidMock.createMock(SigningStrategy.class);
 		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
 		HttpUriRequest request = AndroidMock.createMock(HttpUriRequest.class);
+		OAuthSignListener listener = AndroidMock.createMock(OAuthSignListener.class);
 		
 		AndroidMock.expect(factory.createConsumer(key, secret)).andReturn(consumer);
 		AndroidMock.expect(session.getConsumerKey()).andReturn(key);
@@ -68,7 +71,7 @@ public class OAuthRequestSignerTest extends SocializeUnitTest {
 		consumer.setSigningStrategy(strategy);
 		consumer.setTokenWithSecret(token, tokensecret);
 		
-		AndroidMock.expect(consumer.sign(request)).andReturn(null);
+		AndroidMock.expect(consumer.sign(request, listener)).andReturn(null);
 		
 		AndroidMock.replay(factory);
 		AndroidMock.replay(consumer);
@@ -77,7 +80,7 @@ public class OAuthRequestSignerTest extends SocializeUnitTest {
 		
 		DefaultOauthRequestSigner signer = new DefaultOauthRequestSigner(factory, strategy);
 		
-		HttpUriRequest signed = signer.sign(session, request);
+		HttpUriRequest signed = signer.sign(session, request, listener);
 		
 		assertSame(request, signed);
 		

@@ -571,8 +571,10 @@ public class CommentListView extends BaseView {
 		startIndex = endIndex;
 		endIndex+=defaultGrabLength;
 
-		if(endIndex > commentAdapter.getTotalCount()) {
-			endIndex = commentAdapter.getTotalCount();
+		int totalCount = commentAdapter.getTotalCount();
+
+		if(endIndex > totalCount) {
+			endIndex = totalCount;
 
 			if(startIndex >= endIndex) {
 				commentAdapter.setLast(true);

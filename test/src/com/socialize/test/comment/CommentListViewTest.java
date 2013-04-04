@@ -328,8 +328,7 @@ public class CommentListViewTest extends SocializeActivityTest {
 		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
 		AndroidMock.expect(entities.getItems()).andReturn(listResultComments);
 		AndroidMock.expect(comments.addAll(listResultComments)).andReturn(true);
-		AndroidMock.expect(commentAdapter.getTotalCount()).andReturn(69).anyTimes();
-		
+		AndroidMock.expect(commentAdapter.getTotalCount()).andReturn(79).anyTimes();
 		
 		commentAdapter.setComments(comments);
 		commentAdapter.notifyDataSetChanged();
