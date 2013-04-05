@@ -123,7 +123,7 @@ public class ActionDetailTest extends SocializeActivityTest {
 			}
 		});
 
-		ActionDetailActivity a = TestUtils.waitForActivity(10000);
+		TestUtils.waitForActivity(10000);
 
 		assertTrue(latch.await(20, TimeUnit.SECONDS));
 

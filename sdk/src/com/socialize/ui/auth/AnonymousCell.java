@@ -41,10 +41,12 @@ public class AnonymousCell extends ClickableSectionCell {
 		
 		title.setText(localizationService.getString(I18NConstants.AUTH_ANONYMOUS));
 		sub.setText(localizationService.getString(I18NConstants.AUTH_MESSAGE));
-		
-		title.setTextColor(colors.getColor(Colors.ANON_CELL_TITLE));
-		sub.setTextColor(colors.getColor(Colors.ANON_CELL_TEXT));
-		
+
+		if(colors != null) {
+			title.setTextColor(colors.getColor(Colors.ANON_CELL_TITLE));
+			sub.setTextColor(colors.getColor(Colors.ANON_CELL_TEXT));
+		}
+
 		title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
 		sub.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
 	

@@ -607,16 +607,19 @@ public class SharePanelView extends DialogPanelView {
 					shareDialogListener.onContinue(dialog, remember, networks);
 				}
 			});
-			
-			cancelButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					dialog.dismiss();
-					shareDialogListener.onCancel(dialog);
-				}
-			});
-			
-			buttonLayout.addView(cancelButton);
+
+			if(cancelButton != null) {
+				cancelButton.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						dialog.dismiss();
+						shareDialogListener.onCancel(dialog);
+					}
+				});
+
+				buttonLayout.addView(cancelButton);
+			}
+
 			buttonLayout.addView(continueButton);
 		}
 		

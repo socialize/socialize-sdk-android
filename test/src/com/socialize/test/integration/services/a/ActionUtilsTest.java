@@ -291,7 +291,7 @@ public class ActionUtilsTest extends SocializeActivityTest {
 		
 		assertEquals("No all items of type [" +
 				type.getSimpleName() +
-				"] found in action list", ids.size(), 0);
+				"] found in action list", 0, ids.size());
 	}
 	
 }
