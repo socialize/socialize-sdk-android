@@ -3,10 +3,10 @@ package com.socialize.test.core;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.android.ioc.IOCContainer;
-import com.socialize.test.SocializeUITestCase;
+import com.socialize.test.SocializeUnitTest;
 import com.socialize.ui.ActivityIOCProvider;
 
-public class ActivityIOCProviderTest extends SocializeUITestCase {
+public class ActivityIOCProviderTest extends SocializeUnitTest {
 
 	@UsesMocks (IOCContainer.class)
 	public void testActivityIOCProviderGetBean() {

@@ -1,4 +1,4 @@
-package com.socialize.test.comment;
+package com.socialize.test.comment.ui;
 
 import android.app.Activity;
 import android.app.ProgressDialog;

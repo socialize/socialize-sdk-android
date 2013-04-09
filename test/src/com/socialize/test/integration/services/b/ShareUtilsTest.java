@@ -94,7 +94,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 			}
 		}, shareId);
 		
-		latch.await(20, TimeUnit.SECONDS);
+		latch.await(50, TimeUnit.SECONDS);
 		
 		Share share = getResult(0);
 		assertNotNull(share);

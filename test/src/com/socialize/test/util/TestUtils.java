@@ -174,7 +174,8 @@ public class TestUtils {
 		getActivity(test);
 
 		Socialize.getSocialize().destroy(true);
-		
+
+		SocializeAccess.setAuthProviders(null);
 		SocializeAccess.clearBeanOverrides();
 		SocializeIOC.clearStubs();
 		SocializeAccess.revertProxies();
@@ -190,15 +191,8 @@ public class TestUtils {
 			SharedPreferences prefs = activity.getSharedPreferences("SocializeSession", Context.MODE_PRIVATE);
 			prefs.edit().clear().commit();		
 		}
-		
-		if(monitor != null) {
-			Activity lastActivity = monitor.getLastActivity();
-			if(lastActivity != null) {
-				clearAndExit(lastActivity);
-			}
-			instrumentation.removeMonitor(monitor);
-			monitor = null;
-		}
+
+		unMonitor();
 		
 		if(allActivitiesMonitor != null) {
 			Activity lastActivity = allActivitiesMonitor.getLastActivity();
@@ -218,6 +212,30 @@ public class TestUtils {
         }
 
 		resetCount();
+	}
+
+	public static void unMonitor() {
+		if(monitor != null) {
+			Activity lastActivity = monitor.getLastActivity();
+			if(lastActivity != null) {
+				clearAndExit(lastActivity);
+			}
+			instrumentation.removeMonitor(monitor);
+			monitor = null;
+		}
+	}
+
+	public static Activity restart(SocializeManagedActivityTest<?> test) {
+		if(activity != null) {
+			activity.finish();
+			unMonitor();
+			getActivity(test);
+		}
+		else {
+			getActivity(test);
+		}
+
+		return activity;
 	}
 
     public static void clearAndExit(final Activity ctx) {
@@ -240,9 +258,16 @@ public class TestUtils {
 
     }
 
-	public static void setUpActivityMonitor(Class<?> activityClass) {
+	public static ActivityMonitor setUpActivityMonitor(Class<?> activityClass) {
 		monitor = new ActivityMonitor(activityClass.getName(), null, false);
 		instrumentation.addMonitor(monitor);
+		return monitor;
+	}
+
+	public static void removeLastMonitor() {
+		if(monitor != null) {
+			instrumentation.removeMonitor(monitor);
+		}
 	}
 	
 	public static View clickInList(Activity activity, final int position, final ListView listView) {

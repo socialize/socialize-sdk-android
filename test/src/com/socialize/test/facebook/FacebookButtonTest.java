@@ -27,13 +27,13 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.facebook.FacebookAuthClickListener;
 import com.socialize.networks.facebook.FacebookButton;
-import com.socialize.test.SocializeUITestCase;
+import com.socialize.test.SocializeUnitTest;
 
 /**
  * @author Jason Polites
  *
  */
-public class FacebookButtonTest extends SocializeUITestCase {
+public class FacebookButtonTest extends SocializeUnitTest {
 
 	@UsesMocks({FacebookAuthClickListener.class, SocializeAuthListener.class})
 	public void testFacebookButtonInit() {

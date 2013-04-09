@@ -8,7 +8,7 @@
     -->
     <target name="socialize-test" depends="clean,uninstall,socialize-setup,emma,debug,install,test-safe,report"/>
 
-    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+    <taskdef resource="net/sf/antcontrib/antlib.xml">
         <classpath>
             <pathelement location="libext/ant-contrib.jar"/>
         </classpath>
@@ -36,10 +36,17 @@
             <arg value="${junit.device.path}" />
         </exec>
 
+
+        <echo>Cleaning junit report path on local file system at ${junit.device.path}</echo>
+        <delete dir="${junit.local.path}"/>
+
         <echo>Creating junit report path on local file system at ${junit.device.path}</echo>
         <mkdir dir="${junit.local.path}"/>
 
-        <echo>Creating coverage report path on local file system at ${junit.device.path}</echo>
+        <echo>Cleaning coverage report path on local file system at ${emma.local.path}</echo>
+        <delete dir="${emma.local.path}"/>
+
+        <echo>Creating coverage report path on local file system at ${emma.local.path}</echo>
         <mkdir dir="${emma.local.path}"/>
 
         <echo>Clearing logcat buffer</echo>
@@ -52,24 +59,112 @@
     </target>
 
 
-    <target name="report" depends="-setup">
-        <echo>Pulling junit files from ${junit.device.path} to ${junit.local.path}</echo>
-        <exec executable="${adb}" failonerror="true" dir="${junit.local.path}">
+    <target name="report" depends="-setup, emma">
+
+        <property name="tested.project.absolute.dir" location="${tested.project.dir}" />
+
+        <!-- Application package of the tested project extracted from its manifest file -->
+        <xpath input="${tested.project.absolute.dir}/AndroidManifest.xml"
+               expression="/manifest/@package" output="tested.project.app.package" />
+
+        <if condition="${emma.enabled}">
+            <then>
+                <getprojectpaths projectPath="${tested.project.absolute.dir}"
+                                 binOut="tested.project.out.absolute.dir"
+                                 srcOut="tested.project.source.absolute.dir" />
+
+                <getlibpath projectPath="${tested.project.absolute.dir}"
+                            libraryFolderPathOut="tested.project.lib.source.path"
+                            leaf="@{source.dir}" />
+
+            </then>
+        </if>
+
+        <!-- Most of this target is taken from the original "test" target -->
+        <pathconvert property="tested.project.lib.source.path.value" refid="tested.project.lib.source.path">
+            <firstmatchmapper>
+                <regexpmapper from='^([^ ]*)( .*)$$' to='"\1\2"'/>
+                <identitymapper/>
+            </firstmatchmapper>
+        </pathconvert>
+
+        <echo level="info">Extracting coverage report to ${emma.local.path}...</echo>
+        <emma>
+            <property name="report.html.out.encoding" value="UTF-8" />
+            <report sourcepath="${tested.project.source.absolute.dir}:${tested.project.lib.source.path.value}"
+                    verbosity="${verbosity}">
+
+                <!-- TODO: report.dir or something like should be introduced if necessary -->
+                <infileset file="${tested.project.out.absolute.dir}/coverage.em" />
+
+                <!-- Socialize Customization Begin
+                    ==================================================================================================================
+                    Change the input path to be the emma dump folder, not just a single file
+                    Change the output path for code coverage
+                -->
+                <!-- Original path disabled
+                <infileset file="${out.absolute.dir}/coverage.ec" />
+                -->
+
+                <infileset dir="${out.absolute.dir}" includes="**/*.ec"/>
+
+                <html outfile="${emma.local.path}/coverage.html" />
+                <txt outfile="${emma.local.path}/coverage.txt" />
+                <xml outfile="${emma.local.path}/coverage.xml" />
+
+                <!-- Socialize Customization End
+                    ==================================================================================================================
+                    The remainder of this target is unchanged
+                -->
+            </report>
+        </emma>
+
+        <!-- Removed cleanup from original
+        <echo level="info">Cleaning up temporary files...</echo>
+        <delete file="${out.absolute.dir}/coverage.ec" />
+        <delete file="${tested.project.out.absolute.dir}/coverage.em" />
+        <exec executable="${adb}" failonerror="true">
             <arg line="${adb.device.arg}" />
-            <arg value="pull" />
-            <arg value="${junit.device.path}" />
+            <arg value="shell" />
+            <arg value="run-as" />
+            <arg value="${tested.project.app.package}" />
+            <arg value="rm" />
+            <arg value="${emma.dump.file}" />
         </exec>
+        <echo level="info">Saving the coverage reports in ${out.absolute.dir}</echo>
+        -->
     </target>
 
+    <!-- Runs all packages defined in test.suite with a full uninstall/reinstall between -->
+    <target name="test-suite" depends="clean,socialize-setup">
+        <for list="${test.suite}" param="test.package">
+            <sequential>
+                <antcall target="-test-in-loop" inheritall="true" inheritrefs="true">
+                    <param name="test.package" value="@{test.package}" />
+                </antcall>
+            </sequential>
+        </for>
+
+        <!-- Now extract the combined report -->
+        <antcall target="report" inheritall="true" inheritrefs="true"/>
+
+    </target>
+
+    <!-- Runs a set of tests with a full uninstall/reinstall -->
+    <target name="-test-in-loop" depends="uninstall,emma,debug,install,test-safe"/>
 
     <target name="test-safe">
+
+        <echo></echo>
+        <echo>##################################################################################################</echo>
+        <echo># EXECUTING TEST FOR PACKAGE ${test.package}</echo>
+        <echo>##################################################################################################</echo>
+        <echo></echo>
 
         <trycatch>
             <try>
                 <antcall target="test" inheritall="true" inheritrefs="true"/>
             </try>
-
-            <catch></catch>
 
             <finally>
                 <echo>Dumping and clearing log cat</echo>
@@ -238,36 +333,79 @@
             </else>
         </if>
 
+<!-- Socialize Customization Start
+    ==================================================================================================================
+    Emma coverage files are also renamed to match the package under test.
+
+-->
+        <!-- Set the name of the generated coverage file to include the test package -->
+        <property name="emma.dump.name.raw" value="coverage-${test.package}"/>
+
+        <!-- Replace dots with underscores in the file name -->
+        <propertyregex property="emma.dump.name.replaced"
+                       input="${emma.dump.name.raw}"
+                       regexp="\."
+                       replace="_"
+                       global="true" />
+
+        <property name="emma.dump.name" value="${emma.dump.name.replaced}.ec"/>
+        <property name="emma.dump.path" value="/data/data/${tested.project.app.package}"/>
+        <property name="emma.dump.file" value="${emma.dump.path}/${emma.dump.name}"/>
+
+        <!-- Original property assignment is disabled
         <property name="emma.dump.file"
                   value="/data/data/${tested.project.app.package}/coverage.ec" />
+        -->
+
+<!-- Socialize Customization Stop
+    ==================================================================================================================
+    The the next customization is in the <run-tests-helper> macro
+-->
 
         <if condition="${emma.enabled}">
             <then>
-                <echo>Running tests...</echo>
+                <echo>Running tests for package ${test.package}...</echo>
                 <run-tests-helper emma.enabled="true">
 
-<!-- Socialize Customization Begin
+
+<!-- Socialize Customization Start
     ==================================================================================================================
     We need to customize the output folder for the junit test output so we can effectively pull the result files from
     the device but the "test" target does not allow for customization of instrumentation args.
     Bug filed with Google here: https://code.google.com/p/android/issues/detail?id=53443
+
+    Additional argument (test.package) added to limit the tests to a specific package
+
 -->
                 <extra-instrument-args>
+
                     <arg value="-e" />
                     <arg value="coverageFile" />
                     <arg value="${emma.dump.file}" />
 
+
+                    <arg value="-e" />
+                    <arg value="package" />
+                    <arg value="${test.package}" />
+
                     <arg value="-e" />
                     <arg value="junitOutputDirectory" />
                     <arg value="${junit.device.path}" />
+
                 </extra-instrument-args>
 
-<!-- Socialize Customization End
+<!-- Socialize Customization Stop
     ==================================================================================================================
     The the next customization is in the <emma> sub task
 -->
 
                 </run-tests-helper>
+
+
+<!-- Socialize Customization Start
+    ==================================================================================================================
+    Most of the report extraction moved to a new target, just the pulling of the file is left here
+-->
 
                 <echo level="info">Setting permission to download the coverage file...</echo>
                 <exec executable="${adb}" failonerror="true">
@@ -284,52 +422,20 @@
                     <arg line="${adb.device.arg}" />
                     <arg value="pull" />
                     <arg value="${emma.dump.file}" />
-                    <arg path="${out.absolute.dir}/coverage.ec" />
+                    <arg path="${out.absolute.dir}/${emma.dump.name}" />
                 </exec>
 
-                <pathconvert property="tested.project.lib.source.path.value" refid="tested.project.lib.source.path">
-                    <firstmatchmapper>
-                        <regexpmapper from='^([^ ]*)( .*)$$' to='"\1\2"'/>
-                        <identitymapper/>
-                    </firstmatchmapper>
-                </pathconvert>
-
-                <echo level="info">Extracting coverage report...</echo>
-                <emma>
-                    <property name="report.html.out.encoding" value="UTF-8" />
-                    <report sourcepath="${tested.project.source.absolute.dir}:${tested.project.lib.source.path.value}"
-                            verbosity="${verbosity}">
-                        <!-- TODO: report.dir or something like should be introduced if necessary -->
-                        <infileset file="${out.absolute.dir}/coverage.ec" />
-                        <infileset file="${tested.project.out.absolute.dir}/coverage.em" />
-
-<!-- Socialize Customization Begin
-    ==================================================================================================================
-    Change the output path for code coverage
--->
-
-                        <html outfile="${emma.local.path}/coverage.html" />
-                        <txt outfile="${emma.local.path}/coverage.txt" />
-                        <xml outfile="${emma.local.path}/coverage.xml" />
-
-<!-- Socialize Customization End
-    ==================================================================================================================
-    The remainder of this target is unchanged
--->
-                    </report>
-                </emma>
-                <echo level="info">Cleaning up temporary files...</echo>
-                <delete file="${out.absolute.dir}/coverage.ec" />
-                <delete file="${tested.project.out.absolute.dir}/coverage.em" />
-                <exec executable="${adb}" failonerror="true">
+                <!-- Add download of junit results -->
+                <echo>Pulling junit files from ${junit.device.path} to ${junit.local.path}</echo>
+                <exec executable="${adb}" failonerror="true" dir="${junit.local.path}">
                     <arg line="${adb.device.arg}" />
-                    <arg value="shell" />
-                    <arg value="run-as" />
-                    <arg value="${tested.project.app.package}" />
-                    <arg value="rm" />
-                    <arg value="${emma.dump.file}" />
+                    <arg value="pull" />
+                    <arg value="${junit.device.path}" />
                 </exec>
-                <echo level="info">Saving the coverage reports in ${out.absolute.dir}</echo>
+
+<!-- Socialize Customization Stop
+    ==================================================================================================================
+-->
             </then>
             <else>
                 <run-tests-helper />

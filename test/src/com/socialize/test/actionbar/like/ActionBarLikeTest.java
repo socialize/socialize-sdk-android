@@ -7,15 +7,12 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
-import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.action.like.LikeOptions;
 import com.socialize.api.action.like.SocializeLikeUtils;
 import com.socialize.auth.*;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.networks.SocialNetwork;
@@ -182,13 +179,11 @@ public class ActionBarLikeTest extends ActionBarTest {
 	
 	@SuppressWarnings("unchecked")
 	@UsesMocks ({IAuthDialogFactory.class, UserProviderCredentials.class, AuthProviderInfo.class, AuthProviders.class, AuthProvider.class})
-	public void testLikeDoesNotPromptForAuthWhenUserIsAuthenticated() throws Throwable {
-		
-		Activity activity = TestUtils.getActivity(this);
-		
+	public void testAAALikeDoesNotPromptForAuthWhenUserIsAuthenticated() throws Throwable {
+
 		final UserProviderCredentials creds = AndroidMock.createMock(UserProviderCredentials.class);
 		final AuthProviderInfo info = AndroidMock.createMock(AuthProviderInfo.class);
-		final AuthProviders authProviders = AndroidMock.createMock(AuthProviders.class);
+
 		final AuthProvider<AuthProviderInfo> provider = AndroidMock.createMock(AuthProvider.class);
 		final CountDownLatch latch = new CountDownLatch(1);
 		
@@ -198,7 +193,7 @@ public class ActionBarLikeTest extends ActionBarTest {
 
 		IAuthDialogFactory mockFactory = AndroidMock.createMock(IAuthDialogFactory.class);
 		IShareDialogFactory mockShareFactory = new IShareDialogFactory() {
-			
+
 			@Override
 			public void preload(Context context) {}
 
@@ -213,20 +208,8 @@ public class ActionBarLikeTest extends ActionBarTest {
 		mockLikeUtils.setAuthDialogFactory(mockFactory);
 		mockLikeUtils.setShareDialogFactory(mockShareFactory);
 
-		SocializeAccess.setInitListener(new SocializeInitListener() {
-			@Override
-			public void onInit(Context context, IOCContainer container) {
-				SocializeAccess.setAuthProviders(authProviders);
-				SocializeAccess.setLikeUtilsProxy(mockLikeUtils);
-			}
+		Activity activity = TestUtils.getActivity(this);
 
-			@Override
-			public void onError(SocializeException error) {
-				error.printStackTrace();
-				fail();
-			}
-		});
-		
 		final ActionBarLayoutView actionBar = TestUtils.findView(activity, ActionBarLayoutView.class, 10000);	
 		
 		assertNotNull(actionBar);
@@ -285,10 +268,8 @@ public class ActionBarLikeTest extends ActionBarTest {
 
 		final ActionBarButton commentButton = actionBar.getCommentButton();
 
-		String text = actionBarItem.getText();
-
 		// Make sure we are not liked
-		text = actionBarItem.getText();
+		String text = actionBarItem.getText();
 
 		assertEquals("Like", text);
 

@@ -1,7 +1,3 @@
 To run the test suite, execute this command:
 
-ant -propertyfile global.properties clean socialize-setup emma debug install test-safe report
-
-OR
-
-ant -propertyfile global.properties socialize-test
+ant -propertyfile global.properties test-suite

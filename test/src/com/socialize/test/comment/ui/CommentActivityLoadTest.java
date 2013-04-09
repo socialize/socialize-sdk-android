@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.test.comment;
+package com.socialize.test.comment.ui;
 
 import android.app.Activity;
 import android.content.Context;
@@ -56,9 +56,11 @@ import java.util.concurrent.TimeUnit;
 public class CommentActivityLoadTest extends SocializeActivityTest {
 	
 	public void testCommentActivityLoadsCorrectData() throws Throwable {
+
+		Activity launchActivity = TestUtils.getActivity(this);
 		
 		TestUtils.setupSocializeProxies();
-		TestUtils.setUpActivityMonitor(CommentActivity.class);
+//		TestUtils.setUpActivityMonitor(CommentActivity.class);
 		
 		Entity entity1 = Entity.newInstance("http://entity1.com", null);
 		Entity entity2 = Entity.newInstance("http://entity2.com", null);
@@ -121,8 +123,10 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 				proxy.setDelegate(mockCommentSystem);
 			}
 		});
+
+
 		
-		CommentUtils.showCommentView(TestUtils.getActivity(this), entity1, new OnCommentViewActionListener() {
+		CommentUtils.showCommentView(launchActivity, entity1, new OnCommentViewActionListener() {
 			@Override
 			public void onError(SocializeException error) {
 				error.printStackTrace();
@@ -154,9 +158,10 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 		});
 
 
-		Activity waitForActivity = TestUtils.waitForActivity(20000);
+
+//		Activity waitForActivity = TestUtils.waitForActivity(20000);
 		
-		assertNotNull(waitForActivity);
+//		assertNotNull(waitForActivity);
 		
 		assertTrue(lock.await(20, TimeUnit.SECONDS));
 		
@@ -169,9 +174,11 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 		
 		lr.setItems(dummyResults2);
 
-        waitForActivity.finish();
+//        waitForActivity.finish();
+
+		launchActivity = TestUtils.restart(this);
 		
-		CommentUtils.showCommentView(TestUtils.getActivity(this), entity2, new OnCommentViewActionListener() {
+		CommentUtils.showCommentView(launchActivity, entity2, new OnCommentViewActionListener() {
 			@Override
 			public void onError(SocializeException error) {
 				error.printStackTrace();
@@ -202,9 +209,9 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 			public void onAfterSetComment(Comment comment, CommentListItem item) {}			
 		});	
 		
-		waitForActivity = TestUtils.waitForActivity(5000);
+//		waitForActivity = TestUtils.waitForActivity(5000);
 		
-		assertNotNull(waitForActivity);
+//		assertNotNull(waitForActivity);
 		
 		lock2.await(20, TimeUnit.SECONDS);
 		
@@ -215,7 +222,12 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 			assertEquals(dummyResults2.get(index).getText(), comment.getText());
 			index++;
 		}
-		
-		waitForActivity.finish();
+
+		launchActivity = TestUtils.restart(this);
+		launchActivity.finish();
+
+//		TestUtils.removeLastMonitor();
+
+//		waitForActivity.finish();
 	}
 }

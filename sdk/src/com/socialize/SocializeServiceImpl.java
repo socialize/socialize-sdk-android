@@ -406,7 +406,11 @@ public class SocializeServiceImpl implements SocializeService {
 				this.shareSystem = container.getBean("shareSystem");
 				this.userSystem = container.getBean("userSystem");
 				this.asserter = container.getBean("initializationAsserter");
-				this.authProviders = container.getBean("authProviders");
+
+				if(this.authProviders == null) {
+					this.authProviders = container.getBean("authProviders");
+				}
+
 				this.authProviderInfoBuilder = container.getBean("authProviderInfoBuilder");
 				this.notificationChecker = container.getBean("notificationChecker");
 				this.appUtils = container.getBean("appUtils");
@@ -566,6 +570,7 @@ public class SocializeServiceImpl implements SocializeService {
 			initPaths = null;
 			entityLoader = null;
 			session = null;
+			authProviders = null;
 		}
 		else {
 			destroy();

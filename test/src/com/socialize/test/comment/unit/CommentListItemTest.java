@@ -1,4 +1,4 @@
-package com.socialize.test.comment;
+package com.socialize.test.comment.unit;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;

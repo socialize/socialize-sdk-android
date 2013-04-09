@@ -1,15 +1,15 @@
-package com.socialize.test.comment;
+package com.socialize.test.comment.unit;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.i18n.I18NConstants;
 import com.socialize.i18n.LocalizationService;
-import com.socialize.test.SocializeUITestCase;
+import com.socialize.test.SocializeUnitTest;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.view.ListItemLoadingView;
 import com.socialize.util.DisplayUtils;
 
-public class ListItemLoadingViewTest extends SocializeUITestCase {
+public class ListItemLoadingViewTest extends SocializeUnitTest {
 	@UsesMocks ({
             DisplayUtils.class,
 		Colors.class,

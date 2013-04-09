@@ -34,17 +34,17 @@ public class ActionBarActivity extends EmptyActivity {
         launchLock.countDown();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Socialize.onPause(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Socialize.onResume(this);
-    }
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        Socialize.onPause(this);
+//    }
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        Socialize.onResume(this);
+//    }
 
     @Override
     protected void onDestroy() {

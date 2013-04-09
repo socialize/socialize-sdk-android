@@ -1,15 +1,23 @@
 package com.socialize.test.actionbar;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import com.google.android.testing.mocking.AndroidMock;
+import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
+import com.socialize.android.ioc.IOCContainer;
+import com.socialize.android.ioc.ProxyObject;
 import com.socialize.api.action.entity.SocializeEntityUtils;
 import com.socialize.api.action.like.SocializeLikeUtils;
 import com.socialize.api.action.share.SocializeShareUtils;
 import com.socialize.api.action.view.SocializeViewUtils;
+import com.socialize.auth.AuthProviders;
 import com.socialize.entity.Entity;
 import com.socialize.entity.View;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.view.ViewAddListener;
@@ -25,8 +33,9 @@ public abstract class ActionBarTest extends SocializeManagedActivityTest<ActionB
 	protected Entity entity = Entity.newInstance("http://entity1.com" + Math.random(), "no name");
 	
 	protected CountDownLatch globalLatch = null;
+	protected AuthProviders authProviders;
 
-    public ActionBarTest() {
+	public ActionBarTest() {
         super("com.socialize.testapp", ActionBarActivity.class);
     }
 	
@@ -78,7 +87,8 @@ public abstract class ActionBarTest extends SocializeManagedActivityTest<ActionB
 		catch (InterruptedException e) {}
 	}
 
-	
+
+	@UsesMocks({AuthProviders.class})
 	@Override
 	protected void setUp() throws Exception {
 		
@@ -90,11 +100,29 @@ public abstract class ActionBarTest extends SocializeManagedActivityTest<ActionB
 		setActivityIntent(intent);
 		
 		globalLatch = new CountDownLatch(1);
-		
+
+		authProviders = AndroidMock.createMock(AuthProviders.class);
+
+		SocializeAccess.setBeanOverrides("socialize_proxy_beans.xml");
 		SocializeAccess.setLikeUtilsProxy(mockLikeUtils);
 		SocializeAccess.setEntityUtilsProxy(mockEntityUtils);
 		SocializeAccess.setViewUtilsProxy(mockViewUtils);
-		
+		SocializeAccess.setAuthProviders(authProviders);
+		SocializeAccess.setInitListener(new SocializeInitListener() {
+			@Override
+			public void onInit(Context context, IOCContainer container) {
+				ProxyObject<AuthProviders> providers = container.getProxy("authProviders");
+				if(providers != null) {
+					providers.setDelegate(authProviders);
+				}
+			}
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				fail();
+			}
+		});
+
 		if(overrideShareUtils()) {
 			SocializeAccess.setShareUtilsProxy(mockShareUtils);
 		}

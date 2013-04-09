@@ -1,4 +1,4 @@
-package com.socialize.test.comment;
+package com.socialize.test.comment.unit;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
@@ -9,13 +9,6 @@ import com.socialize.ui.comment.CommentAdapter;
 import java.util.List;
 
 public class CommentAdapterTest extends SocializeUnitTest {
-
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		// Ensure the activity was started and monitored so it dies gracefully.
-
-	}
 
 	@SuppressWarnings("unchecked")
 	@UsesMocks ({List.class})

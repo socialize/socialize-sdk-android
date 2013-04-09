@@ -85,7 +85,7 @@ public class SocializeSystem {
 
 	/**
 	 * EXPERT ONLY (Not documented)
-	 * @param beanOverride
+	 * @param beanOverrides
 	 */
 	void setBeanOverrides(String...beanOverrides) {
 		this.beanOverrides = beanOverrides;

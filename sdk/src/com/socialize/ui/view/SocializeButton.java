@@ -103,31 +103,32 @@ public class SocializeButton extends LinearLayout {
 	}
 
 	public void init() {
-		
-		int dipPadding = displayUtils.getDIP(padding);
-		computedRadius = displayUtils.getDIP(cornerRadius);
-		
-		textPadding = displayUtils.getDIP(4);
-	
-		OnClickListener onClickListener = getOnClickListener();
-		
+		int dipPadding = 0;
 		buttonWidth = LinearLayout.LayoutParams.WRAP_CONTENT;
 		buttonHeight = LinearLayout.LayoutParams.WRAP_CONTENT;
-		
-		if(width == null) {
-			buttonWidth = LinearLayout.LayoutParams.FILL_PARENT;
+
+		if(displayUtils != null) {
+			dipPadding = displayUtils.getDIP(padding);
+			computedRadius = displayUtils.getDIP(cornerRadius);
+			textPadding = displayUtils.getDIP(4);
+
+			if(width == null) {
+				buttonWidth = LinearLayout.LayoutParams.FILL_PARENT;
+			}
+			else if(width > 0) {
+				buttonWidth = displayUtils.getDIP(width);
+			}
+
+			if(height == null) {
+				buttonHeight = LinearLayout.LayoutParams.FILL_PARENT;
+			}
+			else if(height > 0) {
+				buttonHeight = displayUtils.getDIP(height);
+			}
 		}
-		else if(width > 0) {
-			buttonWidth = displayUtils.getDIP(width);
-		}
-		
-		if(height == null) {
-			buttonHeight = LinearLayout.LayoutParams.FILL_PARENT;
-		}
-		else if(height > 0) {
-			buttonHeight = displayUtils.getDIP(height);
-		}
-			
+
+		OnClickListener onClickListener = getOnClickListener();
+
 		LayoutParams fill = makeLayoutParams(buttonWidth, buttonHeight);
 
 		fill.setMargins(dipPadding, dipPadding, dipPadding, dipPadding);
@@ -195,8 +196,12 @@ public class SocializeButton extends LinearLayout {
 			imageView = makeImageView();
 			imageView.setImageDrawable(drawables.getDrawable(imageName));
 			imageView.setLayoutParams(imageLayout);
-			imageView.setPadding(displayUtils.getDIP(imagePaddingLeft), 0, displayUtils.getDIP(imagePaddingRight), 0);
-			
+
+
+			if(displayUtils != null) {
+				imageView.setPadding(displayUtils.getDIP(imagePaddingLeft), 0, displayUtils.getDIP(imagePaddingRight), 0);
+			}
+
 			if(!backgroundVisible) {
 				imageView.setOnClickListener(onClickListener);
 			}

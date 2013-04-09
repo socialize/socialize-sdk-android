@@ -1,4 +1,4 @@
-package com.socialize.test.action;
+package com.socialize.test.profile;
 
 import android.app.Activity;
 import android.content.Context;

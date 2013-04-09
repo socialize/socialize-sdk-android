@@ -4,10 +4,10 @@ import android.content.Context;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.error.SocializeErrorHandler;
-import com.socialize.test.SocializeUITestCase;
+import com.socialize.test.SocializeUnitTest;
 import com.socialize.view.BaseView;
 
-public class BaseViewTest extends SocializeUITestCase {
+public class BaseViewTest extends SocializeUnitTest {
 
 	@UsesMocks(SocializeErrorHandler.class)
 	public void testShowError() {

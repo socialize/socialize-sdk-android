@@ -85,7 +85,13 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 		// Create the receiver
 		receiver.onCreate(getContext());
 	}
-	
+
+	@Override
+	protected void tearDown() throws Exception {
+		TestUtils.restart(this);
+		super.tearDown();
+	}
+
 	public void testOnMessage() throws Throwable {
 		
 		final CountDownLatch latch = new CountDownLatch(1);

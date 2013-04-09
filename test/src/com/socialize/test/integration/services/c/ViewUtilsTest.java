@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.test.integration.services.b;
+package com.socialize.test.integration.services.c;
 
 import com.socialize.EntityUtils;
 import com.socialize.Socialize;
