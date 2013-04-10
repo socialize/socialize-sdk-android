@@ -8,11 +8,9 @@
     -->
     <target name="socialize-test" depends="clean,uninstall,socialize-setup,emma,debug,install,test-safe,report"/>
 
-    <taskdef resource="net/sf/antcontrib/antlib.xml">
-        <classpath>
-            <pathelement location="libext/ant-contrib.jar"/>
-        </classpath>
-    </taskdef>
+    <!-- Put the taskdef into an antlib so we don't eat up permgen space -->
+    <typedef file="antlib-def.xml"/>
+
 
     <!-- Setup Custom Paths -->
     <target name="socialize-setup">

@@ -1,0 +1,7 @@
+<antlib>
+    <taskdef resource="net/sf/antcontrib/antlib.xml">
+        <classpath>
+            <pathelement location="libext/ant-contrib.jar"/>
+        </classpath>
+    </taskdef>
+</antlib>
