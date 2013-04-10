@@ -113,7 +113,7 @@ public class ActionBarShareListenerTest extends ActionBarTest {
 		});
 		
 		assertTrue(shareLatch.await(30, TimeUnit.SECONDS));
-		dialogLatch.await(120, TimeUnit.SECONDS);
+		dialogLatch.await(30, TimeUnit.SECONDS);
 		
 		SharePanelView dialogView = TestUtils.getResult(0);
 		

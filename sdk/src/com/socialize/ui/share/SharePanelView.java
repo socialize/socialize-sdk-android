@@ -247,7 +247,7 @@ public class SharePanelView extends DialogPanelView {
 		}
 		
 		otherOptions = new TextView(getContext());
-		otherOptions.setText(localizationService.getString(I18NConstants.SHARE_MORE_OPTIONS));
+		if(localizationService != null) otherOptions.setText(localizationService.getString(I18NConstants.SHARE_MORE_OPTIONS));
 		otherOptions.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
 		if(colors != null) otherOptions.setTextColor(colors.getColor(Colors.ANON_CELL_TITLE));
 		otherOptions.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL);
@@ -661,7 +661,10 @@ public class SharePanelView extends DialogPanelView {
 			header.setBackgroundDrawable(headerBG);
 		}
 
-		header.setText(localizationService.getString(I18NConstants.SHARE_HEADER));
+		if(localizationService != null) {
+			header.setText(localizationService.getString(I18NConstants.SHARE_HEADER));
+		}
+
 		header.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
 		header.setTextColor(Color.WHITE);
 		header.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
