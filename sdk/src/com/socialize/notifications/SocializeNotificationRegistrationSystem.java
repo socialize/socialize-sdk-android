@@ -78,7 +78,6 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 	@Override
 	public void registerC2DMFailed(Context context, String cause) {
 		notificationRegistrationState.setC2dmPendingRequestTime(0);
-//		notificationRegistrationState.save(context);
 	}
 
 	@Override

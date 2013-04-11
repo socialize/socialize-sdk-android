@@ -57,17 +57,38 @@
         <!--**************** SOCIALIZE DEMO CONFIGURATION ******************-->
         <!--****************************************************************-->  
  
-        <!-- GCM Config -->
+        <!-- GCM Config
         <service android:name=".GCMIntentService" />
-        
+
 		<receiver android:name="com.google.android.gcm.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND" >
 		  <intent-filter>
 		    <action android:name="com.google.android.c2dm.intent.RECEIVE" />
 		    <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 		    <category android:name="com.socialize.demo" />
 		  </intent-filter>
-		</receiver>        
-        
+		</receiver>
+
+        -->
+
+        <service android:name="com.socialize.notifications.SocializeC2DMReceiver"/>
+
+        <receiver
+                android:name="com.socialize.notifications.SocializeBroadcastReceiver"
+                android:permission="com.google.android.c2dm.permission.SEND">
+
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.socialize.demo" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <category android:name="com.socialize.demo" />
+            </intent-filter>
+
+        </receiver>
+
+
         <activity android:name=".DemoList"/>
         <activity android:name=".InitActivity"/>
         <activity android:name=".implementations.tools.ToolsActivity"/>

@@ -32,6 +32,8 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.ResourceLocator;
 
+import java.util.concurrent.CountDownLatch;
+
 /**
  * Houses beans used by the notification service.
  * @author Jason Polites
@@ -42,15 +44,35 @@ public class NotificationContainer {
 	
 	static String[] NotificationBeans = {SocializeConfig.SOCIALIZE_CORE_BEANS_PATH, SocializeConfig.SOCIALIZE_NOTIFICATION_BEANS_PATH};
 	
-	public void onCreate(Context context) throws Exception {
+	public void onCreate(final Context context) throws Exception {
 		Logger.LOG_KEY = Socialize.LOG_KEY;
 		Logger.logLevel = Log.WARN;
 		container = newSocializeIOC();
-		ResourceLocator locator = newResourceLocator();
-		locator.setLogger(newLogger());
+		final ResourceLocator locator = newResourceLocator();
+		final SocializeLogger logger = newLogger();
+		locator.setLogger(logger);
 		ClassLoaderProvider provider = newClassLoaderProvider();
 		locator.setClassLoaderProvider(provider);
-		container.init(context, locator, NotificationBeans);
+
+		final CountDownLatch latch = new CountDownLatch(1);
+
+		// Andorid 4.0 will not allow disk access on main UI thread
+		new Thread(){
+			@Override
+			public void run() {
+				try {
+					container.init(context, locator, NotificationBeans);
+				}
+				catch (Exception e) {
+					logger.error("Error initializing notification container", e);
+				}
+				finally {
+					latch.countDown();
+				}
+			}
+		}.start();
+
+		latch.await();
 	}
 	
 	public void onDestroy(Context context) {}

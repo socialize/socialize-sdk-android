@@ -39,6 +39,7 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 
 	@Override
 	public void onCreate() {
+
 		handler.onCreate(getContext());
 		super.onCreate();
 	}

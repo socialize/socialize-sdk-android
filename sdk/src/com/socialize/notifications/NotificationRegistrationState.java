@@ -46,6 +46,9 @@ public class NotificationRegistrationState {
 	private long pendingSocializeRequestTime = 0L;
 	private long lastC2DMRegistrationTime = 0L;
 	private long lastSocializeRegistrationTime = 0L;
+
+	private String lastGCMSenderID = null;
+	private String lastCustomGCMSenderId = null;
 	
 	private SocializeLogger logger;
 	private SocializeConfig config;
@@ -68,15 +71,24 @@ public class NotificationRegistrationState {
 	public boolean isRegisteredC2DM(Context context) {
 		
 		load(context);
-		
-		long timeout = config.getLongProperty(SocializeConfig.GCM_REGISTRATION_INTERVAL, DEFAULT_GCM_TIMEOUT);
-		long timeSinceLast = (System.currentTimeMillis() - lastC2DMRegistrationTime);
-		
-		if(StringUtils.isEmpty(c2DMRegistrationId) || (timeSinceLast > timeout && timeout >= 0)) {
+
+		if(StringUtils.isEmpty(lastGCMSenderID)) {
 			return false;
 		}
-		
-		return true;
+		else if(!lastGCMSenderID.equals(config.getProperty(SocializeConfig.SOCIALIZE_GCM_SENDER_ID, ""))) {
+			return false;
+		}
+
+		if(lastCustomGCMSenderId != null && !lastCustomGCMSenderId.equals(config.getProperty(SocializeConfig.SOCIALIZE_CUSTOM_GCM_SENDER_ID, ""))) {
+			// Does not match ID
+			return false;
+		}
+
+		long timeout = config.getLongProperty(SocializeConfig.GCM_REGISTRATION_INTERVAL, DEFAULT_GCM_TIMEOUT);
+		long timeSinceLast = (System.currentTimeMillis() - lastC2DMRegistrationTime);
+
+		return !(StringUtils.isEmpty(c2DMRegistrationId) || (timeSinceLast > timeout && timeout >= 0));
+
 	}
 	
 	public void setRegisteredSocialize(User user) {
@@ -125,7 +137,10 @@ public class NotificationRegistrationState {
 			pendingSocializeRequestTime = prefs.getLong("pendingSocializeRequestTime", 0);
 			lastC2DMRegistrationTime = prefs.getLong("lastC2DMRegistrationTime", 0);
 			lastSocializeRegistrationTime = prefs.getLong("lastSocializeRegistrationTime", 0);
-			
+
+			lastGCMSenderID = prefs.getString("lastGCMSenderID", "");
+			lastCustomGCMSenderId = prefs.getString("lastCustomGCMSenderId", "");
+
 			if(logger != null && logger.isDebugEnabled()) {
 				logger.debug("Loaded notification state with registration id [" +
 						c2DMRegistrationId +
@@ -155,7 +170,9 @@ public class NotificationRegistrationState {
 		editor.putLong("pendingSocializeRequestTime", pendingSocializeRequestTime);
 		editor.putLong("lastC2DMRegistrationTime", lastC2DMRegistrationTime);
 		editor.putLong("lastSocializeRegistrationTime", lastSocializeRegistrationTime);
-		
+		editor.putString("lastGCMSenderID", config.getProperty(SocializeConfig.SOCIALIZE_GCM_SENDER_ID, ""));
+		editor.putString("lastCustomGCMSenderId", config.getProperty(SocializeConfig.SOCIALIZE_CUSTOM_GCM_SENDER_ID, ""));
+
 		editor.commit();
 	}
 

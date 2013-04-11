@@ -2,6 +2,7 @@ package com.socialize.notifications;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.log.SocializeLogger;
 
@@ -35,8 +36,16 @@ public class SocializeC2DMReceiverHandler implements C2DMReceiverHandler {
 				
 				if(logger != null && logger.isDebugEnabled()) {
 					logger.debug("SocializeC2DMReceiver received message");
-				}					
-				notificationCallback.onMessage(context, intent.getExtras());
+				}
+
+				Bundle extras = intent.getExtras();
+
+				if(extras != null) {
+					notificationCallback.onMessage(context, extras);
+				}
+				else {
+					logWarn("No extras bundle found in notification intent.  Notification cannot be processed");
+				}
 			}
 			else {
 				logWarn("No notificationCallback found in GCM receiver.  Initialization may have failed.");
