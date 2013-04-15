@@ -644,8 +644,7 @@
 		id="twitterWebViewClient" 
 		class="com.socialize.auth.twitter.TwitterWebViewClient"
 		singleton="false">
-		<constructor-arg type="context"/>
-	</bean>		
+	</bean>
 	
 	<factory id="twitterWebViewClientFactory" makes="twitterWebViewClient"/>		
 	
