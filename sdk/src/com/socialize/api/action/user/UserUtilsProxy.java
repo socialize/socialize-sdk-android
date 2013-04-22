@@ -44,10 +44,10 @@ public interface UserUtilsProxy {
 	public User getCurrentUser(Context context) throws SocializeException;
 	
 	@Synchronous
-	public UserSettings getUserSettings(Context context);
+	public UserSettings getUserSettings(Context context) throws SocializeException;
 	
 	@Synchronous
-	public SocialNetwork[] getAutoPostSocialNetworks(Context context);
+	public SocialNetwork[] getAutoPostSocialNetworks(Context context) throws SocializeException;
 	
 	public void getUser(Context context, long id, UserGetListener listener);
 	

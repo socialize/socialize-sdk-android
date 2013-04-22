@@ -26,6 +26,7 @@ import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import com.socialize.ShareUtils;
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
@@ -128,70 +129,114 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 
 	@Override
 	public void addComment(final Activity context, final Entity entity, final String text, final CommentOptions commentOptions, final CommentAddListener listener, final SocialNetwork...networks) {
-		final boolean doShare = isDisplayShareDialog(context, commentOptions);
-		final SocializeSession session = getSocialize().getSession();
-		
-		if(isDisplayAuthDialog(context, session, commentOptions, networks)) {
-			
-			authDialogFactory.show(context, new AuthDialogListener() {
-				
-				@Override
-				public void onShow(Dialog dialog, AuthPanelView dialogView) {}
-				
-				@Override
-				public void onCancel(Dialog dialog) {
-					if(listener != null) {
-						listener.onCancel();
-					}
-				}
-				
-				@Override
-				public void onSkipAuth(Activity context, Dialog dialog) {
-					dialog.dismiss();
-					doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener);
-				}
 
-				@Override
-				public void onError(Activity context, Dialog dialog, Exception error) {
-					dialog.dismiss();
-					if(listener != null) {
-						listener.onError(SocializeException.wrap(error));
-					}
-				}
+		try {
 
-				@Override
-				public void onAuthenticate(Activity context, Dialog dialog, SocialNetwork network) {
-					dialog.dismiss();
-					if(doShare) {
-						doCommentWithShareDialog(context, session, entity, text, commentOptions, listener);
-					}
-					else {
-						if(networks == null || networks.length == 0) {
-							doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener, UserUtils.getAutoPostSocialNetworks(context));
+			final boolean doShare = isDisplayShareDialog(context, commentOptions);
+			final SocializeSession session = getSocialize().getSession();
+
+			if(isDisplayAuthDialog(context, session, commentOptions, networks)) {
+
+				authDialogFactory.show(context, new AuthDialogListener() {
+
+					@Override
+					public void onShow(Dialog dialog, AuthPanelView dialogView) {}
+
+					@Override
+					public void onCancel(Dialog dialog) {
+						if(listener != null) {
+							listener.onCancel();
 						}
-						else {
-							doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener, networks);
-						}						
 					}
-				}
-			}, !(config.isAllowSkipAuthOnComments() && config.isAllowSkipAuthOnAllActions()));
-		}
-		else {
-			if(doShare) {
-				doCommentWithShareDialog(context, session, entity, text, commentOptions, listener);
+
+					@Override
+					public void onSkipAuth(Activity context, Dialog dialog) {
+						dialog.dismiss();
+						try {
+							doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener);
+						}
+						catch (SocializeException e) {
+							if(listener != null) {
+								listener.onError(e);
+							}
+							if(logger != null) {
+								logger.error("Error adding comment", e);
+							}
+							else {
+								Log.e(SocializeLogger.LOG_TAG, "Error adding comment", e);
+							}
+						}
+					}
+
+					@Override
+					public void onError(Activity context, Dialog dialog, Exception error) {
+						dialog.dismiss();
+						if(listener != null) {
+							listener.onError(SocializeException.wrap(error));
+						}
+					}
+
+					@Override
+					public void onAuthenticate(Activity context, Dialog dialog, SocialNetwork network) {
+						dialog.dismiss();
+						try {
+							if(doShare) {
+								doCommentWithShareDialog(context, session, entity, text, commentOptions, listener);
+							}
+							else {
+								if(networks == null || networks.length == 0) {
+
+										doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener, UserUtils.getAutoPostSocialNetworks(context));
+
+								}
+								else {
+									doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener, networks);
+								}
+							}
+						}
+						catch (SocializeException e) {
+							if(listener != null) {
+								listener.onError(e);
+							}
+							if(logger != null) {
+								logger.error("Error adding comment", e);
+							}
+							else {
+								Log.e(SocializeLogger.LOG_TAG, "Error adding comment", e);
+							}
+						}
+					}
+				}, !(config.isAllowSkipAuthOnComments() && config.isAllowSkipAuthOnAllActions()));
 			}
 			else {
-				if(networks == null || networks.length == 0) {
-					doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener, UserUtils.getAutoPostSocialNetworks(context));
+				if(doShare) {
+					doCommentWithShareDialog(context, session, entity, text, commentOptions, listener);
 				}
 				else {
-					doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener, networks);
-				}					
+					if(networks == null || networks.length == 0) {
+						doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener, UserUtils.getAutoPostSocialNetworks(context));
+					}
+					else {
+						doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener, networks);
+					}
+				}
 			}
-		}			
+		}
+		catch (Throwable e) {
+			if(listener != null) {
+				listener.onError(SocializeException.wrap(e));
+			}
+
+			if(logger != null) {
+				logger.error("Error adding comment", e);
+			}
+			else {
+				Log.e(SocializeLogger.LOG_TAG, "Error adding comment", e);
+			}
+		}
 	}
 
-	protected void doCommentWithShareDialog(final Activity context, final SocializeSession session, final Entity entity, final String text, final CommentOptions commentOptions, final CommentAddListener listener) {
+	protected void doCommentWithShareDialog(final Activity context, final SocializeSession session, final Entity entity, final String text, final CommentOptions commentOptions, final CommentAddListener listener) throws SocializeException {
 		
 		if(isDisplayShareDialog(context, commentOptions)) {
 			shareDialogFactory.show(context, entity, null, new ShareDialogListener() {
@@ -253,7 +298,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 		}
 	}	
 	
-	protected void doCommentWithoutShareDialog(final Activity context, final SocializeSession session, final Entity entity, final String text, CommentOptions commentOptions, final CommentAddListener listener) {
+	protected void doCommentWithoutShareDialog(final Activity context, final SocializeSession session, final Entity entity, final String text, CommentOptions commentOptions, final CommentAddListener listener) throws SocializeException {
 		doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener, UserUtils.getAutoPostSocialNetworks(context));
 	}
 	

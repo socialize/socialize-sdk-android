@@ -3,9 +3,11 @@ package com.socialize.ui.profile;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
+import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.view.EntityView;
 
@@ -38,7 +40,7 @@ public class ProfileView extends EntityView {
 	
 	/**
 	 * Called when the user's profile image is changed.
-	 * @param bitmap
+	 * @param bitmap The image.
 	 */
 	public void onImageChange(Bitmap bitmap) {
 		if(profileLayoutView != null) {
@@ -46,7 +48,12 @@ public class ProfileView extends EntityView {
 		}
 		
 		// Set the image in the user settings
-		UserUtils.getUserSettings(getContext()).setImage(bitmap);
+		try {
+			UserUtils.getUserSettings(getContext()).setImage(bitmap);
+		}
+		catch (SocializeException e) {
+			Log.e(SocializeLogger.LOG_TAG, "Error getting user settings", e);
+		}
 	}
 	
 	@Override

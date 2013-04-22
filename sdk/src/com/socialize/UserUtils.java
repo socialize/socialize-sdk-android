@@ -57,7 +57,7 @@ public class UserUtils {
 	 * @param context The current context.
 	 * @return An array of SocialNetworks, or null if the user has not elected to auto post to any.
 	 */
-	public static SocialNetwork[] getAutoPostSocialNetworks(Context context) {
+	public static SocialNetwork[] getAutoPostSocialNetworks(Context context) throws SocializeException {
 		return proxy.getAutoPostSocialNetworks(context);
 	}
 
@@ -76,7 +76,7 @@ public class UserUtils {
 	 * @param context The current context.
 	 * @return The settings for the current user.
 	 */
-	public static UserSettings getUserSettings(Context context) {
+	public static UserSettings getUserSettings(Context context) throws SocializeException {
 		return proxy.getUserSettings(context);
 	}
 	

@@ -172,16 +172,24 @@ public class CommentListView extends BaseView {
 					doNotificationStatusSave();
 				}
 			});
-			
-			UserSettings user = userUtils.getUserSettings(getContext());
-			
-			if(user.isNotificationsEnabled()) {
-				notifyBox.setVisibility(View.VISIBLE);
+
+			notifyBox.setVisibility(View.GONE);
+
+			try {
+				UserSettings user = userUtils.getUserSettings(getContext());
+				if(user.isNotificationsEnabled()) {
+					notifyBox.setVisibility(View.VISIBLE);
+				}
 			}
-			else {
-				notifyBox.setVisibility(View.GONE);
+			catch (SocializeException e) {
+				if(logger != null) {
+					logger.error("Error getting user settings", e);
+				}
+				else {
+					e.printStackTrace();
+				}
 			}
-			
+
 			sliderAnchor.addView(notifyBox);
 		}		
 		
@@ -805,16 +813,25 @@ public class CommentListView extends BaseView {
 		if(commentEntrySlider != null) {
 			commentEntrySlider.updateContent();
 		}
-		
-		UserSettings user = userUtils.getUserSettings(getContext());
-		
-		if(notifyBox != null && user != null) {
+
+		try {
+			UserSettings user = userUtils.getUserSettings(getContext());
 			if(user.isNotificationsEnabled()) {
 				notifyBox.setVisibility(View.VISIBLE);
 			}
 			else {
 				notifyBox.setVisibility(View.GONE);
 			}
+		}
+		catch (SocializeException e) {
+			if(logger != null) {
+				logger.error("Error getting user settings", e);
+			}
+			else {
+				e.printStackTrace();
+			}
+
+			notifyBox.setVisibility(View.GONE);
 		}
 	}
 	

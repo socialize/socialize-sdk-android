@@ -24,6 +24,7 @@ package com.socialize.api.action.like;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CompoundButton;
@@ -39,6 +40,7 @@ import com.socialize.entity.User;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.like.*;
+import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.actionbutton.LikeButtonListener;
 import com.socialize.ui.auth.AuthDialogListener;
@@ -70,65 +72,87 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 
 	@Override
 	public void like(final Activity context, final Entity entity, final LikeOptions likeOptions, final LikeAddListener listener, final SocialNetwork...networks) {
-		final boolean doShare = isDisplayShareDialog(context, likeOptions);
-		final SocializeSession session = getSocialize().getSession();
 
-		if(isDisplayAuthDialog(context, session, likeOptions, networks)) {
-			authDialogFactory.show(context, new AuthDialogListener() {
-				@Override
-				public void onShow(Dialog dialog, AuthPanelView dialogView) {}
+		try {
 
-				@Override
-				public void onCancel(Dialog dialog) {
-					if(listener != null) {
-						listener.onCancel();
-					}
-				}
 
-				@Override
-				public void onSkipAuth(Activity context, Dialog dialog) {
-					dialog.dismiss();
-					doLikeWithoutShareDialog(context, session, entity, likeOptions, listener);
-				}
+			final boolean doShare = isDisplayShareDialog(context, likeOptions);
+			final SocializeSession session = getSocialize().getSession();
 
-				@Override
-				public void onError(Activity context, Dialog dialog, Exception error) {
-					dialog.dismiss();
-					if(listener != null) {
-						listener.onError(SocializeException.wrap(error));
-					}
-				}
-				@Override
-				public void onAuthenticate(Activity context, Dialog dialog, SocialNetwork network) {
-					dialog.dismiss();
-					
-					if(doShare) {
-						doLikeWithShareDialog(context, session, entity, likeOptions, listener);
-					}
-					else {
-						if(networks == null || networks.length == 0) {
-							doLikeWithoutShareDialog(context, session, entity, likeOptions, listener, UserUtils.getAutoPostSocialNetworks(context));
+			if(isDisplayAuthDialog(context, session, likeOptions, networks)) {
+				authDialogFactory.show(context, new AuthDialogListener() {
+					@Override
+					public void onShow(Dialog dialog, AuthPanelView dialogView) {}
+
+					@Override
+					public void onCancel(Dialog dialog) {
+						if(listener != null) {
+							listener.onCancel();
 						}
-						else {
-							doLikeWithoutShareDialog(context, session, entity, likeOptions, listener, networks);
+					}
+
+					@Override
+					public void onSkipAuth(Activity context, Dialog dialog) {
+						dialog.dismiss();
+						doLikeWithoutShareDialog(context, session, entity, likeOptions, listener);
+					}
+
+					@Override
+					public void onError(Activity context, Dialog dialog, Exception error) {
+						dialog.dismiss();
+						if(listener != null) {
+							listener.onError(SocializeException.wrap(error));
 						}
-					}					
-				}
-			}, !config.isAllowSkipAuthOnAllActions());
-		}
-		else {
-			if(doShare) {
-				doLikeWithShareDialog(context, session, entity, likeOptions, listener);
+					}
+					@Override
+					public void onAuthenticate(Activity context, Dialog dialog, SocialNetwork network) {
+						dialog.dismiss();
+
+						try {
+							if(doShare) {
+								doLikeWithShareDialog(context, session, entity, likeOptions, listener);
+							}
+							else {
+								if(networks == null || networks.length == 0) {
+									doLikeWithoutShareDialog(context, session, entity, likeOptions, listener, UserUtils.getAutoPostSocialNetworks(context));
+								}
+								else {
+									doLikeWithoutShareDialog(context, session, entity, likeOptions, listener, networks);
+								}
+							}
+						}
+						catch (SocializeException e) {
+							if(listener != null) {
+								listener.onError(e);
+							}
+
+							Log.e(SocializeLogger.LOG_TAG, "Error adding like", e);
+						}
+					}
+				}, !config.isAllowSkipAuthOnAllActions());
 			}
 			else {
-				if(networks == null || networks.length == 0) {
-					doLikeWithoutShareDialog(context, session, entity, likeOptions, listener, UserUtils.getAutoPostSocialNetworks(context));
+				if(doShare) {
+					doLikeWithShareDialog(context, session, entity, likeOptions, listener);
 				}
 				else {
-					doLikeWithoutShareDialog(context, session, entity, likeOptions, listener, networks);
+					if(networks == null || networks.length == 0) {
+						doLikeWithoutShareDialog(context, session, entity, likeOptions, listener, UserUtils.getAutoPostSocialNetworks(context));
+					}
+					else {
+						doLikeWithoutShareDialog(context, session, entity, likeOptions, listener, networks);
+					}
 				}
 			}
-		}		
+		}
+		catch (Throwable e) {
+			if(listener != null) {
+				listener.onError(SocializeException.wrap(e));
+			}
+
+			Log.e(SocializeLogger.LOG_TAG, "Error adding like", e);
+		}
+
 	}
 	
 	@Override
@@ -138,7 +162,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 		return options;
 	}
 
-	protected void doLikeWithoutShareDialog(final Activity context, final SocializeSession session, final Entity entity, final LikeAddListener listener) {
+	protected void doLikeWithoutShareDialog(final Activity context, final SocializeSession session, final Entity entity, final LikeAddListener listener) throws SocializeException {
 		doLikeWithoutShareDialog(context, session, entity, getUserLikeOptions(context), listener, UserUtils.getAutoPostSocialNetworks(context));
 	}
 	
@@ -163,7 +187,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 		}, networks);		
 	}	
 	
-	protected void doLikeWithShareDialog(final Activity context, final SocializeSession session, final Entity entity, final LikeOptions likeOptions, final LikeAddListener listener) {
+	protected void doLikeWithShareDialog(final Activity context, final SocializeSession session, final Entity entity, final LikeOptions likeOptions, final LikeAddListener listener) throws SocializeException {
 		
 		if(isDisplayShareDialog(context, likeOptions)) {
 

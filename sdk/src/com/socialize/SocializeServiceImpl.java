@@ -612,7 +612,7 @@ public class SocializeServiceImpl implements SocializeService {
 				public void run() {
 					try {
 						SocializeSession session = userSystem.authenticateSynchronous(context);
-						SocializeServiceImpl.this.session = session;
+						setSession(session);
 						latch.countDown();
 					}
 					catch (Exception e) {
@@ -736,7 +736,7 @@ public class SocializeServiceImpl implements SocializeService {
 	 */
 	@Override
 	public boolean isAuthenticated() {
-		return isInitialized() && session != null;
+		return this.initCount > 0 && session != null;
 	}
 	
 	/*

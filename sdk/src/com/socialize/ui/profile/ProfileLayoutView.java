@@ -88,11 +88,10 @@ public class ProfileLayoutView extends BaseView {
 			
 			@Override
 			public void onGet(User user) {
-				
-				// Merge the current session user
-				UserSettings settings = UserUtils.getUserSettings(getContext());
-				
+
 				try {
+					// Merge the current session user
+					UserSettings settings = UserUtils.getUserSettings(getContext());
 					User currentUser = UserUtils.getCurrentUser(getContext());
 					
 					if(currentUser.getId().equals(user.getId())) {
@@ -100,14 +99,14 @@ public class ProfileLayoutView extends BaseView {
 						settings.update(user);
 						user = currentUser;
 					}
+
+					// Set the user details into the view elements
+					setUserDetails(user, settings);
 				}
 				catch (Exception e) {
 					SocializeLogger.e("Error getting user", e);
 				}
-				
-				// Set the user details into the view elements
-				setUserDetails(user, settings);
-				
+
 				if(dialog != null) {
 					dialog.dismiss();
 				}

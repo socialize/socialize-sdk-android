@@ -23,6 +23,7 @@ package com.socialize.api.action;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
@@ -31,6 +32,8 @@ import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.SocializeAction;
+import com.socialize.error.SocializeException;
+import com.socialize.log.SocializeLogger;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
@@ -107,15 +110,21 @@ public abstract class SocializeActionUtilsBase {
 			boolean shareRequired = fbSupported || twSupported;
 			
 			if(shareRequired) {
-				UserSettings settings = UserUtils.getUserSettings(context);
-				
-				if(shareRequired && fbSupported) {
-					shareRequired &= !settings.isAutoPostFacebook();
+				try {
+					UserSettings settings = UserUtils.getUserSettings(context);
+
+					if(shareRequired && fbSupported) {
+						shareRequired &= !settings.isAutoPostFacebook();
+					}
+
+					if(shareRequired && twSupported) {
+						shareRequired &= !settings.isAutoPostTwitter();
+					}
 				}
-				
-				if(shareRequired && twSupported) {
-					shareRequired &= !settings.isAutoPostTwitter();
-				}	
+				catch (SocializeException e) {
+					Log.e(SocializeLogger.LOG_TAG, "Error getting user settings", e);
+					shareRequired = false;
+				}
 			}
 			
 			return shareRequired;

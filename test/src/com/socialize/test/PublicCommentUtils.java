@@ -30,6 +30,7 @@ import com.socialize.api.action.comment.CommentOptions;
 import com.socialize.api.action.comment.SocializeCommentUtils;
 import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeAction;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
@@ -42,12 +43,12 @@ import com.socialize.networks.SocialNetworkListener;
 public class PublicCommentUtils extends SocializeCommentUtils {
 
 	@Override
-	public void doCommentWithShareDialog(Activity context, SocializeSession session, Entity entity, String text, CommentOptions commentOptions, CommentAddListener listener) {
+	public void doCommentWithShareDialog(Activity context, SocializeSession session, Entity entity, String text, CommentOptions commentOptions, CommentAddListener listener) throws SocializeException {
 		super.doCommentWithShareDialog(context, session, entity, text, commentOptions, listener);
 	}
 
 	@Override
-	public void doCommentWithoutShareDialog(Activity context, SocializeSession session, Entity entity, String text, CommentOptions commentOptions, CommentAddListener listener) {
+	public void doCommentWithoutShareDialog(Activity context, SocializeSession session, Entity entity, String text, CommentOptions commentOptions, CommentAddListener listener) throws SocializeException {
 		super.doCommentWithoutShareDialog(context, session, entity, text, commentOptions, listener);
 	}
 

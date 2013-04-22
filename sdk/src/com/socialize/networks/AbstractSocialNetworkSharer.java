@@ -48,61 +48,71 @@ public abstract class AbstractSocialNetworkSharer implements SocialNetworkSharer
 	@Override
 	public void share(final Activity context, final Entity entity, final PropagationInfo urlSet, final String comment, boolean autoAuth, final ActionType type, final SocialNetworkListener listener) {
 
-		AuthProviderType authProviderType = AuthProviderType.valueOf(getNetwork());
-		
-		if(getSocialize().isSupported(context, authProviderType)) {
-			
-			if(getSocialize().isAuthenticatedForWrite(authProviderType)) {
-				doShare(context, entity, urlSet, comment, listener, type);
-			}
-			else if(autoAuth) {
-				
-				String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-				String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
-				
-				AuthProviderInfo authProviderInfo = authProviderInfoFactory.getInstanceForWrite();
-				
-				getSocialize().authenticate(context, consumerKey, consumerSecret, authProviderInfo, new SocializeAuthListener() {
+		try {
+			AuthProviderType authProviderType = AuthProviderType.valueOf(getNetwork());
 
-					@Override
-					public void onError(SocializeException error) {
-						doError(error, context, listener);
-					}
+			if(getSocialize().isSupported(context, authProviderType)) {
 
-					@Override
-					public void onAuthSuccess(SocializeSession session) {
-						doShare(context, entity, urlSet, comment, listener, type);
-					}
+				if(getSocialize().isAuthenticatedForWrite(authProviderType)) {
+					doShare(context, entity, urlSet, comment, listener, type);
+				}
+				else if(autoAuth) {
 
-					@Override
-					public void onAuthFail(SocializeException error) {
-						doError(error, context, listener);
-					}
+					String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+					String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 
-					@Override
-					public void onCancel() {
-						// Do nothing
-					}
-				});
-			}
-			else {
-				SocializeException error = new SocializeException("User is not authenticated with [" +
-						getNetwork().name() +
-						"]");				
-				
-				if (logger != null) {
-					logger.error("Error during share", error);
+					AuthProviderInfo authProviderInfo = authProviderInfoFactory.getInstanceForWrite();
+
+					getSocialize().authenticate(context, consumerKey, consumerSecret, authProviderInfo, new SocializeAuthListener() {
+
+						@Override
+						public void onError(SocializeException error) {
+							doError(error, context, listener);
+						}
+
+						@Override
+						public void onAuthSuccess(SocializeSession session) {
+							try {
+								doShare(context, entity, urlSet, comment, listener, type);
+							}
+							catch (SocializeException e) {
+								doError(SocializeException.wrap(e), context, listener);
+							}
+						}
+
+						@Override
+						public void onAuthFail(SocializeException error) {
+							doError(error, context, listener);
+						}
+
+						@Override
+						public void onCancel() {
+							// Do nothing
+						}
+					});
 				}
 				else {
-					SocializeLogger.e(error.getMessage(), error);
-				}
+					SocializeException error = new SocializeException("User is not authenticated with [" +
+							getNetwork().name() +
+							"]");
 
-				// Fail
-				if(listener != null) {
-					listener.onNetworkError(context, getNetwork(), error);
+					if (logger != null) {
+						logger.error("Error during share", error);
+					}
+					else {
+						SocializeLogger.e(error.getMessage(), error);
+					}
+
+					// Fail
+					if(listener != null) {
+						listener.onNetworkError(context, getNetwork(), error);
+					}
 				}
 			}
-		}	
+		}
+		catch (Throwable e) {
+			doError(SocializeException.wrap(e), context, listener);
+		}
 	}
 	
 	protected void doError(SocializeException e, Activity parent, SocialNetworkListener listener) {
@@ -122,7 +132,7 @@ public abstract class AbstractSocialNetworkSharer implements SocialNetworkSharer
 	
 	protected abstract SocialNetwork getNetwork();
 	
-	protected abstract void doShare(final Activity context, Entity entity, PropagationInfo urlSet, String comment, final SocialNetworkListener listener, ActionType type);
+	protected abstract void doShare(final Activity context, Entity entity, PropagationInfo urlSet, String comment, final SocialNetworkListener listener, ActionType type) throws SocializeException;
 	
 	public void setConfig(SocializeConfig config) {
 		this.config = config;

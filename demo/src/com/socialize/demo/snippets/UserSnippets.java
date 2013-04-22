@@ -69,21 +69,26 @@ UserUtils.showUserProfile(this, user);
 public void saveUser() {
 // begin-snippet-3
 	
-// The "this" argument refers to the current Activity	
-UserSettings userSettings = UserUtils.getUserSettings(this);
+	// The "this" argument refers to the current Activity
+	try {
+		UserSettings userSettings = UserUtils.getUserSettings(this);
+		UserUtils.saveUserSettings(this, userSettings, new UserSaveListener() {
 
-UserUtils.saveUserSettings(this, userSettings, new UserSaveListener() {
-	
-	@Override
-	public void onUpdate(User result) {
-		// User was updated
+			@Override
+			public void onUpdate(User result) {
+				// User was updated
+			}
+
+			@Override
+			public void onError(SocializeException error) {
+				// Handle error
+			}
+		});
 	}
-	
-	@Override
-	public void onError(SocializeException error) {
+	catch (SocializeException e) {
 		// Handle error
 	}
-});
+
 // end-snippet-3
 }
 

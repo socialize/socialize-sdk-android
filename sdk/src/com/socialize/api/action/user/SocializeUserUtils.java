@@ -56,8 +56,14 @@ public class SocializeUserUtils extends SocializeActionUtilsBase implements User
 	private ListenerHolder listenerHolder;
 
 	@Override
-	public UserSettings getUserSettings(Context context) {
-		return getSocialize().getSession().getUserSettings();
+	public UserSettings getUserSettings(Context context) throws SocializeException {
+		SocializeSession session = getSocialize().getSession();
+
+		if(session != null) {
+			return session.getUserSettings();
+		}
+
+		throw new SocializeException("No current session");
 	}
 	
 	@Override
@@ -90,7 +96,7 @@ public class SocializeUserUtils extends SocializeActionUtilsBase implements User
 
 		final String listenerKey = "action_view";
 
-		if(onActionDetailViewListener != null) {
+		if(onActionDetailViewListener != null && listenerHolder != null) {
 			listenerHolder.push(listenerKey, onActionDetailViewListener);
 		}
 
@@ -121,7 +127,7 @@ public class SocializeUserUtils extends SocializeActionUtilsBase implements User
 	}
 
 	@Override
-	public SocialNetwork[] getAutoPostSocialNetworks(Context context) {
+	public SocialNetwork[] getAutoPostSocialNetworks(Context context) throws SocializeException {
 		SocializeService socialize = Socialize.getSocialize();
 		UserSettings user = getUserSettings(context);
 		
@@ -201,5 +207,9 @@ public class SocializeUserUtils extends SocializeActionUtilsBase implements User
 	
 	protected Intent newIntent(Activity context, Class<?> cls) {
 		return new Intent(context, cls);
+	}
+
+	public void setListenerHolder(ListenerHolder listenerHolder) {
+		this.listenerHolder = listenerHolder;
 	}
 }
