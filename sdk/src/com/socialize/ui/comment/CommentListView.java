@@ -814,24 +814,26 @@ public class CommentListView extends BaseView {
 			commentEntrySlider.updateContent();
 		}
 
-		try {
-			UserSettings user = userUtils.getUserSettings(getContext());
-			if(user.isNotificationsEnabled()) {
-				notifyBox.setVisibility(View.VISIBLE);
+		if(notifyBox != null) {
+			try {
+				UserSettings user = userUtils.getUserSettings(getContext());
+				if(user.isNotificationsEnabled()) {
+					notifyBox.setVisibility(View.VISIBLE);
+				}
+				else {
+					notifyBox.setVisibility(View.GONE);
+				}
 			}
-			else {
+			catch (SocializeException e) {
+				if(logger != null) {
+					logger.error("Error getting user settings", e);
+				}
+				else {
+					e.printStackTrace();
+				}
+
 				notifyBox.setVisibility(View.GONE);
 			}
-		}
-		catch (SocializeException e) {
-			if(logger != null) {
-				logger.error("Error getting user settings", e);
-			}
-			else {
-				e.printStackTrace();
-			}
-
-			notifyBox.setVisibility(View.GONE);
 		}
 	}
 	
