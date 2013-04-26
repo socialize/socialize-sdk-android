@@ -34,13 +34,11 @@ import com.socialize.log.SocializeLogger.LogLevel;
 public class Socialize {
 	
 	// This will be set during the build process
-	public static final String VERSION = "2.8.4";
+	public static final String VERSION = "2.8.7";
 	
 	public static final String ENTITY_OBJECT = "socialize.entity";
 	public static final String ENTITY_ID = "socialize.entity.id";
-	
-//	public static final Map<String, SocializeListener> STATIC_LISTENERS = new HashMap<String, SocializeListener>();
-	
+
 	public static final String ACTION_ID = "socialize.action.id";
 	public static final String ACTION_TYPE = "socialize.action.type";
 	public static final String DIRECT_URL = "socialize.direct.url";
@@ -63,7 +61,7 @@ public class Socialize {
 	 * Initialize Socialize synchronously.  Should not be called from the main UI thread.
 	 * @param context
 	 */
-	public static final void init(Context context) {
+	public static void init(Context context) {
 		instance.init(context);
 	}
 	
@@ -71,7 +69,7 @@ public class Socialize {
 	 * Initialize Socialize asynchronously.  Can be called from the main UI thread.
 	 * @param context
 	 */
-	public static final void initAsync(Context context) {
+	public static void initAsync(Context context) {
 		instance.initAsync(context, null);
 	}
 	
@@ -80,7 +78,7 @@ public class Socialize {
 	 * @param context
 	 * @param listener A listener which will be called after init.
 	 */
-	public static final void initAsync(Context context, SocializeInitListener listener) {
+	public static void initAsync(Context context, SocializeInitListener listener) {
 		instance.initAsync(context, listener);
 	}
 
@@ -88,7 +86,7 @@ public class Socialize {
 	 * Expert only.  Does not normally need to be called.
 	 * @param context
 	 */
-	public static final void destroy(Context context) {
+	public static void destroy(Context context) {
 		if(instance != null) {
 			instance.destroy();
 		}
@@ -98,7 +96,7 @@ public class Socialize {
 	 * Returns the Socialize singleton instance.
 	 * @return The Socialize singleton instance.
 	 */
-	public static final SocializeService getSocialize() {
+	public static SocializeService getSocialize() {
 		return instance;
 	}
 	

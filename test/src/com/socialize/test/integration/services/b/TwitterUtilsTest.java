@@ -302,7 +302,11 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {}
 		};
-		
+
+		SocializeConfig config = new SocializeConfig();
+		config.setProperty("twitter.upload.endpoint", "foobar/");
+
+		utils.setConfig(config);
 		utils.tweetPhoto(TestUtils.getActivity(this), tweet, listener);
 		
 		String resource = getResult(0);
@@ -316,7 +320,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		assertSame(listener, listenerAfter);
 		assertSame(entity, entityAfter);
 		
-		assertEquals("https://upload.twitter.com/1/statuses/update_with_media.json", resource);
+		assertEquals("foobar/statuses/update_with_media.json", resource);
 		assertTrue(entityAfter instanceof CustomMultipartEntity);
 		
 		CustomMultipartEntity ce = (CustomMultipartEntity) entityAfter;
