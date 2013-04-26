@@ -688,6 +688,7 @@
 		<property name="httpRequestProvider" ref="httpRequestProvider"/>
 		<property name="requestSigner" ref="oauthSigner"/>
 		<property name="imageUtils" ref="imageUtils"/>
+        <property name="jsonParser" ref="jsonParser"/>
 		<property name="authProviderInfoBuilder" ref="authProviderInfoBuilder"/>
 	</bean>		
 

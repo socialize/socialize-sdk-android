@@ -41,8 +41,22 @@ public class JSONParser {
 		return parseObject(json);
 	}
 
+	/**
+	 * Detects whether the inbound string is a JSONArray and if so wraps the array in an object with a single field called "data"
+	 * @param json
+	 * @return
+	 */
 	public JSONObject parseObject(String json) throws JSONException {
-		return new JSONObject(json);
+		json = json.trim();
+		if(json.startsWith("[")) {
+			JSONArray array = new JSONArray(json);
+			JSONObject obj = new JSONObject();
+			obj.put("data", array);
+			return obj;
+		}
+		else {
+			return new JSONObject(json);
+		}
 	}
 	
 	public JSONArray parseArray(InputStream in) throws IOException, JSONException {

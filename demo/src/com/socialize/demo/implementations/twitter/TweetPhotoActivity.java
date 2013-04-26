@@ -28,6 +28,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -88,65 +89,63 @@ public class TweetPhotoActivity extends DemoActivity {
 				if(mImageBitmap != null) {
 					
 					final ProgressDialog progress = SafeProgressDialog.show(TweetPhotoActivity.this);
-					
-					
-						// First create a Socialize share object so we get the correct URLs
-						ShareOptions options = ShareUtils.getUserShareOptions(TweetPhotoActivity.this);
-						ShareUtils.registerShare(TweetPhotoActivity.this, entity, options, new ShareAddListener() {
-							
-							@Override
-							public void onError(SocializeException error) {
-								progress.dismiss();
-								handleError(TweetPhotoActivity.this, error);
-							}
-							
-							@Override
-							public void onCreate(Share result) {
-								
-								// We have the result, use the URLs to add to the post
-								PropagationInfo propagationInfo = result.getPropagationInfoResponse().getPropagationInfo(ShareType.TWITTER);
-								String link = propagationInfo.getEntityUrl();
 
-								// Now post to Twitter.
-								try {
-									// Get the bytes for the image
-									byte[] image = TwitterUtils.getImageForPost(TweetPhotoActivity.this, mImageBitmap, CompressFormat.JPEG);
-									
-									PhotoTweet tweet = new PhotoTweet();
-									tweet.setImageData(image);
-									tweet.setText("Photo Tweet! " + link);
-									
-									TwitterUtils.tweetPhoto(TweetPhotoActivity.this, tweet, new SocialNetworkPostListener() {
-										
-										@Override
-										public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
-											progress.dismiss();
-											handleError(TweetPhotoActivity.this, error);
-										}
-										
-										@Override
-										public void onCancel() {
-											progress.dismiss();
-											DemoUtils.showToast(TweetPhotoActivity.this, "Cancelled");
-										}
-										
-										@Override
-										public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
-											progress.dismiss();
-											DemoUtils.showToast(parent, "Photo Shared!");
-										}
-									});
-									
-									
-								}
-								catch (IOException e) {
-									handleError(TweetPhotoActivity.this, e);
-								}	
-								
+
+					// First create a Socialize share object so we get the correct URLs
+					ShareOptions options = ShareUtils.getUserShareOptions(TweetPhotoActivity.this);
+					ShareUtils.registerShare(TweetPhotoActivity.this, entity, options, new ShareAddListener() {
+
+						@Override
+						public void onError(SocializeException error) {
+							progress.dismiss();
+							handleError(TweetPhotoActivity.this, error);
+						}
+
+						@Override
+						public void onCreate(Share result) {
+
+							// We have the result, use the URLs to add to the post
+							PropagationInfo propagationInfo = result.getPropagationInfoResponse().getPropagationInfo(ShareType.TWITTER);
+							String link = propagationInfo.getEntityUrl();
+
+							// Now post to Twitter.
+							try {
+								// Get the bytes for the image
+								byte[] image = TwitterUtils.getImageForPost(TweetPhotoActivity.this, mImageBitmap, CompressFormat.JPEG);
+
+								PhotoTweet tweet = new PhotoTweet();
+								tweet.setImageData(image);
+								tweet.setText("Photo Tweet! " + link);
+
+								TwitterUtils.tweetPhoto(TweetPhotoActivity.this, tweet, new SocialNetworkPostListener() {
+
+									@Override
+									public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+										progress.dismiss();
+										handleError(TweetPhotoActivity.this, error);
+									}
+
+									@Override
+									public void onCancel() {
+										progress.dismiss();
+										DemoUtils.showToast(TweetPhotoActivity.this, "Cancelled");
+									}
+
+									@Override
+									public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+										progress.dismiss();
+										DemoUtils.showToast(parent, "Photo Shared!");
+									}
+								});
+
+
 							}
-						}, SocialNetwork.TWITTER);
-											
-			
+							catch (IOException e) {
+								handleError(TweetPhotoActivity.this, e);
+							}
+
+						}
+					}, SocialNetwork.TWITTER);
 				}
 			}
 		});
@@ -158,6 +157,8 @@ public class TweetPhotoActivity extends DemoActivity {
 		if(intent != null) {
 			Bundle extras = intent.getExtras();
 			mImageBitmap = (Bitmap) extras.get("data");
+
+			Log.e("Socialize", mImageBitmap.getWidth() + "," + mImageBitmap.getHeight());
 			
 			if(mImageBitmap != null) {
 				mImageView.setImageBitmap(mImageBitmap);

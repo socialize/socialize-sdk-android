@@ -21,6 +21,8 @@
  */
 package com.socialize.util;
 
+import org.json.JSONObject;
+
 /**
  * @author Jason Polites
  *

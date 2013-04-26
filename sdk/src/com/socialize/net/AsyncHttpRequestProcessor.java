@@ -21,6 +21,7 @@
  */
 package com.socialize.net;
 
+import com.socialize.apache.http.entity.mime.MultipartEntity;
 import com.socialize.concurrent.ManagedAsyncTask;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
@@ -80,10 +81,13 @@ public class AsyncHttpRequestProcessor extends ManagedAsyncTask<AsyncHttpRequest
 					if(httpRequest instanceof HttpPost) {
 						HttpPost post = (HttpPost) httpRequest;
 						HttpEntity entity = post.getEntity();
-						String requestData = ioUtils.readSafe(entity.getContent());
-						logger.debug("REQUEST \ndata:[" +
-								requestData +
-								"]");
+
+						if(!(entity instanceof MultipartEntity)) {
+							String requestData = ioUtils.readSafe(entity.getContent());
+							logger.debug("REQUEST \ndata:[" +
+									requestData +
+									"]");
+						}
 					}
 				}
 				
@@ -140,8 +144,13 @@ public class AsyncHttpRequestProcessor extends ManagedAsyncTask<AsyncHttpRequest
 		if(listener != null) {
 			HttpResponse response = result.getResponse();
 			String responseData = result.getResponseData();
+			int error = -1;
+			if(response != null) {
+				error = response.getStatusLine().getStatusCode();
+			}
+
 			if(result.getError() != null) {
-				listener.onError(result.getError(), response, response.getStatusLine().getStatusCode(), responseData);
+				listener.onError(result.getError(), response, error, responseData);
 			}
 			else {
 				listener.onSuccess(response, responseData);

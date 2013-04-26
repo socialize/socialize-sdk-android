@@ -602,8 +602,10 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		Tweet tweet = new Tweet();
 		tweet.setShareLocation(false);
 		tweet.setText("foobar");
-		
-		twitterUtils.setApiEndpoint("mock");
+
+		SocializeConfig mockConfig = new SocializeConfig();
+		mockConfig.setProperty("twitter.api.endpoint", "mock");
+		twitterUtils.setConfig(mockConfig);
 		twitterUtils.tweet(TestUtils.getActivity(this), tweet, listener);
 		
 		String result = getResult(0);

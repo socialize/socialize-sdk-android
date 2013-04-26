@@ -82,8 +82,8 @@ do this by creating a simple share object without propagation first.
 Executing a **GET**
 
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/TwitterSnippets.java
-	:start-after: begin-snippet-6
-	:end-before: end-snippet-6
+	:start-after: begin-snippet-7
+	:end-before: end-snippet-7
 	
 	
 Posting Photos to Twitter
