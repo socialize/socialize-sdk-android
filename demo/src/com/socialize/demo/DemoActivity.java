@@ -50,12 +50,20 @@ public abstract class DemoActivity extends Activity implements DialogRegister {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		StictModeUtils.enableDefaults();
-		entity = Entity.newInstance("http://getsocialize.com", "Socialize");
-		entity.setType("article");
+
 		
 		Socialize.onCreate(this, savedInstanceState);
-		ConfigUtils.getConfig(this).setProperty(SocializeConfig.SOCIALIZE_EVENTS_AUTH_ENABLED, "false");
-		ConfigUtils.getConfig(this).setProperty(SocializeConfig.SOCIALIZE_EVENTS_SHARE_ENABLED, "false");
+
+		SocializeConfig config = ConfigUtils.getConfig(this);
+
+		config.setProperty(SocializeConfig.SOCIALIZE_EVENTS_AUTH_ENABLED, "false");
+		config.setProperty(SocializeConfig.SOCIALIZE_EVENTS_SHARE_ENABLED, "false");
+
+		String entityKey = config.getProperty("entity.key");
+		String entityName = config.getProperty("entity.name");
+
+		entity = Entity.newInstance(entityKey, entityName);
+		entity.setType("article");
 		
 		// Standard GCM Registration
 		// This is simply to verify that SmartAlerts work where there is already a GCM implementation

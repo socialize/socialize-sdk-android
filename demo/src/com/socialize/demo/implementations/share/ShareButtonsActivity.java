@@ -39,6 +39,7 @@ import com.socialize.demo.ConfigDialog;
 import com.socialize.demo.DemoActivity;
 import com.socialize.demo.DemoUtils;
 import com.socialize.demo.R;
+import com.socialize.error.SocializeException;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.facebook.FacebookUtils;
@@ -143,6 +144,18 @@ public class ShareButtonsActivity extends DemoActivity {
 					@Override
 					public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject response) {
 						DemoUtils.showToast(parent, "Shared to " + socialNetwork.name());
+					}
+
+					@Override
+					public void onError(SocializeException error) {
+						DemoUtils.showErrorDialog(ShareButtonsActivity.this, error);
+						error.printStackTrace();
+					}
+
+					@Override
+					public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+						DemoUtils.showErrorDialog(context, error);
+						error.printStackTrace();
 					}
 				});
 			}

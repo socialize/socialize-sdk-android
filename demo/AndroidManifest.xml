@@ -140,7 +140,8 @@
         <activity android:name=".implementations.actionbar.ActionBarWithButtonActivity"/>
         <activity android:name=".implementations.actionbar.ActionBarAfterButtonActivity"/>
         <activity android:name=".implementations.actionbar.ActionBarWithMonitorActivity"/>
-        
+        <activity android:name=".implementations.actionbar.ActionBarFragmentActivity" android:screenOrientation="landscape" android:configChanges="orientation|keyboardHidden"/>
+
         <!-- User Activity -->
         <activity android:name=".implementations.action.ActionActivity"/>
         <activity android:name=".implementations.action.GetActionsByEntityActivity"/>

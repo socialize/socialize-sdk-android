@@ -181,7 +181,7 @@ public class ShareUtils {
 	
 	
 	/**
-	 * Shares the given entity via email.  This method with launch the Google+ application on the device.
+	 * Shares the given entity via Google+.  This method with launch the Google+ application on the device.
 	 * @param context The current context.
 	 * @param entity The entity being shared.
 	 * @param listener A listener to handle events.
