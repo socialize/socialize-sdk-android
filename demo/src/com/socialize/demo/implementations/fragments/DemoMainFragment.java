@@ -46,6 +46,6 @@ public class DemoMainFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		Socialize.onPause(this.getActivity());
+		Socialize.onResume(this.getActivity());
 	}
 }
