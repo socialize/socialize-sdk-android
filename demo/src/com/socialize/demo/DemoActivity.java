@@ -67,6 +67,7 @@ public abstract class DemoActivity extends Activity implements DialogRegister {
 		
 		// Standard GCM Registration
 		// This is simply to verify that SmartAlerts work where there is already a GCM implementation
+		// If you are not already using GCM you can ignore this.
 		GCMRegistrar.checkDevice(this);
 		GCMRegistrar.checkManifest(this);
 		
