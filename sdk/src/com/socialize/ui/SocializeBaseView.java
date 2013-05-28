@@ -123,10 +123,10 @@ public abstract class SocializeBaseView extends BaseView {
 		}
 		
 		viewLoaded = true;
-	};
+	}
 	
 	// Subclasses override
-	public void onViewUpdate(IOCContainer container) {};
+	public void onViewUpdate(IOCContainer container) {}
 
 	protected void doSocializeInit(SocializeInitListener listener) {
 		if(!isInEditMode()) {
@@ -135,7 +135,7 @@ public abstract class SocializeBaseView extends BaseView {
 		}
 	}
 	
-	protected <E extends Object> E getBean(String name) {
+	protected <E> E getBean(String name) {
 		return container.getBean(name);
 	}
 

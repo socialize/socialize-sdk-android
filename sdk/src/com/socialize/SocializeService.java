@@ -247,6 +247,10 @@ public interface SocializeService extends SocializeSessionConsumer {
 	 * @param entityLoader
 	 */
 	public void setEntityLoader(SocializeEntityLoader entityLoader);
+
+	public void setUserSettingsActivity(Class<?> activityClass);
+
+	public Class<?> getUserSettingsActivity();
 	
 	/**
 	 * Handles broadcast messages.  Used for push notifications.

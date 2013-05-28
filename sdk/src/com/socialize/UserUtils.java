@@ -162,7 +162,7 @@ public class UserUtils {
 	/**
 	 * Saves the profile for the given user.
 	 * @param context The current context.
-	 * @param user The user for whom the settings will be saved.
+	 * @param userSettings The user settings to be saved.
 	 * @param listener A listener to handle the save.
 	 */
 	public static void saveUserSettings (Context context, UserSettings userSettings, UserSaveListener listener) {

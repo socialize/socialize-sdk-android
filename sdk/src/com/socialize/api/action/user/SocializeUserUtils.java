@@ -68,26 +68,43 @@ public class SocializeUserUtils extends SocializeActionUtilsBase implements User
 	
 	@Override
 	public void showUserSettingsViewForResult(Activity context, Long userId, int requestCode) {
-		Intent i = newIntent(context, ProfileActivity.class);
+
+		Class<?> userSettingsActivity = Socialize.getSocialize().getUserSettingsActivity();
+		if(userSettingsActivity == null) {
+			userSettingsActivity = ProfileActivity.class;
+		}
+
+		Intent i = newIntent(context, userSettingsActivity);
 		i.putExtra(Socialize.USER_ID, userId.toString());
 		
 		try {
 			context.startActivityForResult(i, requestCode);
 		} 
 		catch (ActivityNotFoundException e) {
-			logger.error("Could not find ProfileActivity.  Make sure you have added this to your AndroidManifest.xml");
+			logger.error("Could not find activity " +
+					userSettingsActivity +
+					".  Make sure you have added this to your AndroidManifest.xml");
 		}	
 	}
 	
 	@Override
 	public void showUserSettingsView(Activity context, Long userId) {
-		Intent i = newIntent(context, ProfileActivity.class);
+
+		Class<?> userSettingsActivity = Socialize.getSocialize().getUserSettingsActivity();
+		if(userSettingsActivity == null) {
+			userSettingsActivity = ProfileActivity.class;
+		}
+
+		Intent i = newIntent(context, userSettingsActivity);
 		i.putExtra(Socialize.USER_ID, userId.toString());
+
 		try {
 			context.startActivity(i);
 		} 
 		catch (ActivityNotFoundException e) {
-			logger.error("Could not find ProfileActivity.  Make sure you have added this to your AndroidManifest.xml");
+			logger.error("Could not find activity " +
+					userSettingsActivity +
+					".  Make sure you have added this to your AndroidManifest.xml");
 		}
 	}
 	

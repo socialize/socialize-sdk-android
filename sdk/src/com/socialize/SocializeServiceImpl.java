@@ -88,6 +88,8 @@ public class SocializeServiceImpl implements SocializeService {
 	private SocializeConfig config = new SocializeConfig();
 	
 	private SocializeEntityLoader entityLoader;
+
+	private Class<?> userSettingsActivity;
 	
 	private String[] initPaths = null;
 	private int initCount = 0;
@@ -99,10 +101,16 @@ public class SocializeServiceImpl implements SocializeService {
 		this.logger = newLogger();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.SocializeService#handleBroadcastIntent(android.content.Context, android.content.Intent)
-	 */
+	@Override
+	public Class<?> getUserSettingsActivity() {
+		return userSettingsActivity;
+	}
+
+	@Override
+	public void setUserSettingsActivity(Class<?> userSettingsActivity) {
+		this.userSettingsActivity = userSettingsActivity;
+	}
+
 	@Override
 	public boolean handleBroadcastIntent(Context context, Intent intent) {
 		

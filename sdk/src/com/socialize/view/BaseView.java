@@ -143,13 +143,13 @@ public abstract class BaseView extends LinearLayout implements SocializeView {
 	 * @see com.socialize.view.SocializeView#onViewUpdate()
 	 */
 	@Override
-	public void onViewUpdate() {};
+	public void onViewUpdate() {}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.view.SocializeView#onViewLoad()
 	 */
 	@Override
-	public void onViewLoad() {};
+	public void onViewLoad() {}
 	
 	@Override
 	public void onViewError(Exception e) {
@@ -160,7 +160,7 @@ public abstract class BaseView extends LinearLayout implements SocializeView {
 	 * @see com.socialize.view.SocializeView#onViewRendered(int, int)
 	 */
 	@Override
-	public void onViewRendered(int width, int height) {};
+	public void onViewRendered(int width, int height) {}
 	
 	protected View getParentView() {
 		ViewParent parent = getParent();

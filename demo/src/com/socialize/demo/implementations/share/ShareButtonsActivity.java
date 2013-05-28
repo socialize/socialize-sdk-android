@@ -97,9 +97,7 @@ public class ShareButtonsActivity extends DemoActivity {
 						progress.dismiss();
 						DemoUtils.showToast(parent, "Shared to " + socialNetwork.name());
 					}
-					
-					
-				});				
+				});
 			}
 		});
 		

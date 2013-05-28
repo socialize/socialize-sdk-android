@@ -23,6 +23,7 @@ package com.socialize.demo.snippets;
 
 import android.app.Activity;
 import com.socialize.ActionUtils;
+import com.socialize.Socialize;
 import com.socialize.UserUtils;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeAction;
@@ -31,6 +32,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.activity.ActionListListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
+import com.socialize.ui.profile.ProfileActivity;
 import com.socialize.ui.profile.UserSettings;
 
 import java.util.List;
@@ -138,5 +140,12 @@ ActionUtils.getActionsByUser(this, user.getId(), 0, 10, new ActionListListener()
 });
 // end-snippet-5	
 }
+public void setUserSettings() throws SocializeException {
+// begin-snippet-6
+// Replace ProfileActivity with your own activity class
+Socialize.getSocialize().setUserSettingsActivity(ProfileActivity.class);
+// end-snippet-6
+}
+
 
 }
