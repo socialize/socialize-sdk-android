@@ -165,13 +165,24 @@ To allow a user to update their settings you can simply present them with the Us
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/UserSnippets.java
 	:start-after: begin-snippet-1
 	:end-before: end-snippet-1
-	
 
 If you want to build your own UI to update a User's settings you can simply call the *saveUserSettings* method
 
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/UserSnippets.java
 	:start-after: begin-snippet-3
 	:end-before: end-snippet-3
+
+.. note:: The default comment list activity will launch the default user settings view from a menu option
+
+To globally override the activity that is displayed when a call to **showUserSettings** is made you can set a user
+settings activity class on the global Socialize instance:
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/UserSnippets.java
+	:start-after: begin-snippet-6
+	:end-before: end-snippet-6
+
+This call should be made in the **onCreate** method of your main activity.
+
  
 User Activity
 ~~~~~~~~~~~~~
