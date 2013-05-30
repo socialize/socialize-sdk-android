@@ -50,8 +50,7 @@ import java.util.List;
 public class DefaultActionBarActivity extends DemoActivity {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreate() {
 		
 		if(Debug.profileActionBar) {
 			android.os.Debug.startMethodTracing("actionbar");

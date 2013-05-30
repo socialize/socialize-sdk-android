@@ -36,8 +36,7 @@ import com.socialize.listener.entity.EntityGetListener;
 public class DeepLinkActivity extends DemoActivity {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreate() {
 		Uri uri = getIntent().getData();
 		String key = uri.getQueryParameter("key");
 		if(key != null) {

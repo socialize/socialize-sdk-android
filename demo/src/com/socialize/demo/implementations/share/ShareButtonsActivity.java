@@ -56,8 +56,7 @@ import org.json.JSONObject;
 public class ShareButtonsActivity extends DemoActivity {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreate() {
 		setContentView(R.layout.share_buttons_activity);
 		
 		Button btnShare = (Button) findViewById(R.id.btnShare);

@@ -47,8 +47,7 @@ public class WebViewActionBarActivity extends DemoActivity {
 	ActionBarView actionBarView;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreate() {
 		
 		ActionBarOptions options = new ActionBarOptions();
 		options.setAddScrollView(false);

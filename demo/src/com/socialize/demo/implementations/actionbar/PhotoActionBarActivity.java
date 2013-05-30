@@ -60,8 +60,7 @@ public class PhotoActionBarActivity extends DemoActivity {
 	private static final int IO_BUFFER_SIZE = 4 * 1024; 
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreate() {
 		
 		ActionBarOptions options = new ActionBarOptions();
 		

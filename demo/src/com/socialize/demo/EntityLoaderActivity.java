@@ -34,9 +34,8 @@ import com.socialize.entity.Entity;
  *
  */
 public class EntityLoaderActivity extends DemoActivity {
-	
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+
+	protected void onCreate() {
 		setContentView(R.layout.entity_loader_activity);
 		
 		Bundle extras = getIntent().getExtras();

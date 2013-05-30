@@ -42,8 +42,7 @@ import java.util.List;
 public class CommentViewCustomHeaderActivity extends DemoActivity {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreate() {
 		CommentUtils.showCommentView(this, entity, new OnCommentViewActionListener() {
 			
 			@Override

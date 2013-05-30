@@ -37,8 +37,7 @@ import com.socialize.ui.actionbar.ActionBarOptions;
 public class RedActionBarActivity extends DemoActivity {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreate() {
 		ActionBarOptions options = new ActionBarOptions();
 		
 		options.setAccentColor(Color.parseColor("#cc0000"));

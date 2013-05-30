@@ -57,8 +57,7 @@ public abstract class SDKDemoActivity extends DemoActivity {
 
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreate() {
 		setContentView(R.layout.demo_activity);
 		
 		resultText = (TextView) findViewById(R.id.txtResult);

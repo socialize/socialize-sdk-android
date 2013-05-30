@@ -37,8 +37,7 @@ import com.socialize.ui.actionbar.ActionBarOptions;
 public class AutumnActionBarActivity extends DemoActivity {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreate() {
 		ActionBarOptions options = new ActionBarOptions();
 		
 		options.setStrokeColor(Color.parseColor("#591100"));

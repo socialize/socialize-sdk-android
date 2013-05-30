@@ -38,9 +38,7 @@ import com.socialize.demo.R;
 public class ToolsActivity extends DemoActivity {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		
-		super.onCreate(savedInstanceState);
+	protected void onCreate() {
 
 		setContentView(R.layout.tools);
 

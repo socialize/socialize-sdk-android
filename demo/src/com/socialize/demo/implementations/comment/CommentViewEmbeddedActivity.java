@@ -33,8 +33,7 @@ import com.socialize.ui.comment.CommentView;
 public class CommentViewEmbeddedActivity extends DemoActivity {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreate() {
 		CommentView cv = new CommentView(this);
 		cv.setHeaderDisplayed(false);
 		cv.setEntity(entity);

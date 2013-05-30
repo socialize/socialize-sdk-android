@@ -23,13 +23,18 @@ package com.socialize.demo;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import com.google.android.gcm.GCMRegistrar;
 import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
+import com.socialize.android.ioc.IOCContainer;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeInitListener;
 import com.socialize.ui.dialog.DialogRegister;
+import com.socialize.ui.dialog.SafeProgressDialog;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,33 +56,57 @@ public abstract class DemoActivity extends Activity implements DialogRegister {
 		super.onCreate(savedInstanceState);
 		StictModeUtils.enableDefaults();
 
-		
 		Socialize.onCreate(this, savedInstanceState);
 
-		SocializeConfig config = ConfigUtils.getConfig(this);
+		final SafeProgressDialog dialog = SafeProgressDialog.show(this);
 
-		config.setProperty(SocializeConfig.SOCIALIZE_EVENTS_AUTH_ENABLED, "false");
-		config.setProperty(SocializeConfig.SOCIALIZE_EVENTS_SHARE_ENABLED, "false");
+		// NOTE:
+		// THIS call to initAsync is NOT required by normal apps.  We are just
+		// doing this in our demo to disable some analytics reporting.
+		Socialize.initAsync(this, new SocializeInitListener() {
+			@Override
+			public void onInit(Context context, IOCContainer container) {
+				SocializeConfig config = ConfigUtils.getConfig(DemoActivity.this);
 
-		String entityKey = config.getProperty("entity.key");
-		String entityName = config.getProperty("entity.name");
+				config.setProperty(SocializeConfig.SOCIALIZE_EVENTS_AUTH_ENABLED, "false");
+				config.setProperty(SocializeConfig.SOCIALIZE_EVENTS_SHARE_ENABLED, "false");
 
-		entity = Entity.newInstance(entityKey, entityName);
-		entity.setType("article");
-		
-		// Standard GCM Registration
-		// This is simply to verify that SmartAlerts work where there is already a GCM implementation
-		// If you are not already using GCM you can ignore this.
-		GCMRegistrar.checkDevice(this);
-		GCMRegistrar.checkManifest(this);
-		
-		final String regId = GCMRegistrar.getRegistrationId(this);
-		
-		if (regId.equals("")) {
-			GCMRegistrar.register(this, GCMIntentService.SENDER_ID);
-		} 
+				String entityKey = config.getProperty("entity.key");
+				String entityName = config.getProperty("entity.name");
+
+				entity = Entity.newInstance(entityKey, entityName);
+				entity.setType("article");
+
+				// Standard GCM Registration
+				// This is simply to verify that SmartAlerts work where there is already a GCM implementation
+				// If you are not already using GCM you can ignore this.
+				GCMRegistrar.checkDevice(DemoActivity.this);
+				GCMRegistrar.checkManifest(DemoActivity.this);
+
+				final String regId = GCMRegistrar.getRegistrationId(DemoActivity.this);
+
+				if (regId.equals("")) {
+					GCMRegistrar.register(DemoActivity.this, GCMIntentService.SENDER_ID);
+				}
+
+				onCreate();
+
+				dialog.dismiss();
+			}
+
+			@Override
+			public void onError(SocializeException error) {
+				// Handle error
+				error.printStackTrace();
+
+				dialog.dismiss();
+			}
+		});
+
 	}
-	
+
+	protected abstract void onCreate();
+
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.dialog.DialogRegister#register(android.app.Dialog)
 	 */

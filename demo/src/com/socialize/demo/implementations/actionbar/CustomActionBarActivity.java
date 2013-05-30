@@ -49,8 +49,7 @@ public class CustomActionBarActivity extends DemoActivity {
 	Boolean userLiked = null;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreate() {
 		setContentView(R.layout.custom_actionbar);
 		
 		final ImageView likeButton = (ImageView) findViewById(R.id.btnLike);

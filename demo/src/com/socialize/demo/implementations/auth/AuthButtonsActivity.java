@@ -48,8 +48,7 @@ import com.socialize.ui.auth.AuthPanelView;
 public class AuthButtonsActivity extends DemoActivity {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreate() {
 		setContentView(R.layout.auth_buttons_activity);
 		
 		final Button btnFacebook = (Button) findViewById(R.id.btnFacebook);

@@ -46,8 +46,7 @@ import java.util.Locale;
 public class LocationActivity extends DemoActivity {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreate() {
 
 		setContentView(R.layout.location);
 

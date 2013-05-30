@@ -26,6 +26,7 @@ import android.content.Context;
 import android.os.Bundle;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.log.SocializeLogger.LogLevel;
+import com.socialize.ui.SocializeActivityLifecycleListener;
 
 /**
  * Singleton helper class to make accessing the socialize service easier.
@@ -52,6 +53,7 @@ public class Socialize {
 	static final SocializeServiceImpl instance = new SocializeServiceImpl();
 	
 	static SocializeLifecycleListener socializeLifecycleListener;
+	static SocializeActivityLifecycleListener socializeActivityLifecycleListener;
 
 	private Socialize() {
 		super();
@@ -154,5 +156,13 @@ public class Socialize {
 	
 	public static void setSocializeLifecycleListener(SocializeLifecycleListener socializeLifecycleListener) {
 		Socialize.socializeLifecycleListener = socializeLifecycleListener;
+	}
+
+	public static SocializeActivityLifecycleListener getSocializeActivityLifecycleListener() {
+		return socializeActivityLifecycleListener;
+	}
+
+	public static void setSocializeActivityLifecycleListener(SocializeActivityLifecycleListener socializeActivityLifecycleListener) {
+		Socialize.socializeActivityLifecycleListener = socializeActivityLifecycleListener;
 	}
 }

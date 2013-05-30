@@ -36,9 +36,7 @@ import com.socialize.ui.actionbar.ActionBarView;
 public class TopActionBarActivity extends DemoActivity {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		
-		super.onCreate(savedInstanceState);
+	protected void onCreate() {
 		
 		setContentView(R.layout.actionbar_top);
 		

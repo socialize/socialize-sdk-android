@@ -111,8 +111,7 @@ public class SubscriptionButtonsActivity extends DemoActivity {
 	}
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreate() {
 		setContentView(R.layout.subscription_buttons_activity);
 		
 		final Button btnSubscription = (Button) findViewById(R.id.btnSubscription);

@@ -47,8 +47,7 @@ import com.socialize.ui.dialog.SafeProgressDialog;
 public class LikeButtonsActivity extends DemoActivity {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreate() {
 		setContentView(R.layout.like_buttons_activity);
 		
 		final Button btnLike = (Button) findViewById(R.id.btnLike);

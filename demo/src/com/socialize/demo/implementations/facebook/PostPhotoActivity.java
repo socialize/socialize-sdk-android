@@ -67,8 +67,7 @@ public class PostPhotoActivity extends DemoActivity {
 	ImageView mImageView;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreate() {
 
 		setContentView(R.layout.photo);
 		Button btnPhoto = (Button) findViewById(R.id.btnPhoto);
