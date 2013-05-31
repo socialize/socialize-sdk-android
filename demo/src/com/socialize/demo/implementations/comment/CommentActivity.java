@@ -24,6 +24,7 @@ package com.socialize.demo.implementations.comment;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -69,7 +70,7 @@ public class CommentActivity extends ListActivity {
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
 		setListAdapter(adapter);
 	}
-	
+
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		
@@ -82,7 +83,7 @@ public class CommentActivity extends ListActivity {
 				entity = "http://getsocialize.com";
 				break;
 			}
-			
+
 			CommentUtils.showCommentView(this, Entity.newInstance(entity, "Socialize"), new OnCommentViewActionListener() {
 				
 				@Override
