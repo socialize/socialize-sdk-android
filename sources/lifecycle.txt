@@ -15,4 +15,20 @@ are performed when they should be.
 	:start-after: begin-snippet-0
 	:end-before: end-snippet-0
 
+
+Intercepting Socialize Activity Lifecycle Events
+------------------------------------------------
+
+.. raw:: html
+   :file: snippets/expert_warning.html
+
+If you want to override the default behavior of an activity that is managed by Socialize you can inject a **SocializeActivityLifecycleListener**
+into the Socialize singleton instance.
+
+.. note:: This is a global setting.  The listener will be called for ALL Socialize activities.
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/SampleActivityWithListener.java
+	:start-after: begin-snippet-0
+	:end-before: end-snippet-0
+
 .. include:: footer.inc	
