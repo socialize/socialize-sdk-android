@@ -1,8 +1,8 @@
 .. include:: header.inc
 	
-=================================
-Socialize Android Developer Guide
-=================================
+========================
+Socialize Core SDK Guide
+========================
 
 .. raw:: html
    :file: snippets/expert_warning.html

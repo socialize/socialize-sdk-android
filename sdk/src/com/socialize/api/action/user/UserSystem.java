@@ -28,6 +28,7 @@ import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.UserProviderCredentials;
+import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.user.UserListener;
@@ -64,6 +65,8 @@ public interface UserSystem {
 	public void clearSession(AuthProviderType type);
 
 	public void getUser(SocializeSession session, long id, UserListener listener);
+
+	public void saveUserAsync(Context context, SocializeSession session, User user, UserListener listener);
 
 	public void saveUserSettings(Context context, SocializeSession session, UserSettings profile, UserListener listener);
 }

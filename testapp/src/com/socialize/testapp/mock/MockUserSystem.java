@@ -22,9 +22,7 @@ public class MockUserSystem implements UserSystem {
 		super();
 		this.user = new User();
 	}
-	
-	
-	
+
 	@Override
 	public void authenticate(Context context, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
 		MockSocializeSession mockSocializeSession = new MockSocializeSession();
@@ -97,6 +95,11 @@ public class MockUserSystem implements UserSystem {
 
 	@Override
 	public void saveUserSettings(Context context, SocializeSession session, UserSettings profile, UserListener listener) {
+		listener.onUpdate(user);
+	}
+
+	@Override
+	public void saveUserAsync(Context context, SocializeSession session, User user, UserListener listener) {
 		listener.onUpdate(user);
 	}
 

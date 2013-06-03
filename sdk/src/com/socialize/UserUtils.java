@@ -70,7 +70,26 @@ public class UserUtils {
 	public static User getCurrentUser(Context context) throws SocializeException  {
 		return proxy.getCurrentUser(context);
 	}
-	
+
+	/**
+	 * Returns the current logged in user.  If no user is currently authenticated this will authenticate asynchronously.
+	 * @param context The current context.
+	 * @param listener A listener to handle the result.
+	 */
+	public static void getCurrentUserAsync(Context context, UserGetListener listener)  {
+		proxy.getCurrentUserAsync(context, listener);
+	}
+
+	/**
+	 * Saves the given user.
+	 * @param context The current context.
+	 * @param user The user to be saved.
+	 * @param listener A listener to handle the result.
+	 */
+	public static void saveUserAsync(Context context, User user, UserSaveListener listener) {
+		proxy.saveUserAsync(context, user, listener);
+	}
+
 	/**
 	 * Returns the settings for the current user.
 	 * @param context The current context.

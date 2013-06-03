@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.Intent;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
+import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.SocializeActionUtilsBase;
 import com.socialize.auth.AuthProviderType;
@@ -34,6 +35,8 @@ import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.ListenerHolder;
+import com.socialize.listener.SocializeAuthListener;
+import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.log.SocializeLogger;
@@ -168,7 +171,85 @@ public class SocializeUserUtils extends SocializeActionUtilsBase implements User
 	public User getCurrentUser(Context context) throws SocializeException  {
 		return getCurrentUser(context, false);
 	}
-	
+
+	@Override
+	public void getCurrentUserAsync(Context context, final UserGetListener listener) {
+
+		final SocializeService socialize = getSocialize();
+		SocializeSession session = socialize.getSession();
+
+		if(session != null) {
+			User user = session.getUser();
+			if(user != null) {
+				if(listener != null) {
+					listener.onGet(user);
+				}
+
+				return;
+			}
+		}
+
+		// No user, authenticate
+		if(!socialize.isInitialized(context)) {
+			socialize.initAsync(context, new SocializeInitListener() {
+				@Override
+				public void onInit(Context context, IOCContainer container) {
+					getCurrentUserWithAuth(context, socialize, listener);
+				}
+				@Override
+				public void onError(SocializeException error) {
+					if(listener != null) {
+						listener.onError(error);
+					}
+					else {
+						error.printStackTrace();
+					}
+				}
+			});
+		}
+		else {
+			getCurrentUserWithAuth(context, socialize, listener);
+		}
+	}
+
+	protected void getCurrentUserWithAuth(Context context, SocializeService socialize, final UserGetListener listener) {
+		socialize.authenticate(context, new SocializeAuthListener() {
+			@Override
+			public void onAuthSuccess(SocializeSession session) {
+				if(listener != null) {
+					listener.onGet(session.getUser());
+				}
+			}
+
+			@Override
+			public void onAuthFail(SocializeException error) {
+				if(listener != null) {
+					listener.onError(error);
+				}
+				else {
+					error.printStackTrace();
+				}
+			}
+
+			@Override
+			public void onCancel() {
+				if(listener != null) {
+					listener.onCancel();
+				}
+			}
+
+			@Override
+			public void onError(SocializeException error) {
+				if(listener != null) {
+					listener.onError(error);
+				}
+				else {
+					error.printStackTrace();
+				}
+			}
+		});
+	}
+
 	protected User getCurrentUser(Context context, boolean failOnError) throws SocializeException  {
 		
 		SocializeService socialize = getSocialize();
@@ -202,6 +283,11 @@ public class SocializeUserUtils extends SocializeActionUtilsBase implements User
 	@Override
 	public void getUser(Context context, long id, UserGetListener listener) {
 		userSystem.getUser(Socialize.getSocialize().getSession(), id, listener);
+	}
+
+	@Override
+	public void saveUserAsync(Context context, User user, UserSaveListener listener) {
+		userSystem.saveUserAsync(context, getSocialize().getSession(), user, listener);
 	}
 
 	@Override

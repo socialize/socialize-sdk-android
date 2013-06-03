@@ -36,12 +36,13 @@ import com.socialize.ui.profile.UserSettings;
 
 /**
  * @author Jason Polites
- *
  */
 public interface UserUtilsProxy {
 
 	@Synchronous
 	public User getCurrentUser(Context context) throws SocializeException;
+
+	public void getCurrentUserAsync(Context context, UserGetListener listener);
 	
 	@Synchronous
 	public UserSettings getUserSettings(Context context) throws SocializeException;
@@ -52,6 +53,8 @@ public interface UserUtilsProxy {
 	public void getUser(Context context, long id, UserGetListener listener);
 	
 	public void saveUserSettings (Context context, UserSettings settings, UserSaveListener listener);
+
+	public void saveUserAsync (Context context, User user, UserSaveListener listener);
 	
 	@Synchronous
 	public void showUserSettingsView(Activity context, Long userId);
