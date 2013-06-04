@@ -21,9 +21,15 @@
  */
 package com.socialize;
 
+import android.content.Context;
 import com.socialize.config.SocializeConfig;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.util.StringUtils;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @author Jason Polites
@@ -34,10 +40,11 @@ public class SocializeSystem {
 	private SocializeInitListener initListener;
 	private boolean configChanged = false;
 	private String[] config = null;
+	private Properties beanOverrideProps = null;
 	
 	static final SocializeSystem instance = new SocializeSystem();
 	
-	public static final SocializeSystem getInstance() {
+	public static SocializeSystem getInstance() {
 		return instance;
 	}
 	
@@ -46,18 +53,59 @@ public class SocializeSystem {
 		SocializeConfig.SOCIALIZE_UI_BEANS_PATH
 	};
 	
-	public String[] getBeanConfig() {
+	public String[] getBeanConfig(final Context context) {
 		if(config == null || configChanged) {
+
+			// Try to load the overrides from disk
+			if(beanOverrideProps == null) {
+				final CountDownLatch latch = new CountDownLatch(1);
+
+				new Thread(){
+					@Override
+					public void run() {
+						beanOverrideProps = new Properties();
+						try {
+							beanOverrideProps.load(context.getAssets().open("socialize.properties"));
+						}
+						catch (IOException e) {
+							e.printStackTrace();
+						}
+						finally {
+							latch.countDown();
+						}
+					}
+				}.start();
+
+				try {
+					latch.await();
+				} catch (InterruptedException ignore) {}
+			}
+
+			if(beanOverrideProps != null) {
+				String overrides = beanOverrideProps.getProperty("bean.overrides");
+
+				if(!StringUtils.isEmpty(overrides)) {
+					String[] arrOverrides = overrides.split("\\s*,\\s*");
+
+					if(!StringUtils.isEmpty(arrOverrides)) {
+						if(StringUtils.isEmpty(beanOverrides)) {
+							beanOverrides = arrOverrides;
+						}
+						else {
+							String[] newOverrides = new String[beanOverrides.length + arrOverrides.length];
+							System.arraycopy(beanOverrides, 0, newOverrides, 0, beanOverrides.length);
+							System.arraycopy(arrOverrides, 0, newOverrides, beanOverrides.length, arrOverrides.length);
+							beanOverrides = newOverrides;
+						}
+					}
+				}
+			}
+
 			if(!StringUtils.isEmpty(beanOverrides)) {
 				config = new String[beanOverrides.length + CORE_CONFIG.length];
-				
-				for (int i = 0; i < CORE_CONFIG.length; i++) {
-					config[i] = CORE_CONFIG[i];
-				}
-				
-				for (int i = 0; i < beanOverrides.length; i++) {
-					config[i+CORE_CONFIG.length] = beanOverrides[i];
-				}
+
+				System.arraycopy(CORE_CONFIG, 0, config, 0, CORE_CONFIG.length);
+				System.arraycopy(beanOverrides, 0, config, CORE_CONFIG.length, beanOverrides.length);
 			}
 			else {
 				config = CORE_CONFIG;

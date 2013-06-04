@@ -235,7 +235,7 @@ public class AuthPanelViewTest extends SocializeActivityTest {
 		SocializeIOC.registerStub("twitterAuthClickListener", mockTWListener);
 		
 		SocializeSystem system = Socialize.getSocialize().getSystem();
-		String[] config = system.getBeanConfig();
+		String[] config = system.getBeanConfig(getContext());
 		
 		Socialize.getSocialize().init(getContext(), config);
 		

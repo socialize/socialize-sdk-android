@@ -22,14 +22,16 @@
 		</init-method>
 		<destroy-method name="destroy"/>
 	</bean>
-	
-	<bean id="deviceUtils" class="com.socialize.util.DeviceUtils">
-		<property name="logger" ref="logger"/>
-		<property name="appUtils" ref="appUtils"/>
-		<init-method name="init">
-			<arg type="context"/>
-		</init-method>
-	</bean>		
+
+<!-- Begin Doc Snippet -->
+<bean id="deviceUtils" class="com.socialize.util.DeviceUtils">
+    <property name="logger" ref="logger"/>
+    <property name="appUtils" ref="appUtils"/>
+    <init-method name="init">
+        <arg type="context"/>
+    </init-method>
+</bean>
+<!-- End Doc Snippet -->
 	
 	<bean id="appUtils" class="com.socialize.util.DefaultAppUtils" context-aware="false">
 		<property name="logger" ref="logger"/>

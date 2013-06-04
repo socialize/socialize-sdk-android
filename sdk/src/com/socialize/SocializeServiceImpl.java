@@ -176,7 +176,7 @@ public class SocializeServiceImpl implements SocializeService {
 	 */
 	@Override
 	public IOCContainer init(Context context) {
-		return init(context, getSystem().getBeanConfig());
+		return init(context, getSystem().getBeanConfig(context));
 	}
 	
 	/* (non-Javadoc)
@@ -205,7 +205,7 @@ public class SocializeServiceImpl implements SocializeService {
 	 */
 	@Override
 	public void initAsync(Context context, SocializeInitListener listener) {
-		initAsync(context, listener, getSystem().getBeanConfig());
+		initAsync(context, listener, getSystem().getBeanConfig(context));
 	}
 
 	/*
@@ -286,8 +286,9 @@ public class SocializeServiceImpl implements SocializeService {
 						Logger.logLevel = Log.WARN;
 						
 						this.initPaths = paths;
-						
-						sort(this.initPaths);
+
+						// JP:  Not sure why this sort was here.. but it seems wrong
+//						sort(this.initPaths);
 						
 						if(container == null) {
 							container = newSocializeIOC();
@@ -392,9 +393,9 @@ public class SocializeServiceImpl implements SocializeService {
 	}
 	
 	// So we can mock
-	protected void sort(Object[] array) {
-		Arrays.sort(array);
-	}
+//	protected void sort(Object[] array) {
+//		Arrays.sort(array);
+//	}
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#init(android.content.Context, com.socialize.android.ioc.IOCContainer)

@@ -25,6 +25,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -117,6 +118,16 @@ public class CommentActivity extends ListActivity {
 
 				@Override
 				public void onAfterSetComment(Comment comment, CommentListItem item) {
+				}
+
+				@Override
+				public boolean onRefreshMenuItemClick(MenuItem item) {
+					return false;
+				}
+
+				@Override
+				public boolean onSettingsMenuItemClick(MenuItem item) {
+					return false;
 				}
 			});
 		}

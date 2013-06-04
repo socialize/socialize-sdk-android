@@ -24,6 +24,7 @@ package com.socialize.demo.implementations.comment;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.MenuItem;
 import com.socialize.CommentUtils;
 import com.socialize.demo.DemoActivity;
 import com.socialize.entity.Comment;
@@ -75,6 +76,16 @@ public class CommentViewCustomHeaderActivity extends DemoActivity {
 			
 			@Override
 			public void onAfterSetComment(Comment comment, CommentListItem item) {}
+
+			@Override
+			public boolean onRefreshMenuItemClick(MenuItem item) {
+				return false;
+			}
+
+			@Override
+			public boolean onSettingsMenuItemClick(MenuItem item) {
+				return false;
+			}
 		});
 	}
 }

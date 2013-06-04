@@ -1,0 +1,2 @@
+# Specify a classpath reference to your bean override file
+bean.overrides=override_beans.xml

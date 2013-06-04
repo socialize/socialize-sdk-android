@@ -1,5 +1,7 @@
 package com.socialize.demo;
 
+//begin-snippet-0
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +16,9 @@ import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.ui.dialog.SafeProgressDialog;
 
+/**
+ * Example of a custom UI implementation for user profile.
+ */
 public class CustomProfileViewActivity extends Activity {
 
 	private User user;
@@ -56,7 +61,7 @@ public class CustomProfileViewActivity extends Activity {
 			public void onError(SocializeException error) {
 				// Some sort of error.. handle accordingly
 				progress.dismiss();
-				Toast.makeText(CustomProfileViewActivity.this, "An error occurred retrieving the user", Toast.LENGTH_LONG);
+				Toast.makeText(CustomProfileViewActivity.this, "An error occurred retrieving the user", Toast.LENGTH_LONG).show();
 				error.printStackTrace();
 				finish();
 			}
@@ -70,41 +75,44 @@ public class CustomProfileViewActivity extends Activity {
 			}
 		});
 
-		btnSave.setOnClickListener(new View.OnClickListener() {
+//begin-snippet-1
+btnSave.setOnClickListener(new View.OnClickListener() {
+	@Override
+	public void onClick(View view) {
+
+		// Get the locally stored reference to the user
+		User user = CustomProfileViewActivity.this.user;
+
+		user.setFirstName(firstName.getText().toString());
+		user.setLargeImageUri(lastName.getText().toString());
+		user.setMetaData(meta.getText().toString());
+
+		// Clear the reference
+		CustomProfileViewActivity.this.user = null;
+
+		final SafeProgressDialog progress = SafeProgressDialog.show(CustomProfileViewActivity.this);
+
+		// Save the user
+		UserUtils.saveUserAsync(CustomProfileViewActivity.this, user, new UserSaveListener() {
 			@Override
-			public void onClick(View view) {
+			public void onUpdate(User result) {
+				progress.dismiss();
+				Toast.makeText(CustomProfileViewActivity.this, "User saved", Toast.LENGTH_SHORT).show();
+				finish();
+			}
 
-				User user = CustomProfileViewActivity.this.user;
-
-				user.setFirstName(firstName.getText().toString());
-				user.setLargeImageUri(lastName.getText().toString());
-				user.setMediumImageUri(meta.getText().toString());
-
-				// Clear the reference
-				CustomProfileViewActivity.this.user = null;
-
-				final SafeProgressDialog progress = SafeProgressDialog.show(CustomProfileViewActivity.this);
-
-				// Save the user
-				UserUtils.saveUserAsync(CustomProfileViewActivity.this, user, new UserSaveListener() {
-					@Override
-					public void onUpdate(User result) {
-						progress.dismiss();
-						Toast.makeText(CustomProfileViewActivity.this, "User saved", Toast.LENGTH_SHORT);
-						finish();
-					}
-
-					@Override
-					public void onError(SocializeException error) {
-						// Some sort of error.. handle accordingly
-						progress.dismiss();
-						Toast.makeText(CustomProfileViewActivity.this, "An error occurred saving the user", Toast.LENGTH_LONG);
-						error.printStackTrace();
-						finish();
-					}
-				});
+			@Override
+			public void onError(SocializeException error) {
+				// Some sort of error.. handle accordingly
+				progress.dismiss();
+				Toast.makeText(CustomProfileViewActivity.this, "An error occurred saving the user", Toast.LENGTH_LONG).show();
+				error.printStackTrace();
+				finish();
 			}
 		});
+	}
+});
+//end-snippet-1
 	}
 
 	@Override
@@ -131,3 +139,5 @@ public class CustomProfileViewActivity extends Activity {
 		super.onResume();
 	}
 }
+
+//end-snippet-0

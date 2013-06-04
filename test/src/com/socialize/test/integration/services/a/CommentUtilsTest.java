@@ -23,6 +23,7 @@ package com.socialize.test.integration.services.a;
 
 import android.app.Activity;
 import android.content.Context;
+import android.view.MenuItem;
 import com.socialize.CommentUtils;
 import com.socialize.SocializeAccess;
 import com.socialize.SubscriptionUtils;
@@ -182,6 +183,16 @@ public class CommentUtilsTest extends SocializeActivityTest {
 
 			@Override
 			public void onError(SocializeException error) {}
+
+			@Override
+			public boolean onRefreshMenuItemClick(MenuItem item) {
+				return false;
+			}
+
+			@Override
+			public boolean onSettingsMenuItemClick(MenuItem item) {
+				return false;
+			}
 		});
 
 
@@ -244,6 +255,16 @@ public class CommentUtilsTest extends SocializeActivityTest {
 
 			@Override
 			public void onError(SocializeException error) {}
+
+			@Override
+			public boolean onRefreshMenuItemClick(MenuItem item) {
+				return false;
+			}
+
+			@Override
+			public boolean onSettingsMenuItemClick(MenuItem item) {
+				return false;
+			}
 		});
 
 		view.getNextSet();

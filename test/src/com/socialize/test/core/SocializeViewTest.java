@@ -20,9 +20,9 @@ public class SocializeViewTest extends SocializeActivityTest {
 	public void testOnWindowVisibilityChanged() throws Throwable {
 		
 		final SocializeBaseView view = new SocializeBaseView(TestUtils.getActivity(this)) {
-			
+
 			@Override
-			protected void doSocializeInit(SocializeInitListener listener) {
+			protected void doSocializeInit(Context context, SocializeInitListener listener) {
 				addResult("doSocializeInit");
 			}
 
@@ -64,7 +64,7 @@ public class SocializeViewTest extends SocializeActivityTest {
 			}
 
 			@Override
-			public void doSocializeInit(SocializeInitListener listener) {
+			public void doSocializeInit(Context context, SocializeInitListener listener) {
 				addResult("doSocializeInit");
 			}
 
@@ -102,7 +102,7 @@ public class SocializeViewTest extends SocializeActivityTest {
 			}
 
 			@Override
-			public void doSocializeInit(SocializeInitListener listener) {
+			public void doSocializeInit(Context context, SocializeInitListener listener) {
 				addResult("doSocializeInit");
 			}
 
@@ -174,8 +174,9 @@ public class SocializeViewTest extends SocializeActivityTest {
 	public void test_doSocializeInit() {
 		
 		SocializeInitListener listener = AndroidMock.createMock(SocializeInitListener.class);
+		final Context context = TestUtils.getActivity(this);
 		
-		PublicView view = new PublicView(TestUtils.getActivity(this)) {
+		PublicView view = new PublicView(context) {
 			@Override
 			public boolean isInEditMode() {
 				addResult("isInEditMode");
@@ -188,12 +189,12 @@ public class SocializeViewTest extends SocializeActivityTest {
 			}
 
 			@Override
-			public void initSocialize(SocializeInitListener listener) {
+			public void initSocialize(Context context, SocializeInitListener listener) {
 				addResult(listener);
 			}
 		};
 		
-		view.doSocializeInit(listener);
+		view.doSocializeInit(context, listener);
 		
 		String isInEditMode = getNextResult();
 		String onBeforeSocializeInit = getNextResult();
@@ -216,24 +217,25 @@ public class SocializeViewTest extends SocializeActivityTest {
 		final SocializeSystem system = AndroidMock.createMock(SocializeSystem.class);
 		
 		final String[] config = {"foo", "bar"};
+		final Context context = TestUtils.getActivity(this);
 		
 		AndroidMock.expect(socialize.getSystem()).andReturn(system);
-		AndroidMock.expect(system.getBeanConfig()).andReturn(config);
+		AndroidMock.expect(system.getBeanConfig(context)).andReturn(config);
 		AndroidMock.expect(system.getSystemInitListener()).andReturn(null);
 		
-		socialize.initAsync((Context) AndroidMock.anyObject(), AndroidMock.eq( listener ), AndroidMock.eq(config[0]),AndroidMock.eq(config[1]));
+		socialize.initAsync( AndroidMock.eq(context), AndroidMock.eq( listener ), AndroidMock.eq(config[0]),AndroidMock.eq(config[1]));
 		
 		AndroidMock.replay(system);
 		AndroidMock.replay(socialize);
 		
-		PublicView activity = new PublicView(TestUtils.getActivity(this)) {
+		PublicView activity = new PublicView(context) {
 			@Override
 			public SocializeService getSocialize() {
 				return socialize;
 			}
 		};
 		
-		activity.initSocialize(listener);
+		activity.initSocialize(context, listener);
 		
 		AndroidMock.verify(system);
 		AndroidMock.verify(socialize);
@@ -269,8 +271,8 @@ public class SocializeViewTest extends SocializeActivityTest {
 		}
 
 		@Override
-		public void initSocialize(SocializeInitListener listener) {
-			super.initSocialize(listener);
+		public void initSocialize(Context context, SocializeInitListener listener) {
+			super.initSocialize(context, listener);
 		}
 		
 		@Override
@@ -289,8 +291,8 @@ public class SocializeViewTest extends SocializeActivityTest {
 		}
 
 		@Override
-		public void doSocializeInit(SocializeInitListener listener) {
-			super.doSocializeInit(listener);
+		public void doSocializeInit(Context context, SocializeInitListener listener) {
+			super.doSocializeInit(context, listener);
 		}
 
 		@Override

@@ -24,6 +24,7 @@ package com.socialize.test.comment.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import com.socialize.CommentUtils;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
@@ -154,7 +155,16 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 			public void onBeforeSetComment(Comment comment, CommentListItem item) {}
 			@Override
 			public void onAfterSetComment(Comment comment, CommentListItem item) {}
-			
+
+			@Override
+			public boolean onRefreshMenuItemClick(MenuItem item) {
+				return false;
+			}
+
+			@Override
+			public boolean onSettingsMenuItemClick(MenuItem item) {
+				return false;
+			}
 		});
 
 
@@ -206,8 +216,18 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 			@Override
 			public void onBeforeSetComment(Comment comment, CommentListItem item) {}
 			@Override
-			public void onAfterSetComment(Comment comment, CommentListItem item) {}			
-		});	
+			public void onAfterSetComment(Comment comment, CommentListItem item) {}
+
+			@Override
+			public boolean onRefreshMenuItemClick(MenuItem item) {
+				return false;
+			}
+
+			@Override
+			public boolean onSettingsMenuItemClick(MenuItem item) {
+				return false;
+			}
+		});
 		
 //		waitForActivity = TestUtils.waitForActivity(5000);
 		

@@ -69,13 +69,13 @@ public abstract class SocializeBaseView extends BaseView {
 		if(loading != null) {
 			addView(loading);
 		}
-		doSocializeInit(getInitLoadListener());
+		doSocializeInit(getContext(), getInitLoadListener());
 	}
 	
 	@Override
 	public void onViewUpdate() {
 		super.onViewUpdate();
-		doSocializeInit(getInitUpdateListener());
+		doSocializeInit(getContext(), getInitUpdateListener());
 	}
 	
 	protected SocializeInitListener getInitLoadListener() {
@@ -128,10 +128,10 @@ public abstract class SocializeBaseView extends BaseView {
 	// Subclasses override
 	public void onViewUpdate(IOCContainer container) {}
 
-	protected void doSocializeInit(SocializeInitListener listener) {
+	protected void doSocializeInit(Context context, SocializeInitListener listener) {
 		if(!isInEditMode()) {
 			onBeforeSocializeInit();
-			initSocialize(listener);
+			initSocialize(context, listener);
 		}
 	}
 	
@@ -143,9 +143,9 @@ public abstract class SocializeBaseView extends BaseView {
 		this.container = container;
 	}
 
-	protected void initSocialize(final SocializeInitListener listener) {
+	protected void initSocialize(final Context context, final SocializeInitListener listener) {
 		SocializeSystem system = getSocialize().getSystem();
-		String[] config = system.getBeanConfig();
+		String[] config = system.getBeanConfig(context);
 		
 		final SocializeInitListener systemListener = system.getSystemInitListener();
 		
@@ -190,11 +190,17 @@ public abstract class SocializeBaseView extends BaseView {
 			add.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 				@Override
 				public boolean onMenuItemClick(MenuItem item) {
-					UserUtils.showUserSettingsForResult(source, CommentActivity.PROFILE_UPDATE);
+					if(!onSettingsMenuItemClick(item)) {
+						UserUtils.showUserSettingsForResult(source, CommentActivity.PROFILE_UPDATE);
+					}
 					return true;
 				}
 			});
 		}
+	}
+
+	protected boolean onSettingsMenuItemClick(MenuItem item) {
+		return false;
 	}
 	
 	public final boolean onCreateOptionsMenu(final Activity source, Menu menu) {

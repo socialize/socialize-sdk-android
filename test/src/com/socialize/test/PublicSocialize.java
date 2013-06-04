@@ -93,12 +93,6 @@ public class PublicSocialize extends SocializeServiceImpl {
 	}
 
 	@Override
-	public void sort(Object[] array) {
-
-		super.sort(array);
-	}
-
-	@Override
 	public void verify3rdPartyAuthConfigured() {
 
 		super.verify3rdPartyAuthConfigured();

@@ -140,6 +140,7 @@
         <activity android:name=".implementations.actionbar.ActionBarWithButtonActivity"/>
         <activity android:name=".implementations.actionbar.ActionBarAfterButtonActivity"/>
         <activity android:name=".implementations.actionbar.ActionBarWithMonitorActivity"/>
+        <activity android:name=".implementations.actionbar.ActionBarWithCustomUserProfileActivity"/>
         <activity android:name=".implementations.actionbar.ActionBarFragmentActivity" android:screenOrientation="landscape" android:configChanges="orientation|keyboardHidden"/>
         <activity android:name=".implementations.actionbar.ActionBarFragmentManualActivity" android:screenOrientation="landscape" android:configChanges="orientation|keyboardHidden"/>
 
@@ -180,8 +181,11 @@
         <activity android:name=".implementations.twitter.ListTweetsActivity"/>
 
         <!-- User -->
-        <activity android:name=".implementations.user.UserActivity"/> 
-        
+        <activity android:name=".implementations.user.UserActivity"/>
+
+        <!-- Custom User Profile View -->
+        <activity android:name=".CustomProfileViewActivity"/>
+
         <!-- Entity Loader -->
         <activity android:name=".EntityLoaderActivity"/> 
         

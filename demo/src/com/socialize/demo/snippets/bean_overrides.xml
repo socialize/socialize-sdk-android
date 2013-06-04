@@ -1,0 +1,12 @@
+
+<!-- Begin Doc Snippet -->
+<beans>
+    <bean id="deviceUtils" class="com.yourpackage.MyDeviceUtils">
+        <property name="logger" ref="logger"/>
+        <property name="appUtils" ref="appUtils"/>
+        <init-method name="init">
+            <arg type="context"/>
+        </init-method>
+    </bean>
+</beans>
+<!-- End Doc Snippet -->

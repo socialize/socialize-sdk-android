@@ -35,6 +35,7 @@ public class CommentView extends EntityView {
 	private boolean headerDisplayed = true;
 	private Entity entity;
 	private SocializeConfig config;
+	private OnCommentViewActionListener onCommentViewActionListener;
 	
 	public static final String COMMENT_LISTENER = "socialize.comment.listener";
 	
@@ -63,7 +64,7 @@ public class CommentView extends EntityView {
 				commentListView.setHeaderDisplayed(headerDisplayed);
 				ListenerHolder holder = container.getBean("listenerHolder");
 				if(holder != null) {
-					OnCommentViewActionListener onCommentViewActionListener = holder.pop(COMMENT_LISTENER);
+					onCommentViewActionListener = holder.pop(COMMENT_LISTENER);
 					commentListView.setOnCommentViewActionListener(onCommentViewActionListener);
 				}	
 				
@@ -158,6 +159,11 @@ public class CommentView extends EntityView {
 	}
 
 	@Override
+	protected boolean onSettingsMenuItemClick(MenuItem item) {
+		return onCommentViewActionListener != null && onCommentViewActionListener.onSettingsMenuItemClick(item);
+	}
+
+	@Override
 	protected void createOptionsMenuItem(Activity source, Menu menu) {
 		super.createOptionsMenuItem(source, menu);
 		
@@ -170,7 +176,9 @@ public class CommentView extends EntityView {
 		add2.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
-				reload();
+				if(onCommentViewActionListener == null || !onCommentViewActionListener.onRefreshMenuItemClick(item)) {
+					reload();
+				}
 				return true;
 			}
 		});

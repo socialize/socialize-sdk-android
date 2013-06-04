@@ -1,0 +1,34 @@
+
+<beans>
+
+    <bean
+        id="commentList"
+        class="com.socialize.demo.CustomCommentListView"
+        singleton="false"
+        extends="socializeView"
+        cache="true">
+
+        <constructor-arg type="activity"/>
+
+        <init-method name="init"/>
+
+        <property name="commentAdapterFactory" ref="commentAdapterFactory"/>
+        <property name="drawables" ref="drawables"/>
+        <property name="appUtils" ref="appUtils"/>
+        <property name="config" ref="config"/>
+        <property name="displayUtils" ref="displayUtils"/>
+        <property name="commentUtils" ref="commentUtils"/>
+        <property name="userUtils" ref="userUtils"/>
+        <property name="subscriptionUtils" ref="subscriptionUtils"/>
+        <property name="logger" ref="logger"/>
+        <property name="progressDialogFactory" ref="progressDialogFactory"/>
+        <property name="commentHeaderFactory" ref="commentHeaderFactory"/>
+        <property name="commentEditFieldFactory" ref="commentEditFieldFactory"/>
+        <property name="commentContentViewFactory" ref="loadingListViewFactory"/>
+        <property name="commentEntryFactory" ref="commentEntrySliderItemFactory"/>
+        <property name="notificationEnabledOptionFactory" ref="notificationEnabledOptionNoBorderFactory"/>
+        <property name="sliderFactory" ref="actionBarSliderFactory"/>
+        <property name="imageLoader" ref="imageLoader"/>
+    </bean>
+
+</beans>

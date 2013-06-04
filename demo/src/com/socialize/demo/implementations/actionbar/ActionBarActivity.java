@@ -47,6 +47,7 @@ public class ActionBarActivity extends ListActivity {
 			"Autumn Action Bar",  
 			"Action Bar Top", 
 			"Action Bar on WebView",
+			"Custom Profile View",
 			"Action Bar With Network Detection"};
 	
 	final Class<?>[] activities = new Class<?>[] { 
@@ -58,8 +59,9 @@ public class ActionBarActivity extends ListActivity {
 			ActionBarFragmentActivity.class,
 			ActionBarFragmentManualActivity.class,
 			AutumnActionBarActivity.class, 
-			TopActionBarActivity.class, 
+			TopActionBarActivity.class,
 			WebViewActionBarActivity.class,
+			ActionBarWithCustomUserProfileActivity.class,
 			ActionBarWithMonitorActivity.class};
 	
 	@Override

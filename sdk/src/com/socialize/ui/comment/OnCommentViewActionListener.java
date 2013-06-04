@@ -3,6 +3,7 @@
  */
 package com.socialize.ui.comment;
 
+import android.view.MenuItem;
 import com.socialize.entity.Comment;
 import com.socialize.listener.SocializeListener;
 
@@ -27,4 +28,8 @@ public interface OnCommentViewActionListener extends SocializeListener {
 	public void onReload(CommentListView view);
 	
 	public void onPostComment(Comment comment);
+
+	public boolean onSettingsMenuItemClick(MenuItem item);
+
+	public boolean onRefreshMenuItemClick(MenuItem item);
 }
