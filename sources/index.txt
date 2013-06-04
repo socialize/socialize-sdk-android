@@ -22,6 +22,7 @@ Contents:
 	deep_linking
 	localization
 	sdk_user_guide
+	best_practice
 	config
 	amazon
 	proguard
