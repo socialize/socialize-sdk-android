@@ -335,25 +335,31 @@ public class ActionBarLayoutView extends BaseView {
 		if(commentsItem != null) {
 			commentsItem.init();
 			commentsItem.setText(loadingText);
-			
-			commentButton.init(commentWidth, 0.0f, textColor);
-			commentButton.setText(localizationService.getString(I18NConstants.ACTIONBAR_COMMENT));
+
+			if(commentButton != null) {
+				commentButton.init(commentWidth, 0.0f, textColor);
+				commentButton.setText(localizationService.getString(I18NConstants.ACTIONBAR_COMMENT));
+			}
 		}
 		
 		if(likesItem != null) {
 			likesItem.init();
 			likesItem.setText(loadingText);
-			
-			likeButton.init(likeWidth, 0.0f, textColor);
-			likeButton.setText(loadingText);
+
+			if(likeButton != null) {
+				likeButton.init(likeWidth, 0.0f, textColor);
+				likeButton.setText(loadingText);
+			}
 		}
 		
 		if(sharesItem != null) {
 			sharesItem.init();
 			sharesItem.setText(loadingText);
-			
-			shareButton.init(shareWidth, 0.0f, textColor);
-			shareButton.setText(localizationService.getString(I18NConstants.ACTIONBAR_SHARE));
+
+			if(shareButton != null) {
+				shareButton.init(shareWidth, 0.0f, textColor);
+				shareButton.setText(localizationService.getString(I18NConstants.ACTIONBAR_SHARE));
+			}
 		}
 		
 		if(ticker != null) {
@@ -519,21 +525,18 @@ public class ActionBarLayoutView extends BaseView {
 			@Override
 			public void onError(SocializeException error) {
 				logError("Error deleting like", error);
-				
-				if(localEntity != null) {
-					localEntity.setLiked(false);
-					setEntityData(localEntity, listener);
-				}
+
+				localEntity.setLiked(false);
+				setEntityData(localEntity, listener);
 
 				button.hideLoading();
 			}
 			
 			@Override
 			public void onDelete() {
-				if(localEntity != null) {
-					localEntity.setLiked(false);
-					setEntityData(localEntity, listener);
-				}
+
+				localEntity.setLiked(false);
+				setEntityData(localEntity, listener);
 
 				button.hideLoading();
 				if(onActionBarEventListener != null) {
@@ -668,7 +671,7 @@ public class ActionBarLayoutView extends BaseView {
 		String viewText = "0";
 		
 		if(value != null) {
-			int iVal = value.intValue();
+			int iVal = value;
 			if(iVal >= 1000) {
 				float fVal = (float) iVal / 1000.0f;
 				viewText = countFormat.format(fVal);
