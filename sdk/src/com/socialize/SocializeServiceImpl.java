@@ -281,50 +281,45 @@ public class SocializeServiceImpl implements SocializeService {
 				}
 
 				if(init) {
-					try {
-						Logger.LOG_KEY = Socialize.LOG_KEY;
-						Logger.logLevel = Log.WARN;
-						
-						this.initPaths = paths;
+					Logger.LOG_KEY = Socialize.LOG_KEY;
+					Logger.logLevel = Log.WARN;
 
-						// JP:  Not sure why this sort was here.. but it seems wrong
-//						sort(this.initPaths);
-						
-						if(container == null) {
-							container = newSocializeIOC();
+					this.initPaths = paths;
+
+					// JP:  Not sure why this sort was here.. but it seems wrong
+//				    sort(this.initPaths);
+
+					if(container == null) {
+						container = newSocializeIOC();
+					}
+
+					ResourceLocator locator = newResourceLocator();
+
+					locator.setLogger(newLogger());
+
+					ClassLoaderProvider provider = newClassLoaderProvider();
+
+					locator.setClassLoaderProvider(provider);
+
+					if(logger != null) {
+
+						if(logger.isDebugEnabled()) {
+							for (String path : paths) {
+								logger.debug("Initializing Socialize with path [" +
+										path +
+										"]");
+							}
+
+							Logger.logLevel = Log.DEBUG;
 						}
+						else if(logger.isInfoEnabled()) {
+							Logger.logLevel = Log.INFO;
+						}
+					}
 
-						ResourceLocator locator = newResourceLocator();
-						
-						locator.setLogger(newLogger());
-						
-						ClassLoaderProvider provider = newClassLoaderProvider();
-						
-						locator.setClassLoaderProvider(provider);
-						
-						if(logger != null) {
-							
-							if(logger.isDebugEnabled()) {
-								for (String path : paths) {
-									logger.debug("Initializing Socialize with path [" +
-											path +
-											"]");
-								}
-								
-								Logger.logLevel = Log.DEBUG;
-							}
-							else if(logger.isInfoEnabled()) {
-								Logger.logLevel = Log.INFO;
-							}
-						}	
-						
-						((SocializeIOC) container).init(context, locator, paths);
-						
-						init(context, container, listener); // initCount incremented here
-					}
-					catch (Exception e) {
-						throw e;
-					}
+					((SocializeIOC) container).init(context, locator, paths);
+
+					init(context, container, listener); // initCount incremented here
 				}
 				else {
 					this.initCount++;
@@ -409,6 +404,7 @@ public class SocializeServiceImpl implements SocializeService {
 		if(!isInitialized(context)) {
 			try {
 				this.container = container;
+				this.container.setContext(context);
 				
 				this.logger = container.getBean("logger");
 				
@@ -431,7 +427,7 @@ public class SocializeServiceImpl implements SocializeService {
 				mainConfig.merge(ConfigUtils.preInitConfig);
 				
 				this.config = mainConfig;
-				this.initCount++;
+				this.initCount=1;
 				
 				verify3rdPartyAuthConfigured();
 				

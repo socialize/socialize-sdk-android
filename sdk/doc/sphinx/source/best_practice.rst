@@ -189,7 +189,7 @@ To replace this implementation, simply create a **separate** XML file that redef
 	:start-after: Begin Doc Snippet
 	:end-before: End Doc Snippet
 
-If you are simply extending the Socialize class, be sure to include **ALL OBJECT INITIALIZATION PARAMATERS** in the bean declaration.
+If you are simply extending the Socialize class, be sure to include **ALL OBJECT INITIALIZATION PARAMETERS** in the bean declaration.
 
 Finally add a line to your **socialize.properties** file:
 
