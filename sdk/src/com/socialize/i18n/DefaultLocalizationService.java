@@ -43,7 +43,6 @@ public class DefaultLocalizationService implements LocalizationService {
 	public void init(Context context) {
 		InputStream in = null;
 		try {
-			properties = new Properties();
 			properties = createProperties();
 			in = resourceLocator.locate(context, "i18n.properties");
 			properties.load(in);
