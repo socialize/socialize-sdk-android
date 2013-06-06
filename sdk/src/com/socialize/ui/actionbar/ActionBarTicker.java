@@ -46,13 +46,13 @@ public class ActionBarTicker extends LinearLayout {
 	private RotatingFadeViewAnimator rotator;
 	private DisplayUtils displayUtils;
 	private boolean initialized = false;
-	private int backgroundColor = 0;
+	private Integer backgroundColor = 0;
 	
 	public ActionBarTicker(Context context) {
 		super(context);
 	}
 	
-	public ActionBarTicker(Context context, int backgroundColor) {
+	public ActionBarTicker(Context context, Integer backgroundColor) {
 		super(context);
 		this.backgroundColor = backgroundColor;
 	}
@@ -69,8 +69,8 @@ public class ActionBarTicker extends LinearLayout {
 			masterParams.weight = weight;
 			
 			setLayoutParams(masterParams);
-			
-			ColorDrawable viewBg = new ColorDrawable((backgroundColor == 0) ? DEFAULT_BACKGROUND_COLOR : backgroundColor);
+
+			ColorDrawable viewBg = new ColorDrawable((backgroundColor == null) ? DEFAULT_BACKGROUND_COLOR : backgroundColor);
 			
 			setBackgroundDrawable(viewBg);
 			
