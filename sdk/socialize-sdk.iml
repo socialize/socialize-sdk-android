@@ -15,6 +15,9 @@
         <option name="LIBRARY_PROJECT" value="true" />
       </configuration>
     </facet>
+    <facet type="Python" name="Python">
+      <configuration sdkName="Python 2.7.1 (/Library/Frameworks/Python.framework/Versions/2.7/bin/python)" />
+    </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/bin/classes" />

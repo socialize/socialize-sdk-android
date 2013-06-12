@@ -123,5 +123,4 @@ public class TwitterAuthView extends RelativeLayout {
 			}
 		};
 	}
-
 }

@@ -109,6 +109,8 @@
         <activity android:name=".implementations.share.GetSharesByUserActivity"/>
         <activity android:name=".implementations.share.GetSharesByIDActivity"/>
         <activity android:name=".implementations.share.ShareButtonsActivity"/>
+        <activity android:name=".implementations.pinterest.PinterestShareActivity"/>
+
         
         <!-- Entity -->
         <activity android:name=".implementations.entity.EntityActivity"/>

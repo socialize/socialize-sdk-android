@@ -74,7 +74,7 @@ public abstract class DemoActivity extends Activity implements DialogRegister {
 		Socialize.initAsync(this, new SocializeInitListener() {
 			@Override
 			public void onInit(Context context, IOCContainer container) {
-				SocializeConfig config = ConfigUtils.getConfig(DemoActivity.this);
+				SocializeConfig config = ConfigUtils.getConfig(context);
 
 				config.setProperty(SocializeConfig.SOCIALIZE_EVENTS_AUTH_ENABLED, "false");
 				config.setProperty(SocializeConfig.SOCIALIZE_EVENTS_SHARE_ENABLED, "false");

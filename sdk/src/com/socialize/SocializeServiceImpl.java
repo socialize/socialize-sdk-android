@@ -236,6 +236,8 @@ public class SocializeServiceImpl implements SocializeService {
 			if(paths != null) {
 
 				if(isInitialized(context)) {
+
+
 					
 					if(localPaths != null) {
 						for (String path : paths) {
@@ -286,7 +288,7 @@ public class SocializeServiceImpl implements SocializeService {
 
 					this.initPaths = paths;
 
-					// JP:  Not sure why this sort was here.. but it seems wrong
+					// JP:  This sort is in the wrong place, should only be used when searching for new paths.
 //				    sort(this.initPaths);
 
 					if(container == null) {
@@ -384,7 +386,13 @@ public class SocializeServiceImpl implements SocializeService {
 	
 	// So we can mock
 	protected int binarySearch(String[] array, String str) {
-		return Arrays.binarySearch(array, str);
+		// No longer a binary search because we don't want the list to be sorted as this distrubs the priority
+		for (int i = 0; i < array.length; i++) {
+			if(array[i].equals(str)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 	
 	// So we can mock

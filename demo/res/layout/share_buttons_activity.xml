@@ -44,9 +44,16 @@
 	        android:layout_width="260dip"
 	        android:layout_height="wrap_content"
 	        android:layout_gravity="center_horizontal"
-	        android:text="Share to Twitter"/> 
-	        
-	    <Button 
+	        android:text="Share to Twitter"/>
+
+        <Button
+            android:id="@+id/btnSharePinterest"
+            android:layout_width="260dip"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Share to Pinterest"/>
+
+        <Button
 	        android:id="@+id/btnConfig"
 	        android:layout_width="260dip"
 	        android:layout_height="wrap_content"

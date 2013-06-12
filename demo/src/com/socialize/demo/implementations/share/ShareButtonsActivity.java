@@ -26,6 +26,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -39,6 +40,7 @@ import com.socialize.demo.ConfigDialog;
 import com.socialize.demo.DemoActivity;
 import com.socialize.demo.DemoUtils;
 import com.socialize.demo.R;
+import com.socialize.demo.implementations.pinterest.PinterestShareActivity;
 import com.socialize.error.SocializeException;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
@@ -65,6 +67,7 @@ public class ShareButtonsActivity extends DemoActivity {
 		Button btnShareFacebook = (Button) findViewById(R.id.btnShareFacebook);
 		Button btnShareTwitter = (Button) findViewById(R.id.btnShareTwitter);
 		Button btnConfig = (Button) findViewById(R.id.btnConfig);
+		Button btnSharePinterest = (Button) findViewById(R.id.btnSharePinterest);
 		
 		btnShareTwitter.setOnClickListener(new OnClickListener() {
 			@Override
@@ -190,9 +193,15 @@ public class ShareButtonsActivity extends DemoActivity {
 					}
 				});
 			}
-		});		
-		
-		
+		});
+
+		btnSharePinterest.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				startActivity(new Intent(ShareButtonsActivity.this, PinterestShareActivity.class));
+			}
+		});
+
 		btnConfig.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
