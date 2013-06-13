@@ -168,26 +168,42 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	 * @see com.socialize.api.action.UserSystem#saveUserProfile(android.content.Context, com.socialize.api.SocializeSession, com.socialize.ui.profile.UserProfile, com.socialize.listener.user.UserListener)
 	 */
 	@Override
-	public void saveUserSettings(final Context context, final SocializeSession session, final UserSettings settings, final UserListener listener) {
-		User user = session.getUser();
-		user.setFirstName(settings.getFirstName());
-		user.setLastName(settings.getLastName());
+	public void saveUserSettings(final Context context, final SocializeSession session, final UserSettings settingsToBeSaved, final UserListener listener) {
+		User sessionUser = session.getUser();
+		UserSettings sessionSettings = session.getUserSettings();
+
+		boolean wasNotificationsEnabled = sessionSettings.isNotificationsEnabled();
+
+		// Update the settings and the user in the session so they are saved
+		sessionUser.setFirstName(settingsToBeSaved.getFirstName());
+		sessionUser.setLastName(settingsToBeSaved.getLastName());
+
+		sessionSettings.update(settingsToBeSaved);
+
+		boolean isNotificationsEnabled = sessionSettings.isNotificationsEnabled();
 		
-		if(settings.getImage() != null) {
-			user.setProfilePicData(bitmapUtils.encode(settings.getImage()));
+		if(settingsToBeSaved.getImage() != null) {
+			sessionUser.setProfilePicData(bitmapUtils.encode(settingsToBeSaved.getImage()));
 		}
 
-		saveUserAsync(context, session, user, listener);
+		// If notifications was not previously enabled, we may need to register.
+		if(isNotificationsEnabled && !wasNotificationsEnabled && notificationRegistrationSystem != null) {
+			notificationRegistrationSystem.registerC2DMAsync(context);
+		}
+
+		saveUserAsync(context, session, sessionUser, listener);
 	}
 
 	@Override
-	public void saveUserAsync(final Context context, final SocializeSession session, final User user, final UserListener listener) {
+	public void saveUserAsync(final Context context, final SocializeSession session, final User userToBeSaved, final UserListener listener) {
+
 		final UserSettings settings = session.getUserSettings();
-		settings.update(user);
 
-		String endpoint = ENDPOINT + user.getId() + "/";
+		settings.update(userToBeSaved);
 
-		putAsPostAsync(session, endpoint, user, new UserSaveListener() {
+		String endpoint = ENDPOINT + userToBeSaved.getId() + "/";
+
+		putAsPostAsync(session, endpoint, userToBeSaved, new UserSaveListener() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -196,14 +212,6 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 
 			@Override
 			public void onUpdate(User savedUser) {
-				UserSettings oldProfile = session.getUserSettings();
-				if(settings.isNotificationsEnabled() && oldProfile.isNotificationsEnabled() != settings.isNotificationsEnabled()) {
-					// If notifications was not previously enabled, we may need to register.
-					if(notificationRegistrationSystem != null) {
-						notificationRegistrationSystem.registerC2DMAsync(context);
-					}
-				}
-
 				handleUserUpdate(context, session, savedUser, settings, listener);
 			}
 		});
@@ -217,10 +225,7 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 			// Update local in-memory user
 			User sessionUser = session.getUser();
 			sessionUser.update(savedUser);
-			
-			UserSettings settings = session.getUserSettings();
-			settings.update(userSettings);
-			
+
 			// Save this user to the local session for next load
 			if(sessionPersister != null) {
 				sessionPersister.saveUser(context, sessionUser, userSettings);

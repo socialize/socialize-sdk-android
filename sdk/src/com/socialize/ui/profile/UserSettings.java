@@ -160,7 +160,7 @@ public class UserSettings implements Serializable {
 
 	/**
 	 * Update the local settings based on the given user object.
-	 * @param user
+	 * @param user The user from whom values are copied.
 	 */
 	public void update(User user) {
 		setFirstName(user.getFirstName());
