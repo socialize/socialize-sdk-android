@@ -17,13 +17,21 @@
 
         <echo>Removing applications from device</echo>
 
-        <echo>Removing junit files from device at ${junit.device.path}</echo>
+        <echo>Removing download files from device at ${device.download.path}</echo>
         <exec executable="${adb}" failonerror="false">
             <arg line="${adb.device.arg}" />
             <arg value="shell" />
             <arg value="rm" />
             <arg value="-r" />
-            <arg value="${junit.device.path}" />
+            <arg value="${device.download.path}" />
+        </exec>
+
+        <echo>Creating download path on device at ${device.download.path}</echo>
+        <exec executable="${adb}" failonerror="true">
+            <arg line="${adb.device.arg}" />
+            <arg value="shell" />
+            <arg value="mkdir" />
+            <arg value="${device.download.path}" />
         </exec>
 
         <echo>Creating junit report path on device at ${junit.device.path}</echo>
@@ -170,7 +178,7 @@
                     <arg line="${adb.device.arg}" />
                     <arg value="logcat" />
                     <arg value="-d" />
-                    <arg value="*:I" />
+                    <arg value="*:E" />
                 </exec>
                 <exec executable="${adb}" failonerror="true">
                     <arg line="${adb.device.arg}" />

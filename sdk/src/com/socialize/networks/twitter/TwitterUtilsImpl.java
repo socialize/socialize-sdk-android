@@ -81,8 +81,6 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 	private UserSystem userSystem;
 	private SocializeConfig config;
 	private OAuthRequestSigner requestSigner;
-//	private String apiEndpoint = "https://api.twitter.com/1/";
-//	private String photoEndpoint = "https://upload.twitter.com/1/";
 	private HttpRequestProvider httpRequestProvider;
 	private ImageUtils imageUtils;
 	private AuthProviderInfoBuilder authProviderInfoBuilder;

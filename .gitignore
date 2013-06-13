@@ -2,6 +2,7 @@ sdk/doc/html
 sdk/local.properties
 gh-pages
 out
+test/running_tests_local.txt
 .idea
 **/bin/*
 **/gen/*
