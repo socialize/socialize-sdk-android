@@ -6,8 +6,18 @@
 What's New
 ==========
 
-In this version (v2.8)
+In this version (v2.9)
 ----------------------
+
+
+Pinterest!
+~~~~~~~~~~
+Our demo app and our docs now include examples of sharing to Pinterest using Socialize.
+
+Refer to :ref:`pinterest` for more details.
+
+v2.8
+----
 
 **IMPORTANT NOTE FOR USERS UPGRADING**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

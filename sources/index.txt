@@ -15,6 +15,7 @@ Contents:
 	like_button
 	facebook
 	twitter
+	pinterest
 	facebook_adv
 	twitter_adv
 	push_notifications

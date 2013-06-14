@@ -1,0 +1,252 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Sharing to Pinterest &mdash; Socialize Android SDK v2.9.4 documentation</title>
+    
+    <link rel="stylesheet" href="static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     'v2.9.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="shortcut icon" href="static/favicon.ico"/>
+    <link rel="top" title="Socialize Android SDK v2.9.4 documentation" href="index.html?v=v2.9.4" />
+    <link rel="next" title="Advanced Facebook" href="facebook_adv.html?v=v2.9.4" />
+    <link rel="prev" title="Twitter Integration" href="twitter.html?v=v2.9.4" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="facebook_adv.html?v=v2.9.4" title="Advanced Facebook"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="twitter.html?v=v2.9.4" title="Twitter Integration"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html?v=v2.9.4">Socialize Android SDK v2.9.4 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+      <META HTTP-EQUIV="Pragma" CONTENT="no-cache"/>
+    <META HTTP-EQUIV="Expires" CONTENT="-1"/>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-9835027-5']);
+    _gaq.push(['_setDomainName', '.getsocialize.com']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+
+    <script type="text/javascript" charset="utf-8">
+      var is_ssl = ("https:" == document.location.protocol);
+      var asset_host = is_ssl ? "https://s3.amazonaws.com/getsatisfaction.com/" : "http://s3.amazonaws.com/getsatisfaction.com/";
+      document.write(unescape("%3Cscript src='" + asset_host + "javascripts/feedback-v2.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+
+    <script type="text/javascript" charset="utf-8">
+      var feedback_widget_options = {};
+      feedback_widget_options.display = "overlay";
+      feedback_widget_options.company = "socialize";
+      feedback_widget_options.placement = "right";
+      feedback_widget_options.color = "#222";
+      feedback_widget_options.style = "question";
+      feedback_widget_options.product = "socialize_android_sdk";
+      feedback_widget_options.limit = "3";
+      GSFN.feedback_widget.prototype.local_base_url = "http://support.getsocialize.com";
+      GSFN.feedback_widget.prototype.local_ssl_base_url = "http://support.getsocialize.com";
+      var feedback_widget = new GSFN.feedback_widget(feedback_widget_options);
+    </script><div class="section" id="sharing-to-pinterest">
+<span id="pinterest"></span><h1>Sharing to Pinterest<a class="headerlink" href="#sharing-to-pinterest" title="Permalink to this headline">¶</a></h1>
+<p>Pinterest (<a class="reference external" href="http://www.pinterest.com">http://www.pinterest.com</a>) recently released an SDK for Android what can be easily integrated into the Socialize process.</p>
+<p>By leveraging the Socialize SmartDownload infrastructure all shares to Pinterest can be tracked and optimized along
+with all other share events.</p>
+<p>The following code snippets show how to implement a basic Pinterest <em>Pin</em>.</p>
+<div class="section" id="step-1-download-the-pinterest-sdk">
+<h2>Step 1 - Download the Pinterest SDK<a class="headerlink" href="#step-1-download-the-pinterest-sdk" title="Permalink to this headline">¶</a></h2>
+<p>The Pinterest SDK is a single JAR file you can simply add to the <em>libs</em> folder of your Android project</p>
+<p><a class="reference external" href="http://developers.pinterest.com/android/">http://developers.pinterest.com/android/</a></p>
+</div>
+<div class="section" id="step-2-register-as-a-developer-on-pinterest">
+<h2>Step 2 - Register as a developer on Pinterest<a class="headerlink" href="#step-2-register-as-a-developer-on-pinterest" title="Permalink to this headline">¶</a></h2>
+<p>You will need a Pinterest Client ID to be able to call the Pinterest SDK:</p>
+<p><a class="reference external" href="http://developers.pinterest.com/developer/manage/">http://developers.pinterest.com/developer/manage/</a></p>
+<img alt="images/pinterest_dev.png" src="images/pinterest_dev.png" />
+</div>
+<div class="section" id="step-3-share-to-pinterest">
+<h2>Step 3 - Share to Pinterest!<a class="headerlink" href="#step-3-share-to-pinterest" title="Permalink to this headline">¶</a></h2>
+<p>The following is a baseline example of how to share to Pinterest.  You can modify or extend this to be triggered on the click
+of a button or any other user initiated action</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="c1">// Your Pinterest client ID (CHANGE THIS)</span>
+<span class="n">String</span> <span class="n">PINTEREST_CLIENT_ID</span> <span class="o">=</span> <span class="s">&quot;123456&quot;</span><span class="o">;</span>
+
+<span class="c1">// Set the partner ID on the PinIt instance (this can be done anywhere)</span>
+<span class="n">PinIt</span><span class="o">.</span><span class="na">setPartnerId</span><span class="o">(</span><span class="n">PINTEREST_CLIENT_ID</span><span class="o">);</span>
+
+<span class="kd">final</span> <span class="n">Activity</span> <span class="n">context</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+
+<span class="c1">// The URL of the image being shared</span>
+<span class="kd">final</span> <span class="n">String</span> <span class="n">imageUrl</span> <span class="o">=</span> <span class="s">&quot;http://some.image.to.share/wow.jpg&quot;</span><span class="o">;</span>
+
+<span class="c1">// Create an entity to represent the image</span>
+<span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="n">imageUrl</span><span class="o">,</span> <span class="s">&quot;My Picture!&quot;</span><span class="o">);</span>
+<span class="n">ShareOptions</span> <span class="n">options</span> <span class="o">=</span> <span class="n">ShareUtils</span><span class="o">.</span><span class="na">getUserShareOptions</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+
+<span class="kd">final</span> <span class="n">ProgressDialog</span> <span class="n">dialog</span> <span class="o">=</span> <span class="n">SafeProgressDialog</span><span class="o">.</span><span class="na">show</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+
+<span class="c1">// Create a Socialize share object to enable tracking of the share</span>
+<span class="n">ShareUtils</span><span class="o">.</span><span class="na">registerShare</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="n">options</span><span class="o">,</span> <span class="k">new</span> <span class="n">ShareAddListener</span><span class="o">()</span> <span class="o">{</span>
+
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Share</span> <span class="n">share</span><span class="o">)</span> <span class="o">{</span>
+
+		<span class="c1">// Get the propagation info based on the share type of OTHER</span>
+		<span class="n">PropagationInfo</span> <span class="n">propagationInfo</span> <span class="o">=</span> <span class="n">share</span><span class="o">.</span><span class="na">getPropagationInfoResponse</span><span class="o">().</span><span class="na">getPropagationInfo</span><span class="o">(</span><span class="n">ShareType</span><span class="o">.</span><span class="na">OTHER</span><span class="o">);</span>
+
+		<span class="c1">// Create a PinIt instance and set the properties you need.</span>
+		<span class="n">PinIt</span> <span class="n">pinIt</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PinIt</span><span class="o">();</span>
+		<span class="n">pinIt</span><span class="o">.</span><span class="na">setImageUrl</span><span class="o">(</span><span class="n">imageUrl</span><span class="o">);</span>
+
+		<span class="c1">// Use the URL from the share object</span>
+		<span class="n">pinIt</span><span class="o">.</span><span class="na">setUrl</span><span class="o">(</span><span class="n">propagationInfo</span><span class="o">.</span><span class="na">getEntityUrl</span><span class="o">());</span>
+
+		<span class="n">pinIt</span><span class="o">.</span><span class="na">setDescription</span><span class="o">(</span><span class="n">share</span><span class="o">.</span><span class="na">getEntityDisplayName</span><span class="o">());</span>
+		<span class="n">pinIt</span><span class="o">.</span><span class="na">setListener</span><span class="o">(</span><span class="k">new</span> <span class="n">PinItListener</span><span class="o">()</span> <span class="o">{</span>
+			<span class="nd">@Override</span>
+			<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onComplete</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">completed</span><span class="o">)</span> <span class="o">{</span>
+				<span class="n">dialog</span><span class="o">.</span><span class="na">dismiss</span><span class="o">();</span>
+				<span class="k">if</span><span class="o">(</span><span class="n">completed</span><span class="o">)</span> <span class="o">{</span>
+					<span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="s">&quot;Shared to Pinterest!&quot;</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_LONG</span><span class="o">).</span><span class="na">show</span><span class="o">();</span>
+				<span class="o">}</span>
+				<span class="k">else</span> <span class="o">{</span>
+					<span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="s">&quot;Share Failed!&quot;</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_LONG</span><span class="o">).</span><span class="na">show</span><span class="o">();</span>
+				<span class="o">}</span>
+			<span class="o">}</span>
+			<span class="nd">@Override</span>
+			<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onException</span><span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+				<span class="n">dialog</span><span class="o">.</span><span class="na">dismiss</span><span class="o">();</span>
+
+				<span class="c1">// Handle the error</span>
+			<span class="o">}</span>
+		<span class="o">});</span>
+
+		<span class="c1">// Do the pin</span>
+		<span class="n">pinIt</span><span class="o">.</span><span class="na">doPinIt</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+	<span class="o">}</span>
+
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">SocializeException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">dialog</span><span class="o">.</span><span class="na">dismiss</span><span class="o">();</span>
+
+		<span class="c1">// Handle the error</span>
+	<span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+<p>The Pinterest SDK is not a <strong>direct access</strong> API in that it does not allow posts (pins) to be made directly on the Pinterest service,
+but rather it shares <em>via</em> the Pinterest App.  If the user does not have the Pinterest app installed they will be directed to
+the Google Play store to download it.  If they <em>do</em> have the Pinterest app installed, they will be presented with a Pinterest screen
+from which they can perform the post:</p>
+<img alt="images/pin_share.png" src="images/pin_share.png" />
+<script type="text/javascript">
+</script></div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html?v=v2.9.4" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html?v=v2.9.4">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v2.9.4">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v2.9.4">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lifecycle.html?v=v2.9.4">Socialize Lifecycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html?v=v2.9.4">Socialize Demo App</a></li>
+<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v2.9.4">Socialize Action Bar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entities.html?v=v2.9.4">Socialize Entities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v2.9.4">Custom Like Buttons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v2.9.4">Facebook Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v2.9.4">Twitter Integration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Sharing to Pinterest</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-download-the-pinterest-sdk">Step 1 - Download the Pinterest SDK</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-register-as-a-developer-on-pinterest">Step 2 - Register as a developer on Pinterest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-share-to-pinterest">Step 3 - Share to Pinterest!</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="facebook_adv.html?v=v2.9.4">Advanced Facebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter_adv.html?v=v2.9.4">Advanced Twitter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v2.9.4">SmartAlerts (Push Notifications)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v2.9.4">Entity Loaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deep_linking.html?v=v2.9.4">Deep Linking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="localization.html?v=v2.9.4">Localization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v2.9.4">Socialize Core SDK Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="best_practice.html?v=v2.9.4">Extending Socialize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html?v=v2.9.4">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v2.9.4">Amazon AppStore URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v2.9.4">ProGuard Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v2.9.4">Troubleshooting &amp; Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v2.9.4">Change Log</a></li>
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="facebook_adv.html?v=v2.9.4" title="Advanced Facebook"
+             >next</a></li>
+        <li class="right" >
+          <a href="twitter.html?v=v2.9.4" title="Twitter Integration"
+             >previous</a> |</li>
+        <li><a href="index.html?v=v2.9.4">Socialize Android SDK v2.9.4 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Socialize Inc.
+    </div>
+  </body>
+</html>
