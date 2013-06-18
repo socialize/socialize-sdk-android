@@ -68,7 +68,7 @@ public class DeviceUtilsTest extends SocializeUnitTest {
 		DefaultAppUtils appUtils = new DefaultAppUtils();
 		appUtils.init(getContext());
 		String userAgentString = appUtils.getUserAgentString();
-		String expected = "Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + "; " + Locale.getDefault().getLanguage() + "_" + Locale.getDefault().getCountry() + "; BundleID/com.socialize.testapp;";
+		String expected = "Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + "; " + Locale.getDefault().getLanguage() + "_" + Locale.getDefault().getCountry() + "; BundleID/com.socialize.testapp;Carrier/unknown;Network/wifi";
 		assertEquals(expected, userAgentString);
 	}
 
