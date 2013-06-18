@@ -3,9 +3,13 @@
 
 # Ignore Socialize warnings
 -dontwarn com.socialize.**
+-dontwarn com.facebook.**
 
 # Keep Socialize classes
 -keep public class com.socialize.** { *; }
+
+# Keep Facebook classes
+-keep public class com.facebook.** { *; }
 
 # Keep Signatures to cater for Proguard losing generic type information
 -keepattributes Signature
