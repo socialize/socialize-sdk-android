@@ -30,6 +30,8 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
@@ -53,6 +55,8 @@ public class DefaultAppUtils implements AppUtils {
 	private String appName;
 	private String userAgent;
 	private String country;
+	private String carrier = "unknown";
+	private String networkType = "unknown";
 	private SocializeLogger logger;
 	private SocializeConfig config;
 	
@@ -65,6 +69,7 @@ public class DefaultAppUtils implements AppUtils {
 	private String lastNotificationWarning = null;
 	
 	public void init(Context context) {
+
 		packageName = context.getPackageName();
 		
 		// Try to get the app name 
@@ -92,16 +97,44 @@ public class DefaultAppUtils implements AppUtils {
 		}		
 		
 		try {
-			TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-			if(manager.getPhoneType() == TelephonyManager.PHONE_TYPE_GSM) {
+
+			if(hasPermission(context, "android.permission.READ_PHONE_STATE")) {
+				TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 				country = manager.getNetworkCountryIso();
+				carrier = manager.getNetworkOperatorName();
+
+				if(StringUtils.isEmpty(carrier)) {
+					carrier = "unknown";
+				}
 			}
 		}
 		catch (Exception ignore) {}
-		
+
 		if(StringUtils.isEmpty(country)) {
 			country = Locale.getDefault().getCountry();
 		}
+	}
+
+	@Override
+	public void onResume(Context context) {
+		determineNetworkType(context);
+	}
+
+	private void determineNetworkType(Context context) {
+		try {
+			if(hasPermission(context, "android.permission.ACCESS_NETWORK_STATE")) {
+				ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+				NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+				if(mWifi.isConnected()) {
+					networkType = "wifi";
+				}
+				else {
+					networkType = "cell";
+				}
+			}
+		}
+		catch (Exception ignore) {}
 	}
 	
 	@Override
@@ -118,7 +151,7 @@ public class DefaultAppUtils implements AppUtils {
 			Class<?> activityClass = Class.forName(activityClassName);
 			return isActivityAvailable(context, activityClass);
 		}
-		catch (ClassNotFoundException e) {}
+		catch (ClassNotFoundException ignored) {}
 		
 		return false;
 	}
@@ -343,9 +376,11 @@ public class DefaultAppUtils implements AppUtils {
 	public String getUserAgentString() {
 		if (userAgent == null) {
 			userAgent = "Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + "; " + Locale.getDefault().getLanguage() + "_"
-					+ getCountry() + "; BundleID/" + getPackageName() + ";";
+					+ getCountry() + "; BundleID/" + getPackageName() + "; Carrier/" + carrier + ";";
 		}
-		return userAgent;
+
+		// Always add the network state in case it changed
+		return userAgent + "Network/" + networkType + ";";
 	}
 	
 	/* (non-Javadoc)
@@ -361,9 +396,16 @@ public class DefaultAppUtils implements AppUtils {
 		return country;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.util.IAppUtils#getPackageName()
-	 */
+	@Override
+	public String getCarrier() {
+		return carrier;
+	}
+
+	@Override
+	public String getNetworkType() {
+		return networkType;
+	}
+
 	@Override
 	public String getPackageName() {
 		return packageName;

@@ -54,6 +54,10 @@ public interface AppUtils {
 	public String getAppName();
 	
 	public String getCountry();
+
+	public String getCarrier();
+
+	public String getNetworkType();
 	
 	public int getAppIconId(Context context);
 
@@ -64,7 +68,10 @@ public interface AppUtils {
 	public String getUserAgentString();
 	
 	public void checkAndroidManifest(Context context);
-	
-//	public boolean isAppInBackground(Context context);
 
+	/**
+	 * Called by Socialize during activity resume
+	 * @param context
+	 */
+	public void onResume(Context context);
 }

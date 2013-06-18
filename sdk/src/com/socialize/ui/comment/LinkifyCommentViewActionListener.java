@@ -109,4 +109,14 @@ public class LinkifyCommentViewActionListener implements OnCommentViewActionList
 	public boolean onSettingsMenuItemClick(MenuItem item) {
 		return false;
 	}
+
+	@Override
+	public boolean onCommentIconClicked(CommentListItem item) {
+		return false;
+	}
+
+	@Override
+	public boolean onCommentItemClicked(CommentListItem item) {
+		return false;
+	}
 }

@@ -193,6 +193,16 @@ public class CommentUtilsTest extends SocializeActivityTest {
 			public boolean onSettingsMenuItemClick(MenuItem item) {
 				return false;
 			}
+
+			@Override
+			public boolean onCommentIconClicked(CommentListItem item) {
+				return false;
+			}
+
+			@Override
+			public boolean onCommentItemClicked(CommentListItem item) {
+				return false;
+			}
 		});
 
 
@@ -258,6 +268,16 @@ public class CommentUtilsTest extends SocializeActivityTest {
 
 			@Override
 			public boolean onRefreshMenuItemClick(MenuItem item) {
+				return false;
+			}
+
+			@Override
+			public boolean onCommentItemClicked(CommentListItem item) {
+				return false;
+			}
+
+			@Override
+			public boolean onCommentIconClicked(CommentListItem item) {
 				return false;
 			}
 

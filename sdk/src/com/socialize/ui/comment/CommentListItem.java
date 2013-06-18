@@ -31,6 +31,9 @@ public class CommentListItem extends LinearLayout {
 	private SocializeLogger logger;
 	private Comment commentObject;
 	private boolean deleteOk = false;
+
+	private LinearLayout contentLayout;
+	private LinearLayout iconLayout;
 	
 	@SuppressWarnings("unused")
 	private CommentListItemBackgroundFactory backgroundFactory;
@@ -57,7 +60,7 @@ public class CommentListItem extends LinearLayout {
 		setGravity(Gravity.TOP);
 		setPadding(eight,eight,eight,eight);
 		
-		LinearLayout contentLayout = new LinearLayout(getContext());
+		contentLayout = new LinearLayout(getContext());
 		contentLayout.setOrientation(LinearLayout.VERTICAL);
 		contentLayout.setGravity(Gravity.LEFT);
 		contentLayout.setPadding(0, 0, 0, 0);
@@ -125,11 +128,11 @@ public class CommentListItem extends LinearLayout {
 		
 		contentLayout.addView(contentHeaderLayout);
 		contentLayout.addView(commentText);
-		
-		LinearLayout iconLayout = new LinearLayout(getContext());
-		
+
 		LinearLayout.LayoutParams iconLayoutParams = new LinearLayout.LayoutParams(iconSize, iconSize);
 		iconLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
+
+		iconLayout = new LinearLayout(getContext());
 		iconLayout.setLayoutParams(iconLayoutParams);
 		iconLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
 		
@@ -205,5 +208,13 @@ public class CommentListItem extends LinearLayout {
 
 	public void setDeleteOk(boolean deleteOk) {
 		this.deleteOk = deleteOk;
+	}
+
+	public LinearLayout getContentLayout() {
+		return contentLayout;
+	}
+
+	public LinearLayout getIconLayout() {
+		return iconLayout;
 	}
 }

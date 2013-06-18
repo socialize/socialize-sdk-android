@@ -119,6 +119,20 @@ public class ActionBarCommentListener extends Activity {
 						// Return true to override default behavior
 						return false;
 					}
+
+					@Override
+					public boolean onCommentItemClicked(CommentListItem item) {
+						// Called when the user clicks the text portion of an entry in the comment list
+						// Return true to override default behavior
+						return false;
+					}
+
+					@Override
+					public boolean onCommentIconClicked(CommentListItem item) {
+						// Called when the user clicks the icon portion of an entry in the comment list
+						// Return true to override default behavior
+						return false;
+					}
 				});
 			}
 		});

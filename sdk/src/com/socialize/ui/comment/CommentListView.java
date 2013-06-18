@@ -300,10 +300,7 @@ public class CommentListView extends BaseView {
 				if(comments != null) {
 					comments.add(0, entity);
 				}
-				else {
-					// TODO: handle error!
-				}
-				
+
 				startIndex++;
 				endIndex++;
 				

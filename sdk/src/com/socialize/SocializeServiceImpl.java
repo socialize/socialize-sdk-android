@@ -1037,6 +1037,10 @@ public class SocializeServiceImpl implements SocializeService {
 				public void onInit(Context ctx, IOCContainer container) {
 					// This is the current context
 					setContext(ctx);
+
+					if(appUtils != null) {
+						appUtils.onResume(ctx);
+					}
 					
 					if(FacebookUtils.isAvailable(ctx)) {
 						try {
@@ -1062,6 +1066,10 @@ public class SocializeServiceImpl implements SocializeService {
 			
 			// This is the current context
 			setContext(context);
+
+			if(appUtils != null) {
+				appUtils.onResume(context);
+			}
 		}
 	}
 	

@@ -573,7 +573,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 		}
 	}
 	
-	private HttpResponse executeRequest(HttpClient client, HttpUriRequest request) throws ClientProtocolException, IOException {
+	private HttpResponse executeRequest(HttpClient client, HttpUriRequest request) throws IOException {
 		
 		if(logger != null && logger.isDebugEnabled()) {
 			
@@ -586,20 +586,26 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 				builder.append(header.getValue());
 				builder.append("\n");
 			}
-			
-			logger.debug("REQUEST \nurl:[" +
-					request.getURI().toString() +
-					"] \nheaders:\n" +
-					builder.toString());
-			
+
+			if(logger.isDebugEnabled()) {
+				logger.debug("REQUEST \nurl:[" +
+						request.getURI().toString() +
+						"] \nheaders:\n" +
+						builder.toString());
+
+			}
+
 			if(request instanceof HttpPost) {
 				HttpPost post = (HttpPost) request;
 				HttpEntity entity = post.getEntity();
 				String requestData = ioUtils.readSafe(entity.getContent());
-				logger.debug("REQUEST \ndata:[" +
-						requestData +
-						"]");
-			}			
+
+				if(logger.isDebugEnabled()) {
+					logger.debug("REQUEST \ndata:[" +
+							requestData +
+							"]");
+				}
+			}
 		}
 		
 		return client.execute(request);
@@ -655,8 +661,18 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 						}						
 						
 						if(!StringUtils.isEmpty(json)) {
-							JSONObject object = jsonParser.parseObject(json);
-							
+
+							JSONObject object;
+
+							try {
+								object = jsonParser.parseObject(json);
+							}
+							catch (JSONException je) {
+								throw new SocializeException("Failed to parse response as JSON [" +
+										json +
+										"]", je);
+							}
+
 							if(object.has(JSON_ATTR_ERRORS) && !object.isNull(JSON_ATTR_ERRORS)) {
 								
 								JSONArray errorList = object.getJSONArray(JSON_ATTR_ERRORS);

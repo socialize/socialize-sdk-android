@@ -32,4 +32,8 @@ public interface OnCommentViewActionListener extends SocializeListener {
 	public boolean onSettingsMenuItemClick(MenuItem item);
 
 	public boolean onRefreshMenuItemClick(MenuItem item);
+
+	public boolean onCommentItemClicked(CommentListItem item);
+
+	public boolean onCommentIconClicked(CommentListItem item);
 }

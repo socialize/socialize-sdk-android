@@ -33,6 +33,7 @@ import com.socialize.Socialize;
 import com.socialize.UserUtils;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.Comment;
+import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.image.ImageLoader;
@@ -228,26 +229,28 @@ public class CommentAdapter extends BaseAdapter {
 						}
 
 						if(currentUser != null) {
-							view.setDeleteOk(user.getId() == currentUser.getId());
+							view.setDeleteOk(user.getId().equals(currentUser.getId()));
 						}
 
-						view.setOnClickListener(new OnClickListener() {
+						final CommentListItem fItem = view;
 
+						view.getContentLayout().setOnClickListener(new OnClickListener() {
 							@Override
 							public void onClick(View v) {
-								if(user != null && user.getId() != null) {
-									Context ctx = context.get();
-									if(ctx instanceof Activity) {
-										UserUtils.showUserProfileWithAction((Activity) ctx, user, item);
-									}
-								}
-								else {
-									if(logger != null) {
-										logger.warn("No user for comment " + item.getId());
-									}
+								if(onCommentViewActionListener == null || !onCommentViewActionListener.onCommentItemClicked(fItem)) {
+									handleItemClick(user, item);
 								}
 							}
-						});		
+						});
+
+						view.getIconLayout().setOnClickListener(new OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								if(onCommentViewActionListener == null || !onCommentViewActionListener.onCommentIconClicked(fItem)) {
+									handleItemClick(user, item);
+								}
+							}
+						});
 					}
 					else {
 						displayName = "Anonymous";
@@ -347,6 +350,19 @@ public class CommentAdapter extends BaseAdapter {
 		}
 
 		return returnView;
+	}
+
+	private void handleItemClick(User user, SocializeAction item) {
+		if (user != null && user.getId() != null) {
+			Context ctx = context.get();
+			if (ctx instanceof Activity) {
+				UserUtils.showUserProfileWithAction((Activity) ctx, user, item);
+			}
+		} else {
+			if (logger != null) {
+				logger.warn("No user for comment " + item.getId());
+			}
+		}
 	}
 	
 	@Override
