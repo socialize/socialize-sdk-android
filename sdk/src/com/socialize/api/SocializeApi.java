@@ -85,15 +85,15 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		return provider.loadSession(endpoint, key, secret);
 	}
 	
-	public SocializeSession authenticate(Context context, String endpoint, String key, String secret, String uuid) throws SocializeException {
-		SocializeSession session = provider.authenticate(endpoint, key, secret, uuid);
+	public SocializeSession authenticate(Context context, String endpoint, String key, String secret, String uuid, String advertiserId) throws SocializeException {
+		SocializeSession session = provider.authenticate(endpoint, key, secret, uuid, advertiserId);
 		checkNotifications(context, session);
 		
 		return session;
 	}
 	
-	public SocializeSession authenticate(Context context, String endpoint, String key, String secret, AuthProviderData data, String udid) throws SocializeException {
-		SocializeSession session = provider.authenticate(endpoint, key, secret, data, udid);
+	public SocializeSession authenticate(Context context, String endpoint, String key, String secret, AuthProviderData data, String udid, String advertiserId) throws SocializeException {
+		SocializeSession session = provider.authenticate(endpoint, key, secret, data, udid, advertiserId);
 		checkNotifications(context, session);
 		return session;
 	}
@@ -384,7 +384,8 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			Context context,
 			String key, 
 			String secret, 
-			String uuid, 
+			String uuid,
+			String androidId,
 			final AuthProviderData data,
 			final SocializeAuthListener listener, 
 			final SocializeSessionConsumer sessionConsumer, 
@@ -461,6 +462,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		request.setConsumerKey(key);
 		request.setConsumerSecret(secret);
 		request.setUdid(uuid);
+		request.setAdvertiserId(androidId);
 		request.setAuthProviderData(data);
 		
 		AuthProviderType authProviderType = getAuthProviderType(data);
@@ -708,16 +710,16 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 				response = new SocializeAuthResponse();
 			}
 			
-			SocializeSession session = null;
+			SocializeSession session;
 			
 			AuthProviderData authProviderData = request.getAuthProviderData();
 			AuthProviderType authProviderType = getAuthProviderType(authProviderData);
 			
 			if(authProviderType == null || authProviderType.equals(AuthProviderType.SOCIALIZE)) {
-				session = SocializeApi.this.authenticate(context, request.getEndpoint(), request.getConsumerKey(), request.getConsumerSecret(), request.getUdid());
+				session = SocializeApi.this.authenticate(context, request.getEndpoint(), request.getConsumerKey(), request.getConsumerSecret(), request.getUdid(), request.getAdvertiserId());
 			}
 			else {
-				session = SocializeApi.this.authenticate(context, request.getEndpoint(), request.getConsumerKey(), request.getConsumerSecret(), authProviderData, request.getUdid());
+				session = SocializeApi.this.authenticate(context, request.getEndpoint(), request.getConsumerKey(), request.getConsumerSecret(), authProviderData, request.getUdid(), request.getAdvertiserId());
 			}
 			
 			response.setSession(session);

@@ -84,13 +84,14 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 	}
 
 	@Override
-	public HttpUriRequest getAuthRequestWith3rdParty(SocializeSession session, String endpoint, String udid, UserProviderCredentials userProviderCredentials) throws SocializeException {
+	public HttpUriRequest getAuthRequestWith3rdParty(SocializeSession session, String endpoint, String udid, String advertiserId,  UserProviderCredentials userProviderCredentials) throws SocializeException {
 		HttpPost post = new HttpPost(endpoint);
 		try {
 			List<NameValuePair> data = new ArrayList<NameValuePair>(1);
 			
 			JSONObject json = new JSONObject();
 			json.put("udid", udid);
+			json.put("a", advertiserId);
 			
 			AuthProviderInfo authProviderInfo = userProviderCredentials.getAuthProviderInfo();
 
@@ -126,7 +127,7 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 	}
 
 	@Override
-	public HttpUriRequest getAuthRequest(SocializeSession session, String endpoint, String udid, AuthProviderData data) throws SocializeException {
+	public HttpUriRequest getAuthRequest(SocializeSession session, String endpoint, String udid, String advertiserId, AuthProviderData data) throws SocializeException {
 		
 		UserProviderCredentialsMap userProviderCredentialsMap = session.getUserProviderCredentials();
 		
@@ -134,7 +135,7 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 			AuthProviderInfo authProviderInfo = data.getAuthProviderInfo();
 			if(authProviderInfo != null) {
 				UserProviderCredentials userProviderCredentials = userProviderCredentialsMap.get(authProviderInfo.getType());
-				return getAuthRequestWith3rdParty(session, endpoint, udid, userProviderCredentials);
+				return getAuthRequestWith3rdParty(session, endpoint, udid, advertiserId, userProviderCredentials);
 			}
 			else {
 				throw new SocializeException("No provider info found in stored session");

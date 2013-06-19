@@ -104,6 +104,7 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	public void authenticate(Context ctx, String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
 		if(checkKeys(consumerKey, consumerSecret, listener)) {
 			String udid = deviceUtils.getUDID(ctx);
+			String advertiserId = deviceUtils.getAndroidID(ctx);
 			
 			if(StringUtils.isEmpty(udid)) {
 				if(listener != null) {
@@ -112,7 +113,7 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 			}
 			else {
 				// All Api instances have authenticate, so we can just use any old one
-				authenticateAsync(ctx, consumerKey, consumerSecret, udid, authProviderData, listener, sessionConsumer, do3rdPartyAuth);
+				authenticateAsync(ctx, consumerKey, consumerSecret, udid, advertiserId, authProviderData, listener, sessionConsumer, do3rdPartyAuth);
 			}	
 		}
 	}
@@ -138,7 +139,8 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	@Override
 	public SocializeSession authenticateSynchronous(Context ctx, String consumerKey, String consumerSecret) throws SocializeException {
 		String udid = deviceUtils.getUDID(ctx);
-		SocializeSession session = authenticate(ctx, "/authenticate/",consumerKey, consumerSecret, udid);
+		String advertiserId = deviceUtils.getAndroidID(ctx);
+		SocializeSession session = authenticate(ctx, "/authenticate/",consumerKey, consumerSecret, udid, advertiserId);
 		return session;
 	}
 

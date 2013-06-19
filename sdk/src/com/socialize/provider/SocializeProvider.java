@@ -51,9 +51,9 @@ public interface SocializeProvider<T> {
 	
 	public void clearSession(AuthProviderType type);
 	
-	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException;
+	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid, String advertiserId) throws SocializeException;
 
-	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String udid) throws SocializeException;
+	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String udid, String advertiserId) throws SocializeException;
 
 	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids, String idKey, Map<String, String> extraParams, int startIndex, int endIndex) throws SocializeException;
 	

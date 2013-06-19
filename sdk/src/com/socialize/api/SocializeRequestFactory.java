@@ -36,11 +36,11 @@ import java.util.Map;
  */
 public interface SocializeRequestFactory<T extends SocializeObject> {
 	
-	public HttpUriRequest getAuthRequest(SocializeSession session, String endpoint, String udid, AuthProviderData data) throws SocializeException;
+	public HttpUriRequest getAuthRequest(SocializeSession session, String endpoint, String udid, String advertiserId, AuthProviderData data) throws SocializeException;
 	
-	public HttpUriRequest getAuthRequestWith3rdParty(SocializeSession session, String endpoint, String udid, UserProviderCredentials userProviderCredentials) throws SocializeException;
+	public HttpUriRequest getAuthRequestWith3rdParty(SocializeSession session, String endpoint, String udid, String advertiserId, UserProviderCredentials userProviderCredentials) throws SocializeException;
 	
-	public HttpUriRequest getGetRequest(SocializeSession session, String endpoint,String id) throws SocializeException;
+	public HttpUriRequest getGetRequest(SocializeSession session, String endpoint, String id) throws SocializeException;
 
 	public HttpUriRequest getListRequest(SocializeSession session, String endpoint, String key, String[] ids, String idKey) throws SocializeException;
 	

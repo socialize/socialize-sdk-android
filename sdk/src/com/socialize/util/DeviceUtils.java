@@ -47,6 +47,10 @@ public class DeviceUtils {
 			hasCamera = appUtils.isIntentAvailable(context, MediaStore.ACTION_IMAGE_CAPTURE);
 		}
 	}
+
+	public String getAndroidID(Context context) {
+		return Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
+	}
 	
 	public String getUDID(Context context) {
 		
@@ -60,7 +64,7 @@ public class DeviceUtils {
 				if (logger != null) {
 					logger.warn("Unable to determine device UDID, reverting to " + Secure.ANDROID_ID);
 				}
-				deviceId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
+				deviceId = getAndroidID(context);
 			}
 			
 			if (StringUtils.isEmpty(deviceId)) {

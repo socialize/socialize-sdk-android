@@ -61,7 +61,7 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 	}
 
 	@Override
-	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException {
+	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid, String advertiserId) throws SocializeException {
 		return new MockSocializeSession();
 	}
 
@@ -77,7 +77,7 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 	public void clearSession(AuthProviderType type) {}
 
 	@Override
-	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException {
+	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid, String advertiserId) throws SocializeException {
 		return new MockSocializeSession();
 	}
 	

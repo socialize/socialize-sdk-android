@@ -124,7 +124,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	}
 	
 	@Override
-	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException {
+	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid, String advertiserId) throws SocializeException {
 		
 		if(authProviderDataFactory == null) {
 			throw new SocializeException("Socialize not initialized");
@@ -137,7 +137,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 		}
 		
 		data.setAuthProviderInfo(authProviderInfoBuilder.getFactory(AuthProviderType.SOCIALIZE).getInstanceForRead());
-		return authenticate(endpoint, key, secret, data, uuid);
+		return authenticate(endpoint, key, secret, data, uuid, advertiserId);
 	}
 
 	@Override
@@ -234,7 +234,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	}
 
 	@Override
-	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException {
+	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid, String advertiserId) throws SocializeException {
 		try {
 			SessionLock.lock();
 
@@ -263,7 +263,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 				HttpEntity entity = null;
 				
 				try {
-					HttpUriRequest request = requestFactory.getAuthRequest(session, endpoint, uuid, data);
+					HttpUriRequest request = requestFactory.getAuthRequest(session, endpoint, uuid, advertiserId, data);
 					
 					if(logger != null && logger.isDebugEnabled()) {
 						logger.debug("Calling authenticate endpoint for device [" +
