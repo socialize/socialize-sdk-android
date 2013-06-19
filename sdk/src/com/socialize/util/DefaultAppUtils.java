@@ -380,7 +380,7 @@ public class DefaultAppUtils implements AppUtils {
 		}
 
 		// Always add the network state in case it changed
-		return userAgent + "Network/" + networkType + ";";
+		return userAgent + " Network/" + networkType + ";";
 	}
 	
 	/* (non-Javadoc)
