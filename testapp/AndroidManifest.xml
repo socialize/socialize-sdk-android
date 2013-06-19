@@ -8,6 +8,9 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
+    <!-- Required to determine network type for analytics -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
     <!-- Optional but recommended -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
