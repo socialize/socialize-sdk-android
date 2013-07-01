@@ -107,17 +107,24 @@ public class ProfileActivity extends SocializeUIActivity {
 						cursor.moveToFirst();
 						
 						String path = cursor.getString(column_index);
-						
-						cursor.close();
-						
-						BitmapFactory.Options bfo = new BitmapFactory.Options();
-						bfo.inDither = true;
-						bfo.inSampleSize = 2;
-						
-						Bitmap bm = BitmapFactory.decodeFile(path, bfo);
-						
-						if (bm != null) {
-							view.onImageChange(bm);
+
+						// Close should not be called as per http://developer.android.com/reference/android/app/Activity.html#managedQuery
+//						cursor.close();
+
+						if(path != null) {
+
+							BitmapFactory.Options bfo = new BitmapFactory.Options();
+							bfo.inDither = true;
+							bfo.inSampleSize = 2;
+
+							Bitmap bm = BitmapFactory.decodeFile(path, bfo);
+
+							if (bm != null) {
+								view.onImageChange(bm);
+							}
+						}
+						else {
+							Toast.makeText(this, "Failed to retrieve image", Toast.LENGTH_SHORT).show();
 						}
 					}
 				}
