@@ -40,6 +40,8 @@ public class UserSettings implements Serializable {
 	private String lastName;
 	
 	private Bitmap image;
+
+	private String localImagePath;
 	
 	private boolean notificationsEnabled = true;
 	private boolean locationEnabled = true;
@@ -156,6 +158,18 @@ public class UserSettings implements Serializable {
 	
 	public void setShowAuthDialog(boolean showAuthDialog) {
 		this.showAuthDialog = showAuthDialog;
+	}
+
+	public String getLocalImagePath() {
+		return localImagePath;
+	}
+
+	/**
+	 * Sets the path for the profile image.
+	 * @param localImagePath A local file system path.
+	 */
+	public void setLocalImagePath(String localImagePath) {
+		this.localImagePath = localImagePath;
 	}
 
 	/**

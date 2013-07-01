@@ -86,7 +86,7 @@ public class ProfileActivity extends SocializeUIActivity {
 				if(extras != null) {
 					Bitmap thumbnail = (Bitmap) extras.get("data");
 					if (thumbnail != null) {
-						view.onImageChange(thumbnail);
+						view.onImageChange(thumbnail, null);
 					}
 				}
 			}
@@ -115,12 +115,12 @@ public class ProfileActivity extends SocializeUIActivity {
 
 							BitmapFactory.Options bfo = new BitmapFactory.Options();
 							bfo.inDither = true;
-							bfo.inSampleSize = 2;
+							bfo.inSampleSize = 4;
 
 							Bitmap bm = BitmapFactory.decodeFile(path, bfo);
 
 							if (bm != null) {
-								view.onImageChange(bm);
+								view.onImageChange(bm, path);
 							}
 						}
 						else {

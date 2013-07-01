@@ -35,7 +35,7 @@ import com.socialize.ui.SocializeActivityLifecycleListener;
 public class Socialize {
 	
 	// This will be set during the build process
-	public static final String VERSION = "2.9.2";
+	public static final String VERSION = "2.9.6.1";
 	
 	public static final String ENTITY_OBJECT = "socialize.entity";
 	public static final String ENTITY_ID = "socialize.entity.id";

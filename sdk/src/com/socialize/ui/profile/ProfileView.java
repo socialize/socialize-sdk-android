@@ -42,14 +42,14 @@ public class ProfileView extends EntityView {
 	 * Called when the user's profile image is changed.
 	 * @param bitmap The image.
 	 */
-	public void onImageChange(Bitmap bitmap) {
+	public void onImageChange(Bitmap bitmap, String localPath) {
 		if(profileLayoutView != null) {
 			profileLayoutView.onImageChange(bitmap);
 		}
 		
 		// Set the image in the user settings
 		try {
-			UserUtils.getUserSettings(getContext()).setImage(bitmap);
+			UserUtils.getUserSettings(getContext()).setLocalImagePath(localPath);
 		}
 		catch (SocializeException e) {
 			Log.e(SocializeLogger.LOG_TAG, "Error getting user settings", e);

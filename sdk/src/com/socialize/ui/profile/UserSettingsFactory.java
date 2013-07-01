@@ -21,6 +21,8 @@
  */
 package com.socialize.ui.profile;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import com.socialize.entity.JSONFactory;
 import com.socialize.util.BitmapUtils;
 import org.json.JSONException;
@@ -63,11 +65,31 @@ public class UserSettingsFactory extends JSONFactory<UserSettings> {
 	protected void toJSON(UserSettings user, JSONObject object) throws JSONException {
 		
 		String encoded = null;
-		
-		if(user.getImage() != null) {
-			encoded = bitmapUtils.encode(user.getImage());
+
+		try {
+			if(user.getImage() != null) {
+				encoded = bitmapUtils.encode(user.getImage());
+			}
+			else if(user.getLocalImagePath() != null) {
+
+				BitmapFactory.Options bfo = new BitmapFactory.Options();
+				bfo.inDither = true;
+				bfo.inSampleSize = 4;
+
+				Bitmap bm = BitmapFactory.decodeFile(user.getLocalImagePath(), bfo);
+
+				encoded = bitmapUtils.encode(bm);
+
+				bm.recycle();
+
+				user.setLocalImagePath(null);
+			}
 		}
-		
+		catch (Throwable e) {
+			// TODO: Handle OOM errors by changing sample size on profile images
+			e.printStackTrace();
+		}
+
 		object.put(FIRST_NAME, user.getFirstName());
 		object.put(LAST_NAME, user.getLastName());
 		
