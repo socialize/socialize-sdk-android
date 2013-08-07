@@ -36,6 +36,7 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.SocializeAction;
 import com.socialize.ui.SocializeEntityLoader;
 import com.socialize.ui.util.Colors;
+import com.socialize.ui.util.CompatUtils;
 import com.socialize.ui.util.DateUtils;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
@@ -169,9 +170,9 @@ public class UserActivityListItem extends TableLayout {
 		if(background == null) {
 			background = makeDefaultBackground();
 		}
-		
-		setBackgroundDrawable(background);		
-		
+
+		CompatUtils.setBackgroundDrawable(this, background);
+
 		actionText.setTitleFontSize(titleFontSize);
 		actionText.setContentFontSize(contentFontSize);
 		actionText.setAction(context, action);

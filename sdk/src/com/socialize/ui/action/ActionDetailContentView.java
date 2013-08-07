@@ -45,6 +45,7 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.ui.profile.activity.UserActivityListItem;
 import com.socialize.ui.profile.activity.UserActivityView;
 import com.socialize.ui.util.Colors;
+import com.socialize.ui.util.CompatUtils;
 import com.socialize.ui.util.DateUtils;
 import com.socialize.ui.util.GeoUtils;
 import com.socialize.util.DisplayUtils;
@@ -167,7 +168,9 @@ public class ActionDetailContentView extends BaseView {
 		
 		profilePicture.setLayoutParams(imageLayout);
 		profilePicture.setPadding(imagePadding, imagePadding, imagePadding, imagePadding);
-		profilePicture.setBackgroundDrawable(imageBG);
+
+		CompatUtils.setBackgroundDrawable(profilePicture, imageBG);
+
 		profilePicture.setScaleType(ScaleType.CENTER_CROP);
 	
 		displayName.setTextColor(titleColor);
@@ -197,8 +200,9 @@ public class ActionDetailContentView extends BaseView {
 		if(userActivityViewFactory != null) {
 			
 			divider = new TextView(getContext());
-			divider.setBackgroundDrawable(drawables.getDrawable("divider.png", true, false, true));
-			
+
+			CompatUtils.setBackgroundDrawable(divider, drawables.getDrawable("divider.png", true, false, true));
+
 			LayoutParams dividerLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, displayUtils.getDIP(30));
 			
 			dividerLayout.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
@@ -229,7 +233,9 @@ public class ActionDetailContentView extends BaseView {
 			int activityBg = colors.getColor(Colors.ACTIVITY_BG);
 			GradientDrawable bg = makeGradient(activityBg, activityBg);
 			bg.setAlpha(144);
-			activityHolder.setBackgroundDrawable(bg);
+
+			CompatUtils.setBackgroundDrawable(activityHolder, bg);
+
 			activityHolderLayout.weight = 1.0f;
 			
 			userActivityView = userActivityViewFactory.getBean();

@@ -30,6 +30,7 @@ import com.socialize.ui.profile.UserSettings;
 import com.socialize.ui.slider.ActionBarSliderFactory;
 import com.socialize.ui.slider.ActionBarSliderFactory.ZOrder;
 import com.socialize.ui.slider.ActionBarSliderView;
+import com.socialize.ui.util.CompatUtils;
 import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.ui.view.LoadingListView;
 import com.socialize.util.*;
@@ -103,7 +104,9 @@ public class CommentListView extends BaseView {
 
 		setOrientation(LinearLayout.VERTICAL);
 		setLayoutParams(fill);
-		setBackgroundDrawable(drawables.getDrawable("crosshatch.png", true, true, true));
+
+		CompatUtils.setBackgroundDrawable(this, drawables.getDrawable("crosshatch.png", true, true, true));
+
 		setPadding(0, 0, 0, 0);
 		
 		boolean landscape = displayUtils.isLandscape();

@@ -37,6 +37,7 @@ import android.widget.TextView;
 import com.socialize.i18n.LocalizationService;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.util.Colors;
+import com.socialize.ui.util.CompatUtils;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
@@ -220,7 +221,8 @@ public class SocializeButton extends LinearLayout {
 			StateListDrawable state = new StateListDrawable();
 			state.addState(new int[]{R.attr.state_enabled}, makeEnabledBackgroundDrawable());
 			state.addState(new int[]{-R.attr.state_enabled}, makeDisabledBackgroundDrawable());
-			setBackgroundDrawable(state);
+
+			CompatUtils.setBackgroundDrawable(this, state);
 		}
 		
 		addView(textView);

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.socialize.entity.Comment;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.util.Colors;
+import com.socialize.ui.util.CompatUtils;
 import com.socialize.ui.view.CachedImageView;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
@@ -145,9 +146,9 @@ public class CommentListItem extends LinearLayout {
 		
 		GradientDrawable imageBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] {Color.WHITE, Color.WHITE});
 		imageBG.setStroke(displayUtils.getDIP(1), Color.BLACK);
-		
-		userIcon.setBackgroundDrawable(imageBG);
-		
+
+		CompatUtils.setBackgroundDrawable(userIcon, imageBG);
+
 		iconLayout.addView(userIcon);
 		
 		addView(iconLayout);

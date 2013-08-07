@@ -33,6 +33,7 @@ import android.view.MotionEvent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.socialize.ui.util.CompatUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 
@@ -55,8 +56,8 @@ public class ActionBarSliderHandle extends ActionBarSliderViewChild {
 	}
 
 	public void init() {
-		setBackgroundDrawable(drawables.getDrawable("toolbar_bg.png", true, false, true));
-		
+		CompatUtils.setBackgroundDrawable(this, drawables.getDrawable("toolbar_bg.png", true, false, true));
+
 		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, height);
 		params.setMargins(0,0,0,0);
 		setLayoutParams(params);	
@@ -75,8 +76,9 @@ public class ActionBarSliderHandle extends ActionBarSliderViewChild {
 		
 		closeButton = new LinearLayout(getContext());
 		closeButton.setPadding(0, 0, 0, 0);
-		closeButton.setBackgroundDrawable(drawable);
-		
+
+		CompatUtils.setBackgroundDrawable(closeButton, drawable);
+
 		icon = new ImageView(getContext());
 		
 		LayoutParams textParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);

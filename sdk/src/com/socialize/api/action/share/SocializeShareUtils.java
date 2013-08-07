@@ -220,9 +220,8 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 				}
 				
 				if(share != null && shareSystem != null && networks != null && networks.length > 0) {
-					for (int i = 0; i < networks.length; i++) {
-						final SocialNetwork network = networks[i];
-						shareSystem.share(context, getSocialize().getSession(), share, fText, null, ShareType.valueOf(network), socialNetworkListener);									
+					for (final SocialNetwork network : networks) {
+						shareSystem.share(context, getSocialize().getSession(), share, fText, null, ShareType.valueOf(network), socialNetworkListener);
 					}
 				}
 				
@@ -315,24 +314,26 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	
 	// Handles a non-network share like email or SMS.
 	protected void handleNonNetworkShare(Activity activity, final SocializeSession session, final ShareType shareType, final Share share, String shareText, Location location, final ShareAddListener shareAddListener) {
-		shareSystem.share(activity, session, share, shareText, location, shareType, new SocialNetworkListener() {
+
+		SocialNetworkListener snListener = new SocialNetworkListener() {
+
 			@Override
 			public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
 				if(shareAddListener != null) {
 					shareAddListener.onError(SocializeException.wrap(error));
 				}
 			}
-			
+
 			@Override
 			public void onCancel() {
 				if(shareAddListener != null) {
 					shareAddListener.onCancel();
 				}
-			}			
+			}
 
 			@Override
 			public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
-				return false;
+				return shareAddListener instanceof SocialNetworkListener && ((SimpleShareListener) shareAddListener).onBeforePost(parent, socialNetwork, postData);
 			}
 
 			@Override
@@ -341,7 +342,9 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 					shareAddListener.onCreate(share);
 				}
 			}
-		});	
+		};
+
+		shareSystem.share(activity, session, share, shareText, location, shareType, snListener);
 	}	
 
 	/*

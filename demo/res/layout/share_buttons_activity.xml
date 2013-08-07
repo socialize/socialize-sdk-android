@@ -6,7 +6,7 @@
     
 	<LinearLayout 
 	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
+	    android:layout_height="fill_parent"
 	    android:background="#000000"
 	    android:orientation="vertical"
 	    android:padding="8dip">
@@ -31,6 +31,13 @@
 	        android:layout_height="wrap_content"
 	        android:layout_gravity="center_horizontal"
 	        android:text="Share to Social Networks"/>
+
+        <Button
+            android:id="@+id/btnShareEmailSMS"
+            android:layout_width="260dip"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Share to Email/SMS"/>
 	    
 	    <Button 
 	        android:id="@+id/btnShareFacebook"

@@ -28,6 +28,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import com.socialize.ui.animation.RotatingFadeViewAnimator;
+import com.socialize.ui.util.CompatUtils;
 import com.socialize.util.DisplayUtils;
 
 import java.util.ArrayList;
@@ -71,9 +72,9 @@ public class ActionBarTicker extends LinearLayout {
 			setLayoutParams(masterParams);
 
 			ColorDrawable viewBg = new ColorDrawable((backgroundColor == null) ? DEFAULT_BACKGROUND_COLOR : backgroundColor);
-			
-			setBackgroundDrawable(viewBg);
-			
+
+			CompatUtils.setBackgroundDrawable(this, viewBg);
+
 			if(views != null) {
 				rotator = new RotatingFadeViewAnimator(views.size());
 				int index = 0;

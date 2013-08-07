@@ -37,6 +37,7 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.ui.image.ImageLoadListener;
 import com.socialize.ui.image.ImageLoadRequest;
 import com.socialize.ui.image.ImageLoader;
+import com.socialize.ui.util.CompatUtils;
 import com.socialize.ui.view.ClickableSectionCell;
 import com.socialize.util.Drawables;
 import com.socialize.util.SafeBitmapDrawable;
@@ -79,7 +80,9 @@ public class ProfilePictureEditView extends ClickableSectionCell {
 		
 		profilePicture.setLayoutParams(imageLayout);
 		profilePicture.setPadding(imagePadding, imagePadding, imagePadding, imagePadding);
-		profilePicture.setBackgroundDrawable(imageBG);
+
+		CompatUtils.setBackgroundDrawable(profilePicture, imageBG);
+
 		profilePicture.setScaleType(ScaleType.CENTER_CROP);
 		
 		return profilePicture;

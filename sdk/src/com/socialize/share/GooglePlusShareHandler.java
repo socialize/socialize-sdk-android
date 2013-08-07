@@ -25,13 +25,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
+import com.socialize.ShareUtils;
 import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ShareType;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.SocializeAction;
+import com.socialize.networks.DefaultPostData;
 import com.socialize.networks.SocialNetworkListener;
 
+import java.util.HashMap;
 
 /**
  * @author Jason Polites
@@ -41,13 +44,15 @@ public class GooglePlusShareHandler extends AbstractShareHandler {
 	
 	private ShareMessageBuilder shareMessageBuilder;
 
+	static String PLUS_PACKAGE = "com.google.android.apps.plus";
+
 	/* (non-Javadoc)
 	 * @see com.socialize.share.ShareHandler#isAvailableOnDevice(android.content.Context)
 	 */
 	@Override
 	public boolean isAvailableOnDevice(Context context) {
 		try {
-			context.getPackageManager().getPackageInfo("com.google.android.apps.plus", 0);
+			context.getPackageManager().getPackageInfo(PLUS_PACKAGE, 0);
 			return true;
 		}
 		catch (NameNotFoundException e) {
@@ -60,18 +65,41 @@ public class GooglePlusShareHandler extends AbstractShareHandler {
 	 */
 	@Override
 	protected void handle(Activity context, SocializeAction action, String text, PropagationInfo info, SocialNetworkListener listener) throws Exception {
-		Intent shareIntent = new Intent().setAction(Intent.ACTION_SEND);
-		shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);	
-		
+
+		boolean shareCancelled = false;
+
 		Entity entity = action.getEntity();
-		
-		String body = shareMessageBuilder.buildShareMessage(entity, info, text, false, true);
-		
-		shareIntent.putExtra(Intent.EXTRA_TEXT, body);
-		shareIntent.setType("text/plain");
-		shareIntent.setPackage("com.google.android.apps.plus");
-		context.startActivity(shareIntent);
-		
+
+		HashMap<String, Object> postValues = new HashMap<String, Object>();
+
+		postValues.put(ShareUtils.EXTRA_SUBJECT, shareMessageBuilder.buildShareSubject(entity));
+		postValues.put(ShareUtils.EXTRA_TEXT, shareMessageBuilder.buildShareMessage(entity, info, text, false, true));
+
+		DefaultPostData postData = new DefaultPostData();
+
+		postData.setEntity(entity);
+		postData.setPropagationInfo(info);
+		postData.setPostValues(postValues);
+
+		if(listener != null) {
+			shareCancelled = listener.onBeforePost(context, null, postData);
+		}
+
+		if(!shareCancelled) {
+			String body = String.valueOf(postValues.get(ShareUtils.EXTRA_TEXT));
+			String subject = String.valueOf(postValues.get(ShareUtils.EXTRA_SUBJECT));
+
+			Intent shareIntent = new Intent().setAction(Intent.ACTION_SEND);
+			shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
+			shareIntent.putExtra(Intent.EXTRA_TEXT, body);
+			shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+
+			shareIntent.setType("text/plain");
+			shareIntent.setPackage(PLUS_PACKAGE);
+			context.startActivity(shareIntent);
+		}
+
 		if(listener != null) {
 			listener.onAfterPost(context, null, null);
 		}		

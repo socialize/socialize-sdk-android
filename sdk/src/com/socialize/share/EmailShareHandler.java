@@ -24,12 +24,16 @@ package com.socialize.share;
 import android.app.Activity;
 import android.content.Intent;
 import android.text.Html;
+import com.socialize.ShareUtils;
 import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ShareType;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.SocializeAction;
+import com.socialize.networks.DefaultPostData;
 import com.socialize.networks.SocialNetworkListener;
+
+import java.util.HashMap;
 
 /**
  * @author Jason Polites
@@ -43,26 +47,45 @@ public class EmailShareHandler extends IntentShareHandler {
 	 */
 	@Override
 	protected void handle(Activity context, SocializeAction action, String text, PropagationInfo info, SocialNetworkListener listener) throws Exception {
-		
+
+		boolean shareCancelled = false;
+
 		Entity entity = action.getEntity();
-		
-		String title = "Share";
-		String subject = shareMessageBuilder.buildShareSubject(entity);
-		String body = shareMessageBuilder.buildShareMessage(entity, info, text, isHtml(), true);
-		Intent msg = getIntent();
-		msg.putExtra(Intent.EXTRA_TITLE, title);
-		
-		if(isHtml()) {
-			msg.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(body));
+
+		HashMap<String, Object> postValues = new HashMap<String, Object>();
+
+		postValues.put(ShareUtils.EXTRA_TITLE, "Share");
+		postValues.put(ShareUtils.EXTRA_SUBJECT, shareMessageBuilder.buildShareSubject(entity));
+		postValues.put(ShareUtils.EXTRA_TEXT, shareMessageBuilder.buildShareMessage(entity, info, text, isHtml(), true));
+
+		DefaultPostData postData = new DefaultPostData();
+
+		postData.setEntity(entity);
+		postData.setPropagationInfo(info);
+		postData.setPostValues(postValues);
+
+		if(listener != null) {
+			shareCancelled = listener.onBeforePost(context, null, postData);
 		}
-		else {
-			msg.putExtra(Intent.EXTRA_TEXT, body);
+
+		if(!shareCancelled) {
+			String title = String.valueOf(postValues.get(ShareUtils.EXTRA_TITLE));
+			String body = String.valueOf(postValues.get(ShareUtils.EXTRA_TEXT));
+			Intent msg = getIntent();
+			msg.putExtra(Intent.EXTRA_TITLE, title);
+
+			if(isHtml()) {
+				msg.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(body));
+			}
+			else {
+				msg.putExtra(Intent.EXTRA_TEXT, body);
+			}
+
+			msg.putExtra(Intent.EXTRA_SUBJECT, String.valueOf(postValues.get(ShareUtils.EXTRA_SUBJECT)));
+
+			startActivity(context, msg, title);
 		}
-		
-		msg.putExtra(Intent.EXTRA_SUBJECT, subject);
-		
-		startActivity(context, msg, title);
-		
+
 		if(listener != null) {
 			listener.onAfterPost(context, null, null);
 		}

@@ -33,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.socialize.i18n.LocalizationService;
 import com.socialize.ui.util.Colors;
+import com.socialize.ui.util.CompatUtils;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
@@ -230,8 +231,8 @@ public abstract class ClickableSectionCell extends LinearLayout {
 			stroke.setCornerRadii(strokeRadii);
 			stroke.setAlpha(bgAlpha);
 		}
-		
-		setBackgroundDrawable(bgLayer);
+
+		CompatUtils.setBackgroundDrawable(this, bgLayer);
 		
 		if(displayUtils != null) {
 			int padding = displayUtils.getDIP(8);
@@ -343,7 +344,7 @@ public abstract class ClickableSectionCell extends LinearLayout {
 				arrowIcon.setImageDrawable(drawables.getDrawable(toggledDrawableName));
 			}
 		}
-		else if(!toggled) {
+		else {
 			
 			if(imageOff != null) {
 				imageView.setImageDrawable(imageOff);

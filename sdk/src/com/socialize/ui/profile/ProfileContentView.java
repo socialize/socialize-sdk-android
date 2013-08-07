@@ -44,6 +44,7 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetworkCheckbox;
 import com.socialize.networks.SocialNetworkSignOutListener;
 import com.socialize.ui.user.UserService;
+import com.socialize.ui.util.CompatUtils;
 import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.ui.view.SocializeButton;
 import com.socialize.ui.view.SocializeEditText;
@@ -120,8 +121,9 @@ public class ProfileContentView extends BaseView {
 	public void init() {
 		
 		setOrientation(VERTICAL);
-		setBackgroundDrawable(drawables.getDrawable("slate.png", true, true, true));
-		
+
+		CompatUtils.setBackgroundDrawable(this, drawables.getDrawable("slate.png", true, true, true));
+
 		LayoutParams viewParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		
 		setLayoutParams(viewParams);
@@ -345,8 +347,8 @@ public class ProfileContentView extends BaseView {
 		
 		ColorDrawable background = new ColorDrawable(Color.BLACK);
 		background.setAlpha(64);
-		
-		buttons.setBackgroundDrawable(background);		
+
+		CompatUtils.setBackgroundDrawable(buttons, background);
 		
 		return buttons;
 	}

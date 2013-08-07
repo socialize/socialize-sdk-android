@@ -23,10 +23,12 @@ package com.socialize.demo.snippets;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import com.socialize.ShareUtils;
 import com.socialize.UserUtils;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.share.SocialNetworkDialogListener;
+import com.socialize.demo.DemoUtils;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.Share;
@@ -288,4 +290,32 @@ ShareUtils.getSharesByUser(this, user, 0, 10, new ShareListListener() {
 });
 //end-snippet-5
 }
+
+public void customizeEmailSMS() {
+// begin-snippet-9
+Activity context = this;
+
+Entity entity = Entity.newInstance("http://myentity.com", "My Name");
+
+// Setup the options for display.  This can be anything but for this example we will limit to email/sms
+int options = ShareUtils.EMAIL | ShareUtils.SMS;
+
+// Display the share dialog with these options
+ShareUtils.showShareDialog(context, entity, new SocialNetworkDialogListener() {
+
+	@Override
+	public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+		// For email/SMS the socialNetwork will be null but we can change postData
+		// Possible values are EXTRA_TEXT, EXTRA_SUBJECT and EXTRA_TITLE
+		postData.getPostValues().put(ShareUtils.EXTRA_TEXT, "This is custom text set in the listener! " + postData.getPropagationInfo().getEntityUrl());
+
+		// Return false to indicate we want to continue with the share (i.e. NOT cancel)
+		return false;
+	}
+
+}, options);
+//end-snippet-9
+}
+
+
 }

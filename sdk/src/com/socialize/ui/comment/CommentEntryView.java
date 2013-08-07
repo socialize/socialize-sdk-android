@@ -38,6 +38,7 @@ import com.socialize.i18n.I18NConstants;
 import com.socialize.i18n.LocalizationService;
 import com.socialize.ui.profile.UserSettings;
 import com.socialize.ui.util.Colors;
+import com.socialize.ui.util.CompatUtils;
 import com.socialize.ui.util.KeyboardUtils;
 import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.ui.view.SocializeButton;
@@ -97,7 +98,9 @@ public class CommentEntryView extends BaseView {
 		
 		setOrientation(LinearLayout.VERTICAL);
 		setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
-		setBackgroundDrawable(drawables.getDrawable("slate.png", true, true, true));
+
+		CompatUtils.setBackgroundDrawable(this,drawables.getDrawable("slate.png", true, true, true));
+
 		setLayoutParams(fill);
 		
 		LinearLayout buttonLayoutLeft = new LinearLayout(getContext());
@@ -277,8 +280,10 @@ public class CommentEntryView extends BaseView {
 			LayoutParams toolbarLayoutRightParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 			
 			GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { colors.getColor(Colors.COMMENT_ENTRY_BOTTOM), colors.getColor(Colors.COMMENT_ENTRY_TOP) });
-			toolbarLayout.setBackgroundDrawable(background);
-			toolbarLayout.setPadding(padding, padding, padding, padding);		
+
+			CompatUtils.setBackgroundDrawable(toolbarLayout,background);
+
+			toolbarLayout.setPadding(padding, padding, padding, padding);
 			
 			toolbarLayoutLeftParams.weight = 1.0f;
 			

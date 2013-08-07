@@ -35,6 +35,7 @@ import com.socialize.android.ioc.BeanCreationListener;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.util.Colors;
+import com.socialize.ui.util.CompatUtils;
 import com.socialize.util.DisplayUtils;
 
 /**
@@ -91,8 +92,9 @@ public abstract class AsyncDialogFactory<V extends DialogPanelView, L extends So
 				GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { colors.getColor(Colors.AUTH_REQUEST_DIALOG_BOTTOM), colors.getColor(Colors.AUTH_REQUEST_DIALOG_TOP)});
 				
 				background.setCornerRadius(displayUtils.getDIP(4));
-				
-				view.setBackgroundDrawable(background);				
+
+				CompatUtils.setBackgroundDrawable(view, background);
+
 				dialog.setContentView(view, params);
 			
 				dialog.setOnCancelListener(new OnCancelListener() {

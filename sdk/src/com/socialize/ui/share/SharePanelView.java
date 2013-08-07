@@ -21,6 +21,7 @@
  */
 package com.socialize.ui.share;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -34,6 +35,7 @@ import com.socialize.ShareUtils;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
+import com.socialize.api.action.share.SimpleShareListener;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
@@ -44,6 +46,7 @@ import com.socialize.i18n.LocalizationService;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.log.SocializeLogger;
+import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.FacebookShareCell;
@@ -51,11 +54,13 @@ import com.socialize.networks.twitter.TwitterShareCell;
 import com.socialize.ui.dialog.DialogPanelView;
 import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.ui.util.Colors;
+import com.socialize.ui.util.CompatUtils;
 import com.socialize.ui.view.ClickableSectionCell;
 import com.socialize.ui.view.ClickableSectionCell.OnToggleListener;
 import com.socialize.ui.view.SocializeButton;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
+import org.json.JSONObject;
 
 /**
  * @author Jason Polites
@@ -350,6 +355,7 @@ public class SharePanelView extends DialogPanelView {
 			}
 			else {
 				rememberCell.setVisibility(View.GONE);
+				rememberCell = null;
 			}
 		}	
 		
@@ -480,7 +486,7 @@ public class SharePanelView extends DialogPanelView {
 						dialog.dismiss();
 					}
 					
-					ShareUtils.shareViaEmail(getActivity(), entity, new ShareAddListener() {
+					ShareUtils.shareViaEmail(getActivity(), entity, new SimpleShareListener() {
 						
 						@Override
 						public void onError(SocializeException error) {
@@ -491,6 +497,18 @@ public class SharePanelView extends DialogPanelView {
 						@Override
 						public void onCreate(Share entity) {
 							progress.dismiss();
+						}
+
+						@Override
+						public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+							return socialNetworkListener != null && socialNetworkListener.onBeforePost(parent, socialNetwork, postData);
+						}
+
+						@Override
+						public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+							if(socialNetworkListener != null) {
+								socialNetworkListener.onAfterPost(parent, socialNetwork, responseObject);
+							}
 						}
 					});
 				}
@@ -511,7 +529,7 @@ public class SharePanelView extends DialogPanelView {
 					}
 					
 					final ProgressDialog progress = SafeProgressDialog.show(v.getContext());
-					ShareUtils.shareViaSMS(getActivity(), entity, new ShareAddListener() {
+					ShareUtils.shareViaSMS(getActivity(), entity, new SimpleShareListener() {
 						
 						@Override
 						public void onError(SocializeException error) {
@@ -522,6 +540,18 @@ public class SharePanelView extends DialogPanelView {
 						@Override
 						public void onCreate(Share entity) {
 							progress.dismiss();
+						}
+
+						@Override
+						public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+							return socialNetworkListener != null && socialNetworkListener.onBeforePost(parent, socialNetwork, postData);
+						}
+
+						@Override
+						public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+							if(socialNetworkListener != null) {
+								socialNetworkListener.onAfterPost(parent, socialNetwork, responseObject);
+							}
 						}
 					});
 				}
@@ -543,7 +573,7 @@ public class SharePanelView extends DialogPanelView {
 					
 					final ProgressDialog progress = SafeProgressDialog.show(v.getContext());
 					
-					ShareUtils.shareViaGooglePlus(getActivity(), entity, new ShareAddListener() {
+					ShareUtils.shareViaGooglePlus(getActivity(), entity, new SimpleShareListener() {
 						
 						@Override
 						public void onError(SocializeException error) {
@@ -554,6 +584,18 @@ public class SharePanelView extends DialogPanelView {
 						@Override
 						public void onCreate(Share entity) {
 							progress.dismiss();
+						}
+
+						@Override
+						public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+							return socialNetworkListener != null && socialNetworkListener.onBeforePost(parent, socialNetwork, postData);
+						}
+
+						@Override
+						public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+							if(socialNetworkListener != null) {
+								socialNetworkListener.onAfterPost(parent, socialNetwork, responseObject);
+							}
 						}
 					});
 				}
@@ -658,7 +700,8 @@ public class SharePanelView extends DialogPanelView {
 		if(colors != null) {
 			GradientDrawable headerBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[]{colors.getColor(Colors.AUTH_PANEL_BOTTOM), colors.getColor(Colors.AUTH_PANEL_TOP)});
 			headerBG.setCornerRadii(new float[]{headerRadius, headerRadius, headerRadius, headerRadius, 0.0f, 0.0f, 0.0f, 0.0f});
-			header.setBackgroundDrawable(headerBG);
+
+			CompatUtils.setBackgroundDrawable(header, headerBG);
 		}
 
 		if(localizationService != null) {

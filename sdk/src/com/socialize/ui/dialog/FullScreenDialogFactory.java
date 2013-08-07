@@ -33,6 +33,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.LinearLayout;
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.ui.util.CompatUtils;
 import com.socialize.ui.view.SocializeButton;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
@@ -70,8 +71,9 @@ public class FullScreenDialogFactory {
 			
 			toolbar.setLayoutParams(toolbarParams);
 			toolbar.setGravity(Gravity.CENTER_VERTICAL|Gravity.RIGHT);
-			toolbar.setBackgroundDrawable(viewBg);
-			
+
+			CompatUtils.setBackgroundDrawable(toolbar, viewBg);
+
 			SocializeButton button = buttonFactory.getBean();
 			button.setOnClickListener(new OnClickListener() {
 				@Override

@@ -23,11 +23,16 @@ package com.socialize.share;
 
 import android.app.Activity;
 import android.content.Intent;
+import com.socialize.ShareUtils;
 import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ShareType;
+import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.SocializeAction;
+import com.socialize.networks.DefaultPostData;
 import com.socialize.networks.SocialNetworkListener;
+
+import java.util.HashMap;
 
 
 /**
@@ -42,11 +47,31 @@ public class SmsShareHandler extends IntentShareHandler {
 	 */
 	@Override
 	protected void handle(Activity context, SocializeAction action, String text, PropagationInfo info, SocialNetworkListener listener) throws Exception {
-		String body = shareMessageBuilder.buildShareMessage(action.getEntity(), info, text, false, true);
-		Intent sendIntent = getIntent();
-		sendIntent.putExtra("sms_body", body); 
-		context.startActivity(sendIntent);
-		
+		boolean shareCancelled = false;
+
+		Entity entity = action.getEntity();
+
+		HashMap<String, Object> postValues = new HashMap<String, Object>();
+
+		postValues.put(ShareUtils.EXTRA_TEXT, shareMessageBuilder.buildShareMessage(action.getEntity(), info, text, false, true));
+
+		DefaultPostData postData = new DefaultPostData();
+
+		postData.setEntity(entity);
+		postData.setPropagationInfo(info);
+		postData.setPostValues(postValues);
+
+		if(listener != null) {
+			shareCancelled = listener.onBeforePost(context, null, postData);
+		}
+
+		if(!shareCancelled) {
+			String body = String.valueOf(postValues.get(ShareUtils.EXTRA_TEXT));
+			Intent sendIntent = getIntent();
+			sendIntent.putExtra("sms_body", body);
+			context.startActivity(sendIntent);
+		}
+
 		if(listener != null) {
 			listener.onAfterPost(context, null, null);
 		}

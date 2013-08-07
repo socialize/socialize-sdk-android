@@ -43,7 +43,7 @@ public class SmartAlertUtils {
 	/**
 	 * Handles a GCM message.  Returns true ONLY if this message was intended for Socialize.
 	 * @param context
-	 * @param messageData
+	 * @param intent
 	 * @return
 	 */
 	public static boolean onMessage(Context context, Intent intent) {

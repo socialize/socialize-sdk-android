@@ -34,6 +34,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.socialize.i18n.LocalizationService;
 import com.socialize.ui.util.Colors;
+import com.socialize.ui.util.CompatUtils;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
@@ -114,7 +115,7 @@ public class SocializeHeader extends LinearLayout {
 		LayerDrawable bg = newLayerDrawable(layers);
 		bg.setLayerInset(1, 0, 0, 0, 1);
 		
-		this.setBackgroundDrawable(bg);
+		CompatUtils.setBackgroundDrawable(this, bg);
 		
 		titleText = new TextView(getContext());
 		titleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);

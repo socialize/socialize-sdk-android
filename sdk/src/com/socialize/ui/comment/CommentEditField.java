@@ -32,6 +32,7 @@ import android.widget.TextView;
 import com.socialize.i18n.I18NConstants;
 import com.socialize.i18n.LocalizationService;
 import com.socialize.ui.util.Colors;
+import com.socialize.ui.util.CompatUtils;
 import com.socialize.util.DisplayUtils;
 
 /**
@@ -68,7 +69,9 @@ public class CommentEditField extends LinearLayout {
 		editText.setMinHeight(displayUtils.getDIP(36)); 
 		editText.setGravity(Gravity.CENTER_VERTICAL);
 		editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-		editText.setBackgroundDrawable(makeTextViewBackground());
+
+		CompatUtils.setBackgroundDrawable(editText, makeTextViewBackground());
+
 		editText.setHint(" " + localizationService.getString(I18NConstants.COMMENT_HINT));
 		editText.setLayoutParams(editTextLayoutParams);
 		editText.setPadding(four, four, four, four);

@@ -108,11 +108,7 @@ public class ShareDialogFactory extends AsyncDialogFactory<SharePanelView, Share
 			@Override
 			public boolean onContinue(Dialog dialog, boolean remember, SocialNetwork... networks) {
 				recordEvent("share", networks);
-				if(shareDialoglistener != null) {
-					return shareDialoglistener.onContinue(dialog, remember, networks);
-				}
-				
-				return false;
+				return shareDialoglistener != null && shareDialoglistener.onContinue(dialog, remember, networks);
 			}
 
 			@Override

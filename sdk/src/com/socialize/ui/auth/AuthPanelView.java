@@ -51,6 +51,7 @@ import com.socialize.ui.dialog.DialogPanelView;
 import com.socialize.ui.profile.UserSettings;
 import com.socialize.ui.share.RememberCell;
 import com.socialize.ui.util.Colors;
+import com.socialize.ui.util.CompatUtils;
 import com.socialize.ui.view.ClickableSectionCell;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
@@ -320,7 +321,8 @@ public class AuthPanelView extends DialogPanelView {
 		if(colors != null) {
 			GradientDrawable headerBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[]{colors.getColor(Colors.AUTH_PANEL_BOTTOM), colors.getColor(Colors.AUTH_PANEL_TOP)});
 			headerBG.setCornerRadii(new float[]{headerRadius, headerRadius, headerRadius, headerRadius, 0.0f, 0.0f, 0.0f, 0.0f});
-			header.setBackgroundDrawable(headerBG);
+
+			CompatUtils.setBackgroundDrawable(header, headerBG);
 		}
 
 		header.setText(localizationService.getString(I18NConstants.AUTH_HEADER));

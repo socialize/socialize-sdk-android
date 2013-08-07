@@ -93,7 +93,11 @@ public class ShareUtils {
 	 * The default display settings for the share dialog.
 	 */
 	public static final int DEFAULT = EMAIL|SMS|FACEBOOK|TWITTER|GOOGLE_PLUS|MORE_OPTIONS;
-	
+
+	public static final String EXTRA_TITLE = "title";
+	public static final String EXTRA_TEXT = "text";
+	public static final String EXTRA_SUBJECT = "subject";
+
 	static ShareUtilsProxy proxy;
 	
 	static {
@@ -127,16 +131,16 @@ public class ShareUtils {
 	 */
 	public static void preloadShareDialog (Activity context) {
 		proxy.preloadShareDialog(context);
-	};	
-	
+	}
+
 	/**
 	 * Pre-loads the link dialog in the background to improve load speed and end user responsiveness.
 	 * @param context The current context.
 	 */
 	public static void preloadLinkDialog (Activity context) {
 		proxy.preloadLinkDialog(context);
-	};	
-	
+	}
+
 	/**
 	 * Displays the default share dialog.  In most cases this is the simplest version to use.
 	 * @param context The current context.
@@ -154,8 +158,8 @@ public class ShareUtils {
 	 */
 	public static void showShareDialog (Activity context, Entity entity, SocialNetworkDialogListener listener) {
 		proxy.showShareDialog(context, entity, DEFAULT, listener, listener);
-	};	
-	
+	}
+
 	/**
 	 * Displays the default share dialog and allows for the handling of share events.
 	 * @param context The current context.
@@ -167,8 +171,8 @@ public class ShareUtils {
 	 */
 	public static void showShareDialog (Activity context, Entity entity, SocialNetworkDialogListener listener, int options) {
 		proxy.showShareDialog(context, entity, options, listener, listener);
-	};
-	
+	}
+
 	/**
 	 * Shares the given entity via email.  This method with launch the default email application on the device.
 	 * @param context The current context.
@@ -177,9 +181,9 @@ public class ShareUtils {
 	 */
 	public static void shareViaEmail(Activity context, Entity entity, ShareAddListener listener) {
 		proxy.shareViaEmail(context, entity, listener);
-	};
-	
-	
+	}
+
+
 	/**
 	 * Shares the given entity via Google+.  This method with launch the Google+ application on the device.
 	 * @param context The current context.
@@ -188,8 +192,8 @@ public class ShareUtils {
 	 */
 	public static void shareViaGooglePlus(Activity context, Entity entity, ShareAddListener listener) {
 		proxy.shareViaGooglePlus(context, entity, listener);
-	};
-	
+	}
+
 	/**
 	 * Shares the given entity via a user selected medium.  This method with launch the default application share dialog on the device.
 	 * @param context The current context.
@@ -198,8 +202,8 @@ public class ShareUtils {
 	 */	
 	public static void shareViaOther(Activity context, Entity entity, ShareAddListener listener) {
 		proxy.shareViaOther(context, entity, listener);
-	};
-	
+	}
+
 	/**
 	 * Shares the given entity via SMS.  This method with launch the default SMS application on the device.
 	 * @param context The current context.
@@ -208,8 +212,8 @@ public class ShareUtils {
 	 */	
 	public static void shareViaSMS(Activity context, Entity entity, ShareAddListener listener) {
 		proxy.shareViaSMS(context, entity, listener);
-	};
-	
+	}
+
 	/**
 	 * Shares the given entity via a Social Network such as Twitter or Facebook.  This will prompt the user to select a network.
 	 * @param context The current context.
@@ -229,8 +233,8 @@ public class ShareUtils {
 	 */
 	public static void getShare (Activity context, ShareGetListener listener, long id) {
 		proxy.getShare(context, listener, id);
-	};
-	
+	}
+
 	/**
 	 * Retrieves multiple share events based on ID.
 	 * @param context The current context.
@@ -239,8 +243,8 @@ public class ShareUtils {
 	 */
 	public static void getShares (Activity context, ShareListListener listener, long...ids) {
 		proxy.getShares(context, listener, ids);
-	};
-	
+	}
+
 	/**
 	 * Retrieves all share events performed by the given user.
 	 * @param context The current context.
@@ -251,8 +255,8 @@ public class ShareUtils {
 	 */
 	public static void getSharesByUser (Activity context, User user, int start, int end, ShareListListener listener) {
 		proxy.getSharesByUser(context, user, start, end, listener);
-	};
-	
+	}
+
 	/**
 	 * Retrieves all share events performed on the given entity.
 	 * @param context The current context.
@@ -274,8 +278,8 @@ public class ShareUtils {
 	 */
 	public static void getSharesByApplication (Activity context, int start, int end, ShareListListener listener) {
 		proxy.getSharesByApplication(context, start, end, listener);
-	};	
-	
+	}
+
 	/**
 	 * Creates a simple Socialize Share object.  
 	 * NOTE: This does NOT perform any actual sharing (propagation).  It is used to simply record the fact that a share is taking place.
@@ -298,8 +302,8 @@ public class ShareUtils {
 	 */
 	public static boolean canShareViaEmail(Activity context) {
 		return proxy.canShareViaEmail(context);
-	};
-	
+	}
+
 	/**
 	 * Determines if the current device is capable of sharing via SMS.
 	 * @param context The current context.
@@ -307,5 +311,5 @@ public class ShareUtils {
 	 */	
 	public static boolean canShareViaSMS(Activity context) {
 		return proxy.canShareViaSMS(context);
-	};
+	}
 }

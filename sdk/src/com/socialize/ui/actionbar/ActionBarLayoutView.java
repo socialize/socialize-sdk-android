@@ -55,6 +55,7 @@ import com.socialize.ui.cache.CacheableEntity;
 import com.socialize.ui.cache.EntityCache;
 import com.socialize.ui.comment.OnCommentViewActionListener;
 import com.socialize.ui.dialog.ProgressDialogFactory;
+import com.socialize.ui.util.CompatUtils;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
@@ -218,8 +219,9 @@ public class ActionBarLayoutView extends BaseView {
 		
 		if(commentButton != null) {
 			commentButton.setIcon(commentIcon);
-			commentButton.setBackgroundDrawable(bg);
-			
+
+			CompatUtils.setBackgroundDrawable(commentButton, bg);
+
 			commentButton.setListener(new ActionBarButtonListener() {
 				@Override
 				public void onClick(ActionBarButton button) {
@@ -238,8 +240,9 @@ public class ActionBarLayoutView extends BaseView {
 		
 		if(likeButton != null) {
 			likeButton.setIcon(likeIcon);
-			likeButton.setBackgroundDrawable(bg);
-			
+
+			CompatUtils.setBackgroundDrawable(likeButton, bg);
+
 			likeButton.setListener(new ActionBarButtonListener() {
 				@Override
 				public void onClick(ActionBarButton button) {
@@ -260,8 +263,9 @@ public class ActionBarLayoutView extends BaseView {
 		
 		if(shareButton != null) {
 			shareButton.setIcon(shareIcon);
-			shareButton.setBackgroundDrawable(bg);
-			
+
+			CompatUtils.setBackgroundDrawable(shareButton, bg);
+
 			shareButton.setListener(new ActionBarButtonListener() {
 				@Override
 				public void onClick(ActionBarButton button) {

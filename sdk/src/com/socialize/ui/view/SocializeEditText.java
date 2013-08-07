@@ -31,6 +31,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.socialize.ui.util.Colors;
+import com.socialize.ui.util.CompatUtils;
 import com.socialize.util.DisplayUtils;
 
 /**
@@ -91,8 +92,9 @@ public class SocializeEditText extends LinearLayout {
 		if(label != null) {
 			objLabel.setText(label);
 		}
-		
-		objEdit.setBackgroundDrawable(textBG);
+
+		CompatUtils.setBackgroundDrawable(objEdit, textBG);
+
 		objEdit.setPadding(padding, padding, padding, padding);
 		
 		addView(objLabel);

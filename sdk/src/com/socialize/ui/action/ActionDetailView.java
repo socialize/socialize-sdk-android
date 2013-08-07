@@ -29,6 +29,7 @@ import android.widget.ScrollView;
 import com.socialize.Socialize;
 import com.socialize.entity.SocializeAction;
 import com.socialize.log.SocializeLogger;
+import com.socialize.ui.util.CompatUtils;
 import com.socialize.ui.view.EntityView;
 import com.socialize.util.Drawables;
 
@@ -66,8 +67,9 @@ public class ActionDetailView extends EntityView {
 				LayoutParams masterParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
 				
 				layout.setLayoutParams(masterParams);
-				layout.setBackgroundDrawable(((Drawables)container.getBean("drawables")).getDrawable("slate.png", true, true, true));
-				
+
+				CompatUtils.setBackgroundDrawable(layout, ((Drawables)container.getBean("drawables")).getDrawable("slate.png", true, true, true));
+
 				layout.addView(scrollView);
 				
 				view = layout;

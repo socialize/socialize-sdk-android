@@ -17,6 +17,7 @@ import android.widget.ViewFlipper;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.i18n.LocalizationService;
 import com.socialize.ui.util.Colors;
+import com.socialize.ui.util.CompatUtils;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
@@ -147,8 +148,8 @@ public class CustomCheckbox extends BaseView {
 			bg.setLayerInset(2, 1, 1, 1, 1);
 			
 			bg.setAlpha(96);
-			
-			setBackgroundDrawable(bg);
+
+			CompatUtils.setBackgroundDrawable(this, bg);
 		}
 	}
 	

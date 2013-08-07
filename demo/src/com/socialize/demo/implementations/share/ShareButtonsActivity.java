@@ -34,6 +34,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import com.socialize.ShareUtils;
+import com.socialize.api.action.ShareType;
 import com.socialize.api.action.share.SocialNetworkDialogListener;
 import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.demo.ConfigDialog;
@@ -68,7 +69,30 @@ public class ShareButtonsActivity extends DemoActivity {
 		Button btnShareTwitter = (Button) findViewById(R.id.btnShareTwitter);
 		Button btnConfig = (Button) findViewById(R.id.btnConfig);
 		Button btnSharePinterest = (Button) findViewById(R.id.btnSharePinterest);
-		
+		Button btnShareEmailSMS = (Button) findViewById(R.id.btnShareEmailSMS);
+
+		btnShareEmailSMS.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ShareUtils.showShareDialog(ShareButtonsActivity.this, entity, new SocialNetworkDialogListener() {
+
+					@Override
+					public boolean onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+						// For email/SMS the socialNetwork will be null but we can change postData
+						postData.getPostValues().put(ShareUtils.EXTRA_TEXT, "This is custom text set in the listener! " + postData.getPropagationInfo().getEntityUrl());
+
+						// Return false to indicate we want to continue with the share (i.e. NOT cancel)
+						return false;
+					}
+
+					@Override
+					public void onSimpleShare(ShareType type) {
+						DemoUtils.showToast(ShareButtonsActivity.this, "Shared to " + type.name());
+					}
+				}, ShareUtils.SMS|ShareUtils.EMAIL);
+			}
+		});
+
 		btnShareTwitter.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(final View v) {
@@ -131,7 +155,7 @@ public class ShareButtonsActivity extends DemoActivity {
 					@Override
 					public void onCancel() {
 						progress.dismiss();
-						DemoUtils.showToast((Activity)v.getContext(), "Cancelled");
+						DemoUtils.showToast(v.getContext(), "Cancelled");
 					}
 				});
 			}
