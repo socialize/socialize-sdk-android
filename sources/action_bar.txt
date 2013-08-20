@@ -116,6 +116,18 @@ To change the appearance of the Action Bar simply provide an **ActionBarOptions*
 	:start-after: begin-snippet-0
 	:end-before: end-snippet-0
 
+
+Adding/Removing Buttons
+-----------------------
+
+You can also programmatically remove entire functions from the action bar.  For example, the following code will remove
+the comment button:
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ActionBarNoComments.java
+	:start-after: begin-snippet-0
+	:end-before: end-snippet-0
+	:emphasize-lines: 22
+
 Action Bar Icon Assets
 ~~~~~~~~~~~~~~~~~~~~~~
 To make customization simple we have provided Photoshop PSD templates for the standard Action Bar icons used in the default Action Bar.

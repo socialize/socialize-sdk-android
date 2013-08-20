@@ -260,15 +260,24 @@ you can implement a *Flow Interrupt* to extract text from the user before the sh
 	:start-after: begin-snippet-1
 	:end-before: end-snippet-1
 	
-Customizing the Content of Facebook Posts
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Customizing the Content of Facebook & Twiter Posts
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In some situations you may want to override the default behavior of posting to Facebook.  In these cases you can 
+In some situations you may want to override the default behavior of posting to Facebook or Twitter.  In these cases you can
 implement the **onBeforePost** method of the listener you pass to the ShareUtils call
 
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ShareSnippets.java
 	:start-after: begin-snippet-3
-	:end-before: end-snippet-3	
+	:end-before: end-snippet-3
+
+Customizing the Content of Email & SMS Posts
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can also override the default text for email and sms shares
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ShareSnippets.java
+	:start-after: begin-snippet-9
+	:end-before: end-snippet-9
 
 Retrieving Shares
 ~~~~~~~~~~~~~~~~~
