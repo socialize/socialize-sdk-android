@@ -35,8 +35,21 @@ import com.socialize.demo.R;
  *
  */
 public class TwitterActivity extends ListActivity {
-	final String[] values = new String[] { "Tweet", "Tweet Photo", "List Followers", "List Tweets", "Get Access Token"};//, "Open Graph Test"};
-	final Class<?>[] activities = new Class<?>[] { TweetActivity.class, TweetPhotoActivity.class, ListFollowersActivity.class, ListTweetsActivity.class, GetTokenActivity.class};//, OpenGraphActivity.class};
+	final String[] values = new String[] {
+			"Tweet",
+			"Tweet Photo",
+			"List Followers",
+			"List Tweets",
+			"User Timeline",
+			"Get Access Token"};
+
+	final Class<?>[] activities = new Class<?>[] {
+			TweetActivity.class,
+			TweetPhotoActivity.class,
+			ListFollowersActivity.class,
+			ListTweetsActivity.class,
+			UserTimelineActivity.class,
+			GetTokenActivity.class};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

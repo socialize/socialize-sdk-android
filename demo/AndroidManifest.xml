@@ -182,6 +182,7 @@
         <activity android:name=".implementations.twitter.GetTokenActivity"/>
         <activity android:name=".implementations.twitter.TweetPhotoActivity"/>
         <activity android:name=".implementations.twitter.ListTweetsActivity"/>
+        <activity android:name=".implementations.twitter.UserTimelineActivity"/>
 
         <!-- User -->
         <activity android:name=".implementations.user.UserActivity"/>

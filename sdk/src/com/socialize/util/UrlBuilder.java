@@ -21,6 +21,7 @@
  */
 package com.socialize.util;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 /**
@@ -47,7 +48,6 @@ public class UrlBuilder {
 		}
 		
 		this.builder.append(baseUri);
-		if(!baseUri.endsWith("/")) this.builder.append("/");
 	}
 	
 	public void addParams(String key, String[] values) {
@@ -57,6 +57,14 @@ public class UrlBuilder {
 	}
 	
 	public void addParam(String key, String value) {
+
+		try {
+			value = URLEncoder.encode(value, "utf-8");
+		}
+		catch (UnsupportedEncodingException ignore) {
+			ignore.printStackTrace();
+		}
+
 		if(firstParam) {
 			firstParam = false;
 			this.builder.append("?");
@@ -64,10 +72,10 @@ public class UrlBuilder {
 		else {
 			this.builder.append("&");
 		}
-		
+
 		this.builder.append(key);
 		this.builder.append("=");
-		this.builder.append(URLEncoder.encode(value));
+		this.builder.append(value);
 	}
 
 	@Override
