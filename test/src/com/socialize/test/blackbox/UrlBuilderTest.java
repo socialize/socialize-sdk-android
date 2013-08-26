@@ -40,7 +40,7 @@ public class UrlBuilderTest extends SocializeUnitTest {
 		builder.start(endpoint);
 		builder.addParams(key, ids);
 		
-		String expected = "foo/?bar=A&bar=B&bar=C";
+		String expected = "foo?bar=A&bar=B&bar=C";
 		String actual = builder.toString();
 		
 		assertEquals(expected, actual);
@@ -57,7 +57,7 @@ public class UrlBuilderTest extends SocializeUnitTest {
 		builder.start(endpoint);
 		builder.addParams(key, ids);
 		
-		String expected = "foo/?bar=with+a+space+and+%25percent&bar=some+%26%26+ampersands&bar=a+plus%2B%2B";
+		String expected = "foo?bar=with+a+space+and+%25percent&bar=some+%26%26+ampersands&bar=a+plus%2B%2B";
 		String actual = builder.toString();
 		
 		assertEquals(expected, actual);
