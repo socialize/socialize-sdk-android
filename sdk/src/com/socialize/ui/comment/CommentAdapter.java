@@ -297,8 +297,11 @@ public class CommentAdapter extends BaseAdapter {
 					if (userIcon != null && drawables != null) {
 
 						if(user != null) {
-							userIcon.getBackground().setAlpha(255);
-							
+                            // NPE on some devices (?)
+                            if(userIcon.getBackground() != null) {
+                                userIcon.getBackground().setAlpha(255);
+                            }
+
 							if(!StringUtils.isEmpty(imageUrl)) {
 								
 								try {

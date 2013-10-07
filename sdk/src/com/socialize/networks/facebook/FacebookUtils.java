@@ -178,7 +178,6 @@ public class FacebookUtils {
 	 * @return
 	 */
 	public static boolean isLinkedForWrite(Context context, String...permissions){
-
 		return proxy.isLinkedForWrite(context, permissions);
 	}
 	

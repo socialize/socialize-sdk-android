@@ -237,8 +237,6 @@ public class SocializeServiceImpl implements SocializeService {
 
 				if(isInitialized(context)) {
 
-
-					
 					if(localPaths != null) {
 						for (String path : paths) {
 							if(binarySearch(localPaths, path) < 0) {
