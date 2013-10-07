@@ -21,41 +21,52 @@
  */
 package com.socialize.demo.implementations.facebook;
 
-import com.socialize.demo.SDKDemoActivity;
-import com.socialize.error.SocializeException;
+import android.app.Activity;
+import android.widget.Toast;
 import com.socialize.networks.facebook.FacebookUtils;
-import com.socialize.networks.facebook.OnPermissionResult;
-import com.socialize.util.StringUtils;
-
-import java.util.Arrays;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class CheckIsLinkedActivity extends SDKDemoActivity {
+public class CheckIsLinkedActivity extends Activity {
 
-	/* (non-Javadoc)
-	 * @see com.socialize.demo.DemoActivity#executeDemo()
-	 */
-	@Override
-	public void executeDemo(String text) {
-        handleResults(Arrays.asList(
-                "isLinkedForRead: " + FacebookUtils.isLinkedForRead(this),
-                "isLinkedForWrite: " + FacebookUtils.isLinkedForWrite(this)));
-	}
-	
-	@Override
-	public boolean isTextEntryRequired() {
-		return false;
-	}
+//	/* (non-Javadoc)
+//	 * @see com.socialize.demo.DemoActivity#executeDemo()
+//	 */
+//	@Override
+//	public void executeDemo(String text) {
+//        handleResults(Arrays.asList(
+//                "isLinkedForRead: " + FacebookUtils.isLinkedForRead(this),
+//                "isLinkedForWrite: " + FacebookUtils.isLinkedForWrite(this)));
+//	}
+//
+//	@Override
+//	public boolean isTextEntryRequired() {
+//		return false;
+//	}
+//
+//	/* (non-Javadoc)
+//	 * @see com.socialize.demo.DemoActivity#getButtonText()
+//	 */
+//	@Override
+//	public String getButtonText() {
+//		return "Check isLinked";
+//	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.demo.DemoActivity#getButtonText()
-	 */
-	@Override
-	public String getButtonText() {
-		return "Check isLinked";
-	}
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        StringBuilder builder = new StringBuilder();
+        builder
+                .append("isLinkedForRead:")
+                .append(FacebookUtils.isLinkedForRead(this))
+                .append("\n\n")
+                .append("isLinkedForWrite:")
+                .append(FacebookUtils.isLinkedForWrite(this));
+
+        Toast.makeText(this, builder.toString(), Toast.LENGTH_LONG).show();
+    }
 }
