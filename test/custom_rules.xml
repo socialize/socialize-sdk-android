@@ -206,6 +206,9 @@
 
 
     <target name="-compile" depends="-pre-build, -build-setup, -code-gen, -pre-compile">
+
+        <echo message="Android classpath is ${android.classpath}"/>
+
         <do-only-if-manifest-hasCode elseText="hasCode = false. Skipping...">
 
 <!-- Socialize Customization Begin
@@ -214,6 +217,8 @@
     but the -compile target does not provide for changing the classpath.
     Bug filed with Google here: https://code.google.com/p/android/issues/detail?id=53444&thanks=53444&ts=1363819521
 -->
+
+
             <path id="project.javac.classpath">
                 <path refid="project.all.jars.path" />
                 <path refid="tested.project.classpath" />

@@ -28,6 +28,7 @@ import android.location.Location;
 import android.view.View;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.ConfigUtils;
 import com.socialize.ShareUtils;
 import com.socialize.SocializeAccess;
 import com.socialize.SocializeService;
@@ -67,8 +68,8 @@ import java.util.concurrent.TimeUnit;
  *
  */
 public class ShareUtilsTest extends SocializeActivityTest {
-	
-	public void testGetShareExists() throws Exception {
+
+    public void testGetShareExists() throws Exception {
 		
         JSONObject json = TestUtils.getJSON(getContext(), "shares.json");
 		JSONArray jsonArray = json.getJSONArray("items");
