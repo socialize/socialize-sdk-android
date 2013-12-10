@@ -27,22 +27,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.RemoteViews;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.error.SocializeException;
 import com.socialize.launcher.LaunchAction;
-import com.socialize.notifications.*;
+import com.socialize.notifications.BaseNotificationMessageBuilder;
+import com.socialize.notifications.MessageTranslator;
+import com.socialize.notifications.NotificationMessage;
+import com.socialize.notifications.NotificationType;
+import com.socialize.notifications.SimpleNotificationMessage;
 import com.socialize.test.SocializeUnitTest;
 import com.socialize.testapp.EmptyActivity;
 import com.socialize.ui.SocializeLaunchActivity;
 import com.socialize.util.AppUtils;
+import org.mockito.Mockito;
 
 
 /**
  * @author Jason Polites
  *
  */
-@UsesMocks ({AppUtils.class, Notification.class})
 public class BaseNotificationMessageBuilderTest extends SocializeUnitTest {
 
 	private AppUtils appUtils;
@@ -53,8 +55,8 @@ public class BaseNotificationMessageBuilderTest extends SocializeUnitTest {
 	protected void setUp() throws Exception {
 		super.setUp();
 		
-		appUtils = AndroidMock.createMock(AppUtils.class);
-		notification = AndroidMock.createMock(Notification.class);
+		appUtils = Mockito.mock(AppUtils.class);
+		notification = Mockito.mock(Notification.class);
 		context = getContext();
 	}
 
@@ -86,11 +88,9 @@ public class BaseNotificationMessageBuilderTest extends SocializeUnitTest {
 		
         final PendingIntent mockIntent = PendingIntent.getActivity(context, 0, new Intent(context, EmptyActivity.class), 0);
 		
-		AndroidMock.expect(appUtils.isActivityAvailable(context, SocializeLaunchActivity.class)).andReturn(true);
+		Mockito.when(appUtils.isActivityAvailable(context, SocializeLaunchActivity.class)).thenReturn(true);
 		
 		notification.setLatestEventInfo(context, title, text, mockIntent);
-		
-		AndroidMock.replay(appUtils, notification);
 		
 		final MessageTranslator<SimpleNotificationMessage> messageTranslator = new MessageTranslator<SimpleNotificationMessage>() {
 			@Override
@@ -130,8 +130,6 @@ public class BaseNotificationMessageBuilderTest extends SocializeUnitTest {
 		
 		Notification notification = builder.build(context, bundle, message, icon);
 		
-		AndroidMock.verify(appUtils, notification);
-		
 		assertNotNull(notification);
 		
 		assertEquals(Notification.FLAG_AUTO_CANCEL, (notification.flags & Notification.FLAG_AUTO_CANCEL));
@@ -166,6 +164,4 @@ public class BaseNotificationMessageBuilderTest extends SocializeUnitTest {
 		assertEquals(title, notification.tickerText);
 		
 	}
-	
-
 }

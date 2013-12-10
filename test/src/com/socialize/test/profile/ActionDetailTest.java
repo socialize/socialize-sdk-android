@@ -1,6 +1,7 @@
 package com.socialize.test.profile;
 
 import android.app.Activity;
+import android.app.Instrumentation;
 import android.content.Context;
 import com.socialize.SocializeAccess;
 import com.socialize.UserUtils;
@@ -101,9 +102,9 @@ public class ActionDetailTest extends SocializeActivityTest {
 		SocializeAccess.setUserUtilsProxy(userUtilsProxy);
 		SocializeAccess.setCommentUtilsProxy(commentUtilsProxy);
 
-		TestUtils.setUpActivityMonitor(ActionDetailActivity.class);
+        Instrumentation.ActivityMonitor monitor = TestUtils.setUpActivityMonitor(this, ActionDetailActivity.class);
 
-		final CountDownLatch latch = new CountDownLatch(1);
+        final CountDownLatch latch = new CountDownLatch(1);
 
 		UserUtils.showUserProfileWithAction(TestUtils.getActivity(this), user, action, new OnActionDetailViewListener() {
 
@@ -123,7 +124,7 @@ public class ActionDetailTest extends SocializeActivityTest {
 			}
 		});
 
-		TestUtils.waitForActivity(10000);
+        monitor.waitForActivityWithTimeout(10000);
 
 		assertTrue(latch.await(20, TimeUnit.SECONDS));
 

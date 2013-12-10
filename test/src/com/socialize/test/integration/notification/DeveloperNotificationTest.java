@@ -33,8 +33,6 @@ import org.json.JSONObject;
  */
 public class DeveloperNotificationTest extends C2DMSimulationTest {
 
-	final String actionId = "123";
-	
 	/* (non-Javadoc)
 	 * @see com.socialize.test.integration.notification.C2DMSimulationTest#getNotificationMessagePacket()
 	 */

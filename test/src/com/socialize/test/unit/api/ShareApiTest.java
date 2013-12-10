@@ -22,8 +22,6 @@
 package com.socialize.test.unit.api;
 
 import android.location.Location;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.share.SocializeShareSystem;
@@ -33,13 +31,13 @@ import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeUnitTest;
+import org.mockito.Mockito;
 
 import java.util.List;
 
 /**
  * @author Jason Polites
  */
-@UsesMocks ({SocializeSession.class, ShareListener.class, SocializeProvider.class})
 public class ShareApiTest extends SocializeUnitTest {
 
 	SocializeProvider<Share> provider;
@@ -50,19 +48,20 @@ public class ShareApiTest extends SocializeUnitTest {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		provider = AndroidMock.createMock(SocializeProvider.class);
-		session = AndroidMock.createMock(SocializeSession.class);
-		listener = AndroidMock.createMock(ShareListener.class);
+		provider = Mockito.mock(SocializeProvider.class);
+		session = Mockito.mock(SocializeSession.class);
+		listener = Mockito.mock(ShareListener.class);
 	}
 
 	/**
 	 * More specific test to ensure the share is actually set.
 	 */
-	@UsesMocks ({Location.class})
 	public void testAddShare() {
 		final Entity key = Entity.newInstance("foo", "foo");
 		final String shareText = "foobar_text";
-		Location location = AndroidMock.createMock(Location.class, "foobar");
+
+		Location location = Mockito.mock(Location.class);
+
 		ShareType type = ShareType.OTHER;
 		
 		SocializeShareSystem api = new SocializeShareSystem(provider){

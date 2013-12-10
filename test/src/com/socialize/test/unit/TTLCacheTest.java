@@ -3,10 +3,13 @@
  */
 package com.socialize.test.unit;
 
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.cache.*;
+import com.socialize.cache.ICacheableFactory;
+import com.socialize.cache.ISuicidal;
+import com.socialize.cache.Key;
+import com.socialize.cache.TTLCache;
+import com.socialize.cache.TTLObject;
 import com.socialize.test.SocializeUnitTest;
+import org.mockito.Mockito;
 
 import java.util.Collection;
 import java.util.TreeMap;
@@ -353,14 +356,11 @@ public class TTLCacheTest extends SocializeUnitTest {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@UsesMocks ({TTLObject.class})
 	public void testGetRaw() {
-		final TTLObject<String, StringCacheable> object = AndroidMock.createMock(TTLObject.class);
+		final TTLObject<String, StringCacheable> object = Mockito.mock(TTLObject.class);
 		final StringCacheable cacheable = new StringCacheable();
 		
-		AndroidMock.expect(object.getObject()).andReturn(cacheable);
-		
-		AndroidMock.replay(object);
+		Mockito.when(object.getObject()).thenReturn(cacheable);
 		
 		TTLCache<String, StringCacheable> cache = new TTLCache<String, StringCacheable>() {
 			@Override
@@ -375,21 +375,18 @@ public class TTLCacheTest extends SocializeUnitTest {
 		};
 		
 		assertSame(cacheable, cache.getRaw("foobar"));
-		
-		AndroidMock.verify(object);
 	}
 	
 	@SuppressWarnings("unchecked")
-	@UsesMocks ({TTLObject.class, ICacheableFactory.class})
 	public void testCreateOnEmptyGet() {
 		
 		final String key = "foobar";
-		final TTLObject<String, StringCacheable> object = AndroidMock.createNiceMock(TTLObject.class);
-		final ICacheableFactory<String, StringCacheable> factory = AndroidMock.createMock(ICacheableFactory.class);
+		final TTLObject<String, StringCacheable> object = Mockito.mock(TTLObject.class);
+		final ICacheableFactory<String, StringCacheable> factory = Mockito.mock(ICacheableFactory.class);
 		final StringCacheable cacheable = new StringCacheable();
 		
-		AndroidMock.expect(object.getObject()).andReturn(null);
-		AndroidMock.expect(factory.create(key)).andReturn(cacheable);
+		Mockito.when(object.getObject()).thenReturn(null);
+		Mockito.when(factory.create(key)).thenReturn(cacheable);
 		
 		TTLCache<String, StringCacheable> cache = new TTLCache<String, StringCacheable>() {
 			@Override
@@ -406,13 +403,10 @@ public class TTLCacheTest extends SocializeUnitTest {
 		
 		cache.setObjectFactory(factory);
 		
-		AndroidMock.replay(object);
-		AndroidMock.replay(factory);
-		
 		assertSame(cacheable, cache.get(key));
 		
-		AndroidMock.verify(object);
-		AndroidMock.verify(factory);
+		Mockito.verify(object);
+		Mockito.verify(factory);
 		
 		Boolean result = getNextResult();
 		assertNotNull(result);
@@ -455,55 +449,45 @@ public class TTLCacheTest extends SocializeUnitTest {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@UsesMocks (TTLObject.class)
 	public void testNotExpired() {
 
-		TTLObject<String, StringCacheable> obj = AndroidMock.createMock(TTLObject.class);
-		AndroidMock.expect(obj.getObject()).andReturn(null);
-		AndroidMock.expect(obj.isEternal()).andReturn(false);
-		AndroidMock.expect(obj.getLifeExpectancy()).andReturn(Long.MAX_VALUE);
+		TTLObject<String, StringCacheable> obj = Mockito.mock(TTLObject.class);
+		Mockito.when(obj.getObject()).thenReturn(null);
+		Mockito.when(obj.isEternal()).thenReturn(false);
+		Mockito.when(obj.getLifeExpectancy()).thenReturn(Long.MAX_VALUE);
 		
-		AndroidMock.replay(obj);
-
-		assertFalse(cache.isExpired(obj));
+        assertFalse(cache.isExpired(obj));
 		
-		AndroidMock.verify(obj);
+		Mockito.verify(obj);
 	}
 	
 	@SuppressWarnings("unchecked")
-	@UsesMocks (TTLObject.class)
 	public void testExpired() {
 
-		TTLObject<String, StringCacheable> obj = AndroidMock.createMock(TTLObject.class);
-		AndroidMock.expect(obj.getObject()).andReturn(null);
-		AndroidMock.expect(obj.isEternal()).andReturn(false);
-		AndroidMock.expect(obj.getLifeExpectancy()).andReturn(0L);
+		TTLObject<String, StringCacheable> obj = Mockito.mock(TTLObject.class);
+		Mockito.when(obj.getObject()).thenReturn(null);
+		Mockito.when(obj.isEternal()).thenReturn(false);
+		Mockito.when(obj.getLifeExpectancy()).thenReturn(0L);
 		
-		AndroidMock.replay(obj);
-
 		assertTrue(cache.isExpired(obj));
 		
-		AndroidMock.verify(obj);
+		Mockito.verify(obj);
 	}
 	
 	@SuppressWarnings("unchecked")
-	@UsesMocks ({TTLObject.class, ISuicidal.class})
 	public void testExpiredSuicical() {
 		
 		TTLCache<String, ISuicidal<String>> cache = new TTLCache<String, ISuicidal<String>>();
-		
-		TTLObject<String, ISuicidal<String>> obj = AndroidMock.createMock(TTLObject.class);
-		ISuicidal<String> s = AndroidMock.createMock(ISuicidal.class);
-		AndroidMock.expect(obj.getObject()).andReturn(s);
-		AndroidMock.expect( s.isDead() ).andReturn(true);
-		
-		AndroidMock.replay(obj);
-		AndroidMock.replay(s);
 
-		assertTrue(cache.isExpired(obj));
-		
-		AndroidMock.verify(obj);
-		AndroidMock.verify(s);
+		TTLObject<String, ISuicidal<String>> obj = Mockito.mock(TTLObject.class);
+		ISuicidal<String> s = Mockito.mock(ISuicidal.class);
+		Mockito.when(obj.getObject()).thenReturn(s);
+		Mockito.when(s.isDead()).thenReturn(true);
+
+        assertTrue(cache.isExpired(obj));
+
+		Mockito.verify(obj);
+		Mockito.verify(s);
 	}
 	
 	public void testKey() {

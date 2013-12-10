@@ -22,6 +22,7 @@
 package com.socialize.test.integration.services.a;
 
 import android.app.Activity;
+import android.app.Instrumentation;
 import android.content.Context;
 import android.view.MenuItem;
 import com.socialize.CommentUtils;
@@ -74,9 +75,9 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		Activity context = TestUtils.getActivity(this);
 
 		// Setup the comment Activity for monitoring
-		TestUtils.setUpActivityMonitor(CommentActivity.class);
+        Instrumentation.ActivityMonitor monitor = TestUtils.setUpActivityMonitor(this, CommentActivity.class);
 
-		final int grabLength = 3;
+        final int grabLength = 3;
 
 		SocializeAccess.setBeanOverrides("socialize_proxy_beans.xml");
 
@@ -206,7 +207,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		});
 
 
-		Activity commentActivity = TestUtils.waitForActivity(10000);
+		Activity commentActivity = monitor.waitForActivityWithTimeout(10000);
 
 		assertTrue(latch.await(20, TimeUnit.SECONDS));
 

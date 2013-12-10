@@ -60,7 +60,7 @@ public class ActionBarShareListenerTest extends ActionBarTest {
 	}
 
 	public void testOnActionBarShareEventListenerIsCalledOnDialogDisplay() throws Throwable {
-		
+
         Activity activity = TestUtils.getActivity(this);
 		
 		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.FACEBOOK_APP_ID, "");
@@ -68,8 +68,8 @@ public class ActionBarShareListenerTest extends ActionBarTest {
 		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, "");
 		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
-		ShareUtils.preloadShareDialog(TestUtils.getActivity(this));
-		ShareUtils.preloadLinkDialog(TestUtils.getActivity(this));
+		ShareUtils.preloadShareDialog(activity);
+		ShareUtils.preloadLinkDialog(activity);
 		
 		final ActionBarView actionBar = TestUtils.findView(activity, ActionBarView.class, 5000);
 		final ActionBarLayoutView actionBarView = TestUtils.findView(activity, ActionBarLayoutView.class, 10000);
@@ -103,7 +103,6 @@ public class ActionBarShareListenerTest extends ActionBarTest {
 		SocializeAccess.setLikeUtilsProxy(mockLikeUtils);
 		
 		// Simulate share
-	
 		this.runTestOnUiThread(new Runnable() {
 			@Override
 			public void run() {

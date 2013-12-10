@@ -22,6 +22,7 @@
 package com.socialize.test.comment.ui;
 
 import android.app.Activity;
+import android.app.Instrumentation;
 import android.content.Context;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -61,8 +62,9 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 		Activity launchActivity = TestUtils.getActivity(this);
 		
 		TestUtils.setupSocializeProxies();
-//		TestUtils.setUpActivityMonitor(CommentActivity.class);
-		
+
+        Instrumentation.ActivityMonitor monitor = TestUtils.setUpActivityMonitor(this, CommentActivity.class);
+
 		Entity entity1 = Entity.newInstance("http://entity1.com", null);
 		Entity entity2 = Entity.newInstance("http://entity2.com", null);
 		
@@ -125,8 +127,6 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 			}
 		});
 
-
-		
 		CommentUtils.showCommentView(launchActivity, entity1, new OnCommentViewActionListener() {
 			@Override
 			public void onError(SocializeException error) {
@@ -179,9 +179,8 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 
 
 
-//		Activity waitForActivity = TestUtils.waitForActivity(20000);
-		
-//		assertNotNull(waitForActivity);
+		Activity waitForActivity = monitor.waitForActivityWithTimeout(10000);
+		assertNotNull(waitForActivity);
 		
 		assertTrue(lock.await(20, TimeUnit.SECONDS));
 		
@@ -194,7 +193,7 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 		
 		lr.setItems(dummyResults2);
 
-//        waitForActivity.finish();
+        waitForActivity.finish();
 
 		launchActivity = TestUtils.restart(this);
 		
@@ -249,10 +248,9 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 			}
 		});
 		
-//		waitForActivity = TestUtils.waitForActivity(5000);
-		
-//		assertNotNull(waitForActivity);
-		
+        waitForActivity = monitor.waitForActivityWithTimeout(10000);
+        assertNotNull(waitForActivity);
+
 		lock2.await(20, TimeUnit.SECONDS);
 		
 		assertEquals(dummyResults2.size(), results1.size());	
@@ -266,8 +264,6 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 		launchActivity = TestUtils.restart(this);
 		launchActivity.finish();
 
-//		TestUtils.removeLastMonitor();
-
-//		waitForActivity.finish();
+		waitForActivity.finish();
 	}
 }

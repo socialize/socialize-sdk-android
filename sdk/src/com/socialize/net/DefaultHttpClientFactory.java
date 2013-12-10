@@ -50,7 +50,9 @@ import java.security.KeyStore;
 public class DefaultHttpClientFactory implements HttpClientFactory {
 
 	private HttpParams params;
+
 	private ClientConnectionManager connectionManager;
+
 	private SocializeLogger logger;
 	
 	private IBeanFactory<DefaultHttpClient> apacheHttpClientFactory;

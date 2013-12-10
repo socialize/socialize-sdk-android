@@ -1,88 +1,72 @@
 package com.socialize.test.core;
 
+import android.content.Context;
+import android.test.mock.MockContext;
 import android.view.View;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeListener;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.test.util.TestUtils;
 import com.socialize.ui.view.AuthenticatedView;
 import com.socialize.ui.view.AuthenticatedViewListener;
+import org.mockito.Mockito;
 
 public class AuthenticatedViewListenerTest extends SocializeActivityTest {
 
 	
-	@UsesMocks ({AuthenticatedView.class, SocializeException.class, IOCContainer.class})
 	public void testOnError() {
-		AuthenticatedView view = AndroidMock.createMock(AuthenticatedView.class, TestUtils.getActivity(this));
-		View subView = AndroidMock.createMock(View.class, TestUtils.getActivity(this));
+		AuthenticatedView view = Mockito.mock(AuthenticatedView.class);
+		View subView = Mockito.mock(View.class);
 		SocializeException error =  new SocializeException("TEST ERROR - IGNORE");
-		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
-		SocializeListener errorListener = AndroidMock.createMock(SocializeListener.class);
-		
-		view.onAfterAuthenticate(container);
-		AndroidMock.expect(view.getView()).andReturn(subView);
-		AndroidMock.expect(view.getOnErrorListener()).andReturn(errorListener).anyTimes();
-		
-		errorListener.onError(error);
-		view.removeAllViews();
-		view.addView(subView);
-		
-		view.showError(TestUtils.getActivity(this), error);
-		
-		AndroidMock.replay(view, errorListener);
-		
+		IOCContainer container = Mockito.mock(IOCContainer.class);
+		SocializeListener errorListener = Mockito.mock(SocializeListener.class);
+
+		Mockito.when(view.getView()).thenReturn(subView);
+		Mockito.when(view.getOnErrorListener()).thenReturn(errorListener);
+
 		AuthenticatedViewListener listener = new AuthenticatedViewListener(view, container);
 		listener.onError(error);
-		
-		AndroidMock.verify(view, errorListener);		
+
+        Mockito.verify(view).onAfterAuthenticate(container);
+        Mockito.verify(view).removeAllViews();
+        Mockito.verify(view).addView(subView);
+        Mockito.verify(view).showError(null, error);
+        Mockito.verify(errorListener).onError(error);
 	}
 	
-	@UsesMocks ({AuthenticatedView.class, View.class, IOCContainer.class})
 	public void testOnAuthSuccess() {
-		AuthenticatedView view = AndroidMock.createMock(AuthenticatedView.class, TestUtils.getActivity(this));
-		View subView = AndroidMock.createMock(View.class, TestUtils.getActivity(this));
-		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
-		
-		view.onAfterAuthenticate(container);
-		AndroidMock.expect(view.getView()).andReturn(subView);
-		view.removeAllViews();
-		view.addView(subView);
-		
-		AndroidMock.replay(view);
-		
+		AuthenticatedView view = Mockito.mock(AuthenticatedView.class);
+		View subView = Mockito.mock(View.class);
+		IOCContainer container = Mockito.mock(IOCContainer.class);
+
+        Mockito.when(view.getView()).thenReturn(subView);
+
 		AuthenticatedViewListener listener = new AuthenticatedViewListener(view, container);
 		listener.onAuthSuccess(null);
-		
-		AndroidMock.verify(view);
+
+        Mockito.verify(view).onAfterAuthenticate(container);
+        Mockito.verify(view).removeAllViews();
+        Mockito.verify(view).addView(subView);
 	}
 	
-	@UsesMocks ({AuthenticatedView.class, SocializeException.class, IOCContainer.class, SocializeListener.class})
 	public void testOnAuthFail() {
-		AuthenticatedView view = AndroidMock.createMock(AuthenticatedView.class, TestUtils.getActivity(this));
-		View subView = AndroidMock.createMock(View.class, TestUtils.getActivity(this));
+		AuthenticatedView view = Mockito.mock(AuthenticatedView.class);
+		View subView = Mockito.mock(View.class);
 		SocializeException error =  new SocializeException("TEST ERROR - IGNORE");
-		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
-		SocializeListener errorListener = AndroidMock.createMock(SocializeListener.class);
-		
-		view.onAfterAuthenticate(container);
-		AndroidMock.expect(view.getView()).andReturn(subView);
-		AndroidMock.expect(view.getOnErrorListener()).andReturn(errorListener).anyTimes();
-		
-		errorListener.onError(error);
-		view.removeAllViews();
-		view.addView(subView);
-		
-		view.showError(TestUtils.getActivity(this), error);
-		
-		AndroidMock.replay(view, errorListener);
-		
+		IOCContainer container = Mockito.mock(IOCContainer.class);
+		SocializeListener errorListener = Mockito.mock(SocializeListener.class);
+
+		Mockito.when(view.getView()).thenReturn(subView);
+		Mockito.when(view.getOnErrorListener()).thenReturn(errorListener);
+
 		AuthenticatedViewListener listener = new AuthenticatedViewListener(view, container);
 		listener.onAuthFail(error);
-		
-		AndroidMock.verify(view, errorListener);
+
+        Mockito.verify(view).onAfterAuthenticate(container);
+        Mockito.verify(view).removeAllViews();
+        Mockito.verify(view).addView(subView);
+        Mockito.verify(view).showError(null, error);
+        Mockito.verify(errorListener).onError(error);
 	}
 	
 }

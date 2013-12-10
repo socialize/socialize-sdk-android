@@ -25,12 +25,11 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.test.mock.MockContext;
 import android.test.mock.MockPackageManager;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.Socialize;
 import com.socialize.test.SocializeUnitTest;
 import com.socialize.util.AppUtils;
 import com.socialize.util.DefaultAppUtils;
+import org.mockito.Mockito;
 
 import java.util.Locale;
 
@@ -40,37 +39,33 @@ import java.util.Locale;
  */
 public class DeviceUtilsTest extends SocializeUnitTest {
 
-	@UsesMocks({ MockContext.class, MockPackageManager.class })
 	public void testDeviceUtilsHasPermission() {
 
-		Context mockContext = AndroidMock.createMock(MockContext.class);
-		PackageManager mockManager = AndroidMock.createMock(MockPackageManager.class);
+		Context mockContext = Mockito.mock(MockContext.class);
+		PackageManager mockManager = Mockito.mock(MockPackageManager.class);
 
 		final String permission = "foo";
 		final String packageName = "bar";
 
-		AndroidMock.expect(mockContext.getPackageName()).andReturn(packageName);
-		AndroidMock.expect(mockContext.getPackageManager()).andReturn(mockManager);
-		AndroidMock.expect(mockManager.checkPermission(permission, packageName)).andReturn(PackageManager.PERMISSION_GRANTED);
-
-		AndroidMock.replay(mockContext);
-		AndroidMock.replay(mockManager);
+        Mockito.when(mockContext.getPackageName()).thenReturn(packageName);
+        Mockito.when(mockContext.getPackageManager()).thenReturn(mockManager);
+        Mockito.when(mockManager.checkPermission(Mockito.anyString(), Mockito.anyString())).thenReturn(PackageManager.PERMISSION_GRANTED);
 
 		AppUtils utils = new DefaultAppUtils();
 
 		utils.hasPermission(mockContext, permission);
 
-		AndroidMock.verify(mockContext);
-		AndroidMock.verify(mockManager);
-	}
+        Mockito.verify(mockContext).getPackageName();
+        Mockito.verify(mockManager).checkPermission(permission, packageName);
+    }
 
 	public void testDeviceUtilsUserAgentString() {
 		DefaultAppUtils appUtils = new DefaultAppUtils();
 		appUtils.init(getContext());
 		appUtils.onResume(getContext());
 		String userAgentString = appUtils.getUserAgentString();
-		String expected = "Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + "; " + Locale.getDefault().getLanguage() + "_" + Locale.getDefault().getCountry() + "; BundleID/com.socialize.testapp; Carrier/unknown; Network/wifi;";
-		assertEquals(expected, userAgentString);
+		String expected = "Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + "; " + Locale.getDefault().getLanguage() + "_" + Locale.getDefault().getCountry() + "; BundleID/com.socialize.testapp; Carrier/Android; Network/cell;";
+		assertEquals(expected.toLowerCase(), userAgentString.toLowerCase());
 	}
 
 	// Can't extend TelephonyManager.. so don't bother trying to test. urgh!

@@ -22,8 +22,6 @@
 package com.socialize.test.integration.services.a;
 
 import android.app.Activity;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.ConfigUtils;
 import com.socialize.EntityUtils;
 import com.socialize.EntityUtils.SortOrder;
@@ -41,6 +39,7 @@ import com.socialize.ui.SocializeEntityLoader;
 import com.socialize.util.EntityLoaderUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.mockito.Mockito;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -228,7 +227,7 @@ public class EntityUtilsTest extends SocializeActivityTest {
 		assertNotNull(after);
 		assertEquals(2, after.size());
 		
-		// Make sure it contains what we expect.
+		// Make sure it contains what we when.
 		JSONObject json = TestUtils.getJSON(getContext(), "entities.json");
 		JSONArray jsonArray = json.getJSONArray("items");
 		
@@ -280,7 +279,7 @@ public class EntityUtilsTest extends SocializeActivityTest {
 		assertNotNull(after);
 		assertTrue(after.size() >= 2);
 		
-		// Make sure it contains what we expect.
+		// Make sure it contains what we when.
 		JSONObject json = TestUtils.getJSON(getContext(), "entities.json");
 		JSONArray jsonArray = json.getJSONArray("items");
 		
@@ -380,7 +379,6 @@ public class EntityUtilsTest extends SocializeActivityTest {
 		assertEquals(keys[2], sortedItems.get(2).getKey());
 	}	
 	
-	@UsesMocks ({SocializeEntityLoader.class, EntityLoaderUtils.class})
 	public void testShowEntityByKey() {
 		final Entity entity = new Entity();
 		
@@ -391,23 +389,22 @@ public class EntityUtilsTest extends SocializeActivityTest {
 			}
 		};
 		
-		SocializeEntityLoader entityLoader = AndroidMock.createMock(SocializeEntityLoader.class);
-		EntityLoaderUtils entityLoaderUtils = AndroidMock.createMock(EntityLoaderUtils.class);
+		SocializeEntityLoader entityLoader = Mockito.mock(SocializeEntityLoader.class);
+		EntityLoaderUtils entityLoaderUtils = Mockito.mock(EntityLoaderUtils.class);
 		
-		AndroidMock.expect(entityLoaderUtils.initEntityLoader()).andReturn(entityLoader);
-		AndroidMock.expect(entityLoader.canLoad(TestUtils.getActivity(this), entity)).andReturn(true);
+		Mockito.when(entityLoaderUtils.initEntityLoader()).thenReturn(entityLoader);
+		Mockito.when(entityLoader.canLoad(TestUtils.getActivity(this), entity)).thenReturn(true);
 		
 		entityLoader.loadEntity(TestUtils.getActivity(this), entity);
 		
-		AndroidMock.replay(entityLoaderUtils, entityLoader);
-		
+
 		utils.setEntityLoaderUtils(entityLoaderUtils);
 		utils.showEntity(TestUtils.getActivity(this), "foobar", null);
-		
-		AndroidMock.verify(entityLoaderUtils, entityLoader);
+
+        Mockito.verify(entityLoaderUtils).initEntityLoader();
+        Mockito.verify(entityLoader).canLoad(TestUtils.getActivity(this), entity);
 	}
 	
-	@UsesMocks ({SocializeEntityLoader.class, EntityLoaderUtils.class})
 	public void testShowEntityById() {
 		final Entity entity = new Entity();
 		
@@ -418,20 +415,19 @@ public class EntityUtilsTest extends SocializeActivityTest {
 			}
 		};
 		
-		SocializeEntityLoader entityLoader = AndroidMock.createMock(SocializeEntityLoader.class);
-		EntityLoaderUtils entityLoaderUtils = AndroidMock.createMock(EntityLoaderUtils.class);
+		SocializeEntityLoader entityLoader = Mockito.mock(SocializeEntityLoader.class);
+		EntityLoaderUtils entityLoaderUtils = Mockito.mock(EntityLoaderUtils.class);
 		
-		AndroidMock.expect(entityLoaderUtils.initEntityLoader()).andReturn(entityLoader);
-		AndroidMock.expect(entityLoader.canLoad(TestUtils.getActivity(this), entity)).andReturn(true);
+		Mockito.when(entityLoaderUtils.initEntityLoader()).thenReturn(entityLoader);
+		Mockito.when(entityLoader.canLoad(TestUtils.getActivity(this), entity)).thenReturn(true);
 		
 		entityLoader.loadEntity(TestUtils.getActivity(this), entity);
 		
-		AndroidMock.replay(entityLoaderUtils, entityLoader);
-		
 		utils.setEntityLoaderUtils(entityLoaderUtils);
 		utils.showEntity(TestUtils.getActivity(this), 123, null);
-		
-		AndroidMock.verify(entityLoaderUtils, entityLoader);
+
+        Mockito.verify(entityLoaderUtils).initEntityLoader();
+        Mockito.verify(entityLoader).canLoad(TestUtils.getActivity(this), entity);
 	}	
 	
 }

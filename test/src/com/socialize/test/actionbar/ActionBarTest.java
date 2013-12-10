@@ -3,8 +3,7 @@ package com.socialize.test.actionbar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
+import android.test.ActivityInstrumentationTestCase2;
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
@@ -21,22 +20,22 @@ import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.view.ViewAddListener;
-import com.socialize.test.SocializeManagedActivityTest;
 import com.socialize.test.util.TestUtils;
 import com.socialize.testapp.ActionBarActivity;
+import org.mockito.Mockito;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-public abstract class ActionBarTest extends SocializeManagedActivityTest<ActionBarActivity> {
+public abstract class ActionBarTest extends ActivityInstrumentationTestCase2<ActionBarActivity> {
 
 	protected Entity entity = Entity.newInstance("http://entity1.com" + Math.random(), "no name");
 	
 	protected CountDownLatch globalLatch = null;
 	protected AuthProviders authProviders;
 
-	public ActionBarTest() {
-        super("com.socialize.testapp", ActionBarActivity.class);
+    public ActionBarTest() {
+        super(ActionBarActivity.class);
     }
 	
 	protected final SocializeLikeUtils mockLikeUtils = new SocializeLikeUtils() {
@@ -65,7 +64,6 @@ public abstract class ActionBarTest extends SocializeManagedActivityTest<ActionB
 		}
 	};
 
-
 	// Don't preload
 	protected final SocializeShareUtils mockShareUtils = new SocializeShareUtils() {
 
@@ -77,18 +75,15 @@ public abstract class ActionBarTest extends SocializeManagedActivityTest<ActionB
 	};
 	
 	protected final void waitForActionBarLoad() {
-
         // Make sure the activity has launched
         TestUtils.getActivity(this);
-
 		try {
-			assertTrue("Timeout waiting for action bar to load", globalLatch.await(30, TimeUnit.SECONDS));
+			assertTrue("Timeout waiting for action bar to load", globalLatch.await(5, TimeUnit.SECONDS));
 		}
 		catch (InterruptedException e) {}
 	}
 
 
-	@UsesMocks({AuthProviders.class})
 	@Override
 	protected void setUp() throws Exception {
 		
@@ -101,7 +96,7 @@ public abstract class ActionBarTest extends SocializeManagedActivityTest<ActionB
 		
 		globalLatch = new CountDownLatch(1);
 
-		authProviders = AndroidMock.createMock(AuthProviders.class);
+		authProviders = Mockito.mock(AuthProviders.class);
 
 		SocializeAccess.setBeanOverrides("socialize_proxy_beans.xml");
 		SocializeAccess.setLikeUtilsProxy(mockLikeUtils);
@@ -142,7 +137,7 @@ public abstract class ActionBarTest extends SocializeManagedActivityTest<ActionB
 			globalLatch.countDown();
         }
 		
-		TestUtils.tearDown(this);
+		TestUtils.tearDown();
 		
 		super.tearDown();
 	}

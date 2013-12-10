@@ -22,6 +22,7 @@
 package com.socialize.test.core;
 
 import android.app.Activity;
+import android.app.Instrumentation;
 import android.content.Context;
 import com.socialize.ConfigUtils;
 import com.socialize.SocializeAccess;
@@ -42,9 +43,9 @@ public class ProfileActivityLoadTest extends SocializeActivityTest {
 	public void testProfileActivityLoadsCorrectData() throws Throwable {
 		
 		TestUtils.setupSocializeOverrides(true, true);
-		TestUtils.setUpActivityMonitor(ProfileActivity.class);
-		
-		final User dummy = new User();
+        Instrumentation.ActivityMonitor monitor = TestUtils.setUpActivityMonitor(this, ProfileActivity.class);
+
+        final User dummy = new User();
 		
 		dummy.setId(69L);
 		dummy.setFirstName("foo");
@@ -69,9 +70,9 @@ public class ProfileActivityLoadTest extends SocializeActivityTest {
 		ConfigUtils.getConfig(getContext()).setTwitterKeySecret("U18LUnVjULkkpGoJ6CoP3A", "RiIljnFq4RWV9LEaCM1ZLsAHf053vX2KyhJhmCOlBE");
 		
 		UserUtils.showUserSettings(TestUtils.getActivity(this));
-		
-		Activity waitForActivity = TestUtils.waitForActivity(5000);
-		
+
+		Activity waitForActivity = monitor.waitForActivityWithTimeout(5000);
+
 		assertNotNull(waitForActivity);
 		
 		// Check that the user's name is displayed

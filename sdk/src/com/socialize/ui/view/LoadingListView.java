@@ -39,7 +39,6 @@ public class LoadingListView extends BaseLoadingView<ListView> {
 	 */
 	public static final int LIST_VIEW_ID = 10001;
 
-	
 	public LoadingListView(Context context) {
 		super(context);
 	}

@@ -1,9 +1,8 @@
 package com.socialize.test.actionbar.like;
 
 import android.app.Activity;
+import android.app.Instrumentation;
 import android.content.Context;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
@@ -27,6 +26,7 @@ import com.socialize.ui.auth.IAuthDialogFactory;
 import com.socialize.ui.comment.CommentActivity;
 import com.socialize.ui.share.IShareDialogFactory;
 import com.socialize.ui.share.ShareDialogListener;
+import org.mockito.Mockito;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -128,7 +128,6 @@ public class ActionBarLikeTest extends ActionBarTest {
 		assertTrue(latch.await(10, TimeUnit.SECONDS));
 	}
 
-	@UsesMocks ({IAuthDialogFactory.class})
 	public void testLikeDoesNotPromptForAuthWhenNetworksNotSupported() throws Throwable {
 
 		Activity activity = TestUtils.getActivity(this);
@@ -141,7 +140,7 @@ public class ActionBarLikeTest extends ActionBarTest {
 		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, "");
 		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 
-		IAuthDialogFactory mockFactory = AndroidMock.createMock(IAuthDialogFactory.class);
+		IAuthDialogFactory mockFactory = Mockito.mock(IAuthDialogFactory.class);
 
 		final SocializeLikeUtils mockLikeUtils = new SocializeLikeUtils() {
 			@Override
@@ -155,7 +154,6 @@ public class ActionBarLikeTest extends ActionBarTest {
 			}
 		};
 
-		AndroidMock.replay(mockFactory);
 
 		mockLikeUtils.setAuthDialogFactory(mockFactory);
 
@@ -173,25 +171,22 @@ public class ActionBarLikeTest extends ActionBarTest {
 		});
 
 		assertTrue(latch.await(10, TimeUnit.SECONDS));
-
-		AndroidMock.verify(mockFactory);
 	}
 	
 	@SuppressWarnings("unchecked")
-	@UsesMocks ({IAuthDialogFactory.class, UserProviderCredentials.class, AuthProviderInfo.class, AuthProviders.class, AuthProvider.class})
 	public void testAAALikeDoesNotPromptForAuthWhenUserIsAuthenticated() throws Throwable {
 
-		final UserProviderCredentials creds = AndroidMock.createMock(UserProviderCredentials.class);
-		final AuthProviderInfo info = AndroidMock.createMock(AuthProviderInfo.class);
+		final UserProviderCredentials creds = Mockito.mock(UserProviderCredentials.class);
+		final AuthProviderInfo info = Mockito.mock(AuthProviderInfo.class);
 
-		final AuthProvider<AuthProviderInfo> provider = AndroidMock.createMock(AuthProvider.class);
+		final AuthProvider<AuthProviderInfo> provider = Mockito.mock(AuthProvider.class);
 		final CountDownLatch latch = new CountDownLatch(1);
 		
-		AndroidMock.expect(creds.getAuthProviderInfo()).andReturn(info);
-		AndroidMock.expect(authProviders.getProvider(AuthProviderType.TWITTER)).andReturn(provider);
-		AndroidMock.expect(provider.validateForRead(info)).andReturn(true);
+		Mockito.when(creds.getAuthProviderInfo()).thenReturn(info);
+		Mockito.when(authProviders.getProvider(AuthProviderType.TWITTER)).thenReturn(provider);
+		Mockito.when(provider.validateForRead(info)).thenReturn(true);
 
-		IAuthDialogFactory mockFactory = AndroidMock.createMock(IAuthDialogFactory.class);
+		IAuthDialogFactory mockFactory = Mockito.mock(IAuthDialogFactory.class);
 		IShareDialogFactory mockShareFactory = new IShareDialogFactory() {
 
 			@Override
@@ -202,8 +197,6 @@ public class ActionBarLikeTest extends ActionBarTest {
 				latch.countDown();
 			}
 		};
-		
-		AndroidMock.replay(mockFactory, creds, authProviders, provider);
 		
 		mockLikeUtils.setAuthDialogFactory(mockFactory);
 		mockLikeUtils.setShareDialogFactory(mockShareFactory);
@@ -225,8 +218,6 @@ public class ActionBarLikeTest extends ActionBarTest {
 		
 		assertTrue(latch.await(10, TimeUnit.SECONDS));
 		
-		AndroidMock.verify(mockFactory, creds, authProviders, provider);
-		
 		Socialize.getSocialize().getSession().getUserProviderCredentials().remove(AuthProviderType.TWITTER);
 	}			
 
@@ -234,9 +225,9 @@ public class ActionBarLikeTest extends ActionBarTest {
 
 		Activity activity = TestUtils.getActivity(this);
 
-		TestUtils.setUpActivityMonitor(CommentActivity.class);
+        Instrumentation.ActivityMonitor monitor = TestUtils.setUpActivityMonitor(this, CommentActivity.class);
 
-		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.FACEBOOK_APP_ID, "");
+        ConfigUtils.getConfig(activity).setProperty(SocializeConfig.FACEBOOK_APP_ID, "");
 		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, "");
 		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, "");
 		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
@@ -290,7 +281,7 @@ public class ActionBarLikeTest extends ActionBarTest {
 			}
 		});
 
-		Activity waitForActivity = TestUtils.waitForActivity(5000);
+		Activity waitForActivity = monitor.waitForActivityWithTimeout(5000);
 
 		assertNotNull(waitForActivity);
 

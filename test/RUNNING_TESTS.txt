@@ -1,3 +1,8 @@
 To run the test suite, execute this command:
 
-ant -propertyfile global.properties test-suite
+ant -propertyfile global.properties -Dsdk.dir=/usr/local/android test-suite
+
+Running in intellij:
+
+http://cl.ly/image/263t0R2P1u2E
+http://cl.ly/image/1G0L132p2C2L

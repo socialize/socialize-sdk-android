@@ -25,13 +25,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.util.TestUtils;
 import com.socialize.view.BaseView;
+import org.mockito.Mockito;
 
 /**
  * @author Jason Polites
@@ -39,21 +38,16 @@ import com.socialize.view.BaseView;
  */
 public class BaseViewTest extends SocializeActivityTest {
 
-	@UsesMocks  ({SocializeErrorHandler.class, Exception.class})
 	public void test_showError() {
-		SocializeErrorHandler handler = AndroidMock.createMock(SocializeErrorHandler.class);
-		Exception error = AndroidMock.createMock(Exception.class);
-		
-        handler.handleError(TestUtils.getActivity(this), error);
-		
-		AndroidMock.replay(handler);
+		SocializeErrorHandler handler = Mockito.mock(SocializeErrorHandler.class);
+		Exception error = Mockito.mock(Exception.class);
 		
 		BaseView view = new BaseView(TestUtils.getActivity(this)) {};
 		view.setErrorHandler(handler);
 		
 		view.showError(TestUtils.getActivity(this), error);
-		
-		AndroidMock.verify(handler);
+
+		Mockito.verify(handler).handleError(TestUtils.getActivity(this), error);;
 	}
 	
 	public void test_getActivity() {
@@ -185,10 +179,9 @@ public class BaseViewTest extends SocializeActivityTest {
 		assertTrue(view.checkLoaded());
 	}
 	
-	@UsesMocks(LinearLayout.class)
 	public void test_assignId() {
 		
-		LinearLayout parent = AndroidMock.createMock(LinearLayout.class, TestUtils.getActivity(this));
+		LinearLayout parent = Mockito.mock(LinearLayout.class);
 		
 		PublicBaseView view = new PublicBaseView(TestUtils.getActivity(this)) {
 			@Override
@@ -206,30 +199,21 @@ public class BaseViewTest extends SocializeActivityTest {
 		assertSame(parent, val);
 	}
 	
-	@UsesMocks({LinearLayout.class, View.class})
 	public void test_getNextViewId() {
-		LinearLayout group = AndroidMock.createMock(LinearLayout.class, TestUtils.getActivity(this));
-		View child0 = AndroidMock.createMock(View.class, TestUtils.getActivity(this));
-		View child1 = AndroidMock.createMock(View.class, TestUtils.getActivity(this));
+		LinearLayout group = Mockito.mock(LinearLayout.class);
+		View child0 = Mockito.mock(View.class);
+		View child1 = Mockito.mock(View.class);
 		
-		AndroidMock.expect(group.getChildCount()).andReturn(2);
-		AndroidMock.expect(group.getChildAt(0)).andReturn(child0);
-		AndroidMock.expect(group.getChildAt(1)).andReturn(child1);
+		Mockito.when(group.getChildCount()).thenReturn(2);
+		Mockito.when(group.getChildAt(0)).thenReturn(child0);
+		Mockito.when(group.getChildAt(1)).thenReturn(child1);
 		
-		AndroidMock.expect(child0.getId()).andReturn(10);
-		AndroidMock.expect(child1.getId()).andReturn(5);
+		Mockito.when(child0.getId()).thenReturn(10);
+		Mockito.when(child1.getId()).thenReturn(5);
 		
-		AndroidMock.replay(group);
-		AndroidMock.replay(child0);
-		AndroidMock.replay(child1);
-		
-		PublicBaseView view = new PublicBaseView(TestUtils.getActivity(this));
+        PublicBaseView view = new PublicBaseView(TestUtils.getActivity(this));
 		
 		int id = view.getNextViewId(group);
-		
-		AndroidMock.verify(group);
-		AndroidMock.verify(child0);
-		AndroidMock.verify(child1);
 		
 		assertEquals(11, id);
 	}

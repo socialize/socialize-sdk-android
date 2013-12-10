@@ -22,12 +22,11 @@
 package com.socialize.test.twitter;
 
 import android.webkit.WebView;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.twitter.OAuthRequestListener;
 import com.socialize.auth.twitter.TwitterOAuthProvider;
 import com.socialize.auth.twitter.TwitterWebViewClient;
 import com.socialize.test.SocializeActivityTest;
+import org.mockito.Mockito;
 
 
 /**
@@ -36,10 +35,9 @@ import com.socialize.test.SocializeActivityTest;
  */
 public class TwitterWebViewClientTest extends SocializeActivityTest {
 
-	@UsesMocks ({OAuthRequestListener.class})
 	public void testOnPageStarted() {
 		
-		OAuthRequestListener listener = AndroidMock.createMock(OAuthRequestListener.class);
+		OAuthRequestListener listener = Mockito.mock(OAuthRequestListener.class);
 		
 		// Can't mock :/
 		WebView view = new WebView(getContext()) {
@@ -51,19 +49,13 @@ public class TwitterWebViewClientTest extends SocializeActivityTest {
 		
 		String url = TwitterOAuthProvider.OAUTH_CALLBACK_URL + "?oauth_token=foo&oauth_verifier=bar";
 		
-		listener.onRequestToken("foo", "bar");
-		view.stopLoading();
-		
-		AndroidMock.replay(listener);
-		
 		TwitterWebViewClient client = new TwitterWebViewClient();
 		client.setOauthRequestListener(listener);
 		client.onPageStarted(view, url, null);
-		
-		AndroidMock.verify(listener);
-		
+
 		assertNotNull(getResult(0));
-		
-	}
+
+        Mockito.verify( listener ).onRequestToken("foo", "bar");
+    }
 	
 }

@@ -22,8 +22,6 @@
 package com.socialize.test.blackbox;
 
 import android.test.mock.MockContext;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeApiError;
 import com.socialize.log.SocializeLogger;
@@ -34,6 +32,7 @@ import com.socialize.util.HttpUtils;
 import com.socialize.util.ResourceLocator;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
+import org.mockito.Mockito;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -111,20 +110,16 @@ public class HttpUtilsTest extends SocializeActivityTest {
 		assertFalse(utils.isHttpError(200));
 	}
 	
-	@UsesMocks ({HttpResponse.class, StatusLine.class})
 	public void testHttpIsAuthErrorFromResponse() {
 		
 		final int code = 69;
 		
-		HttpResponse response = AndroidMock.createMock(HttpResponse.class);
-		StatusLine statusLine = AndroidMock.createMock(StatusLine.class);
-		
-		AndroidMock.expect(response.getStatusLine()).andReturn(statusLine);
-		AndroidMock.expect(statusLine.getStatusCode()).andReturn(69);
-		
-		AndroidMock.replay(response);
-		AndroidMock.replay(statusLine);
-		
+		HttpResponse response = Mockito.mock(HttpResponse.class);
+		StatusLine statusLine = Mockito.mock(StatusLine.class);
+
+        Mockito.when(response.getStatusLine()).thenReturn(statusLine);
+        Mockito.when(statusLine.getStatusCode()).thenReturn(69);
+
 		HttpUtils utils = new HttpUtils() {
 
 			@Override
@@ -140,10 +135,6 @@ public class HttpUtilsTest extends SocializeActivityTest {
 		
 		assertNotNull(result);
 		assertEquals(code, result.intValue());
-		
-		AndroidMock.verify(response);
-		AndroidMock.verify(statusLine);
-		
 	}
 	
 	public void testHttpIsAuthError() {
@@ -155,17 +146,14 @@ public class HttpUtilsTest extends SocializeActivityTest {
 		assertFalse(utils.isAuthError(500));
 	}
 	
-	@UsesMocks ({SocializeApiError.class})
 	public void test_isAuthErrorWithException() {
 		
 		int resultCode = 69;
 		String message = "foobar";
 		
-		SocializeApiError error = AndroidMock.createMock(SocializeApiError.class, resultCode, message);
+		SocializeApiError error = Mockito.mock(SocializeApiError.class);
 		
-		AndroidMock.expect(error.getResultCode()).andReturn(resultCode);
-		
-		AndroidMock.replay(error);
+		Mockito.when(error.getResultCode()).thenReturn(resultCode);
 		
 		HttpUtils utils = new HttpUtils() {
 			@Override
@@ -177,18 +165,15 @@ public class HttpUtilsTest extends SocializeActivityTest {
 		
 		utils.isAuthError(error);
 		
-		AndroidMock.verify(error);
-		
 		Integer result = getNextResult();
 		
 		assertNotNull(result);
 		assertEquals(resultCode, result.intValue());
 	}
 	
-	@UsesMocks ({ResourceLocator.class, SocializeLogger.class})
 	public void testHttpUtilsInitFail() throws IOException {
-		ResourceLocator locator = AndroidMock.createMock(ResourceLocator.class);
-		SocializeLogger logger = AndroidMock.createMock(SocializeLogger.class);
+		ResourceLocator locator = Mockito.mock(ResourceLocator.class);
+		SocializeLogger logger = Mockito.mock(SocializeLogger.class);
 		MockContext context = new MockContext();
 		
 		
@@ -196,20 +181,17 @@ public class HttpUtilsTest extends SocializeActivityTest {
 		String failString = "NaN=OK";
 		ByteArrayInputStream bin = new ByteArrayInputStream(failString.getBytes());
 		
-		AndroidMock.expect(locator.locate(context, SocializeConfig.SOCIALIZE_ERRORS_PATH)).andReturn(bin);
-		AndroidMock.expect(logger.isWarnEnabled()).andReturn(true);
+		Mockito.when(locator.locate(context, SocializeConfig.SOCIALIZE_ERRORS_PATH)).thenReturn(bin);
+		Mockito.when(logger.isWarnEnabled()).thenReturn(true);
 
 		logger.warn("NaN is not an integer");
-		
-		AndroidMock.replay(locator);
-		AndroidMock.replay(logger);
 		
 		HttpUtils utils = new HttpUtils();
 		utils.setLogger(logger);
 		utils.setResourceLocator(locator);
 		utils.init(context);
-		
-		AndroidMock.verify(locator);
-		AndroidMock.verify(logger);
+
+		Mockito.verify(locator).locate(context, SocializeConfig.SOCIALIZE_ERRORS_PATH);
+		Mockito.verify(logger).isWarnEnabled();
 	}
 }

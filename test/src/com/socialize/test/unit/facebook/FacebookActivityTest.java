@@ -22,11 +22,10 @@
 package com.socialize.test.unit.facebook;
 
 import android.os.Bundle;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.facebook.FacebookActivity;
 import com.socialize.auth.facebook.FacebookActivityService;
 import com.socialize.test.SocializeActivityTest;
+import org.mockito.Mockito;
 
 /**
  * @author Jason Polites
@@ -35,11 +34,10 @@ import com.socialize.test.SocializeActivityTest;
 public class FacebookActivityTest extends SocializeActivityTest {
 
 	
-	@UsesMocks ({FacebookActivityService.class})
 	public void testOnCreate() {
 		
 		final Bundle bundle = new Bundle();
-		final FacebookActivityService service = AndroidMock.createMock(FacebookActivityService.class);
+		final FacebookActivityService service = Mockito.mock(FacebookActivityService.class);
 		
 		FacebookActivity activity = new FacebookActivity() {
 			@Override
@@ -53,17 +51,13 @@ public class FacebookActivityTest extends SocializeActivityTest {
 			}
 		};
 
-		service.onCreate();
-		
-		AndroidMock.replay(service);
-		
 		activity.onCreate(bundle);
-		
-		AndroidMock.verify(service);
-		
+
+        Mockito.verify(service).onCreate();
+
 		Bundle after = getResult(0);
 		
-		assertNotNull(after);
+        assertNotNull(after);
 		assertSame(bundle, after);
 	}
 }

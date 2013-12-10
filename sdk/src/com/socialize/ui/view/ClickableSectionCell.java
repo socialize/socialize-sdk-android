@@ -151,9 +151,13 @@ public abstract class ClickableSectionCell extends LinearLayout {
 		
 		textParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
 		iconParams.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
-		
-		int margin = displayUtils.getDIP(4);
-		
+
+        int margin = 0;
+
+        if(displayUtils != null) {
+            margin = displayUtils.getDIP(4);
+        }
+
 		textParams.setMargins(margin*2, 0, margin, 0);
 		iconParams.setMargins(margin, 0, margin, 0);
 		

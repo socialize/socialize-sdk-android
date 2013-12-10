@@ -1,6 +1,7 @@
 package com.socialize.test.actionbar.comment;
 
 import android.app.Activity;
+import android.app.Instrumentation;
 import com.socialize.test.actionbar.ActionBarTest;
 import com.socialize.test.util.TestUtils;
 import com.socialize.ui.actionbar.ActionBarLayoutView;
@@ -17,10 +18,10 @@ public class ActionBarCommentTest extends ActionBarTest {
 	public void testCommentButtonOpensCommentView() throws Throwable {
 		
 		Activity activity = TestUtils.getActivity(this);
-		
-		TestUtils.setUpActivityMonitor(CommentActivity.class);
-		
-		final ActionBarLayoutView actionBar = TestUtils.findView(activity, ActionBarLayoutView.class, 5000);
+
+        Instrumentation.ActivityMonitor monitor = TestUtils.setUpActivityMonitor(this, CommentActivity.class);
+
+        final ActionBarLayoutView actionBar = TestUtils.findView(activity, ActionBarLayoutView.class, 5000);
 		
 		assertNotNull(actionBar);
 		
@@ -31,11 +32,10 @@ public class ActionBarCommentTest extends ActionBarTest {
 			}
 		});
 		
-		Activity waitForActivity = TestUtils.waitForActivity(5000);
+		Activity waitForActivity = monitor.waitForActivityWithTimeout(5000);
 		
 		assertNotNull(waitForActivity);
 		assertTrue(waitForActivity instanceof CommentActivity);
-
-		TestUtils.clearAndExit(waitForActivity);
+        waitForActivity.finish();
 	}
 }

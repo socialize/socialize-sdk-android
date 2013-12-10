@@ -21,14 +21,13 @@
  */
 package com.socialize.test.blackbox;
 
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.config.SocializeConfig;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.util.TestUtils;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.ResourceLocator;
 import junit.framework.Assert;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -108,28 +107,22 @@ public class SocializeConfigTest extends SocializeActivityTest {
 	 * tests that config load fails when no props file found
 	 * @throws java.io.IOException
 	 */
-	@UsesMocks({ResourceLocator.class})
-	public void testConfigLoadFail() throws IOException { 
+	public void testConfigLoadFail() throws IOException {
 		
 		final String noFile = "does.not.exist";
-		ResourceLocator mockProvider = AndroidMock.createMock(ResourceLocator.class);
+		ResourceLocator mockProvider = Mockito.mock(ResourceLocator.class);
 		
-		AndroidMock.expect(mockProvider.locate(TestUtils.getActivity(this), noFile)).andReturn(null);
-		AndroidMock.expect(mockProvider.locateInClassPath(TestUtils.getActivity(this), SocializeConfig.DEFAULT_PROPERTIES_PATH)).andReturn(null);
-		
-		AndroidMock.replay(mockProvider);
-		
+		Mockito.when(mockProvider.locate(TestUtils.getActivity(this), noFile)).thenReturn(null);
+		Mockito.when(mockProvider.locateInClassPath(TestUtils.getActivity(this), SocializeConfig.DEFAULT_PROPERTIES_PATH)).thenReturn(null);
+
 		SocializeConfig config = new SocializeConfig(noFile);
 		config.setResourceLocator(mockProvider);
 		config.init(TestUtils.getActivity(this));
-		
-		AndroidMock.verify(mockProvider);
 		
 		assertNotNull(config.getProperties());
 		assertEquals(0, config.getProperties().size());
 	}
 	
-	@UsesMocks({InputStream.class, Properties.class})
 	public void testConfigMerge() {
 		
 		final String noFile = "does.not.exist";
@@ -157,22 +150,17 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		assertTrue(toBeRemoved.isEmpty());
 	}
 	
-	@UsesMocks({ResourceLocator.class, InputStream.class, Properties.class})
 	public void testConfigMergesOverride() throws IOException { 
 		
 		final String noFile = "does.not.exist";
 		
-		InputStream primary = AndroidMock.createNiceMock(InputStream.class);
-		InputStream secondary = AndroidMock.createNiceMock(InputStream.class);
+		InputStream primary = Mockito.mock(InputStream.class);
+		InputStream secondary = Mockito.mock(InputStream.class);
 		
-		ResourceLocator mockProvider = AndroidMock.createMock(ResourceLocator.class);
+		ResourceLocator mockProvider = Mockito.mock(ResourceLocator.class);
 		
-		AndroidMock.expect(mockProvider.locate(TestUtils.getActivity(this), noFile)).andReturn(primary);
-		AndroidMock.expect(mockProvider.locateInClassPath(TestUtils.getActivity(this),SocializeConfig.DEFAULT_PROPERTIES_PATH)).andReturn(secondary);
-		
-		AndroidMock.replay(primary);
-		AndroidMock.replay(secondary);
-		AndroidMock.replay(mockProvider);
+		Mockito.when(mockProvider.locate(TestUtils.getActivity(this), noFile)).thenReturn(primary);
+		Mockito.when(mockProvider.locateInClassPath(TestUtils.getActivity(this), SocializeConfig.DEFAULT_PROPERTIES_PATH)).thenReturn(secondary);
 		
 		SocializeConfig config = new SocializeConfig(noFile) {
 			@Override
@@ -183,8 +171,6 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		
 		config.setResourceLocator(mockProvider);
 		config.init(TestUtils.getActivity(this));
-		
-		AndroidMock.verify(mockProvider);
 		
 		assertNotNull(config.getProperties());
 		assertEquals(0, config.getProperties().size());

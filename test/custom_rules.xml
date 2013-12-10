@@ -161,11 +161,11 @@
 
     <target name="test-safe">
 
-        <echo></echo>
+        <echo/>
         <echo>##################################################################################################</echo>
         <echo># EXECUTING TEST FOR PACKAGE ${test.package}</echo>
         <echo>##################################################################################################</echo>
-        <echo></echo>
+        <echo/>
 
         <trycatch>
             <try>
@@ -213,7 +213,7 @@
 
 <!-- Socialize Customization Begin
     ==================================================================================================================
-    AndroidMock requires Android Framework classes (from android.jar) to be in the classpath during compilation
+    Mockito requires Android Framework classes (from android.jar) to be in the classpath during compilation
     but the -compile target does not provide for changing the classpath.
     Bug filed with Google here: https://code.google.com/p/android/issues/detail?id=53444&thanks=53444&ts=1363819521
 -->

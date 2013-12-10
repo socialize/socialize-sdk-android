@@ -21,6 +21,7 @@
  */
 package com.socialize.test.integration.services.c;
 
+import android.app.Instrumentation;
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
 import com.socialize.entity.User;
@@ -57,12 +58,12 @@ public class UserUtilsTest extends SocializeActivityTest {
 	
 	public void testShowUserProfile() throws SocializeException  {
 		TestUtils.setUp(this);
+
+        Instrumentation.ActivityMonitor monitor = TestUtils.setUpActivityMonitor(this, ProfileActivity.class);
+
+        UserUtils.showUserSettings(TestUtils.getActivity(this));
 		
-		TestUtils.setUpActivityMonitor(ProfileActivity.class);
-		
-		UserUtils.showUserSettings(TestUtils.getActivity(this));
-		
-		ProfileActivity profile = TestUtils.waitForActivity(20000);
+		ProfileActivity profile = (ProfileActivity) monitor.waitForActivityWithTimeout(20000);
 		
 		assertNotNull(profile);
 		

@@ -1,5 +1,6 @@
 package com.socialize.test.actionbar;
 
+import android.app.Instrumentation;
 import android.content.Intent;
 import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
@@ -28,12 +29,18 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 
 	private ActionBarView view = null;
 	private CountDownLatch latch = null;
-	
-	@Override
+	private  Instrumentation.ActivityMonitor monitor;
+
+    @Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		TestUtils.setUpActivityMonitor(ActionBarListenerActivity.class);
-		
+
+        monitor = TestUtils.setUpActivityMonitor(this, ActionBarListenerActivity.class);
+
+
+        // Force activity load
+        getActivity();
+
 		if(latch != null) {
             latch.countDown();
 		}
@@ -50,7 +57,10 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 
 	@Override
 	protected void tearDown() throws Exception {
-		TestUtils.tearDown(this);
+
+        monitor.getLastActivity().finish();
+
+		TestUtils.tearDown();
 		super.tearDown();
 	}
 	
@@ -72,8 +82,8 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 	public void testActionBarReload() throws Throwable {
 		
 		Intent intent = new Intent(TestUtils.getActivity(this), ActionBarListenerActivity.class);
-		
-		Entity entity = new Entity();
+
+        Entity entity = new Entity();
 		entity.setKey("1");
 		entity.setName("foobar_name_testActionBarReload");
 		
@@ -167,7 +177,7 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 		
 		assertEquals("onUpdate", update);
 		assertEquals("2", found.getKey());
-	}	
+	}
 	
 	protected ActionBarView waitForActionBar(long timeout)  {
 		try {

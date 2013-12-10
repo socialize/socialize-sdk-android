@@ -21,8 +21,6 @@
  */
 package com.socialize.test.unit.api;
 
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.view.SocializeViewSystem;
 import com.socialize.entity.Entity;
@@ -31,13 +29,13 @@ import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.view.ViewListener;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeUnitTest;
+import org.mockito.Mockito;
 
 import java.util.List;
 
 /**
  * @author Jason Polites
  */
-@UsesMocks ({SocializeSession.class, ViewListener.class, SocializeProvider.class})
 public class ViewApiTest extends SocializeUnitTest {
 
 	SocializeProvider<View> provider;
@@ -48,9 +46,9 @@ public class ViewApiTest extends SocializeUnitTest {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		provider = AndroidMock.createMock(SocializeProvider.class);
-		session = AndroidMock.createMock(SocializeSession.class);
-		listener = AndroidMock.createMock(ViewListener.class);
+        provider = Mockito.mock(SocializeProvider.class);
+		session = Mockito.mock(SocializeSession.class);
+		listener = Mockito.mock(ViewListener.class);
 	}
 
 	/**

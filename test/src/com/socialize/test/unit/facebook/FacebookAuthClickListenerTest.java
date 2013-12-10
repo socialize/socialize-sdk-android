@@ -22,18 +22,13 @@
 package com.socialize.test.unit.facebook;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
 import android.view.View;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.share.SocialNetworkShareListener;
-import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.facebook.Facebook;
@@ -46,7 +41,7 @@ import com.socialize.networks.facebook.FacebookUtilsProxy;
 import com.socialize.networks.facebook.OnPermissionResult;
 import com.socialize.networks.facebook.v2.FacebookPermissionCallback;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.ui.dialog.SimpleDialogFactory;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.util.Map;
@@ -57,18 +52,9 @@ import java.util.concurrent.TimeUnit;
  * @author Jason Polites
  *
  */
-@UsesMocks ({
-	SocializeConfig.class,
-	SocializeAuthListener.class,
-	SimpleDialogFactory.class,
-	ProgressDialog.class,
-	View.class,
-	SocializeService.class,
-	SocializeSession.class
-})
 public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 
-	static enum AUTH_REPSONSE {SUCCESS, FAIL, ERROR, CANCEL};
+	static enum AUTH_REPSONSE {SUCCESS, FAIL, ERROR, CANCEL}
 
 	public void testOnClickWithAuthSuccess() throws Exception {
 		doOnClickTest(AUTH_REPSONSE.SUCCESS);
@@ -91,7 +77,7 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		
 		SocializeAuthListener listener = null;
-		View view = AndroidMock.createMock(View.class, getContext());
+		View view = Mockito.mock(View.class);
 		FacebookUtilsProxy facebookUtils = new FacebookUtilsProxy() {
 			
 			@Override
@@ -200,16 +186,10 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 		// Stub in facebook utils
 		SocializeIOC.registerStub("facebookUtils", facebookUtils);
 		
-		final SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		final SocializeSession session = Mockito.mock(SocializeSession.class);
 		final SocializeException error = new SocializeException("DUMMY - IGNORE ME"); 
 		
-		view.setEnabled(false);
-		
-
-		view.setEnabled(true);
-		AndroidMock.replay(view);
-			
-		FacebookAuthClickListener facebookAuthClickListener = new FacebookAuthClickListener();
+        FacebookAuthClickListener facebookAuthClickListener = new FacebookAuthClickListener();
 		facebookAuthClickListener.setListener(listener);
 		facebookAuthClickListener.onClick(view);
 
@@ -236,7 +216,8 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 				break;					
 		}		
 			
-		AndroidMock.verify(view);
+		Mockito.verify(view).setEnabled(false);
+        Mockito.verify(view).setEnabled(true);
 	}
 	
 }

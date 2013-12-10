@@ -23,15 +23,13 @@ package com.socialize.test.twitter;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.RelativeLayout.LayoutParams;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.twitter.ITwitterAuthWebView;
 import com.socialize.auth.twitter.TwitterAuthListener;
 import com.socialize.auth.twitter.TwitterAuthView;
 import com.socialize.error.SocializeException;
 import com.socialize.test.SocializeUnitTest;
 import com.socialize.testapp.mock.MockRelativeLayoutParams;
+import org.mockito.Mockito;
 
 /**
  * @author Jason Polites
@@ -39,18 +37,14 @@ import com.socialize.testapp.mock.MockRelativeLayoutParams;
  */
 public class TwitterAuthViewTest extends SocializeUnitTest {
 
-    @UsesMocks({ITwitterAuthWebView.class, MockRelativeLayoutParams.class, View.class})
 	public void testInit() {
-		final ITwitterAuthWebView webView = AndroidMock.createMock(ITwitterAuthWebView.class);
-		final MockRelativeLayoutParams params = AndroidMock.createNiceMock(MockRelativeLayoutParams.class, LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		final View view = AndroidMock.createMock(View.class, getContext());
+		final ITwitterAuthWebView webView = Mockito.mock(ITwitterAuthWebView.class);
+		final MockRelativeLayoutParams params = Mockito.mock(MockRelativeLayoutParams.class);
+		final View view = Mockito.mock(View.class);
 		
-		webView.init();
-		webView.setLayoutParams(params);
+
 		
-		AndroidMock.expect(webView.getView()).andReturn(view);
-		
-		AndroidMock.replay(webView);
+		Mockito.when(webView.getView()).thenReturn(view);
 		
 		TwitterAuthView authView = new TwitterAuthView(getContext()) {
 			@Override
@@ -70,18 +64,18 @@ public class TwitterAuthViewTest extends SocializeUnitTest {
 		};
 		
 		authView.init();
-		
-		AndroidMock.verify(webView);
-		
+
+        Mockito.verify(webView).init();
+        Mockito.verify(webView).setLayoutParams(params);
+
 		assertSame(view, getResult(0));
 	}
 	
-	@UsesMocks({MockRelativeLayoutParams.class, TwitterAuthListener.class, SocializeException.class})
 	public void testAuthenticate() {
 		
-		final MockRelativeLayoutParams params = AndroidMock.createNiceMock(MockRelativeLayoutParams.class, LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		final TwitterAuthListener twitterAuthListener = AndroidMock.createMock(TwitterAuthListener.class);
-		final SocializeException error = AndroidMock.createMock(SocializeException.class);
+		final MockRelativeLayoutParams params = Mockito.mock(MockRelativeLayoutParams.class);
+		final TwitterAuthListener twitterAuthListener = Mockito.mock(TwitterAuthListener.class);
+		final SocializeException error = Mockito.mock(SocializeException.class);
 		
 		final String consumerKey = "foo";
 		final String consumerSecret = "bar";
@@ -89,12 +83,6 @@ public class TwitterAuthViewTest extends SocializeUnitTest {
 		final String secret = "foobar_secret";
 		final String screenName = "foobar_screenName";
 		final String userId = "foobar_userId";
-		
-		twitterAuthListener.onAuthSuccess(token, secret, screenName, userId);
-		twitterAuthListener.onError(error);
-		twitterAuthListener.onCancel();
-		
-		AndroidMock.replay(twitterAuthListener);
 		
 		final ITwitterAuthWebView webView = new ITwitterAuthWebView() {
 			
@@ -156,9 +144,11 @@ public class TwitterAuthViewTest extends SocializeUnitTest {
 		listener.onError(error);
 		listener.onAuthSuccess(token, secret, screenName, userId);
 		listener.onCancel();
-		
-		AndroidMock.verify(twitterAuthListener);
-		
+
+        Mockito.verify(twitterAuthListener).onAuthSuccess(token, secret, screenName, userId);
+        Mockito.verify(twitterAuthListener).onError(error);
+        Mockito.verify(twitterAuthListener).onCancel();
+
 		assertEquals(View.GONE, getResult(3));
 		assertEquals(View.GONE, getResult(4));
 		assertEquals(View.GONE, getResult(5));

@@ -3,10 +3,16 @@ package com.socialize.test.facebook;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import com.facebook.*;
+import com.facebook.AccessToken;
+import com.facebook.FacebookException;
+import com.facebook.FacebookOperationCanceledException;
+import com.facebook.FacebookRequestError;
+import com.facebook.FacebookServiceException;
+import com.facebook.MockResponse;
+import com.facebook.MockSession;
+import com.facebook.Session;
+import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.AuthProviderResponse;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
@@ -19,6 +25,7 @@ import com.socialize.networks.SocializeDeAuthListener;
 import com.socialize.networks.facebook.v3.FacebookFacadeV3;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.util.TestUtils;
+import org.mockito.Mockito;
 
 public class FacebookFacadeV3Test extends SocializeActivityTest {
 
@@ -26,31 +33,6 @@ public class FacebookFacadeV3Test extends SocializeActivityTest {
 	protected void setUp() throws Exception {
 		super.setUp();
 		Session.setActiveSession(null);
-	}
-
-	@UsesMocks({Session.class, SharedPreferencesTokenCachingStrategy.class})
-	public void testOnActivityResult() {
-
-		Activity context = TestUtils.getActivity(this);
-
-		final Session mockSession = AndroidMock.createMock(Session.class, context);
-		final Intent mockData = new Intent(); // Can't mock
-
-		mockSession.onActivityResult(context, 1, 2, mockData);
-
-		AndroidMock.replay(mockSession);
-
-		FacebookFacadeV3 facade = new FacebookFacadeV3() {
-			@Override
-			protected Session getActiveSession(Context context) {
-				return mockSession;
-			}
-		};
-
-		facade.onActivityResult(context, 1, 2, mockData);
-
-		AndroidMock.verify(mockSession);
-
 	}
 
 	public void testAuthenticate0() {
@@ -136,18 +118,15 @@ public class FacebookFacadeV3Test extends SocializeActivityTest {
 		assertSame(listener, getResult(4));
 	}
 
-	@UsesMocks({SocializeConfig.class})
 	public void testOnResume() {
 		// On resume we expect a valid session to be created
 		Activity context = TestUtils.getActivity(this);
 
 		final String tokenString = "foobar_token";
 
-		final SocializeConfig mockConfig = AndroidMock.createMock(SocializeConfig.class);
+		final SocializeConfig mockConfig = Mockito.mock(SocializeConfig.class);
 
-		AndroidMock.expect(mockConfig.getProperty(SocializeConfig.FACEBOOK_APP_ID)).andReturn("foobar");
-
-		AndroidMock.replay(mockConfig);
+		Mockito.when(mockConfig.getProperty(SocializeConfig.FACEBOOK_APP_ID)).thenReturn("foobar");
 
 		FacebookFacadeV3 facade = new FacebookFacadeV3() {
 			@Override
@@ -163,8 +142,6 @@ public class FacebookFacadeV3Test extends SocializeActivityTest {
 
 		facade.setConfig(mockConfig);
 		facade.onResume(context, null);
-
-		AndroidMock.verify(mockConfig);
 
 		AccessToken token = getResult(0);
 		assertNotNull(token);
@@ -231,10 +208,8 @@ public class FacebookFacadeV3Test extends SocializeActivityTest {
 		assertNotNull(auth);
 	}
 
-	@UsesMocks({MockSession.class})
 	public void testLoginCallbackOpenForRead() {
-		Activity context = TestUtils.getActivity(this);
-		MockSession session = AndroidMock.createMock(MockSession.class, context, "foobar");
+		MockSession session = Mockito.mock(MockSession.class);
 
 		PublicFacebookFacadeV3 facade = new PublicFacebookFacadeV3() {
 			@Override
@@ -270,25 +245,19 @@ public class FacebookFacadeV3Test extends SocializeActivityTest {
 			}
 		};
 
-
-		AndroidMock.replay(session);
-
 		Session.StatusCallback loginCallback = facade.createLoginCallback(listener);
 
 		SessionState state = SessionState.OPENED;
 
 		loginCallback.call(session, state, null);
 
-		AndroidMock.verify(session);
-
 		assertSame(session, getResult(0));
 	}
 
-	@UsesMocks({MockSession.class})
 	public void testLoginCallbackClosed() {
 		Activity context = TestUtils.getActivity(this);
 		final Exception mockException = new Exception("foobar");
-		MockSession session = AndroidMock.createMock(MockSession.class, context, "foobar");
+		MockSession session = Mockito.mock(MockSession.class);
 
 		PublicFacebookFacadeV3 facade = new PublicFacebookFacadeV3() {
 			@Override
@@ -319,25 +288,18 @@ public class FacebookFacadeV3Test extends SocializeActivityTest {
 			}
 		};
 
-
-		AndroidMock.replay(session);
-
 		Session.StatusCallback loginCallback = facade.createLoginCallback(listener);
 
 		SessionState state = SessionState.CLOSED;
 
 		loginCallback.call(session, state, mockException);
 
-		AndroidMock.verify(session);
-
 		assertSame(mockException, getResult(0));
 	}
 
-	@UsesMocks({MockSession.class})
 	public void testLoginCallbackFailed() {
-		Activity context = TestUtils.getActivity(this);
 		final Exception mockException = new Exception("foobar");
-		MockSession session = AndroidMock.createMock(MockSession.class, context, "foobar");
+		MockSession session = Mockito.mock(MockSession.class);
 
 		PublicFacebookFacadeV3 facade = new PublicFacebookFacadeV3() {
 			@Override
@@ -357,25 +319,19 @@ public class FacebookFacadeV3Test extends SocializeActivityTest {
 			public void onError(SocializeException error) {}
 		};
 
-		AndroidMock.replay(session);
-
 		Session.StatusCallback loginCallback = facade.createLoginCallback(listener);
 
 		SessionState state = SessionState.CLOSED_LOGIN_FAILED;
 
 		loginCallback.call(session, state, mockException);
 
-		AndroidMock.verify(session);
-
 		assertSame(mockException, getResult(0));
 	}
 
 
-	@UsesMocks({MockSession.class})
 	public void testLoginCallbackCancel() {
-		Activity context = TestUtils.getActivity(this);
 		final Exception mockException = new FacebookOperationCanceledException("foobar");
-		MockSession session = AndroidMock.createMock(MockSession.class, context, "foobar");
+		MockSession session = Mockito.mock(MockSession.class);
 
 		PublicFacebookFacadeV3 facade = new PublicFacebookFacadeV3() {
 			@Override
@@ -395,65 +351,54 @@ public class FacebookFacadeV3Test extends SocializeActivityTest {
 			public void onError(SocializeException error) {}
 		};
 
-		AndroidMock.replay(session);
-
 		Session.StatusCallback loginCallback = facade.createLoginCallback(listener);
 
 		SessionState state = SessionState.OPENED;
 
 		loginCallback.call(session, state, mockException);
 
-		AndroidMock.verify(session);
-
 		assertSame(listener, getResult(0));
 	}
 
-	@UsesMocks({AuthProviderListener.class, GraphUser.class, MockSession.class})
 	public void testHandleMethodsCallAuthListener() {
 
-		Activity context = TestUtils.getActivity(this);
-		MockSession session = AndroidMock.createMock(MockSession.class, context, "foobar");
-		GraphUser user = AndroidMock.createMock(GraphUser.class);
-		AuthProviderListener listener = AndroidMock.createMock(AuthProviderListener.class);
+		final MockSession session = Mockito.mock(MockSession.class);
+		GraphUser user = Mockito.mock(GraphUser.class);
+		AuthProviderListener listener = Mockito.mock(AuthProviderListener.class);
 		SocializeException error = new SocializeException("foobar");
 
-		AndroidMock.expect(user.getId()).andReturn("foo");
+        // FB session method is final :/
+        TestUtils.setProperty(session, "lock", new Object());
 
-		listener.onError(error);
-		listener.onAuthFail(error);
-		listener.onCancel();
-		listener.onAuthSuccess((AuthProviderResponse) AndroidMock.anyObject());
+		Mockito.when(user.getId()).thenReturn("foo");
 
-		AndroidMock.replay(user, session, listener);
-
-		PublicFacebookFacadeV3 facade = new PublicFacebookFacadeV3();
+		PublicFacebookFacadeV3 facade = new PublicFacebookFacadeV3() {
+            @Override
+            protected Session createNewSession(Activity context, String appId) {
+                return session;
+            }
+        };
 
 		facade.handleAuthFail(error, listener);
 		facade.handleCancel(listener);
 		facade.handleError(error, listener);
 		facade.handleResult(session, user, listener);
 
-		AndroidMock.verify(user, session, listener);
-
+        Mockito.verify(listener).onError(error);
+        Mockito.verify(listener).onAuthFail(error);
+        Mockito.verify(listener).onCancel();
+        Mockito.verify(listener).onAuthSuccess((AuthProviderResponse) Mockito.anyObject());
 	}
 
-	@UsesMocks({SocialNetworkPostListener.class, SocializeLogger.class})
 	public void testHandleFBResponseWithError() {
 
 		Activity context = TestUtils.getActivity(this);
-		FacebookException mockException = new FacebookException("foobar");
 		FacebookRequestError mockError = new FacebookRequestError(102, "foo", "bar"); // 102 is EC_INVALID_SESSION
 
 		MockResponse response = new MockResponse(null, null, mockError);// Can't mock it.. thanks FB :/
 
-		SocializeLogger logger = AndroidMock.createMock(SocializeLogger.class);
-		SocialNetworkPostListener listener = AndroidMock.createMock(SocialNetworkPostListener.class);
-
-		// Expectations
-		listener.onNetworkError(AndroidMock.eq(context), AndroidMock.eq(SocialNetwork.FACEBOOK), (FacebookServiceException)AndroidMock.anyObject());
-		logger.error(AndroidMock.eq("bar"), (FacebookServiceException)AndroidMock.anyObject());
-
-		AndroidMock.replay(listener, logger);
+		SocializeLogger logger = Mockito.mock(SocializeLogger.class);
+		SocialNetworkPostListener listener = Mockito.mock(SocialNetworkPostListener.class);
 
 		PublicFacebookFacadeV3 facade = new PublicFacebookFacadeV3() {
 			@Override
@@ -466,7 +411,8 @@ public class FacebookFacadeV3Test extends SocializeActivityTest {
 
 		facade.handleFBResponse(context, response, listener);
 
-		AndroidMock.verify(listener, logger);
+        Mockito.verify(listener).onNetworkError(Mockito.eq(context), Mockito.eq(SocialNetwork.FACEBOOK), (FacebookServiceException) Mockito.anyObject());
+        Mockito.verify(logger).error(Mockito.eq("bar"), (FacebookServiceException) Mockito.anyObject());
 
 		assertSame(context, getResult(0));
 	}
