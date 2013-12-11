@@ -27,10 +27,10 @@ import android.content.Context;
 import com.socialize.SocializeService;
 import com.socialize.config.SocializeConfig;
 import com.socialize.log.SocializeLogger;
+import com.socialize.test.R;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.util.TestUtils;
 import com.socialize.testapp.Main;
-import com.socialize.testapp.R;
 import com.socialize.util.DefaultAppUtils;
 import org.mockito.Mockito;
 

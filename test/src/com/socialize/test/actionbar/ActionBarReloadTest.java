@@ -55,11 +55,13 @@ public class ActionBarReloadTest extends ActionBarTest {
 	public void testReloadRace() throws Throwable {
         Activity activity = TestUtils.getActivity(this);
 
-		// Ensure FB/TW are not supported
-		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.FACEBOOK_APP_ID, "");
-		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, "");
-		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, "");
-		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+        SocializeConfig config = ConfigUtils.getConfig(activity);
+
+        // Ensure FB/TW are not supported
+		config.setProperty(SocializeConfig.FACEBOOK_APP_ID, "");
+		config.setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, "");
+		config.setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, "");
+		config.setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
 		final Like like = new Like();
 		like.setId(-1L);
@@ -107,7 +109,7 @@ public class ActionBarReloadTest extends ActionBarTest {
 		
 		
 		for (int i = 0; i < num; i++) {
-			Entity result = (Entity) TestUtils.getResult(i);
+			Entity result = TestUtils.getResult(i);
 			assertNotNull(result);
 			assertEquals("reloadTest" + i, result.getKey());
 		}
@@ -169,7 +171,7 @@ public class ActionBarReloadTest extends ActionBarTest {
 		
 		assertTrue(latch.await(5, TimeUnit.SECONDS));
 		
-		Entity result = (Entity) TestUtils.getResult(0);
+		Entity result = TestUtils.getResult(0);
 		assertNotNull(result);
 		assertEquals(name, result.getKey());
 	}	
@@ -203,26 +205,18 @@ public class ActionBarReloadTest extends ActionBarTest {
 			@Override
 			public void view(Activity context, Entity e, final ViewAddListener listener) {
 				// run in separate thread
-				try {
-					runTestOnUiThread(
-						new Runnable() {
-
-							@Override
-							public void run() {
-								try {
-									viewLatch.await();
-								}
-								catch (InterruptedException ignore) {}
-								finally {
-									listener.onCreate(view);
-								}
-							}
-
-						});
-				}
-				catch (Throwable e1) {
-					e1.printStackTrace();
-				}
+                new Thread(){
+                    @Override
+                    public void run() {
+                        try {
+                            viewLatch.await();
+                        }
+                        catch (InterruptedException ignore) {}
+                        finally {
+                            listener.onCreate(view);
+                        }
+                    }
+                }.start();
 			}
 		};
 		
@@ -244,10 +238,11 @@ public class ActionBarReloadTest extends ActionBarTest {
 		SocializeAccess.setLikeUtilsProxy(likeUtils);
 		
 		final ActionBarView actionBar = TestUtils.findView(activity, ActionBarView.class, 5000);
-		final ActionBarLayoutView actionBarView = TestUtils.findView(activity, ActionBarLayoutView.class, 10000);	
 
-		assertNotNull(actionBar);	
-		
+        assertNotNull(actionBar);
+
+        final ActionBarLayoutView actionBarView = TestUtils.findView(activity, ActionBarLayoutView.class, 10000);
+
 		// Set the first entity
 		this.runTestOnUiThread(new Runnable() {
 			@Override
