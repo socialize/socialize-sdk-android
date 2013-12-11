@@ -21,6 +21,7 @@
  */
 package com.socialize.test.twitter;
 
+import android.test.UiThreadTest;
 import android.webkit.WebView;
 import com.socialize.auth.twitter.OAuthRequestListener;
 import com.socialize.auth.twitter.TwitterOAuthProvider;
@@ -35,6 +36,7 @@ import org.mockito.Mockito;
  */
 public class TwitterWebViewClientTest extends SocializeActivityTest {
 
+    @UiThreadTest
 	public void testOnPageStarted() {
 		
 		OAuthRequestListener listener = Mockito.mock(OAuthRequestListener.class);
@@ -43,7 +45,7 @@ public class TwitterWebViewClientTest extends SocializeActivityTest {
 		WebView view = new WebView(getContext()) {
 			@Override
 			public void stopLoading() {
-				addResult(0, "stopLoading");
+                // Do nothing
 			}
 		};
 		
@@ -52,8 +54,6 @@ public class TwitterWebViewClientTest extends SocializeActivityTest {
 		TwitterWebViewClient client = new TwitterWebViewClient();
 		client.setOauthRequestListener(listener);
 		client.onPageStarted(view, url, null);
-
-		assertNotNull(getResult(0));
 
         Mockito.verify( listener ).onRequestToken("foo", "bar");
     }

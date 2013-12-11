@@ -158,8 +158,6 @@ public class EntityApiTest extends SocializeUnitTest {
 		Mockito.when(entities.getItems()).thenReturn(items);
 		Mockito.when(items.size()).thenReturn(0);
 		
-
-		
 		api.getEntity(session, key, listener);
 		
 		// get the listener
@@ -171,8 +169,7 @@ public class EntityApiTest extends SocializeUnitTest {
 		listenerFound.onError(exception);
 		listenerFound.onList(entities);
 
-        Mockito.verify(listener).onError(exception);
-        Mockito.verify(listener).onError((SocializeApiError) Mockito.anyObject());
+        Mockito.verify(listener, Mockito.times(2)).onError((SocializeException) Mockito.anyObject());
     }
 	
 }

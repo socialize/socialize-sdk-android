@@ -14,6 +14,7 @@ import com.socialize.api.action.view.ViewUtilsProxy;
 import com.socialize.auth.AuthProviders;
 import com.socialize.config.ConfigUtilsProxy;
 import com.socialize.listener.SocializeInitListener;
+import com.socialize.test.util.TestUtils;
 
 public class SocializeAccess {
 
@@ -26,11 +27,11 @@ public class SocializeAccess {
 	public static final EntityUtilsProxy originalEntityUtilsProxy = EntityUtils.proxy;
 	public static final ActionUtilsProxy originalActionUtilsProxy = ActionUtils.proxy;
 	
-	public static <T extends Object> T getBean(String beanName, Object...args) {
+	public static <T> T getBean(String beanName, Object...args) {
 		return getBean(Socialize.getSocialize(), beanName, args);
 	}
 	
-	public static <T extends Object> T getBean(SocializeService socialize, String beanName, Object...args) {
+	public static <T> T getBean(SocializeService socialize, String beanName, Object...args) {
 		if(socialize instanceof SocializeServiceImpl) {
 			SocializeServiceImpl impl = (SocializeServiceImpl) socialize;
 			return impl.getContainer().getBean(beanName, args);
@@ -38,11 +39,11 @@ public class SocializeAccess {
 		return null;
 	}
 	
-	public static <T extends Object> ProxyObject<T> getProxy(String beanName) {
+	public static <T> ProxyObject<T> getProxy(String beanName) {
 		return getProxy(Socialize.getSocialize(), beanName);
 	}
 	
-	public static <T extends Object> ProxyObject<T> getProxy(SocializeService socialize, String beanName) {
+	public static <T> ProxyObject<T> getProxy(SocializeService socialize, String beanName) {
 		if(socialize instanceof SocializeServiceImpl) {
 			SocializeServiceImpl impl = (SocializeServiceImpl) socialize;
 			return impl.getContainer().getProxy(beanName);
@@ -61,7 +62,11 @@ public class SocializeAccess {
 		}
 		return null;
 	}
-	
+
+    public static void setSocialize(SocializeServiceImpl socialize) {
+        TestUtils.setStaticProperty(Socialize.class, "instance", socialize);
+    }
+
 	public static void clearBeanOverrides() {
 		Socialize.getSocialize().getSystem().setBeanOverrides();
 	}

@@ -77,7 +77,10 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		
 		SocializeAuthListener listener = null;
-		View view = Mockito.mock(View.class);
+
+        // Can't mock the "getContext" method
+		View view = Mockito.spy(new View(getContext()));
+
 		FacebookUtilsProxy facebookUtils = new FacebookUtilsProxy() {
 			
 			@Override

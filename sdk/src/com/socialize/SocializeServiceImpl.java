@@ -345,13 +345,13 @@ public class SocializeServiceImpl implements SocializeService {
 		return container;
 	}
 	
-	void setContext(Context context) {
+	protected void setContext(Context context) {
 		if(container != null) {
 			container.setContext(context);
 		}
 	}
-	
-	void onContextDestroyed(Context context) {
+
+    protected void onContextDestroyed(Context context) {
 		if(container != null) {
 			container.onContextDestroyed(context);
 		}
@@ -392,11 +392,6 @@ public class SocializeServiceImpl implements SocializeService {
 		}
 		return -1;
 	}
-	
-	// So we can mock
-//	protected void sort(Object[] array) {
-//		Arrays.sort(array);
-//	}
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#init(android.content.Context, com.socialize.android.ioc.IOCContainer)
@@ -465,9 +460,6 @@ public class SocializeServiceImpl implements SocializeService {
 		}
 	}
 	
-	/**
-	 * @param context
-	 */
 	protected synchronized void initNotifications(Context context) {
 		if(config.isNotificationsEnabled()) {
 			if(notificationChecker != null) {

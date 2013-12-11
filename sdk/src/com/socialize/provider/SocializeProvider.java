@@ -39,8 +39,7 @@ import java.util.Map;
  * @param <T>
  */
 public interface SocializeProvider<T> {
-	
-	
+
 	public void init(Context context);
 	
 	public WritableSession loadSession(String endpoint, String key, String secret) throws SocializeException;

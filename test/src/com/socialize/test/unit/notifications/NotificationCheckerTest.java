@@ -68,13 +68,11 @@ public class NotificationCheckerTest extends SocializeActivityTest {
 		Mockito.when(notificationRegistrationSystem.isRegisteredC2DM(context)).thenReturn(false);
 		Mockito.when(notificationRegistrationSystem.isRegistrationPending()).thenReturn(false);
 		Mockito.when(notificationRegistrationSystem.isRegisteredSocialize(context, user)).thenReturn(false);
-		
-		notificationRegistrationState.reload(context);
-		
+
+        assertTrue(checker.checkRegistrations(context, session));
+
 		// Expect this once
         Mockito.verify(notificationRegistrationSystem).registerC2DMAsync(context);
-
-		assertTrue(checker.checkRegistrations(context, session));
 	}
 	
 	public void testCheckRegistrationsNotRegisteredForSocialize() {
@@ -107,13 +105,11 @@ public class NotificationCheckerTest extends SocializeActivityTest {
 		Mockito.when(notificationRegistrationSystem.isSocializeRegistrationPending()).thenReturn(false);
 		Mockito.when(notificationRegistrationSystem.isRegisteredSocialize(context, user)).thenReturn(false);
 		Mockito.when(notificationRegistrationState.getC2DMRegistrationId()).thenReturn(registrationId);
-		
-		notificationRegistrationState.reload(context);
-		
-		// Expect this once
-        Mockito.verify(notificationRegistrationSystem).registerSocialize(context, registrationId);
 
 		assertTrue(checker.checkRegistrations(context, session));
+
+        // Expect this once
+        Mockito.verify(notificationRegistrationSystem).registerSocialize(context, registrationId);
     }
 	
 }

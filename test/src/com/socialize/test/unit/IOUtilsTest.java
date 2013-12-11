@@ -60,8 +60,6 @@ public class IOUtilsTest extends SocializeUnitTest {
             IOUtils utils = new IOUtils();
 			String read = utils.readSafe(in);
 
-			Mockito.verify(in);
-
 			assertNotNull(read);
 			assertEquals("", read);
 		} catch (IOException e) {

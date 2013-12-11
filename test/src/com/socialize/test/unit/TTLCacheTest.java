@@ -405,9 +405,6 @@ public class TTLCacheTest extends SocializeUnitTest {
 		
 		assertSame(cacheable, cache.get(key));
 		
-		Mockito.verify(object);
-		Mockito.verify(factory);
-		
 		Boolean result = getNextResult();
 		assertNotNull(result);
 		assertTrue(result);
@@ -457,8 +454,6 @@ public class TTLCacheTest extends SocializeUnitTest {
 		Mockito.when(obj.getLifeExpectancy()).thenReturn(Long.MAX_VALUE);
 		
         assertFalse(cache.isExpired(obj));
-		
-		Mockito.verify(obj);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -470,8 +465,6 @@ public class TTLCacheTest extends SocializeUnitTest {
 		Mockito.when(obj.getLifeExpectancy()).thenReturn(0L);
 		
 		assertTrue(cache.isExpired(obj));
-		
-		Mockito.verify(obj);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -485,9 +478,6 @@ public class TTLCacheTest extends SocializeUnitTest {
 		Mockito.when(s.isDead()).thenReturn(true);
 
         assertTrue(cache.isExpired(obj));
-
-		Mockito.verify(obj);
-		Mockito.verify(s);
 	}
 	
 	public void testKey() {
@@ -519,7 +509,7 @@ public class TTLCacheTest extends SocializeUnitTest {
 		sorted2.put(key2, "bar");
 		sorted2.put(key1, "foo");
 		
-		Key<String> firstKey2 = sorted.firstKey();
+		Key<String> firstKey2 = sorted2.firstKey();
 		
 		assertSame(key1, firstKey2);
 		

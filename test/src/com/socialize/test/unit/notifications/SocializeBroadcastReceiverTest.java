@@ -44,15 +44,13 @@ public class SocializeBroadcastReceiverTest extends SocializeUnitTest {
 		final Intent intent = Mockito.mock(Intent.class);
 		final MockContext context = Mockito.mock(MockContext.class);
 		final Bundle extras = new Bundle();
-		
 
-		
+        extras.putString(C2DMCallback.SOURCE_KEY, C2DMCallback.SOURCE_SOCIALIZE);
+
 		Mockito.when(wakeLock.acquire(context)).thenReturn(true);
 		Mockito.when(intent.getAction()).thenReturn(SocializeC2DMReceiver.C2DM_INTENT);
 		Mockito.when(intent.getExtras()).thenReturn(extras);
 		Mockito.when(intent.setClassName(context, SocializeC2DMReceiver.class.getName())).thenReturn(intent);
-		Mockito.when(context.startService(intent)).thenReturn(null);
-		
 
 		PublicSocialize receiver = new PublicSocialize() {
 			@Override
@@ -63,7 +61,7 @@ public class SocializeBroadcastReceiverTest extends SocializeUnitTest {
 		
 		receiver.handleBroadcastIntent(context, intent);
 
-        Mockito.verify(extras).putString(C2DMCallback.SOURCE_KEY, "socialize");
+        Mockito.verify(context).startService(intent);
 	}
 	
 	public void testOnRecieveOnBroadcastReceiver() {

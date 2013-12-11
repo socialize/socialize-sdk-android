@@ -520,6 +520,20 @@ public class TestUtils {
 		return holder.getAllResults();
 	}
 
+    public static void setStaticProperty(Class<?> container, String field, Object value) {
+        try {
+            Field declaredField = locateField(container, field);
+            declaredField.setAccessible(true);
+            declaredField.set(null, value);
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot spy on field [" +
+                    field +
+                    "] in object [" +
+                    container +
+                    "]", e);
+        }
+    }
+
     public static void setProperty(Object container, String field, Object value) {
         try {
             Field declaredField = locateField(container.getClass(), field);
