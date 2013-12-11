@@ -174,7 +174,8 @@
         <activity android:name=".implementations.facebook.GetPermissionsActivity"/> 
         <activity android:name=".implementations.facebook.OpenGraphActivity"/>
         <activity android:name=".implementations.facebook.GetEmailActivity"/>
-        
+        <activity android:name=".implementations.facebook.CheckIsLinkedActivity"/>
+
         <!-- Twitter -->
         <activity android:name=".implementations.twitter.TwitterActivity"/> 
         <activity android:name=".implementations.twitter.TweetActivity"/> 

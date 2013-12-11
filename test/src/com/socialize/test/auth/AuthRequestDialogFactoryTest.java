@@ -46,7 +46,6 @@ import com.socialize.listener.like.LikeListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.test.PublicEntity;
-import com.socialize.test.SocializeManagedActivityTest;
 import com.socialize.test.util.TestUtils;
 import com.socialize.testapp.ActionBarActivity;
 import com.socialize.testapp.mock.MockLikeSystem;
@@ -62,15 +61,14 @@ import java.util.concurrent.TimeUnit;
  * @author Jason Polites
  *
  */
-public class AuthRequestDialogFactoryTest extends SocializeManagedActivityTest<ActionBarActivity> {
+public class AuthRequestDialogFactoryTest extends ActivityInstrumentationTestCase2<ActionBarActivity> {
 	
 	final EntityStatsImpl entityStats = new EntityStatsImpl();
 	final PublicEntity entity = new PublicEntity("http://entity1.com", "http://entity1.com");
 	
-	
 	public AuthRequestDialogFactoryTest() {
-		super("com.socialize.testapp", ActionBarActivity.class);
-	}
+		super(ActionBarActivity.class);
+    }
 
 	@Override
 	protected void setUp() throws Exception {

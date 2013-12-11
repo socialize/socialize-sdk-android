@@ -39,8 +39,10 @@ public abstract class FacebookCell extends ClickableSectionCell {
 	 */
 	@Override
 	protected ImageView makeImage() {
-		setImageOn(drawables.getDrawable("icon_facebook.png"));
-		setImageOff(drawables.getDrawable("icon_facebook_disabled.png"));
+        if(drawables != null) {
+            setImageOn(drawables.getDrawable("icon_facebook.png"));
+            setImageOff(drawables.getDrawable("icon_facebook_disabled.png"));
+        }
 		return  new ImageView(getContext());
 	}
 }

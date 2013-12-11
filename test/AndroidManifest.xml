@@ -1,15 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- package name must be unique so suffix with "tests" so package loader doesn't ignore us -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.socialize.tests"
+          package="com.socialize.test"
           android:versionCode="1"
           android:versionName="1.0">
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="17" />
 
-    <application>
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- Required to determine network type for analytics -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <!-- Optional but recommended -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <!-- Optionally add ONE of the following to include location data in comments -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <!-- Required for Testing -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <application
+            android:label="@string/app_name"
+            android:icon="@drawable/ic_launcher">
+
         <uses-library android:name="android.test.runner" />
+
+        <activity android:name="com.socialize.testapp.Main" android:clearTaskOnLaunch="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+
+        <activity android:name="com.socialize.testapp.EmptyActivity" android:clearTaskOnLaunch="true"/>
+        <activity android:name="com.socialize.testapp.ActionBarActivity" android:clearTaskOnLaunch="true"/>
+        <activity android:name="com.socialize.testapp.ActionBarListenerActivity" android:clearTaskOnLaunch="true"/>
+
+        <!-- Activities Required by Socialize -->
+        <activity android:name="com.socialize.ui.comment.CommentActivity" android:configChanges="orientation|keyboardHidden" android:clearTaskOnLaunch="true"/>
+        <activity android:name="com.socialize.ui.action.ActionDetailActivity" android:clearTaskOnLaunch="true"/>
+        <activity android:name="com.socialize.ui.profile.ProfileActivity" android:clearTaskOnLaunch="true"/>
+        <activity android:name="com.socialize.auth.facebook.FacebookActivity" android:clearTaskOnLaunch="true"/>
+        <activity android:name="com.socialize.ui.SocializeLaunchActivity" android:noHistory="true" android:clearTaskOnLaunch="true"/>
+
+        <!-- Activities Required by Facebook -->
+        <activity android:name="com.facebook.LoginActivity" android:clearTaskOnLaunch="true"/>
+
+        <!-- Required for some tests that create Session objects -->
+        <!-- DO NOT DELETE (otherwise tests will fail) -->
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="foobar" />
+
     </application>
+
     <instrumentation android:name="pl.polidea.instrumentation.PolideaInstrumentationTestRunner"
-                     android:targetPackage="com.socialize.testapp"
-                     android:label="Tests for com.socialize.testapp"/>
+                     android:targetPackage="com.socialize.test"
+                     android:label="Tests for com.socialize.test"/>
 </manifest>

@@ -25,8 +25,6 @@ import android.app.Notification;
 import android.content.Context;
 import android.os.Bundle;
 import android.test.mock.MockContext;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.JSONFactory;
 import com.socialize.entity.User;
@@ -36,6 +34,7 @@ import com.socialize.test.SocializeUnitTest;
 import com.socialize.ui.profile.UserSettings;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.mockito.Mockito;
 
 import java.util.Map;
 
@@ -45,41 +44,24 @@ import java.util.Map;
  */
 public class SocializeC2DMCallbackTest extends SocializeUnitTest {
 
-	@UsesMocks ({NotificationRegistrationState.class, NotificationRegistrationSystem.class})
 	public void test_onRegister() {
-		NotificationRegistrationState notificationRegistrationState = AndroidMock.createMock(NotificationRegistrationState.class);
-		NotificationRegistrationSystem notificationRegistrationSystem = AndroidMock.createMock(NotificationRegistrationSystem.class);
+		NotificationRegistrationState notificationRegistrationState = Mockito.mock(NotificationRegistrationState.class);
+		NotificationRegistrationSystem notificationRegistrationSystem = Mockito.mock(NotificationRegistrationSystem.class);
 		
 		final String registrationId = "foobar";
-		
-		notificationRegistrationState.setC2DMRegistrationId(registrationId);
-		notificationRegistrationState.save(getContext());
-		notificationRegistrationSystem.registerSocialize(getContext(), registrationId);
-		
-		AndroidMock.replay(notificationRegistrationState, notificationRegistrationSystem);
-		
+
 		SocializeC2DMCallback callback = new SocializeC2DMCallback();
 		callback.setNotificationRegistrationState(notificationRegistrationState);
 		callback.setNotificationRegistrationSystem(notificationRegistrationSystem);
 		
 		callback.onRegister(getContext(), registrationId);
 		
-		AndroidMock.verify(notificationRegistrationState, notificationRegistrationSystem);
-		
+		Mockito.verify(notificationRegistrationState).setC2DMRegistrationId(registrationId);
+        Mockito.verify(notificationRegistrationState).save(getContext());
+        Mockito.verify(notificationRegistrationSystem).registerSocialize(getContext(), registrationId);
 	}
 	
 	@SuppressWarnings("unchecked")
-	@UsesMocks ({
-		User.class, 
-		UserSettings.class,
-		JSONObject.class, 
-		Map.class, 
-		JSONFactory.class, 
-		NotificationMessageBuilder.class, 
-		NotificationMessage.class, 
-		Notification.class, 
-		MockContext.class,
-		SocializeSession.class})
 	public void test_handleNotification() throws JSONException, SocializeException {
 		
 		Bundle data = new Bundle();
@@ -89,33 +71,31 @@ public class SocializeC2DMCallbackTest extends SocializeUnitTest {
 		final int notificatioId = 1337;
 		final long entityId = 55378008;
 		
-		final Context context = AndroidMock.createMock(MockContext.class);
-		final SocializeSession session = AndroidMock.createMock(SocializeSession.class);
-		final User user = AndroidMock.createMock(User.class);
-		final UserSettings userSettings = AndroidMock.createMock(UserSettings.class);
-		final JSONObject message = AndroidMock.createMock(JSONObject.class);
+		final Context context = Mockito.mock(MockContext.class);
+		final SocializeSession session = Mockito.mock(SocializeSession.class);
+		final User user = Mockito.mock(User.class);
+		final UserSettings userSettings = Mockito.mock(UserSettings.class);
+		final JSONObject message = Mockito.mock(JSONObject.class);
 		final NotificationType notificationType = NotificationType.NEW_COMMENTS;
-		final Map<String, JSONFactory<NotificationMessage>> messageFactories = AndroidMock.createMock(Map.class);
-		final Map<String, NotificationMessageBuilder> messageBuilders = AndroidMock.createMock(Map.class);
-		final JSONFactory<NotificationMessage> factory = AndroidMock.createMock(JSONFactory.class);
-		final NotificationMessageBuilder builder = AndroidMock.createMock(NotificationMessageBuilder.class);
-		final NotificationMessage notificationMessage = AndroidMock.createMock(NotificationMessage.class);
-		final Notification notification = AndroidMock.createMock(Notification.class);
+		final Map<String, JSONFactory<NotificationMessage>> messageFactories = Mockito.mock(Map.class);
+		final Map<String, NotificationMessageBuilder> messageBuilders = Mockito.mock(Map.class);
+		final JSONFactory<NotificationMessage> factory = Mockito.mock(JSONFactory.class);
+		final NotificationMessageBuilder builder = Mockito.mock(NotificationMessageBuilder.class);
+		final NotificationMessage notificationMessage = Mockito.mock(NotificationMessage.class);
+		final Notification notification = Mockito.mock(Notification.class);
 		
-		AndroidMock.expect(session.getUser()).andReturn(user);
-		AndroidMock.expect(session.getUserSettings()).andReturn(userSettings);
-		AndroidMock.expect(userSettings.isNotificationsEnabled()).andReturn(true);
-		AndroidMock.expect(message.has("notification_type")).andReturn(true);
-		AndroidMock.expect(message.isNull("notification_type")).andReturn(false);
-		AndroidMock.expect(message.getString("notification_type")).andReturn(notificationType.name().toLowerCase());
-		AndroidMock.expect(factory.fromJSON(message)).andReturn(notificationMessage);
-		AndroidMock.expect(messageBuilders.get(NotificationType.NEW_COMMENTS.name())).andReturn(builder);
-		AndroidMock.expect(messageFactories.get(NotificationType.NEW_COMMENTS.name())).andReturn(factory);
-		AndroidMock.expect(builder.build(context, data, notificationMessage, icon)).andReturn(notification);
-		AndroidMock.expect(notificationMessage.getEntityId()).andReturn(entityId).anyTimes();
+		Mockito.when(session.getUser()).thenReturn(user);
+		Mockito.when(session.getUserSettings()).thenReturn(userSettings);
+		Mockito.when(userSettings.isNotificationsEnabled()).thenReturn(true);
+		Mockito.when(message.has("notification_type")).thenReturn(true);
+		Mockito.when(message.isNull("notification_type")).thenReturn(false);
+		Mockito.when(message.getString("notification_type")).thenReturn(notificationType.name().toLowerCase());
+		Mockito.when(factory.fromJSON(message)).thenReturn(notificationMessage);
+		Mockito.when(messageBuilders.get(NotificationType.NEW_COMMENTS.name())).thenReturn(builder);
+		Mockito.when(messageFactories.get(NotificationType.NEW_COMMENTS.name())).thenReturn(factory);
+		Mockito.when(builder.build(context, data, notificationMessage, icon)).thenReturn(notification);
+		Mockito.when(notificationMessage.getEntityId()).thenReturn(entityId);
 	
-		AndroidMock.replay(session, user, userSettings, message, factory, messageBuilders, messageFactories, builder, context, notificationMessage);
-		
 		PublicSocializeC2DMCallback callback = new PublicSocializeC2DMCallback() {
 			@Override
 			protected JSONObject newJSONObject(String json) throws JSONException {
@@ -141,13 +121,10 @@ public class SocializeC2DMCallbackTest extends SocializeUnitTest {
 			}
 		};
 		
-		
 		callback.setMessageBuilders(messageBuilders);
 		callback.setMessageFactories(messageFactories);
 		callback.handleNotification(context, data, session);
 		
-		AndroidMock.verify(session, user, userSettings, message, factory, messageBuilders, messageFactories, builder, context, notificationMessage);
-
 		String tag = getResult(0);
 		Integer id = getResult(1);
 		Notification n = getResult(2);
@@ -165,8 +142,4 @@ public class SocializeC2DMCallbackTest extends SocializeUnitTest {
 		assertEquals("foobar", jsonAfter);
 		
 	}
-	
-//	public void test_onMessage() {
-//		
-//	}
 }

@@ -27,7 +27,13 @@ import com.socialize.LikeUtils;
 import com.socialize.UserUtils;
 import com.socialize.api.action.comment.CommentOptions;
 import com.socialize.api.action.like.LikeOptions;
-import com.socialize.entity.*;
+import com.socialize.entity.Comment;
+import com.socialize.entity.Entity;
+import com.socialize.entity.Like;
+import com.socialize.entity.ListResult;
+import com.socialize.entity.Share;
+import com.socialize.entity.SocializeAction;
+import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.activity.ActionListListener;
 import com.socialize.listener.comment.CommentAddListener;
@@ -37,7 +43,6 @@ import com.socialize.test.util.TestUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -124,8 +129,6 @@ public class ActionUtilsTest extends SocializeActivityTest {
 	public void testGetActionsByEntity() throws Exception {
 		final CountDownLatch latch = new CountDownLatch(1);
 		
-		final List<SocializeAction> actions = new ArrayList<SocializeAction>();
-		
 		final Entity entityKey = Entity.newInstance("testGetActionsByEntity" + Math.random(), "testGetActionsByEntity");
 		
 		// Set auto auth off
@@ -149,7 +152,6 @@ public class ActionUtilsTest extends SocializeActivityTest {
 			
 			@Override
 			public void onCreate(Like like) {
-				actions.add(like);
 				CommentUtils.addComment(getContext(), entityKey, "Blah", commentOptions, new CommentAddListener() {
 					
 					@Override
@@ -160,7 +162,6 @@ public class ActionUtilsTest extends SocializeActivityTest {
 					
 					@Override
 					public void onCreate(Comment comment) {
-						actions.add(comment);
 						latch.countDown();
 					}
 				});
@@ -199,7 +200,6 @@ public class ActionUtilsTest extends SocializeActivityTest {
 	public void testGetActionsByUserAndEntity() throws Exception {
 		final CountDownLatch latch = new CountDownLatch(1);
 		
-		final List<SocializeAction> actions = new ArrayList<SocializeAction>();
 		final Entity entityKey = Entity.newInstance("testGetActionsByUserAndEntity" + Math.random(), "testGetActionsByUserAndEntity");
 		
 		// Set auto auth off
@@ -222,7 +222,6 @@ public class ActionUtilsTest extends SocializeActivityTest {
 			
 			@Override
 			public void onCreate(Like like) {
-				actions.add(like);
 				CommentUtils.addComment(getContext(), entityKey, "Blah", commentOptions, new CommentAddListener() {
 					
 					@Override
@@ -233,8 +232,7 @@ public class ActionUtilsTest extends SocializeActivityTest {
 					
 					@Override
 					public void onCreate(Comment comment) {
-						actions.add(comment);
-						latch.countDown();
+                        latch.countDown();
 					}
 				});
 			}

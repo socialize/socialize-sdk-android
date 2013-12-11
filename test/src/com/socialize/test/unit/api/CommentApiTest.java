@@ -21,8 +21,6 @@
  */
 package com.socialize.test.unit.api;
 
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.comment.SocializeCommentSystem;
 import com.socialize.config.SocializeConfig;
@@ -32,6 +30,7 @@ import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeUnitTest;
+import org.mockito.Mockito;
 
 import java.util.List;
 import java.util.Map;
@@ -39,7 +38,6 @@ import java.util.Map;
 /**
  * @author Jason Polites
  */
-@UsesMocks ({SocializeSession.class, CommentListener.class, SocializeProvider.class})
 public class CommentApiTest extends SocializeUnitTest {
 
 	SocializeProvider<Comment> provider;
@@ -50,9 +48,9 @@ public class CommentApiTest extends SocializeUnitTest {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		provider = AndroidMock.createMock(SocializeProvider.class);
-		session = AndroidMock.createMock(SocializeSession.class);
-		listener = AndroidMock.createMock(CommentListener.class);
+		provider = Mockito.mock(SocializeProvider.class);
+		session = Mockito.mock(SocializeSession.class);
+		listener = Mockito.mock(CommentListener.class);
 	}
 
 	/**

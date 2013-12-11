@@ -23,26 +23,22 @@ package com.socialize.test.unit.notifications;
 
 import android.content.Context;
 import android.content.Intent;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.notifications.BaseC2DMReceiver;
 import com.socialize.test.SocializeUnitTest;
+import org.mockito.Mockito;
 
 /**
  * @author Jason Polites
  */
 public class BaseC2DMReceiverTest extends SocializeUnitTest {
 
-	@UsesMocks ({Intent.class})
 	public void test_onHandleIntentRegistration() {
 		
 		final String action = "foobar";
 		
-		Intent intent = AndroidMock.createMock(Intent.class);
+		Intent intent = Mockito.mock(Intent.class);
 		
-		AndroidMock.expect(intent.getAction()).andReturn(action);
-		
-		AndroidMock.replay(intent);
+		Mockito.when(intent.getAction()).thenReturn(action);
 		
 		PublicBaseC2DMReceiver receiver = new PublicBaseC2DMReceiver() {
 			@Override
@@ -68,24 +64,19 @@ public class BaseC2DMReceiverTest extends SocializeUnitTest {
 		
 		receiver.onHandleIntent(intent);
 
-		AndroidMock.verify(intent);
-		
 		Intent intentAfter = getResult(0);
 		
 		assertNotNull(intentAfter);
 		assertSame(intent, intentAfter);
 	}
 	
-	@UsesMocks ({Intent.class})
 	public void test_onHandleIntentMessage() {
 		
 		final String action = "foobar";
 		
-		Intent intent = AndroidMock.createMock(Intent.class);
+		Intent intent = Mockito.mock(Intent.class);
 		
-		AndroidMock.expect(intent.getAction()).andReturn(action);
-		
-		AndroidMock.replay(intent);
+		Mockito.when(intent.getAction()).thenReturn(action);
 		
 		PublicBaseC2DMReceiver receiver = new PublicBaseC2DMReceiver() {
 			@Override
@@ -111,24 +102,19 @@ public class BaseC2DMReceiverTest extends SocializeUnitTest {
 		
 		receiver.onHandleIntent(intent);
 
-		AndroidMock.verify(intent);
-		
 		Intent intentAfter = getResult(0);
 		
 		assertNotNull(intentAfter);
 		assertSame(intent, intentAfter);
 	}	
 	
-	@UsesMocks ({Intent.class})
 	public void test_onRegistrationResponse_onError() {
 		String value = "foobar";
 		
-		Intent intent = AndroidMock.createMock(Intent.class);
-		AndroidMock.expect(intent.getStringExtra(BaseC2DMReceiver.EXTRA_REGISTRATION_ID)).andReturn(null);
-		AndroidMock.expect(intent.getStringExtra(BaseC2DMReceiver.EXTRA_ERROR)).andReturn(value);
-		AndroidMock.expect(intent.getStringExtra(BaseC2DMReceiver.EXTRA_UNREGISTERED)).andReturn(null);
-		
-		AndroidMock.replay(intent);
+		Intent intent = Mockito.mock(Intent.class);
+		Mockito.when(intent.getStringExtra(BaseC2DMReceiver.EXTRA_REGISTRATION_ID)).thenReturn(null);
+		Mockito.when(intent.getStringExtra(BaseC2DMReceiver.EXTRA_ERROR)).thenReturn(value);
+		Mockito.when(intent.getStringExtra(BaseC2DMReceiver.EXTRA_UNREGISTERED)).thenReturn(null);
 		
 		PublicBaseC2DMReceiver receiver = new PublicBaseC2DMReceiver() {
 			@Override
@@ -154,25 +140,20 @@ public class BaseC2DMReceiverTest extends SocializeUnitTest {
 		
 		receiver.onRegistrationResponse(getContext(), intent);
 		
-		AndroidMock.verify(intent);
-				
 		String success = getNextResult();
 		assertNotNull(success);
 		assertEquals(value, success);
 	}
 	
 	
-	@UsesMocks ({Intent.class})
 	public void test_onRegistrationResponse_onRegistrered() {
 		
 		String value = "foobar";
 		
-		Intent intent = AndroidMock.createMock(Intent.class);
-		AndroidMock.expect(intent.getStringExtra(BaseC2DMReceiver.EXTRA_REGISTRATION_ID)).andReturn(value);
-		AndroidMock.expect(intent.getStringExtra(BaseC2DMReceiver.EXTRA_ERROR)).andReturn(null);
-		AndroidMock.expect(intent.getStringExtra(BaseC2DMReceiver.EXTRA_UNREGISTERED)).andReturn(null);
-		
-		AndroidMock.replay(intent);
+		Intent intent = Mockito.mock(Intent.class);
+		Mockito.when(intent.getStringExtra(BaseC2DMReceiver.EXTRA_REGISTRATION_ID)).thenReturn(value);
+		Mockito.when(intent.getStringExtra(BaseC2DMReceiver.EXTRA_ERROR)).thenReturn(null);
+		Mockito.when(intent.getStringExtra(BaseC2DMReceiver.EXTRA_UNREGISTERED)).thenReturn(null);
 		
 		PublicBaseC2DMReceiver receiver = new PublicBaseC2DMReceiver() {
 			@Override
@@ -198,22 +179,17 @@ public class BaseC2DMReceiverTest extends SocializeUnitTest {
 		
 		receiver.onRegistrationResponse(getContext(), intent);
 		
-		AndroidMock.verify(intent);
-				
 		String success = getNextResult();
 		assertNotNull(success);
 		assertEquals(value, success);
 	}
 	
-	@UsesMocks ({Intent.class})
 	public void test_onRegistrationResponse_noExtra() {
 		
-		Intent intent = AndroidMock.createMock(Intent.class);
-		AndroidMock.expect(intent.getStringExtra(BaseC2DMReceiver.EXTRA_REGISTRATION_ID)).andReturn(null);
-		AndroidMock.expect(intent.getStringExtra(BaseC2DMReceiver.EXTRA_ERROR)).andReturn(null);
-		AndroidMock.expect(intent.getStringExtra(BaseC2DMReceiver.EXTRA_UNREGISTERED)).andReturn(null);
-		
-		AndroidMock.replay(intent);
+		Intent intent = Mockito.mock(Intent.class);
+		Mockito.when(intent.getStringExtra(BaseC2DMReceiver.EXTRA_REGISTRATION_ID)).thenReturn(null);
+		Mockito.when(intent.getStringExtra(BaseC2DMReceiver.EXTRA_ERROR)).thenReturn(null);
+		Mockito.when(intent.getStringExtra(BaseC2DMReceiver.EXTRA_UNREGISTERED)).thenReturn(null);
 		
 		PublicBaseC2DMReceiver receiver = new PublicBaseC2DMReceiver() {
 			@Override
@@ -239,24 +215,19 @@ public class BaseC2DMReceiverTest extends SocializeUnitTest {
 		
 		receiver.onRegistrationResponse(getContext(), intent);
 		
-		AndroidMock.verify(intent);
-				
 		String success = getNextResult();
 		assertNotNull(success);
 		assertEquals("success", success);
 	}	
 	
-	@UsesMocks ({Intent.class})
 	public void test_onRegistrationResponse_onUnregistered() {
 		
 		String value = "foobar";
 		
-		Intent intent = AndroidMock.createMock(Intent.class);
-		AndroidMock.expect(intent.getStringExtra(BaseC2DMReceiver.EXTRA_REGISTRATION_ID)).andReturn(null);
-		AndroidMock.expect(intent.getStringExtra(BaseC2DMReceiver.EXTRA_ERROR)).andReturn(null);
-		AndroidMock.expect(intent.getStringExtra(BaseC2DMReceiver.EXTRA_UNREGISTERED)).andReturn(value);
-		
-		AndroidMock.replay(intent);
+		Intent intent = Mockito.mock(Intent.class);
+		Mockito.when(intent.getStringExtra(BaseC2DMReceiver.EXTRA_REGISTRATION_ID)).thenReturn(null);
+		Mockito.when(intent.getStringExtra(BaseC2DMReceiver.EXTRA_ERROR)).thenReturn(null);
+		Mockito.when(intent.getStringExtra(BaseC2DMReceiver.EXTRA_UNREGISTERED)).thenReturn(value);
 		
 		PublicBaseC2DMReceiver receiver = new PublicBaseC2DMReceiver() {
 			@Override
@@ -282,12 +253,8 @@ public class BaseC2DMReceiverTest extends SocializeUnitTest {
 		
 		receiver.onRegistrationResponse(getContext(), intent);
 		
-		AndroidMock.verify(intent);
-				
 		String success = getNextResult();
 		assertNotNull(success);
 		assertEquals("success", success);
 	}
-	
-	
 }

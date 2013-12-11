@@ -1,43 +1,33 @@
 package com.socialize.test.comment.unit;
 
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.i18n.I18NConstants;
 import com.socialize.i18n.LocalizationService;
 import com.socialize.test.SocializeUnitTest;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.view.ListItemLoadingView;
 import com.socialize.util.DisplayUtils;
+import org.mockito.Mockito;
 
 public class ListItemLoadingViewTest extends SocializeUnitTest {
-	@UsesMocks ({
-            DisplayUtils.class,
-		Colors.class,
-		LocalizationService.class
-	})
 	public void testMake() {
 		
 		// Just tests for runtime failures
+		DisplayUtils deviceUtils = Mockito.mock(DisplayUtils.class);
+		Colors colors = Mockito.mock(Colors.class);
+		LocalizationService localizationService = Mockito.mock(LocalizationService.class);
 		
-		DisplayUtils deviceUtils = AndroidMock.createMock(DisplayUtils.class);
-		Colors colors = AndroidMock.createMock(Colors.class);
-		LocalizationService localizationService = AndroidMock.createMock(LocalizationService.class);
+		Mockito.when(deviceUtils.getDIP(Mockito.anyInt())).thenReturn(0);
+		Mockito.when(colors.getColor((String)Mockito.anyObject())).thenReturn(0);
+		Mockito.when(localizationService.getString(I18NConstants.LOADING)).thenReturn("Loading...");
 		
-		AndroidMock.expect(deviceUtils.getDIP(AndroidMock.anyInt())).andReturn(0).anyTimes();
-		AndroidMock.expect(colors.getColor((String)AndroidMock.anyObject())).andReturn(0).anyTimes();
-		AndroidMock.expect(localizationService.getString(I18NConstants.LOADING)).andReturn("Loading...").anyTimes();
-		
-		
-		AndroidMock.replay(deviceUtils, colors, localizationService);
-
 		ListItemLoadingView view = new ListItemLoadingView(getContext());
 		
 		view.setColors(colors);
 		view.setLocalizationService(localizationService);
 		view.setDisplayUtils(deviceUtils);
 		view.init();
-		
-		AndroidMock.verify(deviceUtils, colors, localizationService);
+
+        // TODO: Add assertions?
 	}
 	
 }

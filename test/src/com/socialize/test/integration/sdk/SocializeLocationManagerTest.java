@@ -26,12 +26,11 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.location.SocializeLocationManager;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.util.TestUtils;
 import com.socialize.util.AppUtils;
+import org.mockito.Mockito;
 
 /**
  * @author Jason Polites
@@ -40,16 +39,13 @@ import com.socialize.util.AppUtils;
 public class SocializeLocationManagerTest extends SocializeActivityTest {
 
 	// Can't mock location manager, so just do a full integration test
-	@UsesMocks(AppUtils.class)
 	public void testSocializeLocationManager() {
 		
-		AppUtils appUtils = AndroidMock.createMock(AppUtils.class);
+		AppUtils appUtils = Mockito.mock(AppUtils.class);
 		
-		AndroidMock.expect(appUtils.hasPermission((Context)AndroidMock.anyObject(),AndroidMock.eq( "android.permission.ACCESS_FINE_LOCATION"))).andReturn(false);
-		AndroidMock.expect(appUtils.hasPermission((Context)AndroidMock.anyObject(),AndroidMock.eq( "android.permission.ACCESS_COARSE_LOCATION"))).andReturn(true);
-		
-		AndroidMock.replay(appUtils);
-		
+		Mockito.when(appUtils.hasPermission((Context) Mockito.anyObject(),Mockito.eq( "android.permission.ACCESS_FINE_LOCATION"))).thenReturn(false);
+		Mockito.when(appUtils.hasPermission((Context) Mockito.anyObject(),Mockito.eq( "android.permission.ACCESS_COARSE_LOCATION"))).thenReturn(true);
+
 		SocializeLocationManager manager = new SocializeLocationManager(appUtils);
 		manager.init(TestUtils.getActivity(this));
 		
@@ -82,8 +78,6 @@ public class SocializeLocationManagerTest extends SocializeActivityTest {
 		
 		manager.requestLocationUpdates(TestUtils.getActivity(this), bestProvider, 0, 0, listener);
 		manager.removeUpdates(listener);
-		
-		AndroidMock.verify(appUtils);
 	}
 	
 }

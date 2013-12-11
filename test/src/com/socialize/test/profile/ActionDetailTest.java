@@ -1,6 +1,7 @@
 package com.socialize.test.profile;
 
 import android.app.Activity;
+import android.app.Instrumentation;
 import android.content.Context;
 import com.socialize.SocializeAccess;
 import com.socialize.UserUtils;
@@ -101,9 +102,9 @@ public class ActionDetailTest extends SocializeActivityTest {
 		SocializeAccess.setUserUtilsProxy(userUtilsProxy);
 		SocializeAccess.setCommentUtilsProxy(commentUtilsProxy);
 
-		TestUtils.setUpActivityMonitor(ActionDetailActivity.class);
+        Instrumentation.ActivityMonitor monitor = TestUtils.setUpActivityMonitor(this, ActionDetailActivity.class);
 
-		final CountDownLatch latch = new CountDownLatch(1);
+        final CountDownLatch latch = new CountDownLatch(1);
 
 		UserUtils.showUserProfileWithAction(TestUtils.getActivity(this), user, action, new OnActionDetailViewListener() {
 
@@ -123,30 +124,34 @@ public class ActionDetailTest extends SocializeActivityTest {
 			}
 		});
 
-		TestUtils.waitForActivity(10000);
+        Activity actionDetailActivity = monitor.waitForActivityWithTimeout(10000);
 
-		assertTrue(latch.await(20, TimeUnit.SECONDS));
+        try {
+            assertTrue(latch.await(20, TimeUnit.SECONDS));
 
-		ActionDetailLayoutView view = getResult(0);
+            ActionDetailLayoutView view = getResult(0);
 
-		SocializeAction currentAction = view.getCurrentAction();
-		ActionDetailContentView content = view.getContent();
+            SocializeAction currentAction = view.getCurrentAction();
+            ActionDetailContentView content = view.getContent();
 
-		assertNotNull(currentAction);
-		assertNotNull(content);
+            assertNotNull(currentAction);
+            assertNotNull(content);
 
-		assertEquals(action.getId(), currentAction.getId());
-		UserActivityView userActivityView = content.getUserActivityView();
+            assertEquals(action.getId(), currentAction.getId());
+            UserActivityView userActivityView = content.getUserActivityView();
 
-		assertNotNull(userActivityView);
+            assertNotNull(userActivityView);
 
-		LoadingItemView<UserActivityListItem> itemView = userActivityView.getItemView();
+            LoadingItemView<UserActivityListItem> itemView = userActivityView.getItemView();
 
-		assertNotNull(itemView);
+            assertNotNull(itemView);
 
-		List<UserActivityListItem> items = itemView.getItems();
+            List<UserActivityListItem> items = itemView.getItems();
 
-		assertNotNull(items);
-		assertEquals(3, items.size());
+            assertNotNull(items);
+            assertEquals(3, items.size());
+        } finally {
+            actionDetailActivity.finish();
+        }
 	}
 }

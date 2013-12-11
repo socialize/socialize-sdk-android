@@ -21,8 +21,6 @@
  */
 package com.socialize.test.blackbox;
 
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.DefaultSocializeRequestFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.*;
@@ -37,6 +35,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.json.JSONArray;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,10 +79,9 @@ public class CommentFactoryBlackboxTest extends AbstractFactoryBlackBoxTest {
 		}, commentFactory);
 	}
 	
-	@UsesMocks ({SocializeSession.class})
 	public void testCreateRequest() throws Throwable {
 		
-		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		SocializeSession session = Mockito.mock(SocializeSession.class);
 		final String endPoint = "foobar";
 		
 		Comment comment0 = new Comment();

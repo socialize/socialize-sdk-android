@@ -22,8 +22,6 @@
 package com.socialize.test.unit.notifications;
 
 import android.app.Activity;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.User;
@@ -33,6 +31,7 @@ import com.socialize.notifications.NotificationRegistrationSystem;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.util.TestUtils;
 import com.socialize.util.AppUtils;
+import org.mockito.Mockito;
 
 
 /**
@@ -41,29 +40,22 @@ import com.socialize.util.AppUtils;
  */
 public class NotificationCheckerTest extends SocializeActivityTest {
 
-	@UsesMocks ({
-		AppUtils.class, 
-		NotificationRegistrationSystem.class, 
-		NotificationRegistrationState.class, 
-		SocializeConfig.class,
-		SocializeSession.class,
-		User.class})
 	public void testCheckRegistrationsNotRegisteredForC2DM() {
 		
 		final Activity context = TestUtils.getActivity(this);
 		
-        final AppUtils appUtils = AndroidMock.createMock(AppUtils.class);
-		final NotificationRegistrationSystem notificationRegistrationSystem = AndroidMock.createMock(NotificationRegistrationSystem.class);
-		final NotificationRegistrationState notificationRegistrationState = AndroidMock.createMock(NotificationRegistrationState.class);
-		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-		final SocializeSession session = AndroidMock.createMock(SocializeSession.class);
-		final User user = AndroidMock.createMock(User.class);
+        final AppUtils appUtils = Mockito.mock(AppUtils.class);
+		final NotificationRegistrationSystem notificationRegistrationSystem = Mockito.mock(NotificationRegistrationSystem.class);
+		final NotificationRegistrationState notificationRegistrationState = Mockito.mock(NotificationRegistrationState.class);
+		final SocializeConfig config = Mockito.mock(SocializeConfig.class);
+		final SocializeSession session = Mockito.mock(SocializeSession.class);
+		final User user = Mockito.mock(User.class);
 		
 		// Base mocks
-		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.SOCIALIZE_CHECK_NOTIFICATIONS, true)).andReturn(true).anyTimes();
-		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.GCM_REGISTRATION_ENABLED, true)).andReturn(true).anyTimes();
-		AndroidMock.expect(session.getUser()).andReturn(user).anyTimes();
-		AndroidMock.expect(appUtils.isNotificationsAvailable(context)).andReturn(true).anyTimes();
+		Mockito.when(config.getBooleanProperty(SocializeConfig.SOCIALIZE_CHECK_NOTIFICATIONS, true)).thenReturn(true);
+		Mockito.when(config.getBooleanProperty(SocializeConfig.GCM_REGISTRATION_ENABLED, true)).thenReturn(true);
+		Mockito.when(session.getUser()).thenReturn(user);
+		Mockito.when(appUtils.isNotificationsAvailable(context)).thenReturn(true);
 		
 		NotificationChecker checker = new NotificationChecker();
 		
@@ -73,46 +65,32 @@ public class NotificationCheckerTest extends SocializeActivityTest {
 		checker.setConfig(config);
 		
 		// Orchestrate a state where we are not yet registered for C2DM
+		Mockito.when(notificationRegistrationSystem.isRegisteredC2DM(context)).thenReturn(false);
+		Mockito.when(notificationRegistrationSystem.isRegistrationPending()).thenReturn(false);
+		Mockito.when(notificationRegistrationSystem.isRegisteredSocialize(context, user)).thenReturn(false);
 
-		AndroidMock.expect(notificationRegistrationSystem.isRegisteredC2DM(context)).andReturn(false).anyTimes();
-		AndroidMock.expect(notificationRegistrationSystem.isRegistrationPending()).andReturn(false).anyTimes();
-		AndroidMock.expect(notificationRegistrationSystem.isRegisteredSocialize(context, user)).andReturn(false).anyTimes();
-		
-		notificationRegistrationState.reload(context);
-		
+        assertTrue(checker.checkRegistrations(context, session));
+
 		// Expect this once
-		notificationRegistrationSystem.registerC2DMAsync(context);
-		
-		AndroidMock.replay(appUtils, notificationRegistrationSystem, notificationRegistrationState, config, session);
-		
-		assertTrue(checker.checkRegistrations(context, session));
-		
-		AndroidMock.verify(appUtils, notificationRegistrationSystem, notificationRegistrationState, config, session);
+        Mockito.verify(notificationRegistrationSystem).registerC2DMAsync(context);
 	}
 	
-	@UsesMocks ({
-		AppUtils.class, 
-		NotificationRegistrationSystem.class, 
-		NotificationRegistrationState.class, 
-		SocializeConfig.class,
-		SocializeSession.class,
-		User.class})
 	public void testCheckRegistrationsNotRegisteredForSocialize() {
 		
 		final Activity context = TestUtils.getActivity(this);
 		
-		final AppUtils appUtils = AndroidMock.createMock(AppUtils.class);
-		final NotificationRegistrationSystem notificationRegistrationSystem = AndroidMock.createMock(NotificationRegistrationSystem.class);
-		final NotificationRegistrationState notificationRegistrationState = AndroidMock.createMock(NotificationRegistrationState.class);
-		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-		final SocializeSession session = AndroidMock.createMock(SocializeSession.class);
-		final User user = AndroidMock.createMock(User.class);
+		final AppUtils appUtils = Mockito.mock(AppUtils.class);
+		final NotificationRegistrationSystem notificationRegistrationSystem = Mockito.mock(NotificationRegistrationSystem.class);
+		final NotificationRegistrationState notificationRegistrationState = Mockito.mock(NotificationRegistrationState.class);
+		final SocializeConfig config = Mockito.mock(SocializeConfig.class);
+		final SocializeSession session = Mockito.mock(SocializeSession.class);
+		final User user = Mockito.mock(User.class);
 		final String registrationId = "foobar";
 		
 		// Base mocks
-		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.SOCIALIZE_CHECK_NOTIFICATIONS, true)).andReturn(true).anyTimes();
-		AndroidMock.expect(session.getUser()).andReturn(user).anyTimes();
-		AndroidMock.expect(appUtils.isNotificationsAvailable(context)).andReturn(true).anyTimes();
+		Mockito.when(config.getBooleanProperty(SocializeConfig.SOCIALIZE_CHECK_NOTIFICATIONS, true)).thenReturn(true);
+		Mockito.when(session.getUser()).thenReturn(user);
+		Mockito.when(appUtils.isNotificationsAvailable(context)).thenReturn(true);
 		
 		NotificationChecker checker = new NotificationChecker();
 		
@@ -123,22 +101,15 @@ public class NotificationCheckerTest extends SocializeActivityTest {
 		
 		// Orchestrate a state where we are not yet registered for Socialize
 
-		AndroidMock.expect(notificationRegistrationSystem.isRegisteredC2DM(context)).andReturn(true).anyTimes();
-		AndroidMock.expect(notificationRegistrationSystem.isSocializeRegistrationPending()).andReturn(false).anyTimes();
-		AndroidMock.expect(notificationRegistrationSystem.isRegisteredSocialize(context, user)).andReturn(false).anyTimes();
-		AndroidMock.expect(notificationRegistrationState.getC2DMRegistrationId()).andReturn(registrationId).anyTimes();
-		
-		notificationRegistrationState.reload(context);
-		
-		// Expect this once
-		notificationRegistrationSystem.registerSocialize(context, registrationId);
-		
-		AndroidMock.replay(appUtils, notificationRegistrationSystem, notificationRegistrationState, config, session);
-		
+		Mockito.when(notificationRegistrationSystem.isRegisteredC2DM(context)).thenReturn(true);
+		Mockito.when(notificationRegistrationSystem.isSocializeRegistrationPending()).thenReturn(false);
+		Mockito.when(notificationRegistrationSystem.isRegisteredSocialize(context, user)).thenReturn(false);
+		Mockito.when(notificationRegistrationState.getC2DMRegistrationId()).thenReturn(registrationId);
+
 		assertTrue(checker.checkRegistrations(context, session));
-		
-		AndroidMock.verify(appUtils, notificationRegistrationSystem, notificationRegistrationState, config, session);
-		
-	}	
+
+        // Expect this once
+        Mockito.verify(notificationRegistrationSystem).registerSocialize(context, registrationId);
+    }
 	
 }

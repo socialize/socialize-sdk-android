@@ -24,25 +24,18 @@ package com.socialize.test.unit;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.test.mock.MockContext;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.PreferenceSessionPersister;
 import com.socialize.api.SocializeSessionFactory;
 import com.socialize.entity.UserFactory;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.testapp.mock.MockEditor;
 import org.json.JSONException;
+import org.mockito.Mockito;
 
 /**
  * @author Jason Polites
  *
  */
-@UsesMocks ({
-	MockContext.class, 
-	SharedPreferences.class, 
-	MockEditor.class,
-	UserFactory.class,
-		SocializeSessionFactory.class})
 public class PreferenceSessionPersisterTest extends SocializeActivityTest {
 
 	MockContext context;
@@ -55,30 +48,27 @@ public class PreferenceSessionPersisterTest extends SocializeActivityTest {
 	protected void setUp() throws Exception {
 		super.setUp();
 		
-		context = AndroidMock.createMock(MockContext.class);
-		prefs = AndroidMock.createMock(SharedPreferences.class);
-		editor = AndroidMock.createMock(MockEditor.class);
-		userFactory = AndroidMock.createMock(UserFactory.class);
-		socializeSessionFactory = AndroidMock.createMock(SocializeSessionFactory.class);
+		context = Mockito.mock(MockContext.class);
+		prefs = Mockito.mock(SharedPreferences.class);
+		editor = Mockito.mock(MockEditor.class);
+		userFactory = Mockito.mock(UserFactory.class);
+		socializeSessionFactory = Mockito.mock(SocializeSessionFactory.class);
 	}
 	
 	public void testPreferencePersistDelete() throws JSONException {
 
-		AndroidMock.expect(context.getSharedPreferences("SocializeSession", Context.MODE_PRIVATE)).andReturn(prefs);
-		AndroidMock.expect(prefs.edit()).andReturn(editor);
-		AndroidMock.expect(editor.clear()).andReturn(editor);
-		AndroidMock.expect(editor.commit()).andReturn(true);
-		
-		AndroidMock.replay(context);
-		AndroidMock.replay(prefs);
-		AndroidMock.replay(editor);
+		Mockito.when(context.getSharedPreferences("SocializeSession", Context.MODE_PRIVATE)).thenReturn(prefs);
+		Mockito.when(prefs.edit()).thenReturn(editor);
+		Mockito.when(editor.clear()).thenReturn(editor);
+		Mockito.when(editor.commit()).thenReturn(true);
 		
 		PreferenceSessionPersister persister = new PreferenceSessionPersister(userFactory, socializeSessionFactory);
 		
 		persister.delete(context);
-		
-		AndroidMock.verify(context);
-		AndroidMock.verify(prefs);
-		AndroidMock.verify(editor);
+
+        Mockito.verify(context).getSharedPreferences("SocializeSession", Context.MODE_PRIVATE);
+        Mockito.verify(prefs).edit();
+        Mockito.verify(editor).clear();
+        Mockito.verify(editor).commit();
 	}
 }

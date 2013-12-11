@@ -43,9 +43,19 @@ public class FacebookActivity extends ListActivity {
 			"Get Access Token", 
 			"Get Current Permissions", 
 			"Open Graph Like",
-			"Get Email Address"};
+			"Get Email Address",
+            "Check isLinked"};
 	
-	final Class<?>[] activities = new Class<?>[] { PostToWallActivity.class, PostPhotoActivity.class, ListFriendsActivity.class, ListCheckinsActivity.class, GetTokenActivity.class, GetPermissionsActivity.class, OpenGraphActivity.class, GetEmailActivity.class};
+	final Class<?>[] activities = new Class<?>[] {
+            PostToWallActivity.class,
+            PostPhotoActivity.class,
+            ListFriendsActivity.class,
+            ListCheckinsActivity.class,
+            GetTokenActivity.class,
+            GetPermissionsActivity.class,
+            OpenGraphActivity.class,
+            GetEmailActivity.class,
+            CheckIsLinkedActivity.class};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

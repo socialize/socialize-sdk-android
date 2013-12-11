@@ -3,20 +3,17 @@ package com.socialize.test.core;
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
 import com.socialize.SocializeSystem;
 import com.socialize.android.ioc.IOCContainer;
-import com.socialize.error.SocializeErrorHandler;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.util.TestUtils;
 import com.socialize.ui.SocializeBaseView;
+import org.mockito.Mockito;
 
 public class SocializeViewTest extends SocializeActivityTest {
 
-	@UsesMocks ({IOCContainer.class, SocializeErrorHandler.class})
 	public void testOnWindowVisibilityChanged() throws Throwable {
 		
 		final SocializeBaseView view = new SocializeBaseView(TestUtils.getActivity(this)) {
@@ -126,14 +123,11 @@ public class SocializeViewTest extends SocializeActivityTest {
 		assertEquals("getInitUpdateListener", getInitUpdateListener);
 	}	
 	
-	@UsesMocks({IOCContainer.class})
 	public void test_getInitLoadListener() {
-		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
+		IOCContainer container = Mockito.mock(IOCContainer.class);
 		
-		AndroidMock.expect(container.getBean("drawables")).andReturn(null);
-		AndroidMock.expect(container.getBean("localizationService")).andReturn(null);
-		
-		AndroidMock.replay(container);
+		Mockito.when(container.getBean("drawables")).thenReturn(null);
+		Mockito.when(container.getBean("localizationService")).thenReturn(null);
 		
 		PublicView view = new PublicView(TestUtils.getActivity(this)) {
 			@Override
@@ -143,19 +137,14 @@ public class SocializeViewTest extends SocializeActivityTest {
 		};
 		view.getInitLoadListener().onInit(TestUtils.getActivity(this), container);
 		
-		AndroidMock.verify(container);
-		
 		assertSame(container, getNextResult());
 	}
 	
-	@UsesMocks({IOCContainer.class})
 	public void test_getInitUpdateListener() {
-		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
+		IOCContainer container = Mockito.mock(IOCContainer.class);
 		
-		AndroidMock.expect(container.getBean("drawables")).andReturn(null);
-		AndroidMock.expect(container.getBean("localizationService")).andReturn(null);
-		
-		AndroidMock.replay(container);
+		Mockito.when(container.getBean("drawables")).thenReturn(null);
+		Mockito.when(container.getBean("localizationService")).thenReturn(null);
 		
 		PublicView view = new PublicView(TestUtils.getActivity(this)) {
 			@Override
@@ -165,15 +154,12 @@ public class SocializeViewTest extends SocializeActivityTest {
 		};
 		view.getInitUpdateListener().onInit(TestUtils.getActivity(this), container);
 		
-		AndroidMock.verify(container);
-		
 		assertSame(container, getNextResult());
 	}
 	
-	@UsesMocks ({SocializeInitListener.class})
 	public void test_doSocializeInit() {
 		
-		SocializeInitListener listener = AndroidMock.createMock(SocializeInitListener.class);
+		SocializeInitListener listener = Mockito.mock(SocializeInitListener.class);
 		final Context context = TestUtils.getActivity(this);
 		
 		PublicView view = new PublicView(context) {
@@ -210,24 +196,19 @@ public class SocializeViewTest extends SocializeActivityTest {
 	}
 	
 
-	@UsesMocks ({ SocializeInitListener.class, SocializeService.class, SocializeSystem.class})
 	public void testInitSocialize() {
-		final SocializeInitListener listener = AndroidMock.createMock(SocializeInitListener.class);
-		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
-		final SocializeSystem system = AndroidMock.createMock(SocializeSystem.class);
+		final SocializeInitListener listener = Mockito.mock(SocializeInitListener.class);
+		final SocializeService socialize = Mockito.mock(SocializeService.class);
+		final SocializeSystem system = Mockito.mock(SocializeSystem.class);
 		
 		final String[] config = {"foo", "bar"};
 		final Context context = TestUtils.getActivity(this);
 		
-		AndroidMock.expect(socialize.getSystem()).andReturn(system);
-		AndroidMock.expect(system.getBeanConfig(context)).andReturn(config);
-		AndroidMock.expect(system.getSystemInitListener()).andReturn(null);
+		Mockito.when(socialize.getSystem()).thenReturn(system);
+		Mockito.when(system.getBeanConfig(context)).thenReturn(config);
+		Mockito.when(system.getSystemInitListener()).thenReturn(null);
 		
-		socialize.initAsync( AndroidMock.eq(context), AndroidMock.eq( listener ), AndroidMock.eq(config[0]),AndroidMock.eq(config[1]));
-		
-		AndroidMock.replay(system);
-		AndroidMock.replay(socialize);
-		
+
 		PublicView activity = new PublicView(context) {
 			@Override
 			public SocializeService getSocialize() {
@@ -236,27 +217,21 @@ public class SocializeViewTest extends SocializeActivityTest {
 		};
 		
 		activity.initSocialize(context, listener);
-		
-		AndroidMock.verify(system);
-		AndroidMock.verify(socialize);
-	}
+
+        Mockito.verify(socialize).initAsync(Mockito.eq(context), Mockito.eq(listener), Mockito.eq(config[0]), Mockito.eq(config[1]));
+    }
 	
-	@UsesMocks ({IOCContainer.class})
 	public void testGetBeanSocialize() {
 		final String name = "foobar";
 		
-		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
-		
-		AndroidMock.expect(container.getBean(name)).andReturn(null);
-		
-		AndroidMock.replay(container);
+		IOCContainer container = Mockito.mock(IOCContainer.class);
 		
 		PublicView activity = new PublicView(TestUtils.getActivity(this));
 		activity.setContainer(container);
 		
-		activity.getBean(name);
+        activity.getBean(name);
 		
-		AndroidMock.verify(container);
+		Mockito.verify(container).getBean(name);
 	}
 	
 	class PublicView extends SocializeBaseView {

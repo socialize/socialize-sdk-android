@@ -104,16 +104,11 @@ public class ViewUtilsTest extends SocializeActivityTest {
 		assertNotNull(result);
 		assertTrue("Result is not a view object", (result instanceof View));
 		
-//		View view = (View) result;
-//		assertTrue("View ID is not greater than 0", view.getId() > 0);
-		
 		Entity entityAfter = getResult(1);
 		assertNotNull(entityAfter);
 		assertEquals(entityAfter.getKey(), randomKey);
 		assertNotNull(entityAfter.getEntityStats());
-		
-		
-		assertTrue(entityAfter.getEntityStats().getViews().intValue() >= views);
+		assertTrue(entityAfter.getEntityStats().getViews() >= views);
 		
 		// View count updates on the server asynchronously so we can't assert the count here.
 //		assertEquals(views+1, entityAfter.getEntityStats().getViews().intValue());

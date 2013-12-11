@@ -5,6 +5,7 @@ import android.view.View;
 import com.socialize.ActionBarUtils;
 import com.socialize.Socialize;
 import com.socialize.entity.Entity;
+import com.socialize.test.R;
 import com.socialize.ui.actionbar.ActionBarOptions;
 
 import java.util.concurrent.CountDownLatch;

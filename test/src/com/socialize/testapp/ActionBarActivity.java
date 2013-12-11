@@ -5,6 +5,7 @@ import android.view.View;
 import com.socialize.ActionBarUtils;
 import com.socialize.Socialize;
 import com.socialize.entity.Entity;
+import com.socialize.test.R;
 import com.socialize.ui.actionbar.ActionBarOptions;
 
 import java.util.concurrent.CountDownLatch;
@@ -33,18 +34,6 @@ public class ActionBarActivity extends EmptyActivity {
 
         launchLock.countDown();
     }
-
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        Socialize.onPause(this);
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        Socialize.onResume(this);
-//    }
 
     @Override
     protected void onDestroy() {

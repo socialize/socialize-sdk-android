@@ -1,0 +1,28 @@
+<beans>
+	<bean id="userSystem" class="com.socialize.testapp.mock.MockUserSystem" />
+	<bean id="shareSystem" class="com.socialize.testapp.mock.MockShareSystem" />
+	<bean id="commentSystem" class="com.socialize.testapp.mock.MockCommentSystem" />
+	<bean id="likeSystem" class="com.socialize.testapp.mock.MockLikeSystem" />
+	<bean id="entitySystem" class="com.socialize.testapp.mock.MockEntitySystem" />
+	<bean id="viewSystem" class="com.socialize.testapp.mock.MockViewSystem" />
+	<bean id="notificationRegistrationSystem" class="com.socialize.testapp.mock.MockNotificationRegistrationSystem" />
+	<bean id="subscriptionSystem" class="com.socialize.testapp.mock.MockSubscriptionSystem" />
+	
+	<proxy ref="userSystem" />
+	<proxy ref="shareSystem" />
+	<proxy ref="commentSystem" />
+	<proxy ref="likeSystem" />
+	<proxy ref="entitySystem" />
+	<proxy ref="viewSystem" />
+	<proxy ref="subscriptionSystem" />
+	<proxy ref="appUtils" />
+	<proxy ref="alertDialogFactory" />
+	<proxy ref="actionButtonHandlers" />
+	
+	<proxy ref="authProviderInfoBuilder" />	
+	<proxy ref="authDialogFactory" />
+	<proxy ref="shareDialogFactory" />
+	<proxy ref="userProvider" />
+
+	<bean id="initializationAsserter" class="com.socialize.testapp.mock.MockInitializationAsserter" />
+</beans>

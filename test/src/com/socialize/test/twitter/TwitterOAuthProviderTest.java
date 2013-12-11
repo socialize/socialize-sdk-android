@@ -21,8 +21,6 @@
  */
 package com.socialize.test.twitter;
 
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.twitter.OAuthRequestTokenUrlListener;
 import com.socialize.auth.twitter.TwitterOAuthProvider;
 import com.socialize.oauth.signpost.OAuthConsumer;
@@ -31,6 +29,7 @@ import com.socialize.oauth.signpost.exception.OAuthExpectationFailedException;
 import com.socialize.oauth.signpost.exception.OAuthMessageSignerException;
 import com.socialize.oauth.signpost.exception.OAuthNotAuthorizedException;
 import com.socialize.test.SocializeActivityTest;
+import org.mockito.Mockito;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -41,12 +40,11 @@ import java.util.concurrent.TimeUnit;
  */
 public class TwitterOAuthProviderTest extends SocializeActivityTest {
 
-	@UsesMocks ({OAuthConsumer.class})
 	public void test_retrieveRequestTokenAsync() throws Throwable {
 		
 		final String url = "foobar";
 		final String callbackUrl = "foobar_callback";
-		final OAuthConsumer consumer = AndroidMock.createMock(OAuthConsumer.class);
+		final OAuthConsumer consumer = Mockito.mock(OAuthConsumer.class);
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		

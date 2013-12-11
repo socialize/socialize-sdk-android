@@ -231,35 +231,45 @@ public class SocializeButton extends LinearLayout {
 	}
 	
 	protected Drawable makeEnabledBackgroundDrawable() {
-		int bottom = colors.getColor(bottomColor);
-		int top = colors.getColor(topColor);
-		int strokeTop = colors.getColor(strokeTopColor);
-		int strokeBottom = colors.getColor(strokeBottomColor);
-		int bgColor = Color.BLACK;
-		
-		if(!StringUtils.isEmpty(backgroundColor)) {
-			bgColor = colors.getColor(backgroundColor);
-		}
-		
-		return makeBackgroundDrawable(bgColor, computedRadius, strokeBottom, strokeTop, bottom, top);
-	}
+        if(colors != null) {
+            int bottom = colors.getColor(bottomColor);
+            int top = colors.getColor(topColor);
+            int strokeTop = colors.getColor(strokeTopColor);
+            int strokeBottom = colors.getColor(strokeBottomColor);
+            int bgColor = Color.BLACK;
+
+            if(!StringUtils.isEmpty(backgroundColor)) {
+                bgColor = colors.getColor(backgroundColor);
+            }
+            return makeBackgroundDrawable(bgColor, computedRadius, strokeBottom, strokeTop, bottom, top);
+        }
+
+        return makeBackgroundDrawable(0, computedRadius, 0, 0, 0, 0);
+    }
 	
 	protected Drawable makeDisabledBackgroundDrawable() {
-		int bottom = colors.getColor(Colors.BUTTON_DISABLED_BOTTOM);
-		int top = colors.getColor(Colors.BUTTON_DISABLED_TOP);
-		int strokeTop = colors.getColor(Colors.BUTTON_DISABLED_STROKE);
-		int strokeBottom = colors.getColor(Colors.BUTTON_DISABLED_STROKE);
-		int bgColor = colors.getColor(Colors.BUTTON_DISABLED_BACKGROUND);
-		return makeBackgroundDrawable(bgColor, computedRadius, strokeBottom, strokeTop, bottom, top);
+
+        if(colors != null) {
+            int bottom = colors.getColor(Colors.BUTTON_DISABLED_BOTTOM);
+            int top = colors.getColor(Colors.BUTTON_DISABLED_TOP);
+            int strokeTop = colors.getColor(Colors.BUTTON_DISABLED_STROKE);
+            int strokeBottom = colors.getColor(Colors.BUTTON_DISABLED_STROKE);
+            int bgColor = colors.getColor(Colors.BUTTON_DISABLED_BACKGROUND);
+            return makeBackgroundDrawable(bgColor, computedRadius, strokeBottom, strokeTop, bottom, top);
+        }
+
+        return null;
 	}
 	
 	protected Drawable makeBackgroundDrawable(int bgColor, float radius, int strokeBottom, int strokeTop, int bottom, int top) {
 		GradientDrawable base = makeGradient(bgColor, bgColor);
-		base.setCornerRadius(radius+displayUtils.getDIP(2)); // Add 2 pixels to make it look nicer
-		
-		GradientDrawable stroke = makeGradient(strokeBottom, strokeTop);
-		stroke.setCornerRadius(radius+displayUtils.getDIP(1)); // Add 1 pixel to make it look nicer
-		
+        GradientDrawable stroke = makeGradient(strokeBottom, strokeTop);
+
+        if(displayUtils != null) {
+            base.setCornerRadius(radius+displayUtils.getDIP(2)); // Add 2 pixels to make it look nicer
+            stroke.setCornerRadius(radius+displayUtils.getDIP(1)); // Add 1 pixel to make it look nicer
+        }
+
 		GradientDrawable background = makeGradient(bottom, top);
 		
 		background.setCornerRadius(radius);

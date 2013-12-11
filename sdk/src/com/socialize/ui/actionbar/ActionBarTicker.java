@@ -47,7 +47,7 @@ public class ActionBarTicker extends LinearLayout {
 	private RotatingFadeViewAnimator rotator;
 	private DisplayUtils displayUtils;
 	private boolean initialized = false;
-	private Integer backgroundColor = 0;
+	private Integer backgroundColor;
 	
 	public ActionBarTicker(Context context) {
 		super(context);

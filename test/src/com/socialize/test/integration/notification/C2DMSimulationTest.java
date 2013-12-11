@@ -22,6 +22,7 @@
 package com.socialize.test.integration.notification;
 
 import android.app.Activity;
+import android.app.Instrumentation;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.PendingIntent.OnFinished;
@@ -66,12 +67,16 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 	SocializeC2DMReceiverHandler receiver;
 	protected long entityId = -1;
 	protected long commentId = -1;
+    Instrumentation.ActivityMonitor monitor;
 	
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		
-		Socialize.DEFAULT_LOG_LEVEL = LogLevel.DEBUG;
+
+
+        monitor = TestUtils.setUpActivityMonitor(this, SocializeLaunchActivity.class);
+
+        Socialize.DEFAULT_LOG_LEVEL = LogLevel.DEBUG;
 		
 		Socialize.getSocialize().destroy(true);
 		NotificationsAccess.destroy(receiver);		
@@ -79,20 +84,24 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 		receiver = new SocializeC2DMReceiverHandler();
 		
 		// Set override
-		NotificationsAccess.setBeanOverrides(receiver, new String[]{SocializeConfig.SOCIALIZE_CORE_BEANS_PATH, SocializeConfig.SOCIALIZE_NOTIFICATION_BEANS_PATH, "socialize_notification_mock_beans.xml"});
+		NotificationsAccess.setBeanOverrides(receiver, SocializeConfig.SOCIALIZE_CORE_BEANS_PATH, SocializeConfig.SOCIALIZE_NOTIFICATION_BEANS_PATH, "socialize_notification_mock_beans.xml");
 		SocializeAccess.setBeanOverrides("socialize_notification_mock_beans.xml");
 		
 		// Create the receiver
 		receiver.onCreate(getContext());
 	}
 
-	@Override
-	protected void tearDown() throws Exception {
-		TestUtils.restart(this);
-		super.tearDown();
-	}
+    @Override
+    protected void tearDown() throws Exception {
+        Activity activity = monitor.getLastActivity();
+        if(activity != null) {
+            activity.finish();
+        }
 
-	public void testOnMessage() throws Throwable {
+        super.tearDown();
+    }
+
+    public void testOnMessage() throws Throwable {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		final CountDownLatch launchLock = new CountDownLatch(1);
@@ -105,7 +114,7 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 			@Override
 			public void notify(Context context, String tag, int id, Notification notification) {
 				addResult(0, tag);
-				addResult(1, Integer.valueOf(id));
+				addResult(1, id);
 				addResult(2, notification);
 				latch.countDown();
 			}
@@ -201,6 +210,7 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 		String launchAction = extras.getString(SocializeLaunchActivity.LAUNCH_ACTION);
 		
 		assertNotNull(launchAction);
+
 		LaunchAction action = LaunchAction.valueOf(launchAction.toUpperCase());
 		
 		assertEquals(getExpectedLaunchAction(), action);
@@ -229,7 +239,6 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 	
 	/**
 	 * Asserts that the extras bundle sent to the launch activity contains what we need for the notification.
-	 * @param extras
 	 */
 	protected abstract void assertNotificationBundle(Bundle extras) throws Exception;
 	
@@ -241,7 +250,6 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 	
 	/**
 	 * Loads an entity from the JSON file written to disk after the initial python setup script (sdk-cleanup.py)
-	 * @return
 	 * @throws java.io.IOException
 	 * @throws org.json.JSONException
 	 */

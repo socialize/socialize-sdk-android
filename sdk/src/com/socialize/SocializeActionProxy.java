@@ -70,10 +70,12 @@ public class SocializeActionProxy implements InvocationHandler {
 				
 				if(context != null) {
 					synchronized (this) {
-						if(!Socialize.getSocialize().isInitialized(context)) {
-							Socialize.getSocialize().init(context);
-							if(!Socialize.getSocialize().isAuthenticated() && !method.isAnnotationPresent(NoAuth.class)) {
-								Socialize.getSocialize().authenticateSynchronous(context);
+                        SocializeService socialize = Socialize.getSocialize();
+
+                        if(!socialize.isInitialized(context)) {
+							socialize.init(context);
+							if(!socialize.isAuthenticated() && !method.isAnnotationPresent(NoAuth.class)) {
+								socialize.authenticateSynchronous(context);
 							}
 						}
 					}

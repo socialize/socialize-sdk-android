@@ -21,8 +21,6 @@
  */
 package com.socialize.test.unit.api;
 
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.like.SocializeLikeSystem;
 import com.socialize.entity.*;
@@ -32,6 +30,7 @@ import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.like.LikeListener;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeUnitTest;
+import org.mockito.Mockito;
 
 import java.util.List;
 import java.util.Map;
@@ -39,7 +38,6 @@ import java.util.Map;
 /**
  * @author Jason Polites
  */
-@UsesMocks ({SocializeSession.class, LikeListener.class, SocializeProvider.class})
 public class LikeApiTest extends SocializeUnitTest {
 
 	SocializeProvider<Like> provider;
@@ -50,9 +48,9 @@ public class LikeApiTest extends SocializeUnitTest {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		provider = AndroidMock.createMock(SocializeProvider.class);
-		session = AndroidMock.createMock(SocializeSession.class);
-		listener = AndroidMock.createMock(LikeListener.class);
+		provider = Mockito.mock(SocializeProvider.class);
+		session = Mockito.mock(SocializeSession.class);
+		listener = Mockito.mock(LikeListener.class);
 	}
 
 	/**
@@ -222,18 +220,17 @@ public class LikeApiTest extends SocializeUnitTest {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@UsesMocks({ListResult.class, LikeListener.class, Like.class, List.class, User.class, SocializeSession.class})
 	public void testGetLikeByKeyWithResults() {
 
 		String key = "foobar";
 		Long userId = 69L;
 		
-		final Like like = AndroidMock.createMock(Like.class);
-		final ListResult<Like> listResult = (ListResult<Like>) AndroidMock.createMock(ListResult.class);
-		List<Like> items = (List<Like>) AndroidMock.createMock(List.class);
+		final Like like = Mockito.mock(Like.class);
+		final ListResult<Like> listResult = (ListResult<Like>) Mockito.mock(ListResult.class);
+		List<Like> items = (List<Like>) Mockito.mock(List.class);
 		
-		User user = AndroidMock.createMock(User.class);
-		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		User user = Mockito.mock(User.class);
+		SocializeSession session = Mockito.mock(SocializeSession.class);
 		
 		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 			@Override
@@ -267,40 +264,29 @@ public class LikeApiTest extends SocializeUnitTest {
 			public void onCreate(Like entity) {}
 		};
 
-		AndroidMock.expect(listResult.getTotalCount()).andReturn(1);
-		AndroidMock.expect(listResult.getItems()).andReturn(items);
-		AndroidMock.expect(items.size()).andReturn(1);
-		AndroidMock.expect(items.get(0)).andReturn(like);
+		Mockito.when(listResult.getTotalCount()).thenReturn(1);
+		Mockito.when(listResult.getItems()).thenReturn(items);
+		Mockito.when(items.size()).thenReturn(1);
+		Mockito.when(items.get(0)).thenReturn(like);
 		
-		AndroidMock.expect(session.getUser()).andReturn(user);
-		AndroidMock.expect(user.getId()).andReturn(userId);
-		
-		AndroidMock.replay(listResult);
-		AndroidMock.replay(items);
-		AndroidMock.replay(session);
-		AndroidMock.replay(user);
+		Mockito.when(session.getUser()).thenReturn(user);
+		Mockito.when(user.getId()).thenReturn(userId);
 		
 		api.getLike(session, key, likeListener);
-		
-		AndroidMock.verify(listResult);
-		AndroidMock.verify(items);
-		AndroidMock.verify(session);
-		AndroidMock.verify(user);
 	}
 	
 	@SuppressWarnings("unchecked")
-	@UsesMocks({ListResult.class, LikeListener.class, ActionError.class, Like.class, List.class, SocializeSession.class, User.class})
 	public void testGetLikeByKeyWithNoResults() {
 
 		String key = "foobar";
 		
 		Long userId = 69L;
 		
-		User user = AndroidMock.createMock(User.class);
-		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		User user = Mockito.mock(User.class);
+		SocializeSession session = Mockito.mock(SocializeSession.class);
 		
-		final ListResult<Like> listResult = (ListResult<Like>) AndroidMock.createMock(ListResult.class);
-		List<Like> items = (List<Like>) AndroidMock.createMock(List.class);
+		final ListResult<Like> listResult = (ListResult<Like>) Mockito.mock(ListResult.class);
+		List<Like> items = (List<Like>) Mockito.mock(List.class);
 		
 		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 			@Override
@@ -335,24 +321,14 @@ public class LikeApiTest extends SocializeUnitTest {
 			public void onCreate(Like entity) {}
 		};
 
-		AndroidMock.expect(session.getUser()).andReturn(user);
-		AndroidMock.expect(user.getId()).andReturn(userId);
+		Mockito.when(session.getUser()).thenReturn(user);
+		Mockito.when(user.getId()).thenReturn(userId);
 		
-		AndroidMock.expect(listResult.getTotalCount()).andReturn(0);
-		AndroidMock.expect(listResult.getItems()).andReturn(items);
-		AndroidMock.expect(items.size()).andReturn(0);
-		
-		AndroidMock.replay(user);
-		AndroidMock.replay(session);
-		AndroidMock.replay(listResult);
-		AndroidMock.replay(items);
+		Mockito.when(listResult.getTotalCount()).thenReturn(0);
+		Mockito.when(listResult.getItems()).thenReturn(items);
+		Mockito.when(items.size()).thenReturn(0);
 		
 		api.getLike(session, key, likeListener);
-		
-		AndroidMock.verify(user);
-		AndroidMock.verify(session);
-		AndroidMock.verify(listResult);
-		AndroidMock.verify(items);
 	}
 	
 	public void testGetLikeByKeyWithUsesCorrectPagination() {
@@ -390,20 +366,16 @@ public class LikeApiTest extends SocializeUnitTest {
 		assertEquals(String.valueOf(id), strId);
 	}
 	
-	@UsesMocks ({SocializeSession.class, User.class})
 	public void testGetLikeByKey() {
 		
 		String key = "foobar";
 		Long userId = 69L;
 		
-		User user = AndroidMock.createMock(User.class);
-		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		User user = Mockito.mock(User.class);
+		SocializeSession session = Mockito.mock(SocializeSession.class);
 		
-		AndroidMock.expect(session.getUser()).andReturn(user);
-		AndroidMock.expect(user.getId()).andReturn(userId);
-		
-		AndroidMock.replay(user);
-		AndroidMock.replay(session);
+		Mockito.when(session.getUser()).thenReturn(user);
+		Mockito.when(user.getId()).thenReturn(userId);
 		
 		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 			@Override
@@ -414,9 +386,6 @@ public class LikeApiTest extends SocializeUnitTest {
 		};
 		
 		api.getLike(session, key, listener);
-		
-		AndroidMock.verify(user);
-		AndroidMock.verify(session);
 		
 		String strId = getNextResult();
 		String endpoint = getNextResult();

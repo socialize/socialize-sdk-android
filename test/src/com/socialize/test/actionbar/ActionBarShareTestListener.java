@@ -1,8 +1,6 @@
 package com.socialize.test.actionbar;
 
 import android.app.Activity;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeAccess;
 import com.socialize.api.action.like.SocializeLikeUtils;
 import com.socialize.api.action.share.SocialNetworkShareListener;
@@ -16,6 +14,7 @@ import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
 import com.socialize.ui.actionbar.OnActionBarEventListener.ActionBarEvent;
 import com.socialize.ui.share.ShareDialogListener;
+import org.mockito.Mockito;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -27,9 +26,7 @@ public class ActionBarShareTestListener extends ActionBarTest {
 	public boolean isManual() {
 		return false;
 	}
-	
 
-	@UsesMocks({OnActionBarEventListener.class})
 	public void testShareButtonCallsActionBarListener() throws Throwable {
 		
         Activity activity = TestUtils.getActivity(this);
@@ -43,7 +40,7 @@ public class ActionBarShareTestListener extends ActionBarTest {
 			public void getLike(Activity context, String entityKey, LikeGetListener listener) {
 				listener.onGet(mockLike);
 			}
-		};
+        };
 		
 		SocializeShareUtils shareUtils = new SocializeShareUtils() {
 			@Override
@@ -61,13 +58,11 @@ public class ActionBarShareTestListener extends ActionBarTest {
 		assertNotNull(actionBar);
 		assertNotNull(actionBarView);
 
-		OnActionBarEventListener listener = AndroidMock.createMock(OnActionBarEventListener.class);
+		OnActionBarEventListener listener = Mockito.mock(OnActionBarEventListener.class);
 		
-		AndroidMock.expect(listener.onClick(actionBarView, ActionBarEvent.SHARE)).andReturn(false);	
+		Mockito.when(listener.onClick(actionBarView, ActionBarEvent.SHARE)).thenReturn(false);
 		
 		actionBar.setOnActionBarEventListener(listener);	
-		
-		AndroidMock.replay(listener);
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
@@ -81,8 +76,6 @@ public class ActionBarShareTestListener extends ActionBarTest {
 		});
 		
 		assertTrue(latch.await(10, TimeUnit.SECONDS));
-		
-		AndroidMock.verify(listener);	
-	}	
+	}
 	
 }

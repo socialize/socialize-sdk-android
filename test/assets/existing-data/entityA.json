@@ -1,0 +1,24 @@
+{
+    "errors": [],
+    "items": [
+        {
+            "attach_token": "w2FeXTX1hf/HNnsmCto05DLxAjbv6Ykt0NbMNdFzoxi8nUkxIcv32TsChYWGHQAk",
+            "attachments": null,
+            "comments": 0,
+            "id": 13344093,
+            "key": "http://entityA.com",
+            "likes": 0,
+            "meta": null,
+            "name": "A Entity",
+            "shares": 0,
+            "total_activity": 0,
+            "type": "article",
+            "user_action_summary": {
+                "comments": 0,
+                "likes": 0,
+                "shares": 0
+            },
+            "views": 0
+        }
+    ]
+}

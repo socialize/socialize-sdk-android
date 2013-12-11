@@ -1,0 +1,13 @@
+<beans>
+	
+	<bean 
+		id="facebookV2Facade" 
+		class="com.socialize.testapp.mock.MockFacebookFacade">
+	</bean>
+	
+	<bean 
+		id="facebookV3Facade" 
+		class="com.socialize.testapp.mock.MockFacebookFacade">
+	</bean>	
+	
+</beans>

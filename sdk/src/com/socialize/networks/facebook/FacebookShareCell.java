@@ -54,7 +54,9 @@ public class FacebookShareCell extends FacebookCell {
 	}
 
 	public void setAuthListener(SocializeAuthListener listener) {
-		facebookAuthClickListener.setListener(listener);
+        if(facebookAuthClickListener != null) {
+            facebookAuthClickListener.setListener(listener);
+        }
 	}
 
 	public void setFacebookAuthClickListener(FacebookAuthClickListener facebookAuthClickListener) {

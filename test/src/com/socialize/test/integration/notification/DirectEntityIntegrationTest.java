@@ -23,8 +23,6 @@ package com.socialize.test.integration.notification;
 
 import android.app.Activity;
 import android.content.Context;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
@@ -33,6 +31,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.ui.SocializeEntityLoader;
 import com.socialize.util.EntityLoaderUtils;
+import org.mockito.Mockito;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -44,7 +43,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class DirectEntityIntegrationTest extends DirectEntityNotificationTest {
 
-	@UsesMocks ({EntityLoaderUtils.class})
 	@Override
 	public void testOnMessage() throws Throwable {
 		
@@ -65,7 +63,7 @@ public class DirectEntityIntegrationTest extends DirectEntityNotificationTest {
 			}
 		};		
 		
-		final EntityLoaderUtils mockUtils = AndroidMock.createMock(EntityLoaderUtils.class);
+		final EntityLoaderUtils mockUtils = Mockito.mock(EntityLoaderUtils.class);
 		
 		// Setup a proxy for the entity loader
 		SocializeAccess.setInitListener(new SocializeInitListener() {
@@ -83,17 +81,14 @@ public class DirectEntityIntegrationTest extends DirectEntityNotificationTest {
 		});
 		
 
-		AndroidMock.expect(mockUtils.initEntityLoader()).andReturn(testLoader);		
-		AndroidMock.replay(mockUtils);
-		
+		Mockito.when(mockUtils.initEntityLoader()).thenReturn(testLoader);
+
 		// Call super
 		super.testOnMessage();
 		
 		latch.await(10, TimeUnit.SECONDS);
 		
-		AndroidMock.verify(mockUtils);
-		
-		Entity entity = getResult(4);
+        Entity entity = getResult(4);
 		
 		assertNotNull(entity);
 		assertEquals(getEntityId(), entity.getId().longValue());

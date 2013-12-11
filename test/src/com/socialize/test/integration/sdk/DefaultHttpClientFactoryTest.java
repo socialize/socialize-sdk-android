@@ -21,20 +21,18 @@
  */
 package com.socialize.test.integration.sdk;
 
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.config.SocializeConfig;
 import com.socialize.net.DefaultHttpClientFactory;
 import com.socialize.test.SocializeUnitTest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.mockito.Mockito;
 
 /**
  * @author Jason Polites
  *
  */
-@UsesMocks (SocializeConfig.class)
 public class DefaultHttpClientFactoryTest extends SocializeUnitTest {
 	
 	DefaultHttpClientFactory factory;
@@ -44,16 +42,12 @@ public class DefaultHttpClientFactoryTest extends SocializeUnitTest {
 	protected void setUp() throws Exception {
 		super.setUp();
 		factory = new DefaultHttpClientFactory();
-		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+		SocializeConfig config = Mockito.mock(SocializeConfig.class);
+
+        Mockito.when(config.getIntProperty(SocializeConfig.HTTP_CONNECTION_TIMEOUT, 10000)).thenReturn(60000);
+        Mockito.when(config.getIntProperty(SocializeConfig.HTTP_SOCKET_TIMEOUT, 10000)).thenReturn(60000);
 		
-		AndroidMock.expect(config.getIntProperty(SocializeConfig.HTTP_CONNECTION_TIMEOUT, 10000)).andReturn(60000);
-		AndroidMock.expect(config.getIntProperty(SocializeConfig.HTTP_SOCKET_TIMEOUT, 10000)).andReturn(60000);
-		
-		AndroidMock.replay(config);
-		
-		factory.init(config);
-		
-		AndroidMock.verify(config);
+        factory.init(config);
 	}
 
 	@Override

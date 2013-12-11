@@ -2,7 +2,7 @@ package com.facebook;
 
 import android.content.Context;
 
-public class MockSession extends Session{
+public class MockSession extends Session {
 	public MockSession(Context currentContext) {
 		super(currentContext, "foobar", null);
 	}

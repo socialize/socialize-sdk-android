@@ -30,6 +30,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.socialize.CommentUtils;
+import com.socialize.ConfigUtils;
+import com.socialize.config.SocializeConfig;
 import com.socialize.demo.R;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
@@ -81,7 +83,8 @@ public class CommentActivity extends ListActivity {
 			
 			switch (position) {
 			case 0:
-				entity = "http://getsocialize.com";
+                SocializeConfig config = ConfigUtils.getConfig(l.getContext());
+                entity = config.getProperty("entity.key");
 				break;
 			}
 

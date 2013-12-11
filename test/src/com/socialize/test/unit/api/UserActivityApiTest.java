@@ -21,8 +21,6 @@
  */
 package com.socialize.test.unit.api;
 
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.activity.SocializeActivitySystem;
 import com.socialize.entity.SocializeAction;
@@ -30,11 +28,11 @@ import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.activity.ActionListener;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeUnitTest;
+import org.mockito.Mockito;
 
 /**
  * @author Jason Polites
  */
-@UsesMocks ({SocializeSession.class, ActionListener.class, SocializeProvider.class})
 public class UserActivityApiTest extends SocializeUnitTest {
 
 	SocializeProvider<SocializeAction> provider;
@@ -45,12 +43,12 @@ public class UserActivityApiTest extends SocializeUnitTest {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		provider = AndroidMock.createMock(SocializeProvider.class);
-		session = AndroidMock.createMock(SocializeSession.class);
-		listener = AndroidMock.createMock(ActionListener.class);
+		provider = Mockito.mock(SocializeProvider.class);
+		session = Mockito.mock(SocializeSession.class);
+		listener = Mockito.mock(ActionListener.class);
 	}
 
-	public void getActivitysByUser() {
+	public void testGetActivitysByUser() {
 		
 		final int key = 69;
 		
@@ -63,13 +61,13 @@ public class UserActivityApiTest extends SocializeUnitTest {
 		
 		api.getActivityByUser(session, key, listener);
 		
-		Integer after = (Integer) getNextResult();
+		Integer after = getNextResult();
 		
 		assertNotNull(after);
 		assertEquals(key, after.intValue());
 	}
 	
-	public void getActivitysByUserPaginated() {
+	public void testGetActivitysByUserPaginated() {
 		
 		final int key = 69;
 		int startIndex = 0, endIndex = 10;
@@ -89,7 +87,8 @@ public class UserActivityApiTest extends SocializeUnitTest {
 		
 		assertNotNull(after);
 		assertEquals(key, after.intValue());
-		
+
+        // JDK Bug means we have to cast :/
 		int afterStartIndex = (Integer) getNextResult();
 		int afterEndIndex = (Integer) getNextResult();
 		

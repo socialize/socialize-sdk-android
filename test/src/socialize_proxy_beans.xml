@@ -1,0 +1,20 @@
+<beans>
+	<proxy ref="userSystem" />
+	<proxy ref="shareSystem" />
+	<proxy ref="commentSystem" />
+	<proxy ref="likeSystem" />
+	<proxy ref="entitySystem" />
+	<proxy ref="viewSystem" />
+	<proxy ref="subscriptionSystem" />
+	<proxy ref="appUtils" />
+	<proxy ref="alertDialogFactory" />
+	<proxy ref="actionButtonHandlers" />
+	<proxy ref="authProviderInfoBuilder" />	
+	<proxy ref="authDialogFactory" />
+	<proxy ref="shareDialogFactory" />
+	<proxy ref="userProvider" />
+    <proxy ref="appUtils" />
+    <proxy ref="notificationRegistrationSystem" />
+    <proxy ref="subscriptionUtils" />
+    <proxy ref="authProviders" />
+</beans>

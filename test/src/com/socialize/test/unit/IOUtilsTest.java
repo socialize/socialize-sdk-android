@@ -21,8 +21,6 @@
  */
 package com.socialize.test.unit;
 
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.test.SocializeUnitTest;
 import com.socialize.test.util.JsonAssert;
 import com.socialize.util.HttpUtils;
@@ -33,6 +31,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.mockito.Mockito;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -52,19 +51,14 @@ public class IOUtilsTest extends SocializeUnitTest {
 		assertEquals(text, read);
 	}
 
-	@UsesMocks(InputStream.class)
 	public void testIOReadSafe() {
-		InputStream in = AndroidMock.createMock(InputStream.class);
+		InputStream in = Mockito.mock(InputStream.class);
 
 		try {
-			AndroidMock.expect(in.read((byte[]) AndroidMock.anyObject())).andThrow(new IOException("DUMMY EXCEPTION - IGNORE ME!"));
+			Mockito.when(in.read((byte[]) Mockito.anyObject())).thenThrow(new IOException("DUMMY EXCEPTION - IGNORE ME!"));
 
-			AndroidMock.replay(in);
-
-			IOUtils utils = new IOUtils();
+            IOUtils utils = new IOUtils();
 			String read = utils.readSafe(in);
-
-			AndroidMock.verify(in);
 
 			assertNotNull(read);
 			assertEquals("", read);
@@ -85,17 +79,14 @@ public class IOUtilsTest extends SocializeUnitTest {
 		assertFalse(StringUtils.isEmpty(nonEmpty));
 	}
 
-	@UsesMocks({ IOUtils.class, InputStream.class })
 	public void testJSONParseObject() throws Exception {
 
 		final String json = "{foo:bar}";
 
-		IOUtils ioUtils = AndroidMock.createMock(IOUtils.class);
-		InputStream in = AndroidMock.createMock(InputStream.class);
+		IOUtils ioUtils = Mockito.mock(IOUtils.class);
+		InputStream in = Mockito.mock(InputStream.class);
 
-		AndroidMock.expect(ioUtils.read(in)).andReturn(json);
-
-		AndroidMock.replay(ioUtils);
+		Mockito.when(ioUtils.read(in)).thenReturn(json);
 
 		JSONParser parser = new JSONParser();
 		parser.setIoUtils(ioUtils);
@@ -109,20 +100,15 @@ public class IOUtilsTest extends SocializeUnitTest {
 		object = parser.parseObject(json);
 
 		JsonAssert.assertJsonObjectEquals(expected, object);
-
-		AndroidMock.verify(ioUtils);
 	}
 
-	@UsesMocks({ IOUtils.class, InputStream.class })
 	public void testJSONParseArray() throws Exception {
 		final String json = "[foo1,bar1,foo2,bar2,foo3,bar3]";
 
-		IOUtils ioUtils = AndroidMock.createMock(IOUtils.class);
-		InputStream in = AndroidMock.createMock(InputStream.class);
+		IOUtils ioUtils = Mockito.mock(IOUtils.class);
+		InputStream in = Mockito.mock(InputStream.class);
 
-		AndroidMock.expect(ioUtils.read(in)).andReturn(json);
-
-		AndroidMock.replay(ioUtils);
+		Mockito.when(ioUtils.read(in)).thenReturn(json);
 
 		JSONParser parser = new JSONParser();
 		parser.setIoUtils(ioUtils);
@@ -136,28 +122,17 @@ public class IOUtilsTest extends SocializeUnitTest {
 		object = parser.parseArray(json);
 
 		JsonAssert.assertJsonArrayEquals(expected, object);
-
-		AndroidMock.verify(ioUtils);
-
 	}
 
-	@UsesMocks({ HttpResponse.class, StatusLine.class })
 	public void testHttpUtilsIsError() {
 
-		HttpResponse response = AndroidMock.createMock(HttpResponse.class);
-		StatusLine line = AndroidMock.createMock(StatusLine.class);
+		HttpResponse response = Mockito.mock(HttpResponse.class);
+		StatusLine line = Mockito.mock(StatusLine.class);
 
-		AndroidMock.expect(response.getStatusLine()).andReturn(line);
-		AndroidMock.expect(line.getStatusCode()).andReturn(404);
-
-		AndroidMock.replay(response);
-		AndroidMock.replay(line);
+		Mockito.when(response.getStatusLine()).thenReturn(line);
+		Mockito.when(line.getStatusCode()).thenReturn(404);
 
 		HttpUtils utils = new HttpUtils();
 		assertTrue(utils.isHttpError(response));
-
-		AndroidMock.verify(response);
-		AndroidMock.verify(line);
-
 	}
 }

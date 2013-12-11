@@ -1,0 +1,71 @@
+{
+    "errors": [],
+    "items": [
+        {
+            "application": {
+                "id": 235775,
+                "name": "Android Sample App"
+            },
+            "date": "2013-12-10 22:35:17+0000",
+            "entity": {
+                "comments": 30,
+                "id": 13344091,
+                "key": "http://entity1.com",
+                "likes": 1,
+                "meta": null,
+                "name": "First Entity",
+                "shares": 0,
+                "total_activity": 0,
+                "type": "article",
+                "views": 0
+            },
+            "id": 2022731,
+            "lat": 23.740669496318432,
+            "lng": 88.81314308843659,
+            "propagation_info_response": {},
+            "share_location": true,
+            "user": {
+                "first_name": null,
+                "id": 66434432,
+                "last_name": null,
+                "location": null,
+                "meta": null,
+                "small_image_uri": null,
+                "username": "User66434432"
+            }
+        },
+        {
+            "application": {
+                "id": 235775,
+                "name": "Android Sample App"
+            },
+            "date": "2013-12-10 22:35:17+0000",
+            "entity": {
+                "comments": 0,
+                "id": 13344092,
+                "key": "http://entity2.com",
+                "likes": 1,
+                "meta": null,
+                "name": "Second Entity",
+                "shares": 0,
+                "total_activity": 0,
+                "type": "article",
+                "views": 0
+            },
+            "id": 2022732,
+            "lat": 25.187491282704716,
+            "lng": 78.88237978070617,
+            "propagation_info_response": {},
+            "share_location": true,
+            "user": {
+                "first_name": null,
+                "id": 66434432,
+                "last_name": null,
+                "location": null,
+                "meta": null,
+                "small_image_uri": null,
+                "username": "User66434432"
+            }
+        }
+    ]
+}

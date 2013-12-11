@@ -3,17 +3,12 @@ package com.socialize.test.comment.ui;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
-import com.socialize.api.SocializeSession;
 import com.socialize.api.action.comment.CommentOptions;
 import com.socialize.api.action.comment.CommentUtilsProxy;
 import com.socialize.api.action.comment.SocializeCommentUtils;
-import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
@@ -22,10 +17,15 @@ import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.ui.comment.*;
+import com.socialize.ui.comment.CommentAdapter;
+import com.socialize.ui.comment.CommentAddButtonListener;
+import com.socialize.ui.comment.CommentEditField;
+import com.socialize.ui.comment.CommentListView;
+import com.socialize.ui.comment.CommentScrollListener;
 import com.socialize.ui.dialog.SimpleDialogFactory;
 import com.socialize.ui.header.SocializeHeader;
 import com.socialize.ui.view.LoadingListView;
+import org.mockito.Mockito;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -59,7 +59,6 @@ public class CommentListViewTest extends SocializeActivityTest {
 		assertTrue(nextResult);
 	}
 	
-	@UsesMocks ({SocializeService.class, SocializeConfig.class, SocializeSession.class})
 	public void testGetCommentAddListener() throws Throwable {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
@@ -109,18 +108,6 @@ public class CommentListViewTest extends SocializeActivityTest {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@UsesMocks ({
-		Comment.class, 
-		ProgressDialog.class,
-		SimpleDialogFactory.class,
-		CommentAdapter.class,
-		List.class,
-		View.class,
-		SocializeHeader.class,
-		LoadingListView.class,
-		SocializeSession.class,
-		Entity.class,
-        CommentEditField.class})
 	public void testPostCommentSuccess() {
 		
 		final String title = "socialize_comment_dialog";
@@ -131,39 +118,21 @@ public class CommentListViewTest extends SocializeActivityTest {
 		final String commentString = "foobar_comment";
 		boolean shareLocation = true;
 		
-		final Comment comment = AndroidMock.createMock(Comment.class);
-		final ProgressDialog dialog = AndroidMock.createMock(ProgressDialog.class, getContext());
-		final SimpleDialogFactory<ProgressDialog> progressDialogFactory = AndroidMock.createMock(SimpleDialogFactory.class);
-		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class);
-		final List<Comment> comments = AndroidMock.createMock(List.class);
-		final CommentEditField field = AndroidMock.createMock(CommentEditField.class, getContext());
-		final SocializeHeader header = AndroidMock.createMock(SocializeHeader.class, getContext());
-		final LoadingListView content = AndroidMock.createMock(LoadingListView.class, getContext());
-		final Entity entity = AndroidMock.createMock(Entity.class);
+		final Comment comment = Mockito.mock(Comment.class);
+		final ProgressDialog dialog = Mockito.mock(ProgressDialog.class);
+		final SimpleDialogFactory<ProgressDialog> progressDialogFactory = Mockito.mock(SimpleDialogFactory.class);
+		final CommentAdapter commentAdapter = Mockito.mock(CommentAdapter.class);
+		final List<Comment> comments = Mockito.mock(List.class);
+		final CommentEditField field = Mockito.mock(CommentEditField.class);
+		final SocializeHeader header = Mockito.mock(SocializeHeader.class);
+		final LoadingListView content = Mockito.mock(LoadingListView.class);
+		final Entity entity = Mockito.mock(Entity.class);
 
-		AndroidMock.expect(progressDialogFactory.show(getContext(), title, message)).andReturn(dialog);
-		
-		AndroidMock.expect(comment.getText()).andReturn(commentString);
-		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
-		AndroidMock.expect(commentAdapter.getTotalCount()).andReturn(totalCount).anyTimes();
+		Mockito.when(progressDialogFactory.show(getContext(), title, message)).thenReturn(dialog);
+		Mockito.when(comment.getText()).thenReturn(commentString);
+		Mockito.when(commentAdapter.getComments()).thenReturn(comments);
+		Mockito.when(commentAdapter.getTotalCount()).thenReturn(totalCount);
 
-		comments.add(0, comment);
-		header.setText((totalCount) + " Comments");
-
-		commentAdapter.setTotalCount((totalCount+1));
-		commentAdapter.notifyDataSetChanged();
-		content.scrollToTop();
-		dialog.dismiss();
-		
-		AndroidMock.replay(progressDialogFactory);
-		AndroidMock.replay(commentAdapter);
-		AndroidMock.replay(comment);
-		AndroidMock.replay(comments);
-		AndroidMock.replay(header);
-		AndroidMock.replay(field);
-		AndroidMock.replay(content);
-		AndroidMock.replay(dialog);
-		
 		final CommentUtilsProxy mockCommentUtilsProxy = new SocializeCommentUtils() {
 			@Override
 			public void addComment(Activity context, Entity entity, String text, CommentOptions commentOptions, CommentAddListener listener, SocialNetwork... networks) {
@@ -190,26 +159,20 @@ public class CommentListViewTest extends SocializeActivityTest {
 		view.setEntity(entity);
 		view.setCommentUtils(mockCommentUtilsProxy);
 		view.getCommentAddButtonListener().onComment(commentString, shareLocation, false);
-		
-		AndroidMock.verify(progressDialogFactory);
-		AndroidMock.verify(commentAdapter);
-		AndroidMock.verify(comment);
-		AndroidMock.verify(comments);
-		AndroidMock.verify(header);
-		AndroidMock.verify(field);
-		AndroidMock.verify(content);
-		AndroidMock.verify(dialog);
-		
+
+        Mockito.verify(comments).add(0, comment);
+        Mockito.verify(header).setText((totalCount) + " Comments");
+        Mockito.verify(commentAdapter).setTotalCount((totalCount+1));
+        Mockito.verify(commentAdapter).notifyDataSetChanged();
+        Mockito.verify(content).scrollToTop();
+        Mockito.verify(dialog).dismiss();
+
 		// Make sure indexes were updated
-		assertEquals(startIndex+1, view.getStartIndex());
+		assertEquals(1, view.getStartIndex());
 		assertEquals(endIndex+1, view.getEndIndex());
 	}
 	
 	@SuppressWarnings("unchecked")
-	@UsesMocks ({
-		ProgressDialog.class,
-		SimpleDialogFactory.class,
-		SocializeException.class})
 	public void testPostCommentFail() {
 		
 		final String title = "socialize_comment_dialog";
@@ -223,18 +186,12 @@ public class CommentListViewTest extends SocializeActivityTest {
 		entity.setName(entityName);
 		entity.setKey(entityKey);
 		
-		final SocializeException error = AndroidMock.createMock(SocializeException.class);
-		final ProgressDialog dialog = AndroidMock.createMock(ProgressDialog.class, getContext());
-		final SimpleDialogFactory<ProgressDialog> progressDialogFactory = AndroidMock.createMock(SimpleDialogFactory.class);
+		final SocializeException error = Mockito.mock(SocializeException.class);
+		final ProgressDialog dialog = Mockito.mock(ProgressDialog.class);
+		final SimpleDialogFactory<ProgressDialog> progressDialogFactory = Mockito.mock(SimpleDialogFactory.class);
 
-		dialog.dismiss();
-		
-		AndroidMock.expect(progressDialogFactory.show(getContext(), title, message)).andReturn(dialog);
+		Mockito.when(progressDialogFactory.show(getContext(), title, message)).thenReturn(dialog);
 
-		AndroidMock.replay(progressDialogFactory);
-		AndroidMock.replay(dialog);
-		AndroidMock.replay(error);
-		
 		final CommentUtilsProxy mockCommentUtilsProxy = new SocializeCommentUtils() {
 			@Override
 			public void addComment(Activity context, Entity entity, String text, CommentOptions commentOptions, CommentAddListener listener, SocialNetwork... networks) {
@@ -255,31 +212,22 @@ public class CommentListViewTest extends SocializeActivityTest {
 		view.setEntity(entity);
 		view.setCommentUtils(mockCommentUtilsProxy);
 		view.getCommentAddButtonListener().onComment(comment, true, false);
-		
-		AndroidMock.verify(progressDialogFactory);
-		AndroidMock.verify(dialog);
-		AndroidMock.verify(error);
-		
+
+        Mockito.verify(dialog).dismiss();
+
 		Exception result = getNextResult();
 		
 		assertNotNull(result);
 		
 	}
-	
 
-	@UsesMocks ({CommentAdapter.class})
 	public void testGetNextSetIsLast() {
 		
 		final int totalCount = 69;
-		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class);
-		
-		
-		commentAdapter.notifyDataSetChanged();
-		commentAdapter.setLast(true);
-		
-		AndroidMock.expect(commentAdapter.getTotalCount()).andReturn(totalCount).anyTimes();
-		AndroidMock.replay(commentAdapter);
-		
+		final CommentAdapter commentAdapter = Mockito.mock(CommentAdapter.class);
+
+		Mockito.when(commentAdapter.getTotalCount()).thenReturn(totalCount);
+
 		PublicCommentListView view = new PublicCommentListView(getContext()) {
 			@Override
 			protected SocializeService getSocialize() {
@@ -289,7 +237,6 @@ public class CommentListViewTest extends SocializeActivityTest {
 		};
 		
 		// Orchestrate the completion state
-		
 		final int endIndex = 70;
 		final int startIndex = 60;
 		final int grabLength = 10;
@@ -298,45 +245,33 @@ public class CommentListViewTest extends SocializeActivityTest {
 		view.setStartIndex(startIndex);
 		view.setEndIndex(endIndex);
 		view.setDefaultGrabLength(grabLength);
-		
-		
 		view.getNextSet();
-		
-		AndroidMock.verify(commentAdapter);
-		
+
+        Mockito.verify(commentAdapter).notifyDataSetChanged();
+        Mockito.verify(commentAdapter).setLast(true);
+
 		assertEquals(totalCount, view.getEndIndex());
 		assertEquals(startIndex+grabLength, view.getStartIndex());
 		assertFalse(view.isLoading());
 	}
 	
 	@SuppressWarnings("unchecked")
-	@UsesMocks ({
-		CommentAdapter.class,
-		List.class,
-		ListResult.class})
 	public void testGetNextSet() {
 		
 		final int startIndex = 0;
 		final int endIndex = 70;
 		
-		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class);
-		final List<Comment> comments = AndroidMock.createMock(List.class);
-		final List<Comment> listResultComments = AndroidMock.createMock(List.class);
+		final CommentAdapter commentAdapter = Mockito.mock(CommentAdapter.class);
+		final List<Comment> comments = Mockito.mock(List.class);
+		final List<Comment> listResultComments = Mockito.mock(List.class);
 		
-		final ListResult<Comment> entities = AndroidMock.createMock(ListResult.class);
+		final ListResult<Comment> entities = Mockito.mock(ListResult.class);
 
-		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
-		AndroidMock.expect(entities.getItems()).andReturn(listResultComments);
-		AndroidMock.expect(comments.addAll(listResultComments)).andReturn(true);
-		AndroidMock.expect(commentAdapter.getTotalCount()).andReturn(79).anyTimes();
+		Mockito.when(commentAdapter.getComments()).thenReturn(comments);
+		Mockito.when(entities.getItems()).thenReturn(listResultComments);
+		Mockito.when(comments.addAll(listResultComments)).thenReturn(true);
+		Mockito.when(commentAdapter.getTotalCount()).thenReturn(79);
 		
-		commentAdapter.setComments(comments);
-		commentAdapter.notifyDataSetChanged();
-		
-		AndroidMock.replay(entities);
-		AndroidMock.replay(commentAdapter);
-		AndroidMock.replay(comments);
-
 		final CommentUtilsProxy mockCommentUtilsProxy = new SocializeCommentUtils() {
 			@Override
 			public void getCommentsByEntity(Activity context, String entityKey, int start, int end, CommentListListener listener) {
@@ -345,7 +280,7 @@ public class CommentListViewTest extends SocializeActivityTest {
 		};
 		
 		PublicCommentListView view = new PublicCommentListView(getContext()) {
-//			@Override
+            @Override
 			protected void preLoadImages(List<Comment> comments) {
 				// Do nothing.
 			}
@@ -357,58 +292,34 @@ public class CommentListViewTest extends SocializeActivityTest {
 		view.setDefaultGrabLength(10);
 		view.setCommentUtils(mockCommentUtilsProxy);
 		view.getNextSet();
-		
-		AndroidMock.verify(commentAdapter);
-		AndroidMock.verify(comments);
-		AndroidMock.verify(entities);
+
+        Mockito.verify(commentAdapter).setComments(comments);
+        Mockito.verify(commentAdapter).notifyDataSetChanged();
 		
 		assertFalse(view.isLoading());
 	}
 	
-	
-
 	@SuppressWarnings("unchecked")
-	@UsesMocks ({
-		CommentAdapter.class,
-		List.class,
-		SocializeHeader.class,
-		LoadingListView.class,
-		ListResult.class})
 	public void testDoListCommentsSuccessEmptyCommentsWithoutUpdate() {
 		
 		final int totalCount = 69;
 		final int startIndex = 0;
 		final int endIndex = 70;
 		
-		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class);
-		final List<Comment> comments = AndroidMock.createMock(List.class);
-		final List<Comment> listResultComments = AndroidMock.createMock(List.class);
+		final CommentAdapter commentAdapter = Mockito.mock(CommentAdapter.class);
+		final List<Comment> comments = Mockito.mock(List.class);
+		final List<Comment> listResultComments = Mockito.mock(List.class);
 		
-		final SocializeHeader header = AndroidMock.createMock(SocializeHeader.class, getContext());
-		final LoadingListView content = AndroidMock.createMock(LoadingListView.class, getContext());
-		final ListResult<Comment> entities = AndroidMock.createMock(ListResult.class);
+		final SocializeHeader header = Mockito.mock(SocializeHeader.class);
+		final LoadingListView content = Mockito.mock(LoadingListView.class);
+		final ListResult<Comment> entities = Mockito.mock(ListResult.class);
 		
-		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
-		AndroidMock.expect(comments.size()).andReturn(0).anyTimes(); // Empty comments
-		AndroidMock.expect(entities.getItems()).andReturn(listResultComments);
-		AndroidMock.expect(entities.getTotalCount()).andReturn(totalCount).anyTimes();
-		AndroidMock.expect(commentAdapter.getTotalCount()).andReturn(totalCount).anyTimes();
+		Mockito.when(commentAdapter.getComments()).thenReturn(comments);
+		Mockito.when(comments.size()).thenReturn(0); // Empty comments
+		Mockito.when(entities.getItems()).thenReturn(listResultComments);
+		Mockito.when(entities.getTotalCount()).thenReturn(totalCount);
+		Mockito.when(commentAdapter.getTotalCount()).thenReturn(totalCount);
 
-
-        content.scrollToTop();
-		commentAdapter.setComments(listResultComments);
-		commentAdapter.setLast(true);
-		commentAdapter.setTotalCount(totalCount);
-        commentAdapter.notifyDataSetChanged();
-		header.setText(totalCount + " Comments");
-		content.showList();
-		
-		AndroidMock.replay(entities);
-		AndroidMock.replay(commentAdapter);
-		AndroidMock.replay(comments);
-		AndroidMock.replay(header);
-		AndroidMock.replay(content);
-		
 		final CommentUtilsProxy mockCommentUtilsProxy = new SocializeCommentUtils() {
 			@Override
 			public void getCommentsByEntity(Activity context, String entityKey, int start, int end, CommentListListener listener) {
@@ -433,37 +344,27 @@ public class CommentListViewTest extends SocializeActivityTest {
 		
 		assertEquals(totalCount, view.getTotalCount());
 		assertFalse(view.isLoading());
-		
-		AndroidMock.verify(commentAdapter);
-		AndroidMock.verify(comments);
-		AndroidMock.verify(header);
-		AndroidMock.verify(content);
-		AndroidMock.verify(entities);
+
+
+        Mockito.verify(content).scrollToTop();
+        Mockito.verify(commentAdapter).setComments(listResultComments);
+        Mockito.verify(commentAdapter).setLast(true);
+        Mockito.verify(commentAdapter).setTotalCount(totalCount);
+        Mockito.verify(commentAdapter).notifyDataSetChanged();
+        Mockito.verify(header).setText(totalCount + " Comments");
+        Mockito.verify(content).showList();
 	}
 	
 	@SuppressWarnings("unchecked")
-	@UsesMocks ({
-		SocializeException.class,
-		CommentAdapter.class,
-		List.class,
-		CommentUtilsProxy.class})
 	public void testDoListCommentsFailEmptyCommentsWithoutUpdate() {
 		
-		final SocializeException error = AndroidMock.createMock(SocializeException.class);
-		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class);
-		final List<Comment> comments = AndroidMock.createMock(List.class);
-		final LoadingListView content = AndroidMock.createMock(LoadingListView.class, getContext());
+		final SocializeException error = Mockito.mock(SocializeException.class);
+		final CommentAdapter commentAdapter = Mockito.mock(CommentAdapter.class);
+		final List<Comment> comments = Mockito.mock(List.class);
+		final LoadingListView content = Mockito.mock(LoadingListView.class);
 
-		content.showList();
-		
-		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
-		AndroidMock.expect(comments.size()).andReturn(0); // Empty comments
-		
-		AndroidMock.replay(commentAdapter);
-		AndroidMock.replay(comments);
-		AndroidMock.replay(content);
-		AndroidMock.replay(error);
-		
+		Mockito.when(commentAdapter.getComments()).thenReturn(comments);
+		Mockito.when(comments.size()).thenReturn(0); // Empty comments
 		
 		final CommentUtilsProxy mockCommentUtilsProxy = new SocializeCommentUtils() {
 			@Override
@@ -483,44 +384,26 @@ public class CommentListViewTest extends SocializeActivityTest {
 		view.setContent(content);
 		view.setCommentUtils(mockCommentUtilsProxy);
 		view.doListComments(false);
-		
-		AndroidMock.verify(commentAdapter);
-		AndroidMock.verify(comments);
-		AndroidMock.verify(error);
-		AndroidMock.verify(content);
-		
+
+        Mockito.verify(content).showList();
+
 		Exception result = getNextResult();
 		
 		assertNotNull(result);
 	}
 	
 	@SuppressWarnings("unchecked")
-	@UsesMocks ({
-		CommentAdapter.class,
-		List.class,
-		LoadingListView.class})
 	public void testDoListCommentsSuccessPopulatedCommentsWithoutUpdate() {
 		
-		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class);
-		final List<Comment> comments = AndroidMock.createMock(List.class);
-		final LoadingListView content = AndroidMock.createMock(LoadingListView.class, getContext());
-		final SocializeHeader header = AndroidMock.createMock(SocializeHeader.class, getContext());
+		final CommentAdapter commentAdapter = Mockito.mock(CommentAdapter.class);
+		final List<Comment> comments = Mockito.mock(List.class);
+		final LoadingListView content = Mockito.mock(LoadingListView.class);
+		final SocializeHeader header = Mockito.mock(SocializeHeader.class);
 		
-		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
-		AndroidMock.expect(comments.size()).andReturn(10); // Populated comments
+		Mockito.when(commentAdapter.getComments()).thenReturn(comments);
+		Mockito.when(comments.size()).thenReturn(10); // Populated comments
+		Mockito.when(commentAdapter.getTotalCount()).thenReturn(10); // Populated comments
 
-		AndroidMock.expect(commentAdapter.getTotalCount()).andReturn(10); // Populated comments
-		
-		commentAdapter.notifyDataSetChanged();
-		content.showList();
-		
-		header.setText(10 + " Comments");
-		
-		AndroidMock.replay(commentAdapter);
-		AndroidMock.replay(comments);
-		AndroidMock.replay(content);
-		AndroidMock.replay(header);
-		
 		PublicCommentListView view = new PublicCommentListView(getContext());
 		
 		view.setCommentAdapter(commentAdapter);
@@ -528,23 +411,19 @@ public class CommentListViewTest extends SocializeActivityTest {
 		view.setHeader(header);
 		
 		view.doListComments(false);
-		
-		AndroidMock.verify(commentAdapter);
-		AndroidMock.verify(comments);
-		AndroidMock.verify(content);
-		AndroidMock.verify(header);
+
+        Mockito.verify(commentAdapter).notifyDataSetChanged();
+        Mockito.verify(content).showList();
+        Mockito.verify(header).setText(10 + " Comments");
 		
 		assertFalse(view.isLoading());
 	}
 	
-
-	@UsesMocks ({SocializeService.class})
 	public void testOnViewLoadSuccess() {
-		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
+		final SocializeService socialize = Mockito.mock(SocializeService.class);
 		
-		AndroidMock.expect(socialize.isAuthenticated()).andReturn(true);
-		AndroidMock.replay(socialize);
-		
+		Mockito.when(socialize.isAuthenticated()).thenReturn(true);
+
 		PublicCommentListView view = new PublicCommentListView(getContext()) {
 			@Override
 			protected SocializeService getSocialize() {
@@ -563,23 +442,14 @@ public class CommentListViewTest extends SocializeActivityTest {
 		
 		assertNotNull(update);
 		assertFalse(update);
-		
-		AndroidMock.verify(socialize);
 	}
 	
-	@UsesMocks ({
-		SocializeService.class,
-		LoadingListView.class})
 	public void testOnViewLoadFail() {
-		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
-		final LoadingListView content = AndroidMock.createMock(LoadingListView.class, getContext());
+		final SocializeService socialize = Mockito.mock(SocializeService.class);
+		final LoadingListView content = Mockito.mock(LoadingListView.class);
 		
-		AndroidMock.expect(socialize.isAuthenticated()).andReturn(false);
-		content.showList();
-		
-		AndroidMock.replay(socialize);
-		AndroidMock.replay(content);
-		
+		Mockito.when(socialize.isAuthenticated()).thenReturn(false);
+
 		PublicCommentListView view = new PublicCommentListView(getContext()) {
 			@Override
 			protected SocializeService getSocialize() {
@@ -607,8 +477,7 @@ public class CommentListViewTest extends SocializeActivityTest {
 		assertNotNull(error);
 		assertEquals("Socialize not authenticated", error.getMessage());
 		
-		AndroidMock.verify(socialize);
-		AndroidMock.verify(content);
+        Mockito.verify(content).showList();
 	}
 	
 	class PublicCommentListView extends CommentListView {

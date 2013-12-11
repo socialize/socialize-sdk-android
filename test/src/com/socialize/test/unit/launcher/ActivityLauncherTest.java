@@ -24,34 +24,30 @@ package com.socialize.test.unit.launcher;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.launcher.ActivityLauncher;
 import com.socialize.test.SocializeUnitTest;
 import com.socialize.util.AppUtils;
 import com.socialize.util.EntityLoaderUtils;
+import org.mockito.Mockito;
 
 /**
  * @author Jason Polites
  * 
  */
-@UsesMocks({ AppUtils.class, Intent.class, Activity.class, EntityLoaderUtils.class })
 public class ActivityLauncherTest extends SocializeUnitTest {
 
 	public void testActivityLauncher() {
-		AppUtils appUtils = AndroidMock.createMock(AppUtils.class);
-		Activity activity = AndroidMock.createMock(Activity.class);
-		EntityLoaderUtils utils = AndroidMock.createMock(EntityLoaderUtils.class);
-		final Intent intent = AndroidMock.createMock(Intent.class);
+
+        AppUtils appUtils = Mockito.mock(AppUtils.class);
+		Activity activity = Mockito.mock(Activity.class);
+		EntityLoaderUtils utils = Mockito.mock(EntityLoaderUtils.class);
+		final Intent intent = Mockito.mock(Intent.class);
 		final Class<?> activityClass = String.class;
 		final Bundle extras = new Bundle(); // can't mock
 
-		AndroidMock.expect(appUtils.isActivityAvailable(activity, activityClass)).andReturn(true);
-		AndroidMock.expect(intent.putExtras(extras)).andReturn(intent);
-		activity.startActivity(intent);
-		AndroidMock.expect(utils.initEntityLoader()).andReturn(null);
-
-		AndroidMock.replay(appUtils, utils, intent, activity);
+		Mockito.when(appUtils.isActivityAvailable(activity, activityClass)).thenReturn(true);
+		Mockito.when(intent.putExtras(extras)).thenReturn(intent);
+		Mockito.when(utils.initEntityLoader()).thenReturn(null);
 
 		ActivityLauncher launcher = new ActivityLauncher() {
 
@@ -78,7 +74,7 @@ public class ActivityLauncherTest extends SocializeUnitTest {
 
 		assertTrue(launcher.launch(activity, extras));
 
-		AndroidMock.verify(appUtils, utils, intent, activity);
+		Mockito.verify(activity).startActivity(intent);;
 	}
 
 }

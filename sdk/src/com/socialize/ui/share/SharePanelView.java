@@ -32,6 +32,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.*;
 import com.socialize.ShareUtils;
+import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
@@ -381,13 +382,16 @@ public class SharePanelView extends DialogPanelView {
 
 	protected void makeShareButtons() {
 		LayoutParams cellParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		
-		boolean fbOK = getSocialize().isSupported(getContext(), AuthProviderType.FACEBOOK) && facebookShareCellFactory != null;
-		boolean twOK = getSocialize().isSupported(getContext(), AuthProviderType.TWITTER) && twitterShareCellFactory != null;
-		boolean emailOK = getSocialize().canShare(getContext(), ShareType.EMAIL) && emailCellFactory != null;
-		boolean smsOK = getSocialize().canShare(getContext(), ShareType.SMS) && smsCellFactory != null;
+
+        SocializeService socialize = getSocialize();
+        Context context = getContext();
+
+        boolean fbOK = socialize.isSupported(context, AuthProviderType.FACEBOOK) && facebookShareCellFactory != null;
+		boolean twOK = socialize.isSupported(context, AuthProviderType.TWITTER) && twitterShareCellFactory != null;
+		boolean emailOK = socialize.canShare(context, ShareType.EMAIL) && emailCellFactory != null;
+		boolean smsOK = socialize.canShare(context, ShareType.SMS) && smsCellFactory != null;
 		boolean rememberOk = rememberCellFactory != null;
-		boolean googlePlusOK = config != null && config.isGooglePlusEnabled() && getSocialize().canShare(getContext(), ShareType.GOOGLE_PLUS) && googlePlusCellFactory != null;
+		boolean googlePlusOK = config != null && config.isGooglePlusEnabled() && socialize.canShare(context, ShareType.GOOGLE_PLUS) && googlePlusCellFactory != null;
 		
 		if(fbOK) {
 			facebookShareCell = facebookShareCellFactory.getBean();

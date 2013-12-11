@@ -23,27 +23,20 @@ package com.socialize.test.unit.notifications;
 
 import android.content.Context;
 import android.content.Intent;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.notifications.C2DMCallback;
 import com.socialize.notifications.SocializeC2DMReceiver;
 import com.socialize.notifications.SocializeC2DMReceiverHandler;
 import com.socialize.test.SocializeUnitTest;
+import org.mockito.Mockito;
 
 /**
  * @author Jason Polites
  *
  */
-@UsesMocks ({SocializeC2DMReceiverHandler.class, C2DMCallback.class})
 public class SocializeC2DMReceiverTest extends SocializeUnitTest {
 
 	public void test_onCreate() throws Exception {
-		final SocializeC2DMReceiverHandler container = AndroidMock.createMock(SocializeC2DMReceiverHandler.class);
+		final SocializeC2DMReceiverHandler container = Mockito.mock(SocializeC2DMReceiverHandler.class);
 
-		container.onCreate(getContext());
-		
-		AndroidMock.replay(container);
-		
 		SocializeC2DMReceiver receiver = new SocializeC2DMReceiver() {
 			@Override
 			protected SocializeC2DMReceiverHandler newC2DMReceiverHandler() {
@@ -58,17 +51,13 @@ public class SocializeC2DMReceiverTest extends SocializeUnitTest {
 		};
 		
 		receiver.onCreate();
-		
-		AndroidMock.verify(container);
+
+		Mockito.verify(container).onCreate(getContext());
 	}
 	
 	public void test_onDestroy() {
-		final SocializeC2DMReceiverHandler container = AndroidMock.createMock(SocializeC2DMReceiverHandler.class);
+		final SocializeC2DMReceiverHandler container = Mockito.mock(SocializeC2DMReceiverHandler.class);
 
-		container.onDestroy(getContext());
-		
-		AndroidMock.replay(container);
-		
 		SocializeC2DMReceiver receiver = new SocializeC2DMReceiver() {
 			
 			@Override
@@ -89,7 +78,7 @@ public class SocializeC2DMReceiverTest extends SocializeUnitTest {
 		
 		receiver.onDestroy();
 		
-		AndroidMock.verify(container);
+		Mockito.verify(container).onDestroy(getContext());
 		
 		Object nextResult = getNextResult();
 		
@@ -99,12 +88,11 @@ public class SocializeC2DMReceiverTest extends SocializeUnitTest {
 	
 	
 	public void test_onError() throws Exception {
-		final SocializeC2DMReceiverHandler container = AndroidMock.createMock(SocializeC2DMReceiverHandler.class);
+		final SocializeC2DMReceiverHandler container = Mockito.mock(SocializeC2DMReceiverHandler.class);
 		final String errorId = "foobar";
-		container.onError(getContext(), errorId);
+
 		
-		AndroidMock.replay(container);
-		
+
 		SocializeC2DMReceiver receiver = new SocializeC2DMReceiver() {
 			@Override
 			protected SocializeC2DMReceiverHandler newC2DMReceiverHandler() {
@@ -119,19 +107,15 @@ public class SocializeC2DMReceiverTest extends SocializeUnitTest {
 		
 		receiver.onError(getContext(), errorId);
 		
-		AndroidMock.verify(container);
+		Mockito.verify(container).onError(getContext(), errorId);
 	}	
 	
-	@UsesMocks({Intent.class})
 	public void test_onMessage() {
 	
-		Intent intent = AndroidMock.createMock(Intent.class);
+		Intent intent = Mockito.mock(Intent.class);
 		
-		final SocializeC2DMReceiverHandler container = AndroidMock.createMock(SocializeC2DMReceiverHandler.class);
-		container.onMessage(getContext(), intent);
-		
-		AndroidMock.replay(container);
-		
+		final SocializeC2DMReceiverHandler container = Mockito.mock(SocializeC2DMReceiverHandler.class);
+
 		SocializeC2DMReceiver receiver = new SocializeC2DMReceiver() {
 			@Override
 			protected SocializeC2DMReceiverHandler newC2DMReceiverHandler() {
@@ -146,17 +130,15 @@ public class SocializeC2DMReceiverTest extends SocializeUnitTest {
 		
 		receiver.onMessage(getContext(), intent);
 		
-		AndroidMock.verify(container);		
+		Mockito.verify(container).onMessage(getContext(), intent);
 	}
 	
 	public void test_onRegistrered() {
 		
-		final SocializeC2DMReceiverHandler container = AndroidMock.createMock(SocializeC2DMReceiverHandler.class);
+		final SocializeC2DMReceiverHandler container = Mockito.mock(SocializeC2DMReceiverHandler.class);
 		final String errorId = "foobar";
-		container.onRegistered(getContext(), errorId);
-		
-		AndroidMock.replay(container);
-		
+
+
 		SocializeC2DMReceiver receiver = new SocializeC2DMReceiver() {
 			@Override
 			protected SocializeC2DMReceiverHandler newC2DMReceiverHandler() {
@@ -171,15 +153,12 @@ public class SocializeC2DMReceiverTest extends SocializeUnitTest {
 		
 		receiver.onRegistrered(getContext(), errorId);
 		
-		AndroidMock.verify(container);		
+		Mockito.verify(container).onRegistered(getContext(), errorId);
 	}
 	
 	public void test_onUnregistered() {
-		final SocializeC2DMReceiverHandler container = AndroidMock.createMock(SocializeC2DMReceiverHandler.class);
-		container.onUnregistered(getContext());
-		
-		AndroidMock.replay(container);
-		
+		final SocializeC2DMReceiverHandler container = Mockito.mock(SocializeC2DMReceiverHandler.class);
+
 		SocializeC2DMReceiver receiver = new SocializeC2DMReceiver() {
 			@Override
 			protected SocializeC2DMReceiverHandler newC2DMReceiverHandler() {
@@ -194,6 +173,6 @@ public class SocializeC2DMReceiverTest extends SocializeUnitTest {
 		
 		receiver.onUnregistered(getContext());
 		
-		AndroidMock.verify(container);	
+		Mockito.verify(container).onUnregistered(getContext());
 	}
 }

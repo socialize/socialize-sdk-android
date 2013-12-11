@@ -22,12 +22,11 @@
 package com.socialize.test.facebook;
 
 import android.view.View.OnClickListener;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.facebook.FacebookAuthClickListener;
 import com.socialize.networks.facebook.FacebookButton;
 import com.socialize.test.SocializeUnitTest;
+import org.mockito.Mockito;
 
 /**
  * @author Jason Polites
@@ -35,14 +34,9 @@ import com.socialize.test.SocializeUnitTest;
  */
 public class FacebookButtonTest extends SocializeUnitTest {
 
-	@UsesMocks({FacebookAuthClickListener.class, SocializeAuthListener.class})
 	public void testFacebookButtonInit() {
-		FacebookAuthClickListener facebookAuthClickListener = AndroidMock.createMock(FacebookAuthClickListener.class);
-		SocializeAuthListener socializeAuthListener = AndroidMock.createMock(SocializeAuthListener.class);
-		
-		facebookAuthClickListener.setListener(socializeAuthListener);
-		
-		AndroidMock.replay(facebookAuthClickListener, socializeAuthListener);
+		FacebookAuthClickListener facebookAuthClickListener = Mockito.mock(FacebookAuthClickListener.class);
+		SocializeAuthListener socializeAuthListener = Mockito.mock(SocializeAuthListener.class);
 		
 		FacebookButton button = new FacebookButton(getContext()) {
 			@Override
@@ -58,15 +52,13 @@ public class FacebookButtonTest extends SocializeUnitTest {
 		
 		button.setFacebookAuthClickListener(facebookAuthClickListener);
 		button.init();
-		
 		button.setAuthListener(socializeAuthListener);
-		
-		AndroidMock.verify(facebookAuthClickListener, socializeAuthListener);
 		
 		OnClickListener listener = getNextResult();
 		
 		assertNotNull(listener);
 		assertSame(facebookAuthClickListener, listener);
+
+        Mockito.verify(	facebookAuthClickListener ).setListener(socializeAuthListener);
 	}
-	
 }

@@ -23,12 +23,15 @@ package com.socialize.test.twitter;
 
 import android.app.Dialog;
 import android.content.Context;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.auth.twitter.*;
+import com.socialize.auth.twitter.TwitterAuthDialogListener;
+import com.socialize.auth.twitter.TwitterAuthListener;
+import com.socialize.auth.twitter.TwitterAuthProviderInfo;
+import com.socialize.auth.twitter.TwitterAuthUtils;
+import com.socialize.auth.twitter.TwitterAuthView;
 import com.socialize.error.SocializeException;
 import com.socialize.test.SocializeActivityTest;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +46,6 @@ import java.util.concurrent.TimeUnit;
 public class TwitterAuthUtilsTest extends SocializeActivityTest {
 
 	@SuppressWarnings("unchecked")
-	@UsesMocks ({IBeanFactory.class, TwitterAuthListener.class, TwitterAuthProviderInfo.class})
 	public void testShowAuthDialogCancel() throws Throwable {
 		
 		final Context context = getContext();
@@ -57,18 +59,14 @@ public class TwitterAuthUtilsTest extends SocializeActivityTest {
 			}
 		};
 		
-		final IBeanFactory<TwitterAuthView> twitterAuthViewFactory = AndroidMock.createMock(IBeanFactory.class);
-		final TwitterAuthProviderInfo info = AndroidMock.createMock(TwitterAuthProviderInfo.class);
-		final TwitterAuthListener listener = AndroidMock.createMock(TwitterAuthListener.class);
+		final IBeanFactory<TwitterAuthView> twitterAuthViewFactory = Mockito.mock(IBeanFactory.class);
+		final TwitterAuthProviderInfo info = Mockito.mock(TwitterAuthProviderInfo.class);
+		final TwitterAuthListener listener = Mockito.mock(TwitterAuthListener.class);
 		
-		AndroidMock.expect(info.getConsumerKey()).andReturn(key);
-		AndroidMock.expect(info.getConsumerSecret()).andReturn(secret);
-		AndroidMock.expect(twitterAuthViewFactory.getBean(key, secret)).andReturn(view);
+		Mockito.when(info.getConsumerKey()).thenReturn(key);
+		Mockito.when(info.getConsumerSecret()).thenReturn(secret);
+		Mockito.when(twitterAuthViewFactory.getBean(key, secret)).thenReturn(view);
 
-		listener.onCancel();
-		
-		AndroidMock.replay(info, twitterAuthViewFactory, listener);
-		
 		final TwitterAuthUtils utils = new TwitterAuthUtils();
 		
 		utils.setTwitterAuthViewFactory(twitterAuthViewFactory);
@@ -108,11 +106,10 @@ public class TwitterAuthUtilsTest extends SocializeActivityTest {
 		
 		// Wait for hide;
 		sleep(500);
-		
-		AndroidMock.verify(info, twitterAuthViewFactory, listener);
+
+		Mockito.verify(listener).onCancel();
 	}
 	
-	@UsesMocks ({Dialog.class, TwitterAuthListener.class})
 	public void test_newTwitterAuthDialogListener() {
 		
 		PublicTwitterAuthUtils utils = new PublicTwitterAuthUtils();
@@ -123,24 +120,8 @@ public class TwitterAuthUtilsTest extends SocializeActivityTest {
 		final String userId = "foobar_userId";
 		final SocializeException e = new SocializeException();
 		
-		Dialog dialog = AndroidMock.createMock(Dialog.class, getContext());
-		TwitterAuthListener listener = AndroidMock.createMock(TwitterAuthListener.class);
-		
-		listener.onAuthSuccess(token, secret, screenName, userId);
-		listener.onAuthSuccess(token, secret, screenName, userId);
-		listener.onCancel();
-		listener.onCancel();
-		listener.onError(e);
-		listener.onError(e);
-		
-		dialog.dismiss();
-		dialog.dismiss();
-		dialog.dismiss();
-		dialog.dismiss();
-		dialog.dismiss();
-		dialog.dismiss();
-		
-		AndroidMock.replay(dialog, listener);
+		Dialog dialog = Mockito.mock(Dialog.class);
+		TwitterAuthListener listener = Mockito.mock(TwitterAuthListener.class);
 		
 		TwitterAuthDialogListener newTwitterAuthDialogListener = utils.newTwitterAuthDialogListener(dialog, listener);
 	
@@ -150,8 +131,11 @@ public class TwitterAuthUtilsTest extends SocializeActivityTest {
 		newTwitterAuthDialogListener.onCancel(dialog);
 		newTwitterAuthDialogListener.onError(e);
 		newTwitterAuthDialogListener.onError(dialog, e);
-		
-		AndroidMock.verify(dialog, listener);
+
+        Mockito.verify(listener, Mockito.times(2)).onAuthSuccess(token, secret, screenName, userId);
+        Mockito.verify(listener, Mockito.times(2)).onCancel();
+        Mockito.verify(listener, Mockito.times(2)).onError(e);
+		Mockito.verify(dialog, Mockito.times(6)).dismiss();
 	}
 	
 }

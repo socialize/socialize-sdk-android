@@ -16,7 +16,6 @@ test/test-output
 test/local.properties
 test/private/**
 testapp/assets/existing-data/
-testapp/assets/socialize.properties
 test/junit-results
 test/coverage-results
 build

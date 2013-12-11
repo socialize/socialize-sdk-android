@@ -21,13 +21,12 @@
  */
 package com.socialize.test.twitter;
 
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.AuthProviderResponse;
 import com.socialize.auth.twitter.TwitterAuthListener;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.test.SocializeUnitTest;
+import org.mockito.Mockito;
 
 
 /**
@@ -36,10 +35,9 @@ import com.socialize.test.SocializeUnitTest;
  */
 public class TwitterAuthProviderTest extends SocializeUnitTest {
 
-	@UsesMocks ({AuthProviderResponse.class, AuthProviderListener.class})
 	public void test_newTwitterAuthListener() {
-		final AuthProviderResponse response = AndroidMock.createMock(AuthProviderResponse.class);
-		AuthProviderListener listener = AndroidMock.createMock(AuthProviderListener.class);
+		final AuthProviderResponse response = Mockito.mock(AuthProviderResponse.class);
+		AuthProviderListener listener = Mockito.mock(AuthProviderListener.class);
 		
 		String token = "a";
 		String secret = "b";
@@ -48,16 +46,7 @@ public class TwitterAuthProviderTest extends SocializeUnitTest {
 		
 		SocializeException e = new SocializeException();
 		
-		response.setToken(token);
-		response.setSecret(secret);
-		response.setUserId(userId);
-		
-		listener.onAuthSuccess(response);
-		listener.onCancel();
-		listener.onError(e);
-		
-		AndroidMock.replay(listener, response);
-		
+
 		PublicTwitterAuthProvider provider = new PublicTwitterAuthProvider() {
 			@Override
 			public AuthProviderResponse newAuthProviderResponse() {
@@ -70,7 +59,13 @@ public class TwitterAuthProviderTest extends SocializeUnitTest {
 		newTwitterAuthListener.onAuthSuccess(token, secret, screenName, userId);
 		newTwitterAuthListener.onCancel();
 		newTwitterAuthListener.onError(e);
-		
-		AndroidMock.verify(listener, response);
+
+        Mockito.verify(response).setToken(token);
+        Mockito.verify(response).setSecret(secret);
+        Mockito.verify(response).setUserId(userId);
+
+        Mockito.verify(listener).onAuthSuccess(response);
+        Mockito.verify(listener).onCancel();
+        Mockito.verify(listener).onError(e);
 	}
 }

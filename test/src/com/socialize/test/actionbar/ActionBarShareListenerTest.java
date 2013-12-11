@@ -46,9 +46,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class ActionBarShareListenerTest extends ActionBarTest {
 
-	/* (non-Javadoc)
-	 * @see com.socialize.test.ui.actionbar.ActionBarTest#isManual()
-	 */
 	@Override
 	public boolean isManual() {
 		return false;
@@ -60,16 +57,18 @@ public class ActionBarShareListenerTest extends ActionBarTest {
 	}
 
 	public void testOnActionBarShareEventListenerIsCalledOnDialogDisplay() throws Throwable {
-		
+
         Activity activity = TestUtils.getActivity(this);
+
+        SocializeConfig config = ConfigUtils.getConfig(activity);
+
+        config.setProperty(SocializeConfig.FACEBOOK_APP_ID, "");
+		config.setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, "");
+		config.setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, "");
+		config.setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
-		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.FACEBOOK_APP_ID, "");
-		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, "");
-		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, "");
-		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
-		
-		ShareUtils.preloadShareDialog(TestUtils.getActivity(this));
-		ShareUtils.preloadLinkDialog(TestUtils.getActivity(this));
+		ShareUtils.preloadShareDialog(activity);
+		ShareUtils.preloadLinkDialog(activity);
 		
 		final ActionBarView actionBar = TestUtils.findView(activity, ActionBarView.class, 5000);
 		final ActionBarLayoutView actionBarView = TestUtils.findView(activity, ActionBarLayoutView.class, 10000);
@@ -95,7 +94,8 @@ public class ActionBarShareListenerTest extends ActionBarTest {
 
 			@Override
 			public void onShow(Dialog dialog, SharePanelView dialogView) {
-				TestUtils.addResult(dialogView);
+				TestUtils.addResult(0, dialog);
+                TestUtils.addResult(1, dialogView);
 				dialogLatch.countDown();
 			}
 		});
@@ -103,7 +103,6 @@ public class ActionBarShareListenerTest extends ActionBarTest {
 		SocializeAccess.setLikeUtilsProxy(mockLikeUtils);
 		
 		// Simulate share
-	
 		this.runTestOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -113,10 +112,15 @@ public class ActionBarShareListenerTest extends ActionBarTest {
 		});
 		
 		assertTrue(shareLatch.await(30, TimeUnit.SECONDS));
+
 		dialogLatch.await(30, TimeUnit.SECONDS);
 		
-		SharePanelView dialogView = TestUtils.getResult(0);
+		SharePanelView dialogView = TestUtils.getResult(1);
+        Dialog dialog = TestUtils.getResult(0);
 		
 		assertNotNull(dialogView);
+        assertNotNull(dialog);
+
+        dialog.dismiss();
 	}
 }

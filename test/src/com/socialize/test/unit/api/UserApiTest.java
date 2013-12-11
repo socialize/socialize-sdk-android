@@ -23,8 +23,6 @@ package com.socialize.test.unit.api;
 
 import android.content.Context;
 import android.test.mock.MockContext;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionPersister;
 import com.socialize.api.action.user.SocializeUserSystem;
@@ -38,11 +36,11 @@ import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeUnitTest;
 import com.socialize.ui.profile.UserSettings;
 import junit.framework.Assert;
+import org.mockito.Mockito;
 
 /**
  * @author Jason Polites
  */
-@UsesMocks ({SocializeSession.class, UserListener.class, SocializeProvider.class})
 public class UserApiTest extends SocializeUnitTest {
 
 	SocializeProvider<User> provider;
@@ -53,9 +51,9 @@ public class UserApiTest extends SocializeUnitTest {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		provider = AndroidMock.createMock(SocializeProvider.class);
-		session = AndroidMock.createMock(SocializeSession.class);
-		listener = AndroidMock.createMock(UserListener.class);
+        provider = Mockito.mock(SocializeProvider.class);
+		session = Mockito.mock(SocializeSession.class);
+		listener = Mockito.mock(UserListener.class);
 	}
 
 	public void testGetUser() {
@@ -80,7 +78,6 @@ public class UserApiTest extends SocializeUnitTest {
 	/**
 	 * Tests that the listener created in saveUserSettings behaves correctly.
 	 */
-	@UsesMocks ({SocializeException.class, SocializeSessionPersister.class, NotificationRegistrationSystem.class, User.class, UserSettings.class})
 	public void testSaveUserProfileListener() {
 		
 		final long id = 69;
@@ -106,12 +103,12 @@ public class UserApiTest extends SocializeUnitTest {
 
 		////////////////////////////////////////// Setup Mocks
 
-		SocializeSessionPersister sessionPersister = AndroidMock.createMock(SocializeSessionPersister.class);
-		SocializeException exception = AndroidMock.createMock(SocializeException.class);
-		NotificationRegistrationSystem notificationRegistrationSystem = AndroidMock.createMock(NotificationRegistrationSystem.class);
+		SocializeSessionPersister sessionPersister = Mockito.mock(SocializeSessionPersister.class);
+		SocializeException exception = Mockito.mock(SocializeException.class);
+		NotificationRegistrationSystem notificationRegistrationSystem = Mockito.mock(NotificationRegistrationSystem.class);
 		
-		AndroidMock.expect(session.getUser()).andReturn(sessionUser).anyTimes();
-		AndroidMock.expect(session.getUserSettings()).andReturn(sessionSettings).anyTimes();
+		Mockito.when(session.getUser()).thenReturn(sessionUser);
+		Mockito.when(session.getUserSettings()).thenReturn(sessionSettings);
 
 		notificationRegistrationSystem.registerC2DMAsync(context);
 
@@ -131,8 +128,6 @@ public class UserApiTest extends SocializeUnitTest {
 		
 		api.setSessionPersister(sessionPersister);
 		
-		AndroidMock.replay(session, listener, sessionPersister, notificationRegistrationSystem);
-
 		api.setNotificationRegistrationSystem(notificationRegistrationSystem);
 		api.saveUserSettings(context, session, settingsToBeSaved, listener);
 		
@@ -145,15 +140,12 @@ public class UserApiTest extends SocializeUnitTest {
 		listenerFound.onUpdate(sessionUser);
 		listenerFound.onError(exception);
 		
-		AndroidMock.verify(session, listener, sessionPersister, notificationRegistrationSystem);
-
-		Assert.assertEquals(firstName, sessionSettings.getFirstName());
+        Assert.assertEquals(firstName, sessionSettings.getFirstName());
 		Assert.assertEquals(lastName, sessionSettings.getLastName());
 		Assert.assertEquals(true, sessionSettings.isAutoPostFacebook());
 		Assert.assertEquals(true, sessionSettings.isAutoPostTwitter());
 		Assert.assertEquals(true, sessionSettings.isNotificationsEnabled());
 		Assert.assertEquals(true, sessionSettings.isLocationEnabled());
-
 		Assert.assertEquals(firstName, sessionUser.getFirstName());
 		Assert.assertEquals(lastName, sessionUser.getLastName());
 	}

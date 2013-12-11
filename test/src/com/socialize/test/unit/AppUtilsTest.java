@@ -22,17 +22,17 @@
 package com.socialize.test.unit;
 
 import android.app.Activity;
+import android.app.Instrumentation;
 import android.content.Context;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
 import com.socialize.config.SocializeConfig;
 import com.socialize.log.SocializeLogger;
+import com.socialize.test.R;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.util.TestUtils;
 import com.socialize.testapp.Main;
-import com.socialize.testapp.R;
 import com.socialize.util.DefaultAppUtils;
+import org.mockito.Mockito;
 
 /**
  * @author Jason Polites
@@ -47,12 +47,12 @@ public class AppUtilsTest extends SocializeActivityTest {
 	}
 	
 	public void testLaunchMainApp() {
+
+        Instrumentation.ActivityMonitor monitor = TestUtils.setUpActivityMonitor(this, Main.class);
+
+        DefaultAppUtils.launchMainApp(getContext());
 		
-		TestUtils.setUpActivityMonitor(Main.class);
-		
-		DefaultAppUtils.launchMainApp(getContext());
-		
-		Activity activity = TestUtils.waitForActivity(10000);
+		Activity activity = monitor.waitForActivityWithTimeout(10000);
 		
 		assertNotNull(activity);
 		activity.finish();
@@ -60,17 +60,14 @@ public class AppUtilsTest extends SocializeActivityTest {
 		
 	}
 	
-	@UsesMocks ({SocializeConfig.class, SocializeService.class})
 	public void test_isNotificationsAvailable() {
 		
-		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
+		final SocializeConfig config = Mockito.mock(SocializeConfig.class);
+		final SocializeService socialize = Mockito.mock(SocializeService.class);
 		
-		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_ENABLED, true)).andReturn(true);
-		AndroidMock.expect(config.isEntityLoaderCheckEnabled()).andReturn(true);
-		AndroidMock.expect(socialize.getEntityLoader()).andReturn(null);
-		
-		AndroidMock.replay(config, socialize);
+		Mockito.when(config.getBooleanProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_ENABLED, true)).thenReturn(true);
+		Mockito.when(config.isEntityLoaderCheckEnabled()).thenReturn(true);
+		Mockito.when(socialize.getEntityLoader()).thenReturn(null);
 		
 		SocializeLogger mockLogger = new SocializeLogger();
 		
@@ -91,10 +88,7 @@ public class AppUtilsTest extends SocializeActivityTest {
 		appUtils.setLogger(mockLogger);
 		
 		assertFalse(appUtils.isNotificationsAvailable(getContext()));
-		
 
-		AndroidMock.verify(config, socialize);
-		
 		String result0 = getResult(0);
 		String result1 = getResult(1);
 		
@@ -104,5 +98,4 @@ public class AppUtilsTest extends SocializeActivityTest {
 		assertEquals(getContext().getPackageName() + ".permission.C2D_MESSAGE", result0);
 		assertEquals("com.google.android.c2dm.permission.RECEIVE", result1);
 	}
-
 }

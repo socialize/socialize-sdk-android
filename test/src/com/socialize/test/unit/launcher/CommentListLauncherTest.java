@@ -23,8 +23,6 @@ package com.socialize.test.unit.launcher;
 
 import android.app.Activity;
 import android.os.Bundle;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.api.SocializeSession;
@@ -38,6 +36,7 @@ import com.socialize.notifications.NotificationAuthenticator;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.util.TestUtils;
 import com.socialize.util.EntityLoaderUtils;
+import org.mockito.Mockito;
 
 
 /**
@@ -46,19 +45,13 @@ import com.socialize.util.EntityLoaderUtils;
  */
 public class CommentListLauncherTest extends SocializeActivityTest {
 
-	@UsesMocks ({
-		EntityLoaderUtils.class, 
-		NotificationAuthenticator.class, 
-		ActivitySystem.class,
-		SocializeSession.class,
-		SocializeAction.class})
 	public void testLaunch() throws Exception {
 		
-		EntityLoaderUtils entityLoaderUtils = AndroidMock.createMock(EntityLoaderUtils.class);
-		NotificationAuthenticator notificationAuthenticator = AndroidMock.createMock(NotificationAuthenticator.class);
-		ActivitySystem activitySystem = AndroidMock.createMock(ActivitySystem.class);
-		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
-		SocializeAction action = AndroidMock.createMock(SocializeAction.class);
+        EntityLoaderUtils entityLoaderUtils = Mockito.mock(EntityLoaderUtils.class);
+		NotificationAuthenticator notificationAuthenticator = Mockito.mock(NotificationAuthenticator.class);
+		ActivitySystem activitySystem = Mockito.mock(ActivitySystem.class);
+		SocializeSession session = Mockito.mock(SocializeSession.class);
+		SocializeAction action = Mockito.mock(SocializeAction.class);
 
 		final Entity entity = Entity.newInstance("foo", "bar");
 		final long id = 69;
@@ -67,12 +60,11 @@ public class CommentListLauncherTest extends SocializeActivityTest {
 		Bundle bundle = new Bundle();
 		bundle.putLong(Socialize.ACTION_ID, id);
 		bundle.putString(Socialize.ACTION_TYPE, type);
-		
-		
-		AndroidMock.expect(entityLoaderUtils.initEntityLoader()).andReturn(null);
-        AndroidMock.expect(notificationAuthenticator.authenticate(TestUtils.getActivity(this))).andReturn(session);
-		AndroidMock.expect(activitySystem.getAction(session, id, ActionType.valueOf(type))).andReturn(action);
-		AndroidMock.expect(action.getEntity()).andReturn(entity);
+
+		Mockito.when(entityLoaderUtils.initEntityLoader()).thenReturn(null);
+        Mockito.when(notificationAuthenticator.authenticate(TestUtils.getActivity(this))).thenReturn(session);
+		Mockito.when(activitySystem.getAction(session, id, ActionType.valueOf(type))).thenReturn(action);
+		Mockito.when(action.getEntity()).thenReturn(entity);
 		
 		SocializeCommentUtils mockCommentUtils = new SocializeCommentUtils() {
 			@Override
@@ -83,16 +75,11 @@ public class CommentListLauncherTest extends SocializeActivityTest {
 		
 		SocializeAccess.setCommentUtilsProxy(mockCommentUtils);
 		
-		AndroidMock.replay(entityLoaderUtils, notificationAuthenticator, activitySystem, action, session);
-		
 		CommentListLauncher launcher = new CommentListLauncher();
 		launcher.setActivitySystem(activitySystem);
 		launcher.setEntityLoaderUtils(entityLoaderUtils);
 		launcher.setNotificationAuthenticator(notificationAuthenticator);
-		
 		launcher.launch(TestUtils.getActivity(this), bundle);
-		
-		AndroidMock.verify(entityLoaderUtils, notificationAuthenticator, activitySystem, action, session);
 		
 		Entity result = getResult(0);
 		

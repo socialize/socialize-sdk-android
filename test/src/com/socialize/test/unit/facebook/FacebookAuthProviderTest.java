@@ -24,8 +24,6 @@ package com.socialize.test.unit.facebook;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.AuthProviderResponse;
 import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.error.SocializeException;
@@ -35,6 +33,7 @@ import com.socialize.listener.ListenerHolder;
 import com.socialize.listener.SocializeListener;
 import com.socialize.networks.facebook.v2.FacebookFacadeV2;
 import com.socialize.test.SocializeUnitTest;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -45,14 +44,13 @@ import java.net.MalformedURLException;
  */
 public class FacebookAuthProviderTest extends SocializeUnitTest {
 
-	@UsesMocks ({Activity.class, AuthProviderListener.class, SocializeException.class, AuthProviderResponse.class})
 	public void testAuthenticate() {
 		
 		final String appId = "foobar";
-		Activity context = AndroidMock.createNiceMock(Activity.class);
-		AuthProviderListener listener = AndroidMock.createMock(AuthProviderListener.class);
-		SocializeException error = AndroidMock.createMock(SocializeException.class);
-		AuthProviderResponse response = AndroidMock.createMock(AuthProviderResponse.class);
+		Activity context = Mockito.mock(Activity.class);
+		AuthProviderListener listener = Mockito.mock(AuthProviderListener.class);
+		SocializeException error = Mockito.mock(SocializeException.class);
+		AuthProviderResponse response = Mockito.mock(AuthProviderResponse.class);
 		
 		ListenerHolder holder = new ListenerHolder() {
 
@@ -72,15 +70,7 @@ public class FacebookAuthProviderTest extends SocializeUnitTest {
 			}
 		};
 		
-		context.startActivity((Intent)AndroidMock.anyObject());
-		
-		listener.onError(error);
-		listener.onAuthSuccess(response);
-		listener.onAuthFail(error);
-		
-		AndroidMock.replay(context);
-		AndroidMock.replay(listener);
-		
+
 		FacebookFacadeV2 provider = new FacebookFacadeV2();
 		provider.setHolder(holder);
 		
@@ -109,22 +99,22 @@ public class FacebookAuthProviderTest extends SocializeUnitTest {
 		key = getNextResult();
 		assertNotNull(key);
 		assertEquals("auth", key);
-		
-		AndroidMock.verify(context);
-		AndroidMock.verify(listener);
-	}
+
+
+        Mockito.verify(context).startActivity((Intent)Mockito.anyObject());
+        Mockito.verify(listener).onError(error);
+        Mockito.verify(listener).onAuthSuccess(response);
+        Mockito.verify(listener).onAuthFail(error);
+    }
 	
 	@Deprecated
-	@UsesMocks ({Facebook.class})
 	public void testClearCache() throws MalformedURLException, IOException {
 		
 		final String appId = "foobar";
 		
-		final Facebook facebook = AndroidMock.createMock(Facebook.class, "foobar");
+		final Facebook facebook = Mockito.mock(Facebook.class, "foobar");
 		
-		AndroidMock.expect(facebook.logout(getContext())).andReturn(null);
-		
-		AndroidMock.replay(facebook);
+		Mockito.when(facebook.logout(getContext())).thenReturn(null);
 		
 		FacebookFacadeV2 facade = new FacebookFacadeV2() {
 			@Override
@@ -137,8 +127,6 @@ public class FacebookAuthProviderTest extends SocializeUnitTest {
 		fb.setAppId(appId);
 		
 		facade.logout(getContext());
-		
-		AndroidMock.verify(facebook);
-	}
+    }
 	
 }

@@ -22,19 +22,18 @@
 package com.socialize.test;
 
 import android.app.Activity;
+import android.test.ActivityInstrumentationTestCase2;
 import com.socialize.entity.Entity;
 import com.socialize.test.util.TestUtils;
 import com.socialize.testapp.EmptyActivity;
 
-import java.util.List;
-
-public abstract class SocializeActivityTest extends SocializeManagedActivityTest<EmptyActivity> {
+public abstract class SocializeActivityTest extends ActivityInstrumentationTestCase2<EmptyActivity> {
 
 	// Sample entity defined in comments.json
 	protected final Entity entity = Entity.newInstance("http://entity1.com", "http://entity1.com");
 
-	public SocializeActivityTest() {
-		super("com.socialize.testapp", EmptyActivity.class);
+    public SocializeActivityTest() {
+		super(EmptyActivity.class);
 	}
 
 	@Override
@@ -45,7 +44,7 @@ public abstract class SocializeActivityTest extends SocializeManagedActivityTest
 	
 	@Override
 	protected void tearDown() throws Exception {
-		TestUtils.tearDown(this);
+		TestUtils.tearDown();
 		super.tearDown();
 	}
 	
@@ -61,15 +60,11 @@ public abstract class SocializeActivityTest extends SocializeManagedActivityTest
 		TestUtils.addResult(index, obj);
 	}
 	
-	protected <T extends Object> T getResult(int index) {
+	protected <T> T getResult(int index) {
 		return TestUtils.getResult(index);
 	}
 	
-	protected List<Object> getAllResults() {
-		return TestUtils.getAllResults();
-	}
-	
-	protected <T extends Object> T getNextResult() {
+    protected <T> T getNextResult() {
 		return TestUtils.getNextResult();
 	}
 	

@@ -89,7 +89,7 @@ public class ActionBarUtilsImpl {
 			addScrollView = options.isAddScrollView();
 		}
 		
-		View contentView = null;
+		View contentView;
 		
 		if(addScrollView && !(original instanceof ScrollView) && !(original instanceof ListView) ) {
 			RelativeLayout.LayoutParams scrollViewParams = newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);

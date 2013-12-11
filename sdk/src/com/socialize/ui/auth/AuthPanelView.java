@@ -325,7 +325,10 @@ public class AuthPanelView extends DialogPanelView {
 			CompatUtils.setBackgroundDrawable(header, headerBG);
 		}
 
-		header.setText(localizationService.getString(I18NConstants.AUTH_HEADER));
+        if(localizationService != null) {
+            header.setText(localizationService.getString(I18NConstants.AUTH_HEADER));
+        }
+
 		header.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
 		header.setTextColor(Color.WHITE);
 		header.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
