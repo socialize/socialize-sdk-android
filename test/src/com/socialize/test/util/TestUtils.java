@@ -151,8 +151,7 @@ public class TestUtils {
 		}
 	}
 
-	public static Activity restart(ActivityInstrumentationTestCase2<?> test) {
-        Activity activity = test.getActivity();
+	public static Activity restart(ActivityInstrumentationTestCase2<?> test, Activity activity) {
         activity.finish();
         activity = test.getActivity();
 		return activity;

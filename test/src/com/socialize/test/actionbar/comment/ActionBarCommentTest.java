@@ -32,10 +32,10 @@ public class ActionBarCommentTest extends ActionBarTest {
 			}
 		});
 		
-		Activity waitForActivity = monitor.waitForActivityWithTimeout(5000);
+		Activity commentActivity = monitor.waitForActivityWithTimeout(5000);
 		
-		assertNotNull(waitForActivity);
-		assertTrue(waitForActivity instanceof CommentActivity);
-        waitForActivity.finish();
+		assertNotNull(commentActivity);
+		assertTrue(commentActivity instanceof CommentActivity);
+        commentActivity.finish();
 	}
 }

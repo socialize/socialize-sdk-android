@@ -66,7 +66,6 @@ public class AuthRequestDialogFactoryTest extends ActivityInstrumentationTestCas
 	final EntityStatsImpl entityStats = new EntityStatsImpl();
 	final PublicEntity entity = new PublicEntity("http://entity1.com", "http://entity1.com");
 	
-	
 	public AuthRequestDialogFactoryTest() {
 		super(ActionBarActivity.class);
     }

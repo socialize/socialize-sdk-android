@@ -46,9 +46,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class ActionBarShareListenerTest extends ActionBarTest {
 
-	/* (non-Javadoc)
-	 * @see com.socialize.test.ui.actionbar.ActionBarTest#isManual()
-	 */
 	@Override
 	public boolean isManual() {
 		return false;
@@ -62,11 +59,13 @@ public class ActionBarShareListenerTest extends ActionBarTest {
 	public void testOnActionBarShareEventListenerIsCalledOnDialogDisplay() throws Throwable {
 
         Activity activity = TestUtils.getActivity(this);
-		
-		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.FACEBOOK_APP_ID, "");
-		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, "");
-		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, "");
-		ConfigUtils.getConfig(activity).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+
+        SocializeConfig config = ConfigUtils.getConfig(activity);
+
+        config.setProperty(SocializeConfig.FACEBOOK_APP_ID, "");
+		config.setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, "");
+		config.setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, "");
+		config.setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
 		ShareUtils.preloadShareDialog(activity);
 		ShareUtils.preloadLinkDialog(activity);
@@ -95,7 +94,8 @@ public class ActionBarShareListenerTest extends ActionBarTest {
 
 			@Override
 			public void onShow(Dialog dialog, SharePanelView dialogView) {
-				TestUtils.addResult(dialogView);
+				TestUtils.addResult(0, dialog);
+                TestUtils.addResult(1, dialogView);
 				dialogLatch.countDown();
 			}
 		});
@@ -112,10 +112,15 @@ public class ActionBarShareListenerTest extends ActionBarTest {
 		});
 		
 		assertTrue(shareLatch.await(30, TimeUnit.SECONDS));
+
 		dialogLatch.await(30, TimeUnit.SECONDS);
 		
-		SharePanelView dialogView = TestUtils.getResult(0);
+		SharePanelView dialogView = TestUtils.getResult(1);
+        Dialog dialog = TestUtils.getResult(0);
 		
 		assertNotNull(dialogView);
+        assertNotNull(dialog);
+
+        dialog.dismiss();
 	}
 }

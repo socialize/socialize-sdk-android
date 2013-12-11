@@ -53,7 +53,6 @@ public abstract class ActionBarTest extends ActivityInstrumentationTestCase2<Act
 		}
 	};
 
-
 	protected final SocializeViewUtils mockViewUtils = new SocializeViewUtils() {
 		@Override
 		public void view(Activity context, Entity e, ViewAddListener listener) {

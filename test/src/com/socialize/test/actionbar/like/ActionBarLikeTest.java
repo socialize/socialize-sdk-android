@@ -90,8 +90,7 @@ public class ActionBarLikeTest extends ActionBarTest {
 
 	public void testLikeCallsApiHost() throws Throwable {
 
-		Activity activity = TestUtils.getActivity(this);
-
+		final Activity activity = TestUtils.getActivity(this);
 		final CountDownLatch latch = new CountDownLatch(1);
 
 		// Ensure FB/TW are not supported
@@ -114,7 +113,7 @@ public class ActionBarLikeTest extends ActionBarTest {
 
 		SocializeAccess.setLikeUtilsProxy(mockLikeUtils);
 
-		final ActionBarLayoutView actionBar = TestUtils.findView(TestUtils.getActivity(this), ActionBarLayoutView.class, 25000);
+		final ActionBarLayoutView actionBar = TestUtils.findView(activity, ActionBarLayoutView.class, 25000);
 
 		assertNotNull(actionBar);
 
@@ -130,8 +129,7 @@ public class ActionBarLikeTest extends ActionBarTest {
 
 	public void testLikeDoesNotPromptForAuthWhenNetworksNotSupported() throws Throwable {
 
-		Activity activity = TestUtils.getActivity(this);
-
+		final Activity activity = TestUtils.getActivity(this);
 		final CountDownLatch latch = new CountDownLatch(1);
 
 		// Ensure FB/TW are not supported
@@ -201,9 +199,8 @@ public class ActionBarLikeTest extends ActionBarTest {
 		mockLikeUtils.setAuthDialogFactory(mockFactory);
 		mockLikeUtils.setShareDialogFactory(mockShareFactory);
 
-		Activity activity = TestUtils.getActivity(this);
-
-		final ActionBarLayoutView actionBar = TestUtils.findView(activity, ActionBarLayoutView.class, 10000);	
+		final Activity activity = TestUtils.getActivity(this);
+		final ActionBarLayoutView actionBar = TestUtils.findView(activity, ActionBarLayoutView.class, 10000);
 		
 		assertNotNull(actionBar);
 		
@@ -223,7 +220,7 @@ public class ActionBarLikeTest extends ActionBarTest {
 
 	public void testLikeStateIsRetained() throws Throwable {
 
-		Activity activity = TestUtils.getActivity(this);
+		final Activity activity = TestUtils.getActivity(this);
 
         Instrumentation.ActivityMonitor monitor = TestUtils.setUpActivityMonitor(this, CommentActivity.class);
 
@@ -281,19 +278,16 @@ public class ActionBarLikeTest extends ActionBarTest {
 			}
 		});
 
-		Activity waitForActivity = monitor.waitForActivityWithTimeout(5000);
+		Activity commentActivity = monitor.waitForActivityWithTimeout(5000);
 
-		assertNotNull(waitForActivity);
+		assertNotNull(commentActivity);
+        commentActivity.finish();
 
-		waitForActivity.finish();
-
-		// Now make sure we are still liked
-		actionBar = TestUtils.findView(TestUtils.getActivity(this), ActionBarLayoutView.class, 5000);
-		assertNotNull(actionBar);
-
-		text = actionBarItem.getText();
-
-		assertEquals("Unlike", text);
+        // Now make sure we are still liked
+        actionBar = TestUtils.findView(activity, ActionBarLayoutView.class, 5000);
+        assertNotNull(actionBar);
+        text = actionBarItem.getText();
+        assertEquals("Unlike", text);
 	}
 	
 	protected void doLike(final ActionBarLayoutView actionBar) throws Throwable {

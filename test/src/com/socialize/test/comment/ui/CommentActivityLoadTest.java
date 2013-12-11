@@ -59,7 +59,7 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 	
 	public void testCommentActivityLoadsCorrectData() throws Throwable {
 
-		Activity launchActivity = TestUtils.getActivity(this);
+		final Activity activityUnderTest = TestUtils.getActivity(this);
 		
 		TestUtils.setupSocializeProxies();
 
@@ -127,7 +127,7 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 			}
 		});
 
-		CommentUtils.showCommentView(launchActivity, entity1, new OnCommentViewActionListener() {
+		CommentUtils.showCommentView(activityUnderTest, entity1, new OnCommentViewActionListener() {
 			@Override
 			public void onError(SocializeException error) {
 				error.printStackTrace();
@@ -177,10 +177,9 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 			}
 		});
 
+		Activity commentActivity = monitor.waitForActivityWithTimeout(10000);
 
-
-		Activity waitForActivity = monitor.waitForActivityWithTimeout(10000);
-		assertNotNull(waitForActivity);
+		assertNotNull(commentActivity);
 		
 		assertTrue(lock.await(20, TimeUnit.SECONDS));
 		
@@ -193,63 +192,71 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 		
 		lr.setItems(dummyResults2);
 
-        waitForActivity.finish();
+        commentActivity.finish();
 
-		launchActivity = TestUtils.restart(this);
+//		activityUnderTest = TestUtils.restart(this);
 		
-		CommentUtils.showCommentView(launchActivity, entity2, new OnCommentViewActionListener() {
-			@Override
-			public void onError(SocializeException error) {
-				error.printStackTrace();
-				lock2.countDown();
-			}
-			@Override
-			public void onReload(CommentListView view) {}
-			@Override
-			public void onPostComment(Comment comment) {}
-			@Override
-			public void onCreate(CommentListView view) {}
-			@Override
-			public void onCommentList(CommentListView view, List<Comment> comments, int start, int end) {}
-			@Override
-			public void onRender(CommentListView view) {
-				
-				List<Comment> comments = view.getCommentAdapter().getComments();
-				
-				if(comments != null) {
-					results1.addAll(view.getCommentAdapter().getComments());
-				}
-				
-				lock2.countDown();
-			}
-			@Override
-			public void onBeforeSetComment(Comment comment, CommentListItem item) {}
-			@Override
-			public void onAfterSetComment(Comment comment, CommentListItem item) {}
+		CommentUtils.showCommentView(activityUnderTest, entity2, new OnCommentViewActionListener() {
+            @Override
+            public void onError(SocializeException error) {
+                error.printStackTrace();
+                lock2.countDown();
+            }
 
-			@Override
-			public boolean onRefreshMenuItemClick(MenuItem item) {
-				return false;
-			}
+            @Override
+            public void onReload(CommentListView view) {}
 
-			@Override
-			public boolean onCommentItemClicked(CommentListItem item) {
-				return false;
-			}
+            @Override
+            public void onPostComment(Comment comment) {}
 
-			@Override
-			public boolean onCommentIconClicked(CommentListItem item) {
-				return false;
-			}
+            @Override
+            public void onCreate(CommentListView view) {}
 
-			@Override
-			public boolean onSettingsMenuItemClick(MenuItem item) {
-				return false;
-			}
-		});
+            @Override
+            public void onCommentList(CommentListView view, List<Comment> comments, int start, int end) {}
+
+            @Override
+            public void onRender(CommentListView view) {
+
+                List<Comment> comments = view.getCommentAdapter().getComments();
+
+                if (comments != null) {
+                    results1.addAll(view.getCommentAdapter().getComments());
+                }
+
+                lock2.countDown();
+            }
+
+            @Override
+            public void onBeforeSetComment(Comment comment, CommentListItem item) {}
+
+            @Override
+            public void onAfterSetComment(Comment comment, CommentListItem item) {}
+
+            @Override
+            public boolean onRefreshMenuItemClick(MenuItem item) {
+                return false;
+            }
+
+            @Override
+            public boolean onCommentItemClicked(CommentListItem item) {
+                return false;
+            }
+
+            @Override
+            public boolean onCommentIconClicked(CommentListItem item) {
+                return false;
+            }
+
+            @Override
+            public boolean onSettingsMenuItemClick(MenuItem item) {
+                return false;
+            }
+        });
 		
-        waitForActivity = monitor.waitForActivityWithTimeout(10000);
-        assertNotNull(waitForActivity);
+        commentActivity = monitor.waitForActivityWithTimeout(10000);
+
+        assertNotNull(commentActivity);
 
 		lock2.await(20, TimeUnit.SECONDS);
 		
@@ -261,9 +268,6 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 			index++;
 		}
 
-		launchActivity = TestUtils.restart(this);
-		launchActivity.finish();
-
-		waitForActivity.finish();
+        commentActivity.finish();
 	}
 }
