@@ -37,6 +37,8 @@ public abstract class ActionBarTest extends ActivityInstrumentationTestCase2<Act
     public ActionBarTest() {
         super(ActionBarActivity.class);
     }
+
+
 	
 	protected final SocializeLikeUtils mockLikeUtils = new SocializeLikeUtils() {
 		@Override
@@ -87,6 +89,8 @@ public abstract class ActionBarTest extends ActivityInstrumentationTestCase2<Act
 	protected void setUp() throws Exception {
 		
 		super.setUp();
+
+        TestUtils.setDexCache(this);
 		
 		Intent intent = new Intent();
 		intent.putExtra(Socialize.ENTITY_OBJECT, entity);

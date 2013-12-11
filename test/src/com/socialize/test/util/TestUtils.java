@@ -6,6 +6,7 @@ import android.app.Instrumentation.ActivityMonitor;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ import com.socialize.util.IOUtils;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -38,7 +40,8 @@ public class TestUtils {
 	
 	static ResultHolder holder;
     static Map<String, JSONObject> jsons = new HashMap<String, JSONObject>();
-	
+
+    static File cacheDir;
 
 	private static String fb_token = null;
 	private static String tw_token = null;
@@ -127,6 +130,8 @@ public class TestUtils {
 
 	public static void setUp(ActivityInstrumentationTestCase2<?> test)  {
 
+        setDexCache(test);
+        
 		AsyncTaskManager.setManaged(true);
 		
 		holder = new ResultHolder();
@@ -560,5 +565,26 @@ public class TestUtils {
                 throw e;
             }
         }
+    }
+
+    public static void setDexCache(ActivityInstrumentationTestCase2<?> test) {
+        // Fix for bug https://code.google.com/p/dexmaker/issues/detail?id=2
+        File cacheDir = getCacheDir(test.getInstrumentation().getTargetContext());
+        ActivityInstrumentationTestCase2.assertNotNull(cacheDir);
+        System.setProperty("dexmaker.dexcache", cacheDir.toString());
+    }
+
+    public static File getCacheDir(Context context) {
+        if(cacheDir == null) {
+            File dataDir = new File("/data/data/" + context.getPackageName());
+            cacheDir = new File(dataDir, "cache");
+            if (!cacheDir.exists() && !cacheDir.mkdir()) {
+                Log.w("Socialize Test", "Failed to create cache dir in [" +
+                        cacheDir +
+                        "]");
+                cacheDir = null;
+            }
+        }
+        return cacheDir;
     }
 }
