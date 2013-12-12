@@ -55,7 +55,7 @@
 
     </application>
 
-    <instrumentation android:name="pl.polidea.instrumentation.PolideaInstrumentationTestRunner"
+    <instrumentation android:name="com.socialize.SocializeTestRunner"
                      android:targetPackage="com.socialize.test"
                      android:label="Tests for com.socialize.test"/>
 </manifest>
