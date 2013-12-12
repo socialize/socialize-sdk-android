@@ -11,16 +11,16 @@
             <arg line="${adb.device.arg}" />
             <arg value="shell" />
             <arg value="run-as" />
-            <arg value="com.sharethis.loopy.test" />
+            <arg value="com.socialize.test" />
             <arg value="chmod" />
             <arg value="644" />
-            <arg value="/data/data/com.sharethis.loopy.test/ALL-TEST.xml" />
+            <arg value="/data/data/com.socialize.test/ALL-TEST.xml" />
         </exec>
 
         <exec executable="${adb}" failonerror="true" dir="test-results">
             <arg line="${adb.device.arg}" />
             <arg value="pull" />
-            <arg value="/data/data/com.sharethis.loopy.test/ALL-TEST.xml" />
+            <arg value="/data/data/com.socialize.test/ALL-TEST.xml" />
         </exec>
     </target>
 
