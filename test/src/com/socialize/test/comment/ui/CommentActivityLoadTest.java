@@ -194,8 +194,8 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 
         commentActivity.finish();
 
-//		activityUnderTest = TestUtils.restart(this);
-		
+        monitor = TestUtils.setUpActivityMonitor(this, CommentActivity.class);
+
 		CommentUtils.showCommentView(activityUnderTest, entity2, new OnCommentViewActionListener() {
             @Override
             public void onError(SocializeException error) {

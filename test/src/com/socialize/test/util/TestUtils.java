@@ -131,7 +131,7 @@ public class TestUtils {
 	public static void setUp(ActivityInstrumentationTestCase2<?> test)  {
 
         setDexCache(test);
-        
+
 		AsyncTaskManager.setManaged(true);
 		
 		holder = new ResultHolder();
@@ -154,12 +154,6 @@ public class TestUtils {
 			holder.clear();
 			holder = null;
 		}
-	}
-
-	public static Activity restart(ActivityInstrumentationTestCase2<?> test, Activity activity) {
-        activity.finish();
-        activity = test.getActivity();
-		return activity;
 	}
 
 	public static ActivityMonitor setUpActivityMonitor(ActivityInstrumentationTestCase2<?> testCase, Class<?> activityClass) {

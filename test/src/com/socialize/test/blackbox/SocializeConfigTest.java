@@ -100,7 +100,7 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		config.init(TestUtils.getActivity(this));
 		Assert.assertNotNull(config.getProperties());
 		Assert.assertNotNull(config.getProperties().getProperty("test_value"));
-		Assert.assertEquals("testapp", config.getProperties().getProperty("test_value"));
+		Assert.assertEquals("test", config.getProperties().getProperty("test_value"));
 	}
 
 	/**
