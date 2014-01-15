@@ -116,7 +116,7 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 			String customSender = config.getProperty(SocializeConfig.SOCIALIZE_CUSTOM_GCM_SENDER_ID);
 			
 			// Only supported in GCM
-			if(!StringUtils.isEmpty(senderId) && !StringUtils.isEmpty(customSender)) {
+			if(!StringUtils.isEmpty(senderId) && !StringUtils.isEmpty(customSender) && !senderId.equals(customSender)) {
 				senderId = senderId + "," + customSender;
 			}
 			
