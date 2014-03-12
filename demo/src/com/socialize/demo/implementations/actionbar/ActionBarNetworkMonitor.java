@@ -121,7 +121,13 @@ public class ActionBarNetworkMonitor {
 
 				@Override
 				public void onResume(Activity activity) {}
-			});
+
+                @Override
+                public void onStart(Activity activity) {}
+
+                @Override
+                public void onStop(Activity activity) {}
+            });
 			
 			timer.schedule(new ReloadTask(), interval, interval);
 		}

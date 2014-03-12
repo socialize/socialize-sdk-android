@@ -148,7 +148,7 @@ public class ShareUtils {
 	 */
 	public static void showShareDialog (Activity context, Entity entity) {
 		proxy.showShareDialog(context, entity, DEFAULT, null, null);
-	};	
+	}
 	
 	/**
 	 * Displays the default share dialog and allows for the handling of share dialog events.

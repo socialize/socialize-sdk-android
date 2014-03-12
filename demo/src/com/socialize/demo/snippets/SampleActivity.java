@@ -53,12 +53,29 @@ public class SampleActivity extends Activity {
 		Socialize.onResume(this);
 	}
 
-	@Override
-	protected void onDestroy() {
-		// Call Socialize in onDestroy before the activity is destroyed
-		Socialize.onDestroy(this);
-		
-		super.onDestroy();
-	}
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // Call Socialize in onStart
+        Socialize.onStart(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // Call Socialize in onStop
+        Socialize.onStop(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        // Call Socialize in onDestroy before the activity is destroyed
+        Socialize.onDestroy(this);
+
+        super.onDestroy();
+    }
 }
 //end-snippet-0

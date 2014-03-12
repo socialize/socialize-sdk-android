@@ -155,11 +155,9 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 								if(dialogView != null) {
 									dialogView.getContinueButton().setEnabled(true);
 								}
-								
-								if(dialogListener != null) {
-									dialogListener.onCancel(dialog);
-								}
-							}
+
+                                dialogListener.onCancel(dialog);
+                            }
 						});
 					}
 				}

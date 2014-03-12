@@ -97,6 +97,8 @@ public class SocializeConfig {
 	public static final String SOCIALIZE_ALLOW_DELETE_COMMENT = "socialize.allow.delete.comment";
 	
 	public static final String GOOGLE_PLUS_ENABLED = "googleplus.enabled";
+
+    public static final String LOOPY_ENABLED = "loopy.enabled";
 	
 	/**
 	 * true if Single Sign On is enabled.  Default is true.
@@ -375,8 +377,12 @@ public class SocializeConfig {
 	public boolean isAllowSkipAuthOnComments() {
 		return getBooleanProperty(SOCIALIZE_ALLOW_ANON_COMMENT, false);
 	}
-	
-	public boolean isDiagnosticLoggingEnabled() {
+
+    public boolean isLoopyEnabled() {
+        return getBooleanProperty(LOOPY_ENABLED, true);
+    }
+
+    public boolean isDiagnosticLoggingEnabled() {
 		return getBooleanProperty(SOCIALIZE_EXTERNAL_LOGS_ENABLED, false);
 	}
 	

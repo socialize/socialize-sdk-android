@@ -138,6 +138,23 @@ btnSave.setOnClickListener(new View.OnClickListener() {
 
 		super.onResume();
 	}
+
+
+    @Override
+    protected void onStart() {
+
+        Socialize.onStart(this);
+
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+
+        Socialize.onStop(this);
+
+        super.onStop();
+    }
 }
 
 //end-snippet-0

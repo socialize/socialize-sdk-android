@@ -55,19 +55,16 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 	private ShareHandlers shareHandlers;
 	
 	private SocializeLogger logger;
-	
-	public SocializeShareSystem(SocializeProvider<Share> provider) {
+
+    public SocializeShareSystem(SocializeProvider<Share> provider) {
 		super(provider);
 	}
 	
 	@Override
 	public boolean canShare(Context context, ShareType shareType) {
 		ShareHandler shareHandler = shareHandlers.getShareHandler(shareType);
-		if(shareHandler != null) {
-			return shareHandler.isAvailableOnDevice(context);
-		}
-		return false;
-	}
+        return shareHandler != null && shareHandler.isAvailableOnDevice(context);
+    }
 
 	@Override
 	public void addShare(Context context, SocializeSession session, Entity entity, String text, SocialNetwork network, Location location, ShareListener listener) {

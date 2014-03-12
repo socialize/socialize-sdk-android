@@ -373,30 +373,30 @@
 		<property name="logger" ref="logger"/>
 		<property name="shareHandlers" ref="shareHandlers"/>
 	</bean>
-	
-	<bean id="emailShareHandler" class="com.socialize.share.EmailShareHandler">
+
+    <bean id="abstractShareHandler" abstract="true">
+        <property name="logger" ref="logger"/>
+        <property name="loopyService" ref="loopyService"/>
+    </bean>
+
+	<bean id="emailShareHandler" class="com.socialize.share.EmailShareHandler" extends="abstractShareHandler">
 		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
-		<property name="logger" ref="logger"/>
 	</bean>
 	
-	<bean id="smsShareHandler" class="com.socialize.share.SmsShareHandler">
+	<bean id="smsShareHandler" class="com.socialize.share.SmsShareHandler" extends="abstractShareHandler">
 		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
-		<property name="logger" ref="logger"/>
 	</bean>
 	
-	<bean id="facebookShareHandler" class="com.socialize.share.FacebookShareHandler">
+	<bean id="facebookShareHandler" class="com.socialize.share.FacebookShareHandler" extends="abstractShareHandler">
 		<property name="facebookSharer" ref="facebookSharer"/>
-		<property name="logger" ref="logger"/>
 	</bean>
 	
-	<bean id="googlePlusShareHandler" class="com.socialize.share.GooglePlusShareHandler">
+	<bean id="googlePlusShareHandler" class="com.socialize.share.GooglePlusShareHandler" extends="abstractShareHandler">
 		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
-		<property name="logger" ref="logger"/>
 	</bean>
 
-	<bean id="twitterShareHandler" class="com.socialize.share.TwitterShareHandler">
+	<bean id="twitterShareHandler" class="com.socialize.share.TwitterShareHandler" extends="abstractShareHandler">
 		<property name="twitterSharer" ref="twitterSharer"/>
-		<property name="logger" ref="logger"/>
 	</bean>
 	
 	<bean id="otherShareHandler" class="com.socialize.share.OtherShareHandler" extends="emailShareHandler"/>
@@ -433,6 +433,12 @@
 	</bean>
 	
 <!-- End Share API -->
+
+<!-- Loopy integration -->
+    <bean id="loopyService" class="com.socialize.loopy.LoopyService">
+        <property name="config" ref="config"/>
+    </bean>
+<!-- End Loopy integration -->
 
 <!-- User API -->
 
