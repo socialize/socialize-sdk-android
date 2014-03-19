@@ -25,22 +25,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.text.Html;
 import com.socialize.ShareUtils;
-import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ShareType;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.SocializeAction;
-import com.socialize.networks.DefaultPostData;
+import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetworkListener;
-
-import java.util.HashMap;
 
 /**
  * @author Jason Polites
  */
 public class EmailShareHandler extends IntentShareHandler {
 
-	private ShareMessageBuilder shareMessageBuilder;
+	private SharePostDataFactory sharePostDataFactory;
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.share.AbstractShareHandler#handle(android.app.Activity, com.socialize.entity.SocializeAction, java.lang.String, com.socialize.entity.PropagationInfo, com.socialize.share.ShareHandlerListener)
@@ -52,26 +49,16 @@ public class EmailShareHandler extends IntentShareHandler {
 
 		Entity entity = action.getEntity();
 
-		HashMap<String, Object> postValues = new HashMap<String, Object>();
-
-		postValues.put(ShareUtils.EXTRA_TITLE, "Share");
-		postValues.put(ShareUtils.EXTRA_SUBJECT, shareMessageBuilder.buildShareSubject(entity));
-		postValues.put(ShareUtils.EXTRA_TEXT, shareMessageBuilder.buildShareMessage(entity, info, text, isHtml(), true));
-
-		DefaultPostData postData = new DefaultPostData();
-
-		postData.setEntity(entity);
-		postData.setPropagationInfo(info);
-		postData.setPostValues(postValues);
+		PostData postData = sharePostDataFactory.create(entity, info, text, isHtml(), true);
 
 		if(listener != null) {
 			shareCancelled = listener.onBeforePost(context, null, postData);
 		}
 
 		if(!shareCancelled) {
-			String title = String.valueOf(postValues.get(ShareUtils.EXTRA_TITLE));
-			String body = String.valueOf(postValues.get(ShareUtils.EXTRA_TEXT));
-			Intent msg = getIntent();
+			String title = String.valueOf(postData.getPostValues().get(ShareUtils.EXTRA_TITLE));
+			String body = String.valueOf(postData.getPostValues().get(ShareUtils.EXTRA_TEXT));
+			Intent msg = getIntent(context);
 			msg.putExtra(Intent.EXTRA_TITLE, title);
 
 			if(isHtml()) {
@@ -81,7 +68,7 @@ public class EmailShareHandler extends IntentShareHandler {
 				msg.putExtra(Intent.EXTRA_TEXT, body);
 			}
 
-			msg.putExtra(Intent.EXTRA_SUBJECT, String.valueOf(postValues.get(ShareUtils.EXTRA_SUBJECT)));
+            msg.putExtra(Intent.EXTRA_SUBJECT, String.valueOf(postData.getPostValues().get(ShareUtils.EXTRA_SUBJECT)));
 
 			startActivity(context, msg, title);
 		}
@@ -90,7 +77,7 @@ public class EmailShareHandler extends IntentShareHandler {
 			listener.onAfterPost(context, null, null);
 		}
 	}
-	
+
 	protected void startActivity(Activity context, Intent intent, String title) {
 		Intent chooser = Intent.createChooser(intent, title);
 		chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -114,7 +101,8 @@ public class EmailShareHandler extends IntentShareHandler {
 		return ShareType.EMAIL;
 	}
 
-	public void setShareMessageBuilder(ShareMessageBuilder shareMessageBuilder) {
-		this.shareMessageBuilder = shareMessageBuilder;
-	}
+    @SuppressWarnings("unused")
+    public void setSharePostDataFactory(SharePostDataFactory sharePostDataFactory) {
+        this.sharePostDataFactory = sharePostDataFactory;
+    }
 }

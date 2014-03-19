@@ -380,7 +380,7 @@
     </bean>
 
 	<bean id="emailShareHandler" class="com.socialize.share.EmailShareHandler" extends="abstractShareHandler">
-		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
+		<property name="sharePostDataFactory" ref="sharePostDataFactory"/>
 	</bean>
 	
 	<bean id="smsShareHandler" class="com.socialize.share.SmsShareHandler" extends="abstractShareHandler">
@@ -400,7 +400,7 @@
 	</bean>
 	
 	<bean id="otherShareHandler" class="com.socialize.share.OtherShareHandler" extends="emailShareHandler"/>
-	
+
 	<bean id="shareHandlers" class="com.socialize.share.ShareHandlers">
 		<property name="handlers">
 			<map>
@@ -437,6 +437,7 @@
 <!-- Loopy integration -->
     <bean id="loopyService" class="com.socialize.loopy.LoopyService">
         <property name="config" ref="config"/>
+        <property name="sharePostDataFactory" ref="sharePostDataFactory"/>
     </bean>
 <!-- End Loopy integration -->
 
@@ -566,10 +567,14 @@
 
 <!-- Facebook -->
 
-	<bean id="shareMessageBuilder" class="com.socialize.api.DefaultShareMessageBuilder">
+    <bean id="shareMessageBuilder" class="com.socialize.api.DefaultShareMessageBuilder">
 		<property name="appUtils" ref="appUtils"/>
         <property name="localizationService" ref="localizationService"/>
-	</bean>	
+	</bean>
+
+    <bean id="sharePostDataFactory" class="com.socialize.share.SharePostDataFactory">
+        <property name="shareMessageBuilder" ref="shareMessageBuilder"/>
+    </bean>
 	
 	<bean id="facebookUrlBuilder" class="com.socialize.auth.facebook.FacebookUrlBuilder"/>
 	 

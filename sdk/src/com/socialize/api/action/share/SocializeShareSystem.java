@@ -257,7 +257,7 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 	public void share(Activity context, SocializeSession session, SocializeAction action, String comment, Location location, ShareType destination, SocialNetworkListener listener) {
 		ShareHandler sharer = getSharer(destination);
 		if(sharer != null) {
-			sharer.handle(context, action, location, comment, listener);
+            sharer.handle(context, action, location, comment, listener);
 		}
 		else {
 			if(listener != null) {
