@@ -86,7 +86,6 @@ public class AuthenticateSDKTest extends SDKIntegrationTest {
 		assertEquals(user1, user2);
 	}
 	
-	
 	public void testAuthenticateKnownUser() throws Throwable {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Activity context = getContext();
