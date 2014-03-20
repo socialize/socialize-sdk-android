@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="loopy_test_custom">
+<project name="socialize_test_custom">
 
     <target name="test-with-results" depends="clean,emma,debug,install,test,pull-test-results,pull-coverage-results"/>
 
