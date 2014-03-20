@@ -32,7 +32,14 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.share.ShareSystem;
 import com.socialize.api.action.user.UserSystem;
-import com.socialize.auth.*;
+import com.socialize.auth.AuthProvider;
+import com.socialize.auth.AuthProviderInfo;
+import com.socialize.auth.AuthProviderInfoBuilder;
+import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.AuthProviders;
+import com.socialize.auth.SocializeAuthProviderInfo;
+import com.socialize.auth.UserProviderCredentials;
+import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.concurrent.AsyncTaskManager;
 import com.socialize.concurrent.ManagedAsyncTask;
 import com.socialize.config.SocializeConfig;
@@ -45,6 +52,7 @@ import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.SocializeListener;
 import com.socialize.location.SocializeLocationProvider;
 import com.socialize.log.SocializeLogger;
+import com.socialize.loopy.LoopyService;
 import com.socialize.networks.facebook.FacebookFacade;
 import com.socialize.networks.facebook.FacebookUtils;
 import com.socialize.networks.twitter.TwitterUtils;
@@ -54,10 +62,19 @@ import com.socialize.notifications.SocializeC2DMReceiver;
 import com.socialize.notifications.WakeLock;
 import com.socialize.ui.ActivityIOCProvider;
 import com.socialize.ui.SocializeEntityLoader;
-import com.socialize.util.*;
+import com.socialize.util.AppUtils;
+import com.socialize.util.ClassLoaderProvider;
+import com.socialize.util.DisplayUtils;
+import com.socialize.util.EntityLoaderUtils;
+import com.socialize.util.ResourceLocator;
 
 import java.lang.ref.WeakReference;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
@@ -78,6 +95,7 @@ public class SocializeServiceImpl implements SocializeService {
 	private SocializeInitializationAsserter asserter;
 	private ShareSystem shareSystem;
 	private UserSystem userSystem;
+    private LoopyService loopyService;
 
 	private AuthProviders authProviders;
 	private NotificationChecker notificationChecker;
@@ -408,6 +426,7 @@ public class SocializeServiceImpl implements SocializeService {
 				this.container.setContext(context);
 				
 				this.logger = container.getBean("logger");
+                this.loopyService = container.getBean("loopyService");
 				
 				this.shareSystem = container.getBean("shareSystem");
 				this.userSystem = container.getBean("userSystem");
@@ -1064,14 +1083,36 @@ public class SocializeServiceImpl implements SocializeService {
 	}
 	
 	@Override
-	public void onCreate(Activity context, Bundle savedInstanceState) {}
+	public void onCreate(Activity context, Bundle savedInstanceState) {
+        if(loopyService != null) {
+            loopyService.onCreate(context);
+        }
+    }
 
 	@Override
 	public void onDestroy(Activity context) {
 		onContextDestroyed(context);
+
+        if(loopyService != null) {
+            loopyService.onDestroy(context);
+        }
 	}
 
-	protected void setShareSystem(ShareSystem shareSystem) {
+    @Override
+    public void onStart(Activity context) {
+        if(loopyService != null) {
+            loopyService.onStart(context);
+        }
+    }
+
+    @Override
+    public void onStop(Activity context) {
+        if(loopyService != null) {
+            loopyService.onStop(context);
+        }
+    }
+
+    protected void setShareSystem(ShareSystem shareSystem) {
 		this.shareSystem = shareSystem;
 	}
 

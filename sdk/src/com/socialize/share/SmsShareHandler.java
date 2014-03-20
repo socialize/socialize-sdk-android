@@ -22,7 +22,10 @@
 package com.socialize.share;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.provider.Telephony;
 import com.socialize.ShareUtils;
 import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ShareType;
@@ -67,8 +70,14 @@ public class SmsShareHandler extends IntentShareHandler {
 
 		if(!shareCancelled) {
 			String body = String.valueOf(postValues.get(ShareUtils.EXTRA_TEXT));
-			Intent sendIntent = getIntent();
-			sendIntent.putExtra("sms_body", body);
+			Intent sendIntent = getIntent(context);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                sendIntent.putExtra(Intent.EXTRA_TEXT, body);
+            } else {
+                sendIntent.putExtra("sms_body", body);
+            }
+
 			context.startActivity(sendIntent);
 		}
 
@@ -77,15 +86,33 @@ public class SmsShareHandler extends IntentShareHandler {
 		}
 	}
 	
-	protected Intent getIntent() {
-		Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-		sendIntent.setType(getMimeType());
+	protected Intent getIntent(Context context) {
+        Intent sendIntent;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { //At least KitKat
+            String defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(context); //Need to change the build to API 19
+
+            sendIntent = new Intent(Intent.ACTION_SEND);
+
+            if (defaultSmsPackageName != null) {
+                sendIntent.setPackage(defaultSmsPackageName);
+            }
+        }
+        else {
+            sendIntent = new Intent(Intent.ACTION_VIEW);
+        }
+
+        sendIntent.setType(getMimeType());
 		return sendIntent;
 	}
 	
 	@Override
 	protected String getMimeType() {
-		return "vnd.android-dir/mms-sms";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            return "text/plain";
+        } else {
+            return "vnd.android-dir/mms-sms";
+        }
 	}
 
 	/* (non-Javadoc)

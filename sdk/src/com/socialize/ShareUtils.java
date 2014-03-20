@@ -47,7 +47,7 @@ public class ShareUtils {
 	/**
 	 * Used to instruct the dialog to display the Email option.
 	 */
-	public static final int EMAIL = 1<<0;
+	public static final int EMAIL = 1;
 	
 	/**
 	 * Used to instruct the dialog to display the SMS option.
@@ -148,7 +148,7 @@ public class ShareUtils {
 	 */
 	public static void showShareDialog (Activity context, Entity entity) {
 		proxy.showShareDialog(context, entity, DEFAULT, null, null);
-	};	
+	}
 	
 	/**
 	 * Displays the default share dialog and allows for the handling of share dialog events.
@@ -267,7 +267,7 @@ public class ShareUtils {
 	 */
 	public static void getSharesByEntity (Activity context, String entityKey, int start, int end, ShareListListener listener) {
 		proxy.getSharesByEntity(context, entityKey, start, end, listener);
-	};
+	}
 	
 	/**
 	 * Retrieves all share events across all entities.

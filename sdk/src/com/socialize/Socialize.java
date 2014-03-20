@@ -61,7 +61,6 @@ public class Socialize {
 
 	/**
 	 * Initialize Socialize synchronously.  Should not be called from the main UI thread.
-	 * @param context
 	 */
 	public static void init(Context context) {
 		instance.init(context);
@@ -69,7 +68,6 @@ public class Socialize {
 	
 	/**
 	 * Initialize Socialize asynchronously.  Can be called from the main UI thread.
-	 * @param context
 	 */
 	public static void initAsync(Context context) {
 		instance.initAsync(context, null);
@@ -77,7 +75,6 @@ public class Socialize {
 	
 	/**
 	 * Initialize Socialize asynchronously.  Can be called from the main UI thread.
-	 * @param context
 	 * @param listener A listener which will be called after init.
 	 */
 	public static void initAsync(Context context, SocializeInitListener listener) {
@@ -86,13 +83,10 @@ public class Socialize {
 
 	/**
 	 * Expert only.  Does not normally need to be called.
-	 * @param context
 	 */
 	public static void destroy(Context context) {
-		if(instance != null) {
-			instance.destroy();
-		}
-	}
+        instance.destroy();
+    }
 
 	/**
 	 * Returns the Socialize singleton instance.
@@ -108,7 +102,6 @@ public class Socialize {
 
 	/**
 	 * Called by containing Activities in their onPause() method.
-	 * @param context
 	 */
 	public static void onPause(Activity context) {
 		instance.onPause(context);
@@ -120,7 +113,6 @@ public class Socialize {
 	
 	/**
 	 * Called by containing Activities in their onResume() method.
-	 * @param context
 	 */
 	public static void onResume(Activity context) {
 		instance.onResume(context);
@@ -132,7 +124,6 @@ public class Socialize {
 	
 	/**
 	 * Called by containing Activities in their onCreate() method.
-	 * @param context
 	 */
 	public static void onCreate(Activity context, Bundle savedInstanceState) {
 		instance.onCreate(context, savedInstanceState);
@@ -144,7 +135,6 @@ public class Socialize {
 
 	/**
 	 * Called by containing Activities in their onDestroy() method.
-	 * @param context
 	 */
 	public static void onDestroy(Activity context) {
 		instance.onDestroy(context);
@@ -153,6 +143,28 @@ public class Socialize {
 			socializeLifecycleListener.onDestroy(context);
 		}		
 	}
+
+    /**
+     * Called by containing Activities in their onStart() method.
+     */
+    public static void onStart(Activity context) {
+        instance.onStart(context);
+
+        if(socializeLifecycleListener != null) {
+            socializeLifecycleListener.onStart(context);
+        }
+    }
+
+    /**
+     * Called by containing Activities in their onStop() method.
+     */
+    public static void onStop(Activity context) {
+        instance.onStop(context);
+
+        if(socializeLifecycleListener != null) {
+            socializeLifecycleListener.onStop(context);
+        }
+    }
 	
 	public static void setSocializeLifecycleListener(SocializeLifecycleListener socializeLifecycleListener) {
 		Socialize.socializeLifecycleListener = socializeLifecycleListener;

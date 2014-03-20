@@ -35,4 +35,6 @@ public interface SocializeLifecycleListener {
 	public void onDestroy(Activity activity);
 	public void onPause(Activity activity);
 	public void onResume(Activity activity);
+    public void onStart(Activity activity);
+    public void onStop(Activity activity);
 }

@@ -33,7 +33,7 @@ public abstract class IntentShareHandler extends AbstractShareHandler {
 
 	private Intent sendIntent = null;
 
-	protected Intent getIntent() {
+	protected Intent getIntent(Context context) {
 		if(sendIntent == null) {
 			sendIntent = new Intent(android.content.Intent.ACTION_SEND);
 			sendIntent.setType(getMimeType());
@@ -43,7 +43,7 @@ public abstract class IntentShareHandler extends AbstractShareHandler {
 
 	@Override
 	public boolean isAvailableOnDevice(Context parent) {
-		return parent.getPackageManager().resolveActivity(getIntent(), PackageManager.MATCH_DEFAULT_ONLY) != null;
+		return parent.getPackageManager().resolveActivity(getIntent(parent), PackageManager.MATCH_DEFAULT_ONLY) != null;
 	}
 	
 	protected abstract String getMimeType();

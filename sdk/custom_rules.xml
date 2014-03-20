@@ -134,19 +134,24 @@
 	
 		<copy todir="${tmp_dir}/lib/facebook-android-sdk">
 			<fileset dir="../../facebook-android-sdk/facebook" excludes="*.iml,gen/**,bin/**,build/**,tests/**,TestApp/**,codetemplates.xml, local.properties"/>
-		</copy>		
+		</copy>
+
+        <copy todir="${tmp_dir}/lib/loopy-sdk-android">
+            <fileset dir="../../loopy-sdk-android/sdk" excludes="*.iml,gen/**,bin/**,build/**,doc/**,codetemplates.xml, local.properties"/>
+        </copy>
 	
 		<!-- Set the version -->
         <echo>Setting verson in Socialize.java to ${version}</echo>
 		<replaceregexp file="${tmp_dir}/sdk/src/com/socialize/Socialize.java" match="public\s+static\s+final\s+String\s+VERSION\s*=\s*&quot;.*&quot;" replace="public static final String VERSION = &quot;${version}&quot;" />
 
         <!-- Adjust project reference paths -->
-        <replaceregexp file="${tmp_dir}/sdk/project.properties" match="android.library.reference.1=../../android-ioc/core" replace="android.library.reference.1=../lib/android-ioc" byline="true"/>
-		<replaceregexp file="${tmp_dir}/sdk/project.properties" match="android.library.reference.2=../../facebook-android-sdk/facebook" replace="android.library.reference.2=../lib/facebook-android-sdk" byline="true"/>
+        <replaceregexp file="${tmp_dir}/sdk/project.properties" match="android.library.reference.1=../../facebook-android-sdk/facebook" replace="android.library.reference.1=../lib/facebook-android-sdk" byline="true"/>
+        <replaceregexp file="${tmp_dir}/sdk/project.properties" match="android.library.reference.2=../../android-ioc/core" replace="android.library.reference.2=../lib/android-ioc" byline="true"/>
+        <replaceregexp file="${tmp_dir}/sdk/project.properties" match="android.library.reference.3=../../loopy-sdk-android/sdk" replace="android.library.reference.3=../lib/loopy-sdk-android" byline="true"/>
 
         <replaceregexp file="${tmp_dir}/demo/project.properties" match="android.library.reference.2=../../android-ioc/core" replace="android.library.reference.2=../lib/android-ioc" byline="true"/>
         <replaceregexp file="${tmp_dir}/demo/project.properties" match="android.library.reference.3=../../facebook-android-sdk/facebook" replace="android.library.reference.3=../lib/facebook-android-sdk" byline="true"/>
-
+        <replaceregexp file="${tmp_dir}/demo/project.properties" match="android.library.reference.4=../../loopy-sdk-android/sdk" replace="android.library.reference.4=../lib/loopy-sdk-android" byline="true"/>
 
         <!-- Create the ZIP file for distribution -->
 		<zip destfile="build/socialize-sdk-android-${version}.zip">

@@ -304,4 +304,14 @@ public interface SocializeService extends SocializeSessionConsumer {
 	 * Should be called in the onDestroy method of the containing activity
 	 */
 	public void onDestroy(Activity context);
+
+    /**
+     * Should be called in the onStart method of the containing activity
+     */
+    public void onStart(Activity context);
+
+    /**
+     * Should be called in the onStop method of the containing activity
+     */
+    public void onStop(Activity context);
 }

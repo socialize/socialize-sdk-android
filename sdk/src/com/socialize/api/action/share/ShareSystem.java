@@ -63,8 +63,6 @@ public interface ShareSystem {
 	
 	/**
 	 * Returns true if sharing to the given share type is supported on this device.
-	 * @param shareType
-	 * @return
 	 */
 	public boolean canShare(Context context, ShareType shareType);
 	

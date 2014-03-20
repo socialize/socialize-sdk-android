@@ -137,31 +137,27 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 					doShare(dialog, context, entity, socialNetworkListener, networks);
 				}
 				else {
-					if(dialogListener != null) {
-						dialogListener.onFlowInterrupted(new DialogFlowController() {
-							
-							@Override
-							public void onContinue(String text) {
-								
-								ShareOptions options = new ShareOptions();
-								options.setText(text);
-								
-								doShare(dialog, context, entity, socialNetworkListener, options, networks);
-							}
+                    dialogListener.onFlowInterrupted(new DialogFlowController() {
 
-							@Override
-							public void onCancel() {
-								
-								if(dialogView != null) {
-									dialogView.getContinueButton().setEnabled(true);
-								}
-								
-								if(dialogListener != null) {
-									dialogListener.onCancel(dialog);
-								}
-							}
-						});
-					}
+                        @Override
+                        public void onContinue(String text) {
+
+                            ShareOptions options = new ShareOptions();
+                            options.setText(text);
+
+                            doShare(dialog, context, entity, socialNetworkListener, options, networks);
+                        }
+
+                        @Override
+                        public void onCancel() {
+
+                            if(dialogView != null) {
+                                dialogView.getContinueButton().setEnabled(true);
+                            }
+
+                            dialogListener.onCancel(dialog);
+                        }
+                    });
 				}
 				
 				return false;

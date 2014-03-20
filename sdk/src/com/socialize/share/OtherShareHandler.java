@@ -31,7 +31,7 @@ public class OtherShareHandler extends EmailShareHandler {
 
 	@Override
 	protected String getMimeType() {
-		return "text/plain";
+        return "text/plain";
 	}
 
 	/* (non-Javadoc)

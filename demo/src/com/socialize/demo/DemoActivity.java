@@ -270,7 +270,19 @@ public abstract class DemoActivity extends Activity implements DialogRegister {
 		Socialize.onResume(this);
 	}
 
-	@Override
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Socialize.onStart(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Socialize.onStop(this);
+    }
+
+    @Override
 	protected void onDestroy() {
 		if(dialogs != null) {
 			for (Dialog dialog : dialogs) {

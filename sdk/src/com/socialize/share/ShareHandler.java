@@ -36,11 +36,8 @@ public interface ShareHandler {
 	
 	/**
 	 * Handles the share based on its type.
-	 * @param context
-	 * @param action
 	 * @param location The user's current location (may ne null).
 	 * @param text The text entered by the user.
-	 * @param listener
 	 */
 	public void handle(Activity context, SocializeAction action, Location location, String text, SocialNetworkListener listener);
 	

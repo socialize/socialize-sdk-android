@@ -29,36 +29,53 @@ import com.socialize.Socialize;
 
 public class SampleActivity extends Activity {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		// Call Socialize in onCreate
-		Socialize.onCreate(this, savedInstanceState);
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		
-		// Call Socialize in onPause
-		Socialize.onPause(this);
-	}
+        // Call Socialize in onCreate
+        Socialize.onCreate(this, savedInstanceState);
+    }
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		
-		// Call Socialize in onResume
-		Socialize.onResume(this);
-	}
+    @Override
+    protected void onPause() {
+        super.onPause();
 
-	@Override
-	protected void onDestroy() {
-		// Call Socialize in onDestroy before the activity is destroyed
-		Socialize.onDestroy(this);
-		
-		super.onDestroy();
-	}
+        // Call Socialize in onPause
+        Socialize.onPause(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Call Socialize in onResume
+        Socialize.onResume(this);
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // Call Socialize in onStart
+        Socialize.onStart(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // Call Socialize in onStop
+        Socialize.onStop(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        // Call Socialize in onDestroy before the activity is destroyed
+        Socialize.onDestroy(this);
+
+        super.onDestroy();
+    }
 }
 //end-snippet-0

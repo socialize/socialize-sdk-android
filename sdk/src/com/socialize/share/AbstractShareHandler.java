@@ -23,14 +23,19 @@ package com.socialize.share;
 
 import android.app.Activity;
 import android.location.Location;
+import com.sharethis.loopy.sdk.Item;
+import com.sharethis.loopy.sdk.ShareCallback;
+import com.sharethis.loopy.sdk.util.StringUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.action.ShareType;
+import com.socialize.entity.DefaultPropagationInfo;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.PropagationInfoResponse;
 import com.socialize.entity.SocializeAction;
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
+import com.socialize.loopy.LoopyService;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 
@@ -40,48 +45,77 @@ import com.socialize.networks.SocialNetworkListener;
  *
  */
 public abstract class AbstractShareHandler implements ShareHandler {
-	
-	private SocializeLogger logger;
+
+    protected SocializeLogger logger;
+    protected LoopyService loopyService;
 
 	/* (non-Javadoc)
 	 * @see com.socialize.share.ShareHandler#handle(android.app.Activity, com.socialize.entity.Share, com.socialize.share.ShareHandlerListener)
 	 */
 	@Override
-	public void handle(Activity context, SocializeAction action, Location location, String text, SocialNetworkListener listener) {
-		final SocialNetwork network = SocialNetwork.valueOf(getShareType());
+	public void handle(final Activity context, final SocializeAction action, Location location, final String text, final SocialNetworkListener listener) {
+        ShareType shareType = getShareType();
+        final SocialNetwork network = SocialNetwork.valueOf(shareType);
 		PropagationInfoResponse propagationInfoResponse = action.getPropagationInfoResponse();
 		
 		if(propagationInfoResponse != null) {
-			PropagationInfo propagationInfo = propagationInfoResponse.getPropagationInfo(getShareType());
+			final PropagationInfo propagationInfo = propagationInfoResponse.getPropagationInfo(shareType);
 			
 			if(propagationInfo != null) {
 				try {
-					handle(context, action, text, propagationInfo, listener);
+                    if(loopyService.isLoopyEnabled()) {
+
+                        if(shareType.equals(ShareType.OTHER)) {
+                            loopyService.showShareDialog(context, "", text, action.getEntity(), propagationInfo, listener);
+                        } else {
+                            loopyService.getTrackableUrl(action.getEntity(), shareType, propagationInfo.getEntityUrl(), new ShareCallback() {
+                                @Override
+                                public void onResult(Item item, Throwable error) {
+
+                                    PropagationInfo infoInUse = loopyService.setShortlinks(propagationInfo, item, error);
+
+                                    try {
+                                        handle(context, action, text, infoInUse, listener);
+                                    } catch (Exception e) {
+                                        if(logger != null) {
+                                            logger.error("Error handling share", e);
+                                        }
+
+                                        if(listener != null) {
+                                            listener.onNetworkError(context, network, e);
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    } else {
+                        handle(context, action, text, propagationInfo, listener);
+                    }
 				}
 				catch (Exception e) {
 					if(logger != null) {
 						logger.error("Error handling share", e);
 					}
-					
+
 					if(listener != null) {
 						listener.onNetworkError(context, network, e);
 					}
 				}
 			}
 			else {
-				logError(context, network, action, "No propagation info found for type [" +
-								getShareType() +
+				logError(context, network, "No propagation info found for type [" +
+                        shareType +
 								"].  Share will not propagate", listener);
 			}
 		}
 		else {
-			logError(context, network, action, "No propagation info found for type [" +
-							getShareType() +
+			logError(context, network, "No propagation info found for type [" +
+                    shareType +
 							"].  Share will not propagate", listener);
 		}
 	}
-	
-	protected void logError(Activity context, SocialNetwork network, SocializeAction action, String msg, SocialNetworkListener listener) {
+
+	protected void logError(Activity context, SocialNetwork network, String msg, SocialNetworkListener listener) {
 		if(logger != null) {
 			logger.warn(msg);
 		}
@@ -97,8 +131,13 @@ public abstract class AbstractShareHandler implements ShareHandler {
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}
-	
-	protected abstract void handle(Activity context, SocializeAction action, String text, PropagationInfo info, SocialNetworkListener listener) throws Exception;
+
+    @SuppressWarnings("unused")
+    public void setLoopyService(LoopyService loopyService) {
+        this.loopyService = loopyService;
+    }
+
+    protected abstract void handle(Activity context, SocializeAction action, String text, PropagationInfo info, SocialNetworkListener listener) throws Exception;
 	
 	protected abstract ShareType getShareType();
 	
