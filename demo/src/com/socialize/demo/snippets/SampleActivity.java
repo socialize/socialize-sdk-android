@@ -29,29 +29,29 @@ import com.socialize.Socialize;
 
 public class SampleActivity extends Activity {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		// Call Socialize in onCreate
-		Socialize.onCreate(this, savedInstanceState);
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		
-		// Call Socialize in onPause
-		Socialize.onPause(this);
-	}
+        // Call Socialize in onCreate
+        Socialize.onCreate(this, savedInstanceState);
+    }
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		
-		// Call Socialize in onResume
-		Socialize.onResume(this);
-	}
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Call Socialize in onPause
+        Socialize.onPause(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Call Socialize in onResume
+        Socialize.onResume(this);
+    }
 
 
     @Override

@@ -24,7 +24,6 @@ package com.socialize.demo;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -85,8 +84,11 @@ public abstract class SDKDemoActivity extends DemoActivity {
 			public void onClick(View v) {
 				imm.hideSoftInputFromWindow(entryText.getWindowToken(), 0);				
 				progress = SafeProgressDialog.show(SDKDemoActivity.this);
-				executeDemo(entryText.getText().toString());
-			}
+
+                if(entryText.getText() != null) {
+                    executeDemo(entryText.getText().toString());
+                }
+            }
 		});
 	}
 
@@ -122,7 +124,7 @@ public abstract class SDKDemoActivity extends DemoActivity {
 		List<A> items = results.getItems();
 		Collection<String> strResults = new ArrayList<String>();
 		for (A socializeAction : items) {
-			strResults.add(socializeAction.toString());
+			strResults.add(((Object) socializeAction).toString());
 		}
 		
 		handleResults(strResults);
@@ -148,7 +150,7 @@ public abstract class SDKDemoActivity extends DemoActivity {
 	}
 	
 	protected void handleBasicSocializeResult(SocializeObject action) {
-		handleResult(action.toString());
+		handleResult(((Object) action).toString());
 	}
 	
 	protected void handleSocializeResult(SocializeAction action) {
