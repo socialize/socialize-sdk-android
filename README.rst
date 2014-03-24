@@ -49,4 +49,18 @@ Now you can install the demo app::
 
 The demo app is called, **Socialize Demos**
 
+Building the Documentation
+==========================
+
+To build the html version of the documentation::
+
+    cd socialize-sdk-android/sdk
+    ant -Dsdk.dir=/usr/local/android doc
+
+Make sure you replace **/usr/local/android** with your local path to the Android SDK
+
+Now you can browse the documentation::
+
+    open build/docs/user_guide/index.html
+
 
