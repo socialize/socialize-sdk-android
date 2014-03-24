@@ -126,7 +126,7 @@ This is a python script located in the *test* folder::
 
 To run the tests::
     
-    ant -Dsdk.dir=/usr/local/android test-with-results
+    ant -propertyfile ant.global.properties -Dsdk.dir=/usr/local/android test-with-results
 
 Make sure you replace **/usr/local/android** with your local path to the Android SDK
 
