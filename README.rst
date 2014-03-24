@@ -31,6 +31,12 @@ Switch to the verified (tested) version of Facebook::
     cd facebook-android-sdk
     git checkout sdk-version-3.0.1
     cd ../
+    
+Now you can build the SDK distribution::
+
+    ant -Dsdk.dir=/usr/local/android clean build
+    
+Make sure you replace **/usr/local/android** with your local path to the Android SDK    
 
 Building the Demo App
 =====================
