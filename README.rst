@@ -52,7 +52,9 @@ The demo app is called, **Socialize Demos**
 Building the Documentation
 ==========================
 
-Note: Sphinx 1.2.2 is required to generate docs.
+Note: Sphinx 1.2.2 is required to generate docs::
+
+    sudo pip install sphinx
 
 To build the html version of the documentation::
 
