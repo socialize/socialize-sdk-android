@@ -52,6 +52,8 @@ The demo app is called, **Socialize Demos**
 Building the Documentation
 ==========================
 
+Note: Sphinx 1.2.2 is required to generate docs.
+
 To build the html version of the documentation::
 
     cd socialize-sdk-android/sdk
@@ -62,5 +64,6 @@ Make sure you replace **/usr/local/android** with your local path to the Android
 Now you can browse the documentation::
 
     open build/docs/user_guide/index.html
+
 
 
