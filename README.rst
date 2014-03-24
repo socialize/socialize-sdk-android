@@ -120,7 +120,9 @@ This is a python script located in the *test* folder::
 
     cd socialize-sdk-android/test
     
-    python sdk-cleanup.py <consumer-key> <consumer-secret> <http://stage.api.socialize.com/v1> [facebook_user_id] [facebook_token]
+    python sdk-cleanup.py <consumer-key> <consumer-secret> \
+    <http://stage.api.socialize.com/v1> \
+    [facebook_user_id] [facebook_token]
 
 To run the tests::
     
