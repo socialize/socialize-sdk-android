@@ -9,12 +9,39 @@ Check out the full documentation to learn how to integrate Socialize into your a
 
 http://socialize.github.io/socialize-sdk-android/
 
+Prerequisites
+=============
+
+Make sure you have the following installed on your local machine:
+
+- Android SDK (https://developer.android.com/sdk/)
+
+- Pip::
+
+    sudo easy_install pip
+    
+- Sphinx 1.2.2::
+
+    sudo pip install sphinx
+    
+- ANT::
+    
+    brew install ant
+
+Also make sure you have the following *versions* of the Android SDK installed:
+
+- Android 2.2 (API 8)
+- Android 4.4 (API 19)
+
+These are installed using the Android SDK manager:
+
+http://developer.android.com/tools/help/sdk-manager.html
+
+
 Building Socialize
 ==================
 
-.. note::
-
-    This is not required if you simply want to integrate Socialize into your app
+**Note**: *This is not required if you simply want to integrate Socialize into your app*
 
 First clone **this** repo::
 
