@@ -16,7 +16,7 @@ def create_android_config(key,secret,url,fb_token):
 	f = open(config_file_path,'w')
 	text = 'socialize.consumer.key='+key
 	text+= '\nsocialize.consumer.secret='+secret
-	text+= '\nsocialize.entity.loader=com.socialize.test.EntityLoader'
+	text+= '\nsocialize.entity.loader=com.socialize.testapp.EntityLoader'
 	text+= '\nsocialize.allow.anon=true'
 	text+= '\napi.host='+url
 	text+= '\nredirect.host=http://stage.getsocialize.com'
@@ -266,7 +266,7 @@ def main(key,secret,url):
     make_request(client, req_url,method='POST', data=shares, outfile='shares.json')
 
     print '#'*20
-    print '## CREATE VIEWS ##'
+    print '## CREATE VIEWS ##'ant.global.properties
     print '#'*20  
 
     views = [ gen_like_and_view('http://entity1.com') , gen_like_and_view('http://entity2.com')]
