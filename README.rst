@@ -100,5 +100,30 @@ Now you can browse the documentation::
 
     open build/docs/user_guide/index.html
 
+Running the Tests
+=================
+
+In order to run the tests you need *either* an Android 4.4 device or emulator.  We recommend using the 
+Genymotion Android virtualization platform avaialable here: http://www.genymotion.com/
+
+Ensure the device/emulator is connected and available::
+
+    /usr/local/android/platform-tools/adb devices
+
+If you do not see any devices listed, try restarting the adb server::
+
+    /usr/local/android/platform-tools/adb kill-server
+    /usr/local/android/platform-tools/adb start-server
+
+To run the tests::
+
+    cd socialize-sdk-android/test
+    ant -Dsdk.dir=/usr/local/android test-with-results
+
+Make sure you replace **/usr/local/android** with your local path to the Android SDK
+
+Now you can browse the coverage results::
+
+    open coverage-results/index.html
 
 
