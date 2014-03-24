@@ -114,10 +114,16 @@ If you do not see any devices listed, try restarting the adb server::
 
     /usr/local/android/platform-tools/adb kill-server
     /usr/local/android/platform-tools/adb start-server
-
-To run the tests::
+    
+Prior to running the tests you **MUST** run an sdk cleanup so that the stage server has its state reset.  
+This is a python script located in the *test* folder::
 
     cd socialize-sdk-android/test
+    
+    python sdk-cleanup.py <consumer-key> <consumer-secret> <http://stage.api.socialize.com/v1> [facebook_user_id] [facebook_token]
+
+To run the tests::
+    
     ant -Dsdk.dir=/usr/local/android test-with-results
 
 Make sure you replace **/usr/local/android** with your local path to the Android SDK
