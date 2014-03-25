@@ -60,7 +60,8 @@ Switch to the verified (tested) version of Facebook::
     cd ../
     
 Now you can build the SDK distribution::
-
+    
+    cd socialize-sdk-android/sdk
     ant -Dsdk.dir=/usr/local/android clean build
     
 Make sure you replace **/usr/local/android** with your local path to the Android SDK    
