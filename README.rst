@@ -52,12 +52,30 @@ Socialize depends on 3 external library projects::
     git clone git@github.com:socialize/android-ioc.git
     git clone git@github.com:socialize/loopy-sdk-android.git
     git clone git@github.com:facebook/facebook-android-sdk.git
+    
+Setup the Facebook SDK for Build
+--------------------------------
 
 Switch to the verified (tested) version of Facebook::
 
     cd facebook-android-sdk
     git checkout sdk-version-3.0.1
     cd ../
+    
+    
+This version of the Facebook SDK (3.0.1) has some compilation warnings which are treated 
+as errors by facebook.  To override this, we need to change the compiler arguments in the
+facebook ant.properties::
+
+    vim facebook-android-sdk/facebook/ant.properties
+    
+Replace the following line::
+
+    java.compilerargs=-Xlint -Werror
+    
+With::
+    
+    java.compilerargs=-Xlint
     
 Now you can build the SDK distribution::
     
