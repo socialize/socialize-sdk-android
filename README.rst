@@ -123,7 +123,7 @@ Running the Tests
 =================
 
 In order to run the tests you need *either* an Android 4.4 device or emulator.  We recommend using the 
-Genymotion Android virtualization platform avaialable here: http://www.genymotion.com/
+Genymotion Android virtualization platform available here: http://www.genymotion.com/
 
 Ensure the device/emulator is connected and available::
 
