@@ -75,7 +75,6 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 
 		try {
 
-
 			final boolean doShare = isDisplayShareDialog(context, likeOptions);
 			final SocializeSession session = getSocialize().getSession();
 

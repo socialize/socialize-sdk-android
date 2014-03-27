@@ -27,6 +27,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.widget.Toast;
+import com.socialize.CommentUtils;
 import com.socialize.EntityUtils;
 import com.socialize.LikeUtils;
 import com.socialize.ShareUtils;
@@ -101,9 +102,9 @@ public class ActionBarLayoutView extends BaseView {
 	
 	private DisplayUtils displayUtils;
 	
-	private ShareUtilsProxy shareUtils;
+	private ShareUtils shareUtils;
 
-	private CommentUtilsProxy commentUtils;
+	private CommentUtils commentUtils;
 	
 	private ActionBarView actionBarView;
 	
@@ -131,7 +132,7 @@ public class ActionBarLayoutView extends BaseView {
 	public void init() {
 		
 		if(logger != null && logger.isDebugEnabled()) {
-			logger.debug("init called on " + getClass().getSimpleName());
+			logger.debug("init called on " + ((Object)this).getClass().getSimpleName());
 		}
 		
 		int height = ActionBarView.ACTION_BAR_HEIGHT;
@@ -745,12 +746,11 @@ public class ActionBarLayoutView extends BaseView {
 		this.itemFactory = itemFactory;
 	}
 	
-	
-	public void setShareUtils(ShareUtilsProxy shareUtils) {
+	public void setShareUtils(ShareUtils shareUtils) {
 		this.shareUtils = shareUtils;
 	}
 	
-	public void setCommentUtils(CommentUtilsProxy commentUtils) {
+	public void setCommentUtils(CommentUtils commentUtils) {
 		this.commentUtils = commentUtils;
 	}
 

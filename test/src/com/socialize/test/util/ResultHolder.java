@@ -1,5 +1,7 @@
 package com.socialize.test.util;
 
+import android.app.Activity;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,26 +19,6 @@ public class ResultHolder {
 		counts = new HashMap<String, Integer>();
 	}
 	
-
-	public void incrementCount(String key) {
-		Integer count = counts.get(key);
-		if(count == null) {
-			counts.put(key, 1);
-		}
-		else {
-			counts.put(key, count.intValue() + 1);
-		}
-		
-	}
-	
-	public int getCount(String key) {
-		Integer count = counts.get(key);
-		if(count == null) {
-			return 0;
-		}
-		return count.intValue();
-	}
-
 	public int getNextIndex() {
 		return index.getAndIncrement();
 	}
@@ -44,10 +26,6 @@ public class ResultHolder {
 	public void addResult(Object obj) {
 		if(obj != null)
 			bucket.add(obj);
-	}
-	
-	public List<Object> getAllResults() {
-		return bucket;
 	}
 	
 	public void addResult(int index, Object obj) {
@@ -61,25 +39,29 @@ public class ResultHolder {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <T extends Object> T getResult(int index) {
+	public <T> T getResult(int index) {
 		if(!bucket.isEmpty()) {
 			if(index < bucket.size()) {
 				return (T) bucket.get(index);
 			}
 		}
-		return (T) null;
+		return null;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <T extends Object> T getNextResult() {
+	public <T> T getNextResult() {
 		if(!bucket.isEmpty()) {
 			return (T) bucket.remove(0);
 		}
-		return (T) null;
+		return null;
 	}
 	
 	public void clear() {
 		if(bucket != null) bucket.clear();
 		if(counts != null) counts.clear();
 	}
+
+    public <T> T pop() {
+        return getNextResult();
+    }
 }

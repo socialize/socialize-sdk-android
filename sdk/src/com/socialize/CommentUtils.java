@@ -151,8 +151,6 @@ public class CommentUtils {
 	
 	/**
 	 * Shows the comments for an entity.
-	 * @param context
-	 * @param entity
 	 * @param listener A listener to handle the result.
 	 */
 	public static void showCommentView(Activity context, Entity entity, OnCommentViewActionListener listener) {
@@ -161,8 +159,6 @@ public class CommentUtils {
 
 	/**
 	 * Shows the comments for an entity.
-	 * @param context
-	 * @param entity
 	 */
 	public static void showCommentView(Activity context, Entity entity) {
 		proxy.showCommentView(context, entity);

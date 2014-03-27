@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.view.View;
 import com.socialize.ActionBarUtils;
 import com.socialize.Socialize;
-import com.socialize.entity.Entity;
 import com.socialize.test.R;
+import com.socialize.test.actionbar.ActionBarTests;
 import com.socialize.ui.actionbar.ActionBarOptions;
 
 import java.util.concurrent.CountDownLatch;
@@ -19,15 +19,18 @@ public class ActionBarActivity extends EmptyActivity {
 
         Socialize.onCreate(this, savedInstanceState);
 
-        Bundle extras = this.getIntent().getExtras();
-
-        if(extras != null) {
+        if(ActionBarTests.entity != null) {
             ActionBarOptions options = new ActionBarOptions();
             options.setAddScrollView(true);
 
             Socialize.getSocialize().setEntityLoader(new EntityLoader());
 
-            View actionBarWrapped = ActionBarUtils.showActionBar(this, R.layout.action_bar_auto, (Entity)extras.get(Socialize.ENTITY_OBJECT), options);
+            View actionBarWrapped = ActionBarUtils.showActionBar(
+                    this,
+                    R.layout.action_bar_auto,
+                    ActionBarTests.entity,
+                    options,
+                    ActionBarTests.listener);
 
             setContentView(actionBarWrapped);
         }

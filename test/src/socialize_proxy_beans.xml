@@ -16,5 +16,4 @@
     <proxy ref="appUtils" />
     <proxy ref="notificationRegistrationSystem" />
     <proxy ref="subscriptionUtils" />
-    <proxy ref="authProviders" />
 </beans>
