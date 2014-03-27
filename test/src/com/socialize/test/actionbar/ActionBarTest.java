@@ -14,12 +14,14 @@ import com.socialize.api.action.share.SocializeShareUtils;
 import com.socialize.api.action.view.SocializeViewUtils;
 import com.socialize.auth.AuthProviders;
 import com.socialize.entity.Entity;
+import com.socialize.entity.EntityStatsImpl;
 import com.socialize.entity.View;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.view.ViewAddListener;
+import com.socialize.test.PublicEntity;
 import com.socialize.test.util.TestUtils;
 import com.socialize.testapp.ActionBarActivity;
 import org.mockito.Mockito;
@@ -27,10 +29,10 @@ import org.mockito.Mockito;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+@Deprecated
 public abstract class ActionBarTest extends ActivityInstrumentationTestCase2<ActionBarActivity> {
 
-	protected Entity entity = Entity.newInstance("http://entity1.com" + Math.random(), "no name");
-	
+	protected PublicEntity entity;
 	protected CountDownLatch globalLatch = null;
 	protected AuthProviders authProviders;
 
@@ -38,8 +40,6 @@ public abstract class ActionBarTest extends ActivityInstrumentationTestCase2<Act
         super(ActionBarActivity.class);
     }
 
-
-	
 	protected final SocializeLikeUtils mockLikeUtils = new SocializeLikeUtils() {
 		@Override
 		public void getLike(Activity context, String entityKey, LikeGetListener listener) {
@@ -75,29 +75,38 @@ public abstract class ActionBarTest extends ActivityInstrumentationTestCase2<Act
 		public void preloadLinkDialog(Activity context) {}
 	};
 	
-	protected final void waitForActionBarLoad() {
+	protected final void waitForActionBarLoad() throws InterruptedException {
+
         // Make sure the activity has launched
-        TestUtils.getActivity(this);
+        this.getActivity();
+        this.getInstrumentation().waitForIdleSync();
+
 		try {
 			assertTrue("Timeout waiting for action bar to load", globalLatch.await(5, TimeUnit.SECONDS));
-		}
-		catch (InterruptedException e) {}
+        }
+		catch (InterruptedException ignored) {
+            ignored.printStackTrace();
+        }
 	}
-
 
 	@Override
 	protected void setUp() throws Exception {
-		
-		super.setUp();
+
+        entity = new PublicEntity();
+
+        EntityStatsImpl stats = new EntityStatsImpl();
+        stats.setComments(2);
+        stats.setLikes(4);
+        stats.setShares(6);
+        stats.setViews(8);
+
+        entity.setEntityStats(stats);
+        entity.setKey("http://entity1.com" + Math.random());
+        entity.setName("no name");
+
+		globalLatch = new CountDownLatch(1);
 
         TestUtils.setDexCache(this);
-		
-		Intent intent = new Intent();
-		intent.putExtra(Socialize.ENTITY_OBJECT, entity);
-		intent.putExtra("manual", isManual());
-		setActivityIntent(intent);
-		
-		globalLatch = new CountDownLatch(1);
 
 		authProviders = Mockito.mock(AuthProviders.class);
 
@@ -106,6 +115,7 @@ public abstract class ActionBarTest extends ActivityInstrumentationTestCase2<Act
 		SocializeAccess.setEntityUtilsProxy(mockEntityUtils);
 		SocializeAccess.setViewUtilsProxy(mockViewUtils);
 		SocializeAccess.setAuthProviders(authProviders);
+
 		SocializeAccess.setInitListener(new SocializeInitListener() {
 			@Override
 			public void onInit(Context context, IOCContainer container) {
@@ -127,8 +137,15 @@ public abstract class ActionBarTest extends ActivityInstrumentationTestCase2<Act
 		
 		TestUtils.setUp(this);
 
+        super.setUp();
+
+        Intent intent = new Intent();
+        intent.putExtra(Socialize.ENTITY_OBJECT, entity);
+        intent.putExtra("manual", isManual());
+        setActivityIntent(intent);
+
         waitForActionBarLoad();
-	}
+    }
 	
 	protected boolean overrideShareUtils() {
 		return true;
@@ -140,7 +157,7 @@ public abstract class ActionBarTest extends ActivityInstrumentationTestCase2<Act
 			globalLatch.countDown();
         }
 		
-		TestUtils.tearDown();
+		TestUtils.tearDown(this);
 		
 		super.tearDown();
 	}

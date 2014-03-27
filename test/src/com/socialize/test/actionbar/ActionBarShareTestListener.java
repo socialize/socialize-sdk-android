@@ -19,7 +19,7 @@ import org.mockito.Mockito;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-
+@Deprecated
 public class ActionBarShareTestListener extends ActionBarTest {
 	
 	@Override
@@ -53,10 +53,10 @@ public class ActionBarShareTestListener extends ActionBarTest {
 		SocializeAccess.setLikeUtilsProxy(likeUtils);
 		
 		final ActionBarLayoutView actionBar = TestUtils.findView(activity, ActionBarLayoutView.class, 10000);	
-		final ActionBarView actionBarView = TestUtils.findView(activity, ActionBarView.class, 10000);	
-		
-		assertNotNull(actionBar);
-		assertNotNull(actionBarView);
+		final ActionBarView actionBarView = TestUtils.findView(activity, ActionBarView.class, 10000);
+
+        assertNotNull("Action bar was null", actionBar);
+        assertNotNull("Action bar view was null", actionBarView);
 
 		OnActionBarEventListener listener = Mockito.mock(OnActionBarEventListener.class);
 		

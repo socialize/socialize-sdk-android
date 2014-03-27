@@ -32,6 +32,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 
+@Deprecated
 public class ActionBarLikeTest extends ActionBarTest {
 	
 	@Override
@@ -76,7 +77,7 @@ public class ActionBarLikeTest extends ActionBarTest {
 
 		final ActionBarLayoutView actionBar = TestUtils.findView(activity, ActionBarLayoutView.class, 10000);
 
-		assertNotNull(actionBar);
+        assertNotNull("Action bar was null", actionBar);
 
 		this.runTestOnUiThread(new Runnable() {
 			@Override
@@ -115,7 +116,7 @@ public class ActionBarLikeTest extends ActionBarTest {
 
 		final ActionBarLayoutView actionBar = TestUtils.findView(activity, ActionBarLayoutView.class, 25000);
 
-		assertNotNull(actionBar);
+		assertNotNull("Action bar was null", actionBar);
 
 		this.runTestOnUiThread(new Runnable() {
 			@Override
@@ -172,7 +173,7 @@ public class ActionBarLikeTest extends ActionBarTest {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void testAAALikeDoesNotPromptForAuthWhenUserIsAuthenticated() throws Throwable {
+	public void testLikeDoesNotPromptForAuthWhenUserIsAuthenticated() throws Throwable {
 
 		final UserProviderCredentials creds = Mockito.mock(UserProviderCredentials.class);
 		final AuthProviderInfo info = Mockito.mock(AuthProviderInfo.class);

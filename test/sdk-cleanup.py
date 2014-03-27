@@ -266,7 +266,7 @@ def main(key,secret,url):
     make_request(client, req_url,method='POST', data=shares, outfile='shares.json')
 
     print '#'*20
-    print '## CREATE VIEWS ##'ant.global.properties
+    print '## CREATE VIEWS ##'
     print '#'*20  
 
     views = [ gen_like_and_view('http://entity1.com') , gen_like_and_view('http://entity2.com')]

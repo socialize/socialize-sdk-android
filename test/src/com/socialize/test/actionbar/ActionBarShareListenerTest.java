@@ -44,6 +44,7 @@ import java.util.concurrent.TimeUnit;
  * @author Jason Polites
  *
  */
+@Deprecated
 public class ActionBarShareListenerTest extends ActionBarTest {
 
 	@Override
@@ -72,8 +73,9 @@ public class ActionBarShareListenerTest extends ActionBarTest {
 		
 		final ActionBarView actionBar = TestUtils.findView(activity, ActionBarView.class, 5000);
 		final ActionBarLayoutView actionBarView = TestUtils.findView(activity, ActionBarLayoutView.class, 10000);
-		
-		assertNotNull(actionBar);
+
+        assertNotNull("Action bar was null", actionBar);
+        assertNotNull("Action bar view was null", actionBarView);
 		
 		final Like like = new Like();
 		

@@ -25,6 +25,7 @@ import com.socialize.ui.actionbar.OnActionBarEventListener;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+@Deprecated
 public class ActionBarListenerTest extends SocializeActivityTest {
 
 	private ActionBarView view = null;
@@ -60,7 +61,7 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 
         monitor.getLastActivity().finish();
 
-		TestUtils.tearDown();
+		TestUtils.tearDown(this);
 		super.tearDown();
 	}
 	

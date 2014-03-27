@@ -12,7 +12,7 @@ import com.socialize.ui.share.ShareDialogListener;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-
+@Deprecated
 public class ActionBarShareTest extends ActionBarTest {
 	
 	@Override

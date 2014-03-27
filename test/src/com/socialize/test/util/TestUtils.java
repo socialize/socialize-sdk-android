@@ -136,12 +136,13 @@ public class TestUtils {
 		
 		holder = new ResultHolder();
 		holder.setUp();
-		
-        SharedPreferences prefs = test.getActivity().getSharedPreferences("SocializeSession", Context.MODE_PRIVATE);
-        prefs.edit().clear().commit();
     }
 	
-	public static void tearDown() {
+	public static void tearDown(ActivityInstrumentationTestCase2<?> test) {
+
+//        SharedPreferences prefs = test.getActivity().getSharedPreferences("SocializeSession", Context.MODE_PRIVATE);
+//        prefs.edit().clear().commit();
+
 		Socialize.getSocialize().destroy(true);
 		SocializeAccess.setAuthProviders(null);
 		SocializeAccess.clearBeanOverrides();
@@ -512,10 +513,6 @@ public class TestUtils {
 		});
 		
 		return latch.await(timeout, TimeUnit.MILLISECONDS);
-	}
-
-	public static List<Object> getAllResults() {
-		return holder.getAllResults();
 	}
 
     public static void setStaticProperty(Class<?> container, String field, Object value) {

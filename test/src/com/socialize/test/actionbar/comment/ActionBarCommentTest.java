@@ -8,6 +8,7 @@ import com.socialize.ui.actionbar.ActionBarLayoutView;
 import com.socialize.ui.comment.CommentActivity;
 
 
+@Deprecated
 public class ActionBarCommentTest extends ActionBarTest {
 	
 	@Override
