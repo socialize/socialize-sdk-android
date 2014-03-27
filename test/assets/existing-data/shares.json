@@ -6,10 +6,10 @@
                 "id": 235775,
                 "name": "Android Sample App"
             },
-            "date": "2014-03-25 19:27:05+0000",
+            "date": "2014-03-27 18:05:51+0000",
             "entity": {
                 "comments": 30,
-                "id": 13344611,
+                "id": 13344666,
                 "key": "http://entity1.com",
                 "likes": 1,
                 "meta": null,
@@ -19,9 +19,9 @@
                 "type": "article",
                 "views": 0
             },
-            "id": 518177,
-            "lat": 63.9678418416976,
-            "lng": 42.77158881999373,
+            "id": 518183,
+            "lat": 31.31581752034794,
+            "lng": 12.00354474826924,
             "medium": {
                 "id": 1,
                 "medium": "Twitter"
@@ -31,12 +31,12 @@
             "text": "POST SHARE on Twitter",
             "user": {
                 "first_name": null,
-                "id": 66435564,
+                "id": 66435628,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66435564"
+                "username": "User66435628"
             }
         },
         {
@@ -44,10 +44,10 @@
                 "id": 235775,
                 "name": "Android Sample App"
             },
-            "date": "2014-03-25 19:27:05+0000",
+            "date": "2014-03-27 18:05:51+0000",
             "entity": {
                 "comments": 0,
-                "id": 13344612,
+                "id": 13344667,
                 "key": "http://entity2.com",
                 "likes": 1,
                 "meta": null,
@@ -57,9 +57,9 @@
                 "type": "article",
                 "views": 0
             },
-            "id": 518178,
-            "lat": 21.863693642118687,
-            "lng": 48.97604226435487,
+            "id": 518184,
+            "lat": 29.54322166162794,
+            "lng": 73.63837771304675,
             "medium": {
                 "id": 2,
                 "medium": "Facebook"
@@ -69,12 +69,12 @@
             "text": "POST SHARE on Facebook",
             "user": {
                 "first_name": null,
-                "id": 66435564,
+                "id": 66435628,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66435564"
+                "username": "User66435628"
             }
         }
     ]

@@ -6,10 +6,10 @@
                 "id": 235775,
                 "name": "Android Sample App"
             },
-            "date": "2014-03-25 19:27:04+0000",
+            "date": "2014-03-27 18:05:51+0000",
             "entity": {
                 "comments": 3,
-                "id": 13344615,
+                "id": 13344670,
                 "key": "http://entityC.com",
                 "likes": 0,
                 "meta": null,
@@ -19,20 +19,20 @@
                 "type": "article",
                 "views": 0
             },
-            "id": 792494,
-            "lat": 13.713494482797836,
-            "lng": 59.63593433023446,
+            "id": 792562,
+            "lat": 10.848901293777335,
+            "lng": 56.90244977135364,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #0",
             "user": {
                 "first_name": null,
-                "id": 66435564,
+                "id": 66435628,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66435564"
+                "username": "User66435628"
             }
         },
         {
@@ -40,10 +40,10 @@
                 "id": 235775,
                 "name": "Android Sample App"
             },
-            "date": "2014-03-25 19:27:04+0000",
+            "date": "2014-03-27 18:05:51+0000",
             "entity": {
                 "comments": 3,
-                "id": 13344615,
+                "id": 13344670,
                 "key": "http://entityC.com",
                 "likes": 0,
                 "meta": null,
@@ -53,20 +53,20 @@
                 "type": "article",
                 "views": 0
             },
-            "id": 792495,
-            "lat": 5.761177311122846,
-            "lng": 43.00122503344857,
+            "id": 792563,
+            "lat": 55.37145781920685,
+            "lng": 46.29591929336745,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #1",
             "user": {
                 "first_name": null,
-                "id": 66435564,
+                "id": 66435628,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66435564"
+                "username": "User66435628"
             }
         },
         {
@@ -74,10 +74,10 @@
                 "id": 235775,
                 "name": "Android Sample App"
             },
-            "date": "2014-03-25 19:27:05+0000",
+            "date": "2014-03-27 18:05:51+0000",
             "entity": {
                 "comments": 3,
-                "id": 13344615,
+                "id": 13344670,
                 "key": "http://entityC.com",
                 "likes": 0,
                 "meta": null,
@@ -87,20 +87,20 @@
                 "type": "article",
                 "views": 0
             },
-            "id": 792496,
-            "lat": 12.041309294743414,
-            "lng": 13.428655046291789,
+            "id": 792564,
+            "lat": 12.836437087275621,
+            "lng": 59.35689259270038,
             "propagation_info_response": {},
             "share_location": true,
             "text": "POST comment #2",
             "user": {
                 "first_name": null,
-                "id": 66435564,
+                "id": 66435628,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66435564"
+                "username": "User66435628"
             }
         }
     ]

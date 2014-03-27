@@ -126,7 +126,7 @@ public class DefaultAppUtils implements AppUtils {
 				ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 				NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-				if(mWifi.isConnected()) {
+				if(mWifi != null && mWifi.isConnected()) {
 					networkType = "wifi";
 				}
 				else {
