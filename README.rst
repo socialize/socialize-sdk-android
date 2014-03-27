@@ -151,6 +151,6 @@ Make sure you replace **/usr/local/android** with your local path to the Android
 
 Now you can browse the coverage results::
 
-    open coverage-results/index.html
+    open coverage-results/coverage.html
 
 
