@@ -35,35 +35,36 @@ import java.util.Locale;
 
 /**
  * @author jasonpolites
- * 
+ *
  */
 public class DeviceUtilsTest extends SocializeUnitTest {
 
-	public void testDeviceUtilsHasPermission() {
+    public void testDeviceUtilsHasPermission() {
 
-		Context mockContext = Mockito.mock(MockContext.class);
-		PackageManager mockManager = Mockito.mock(MockPackageManager.class);
+        Context mockContext = Mockito.mock(MockContext.class);
+        PackageManager mockManager = Mockito.mock(MockPackageManager.class);
 
-		final String permission = "foo";
-		final String packageName = "bar";
+        final String permission = "foo";
+        final String packageName = "bar";
 
         Mockito.when(mockContext.getPackageName()).thenReturn(packageName);
         Mockito.when(mockContext.getPackageManager()).thenReturn(mockManager);
         Mockito.when(mockManager.checkPermission(Mockito.anyString(), Mockito.anyString())).thenReturn(PackageManager.PERMISSION_GRANTED);
 
-		AppUtils utils = new DefaultAppUtils();
+        AppUtils utils = new DefaultAppUtils();
 
-		utils.hasPermission(mockContext, permission);
+        utils.hasPermission(mockContext, permission);
 
         Mockito.verify(mockContext).getPackageName();
         Mockito.verify(mockManager).checkPermission(permission, packageName);
+
     }
 
-	public void testDeviceUtilsUserAgentString() {
-		DefaultAppUtils appUtils = new DefaultAppUtils();
-		appUtils.init(getContext());
-		appUtils.onResume(getContext());
-		String userAgentString = appUtils.getUserAgentString();
+    public void testDeviceUtilsUserAgentString() {
+        DefaultAppUtils appUtils = new DefaultAppUtils();
+        appUtils.init(getContext());
+        appUtils.onResume(getContext());
+        String userAgentString = appUtils.getUserAgentString();
 
         String[] expected = {
                 "Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION,
@@ -77,8 +78,8 @@ public class DeviceUtilsTest extends SocializeUnitTest {
             assertEquals(expected[i].toLowerCase(), actual[i].toLowerCase());
         }
 
-	}
+    }
 
-	// Can't extend TelephonyManager.. so don't bother trying to test. urgh!
+    // Can't extend TelephonyManager.. so don't bother trying to test. urgh!
 
 }
