@@ -6,10 +6,10 @@
                 "id": 235775,
                 "name": "Android Sample App"
             },
-            "date": "2014-03-27 18:05:46+0000",
+            "date": "2014-03-27 19:30:09+0000",
             "entity": {
                 "comments": 30,
-                "id": 13344666,
+                "id": 13344693,
                 "key": "http://entity1.com",
                 "likes": 1,
                 "meta": null,
@@ -19,19 +19,19 @@
                 "type": "article",
                 "views": 0
             },
-            "id": 2022937,
-            "lat": 54.15495377700788,
-            "lng": 30.712909973613833,
+            "id": 2022948,
+            "lat": 1.194162284434609,
+            "lng": 6.982596284932887,
             "propagation_info_response": {},
             "share_location": true,
             "user": {
                 "first_name": null,
-                "id": 66435628,
+                "id": 66435629,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66435628"
+                "username": "User66435629"
             }
         },
         {
@@ -39,10 +39,10 @@
                 "id": 235775,
                 "name": "Android Sample App"
             },
-            "date": "2014-03-27 18:05:46+0000",
+            "date": "2014-03-27 19:30:09+0000",
             "entity": {
                 "comments": 0,
-                "id": 13344667,
+                "id": 13344694,
                 "key": "http://entity2.com",
                 "likes": 1,
                 "meta": null,
@@ -52,19 +52,19 @@
                 "type": "article",
                 "views": 0
             },
-            "id": 2022938,
-            "lat": 52.7842267089855,
-            "lng": 47.81600868891836,
+            "id": 2022949,
+            "lat": 32.319820612922754,
+            "lng": 43.96168598915171,
             "propagation_info_response": {},
             "share_location": true,
             "user": {
                 "first_name": null,
-                "id": 66435628,
+                "id": 66435629,
                 "last_name": null,
                 "location": null,
                 "meta": null,
                 "small_image_uri": null,
-                "username": "User66435628"
+                "username": "User66435629"
             }
         }
     ]

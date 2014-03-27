@@ -74,7 +74,7 @@ public class DeviceUtilsTest extends SocializeUnitTest {
         String[] actual = userAgentString.split("\\s*;\\s*");
 
         for (int i = 0; i < expected.length; i++) {
-            assertEquals(expected[i], actual[i]);
+            assertEquals(expected[i].toLowerCase(), actual[i].toLowerCase());
         }
 
 	}
