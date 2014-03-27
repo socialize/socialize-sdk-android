@@ -1,0 +1,580 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuites>
+  <testsuite errors="0" failures="0" name="com.socialize.test.actionbar.ActionBarTests" package="com.socialize.test.actionbar" tests="7" time="13.893" timestamp="2014-03-27T10:50:57">
+    <testcase classname="com.socialize.test.actionbar.ActionBarTests" name="testActionBarActionListenerComment" time="2.646" />
+    <testcase classname="com.socialize.test.actionbar.ActionBarTests" name="testActionBarActionListenerLike" time="2.574" />
+    <testcase classname="com.socialize.test.actionbar.ActionBarTests" name="testActionBarActionListenerShare" time="2.087" />
+    <testcase classname="com.socialize.test.actionbar.ActionBarTests" name="testActionBarListenerOnCreateIsCalled" time="1.61" />
+    <testcase classname="com.socialize.test.actionbar.ActionBarTests" name="testActionBarLoad" time="1.628" />
+    <testcase classname="com.socialize.test.actionbar.ActionBarTests" name="testActionBarReload" time="1.615" />
+    <testcase classname="com.socialize.test.actionbar.ActionBarTests" name="testReloadListener" time="1.733" />
+    <properties />
+    <system-out />
+    <system-err />
+  </testsuite>
+  <testsuite errors="0" failures="1" name="com.socialize.test.auth.AuthPanelViewTest" package="com.socialize.test.auth" tests="8" time="47.66" timestamp="2014-03-27T10:50:57">
+    <testcase classname="com.socialize.test.auth.AuthPanelViewTest" name="testAuthPanelAuthRequiredOnComment" time="0.076" />
+    <testcase classname="com.socialize.test.auth.AuthPanelViewTest" name="testAuthPanelAuthRequiredOnLike" time="0.062" />
+    <testcase classname="com.socialize.test.auth.AuthPanelViewTest" name="testAuthPanelUI00" time="1.487" />
+    <testcase classname="com.socialize.test.auth.AuthPanelViewTest" name="testAuthPanelUI01" time="1.437" />
+    <testcase classname="com.socialize.test.auth.AuthPanelViewTest" name="testAuthPanelUI02" time="1.41" />
+    <testcase classname="com.socialize.test.auth.AuthPanelViewTest" name="testAuthPanelUI03" time="1.361" />
+    <testcase classname="com.socialize.test.auth.AuthPanelViewTest" name="testAuthPanelViewRenderAndClick" time="1.522" />
+    <testcase classname="com.socialize.test.auth.AuthRequestDialogFactoryTest" name="testAuthRequestDialog" time="40.305">
+      <failure>junit.framework.AssertionFailedError
+	at junit.framework.Assert.fail(Assert.java:48)
+	at junit.framework.Assert.assertTrue(Assert.java:20)
+	at junit.framework.Assert.assertNotNull(Assert.java:218)
+	at junit.framework.Assert.assertNotNull(Assert.java:211)
+	at com.socialize.test.auth.AuthRequestDialogFactoryTest.testAuthRequestDialog(AuthRequestDialogFactoryTest.java:162)
+	at java.lang.reflect.Method.invokeNative(Native Method)
+	at java.lang.reflect.Method.invoke(Method.java:515)
+	at android.test.InstrumentationTestCase.runMethod(InstrumentationTestCase.java:214)
+	at android.test.InstrumentationTestCase.runTest(InstrumentationTestCase.java:199)
+	at android.test.ActivityInstrumentationTestCase2.runTest(ActivityInstrumentationTestCase2.java:192)
+	at junit.framework.TestCase.runBare(TestCase.java:134)
+	at junit.framework.TestResult$1.protect(TestResult.java:115)
+	at junit.framework.TestResult.runProtected(TestResult.java:133)
+	at junit.framework.TestResult.run(TestResult.java:118)
+	at junit.framework.TestCase.run(TestCase.java:124)
+	at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:191)
+	at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:176)
+	at android.test.InstrumentationTestRunner.onStart(InstrumentationTestRunner.java:554)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:1701)
+</failure>
+    </testcase>
+    <properties />
+    <system-out />
+    <system-err />
+  </testsuite>
+  <testsuite errors="0" failures="0" name="com.socialize.test.blackbox.AuthProviderDataTest" package="com.socialize.test.blackbox" tests="31" time="4.879" timestamp="2014-03-27T10:50:57">
+    <testcase classname="com.socialize.test.blackbox.AuthProviderDataTest" name="testAndroidTestCaseSetupProperly" time="0.001" />
+    <testcase classname="com.socialize.test.blackbox.AuthProviderDataTest" name="testAuthProviderData" time="0.008" />
+    <testcase classname="com.socialize.test.blackbox.AuthProviderDataTest" name="testEquals" time="0.001" />
+    <testcase classname="com.socialize.test.blackbox.AuthProviderTypeTest" name="testAndroidTestCaseSetupProperly" time="0.001" />
+    <testcase classname="com.socialize.test.blackbox.AuthProviderTypeTest" name="testAuthProvider" time="0.001" />
+    <testcase classname="com.socialize.test.blackbox.CommentFactoryBlackboxTest" name="testCreateRequest" time="0.36" />
+    <testcase classname="com.socialize.test.blackbox.DeviceUtilsBlackboxTest" name="testAndroidTestCaseSetupProperly" time="0.002" />
+    <testcase classname="com.socialize.test.blackbox.DeviceUtilsBlackboxTest" name="testDeviceUtilsGetUDID" time="0.006" />
+    <testcase classname="com.socialize.test.blackbox.HttpUtilsTest" name="testHttpIsAuthError" time="0.074" />
+    <testcase classname="com.socialize.test.blackbox.HttpUtilsTest" name="testHttpIsAuthErrorFromResponse" time="0.05" />
+    <testcase classname="com.socialize.test.blackbox.HttpUtilsTest" name="testHttpIsError" time="0.064" />
+    <testcase classname="com.socialize.test.blackbox.HttpUtilsTest" name="testHttpStatusCodes" time="0.208" />
+    <testcase classname="com.socialize.test.blackbox.HttpUtilsTest" name="testHttpUtilsInitFail" time="0.407" />
+    <testcase classname="com.socialize.test.blackbox.HttpUtilsTest" name="test_isAuthErrorWithException" time="0.191" />
+    <testcase classname="com.socialize.test.blackbox.OAuthConsumerTest" name="testAndroidTestCaseSetupProperly" time="0.001" />
+    <testcase classname="com.socialize.test.blackbox.OAuthConsumerTest" name="testCommonsHttpOAuthConsumerFactory" time="0.006" />
+    <testcase classname="com.socialize.test.blackbox.SocializeApiErrorTest" name="testAndroidTestCaseSetupProperly" time="0.002" />
+    <testcase classname="com.socialize.test.blackbox.SocializeApiErrorTest" name="testSocializeApiErrorConstructor" time="0.005" />
+    <testcase classname="com.socialize.test.blackbox.SocializeBlackboxTest" name="testDefaultSocializeInit" time="1.096" />
+    <testcase classname="com.socialize.test.blackbox.SocializeConfigTest" name="testConfigLoad" time="0.168" />
+    <testcase classname="com.socialize.test.blackbox.SocializeConfigTest" name="testConfigLoadFail" time="0.377" />
+    <testcase classname="com.socialize.test.blackbox.SocializeConfigTest" name="testConfigLoadWithOverride" time="0.246" />
+    <testcase classname="com.socialize.test.blackbox.SocializeConfigTest" name="testConfigMerge" time="0.059" />
+    <testcase classname="com.socialize.test.blackbox.SocializeConfigTest" name="testConfigMergesOverride" time="0.279" />
+    <testcase classname="com.socialize.test.blackbox.SocializeConfigTest" name="testConfigValueTrimOnInit" time="0.304" />
+    <testcase classname="com.socialize.test.blackbox.SocializeConfigTest" name="testConfigValueTrimOnSet" time="0.065" />
+    <testcase classname="com.socialize.test.blackbox.SocializeConfigTest" name="test_setFacebookSingleSignOnEnabled" time="0.06" />
+    <testcase classname="com.socialize.test.blackbox.SocializeIOCTest" name="testSocializeBeans" time="0.834" />
+    <testcase classname="com.socialize.test.blackbox.UrlBuilderTest" name="testAndroidTestCaseSetupProperly" time="0.001" />
+    <testcase classname="com.socialize.test.blackbox.UrlBuilderTest" name="testUrlBuilder" time="0.001" />
+    <testcase classname="com.socialize.test.blackbox.UrlBuilderTest" name="testUrlBuilderEncoding" time="0.001" />
+    <properties />
+    <system-out />
+    <system-err />
+  </testsuite>
+  <testsuite errors="0" failures="0" name="com.socialize.test.comment.ui.CommentActivityLoadTest" package="com.socialize.test.comment.ui" tests="12" time="20.989" timestamp="2014-03-27T10:50:57">
+    <testcase classname="com.socialize.test.comment.ui.CommentActivityLoadTest" name="testCommentActivityLoadsCorrectData" time="7.113" />
+    <testcase classname="com.socialize.test.comment.ui.CommentListViewTest" name="testDoListCommentsFailEmptyCommentsWithoutUpdate" time="3.201" />
+    <testcase classname="com.socialize.test.comment.ui.CommentListViewTest" name="testDoListCommentsSuccessEmptyCommentsWithoutUpdate" time="2.744" />
+    <testcase classname="com.socialize.test.comment.ui.CommentListViewTest" name="testDoListCommentsSuccessPopulatedCommentsWithoutUpdate" time="0.174" />
+    <testcase classname="com.socialize.test.comment.ui.CommentListViewTest" name="testGetCommentAddListener" time="1.331" />
+    <testcase classname="com.socialize.test.comment.ui.CommentListViewTest" name="testGetCommentScrollListener" time="0.192" />
+    <testcase classname="com.socialize.test.comment.ui.CommentListViewTest" name="testGetNextSet" time="0.308" />
+    <testcase classname="com.socialize.test.comment.ui.CommentListViewTest" name="testGetNextSetIsLast" time="0.233" />
+    <testcase classname="com.socialize.test.comment.ui.CommentListViewTest" name="testOnViewLoadFail" time="0.31" />
+    <testcase classname="com.socialize.test.comment.ui.CommentListViewTest" name="testOnViewLoadSuccess" time="0.243" />
+    <testcase classname="com.socialize.test.comment.ui.CommentListViewTest" name="testPostCommentFail" time="1.5" />
+    <testcase classname="com.socialize.test.comment.ui.CommentListViewTest" name="testPostCommentSuccess" time="3.64" />
+    <properties />
+    <system-out />
+    <system-err />
+  </testsuite>
+  <testsuite errors="0" failures="0" name="com.socialize.test.comment.unit.CommentAdapterTest" package="com.socialize.test.comment.unit" tests="16" time="0.367" timestamp="2014-03-27T10:50:57">
+    <testcase classname="com.socialize.test.comment.unit.CommentAdapterTest" name="testAndroidTestCaseSetupProperly" time="0.001" />
+    <testcase classname="com.socialize.test.comment.unit.CommentAdapterTest" name="testGetCountWithLoading" time="0.001" />
+    <testcase classname="com.socialize.test.comment.unit.CommentAdapterTest" name="testGetCountWithoutLoading" time="0.002" />
+    <testcase classname="com.socialize.test.comment.unit.CommentAdapterTest" name="testGetItemId" time="0.002" />
+    <testcase classname="com.socialize.test.comment.unit.CommentAdapterTest" name="testGetItemOutsideSize" time="0.001" />
+    <testcase classname="com.socialize.test.comment.unit.CommentAdapterTest" name="testGetItemViewTypeCountForLoading" time="0.002" />
+    <testcase classname="com.socialize.test.comment.unit.CommentAdapterTest" name="testGetItemViewTypeCountForNonLoading" time="0.002" />
+    <testcase classname="com.socialize.test.comment.unit.CommentAdapterTest" name="testGetItemViewTypeForLoading" time="0.003" />
+    <testcase classname="com.socialize.test.comment.unit.CommentAdapterTest" name="testGetItemViewTypeForNormal" time="0.002" />
+    <testcase classname="com.socialize.test.comment.unit.CommentAdapterTest" name="testGetItemWithinSize" time="0.013" />
+    <testcase classname="com.socialize.test.comment.unit.CommentAdapterTest" name="testIsDisplayLoadingFalse" time="0.003" />
+    <testcase classname="com.socialize.test.comment.unit.CommentAdapterTest" name="testIsDisplayLoadingTrue" time="0.003" />
+    <testcase classname="com.socialize.test.comment.unit.CommentListItemTest" name="testAndroidTestCaseSetupProperly" time="0.012" />
+    <testcase classname="com.socialize.test.comment.unit.CommentListItemTest" name="testInit" time="0.315" />
+    <testcase classname="com.socialize.test.comment.unit.ListItemLoadingViewTest" name="testAndroidTestCaseSetupProperly" time="0.001" />
+    <testcase classname="com.socialize.test.comment.unit.ListItemLoadingViewTest" name="testMake" time="0.004" />
+    <properties />
+    <system-out />
+    <system-err />
+  </testsuite>
+  <testsuite errors="0" failures="0" name="com.socialize.test.core.ActivityIOCProviderTest" package="com.socialize.test.core" tests="23" time="14.499" timestamp="2014-03-27T10:50:57">
+    <testcase classname="com.socialize.test.core.ActivityIOCProviderTest" name="testActivityIOCProviderGetBean" time="0.004" />
+    <testcase classname="com.socialize.test.core.ActivityIOCProviderTest" name="testAndroidTestCaseSetupProperly" time="0.002" />
+    <testcase classname="com.socialize.test.core.AuthenticatedViewListenerTest" name="testOnAuthFail" time="4.259" />
+    <testcase classname="com.socialize.test.core.AuthenticatedViewListenerTest" name="testOnAuthSuccess" time="0.074" />
+    <testcase classname="com.socialize.test.core.AuthenticatedViewListenerTest" name="testOnError" time="0.085" />
+    <testcase classname="com.socialize.test.core.AuthenticatedViewTest" name="testOnViewLoad" time="0.595" />
+    <testcase classname="com.socialize.test.core.BaseViewTest" name="testAndroidTestCaseSetupProperly" time="0.004" />
+    <testcase classname="com.socialize.test.core.BaseViewTest" name="testShowError" time="0.002" />
+    <testcase classname="com.socialize.test.core.ProfileActivityLoadTest" name="testProfileActivityLoadsCorrectData" time="2.99" />
+    <testcase classname="com.socialize.test.core.SocialNetworkSignOutClickListenerTest" name="testSignOutFacebook" time="1.066" />
+    <testcase classname="com.socialize.test.core.SocialNetworkSignOutClickListenerTest" name="testSignOutTwitter" time="0.978" />
+    <testcase classname="com.socialize.test.core.SocializeLaunchActivityTest" name="testAuthListenerAuthFail" time="0.091" />
+    <testcase classname="com.socialize.test.core.SocializeLaunchActivityTest" name="testAuthListenerError" time="0.087" />
+    <testcase classname="com.socialize.test.core.SocializeLaunchActivityTest" name="testAuthListenerSuccess" time="0.598" />
+    <testcase classname="com.socialize.test.core.SocializeLaunchActivityTest" name="testOnCreate" time="0.083" />
+    <testcase classname="com.socialize.test.core.SocializeViewTest" name="testGetBeanSocialize" time="0.385" />
+    <testcase classname="com.socialize.test.core.SocializeViewTest" name="testInitSocialize" time="0.371" />
+    <testcase classname="com.socialize.test.core.SocializeViewTest" name="testOnWindowVisibilityChanged" time="1.301" />
+    <testcase classname="com.socialize.test.core.SocializeViewTest" name="test_doSocializeInit" time="0.352" />
+    <testcase classname="com.socialize.test.core.SocializeViewTest" name="test_getInitLoadListener" time="0.226" />
+    <testcase classname="com.socialize.test.core.SocializeViewTest" name="test_getInitUpdateListener" time="0.312" />
+    <testcase classname="com.socialize.test.core.SocializeViewTest" name="test_onViewLoad" time="0.217" />
+    <testcase classname="com.socialize.test.core.SocializeViewTest" name="test_onViewUpdate" time="0.417" />
+    <properties />
+    <system-out />
+    <system-err />
+  </testsuite>
+  <testsuite errors="0" failures="0" name="com.socialize.test.dialog.AlertDialogFactoryTest" package="com.socialize.test.dialog" tests="3" time="1.563" timestamp="2014-03-27T10:50:57">
+    <testcase classname="com.socialize.test.dialog.AlertDialogFactoryTest" name="testShow" time="0.239" />
+    <testcase classname="com.socialize.test.dialog.DialogErrorHandlerTest" name="testHandleErrorWithDebug" time="1.089" />
+    <testcase classname="com.socialize.test.dialog.ProgressDialogFactoryTest" name="testShow" time="0.235" />
+    <properties />
+    <system-out />
+    <system-err />
+  </testsuite>
+  <testsuite errors="0" failures="0" name="com.socialize.test.facebook.FacebookButtonTest" package="com.socialize.test.facebook" tests="19" time="4.282" timestamp="2014-03-27T10:50:57">
+    <testcase classname="com.socialize.test.facebook.FacebookButtonTest" name="testAndroidTestCaseSetupProperly" time="0.001" />
+    <testcase classname="com.socialize.test.facebook.FacebookButtonTest" name="testFacebookButtonInit" time="0.094" />
+    <testcase classname="com.socialize.test.facebook.FacebookFacadeV3Test" name="testAuthenticate0" time="0.284" />
+    <testcase classname="com.socialize.test.facebook.FacebookFacadeV3Test" name="testAuthenticate1" time="0.297" />
+    <testcase classname="com.socialize.test.facebook.FacebookFacadeV3Test" name="testHandleFBResponseWithError" time="0.222" />
+    <testcase classname="com.socialize.test.facebook.FacebookFacadeV3Test" name="testHandleMethodsCallAuthListener" time="0.25" />
+    <testcase classname="com.socialize.test.facebook.FacebookFacadeV3Test" name="testLoginCallbackCancel" time="0.082" />
+    <testcase classname="com.socialize.test.facebook.FacebookFacadeV3Test" name="testLoginCallbackClosed" time="0.216" />
+    <testcase classname="com.socialize.test.facebook.FacebookFacadeV3Test" name="testLoginCallbackFailed" time="0.101" />
+    <testcase classname="com.socialize.test.facebook.FacebookFacadeV3Test" name="testLoginCallbackOpenForRead" time="0.088" />
+    <testcase classname="com.socialize.test.facebook.FacebookFacadeV3Test" name="testLoginPublish" time="0.252" />
+    <testcase classname="com.socialize.test.facebook.FacebookFacadeV3Test" name="testLoginRead" time="0.243" />
+    <testcase classname="com.socialize.test.facebook.FacebookFacadeV3Test" name="testOnResume" time="0.295" />
+    <testcase classname="com.socialize.test.facebook.FacebookSharerTest" name="testDoError" time="0.345" />
+    <testcase classname="com.socialize.test.facebook.FacebookSharerTest" name="testDoShareComment" time="0.475" />
+    <testcase classname="com.socialize.test.facebook.FacebookSharerTest" name="testDoShareLike" time="0.244" />
+    <testcase classname="com.socialize.test.facebook.FacebookSharerTest" name="testDoShareShare" time="0.276" />
+    <testcase classname="com.socialize.test.facebook.FacebookSharerTest" name="testShareAuthListener" time="0.236" />
+    <testcase classname="com.socialize.test.facebook.FacebookSharerTest" name="testShareNotAuthenticated" time="0.281" />
+    <properties />
+    <system-out />
+    <system-err />
+  </testsuite>
+  <testsuite errors="0" failures="0" name="com.socialize.test.integration.notification.DeveloperNotificationTest" package="com.socialize.test.integration.notification" tests="9" time="19.351" timestamp="2014-03-27T10:50:57">
+    <testcase classname="com.socialize.test.integration.notification.DeveloperNotificationTest" name="testOnMessage" time="2.816" />
+    <testcase classname="com.socialize.test.integration.notification.DirectEntityIntegrationTest" name="testOnMessage" time="2.574" />
+    <testcase classname="com.socialize.test.integration.notification.DirectEntityNotificationTest" name="testOnMessage" time="1.863" />
+    <testcase classname="com.socialize.test.integration.notification.DirectUrlIntegrationTest" name="testOnMessage" time="2.489" />
+    <testcase classname="com.socialize.test.integration.notification.DirectUrlNotificationTest" name="testOnMessage" time="1.884" />
+    <testcase classname="com.socialize.test.integration.notification.NewCommentsIntegrationTestA" name="testOnMessage" time="2.281" />
+    <testcase classname="com.socialize.test.integration.notification.NewCommentsIntegrationTestB" name="testOnMessage" time="2.339" />
+    <testcase classname="com.socialize.test.integration.notification.NewCommentsNotificationTest" name="testOnMessage" time="2.246" />
+    <testcase classname="com.socialize.test.integration.notification.NotificationContainerTest" name="testSocializeC2DMReceiver" time="0.859" />
+    <properties />
+    <system-out />
+    <system-err />
+  </testsuite>
+  <testsuite errors="0" failures="1" name="com.socialize.test.integration.sdk.AuthenticateSDKTest" package="com.socialize.test.integration.sdk" tests="6" time="4.848" timestamp="2014-03-27T10:50:57">
+    <testcase classname="com.socialize.test.integration.sdk.AuthenticateSDKTest" name="testAuthenticate" time="1.728" />
+    <testcase classname="com.socialize.test.integration.sdk.AuthenticateSDKTest" name="testAuthenticateKnownUser" time="1.64">
+      <failure>junit.framework.AssertionFailedError
+	at junit.framework.Assert.fail(Assert.java:48)
+	at junit.framework.Assert.assertTrue(Assert.java:20)
+	at junit.framework.Assert.assertNotNull(Assert.java:218)
+	at junit.framework.Assert.assertNotNull(Assert.java:211)
+	at com.socialize.test.integration.sdk.AuthenticateSDKTest.testAuthenticateKnownUser(AuthenticateSDKTest.java:142)
+	at java.lang.reflect.Method.invokeNative(Native Method)
+	at java.lang.reflect.Method.invoke(Method.java:515)
+	at android.test.InstrumentationTestCase.runMethod(InstrumentationTestCase.java:214)
+	at android.test.InstrumentationTestCase.runTest(InstrumentationTestCase.java:199)
+	at android.test.ActivityInstrumentationTestCase2.runTest(ActivityInstrumentationTestCase2.java:192)
+	at junit.framework.TestCase.runBare(TestCase.java:134)
+	at junit.framework.TestResult$1.protect(TestResult.java:115)
+	at junit.framework.TestResult.runProtected(TestResult.java:133)
+	at junit.framework.TestResult.run(TestResult.java:118)
+	at junit.framework.TestCase.run(TestCase.java:124)
+	at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:191)
+	at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:176)
+	at android.test.InstrumentationTestRunner.onStart(InstrumentationTestRunner.java:554)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:1701)
+</failure>
+    </testcase>
+    <testcase classname="com.socialize.test.integration.sdk.DefaultHttpClientFactoryTest" name="testAndroidTestCaseSetupProperly" time="0.024" />
+    <testcase classname="com.socialize.test.integration.sdk.DefaultHttpClientFactoryTest" name="testClientFactoryCorrectlyConfiguresAClientForHttp" time="0.473" />
+    <testcase classname="com.socialize.test.integration.sdk.DefaultHttpClientFactoryTest" name="testClientFactoryCorrectlyConfiguresAClientForHttps" time="0.623" />
+    <testcase classname="com.socialize.test.integration.sdk.SocializeLocationManagerTest" name="testSocializeLocationManager" time="0.36" />
+    <properties />
+    <system-out />
+    <system-err />
+  </testsuite>
+  <testsuite errors="0" failures="1" name="com.socialize.test.integration.services.a.ActionUtilsTest" package="com.socialize.test.integration.services.a" tests="41" time="71.96" timestamp="2014-03-27T10:50:57">
+    <testcase classname="com.socialize.test.integration.services.a.ActionUtilsTest" name="testGetActionsByApplication" time="4.531" />
+    <testcase classname="com.socialize.test.integration.services.a.ActionUtilsTest" name="testGetActionsByEntity" time="2.336" />
+    <testcase classname="com.socialize.test.integration.services.a.ActionUtilsTest" name="testGetActionsByUser" time="2.029" />
+    <testcase classname="com.socialize.test.integration.services.a.ActionUtilsTest" name="testGetActionsByUserAndEntity" time="3.055" />
+    <testcase classname="com.socialize.test.integration.services.a.CommentUtilsTest" name="testCommentIsSharedWithAutoPost" time="1.019" />
+    <testcase classname="com.socialize.test.integration.services.a.CommentUtilsTest" name="testCommentViewDisplaysCorrectData" time="5.771" />
+    <testcase classname="com.socialize.test.integration.services.a.CommentUtilsTest" name="test_getComments" time="2.274" />
+    <testcase classname="com.socialize.test.integration.services.a.CommentUtilsTest" name="test_getCommentsByApplication" time="2.326" />
+    <testcase classname="com.socialize.test.integration.services.a.CommentUtilsTest" name="test_getCommentsByEntity" time="2.163" />
+    <testcase classname="com.socialize.test.integration.services.a.CommentUtilsTest" name="test_getCommentsByUser" time="2.33" />
+    <testcase classname="com.socialize.test.integration.services.a.CommentUtilsTest" name="test_subscribe_unsubscribe" time="2.238" />
+    <testcase classname="com.socialize.test.integration.services.a.ConcurrentTest" name="testConcurrentLikeIsSameUser" time="3.118" />
+    <testcase classname="com.socialize.test.integration.services.a.EntityUtilsTest" name="testAddEntity" time="1.574" />
+    <testcase classname="com.socialize.test.integration.services.a.EntityUtilsTest" name="testEntityMetaDataWithUrl" time="1.534" />
+    <testcase classname="com.socialize.test.integration.services.a.EntityUtilsTest" name="testGetEntities" time="2.268" />
+    <testcase classname="com.socialize.test.integration.services.a.EntityUtilsTest" name="testGetEntitiesByKey" time="1.493" />
+    <testcase classname="com.socialize.test.integration.services.a.EntityUtilsTest" name="testGetEntitiesWithSort" time="1.928" />
+    <testcase classname="com.socialize.test.integration.services.a.EntityUtilsTest" name="testGetEntity" time="1.444" />
+    <testcase classname="com.socialize.test.integration.services.a.EntityUtilsTest" name="testShowEntityById" time="0.321" />
+    <testcase classname="com.socialize.test.integration.services.a.EntityUtilsTest" name="testShowEntityByKey" time="0.246" />
+    <testcase classname="com.socialize.test.integration.services.a.FacebookUtilsTest" name="testFlowDeleteNotAuthed" time="0.37" />
+    <testcase classname="com.socialize.test.integration.services.a.FacebookUtilsTest" name="testFlowGetNotAuthed" time="0.277" />
+    <testcase classname="com.socialize.test.integration.services.a.FacebookUtilsTest" name="testFlowPostEntityNotAuthed" time="0.337" />
+    <testcase classname="com.socialize.test.integration.services.a.FacebookUtilsTest" name="testFlowPostNotAuthed" time="0.324" />
+    <testcase classname="com.socialize.test.integration.services.a.FacebookUtilsTest" name="testLinkIsLinkedForRead" time="1.696" />
+    <testcase classname="com.socialize.test.integration.services.a.FacebookUtilsTest" name="testLinkIsLinkedForReadAndWrite" time="2.571">
+      <failure>junit.framework.AssertionFailedError
+	at junit.framework.Assert.fail(Assert.java:48)
+	at junit.framework.Assert.assertTrue(Assert.java:20)
+	at junit.framework.Assert.assertTrue(Assert.java:27)
+	at com.socialize.test.integration.services.a.FacebookUtilsTest.testLinkIsLinkedForReadAndWrite(FacebookUtilsTest.java:400)
+	at java.lang.reflect.Method.invokeNative(Native Method)
+	at java.lang.reflect.Method.invoke(Method.java:515)
+	at android.test.InstrumentationTestCase.runMethod(InstrumentationTestCase.java:214)
+	at android.test.InstrumentationTestCase.runTest(InstrumentationTestCase.java:199)
+	at android.test.ActivityInstrumentationTestCase2.runTest(ActivityInstrumentationTestCase2.java:192)
+	at junit.framework.TestCase.runBare(TestCase.java:134)
+	at junit.framework.TestResult$1.protect(TestResult.java:115)
+	at junit.framework.TestResult.runProtected(TestResult.java:133)
+	at junit.framework.TestResult.run(TestResult.java:118)
+	at junit.framework.TestCase.run(TestCase.java:124)
+	at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:191)
+	at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:176)
+	at android.test.InstrumentationTestRunner.onStart(InstrumentationTestRunner.java:554)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:1701)
+</failure>
+    </testcase>
+    <testcase classname="com.socialize.test.integration.services.a.FacebookUtilsTest" name="testLinkIsLinkedForWrite" time="1.814" />
+    <testcase classname="com.socialize.test.integration.services.a.FacebookUtilsTest" name="testLinkIsLinkedForWriteAndRead" time="2.279" />
+    <testcase classname="com.socialize.test.integration.services.a.FacebookUtilsTest" name="test_isAvailable" time="1.517" />
+    <testcase classname="com.socialize.test.integration.services.a.FacebookUtilsTest" name="test_setAppId" time="0.991" />
+    <testcase classname="com.socialize.test.integration.services.a.LikeUtilsTest" name="testAddLike" time="1.67" />
+    <testcase classname="com.socialize.test.integration.services.a.LikeUtilsTest" name="testDoLikeWithShare" time="0.424" />
+    <testcase classname="com.socialize.test.integration.services.a.LikeUtilsTest" name="testGetLikeDoesNotExist" time="1.385" />
+    <testcase classname="com.socialize.test.integration.services.a.LikeUtilsTest" name="testGetLikeExists" time="1.621" />
+    <testcase classname="com.socialize.test.integration.services.a.LikeUtilsTest" name="testGetLikesByApplication" time="1.805" />
+    <testcase classname="com.socialize.test.integration.services.a.LikeUtilsTest" name="testGetLikesByEntity" time="1.674" />
+    <testcase classname="com.socialize.test.integration.services.a.LikeUtilsTest" name="testGetLikesByUser" time="2.091" />
+    <testcase classname="com.socialize.test.integration.services.a.LikeUtilsTest" name="testLikeIsSharedWithAutoPost" time="1.213" />
+    <testcase classname="com.socialize.test.integration.services.a.LikeUtilsTest" name="testMakeLikeButtonDoLike" time="1.252" />
+    <testcase classname="com.socialize.test.integration.services.a.LikeUtilsTest" name="testMakeLikeButtonDoUnLike" time="0.271" />
+    <testcase classname="com.socialize.test.integration.services.a.LikeUtilsTest" name="testUnlike" time="2.38" />
+    <properties />
+    <system-out />
+    <system-err />
+  </testsuite>
+  <testsuite errors="0" failures="0" name="com.socialize.test.integration.services.b.LocationUtilsTest" package="com.socialize.test.integration.services.b" tests="30" time="39.674" timestamp="2014-03-27T10:50:57">
+    <testcase classname="com.socialize.test.integration.services.b.LocationUtilsTest" name="testGetLocation" time="1.276" />
+    <testcase classname="com.socialize.test.integration.services.b.ShareUtilsTest" name="testGetShareDoesNotExist" time="1.6" />
+    <testcase classname="com.socialize.test.integration.services.b.ShareUtilsTest" name="testGetShareExists" time="1.765" />
+    <testcase classname="com.socialize.test.integration.services.b.ShareUtilsTest" name="testGetSharesByApplication" time="2.134" />
+    <testcase classname="com.socialize.test.integration.services.b.ShareUtilsTest" name="testGetSharesByEntity" time="1.713" />
+    <testcase classname="com.socialize.test.integration.services.b.ShareUtilsTest" name="testGetSharesByUser" time="1.757" />
+    <testcase classname="com.socialize.test.integration.services.b.ShareUtilsTest" name="testShareViaEmail" time="0.322" />
+    <testcase classname="com.socialize.test.integration.services.b.ShareUtilsTest" name="testShareViaGooglePlus" time="0.428" />
+    <testcase classname="com.socialize.test.integration.services.b.ShareUtilsTest" name="testShareViaOther" time="0.268" />
+    <testcase classname="com.socialize.test.integration.services.b.ShareUtilsTest" name="testShareViaSMS" time="0.355" />
+    <testcase classname="com.socialize.test.integration.services.b.ShareUtilsTest" name="testShareViaSocialNetworks" time="0.307" />
+    <testcase classname="com.socialize.test.integration.services.b.ShareUtilsTest" name="testShowShareDialogAndCancel" time="0.342" />
+    <testcase classname="com.socialize.test.integration.services.b.ShareUtilsTest" name="testShowShareDialogAndContinueWithFlowControl" time="0.264" />
+    <testcase classname="com.socialize.test.integration.services.b.ShareUtilsTest" name="testShowShareDialogAndContinueWithoutFlowControl" time="0.361" />
+    <testcase classname="com.socialize.test.integration.services.b.ShareUtilsTest" name="testShowShareDialogDefault" time="3.385" />
+    <testcase classname="com.socialize.test.integration.services.b.ShareUtilsTest" name="testShowShareDialogSocial" time="3.195" />
+    <testcase classname="com.socialize.test.integration.services.b.SubscriptionUtilsTest" name="testSubscribeEntity" time="2.897" />
+    <testcase classname="com.socialize.test.integration.services.b.SubscriptionUtilsTest" name="testSubscribeNewComments" time="2.885" />
+    <testcase classname="com.socialize.test.integration.services.b.TwitterUtilsTest" name="testPostFlowNotAuthed" time="0.256" />
+    <testcase classname="com.socialize.test.integration.services.b.TwitterUtilsTest" name="testTweetFlowNotAuthed" time="0.361" />
+    <testcase classname="com.socialize.test.integration.services.b.TwitterUtilsTest" name="testTweetPhoto" time="0.279" />
+    <testcase classname="com.socialize.test.integration.services.b.TwitterUtilsTest" name="testTweetPhotoFlowAuthed" time="0.329" />
+    <testcase classname="com.socialize.test.integration.services.b.TwitterUtilsTest" name="testTweetPhotoFlowNotAuthed" time="0.291" />
+    <testcase classname="com.socialize.test.integration.services.b.TwitterUtilsTest" name="testTweetUsesCustomPath" time="0.374" />
+    <testcase classname="com.socialize.test.integration.services.b.TwitterUtilsTest" name="test_isAvailable" time="1.173" />
+    <testcase classname="com.socialize.test.integration.services.b.TwitterUtilsTest" name="test_link" time="1.188" />
+    <testcase classname="com.socialize.test.integration.services.b.TwitterUtilsTest" name="test_link_with_token" time="2.124" />
+    <testcase classname="com.socialize.test.integration.services.b.TwitterUtilsTest" name="test_post_authed" time="2.86" />
+    <testcase classname="com.socialize.test.integration.services.b.TwitterUtilsTest" name="test_post_not_authed" time="3.897" />
+    <testcase classname="com.socialize.test.integration.services.b.TwitterUtilsTest" name="test_setCredentials" time="1.288" />
+    <properties />
+    <system-out />
+    <system-err />
+  </testsuite>
+  <testsuite errors="0" failures="0" name="com.socialize.test.integration.services.c.UserUtilsTest" package="com.socialize.test.integration.services.c" tests="5" time="30.428" timestamp="2014-03-27T10:50:57">
+    <testcase classname="com.socialize.test.integration.services.c.UserUtilsTest" name="testGetCurrentUser" time="2.22" />
+    <testcase classname="com.socialize.test.integration.services.c.UserUtilsTest" name="testSaveUserSettings" time="2.521" />
+    <testcase classname="com.socialize.test.integration.services.c.UserUtilsTest" name="testShowUserProfile" time="3.291" />
+    <testcase classname="com.socialize.test.integration.services.c.ViewUtilsTest" name="testAddView" time="1.99" />
+    <testcase classname="com.socialize.test.integration.services.c.ViewUtilsTest" name="testGetViewExists" time="20.406" />
+    <properties />
+    <system-out />
+    <system-err />
+  </testsuite>
+  <testsuite errors="0" failures="0" name="com.socialize.test.profile.ActionDetailTest" package="com.socialize.test.profile" tests="1" time="1.886" timestamp="2014-03-27T10:50:57">
+    <testcase classname="com.socialize.test.profile.ActionDetailTest" name="testActionDetailViewDisplaysCorrectInformation" time="1.886" />
+    <properties />
+    <system-out />
+    <system-err />
+  </testsuite>
+  <testsuite errors="0" failures="0" name="com.socialize.test.twitter.TwitterAuthProviderInfoTest" package="com.socialize.test.twitter" tests="16" time="3.315" timestamp="2014-03-27T10:50:57">
+    <testcase classname="com.socialize.test.twitter.TwitterAuthProviderInfoTest" name="testAndroidTestCaseSetupProperly" time="0.001" />
+    <testcase classname="com.socialize.test.twitter.TwitterAuthProviderInfoTest" name="testEquals" time="0.001" />
+    <testcase classname="com.socialize.test.twitter.TwitterAuthProviderTest" name="testAndroidTestCaseSetupProperly" time="0.002" />
+    <testcase classname="com.socialize.test.twitter.TwitterAuthProviderTest" name="test_newTwitterAuthListener" time="0.148" />
+    <testcase classname="com.socialize.test.twitter.TwitterAuthUtilsTest" name="testShowAuthDialogCancel" time="1.571" />
+    <testcase classname="com.socialize.test.twitter.TwitterAuthUtilsTest" name="test_newTwitterAuthDialogListener" time="0.455" />
+    <testcase classname="com.socialize.test.twitter.TwitterAuthViewTest" name="testAndroidTestCaseSetupProperly" time="0.002" />
+    <testcase classname="com.socialize.test.twitter.TwitterAuthViewTest" name="testAuthenticate" time="0.129" />
+    <testcase classname="com.socialize.test.twitter.TwitterAuthViewTest" name="testInit" time="0.005" />
+    <testcase classname="com.socialize.test.twitter.TwitterAuthWebViewTest" name="testAndroidTestCaseSetupProperly" time="0.002" />
+    <testcase classname="com.socialize.test.twitter.TwitterAuthWebViewTest" name="testAuthenticate" time="0.4" />
+    <testcase classname="com.socialize.test.twitter.TwitterAuthWebViewTest" name="testOAuthRequestListener" time="0.006" />
+    <testcase classname="com.socialize.test.twitter.TwitterAuthWebViewTest" name="testOAuthRequestTokenUrlListener" time="0.059" />
+    <testcase classname="com.socialize.test.twitter.TwitterAuthWebViewTest" name="testOAuthTokenListener" time="0.151" />
+    <testcase classname="com.socialize.test.twitter.TwitterOAuthProviderTest" name="test_retrieveRequestTokenAsync" time="0.119" />
+    <testcase classname="com.socialize.test.twitter.TwitterWebViewClientTest" name="testOnPageStarted" time="0.264" />
+    <properties />
+    <system-out />
+    <system-err />
+  </testsuite>
+  <testsuite errors="0" failures="1" name="com.socialize.test.unit.AppUtilsTest" package="com.socialize.test.unit" tests="57" time="7.152" timestamp="2014-03-27T10:50:57">
+    <testcase classname="com.socialize.test.unit.AppUtilsTest" name="testGetAppIconId" time="0.373" />
+    <testcase classname="com.socialize.test.unit.AppUtilsTest" name="testLaunchMainApp" time="0.251" />
+    <testcase classname="com.socialize.test.unit.AppUtilsTest" name="test_isNotificationsAvailable" time="0.343" />
+    <testcase classname="com.socialize.test.unit.BitmapUtilsTest" name="testAndroidTestCaseSetupProperly" time="0.0" />
+    <testcase classname="com.socialize.test.unit.BitmapUtilsTest" name="testGetScaledBitmapHorizontalCropOnReduce" time="0.047" />
+    <testcase classname="com.socialize.test.unit.BitmapUtilsTest" name="testGetScaledBitmapVerticalCropOnReduce" time="0.042" />
+    <testcase classname="com.socialize.test.unit.DateUtilsTest" name="testAndroidTestCaseSetupProperly" time="0.004" />
+    <testcase classname="com.socialize.test.unit.DateUtilsTest" name="testTimeUtils" time="0.009" />
+    <testcase classname="com.socialize.test.unit.DeviceUtilsTest" name="testAndroidTestCaseSetupProperly" time="0.001" />
+    <testcase classname="com.socialize.test.unit.DeviceUtilsTest" name="testDeviceUtilsHasPermission" time="0.898" />
+    <testcase classname="com.socialize.test.unit.DeviceUtilsTest" name="testDeviceUtilsUserAgentString" time="0.008">
+      <failure>junit.framework.ComparisonFailure: expected:&lt;...alize.test; carrier/[unknown; network/wifi];&gt; but was:&lt;...alize.test; carrier/[at&amp;t; network/cell];&gt;
+	at junit.framework.Assert.assertEquals(Assert.java:85)
+	at junit.framework.Assert.assertEquals(Assert.java:91)
+	at com.socialize.test.unit.DeviceUtilsTest.testDeviceUtilsUserAgentString(DeviceUtilsTest.java:68)
+	at java.lang.reflect.Method.invokeNative(Native Method)
+	at java.lang.reflect.Method.invoke(Method.java:515)
+	at junit.framework.TestCase.runTest(TestCase.java:168)
+	at junit.framework.TestCase.runBare(TestCase.java:134)
+	at junit.framework.TestResult$1.protect(TestResult.java:115)
+	at junit.framework.TestResult.runProtected(TestResult.java:133)
+	at junit.framework.TestResult.run(TestResult.java:118)
+	at junit.framework.TestCase.run(TestCase.java:124)
+	at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:191)
+	at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:176)
+	at android.test.InstrumentationTestRunner.onStart(InstrumentationTestRunner.java:554)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:1701)
+</failure>
+    </testcase>
+    <testcase classname="com.socialize.test.unit.GSONUtilsTest" name="testAndroidTestCaseSetupProperly" time="0.001" />
+    <testcase classname="com.socialize.test.unit.GSONUtilsTest" name="testSerializeDeserializeUserProviderCredentialsMapMultiValue" time="0.025" />
+    <testcase classname="com.socialize.test.unit.GSONUtilsTest" name="testSerializeDeserializeUserProviderCredentialsMapSingleValue" time="0.013" />
+    <testcase classname="com.socialize.test.unit.GSONUtilsTest" name="testSerializeDeserializeUserUserProviderCredentials" time="0.017" />
+    <testcase classname="com.socialize.test.unit.IOUtilsTest" name="testAndroidTestCaseSetupProperly" time="0.004" />
+    <testcase classname="com.socialize.test.unit.IOUtilsTest" name="testHttpUtilsIsError" time="0.005" />
+    <testcase classname="com.socialize.test.unit.IOUtilsTest" name="testIOReadSafe" time="0.023" />
+    <testcase classname="com.socialize.test.unit.IOUtilsTest" name="testIOUtilsRead" time="0.003" />
+    <testcase classname="com.socialize.test.unit.IOUtilsTest" name="testJSONParseArray" time="0.154" />
+    <testcase classname="com.socialize.test.unit.IOUtilsTest" name="testJSONParseObject" time="0.003" />
+    <testcase classname="com.socialize.test.unit.IOUtilsTest" name="testStringUtils" time="0.001" />
+    <testcase classname="com.socialize.test.unit.OAuthRequestSignerTest" name="testAndroidTestCaseSetupProperly" time="0.004" />
+    <testcase classname="com.socialize.test.unit.OAuthRequestSignerTest" name="testDefaultOauthRequestSigner" time="0.043" />
+    <testcase classname="com.socialize.test.unit.PreferenceSessionPersisterTest" name="testPreferencePersistDelete" time="0.38" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testAndroidTestCaseSetupProperly" time="0.002" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testConstructorUsesDefaultCacheCount" time="0.003" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testCreateOnEmptyGet" time="0.113" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testExpired" time="0.003" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testExpiredSuicical" time="0.003" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testGetRaw" time="0.003" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testKey" time="0.001" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testKeyCompare" time="0.002" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testManualCacheReap" time="0.001" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testNotExpired" time="0.002" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testObjectExpiry" time="0.51" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testOldestRemoveOnReap" time="0.505" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testOnGetCalledOnGet" time="0.002" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testOnPutCalledOnPut" time="0.002" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testOnRemoveCalledOnClear" time="0.009" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testOnRemoveCalledOnReap" time="0.508" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testOnRemoveCalledOnRemove" time="0.009" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testOnRemoveNOTCalledOnReplace" time="0.003" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testPauseCallsStopOnReaper" time="0.005" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testPutCallPutWithDefaultTTL" time="0.01" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testPutFailOnBytesExceededWithHardLimit" time="0.01" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testResumeCallsStartOnReaper" time="0.008" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testScheduledCacheReap" time="2.209" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testSimpleCachePut" time="0.009" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testSizeInBytesCorrectOnClear" time="0.01" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testSizeInBytesCorrectOnReap" time="0.509" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testSizeInBytesCorrectOnRemove" time="0.002" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testSizeInBytesCorrectOnReplace" time="0.008" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testSizeInBytesIncreasedOnPut" time="0.008" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testTrimOnBytesExceededAfterReap" time="0.009" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testTrimOnCountExceededAfterReap" time="0.009" />
+    <testcase classname="com.socialize.test.unit.TTLCacheTest" name="testValues" time="0.013" />
+    <properties />
+    <system-out />
+    <system-err />
+  </testsuite>
+  <testsuite errors="0" failures="0" name="com.socialize.test.unit.api.CommentApiTest" package="com.socialize.test.unit.api" tests="40" time="1.855" timestamp="2014-03-27T10:50:57">
+    <testcase classname="com.socialize.test.unit.api.CommentApiTest" name="testAddComment" time="0.125" />
+    <testcase classname="com.socialize.test.unit.api.CommentApiTest" name="testAndroidTestCaseSetupProperly" time="0.002" />
+    <testcase classname="com.socialize.test.unit.api.CommentApiTest" name="testGetComment" time="0.002" />
+    <testcase classname="com.socialize.test.unit.api.CommentApiTest" name="testGetCommentsByEntity" time="0.005" />
+    <testcase classname="com.socialize.test.unit.api.CommentApiTest" name="testGetCommentsById" time="0.015" />
+    <testcase classname="com.socialize.test.unit.api.CommentApiTest" name="testGetCommentsByUser" time="0.012" />
+    <testcase classname="com.socialize.test.unit.api.CommentApiTest" name="testGetCommentsByUserPaginated" time="0.014" />
+    <testcase classname="com.socialize.test.unit.api.EntityApiTest" name="testAndroidTestCaseSetupProperly" time="0.124" />
+    <testcase classname="com.socialize.test.unit.api.EntityApiTest" name="testCreateEntity" time="0.002" />
+    <testcase classname="com.socialize.test.unit.api.EntityApiTest" name="testGetEntity" time="0.002" />
+    <testcase classname="com.socialize.test.unit.api.EntityApiTest" name="testGetEntityListenerFail404" time="0.01" />
+    <testcase classname="com.socialize.test.unit.api.EntityApiTest" name="testGetEntityListenerSuccess" time="0.028" />
+    <testcase classname="com.socialize.test.unit.api.LikeApiTest" name="testAddLike" time="0.119" />
+    <testcase classname="com.socialize.test.unit.api.LikeApiTest" name="testAndroidTestCaseSetupProperly" time="0.002" />
+    <testcase classname="com.socialize.test.unit.api.LikeApiTest" name="testDeleteLike" time="0.002" />
+    <testcase classname="com.socialize.test.unit.api.LikeApiTest" name="testGetLike" time="0.004" />
+    <testcase classname="com.socialize.test.unit.api.LikeApiTest" name="testGetLikeByKey" time="0.212" />
+    <testcase classname="com.socialize.test.unit.api.LikeApiTest" name="testGetLikeByKeyWithNoResults" time="0.005" />
+    <testcase classname="com.socialize.test.unit.api.LikeApiTest" name="testGetLikeByKeyWithResults" time="0.213" />
+    <testcase classname="com.socialize.test.unit.api.LikeApiTest" name="testGetLikeByKeyWithUsesCorrectPagination" time="0.002" />
+    <testcase classname="com.socialize.test.unit.api.LikeApiTest" name="testGetLikesByEntity" time="0.003" />
+    <testcase classname="com.socialize.test.unit.api.LikeApiTest" name="testGetLikesByEntityPaginated" time="0.002" />
+    <testcase classname="com.socialize.test.unit.api.LikeApiTest" name="testGetLikesById" time="0.003" />
+    <testcase classname="com.socialize.test.unit.api.LikeApiTest" name="testGetLikesByUser" time="0.013" />
+    <testcase classname="com.socialize.test.unit.api.LikeApiTest" name="testGetLikesByUserPaginated" time="0.004" />
+    <testcase classname="com.socialize.test.unit.api.ShareApiTest" name="testAddShare" time="0.325" />
+    <testcase classname="com.socialize.test.unit.api.ShareApiTest" name="testAndroidTestCaseSetupProperly" time="0.002" />
+    <testcase classname="com.socialize.test.unit.api.SubscriptionApiTest" name="testAddSubscription" time="0.085" />
+    <testcase classname="com.socialize.test.unit.api.SubscriptionApiTest" name="testAndroidTestCaseSetupProperly" time="0.002" />
+    <testcase classname="com.socialize.test.unit.api.SubscriptionApiTest" name="testGetSubscription" time="0.003" />
+    <testcase classname="com.socialize.test.unit.api.SubscriptionApiTest" name="testGetSubscriptionsByEntity" time="0.002" />
+    <testcase classname="com.socialize.test.unit.api.SubscriptionApiTest" name="testRemoveSubscription" time="0.002" />
+    <testcase classname="com.socialize.test.unit.api.UserActivityApiTest" name="testAndroidTestCaseSetupProperly" time="0.218" />
+    <testcase classname="com.socialize.test.unit.api.UserActivityApiTest" name="testGetActivitysByUser" time="0.002" />
+    <testcase classname="com.socialize.test.unit.api.UserActivityApiTest" name="testGetActivitysByUserPaginated" time="0.002" />
+    <testcase classname="com.socialize.test.unit.api.UserApiTest" name="testAndroidTestCaseSetupProperly" time="0.137" />
+    <testcase classname="com.socialize.test.unit.api.UserApiTest" name="testGetUser" time="0.002" />
+    <testcase classname="com.socialize.test.unit.api.UserApiTest" name="testSaveUserProfileListener" time="0.005" />
+    <testcase classname="com.socialize.test.unit.api.ViewApiTest" name="testAddView" time="0.141" />
+    <testcase classname="com.socialize.test.unit.api.ViewApiTest" name="testAndroidTestCaseSetupProperly" time="0.002" />
+    <properties />
+    <system-out />
+    <system-err />
+  </testsuite>
+  <testsuite errors="0" failures="0" name="com.socialize.test.unit.facebook.FacebookActivityTest" package="com.socialize.test.unit.facebook" tests="14" time="8.177" timestamp="2014-03-27T10:50:57">
+    <testcase classname="com.socialize.test.unit.facebook.FacebookActivityTest" name="testOnCreate" time="0.226" />
+    <testcase classname="com.socialize.test.unit.facebook.FacebookAuthClickListenerTest" name="testOnClickWithAuthError" time="2.961" />
+    <testcase classname="com.socialize.test.unit.facebook.FacebookAuthClickListenerTest" name="testOnClickWithAuthFail" time="1.303" />
+    <testcase classname="com.socialize.test.unit.facebook.FacebookAuthClickListenerTest" name="testOnClickWithAuthSuccess" time="1.228" />
+    <testcase classname="com.socialize.test.unit.facebook.FacebookAuthClickListenerTest" name="testOnClickWithCancel" time="1.281" />
+    <testcase classname="com.socialize.test.unit.facebook.FacebookAuthProviderInfoTest" name="testAndroidTestCaseSetupProperly" time="0.001" />
+    <testcase classname="com.socialize.test.unit.facebook.FacebookAuthProviderInfoTest" name="testEquals" time="0.001" />
+    <testcase classname="com.socialize.test.unit.facebook.FacebookAuthProviderInfoTest" name="testMatchesRead" time="0.001" />
+    <testcase classname="com.socialize.test.unit.facebook.FacebookAuthProviderInfoTest" name="testMatchesWrite" time="0.001" />
+    <testcase classname="com.socialize.test.unit.facebook.FacebookAuthProviderTest" name="testAndroidTestCaseSetupProperly" time="0.001" />
+    <testcase classname="com.socialize.test.unit.facebook.FacebookAuthProviderTest" name="testAuthenticate" time="1.013" />
+    <testcase classname="com.socialize.test.unit.facebook.FacebookAuthProviderTest" name="testClearCache" time="0.158" />
+    <testcase classname="com.socialize.test.unit.facebook.FacebookUrlBuilderTest" name="testAndroidTestCaseSetupProperly" time="0.001" />
+    <testcase classname="com.socialize.test.unit.facebook.FacebookUrlBuilderTest" name="testFacebookUrlBuilder" time="0.001" />
+    <properties />
+    <system-out />
+    <system-err />
+  </testsuite>
+  <testsuite errors="0" failures="0" name="com.socialize.test.unit.launcher.ActivityLauncherTest" package="com.socialize.test.unit.launcher" tests="3" time="0.517" timestamp="2014-03-27T10:50:57">
+    <testcase classname="com.socialize.test.unit.launcher.ActivityLauncherTest" name="testActivityLauncher" time="0.004" />
+    <testcase classname="com.socialize.test.unit.launcher.ActivityLauncherTest" name="testAndroidTestCaseSetupProperly" time="0.0" />
+    <testcase classname="com.socialize.test.unit.launcher.CommentListLauncherTest" name="testLaunch" time="0.513" />
+    <properties />
+    <system-out />
+    <system-err />
+  </testsuite>
+  <testsuite errors="0" failures="0" name="com.socialize.test.unit.notifications.ActionNotificationMessageFactoryTest" package="com.socialize.test.unit.notifications" tests="41" time="1.848" timestamp="2014-03-27T10:50:57">
+    <testcase classname="com.socialize.test.unit.notifications.ActionNotificationMessageFactoryTest" name="testAndroidTestCaseSetupProperly" time="0.001" />
+    <testcase classname="com.socialize.test.unit.notifications.ActionNotificationMessageFactoryTest" name="testFromJSON" time="0.002" />
+    <testcase classname="com.socialize.test.unit.notifications.BaseC2DMReceiverTest" name="testAndroidTestCaseSetupProperly" time="0.001" />
+    <testcase classname="com.socialize.test.unit.notifications.BaseC2DMReceiverTest" name="test_onHandleIntentMessage" time="0.001" />
+    <testcase classname="com.socialize.test.unit.notifications.BaseC2DMReceiverTest" name="test_onHandleIntentRegistration" time="0.003" />
+    <testcase classname="com.socialize.test.unit.notifications.BaseC2DMReceiverTest" name="test_onRegistrationResponse_noExtra" time="0.004" />
+    <testcase classname="com.socialize.test.unit.notifications.BaseC2DMReceiverTest" name="test_onRegistrationResponse_onError" time="0.005" />
+    <testcase classname="com.socialize.test.unit.notifications.BaseC2DMReceiverTest" name="test_onRegistrationResponse_onRegistrered" time="0.005" />
+    <testcase classname="com.socialize.test.unit.notifications.BaseC2DMReceiverTest" name="test_onRegistrationResponse_onUnregistered" time="0.004" />
+    <testcase classname="com.socialize.test.unit.notifications.BaseNotificationMessageBuilderTest" name="testAndroidTestCaseSetupProperly" time="0.129" />
+    <testcase classname="com.socialize.test.unit.notifications.BaseNotificationMessageBuilderTest" name="testBuild_DEVELOPER_NOTIFICATION" time="0.004" />
+    <testcase classname="com.socialize.test.unit.notifications.BaseNotificationMessageBuilderTest" name="testBuild_NEW_COMMENTS" time="0.003" />
+    <testcase classname="com.socialize.test.unit.notifications.DeveloperNotificationMessageFactoryTest" name="testAndroidTestCaseSetupProperly" time="0.003" />
+    <testcase classname="com.socialize.test.unit.notifications.DeveloperNotificationMessageFactoryTest" name="testFromJSON" time="0.003" />
+    <testcase classname="com.socialize.test.unit.notifications.NotificationCheckerTest" name="testCheckRegistrationsNotRegisteredForC2DM" time="0.493" />
+    <testcase classname="com.socialize.test.unit.notifications.NotificationCheckerTest" name="testCheckRegistrationsNotRegisteredForSocialize" time="0.266" />
+    <testcase classname="com.socialize.test.unit.notifications.NotificationIdGeneratorTest" name="testAndroidTestCaseSetupProperly" time="0.001" />
+    <testcase classname="com.socialize.test.unit.notifications.SimpleNotificationMessageTranslatorTest" name="testAndroidTestCaseSetupProperly" time="0.001" />
+    <testcase classname="com.socialize.test.unit.notifications.SimpleNotificationMessageTranslatorTest" name="testTranslate" time="0.0" />
+    <testcase classname="com.socialize.test.unit.notifications.SocializeBroadcastReceiverTest" name="testAndroidTestCaseSetupProperly" time="0.002" />
+    <testcase classname="com.socialize.test.unit.notifications.SocializeBroadcastReceiverTest" name="testOnRecieveOnBroadcastReceiver" time="0.002" />
+    <testcase classname="com.socialize.test.unit.notifications.SocializeBroadcastReceiverTest" name="test_onReceive" time="0.078" />
+    <testcase classname="com.socialize.test.unit.notifications.SocializeC2DMCallbackTest" name="testAndroidTestCaseSetupProperly" time="0.001" />
+    <testcase classname="com.socialize.test.unit.notifications.SocializeC2DMCallbackTest" name="test_handleNotification" time="0.43" />
+    <testcase classname="com.socialize.test.unit.notifications.SocializeC2DMCallbackTest" name="test_onRegister" time="0.003" />
+    <testcase classname="com.socialize.test.unit.notifications.SocializeC2DMReceiverTest" name="testAndroidTestCaseSetupProperly" time="0.001" />
+    <testcase classname="com.socialize.test.unit.notifications.SocializeC2DMReceiverTest" name="test_onCreate" time="0.112" />
+    <testcase classname="com.socialize.test.unit.notifications.SocializeC2DMReceiverTest" name="test_onDestroy" time="0.002" />
+    <testcase classname="com.socialize.test.unit.notifications.SocializeC2DMReceiverTest" name="test_onError" time="0.002" />
+    <testcase classname="com.socialize.test.unit.notifications.SocializeC2DMReceiverTest" name="test_onMessage" time="0.003" />
+    <testcase classname="com.socialize.test.unit.notifications.SocializeC2DMReceiverTest" name="test_onRegistrered" time="0.081" />
+    <testcase classname="com.socialize.test.unit.notifications.SocializeC2DMReceiverTest" name="test_onUnregistered" time="0.002" />
+    <testcase classname="com.socialize.test.unit.notifications.SocializeNotificationRegistrationSystemTest" name="testAndroidTestCaseSetupProperly" time="0.001" />
+    <testcase classname="com.socialize.test.unit.notifications.SocializeNotificationRegistrationSystemTest" name="test_doRegistrationSocialize" time="0.164" />
+    <testcase classname="com.socialize.test.unit.notifications.SocializeNotificationRegistrationSystemTest" name="test_isRegisteredC2DM" time="0.001" />
+    <testcase classname="com.socialize.test.unit.notifications.SocializeNotificationRegistrationSystemTest" name="test_isRegisteredSocialize" time="0.002" />
+    <testcase classname="com.socialize.test.unit.notifications.SocializeNotificationRegistrationSystemTest" name="test_isRegistrationPending" time="0.003" />
+    <testcase classname="com.socialize.test.unit.notifications.SocializeNotificationRegistrationSystemTest" name="test_registerC2DM" time="0.014" />
+    <testcase classname="com.socialize.test.unit.notifications.SocializeNotificationRegistrationSystemTest" name="test_registerC2DMAsync" time="0.007" />
+    <testcase classname="com.socialize.test.unit.notifications.SocializeNotificationRegistrationSystemTest" name="test_registerC2DMFailed" time="0.003" />
+    <testcase classname="com.socialize.test.unit.notifications.SocializeNotificationRegistrationSystemTest" name="test_registerSocialize" time="0.005" />
+    <properties />
+    <system-out />
+    <system-err />
+  </testsuite>
+  <testsuite errors="0" failures="0" name="com.socialize.test.unit.view.BaseViewTest" package="com.socialize.test.unit.view" tests="7" time="6.957" timestamp="2014-03-27T10:50:57">
+    <testcase classname="com.socialize.test.unit.view.BaseViewTest" name="test_assignId" time="2.713" />
+    <testcase classname="com.socialize.test.unit.view.BaseViewTest" name="test_checkLoaded" time="0.27" />
+    <testcase classname="com.socialize.test.unit.view.BaseViewTest" name="test_getActivity" time="0.35" />
+    <testcase classname="com.socialize.test.unit.view.BaseViewTest" name="test_getNextViewId" time="2.382" />
+    <testcase classname="com.socialize.test.unit.view.BaseViewTest" name="test_onWindowVisibilityChangedVisibleFirstLoad" time="0.427" />
+    <testcase classname="com.socialize.test.unit.view.BaseViewTest" name="test_onWindowVisibilityChangedVisibleSecondLoad" time="0.345" />
+    <testcase classname="com.socialize.test.unit.view.BaseViewTest" name="test_showError" time="0.47" />
+    <properties />
+    <system-out />
+    <system-err />
+  </testsuite>
+</testsuites>
