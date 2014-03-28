@@ -61,7 +61,6 @@ import com.socialize.test.util.TestUtils;
 import com.socialize.ui.auth.AuthDialogFactory;
 import com.socialize.ui.auth.AuthDialogListener;
 import com.socialize.ui.share.DialogFlowController;
-import com.socialize.ui.share.EmailCell;
 import com.socialize.ui.share.IShareDialogFactory;
 import com.socialize.ui.share.SMSCell;
 import com.socialize.ui.share.ShareDialogListener;
@@ -84,7 +83,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		
         JSONObject json = TestUtils.getJSON(getContext(), "shares.json");
 		JSONArray jsonArray = json.getJSONArray("items");
-		JSONObject jsonObject = (JSONObject) jsonArray.get(0);
+        JSONObject jsonObject = (JSONObject) jsonArray.get(0);
 		String id = jsonObject.getString("id");
 		
 		long shareId = Long.parseLong(id);

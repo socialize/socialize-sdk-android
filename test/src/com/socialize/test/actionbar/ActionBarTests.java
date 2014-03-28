@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 import com.socialize.ConfigUtils;
-import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
@@ -14,11 +13,7 @@ import com.socialize.api.action.like.LikeOptions;
 import com.socialize.api.action.like.SocializeLikeUtils;
 import com.socialize.api.action.share.SocializeShareUtils;
 import com.socialize.api.action.view.SocializeViewUtils;
-import com.socialize.auth.AuthProvider;
-import com.socialize.auth.AuthProviderInfo;
-import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
-import com.socialize.auth.UserProviderCredentials;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.EntityStatsImpl;
@@ -31,7 +26,6 @@ import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkListener;
 import com.socialize.test.PublicEntity;
 import com.socialize.test.util.TestUtils;
 import com.socialize.testapp.ActionBarActivity;
@@ -40,17 +34,12 @@ import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
 import com.socialize.ui.actionbar.OnActionBarReloadListener;
-import com.socialize.ui.auth.AuthDialogListener;
-import com.socialize.ui.auth.IAuthDialogFactory;
-import com.socialize.ui.share.IShareDialogFactory;
-import com.socialize.ui.share.ShareDialogListener;
 import junit.framework.Assert;
-import org.mockito.Mockito;
-
-import static org.mockito.Mockito.*;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
+import static org.mockito.Mockito.*;
 
 /**
  * @author Jason Polites

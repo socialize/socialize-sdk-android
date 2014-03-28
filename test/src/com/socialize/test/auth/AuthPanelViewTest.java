@@ -92,8 +92,7 @@ public class AuthPanelViewTest extends SocializeActivityTest {
 		Boolean result = getResult(0);
 		
 		assertNotNull(result);
-		assertTrue(result.booleanValue());
-		
+		assertTrue(result);
 		
 		config.setProperty(SocializeConfig.SOCIALIZE_ALLOW_ANON, String.valueOf(false));
 		config.setProperty(SocializeConfig.SOCIALIZE_ALLOW_ANON_COMMENT, String.valueOf(false));
@@ -103,10 +102,8 @@ public class AuthPanelViewTest extends SocializeActivityTest {
 		result = getResult(0);
 		
 		assertNotNull(result);
-		assertTrue(result.booleanValue());
-		
-		
-		
+		assertTrue(result);
+
 		config.setProperty(SocializeConfig.SOCIALIZE_ALLOW_ANON, String.valueOf(true));
 		config.setProperty(SocializeConfig.SOCIALIZE_ALLOW_ANON_COMMENT, String.valueOf(true));
 		
@@ -115,8 +112,7 @@ public class AuthPanelViewTest extends SocializeActivityTest {
 		result = getResult(0);
 		
 		assertNotNull(result);
-		assertFalse(result.booleanValue());
-		
+		assertFalse(result);
 		
 		config.setProperty(SocializeConfig.SOCIALIZE_ALLOW_ANON, String.valueOf(true));
 		config.setProperty(SocializeConfig.SOCIALIZE_ALLOW_ANON_COMMENT, String.valueOf(false));
@@ -126,7 +122,7 @@ public class AuthPanelViewTest extends SocializeActivityTest {
 		result = getResult(0);
 		
 		assertNotNull(result);
-		assertTrue(result.booleanValue());				
+		assertTrue(result);
 	}
 	
 	public void testAuthPanelAuthRequiredOnLike() {
@@ -164,7 +160,7 @@ public class AuthPanelViewTest extends SocializeActivityTest {
 		Boolean result = getResult(0);
 		
 		assertNotNull(result);
-		assertTrue(result.booleanValue());
+		assertTrue(result);
 		
 		
 		config.setProperty(SocializeConfig.SOCIALIZE_ALLOW_ANON, String.valueOf(true));
@@ -174,7 +170,7 @@ public class AuthPanelViewTest extends SocializeActivityTest {
 		result = getResult(0);
 		
 		assertNotNull(result);
-		assertFalse(result.booleanValue());
+		assertFalse(result);
 		
 	}
 
@@ -203,8 +199,7 @@ public class AuthPanelViewTest extends SocializeActivityTest {
 		view.setAuthRequired(authRequired);
 		
         RememberCell remember = TestUtils.findView(view, RememberCell.class);
-	
-		
+
 		if(neverAuth) {
 			assertNotNull(remember);
 			assertEquals(remember.getVisibility(), expectedVisibility);
