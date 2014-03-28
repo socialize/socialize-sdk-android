@@ -15,7 +15,7 @@ test/coverage
 test/test-output
 test/local.properties
 test/private/**
-testapp/assets/existing-data/
+test/assets/existing-data/
 test/test-results
 test/coverage-results
 build

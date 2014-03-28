@@ -122,10 +122,10 @@
 		<mkdir dir="${tmp_dir}"/>
 
 		<copy todir="${tmp_dir}/demo">
-			<fileset dir="../demo/" excludes="*.iml,gen/**,bin/**,build/**,codetemplates.xml, local.properties"/>
+			<fileset dir="../demo/" excludes="*.iml,gen/**,bin/**,out/**,build/**,codetemplates.xml, local.properties"/>
 		</copy>
 		<copy todir="${tmp_dir}/sdk">
-			<fileset dir="../sdk/" excludes="*.iml,gen/**,bin/**,build/**,doc/**,icons/**,classes/**, codetemplates.xml, ant.properties, local.properties"/>
+			<fileset dir="../sdk/" excludes="*.iml,gen/**,bin/**,out/**,build/**,doc/**,icons/**,classes/**, codetemplates.xml, ant.properties, local.properties"/>
 		</copy>
 		
 		<copy todir="${tmp_dir}/lib/android-ioc">
