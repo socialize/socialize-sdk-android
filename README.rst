@@ -152,5 +152,16 @@ Make sure you replace **/usr/local/android** with your local path to the Android
 Now you can browse the coverage results::
 
     open coverage-results/coverage.html
+    
+Building the Distro
+===================
+
+To build the distributable SDK (zip)::
+
+    cd socialize-sdk-android/sdk
+    ant -Dsdk.dir=/usr/local/android clean build
+
+Make sure you replace **/usr/local/android** with your local path to the Android SDK
+
 
 
