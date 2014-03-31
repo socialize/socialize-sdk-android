@@ -102,9 +102,9 @@ public class ActionBarLayoutView extends BaseView {
 	
 	private DisplayUtils displayUtils;
 	
-	private ShareUtils shareUtils;
+	private ShareUtilsProxy shareUtils;
 
-	private CommentUtils commentUtils;
+	private CommentUtilsProxy commentUtils;
 	
 	private ActionBarView actionBarView;
 	
@@ -746,11 +746,11 @@ public class ActionBarLayoutView extends BaseView {
 		this.itemFactory = itemFactory;
 	}
 	
-	public void setShareUtils(ShareUtils shareUtils) {
+	public void setShareUtils(ShareUtilsProxy shareUtils) {
 		this.shareUtils = shareUtils;
 	}
 	
-	public void setCommentUtils(CommentUtils commentUtils) {
+	public void setCommentUtils(CommentUtilsProxy commentUtils) {
 		this.commentUtils = commentUtils;
 	}
 

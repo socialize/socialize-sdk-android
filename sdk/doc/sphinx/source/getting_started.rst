@@ -75,16 +75,23 @@ a full "clean" of these projects:
 Required Libraries
 ~~~~~~~~~~~~~~~~~~
 
-The Socialize SDK depends on 2 external libraries:
+The Socialize SDK depends on 3 external libraries:
 
  - android-ioc
+ - loopy-sdk-android
  - facebook-android-sdk
 
-Both of these are Android Library Projects are are also included in the SDK however you can also reference these directly 
+All of these are Android Library Projects are are also included in the SDK however you can also reference these directly
 from their respective source repositories:
 
  - https://github.com/socialize/android-ioc
+ - https://github.com/socialize/loopy-sdk-android
  - https://github.com/facebook/facebook-android-sdk
+
+.. note::
+
+    Socialize has been tested with v3.0.1 of the Facebook SDK.  If you choose to reference their SDK directly please
+    ensure you *checkout* the 3.0.1 version.
 
 2. Set up your Socialize Keys
 =============================

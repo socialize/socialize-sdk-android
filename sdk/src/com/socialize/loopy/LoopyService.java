@@ -96,7 +96,7 @@ public class LoopyService {
 
     public void showShareDialog(final Activity context, String title, final String text, final Entity entity, final PropagationInfo info, final SocialNetworkListener listener) {
         Item item = toItem(entity, info.getEntityUrl());
-        Intent intent = new Intent();
+        Intent intent = new Intent(Intent.ACTION_SEND);
         Loopy.showShareDialog(context, title, item, intent, new ShareDialogListener() {
 
             boolean shareCancelled = false;
