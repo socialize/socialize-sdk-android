@@ -6,9 +6,20 @@
 What's New
 ==========
 
-In this version (v2.9)
-----------------------
+In this version (v3.0.0)
+------------------------
 
+Lifecycle Changes
+~~~~~~~~~~~~~~~~~
+
+If you're already using Sociaize and are upgrading to v3.0.0+ then make sure you implement the new lifecycle methods.
+
+More information here:
+
+:ref:`lifecycle`
+
+v2.9
+----
 
 Pinterest!
 ~~~~~~~~~~
