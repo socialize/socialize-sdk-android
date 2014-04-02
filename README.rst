@@ -9,8 +9,13 @@ Check out the full documentation to learn how to integrate Socialize into your a
 
 http://socialize.github.io/socialize-sdk-android/
 
+Building Socialize from Source
+==============================
+
+**Note**: *This is not required if you simply want to integrate Socialize into your app*
+
 Prerequisites
-=============
+-------------
 
 Make sure you have the following installed on your local machine:
 
@@ -37,11 +42,8 @@ These are installed using the Android SDK manager:
 
 http://developer.android.com/tools/help/sdk-manager.html
 
-
 Building Socialize
-==================
-
-**Note**: *This is not required if you simply want to integrate Socialize into your app*
+------------------
 
 First clone **this** repo::
 
@@ -54,14 +56,13 @@ Socialize depends on 3 external library projects::
     git clone git@github.com:facebook/facebook-android-sdk.git
     
 Setup the Facebook SDK for Build
---------------------------------
+````````````````````````````````
 
 Switch to the verified (tested) version of Facebook::
 
     cd facebook-android-sdk
     git checkout sdk-version-3.0.1
     cd ../
-    
     
 This version of the Facebook SDK (3.0.1) has some compilation warnings which are treated 
 as errors by facebook.  To override this, we need to change the compiler arguments in the
@@ -85,7 +86,7 @@ Now you can build the SDK distribution::
 Make sure you replace **/usr/local/android** with your local path to the Android SDK    
 
 Building the Demo App
-=====================
+---------------------
 
 To build and test the demo app from the command line::
 
@@ -102,7 +103,7 @@ Now you can install the demo app::
 The demo app is called, **Socialize Demos**
 
 Building the Documentation
-==========================
+--------------------------
 
 Note: Sphinx 1.2.2 is required to generate docs::
 
@@ -120,7 +121,7 @@ Now you can browse the documentation::
     open build/docs/user_guide/index.html
 
 Running the Tests
-=================
+-----------------
 
 In order to run the tests you need *either* an Android 4.4 device or emulator.  We recommend using the 
 Genymotion Android virtualization platform available here: http://www.genymotion.com/
@@ -154,7 +155,7 @@ Now you can browse the coverage results::
     open coverage-results/coverage.html
     
 Building the Distro
-===================
+-------------------
 
 To build the distributable SDK (zip)::
 
