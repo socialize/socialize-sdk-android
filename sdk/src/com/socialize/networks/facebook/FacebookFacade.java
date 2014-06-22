@@ -44,7 +44,7 @@ public interface FacebookFacade {
 	
 	public static final String[] READ_PERMISSIONS = {};
 	
-	public static final String[] WRITE_PERMISSIONS = {"publish_stream", "publish_actions"};
+	public static final String[] WRITE_PERMISSIONS = {"publish_actions"};
 	
 	@Deprecated
 	public static final String[] DEFAULT_PERMISSIONS = {"publish_stream", "publish_actions", "photo_upload"};
