@@ -25,7 +25,7 @@ of these rules.
 
 By default Socialize requests no additional permissions for READ access, and requests the following permissions for WRITE access:
 
-	"publish_stream", "publish_actions"
+	"publish_actions"
 	
 When performing a direct Facebook operation you must first check to see whether the appropriate permissions have been linked:
 
