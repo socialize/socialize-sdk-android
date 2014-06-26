@@ -6,7 +6,7 @@
 What's New
 ==========
 
-In this version (v3.0.0)
+In this version (v3.0.1)
 ------------------------
 
 Lifecycle Changes
