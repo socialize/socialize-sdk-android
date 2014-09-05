@@ -6,8 +6,20 @@
 What's New
 ==========
 
-In this version (v3.0.1)
+In this version (v3.1.0)
 ------------------------
+
+Facebook upgrade
+~~~~~~~~~~~~~~~~
+
+Socialize is upgrading to Facebook SDK 3.18 due to proximity of end of support of older Facebook API.
+
+More information here:
+
+:ref:`https://developers.facebook.com/docs/apps/upgrading`
+
+v3.0
+----
 
 Lifecycle Changes
 ~~~~~~~~~~~~~~~~~
