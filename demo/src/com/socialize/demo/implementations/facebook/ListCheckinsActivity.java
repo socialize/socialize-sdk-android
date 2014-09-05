@@ -46,7 +46,7 @@ public class ListCheckinsActivity extends SDKDemoActivity {
 	public void executeDemo(String text) {
 		
 		// We need additional permissions for this
-		String[] permissions = {"user_status"};
+		String[] permissions = {"user_tagged_places"};
 		
 		FacebookUtils.linkForRead(this, new SocializeAuthListener() {
 			
@@ -63,7 +63,7 @@ public class ListCheckinsActivity extends SDKDemoActivity {
 			@Override
 			public void onAuthSuccess(SocializeSession session) {
 				
-				FacebookUtils.get(ListCheckinsActivity.this, "me/checkins", null, new SocialNetworkPostListener() {
+				FacebookUtils.get(ListCheckinsActivity.this, "me/tagged_places", null, new SocialNetworkPostListener() {
 					
 					@Override
 					public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
@@ -104,6 +104,6 @@ public class ListCheckinsActivity extends SDKDemoActivity {
 	 */
 	@Override
 	public String getButtonText() {
-		return "List My Checkins";
+		return "List My Tagged Places";
 	}
 }

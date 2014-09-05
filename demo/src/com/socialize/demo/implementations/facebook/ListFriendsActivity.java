@@ -46,6 +46,9 @@ public class ListFriendsActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(String text) {
 		
+		// We need additional permissions for this
+		String[] permissions = {"user_friends"};
+		
 		FacebookUtils.linkForRead(this, new SocializeAuthListener() {
 			
 			@Override
@@ -106,7 +109,7 @@ public class ListFriendsActivity extends SDKDemoActivity {
 			public void onAuthFail(SocializeException error) {
 				handleError(ListFriendsActivity.this, error);
 			}
-		});
+		}, permissions);
 	}
 	
 	@Override

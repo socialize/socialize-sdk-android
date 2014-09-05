@@ -39,7 +39,7 @@ public class FacebookActivity extends ListActivity {
 			"Post to Wall", 
 			"Post Photo", 
 			"List Friends", 
-			"List Checkins (alt. permissions)", 
+			"List Tagged Places (alt. permissions)", 
 			"Get Access Token", 
 			"Get Current Permissions", 
 			"Open Graph Like",

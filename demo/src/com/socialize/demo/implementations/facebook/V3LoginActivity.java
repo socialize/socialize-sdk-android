@@ -43,7 +43,7 @@ public class V3LoginActivity extends SDKDemoActivity {
 		// start Facebook Login
 		Session.OpenRequest auth = new Session.OpenRequest(this);
 		
-		String[] permissions = {"publish_stream", "user_status"};
+		String[] permissions = {"publish_actions", "user_status"};
 		
 		auth.setPermissions(Arrays.asList(permissions));
 		auth.setLoginBehavior(SessionLoginBehavior.SSO_WITH_FALLBACK);

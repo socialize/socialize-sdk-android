@@ -35,6 +35,6 @@ public class PostPhotoToFanPageActivity extends PostPhotoActivity {
 
 	@Override
 	protected String[] getPermissions() {
-		return new String[]{"publish_stream", "publish_actions", "photo_upload", "manage_pages"};
+		return new String[]{"publish_actions", "manage_pages"};
 	}
 }
