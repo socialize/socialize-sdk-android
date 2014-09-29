@@ -61,10 +61,10 @@ Setup the Facebook SDK for Build
 Switch to the verified (tested) version of Facebook::
 
     cd facebook-android-sdk
-    git checkout sdk-version-3.0.1
+    git checkout sdk-version-3.17.2
     cd ../
     
-This version of the Facebook SDK (3.0.1) has some compilation warnings which are treated 
+This version of the Facebook SDK (3.17.2) has some compilation warnings which are treated 
 as errors by facebook.  To override this, we need to change the compiler arguments in the
 facebook ant.properties::
 
