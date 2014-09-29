@@ -12,10 +12,10 @@ public class MockResponse extends Response {
 	}
 
 	public MockResponse(Request request, HttpURLConnection connection, GraphObject graphObject, boolean isFromCache) {
-		super(request, connection, graphObject, isFromCache);
+		super(request, connection, null, graphObject, isFromCache);
 	}
 
 	public MockResponse(Request request, HttpURLConnection connection, GraphObjectList<GraphObject> graphObjects, boolean isFromCache) {
-		super(request, connection, graphObjects, isFromCache);
+		super(request, connection, null, graphObjects, isFromCache);
 	}
 }
