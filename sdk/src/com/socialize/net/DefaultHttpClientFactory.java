@@ -74,12 +74,6 @@ public class DefaultHttpClientFactory implements HttpClientFactory {
 				logger.debug("Initializing " + getClass().getSimpleName());
 			}
 			
-	        KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-	        trustStore.load(null, null);
-
-	        SSLSocketFactory sf = new NaiveSSLSocketFactory(trustStore);
-	        sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-
 	        params = new BasicHttpParams();
 	        HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
 	        HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
@@ -89,7 +83,7 @@ public class DefaultHttpClientFactory implements HttpClientFactory {
 	        
 	        SchemeRegistry registry = new SchemeRegistry();
 	        registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-	        registry.register(new Scheme("https", sf, 443));
+	        registry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
 
 	        connectionManager = new ThreadSafeClientConnManager(params, registry);
 	        
