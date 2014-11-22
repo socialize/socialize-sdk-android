@@ -6,7 +6,7 @@
 What's New
 ==========
 
-In this version (v3.1.1)
+In this version (v3.1.2)
 ------------------------
 
 Facebook upgrade
