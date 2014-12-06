@@ -21,9 +21,14 @@
  */
 package com.socialize.notifications;
 
+import java.util.List;
+
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 import com.socialize.android.ioc.IBeanFactory;
@@ -120,10 +125,22 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 				senderId = senderId + "," + customSender;
 			}
 			
-			Intent registrationIntent = newIntent(REQUEST_REGISTRATION_INTENT);
-			registrationIntent.putExtra(EXTRA_APPLICATION_PENDING_INTENT, newPendingIntent(context));
-			registrationIntent.putExtra(EXTRA_SENDER, senderId);
-			context.startService(registrationIntent);
+			Intent implicitIntent = newIntent(REQUEST_REGISTRATION_INTENT);
+			PackageManager pm = context.getPackageManager();
+			List<ResolveInfo> resolveInfos = pm.queryIntentServices(implicitIntent, 0);
+			if (resolveInfos != null
+					&& resolveInfos.size() == 1) {
+				ResolveInfo serviceInfo = resolveInfos.get(0);
+				String packageName = serviceInfo.serviceInfo.packageName;
+				String className = serviceInfo.serviceInfo.name;
+				ComponentName component = new ComponentName(packageName, className);
+				
+				Intent registrationIntent = newIntent(implicitIntent);
+				registrationIntent.setComponent(component);
+				registrationIntent.putExtra(EXTRA_APPLICATION_PENDING_INTENT, newPendingIntent(context));
+				registrationIntent.putExtra(EXTRA_SENDER, senderId);
+				context.startService(registrationIntent);
+			}
 		}	
 		else {
 			if(logger != null && logger.isDebugEnabled()) {
@@ -187,6 +204,10 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 	// So we can mock
 	protected Intent newIntent(String action) {
 		return new Intent(action);
+	}
+	
+	protected Intent newIntent(Intent intent) {
+		return new Intent(intent);
 	}
 	
 	// So we can mock
