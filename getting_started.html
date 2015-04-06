@@ -137,6 +137,20 @@ a full &#8220;clean&#8221; of these projects:</p>
 </div>
 <img alt="images/setup6.png" src="images/setup6.png" />
 </div>
+<div class="section" id="using-android-studio">
+<h4>Using Android Studio<a class="headerlink" href="#using-android-studio" title="Permalink to this headline">¶</a></h4>
+<p>There are no <strong>Android Studio modules</strong> embedded in SDK, but you can easily create one for SDK with Android Studio toolset.</p>
+<p>In Android Studio select File-&gt;Import Module...</p>
+<img alt="images/setup-studio0.png" src="images/setup-studio0.png" />
+<p>In New Module dialog click &#8221;...&#8221; button on the right of &#8220;Source directory&#8221; field</p>
+<img alt="images/setup-studio1.png" src="images/setup-studio1.png" />
+<p>Browse to the location into which you unzipped the SDK, select &#8216;sdk&#8217; folder and click &#8216;OK&#8217;.</p>
+<img alt="images/setup-studio2.png" src="images/setup-studio2.png" />
+<p>You may want to change the module name if it&#8217;s ambiguous for your project. Also note the warning about the required dependencies for sdk which also should be included in the project. After that click &#8216;Finish&#8217;.</p>
+<img alt="images/setup-studio3.png" src="images/setup-studio3.png" />
+<p>If project is integrated in Android Studio version higher or equal to 1.0.0 applicationId param from SDK default configuration should be removed.</p>
+<img alt="images/setup-studio4.png" src="images/setup-studio4.png" />
+</div>
 <div class="section" id="required-libraries">
 <h4>Required Libraries<a class="headerlink" href="#required-libraries" title="Permalink to this headline">¶</a></h4>
 <p>The Socialize SDK depends on 3 external libraries:</p>
