@@ -21,8 +21,6 @@
  */
 package com.socialize.notifications;
 
-import java.util.List;
-
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
@@ -31,6 +29,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
 import android.util.Log;
+
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.android.ioc.Logger;
 import com.socialize.api.DeviceRegistrationSystem;
@@ -42,6 +41,8 @@ import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.StringUtils;
+
+import java.util.List;
 
 /**
  * @author Jason Polites
@@ -128,8 +129,10 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 			Intent implicitIntent = newIntent(REQUEST_REGISTRATION_INTENT);
 			PackageManager pm = context.getPackageManager();
 			List<ResolveInfo> resolveInfos = pm.queryIntentServices(implicitIntent, 0);
+
 			if (resolveInfos != null
-					&& resolveInfos.size() == 1) {
+					&& resolveInfos.size() > 1) {
+
 				ResolveInfo serviceInfo = resolveInfos.get(0);
 				String packageName = serviceInfo.serviceInfo.packageName;
 				String className = serviceInfo.serviceInfo.name;
@@ -140,7 +143,9 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 				registrationIntent.putExtra(EXTRA_APPLICATION_PENDING_INTENT, newPendingIntent(context));
 				registrationIntent.putExtra(EXTRA_SENDER, senderId);
 				context.startService(registrationIntent);
+
 			}
+
 		}	
 		else {
 			if(logger != null && logger.isDebugEnabled()) {
