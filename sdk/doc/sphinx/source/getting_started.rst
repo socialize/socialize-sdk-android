@@ -72,6 +72,32 @@ a full "clean" of these projects:
 
 .. image:: images/2.8.4/setup6.png
 
+Using Android Studio
+~~~~~~~~~~~~~~~~~~~~
+
+There are no **Android Studio modules** embedded in SDK, but you can easily create one for SDK with Android Studio toolset.
+
+In Android Studio select File->Import Module...
+
+.. image:: images/3.1.3/setup-studio0.png
+
+In New Module dialog click "..." button on the right of "Source directory" field
+
+.. image:: images/3.1.3/setup-studio1.png
+
+Browse to the location into which you unzipped the SDK, select 'sdk' folder and click 'OK'.
+
+.. image:: images/3.1.3/setup-studio2.png
+
+You may want to change the module name if it's ambiguous for your project. Also note the warning about the required dependencies for sdk which also should be included in the project. After that click 'Finish'.
+
+.. image:: images/3.1.3/setup-studio3.png
+
+If project is integrated in Android Studio version higher or equal to 1.0.0 applicationId param from SDK default configuration should be removed.
+
+.. image:: images/3.1.3/setup-studio4.png
+
+
 Required Libraries
 ~~~~~~~~~~~~~~~~~~
 
