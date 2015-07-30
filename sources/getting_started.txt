@@ -116,8 +116,8 @@ from their respective source repositories:
 
 .. note::
 
-    Socialize has been tested with v3.0.1 of the Facebook SDK.  If you choose to reference their SDK directly please
-    ensure you *checkout* the 3.0.1 version.
+    Socialize has been tested with v3.17.2 of the Facebook SDK.  If you choose to reference their SDK directly please
+    ensure you *checkout* the 3.17.2 version.
 
 2. Set up your Socialize Keys
 =============================
