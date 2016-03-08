@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Entity Loaders &mdash; Socialize Android SDK v3.1.6 documentation</title>
+    <title>Entity Loaders &mdash; Socialize Android SDK v3.1.7 documentation</title>
     
     <link rel="stylesheet" href="static/nature.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     'v3.1.6',
+        VERSION:     'v3.1.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,28 +24,28 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v3.1.6 documentation" href="index.html?v=v3.1.6" />
-    <link rel="next" title="Deep Linking" href="deep_linking.html?v=v3.1.6" />
-    <link rel="prev" title="SmartAlerts (Push Notifications)" href="push_notifications.html?v=v3.1.6" /> 
+    <link rel="top" title="Socialize Android SDK v3.1.7 documentation" href="index.html?v=v3.1.7" />
+    <link rel="next" title="Deep Linking" href="deep_linking.html?v=v3.1.7" />
+    <link rel="prev" title="SmartAlerts (Push Notifications)" href="push_notifications.html?v=v3.1.7" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="deep_linking.html?v=v3.1.6" title="Deep Linking"
+          <a href="deep_linking.html?v=v3.1.7" title="Deep Linking"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="push_notifications.html?v=v3.1.6" title="SmartAlerts (Push Notifications)"
+          <a href="push_notifications.html?v=v3.1.7" title="SmartAlerts (Push Notifications)"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html?v=v3.1.6">Socialize Android SDK v3.1.6 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html?v=v3.1.7">Socialize Android SDK v3.1.7 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
       <META HTTP-EQUIV="Pragma" CONTENT="no-cache"/>
     <META HTTP-EQUIV="Expires" CONTENT="-1"/>
@@ -99,7 +99,7 @@ interface.</p>
 <p class="last">An entity loader MUST define a parameterless constructor</p>
 </div>
 <p>There is only one Entity Loader per application and it can be set on the Socialize instance:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="c1">// This is a class you need to create in your app</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="c1">// This is a class you need to create in your app</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyEntityLoader</span> <span class="kd">implements</span> <span class="n">SocializeEntityLoader</span> <span class="o">{</span>
 
 	<span class="c1">// MUST define a parameterless constructor</span>
@@ -132,7 +132,7 @@ interface.</p>
 <p>The <strong>loadEntity</strong> method will be called by Socialize when the user selects an item rendered by Socialize which corresponds directly to
 content in your app.</p>
 <p>For example you may want to start an activity in the entity loader:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="c1">// This is a class you need to create in your app</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="c1">// This is a class you need to create in your app</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyEntityLoader</span> <span class="kd">implements</span> <span class="n">SocializeEntityLoader</span> <span class="o">{</span>
 
 	<span class="c1">// MUST define a parameterless constructor</span>
@@ -171,7 +171,7 @@ content in your app.</p>
 <div class="section" id="adding-the-entity-loader-to-socialize">
 <h2>Adding the Entity Loader to Socialize<a class="headerlink" href="#adding-the-entity-loader-to-socialize" title="Permalink to this headline">¶</a></h2>
 <p>To add your Entity Loader to Socialize simply add an entry to <strong>socialize.properties</strong></p>
-<div class="highlight-properties"><div class="highlight"><pre><span class="c"># Entity Loader Class Name</span>
+<div class="highlight-properties"><div class="highlight"><pre><span></span><span class="c"># Entity Loader Class Name</span>
 <span class="na">socialize.entity.loader</span><span class="o">=</span><span class="s">com.mypackage.MyEntityLoader</span>
 </pre></div>
 </div>
@@ -184,11 +184,11 @@ content in your app.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <form class="search" action="search.html?v=v3.1.6" method="get">
+    <form class="search" action="search.html?v=v3.1.7" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -199,55 +199,55 @@ content in your app.</p>
     </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-<h3><a href="index.html?v=v3.1.6">Table Of Contents</a></h3>
+<h3><a href="index.html?v=v3.1.7">Table Of Contents</a></h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v3.1.6">What&#8217;s New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v3.1.6">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lifecycle.html?v=v3.1.6">Socialize Lifecycle</a></li>
-<li class="toctree-l1"><a class="reference internal" href="demo.html?v=v3.1.6">Socialize Demo App</a></li>
-<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v3.1.6">Socialize Action Bar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="entities.html?v=v3.1.6">Socialize Entities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v3.1.6">Custom Like Buttons</a></li>
-<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v3.1.6">Facebook Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v3.1.6">Twitter Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pinterest.html?v=v3.1.6">Sharing to Pinterest</a></li>
-<li class="toctree-l1"><a class="reference internal" href="facebook_adv.html?v=v3.1.6">Advanced Facebook</a></li>
-<li class="toctree-l1"><a class="reference internal" href="twitter_adv.html?v=v3.1.6">Advanced Twitter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v3.1.6">SmartAlerts (Push Notifications)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v3.1.7">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v3.1.7">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lifecycle.html?v=v3.1.7">Socialize Lifecycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html?v=v3.1.7">Socialize Demo App</a></li>
+<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v3.1.7">Socialize Action Bar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entities.html?v=v3.1.7">Socialize Entities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v3.1.7">Custom Like Buttons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v3.1.7">Facebook Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v3.1.7">Twitter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pinterest.html?v=v3.1.7">Sharing to Pinterest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook_adv.html?v=v3.1.7">Advanced Facebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter_adv.html?v=v3.1.7">Advanced Twitter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v3.1.7">SmartAlerts (Push Notifications)</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Entity Loaders</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#creating-the-entity-loader">Creating the Entity Loader</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#adding-the-entity-loader-to-socialize">Adding the Entity Loader to Socialize</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="deep_linking.html?v=v3.1.6">Deep Linking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="localization.html?v=v3.1.6">Localization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v3.1.6">Socialize Core SDK Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="best_practice.html?v=v3.1.6">Extending Socialize</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html?v=v3.1.6">Configuration Settings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v3.1.6">Amazon AppStore URLs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v3.1.6">ProGuard Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v3.1.6">Troubleshooting &amp; Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v3.1.6">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deep_linking.html?v=v3.1.7">Deep Linking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="localization.html?v=v3.1.7">Localization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v3.1.7">Socialize Core SDK Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="best_practice.html?v=v3.1.7">Extending Socialize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html?v=v3.1.7">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v3.1.7">Amazon AppStore URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v3.1.7">ProGuard Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v3.1.7">Troubleshooting &amp; Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v3.1.7">Change Log</a></li>
 </ul>
 
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="deep_linking.html?v=v3.1.6" title="Deep Linking"
+          <a href="deep_linking.html?v=v3.1.7" title="Deep Linking"
              >next</a></li>
         <li class="right" >
-          <a href="push_notifications.html?v=v3.1.6" title="SmartAlerts (Push Notifications)"
+          <a href="push_notifications.html?v=v3.1.7" title="SmartAlerts (Push Notifications)"
              >previous</a> |</li>
-        <li><a href="index.html?v=v3.1.6">Socialize Android SDK v3.1.6 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html?v=v3.1.7">Socialize Android SDK v3.1.7 documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2012, Socialize Inc.
     </div>
   </body>

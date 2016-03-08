@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Socialize Entities &mdash; Socialize Android SDK v3.1.6 documentation</title>
+    <title>Socialize Entities &mdash; Socialize Android SDK v3.1.7 documentation</title>
     
     <link rel="stylesheet" href="static/nature.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     'v3.1.6',
+        VERSION:     'v3.1.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,28 +24,28 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v3.1.6 documentation" href="index.html?v=v3.1.6" />
-    <link rel="next" title="Custom Like Buttons" href="like_button.html?v=v3.1.6" />
-    <link rel="prev" title="Socialize Action Bar" href="action_bar.html?v=v3.1.6" /> 
+    <link rel="top" title="Socialize Android SDK v3.1.7 documentation" href="index.html?v=v3.1.7" />
+    <link rel="next" title="Custom Like Buttons" href="like_button.html?v=v3.1.7" />
+    <link rel="prev" title="Socialize Action Bar" href="action_bar.html?v=v3.1.7" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="like_button.html?v=v3.1.6" title="Custom Like Buttons"
+          <a href="like_button.html?v=v3.1.7" title="Custom Like Buttons"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="action_bar.html?v=v3.1.6" title="Socialize Action Bar"
+          <a href="action_bar.html?v=v3.1.7" title="Socialize Action Bar"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html?v=v3.1.6">Socialize Android SDK v3.1.6 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html?v=v3.1.7">Socialize Android SDK v3.1.7 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
       <META HTTP-EQUIV="Pragma" CONTENT="no-cache"/>
     <META HTTP-EQUIV="Expires" CONTENT="-1"/>
@@ -93,17 +93,17 @@ In this scenario each photo would be an <em>entity</em> and users can then perfo
 </div>
 <p>Entities in Socialize MUST be associated with a unique key.  It is recommended that where possible an
 HTTP URL be used (i.e. one that corresponds to an active web page).  If your entities do not have web addressable URLs Socialize can automatically
-generate an Entity Page for you.  Refer to the <a class="reference internal" href="#entity-no-url"><em>Entities Without URLs</em></a> section on this page for more information.</p>
+generate an Entity Page for you.  Refer to the <a class="reference internal" href="#entity-no-url"><span>Entities Without URLs</span></a> section on this page for more information.</p>
 <div class="section" id="auto-creation-of-entities">
 <h2>Auto-Creation of Entities<a class="headerlink" href="#auto-creation-of-entities" title="Permalink to this headline">¶</a></h2>
 <p>In most cases Socialize will automatically create an entity for you based on the information you provide to a particular call in the SDK.</p>
-<p>For example, if you are using the <a class="reference internal" href="action_bar.html?v=v3.1.6"><em>Socialize Action Bar</em></a> the entity that you pass to the Action Bar will be automatically created for you if it
+<p>For example, if you are using the <a class="reference internal" href="action_bar.html?v=v3.1.7"><em>Socialize Action Bar</em></a> the entity that you pass to the Action Bar will be automatically created for you if it
 does not already exist.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">You should always specify a name when creating an entity, however if you have previously created the entity with a name and do not want to specify the name every time you can provide a &#8220;null&#8221; argument for the name.  This will instruct Socialize to ignore the name attribute and the name of the entity will NOT be updated.</p>
 </div>
-<div class="highlight-java"><div class="highlight"><pre><span class="c1">// Your entity key. </span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="c1">// Your entity key. </span>
 <span class="n">String</span> <span class="n">entityKey</span> <span class="o">=</span> <span class="s">&quot;http://www.getsocialize.com&quot;</span><span class="o">;</span>
 
 <span class="c1">// Create an entity object including a name</span>
@@ -119,7 +119,7 @@ does not already exist.</p>
 <h2>Manual Creation of Entities<a class="headerlink" href="#manual-creation-of-entities" title="Permalink to this headline">¶</a></h2>
 <p>If you want complete control over the lifecycle of an entity you can also create or edit any entity in the system manually</p>
 <p>To create an entity, simply call the <strong>saveEntity</strong> method:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;name&quot;</span><span class="o">);</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;name&quot;</span><span class="o">);</span>
 
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">EntityUtils</span><span class="o">.</span><span class="na">saveEntity</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntityAddListener</span><span class="o">()</span> <span class="o">{</span>
@@ -140,8 +140,8 @@ does not already exist.</p>
 <div class="section" id="retrieving-entity-data">
 <h2>Retrieving Entity Data<a class="headerlink" href="#retrieving-entity-data" title="Permalink to this headline">¶</a></h2>
 <p>An existing entity can be retrieved via the <strong>getEntity</strong> method.  Entities obtained in this way will also
-provide aggregate data on comments, likes, shares and views.  Refer to the <a class="reference internal" href="sdk_user_guide.html?v=v3.1.6#entity-stats"><em>Entity Stats (Global)</em></a> section for more detail on these aggregate values.</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="c1">// The &quot;this&quot; argument refers to the current Activity	</span>
+provide aggregate data on comments, likes, shares and views.  Refer to the <a class="reference internal" href="sdk_user_guide.html?v=v3.1.7#entity-stats"><span>Entity Stats (Global)</span></a> section for more detail on these aggregate values.</p>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="c1">// The &quot;this&quot; argument refers to the current Activity	</span>
 <span class="n">EntityUtils</span><span class="o">.</span><span class="na">getEntity</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntityGetListener</span><span class="o">()</span> <span class="o">{</span>
 	
 	<span class="nd">@Override</span>
@@ -162,7 +162,7 @@ provide aggregate data on comments, likes, shares and views.  Refer to the <a cl
 </pre></div>
 </div>
 <p>You can also retrieve several entities in one call:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">EntityUtils</span><span class="o">.</span><span class="na">getEntities</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntityListListener</span><span class="o">()</span> <span class="o">{</span>
 
 	<span class="nd">@Override</span>
@@ -185,7 +185,7 @@ provide aggregate data on comments, likes, shares and views.  Refer to the <a cl
 <div class="section" id="retrieving-popular-entities">
 <span id="entity-popular"></span><h2>Retrieving Popular Entities<a class="headerlink" href="#retrieving-popular-entities" title="Permalink to this headline">¶</a></h2>
 <p>You can retrieve a list of entities ordered by popularity (activity) by passing a SortOrder paramter to the <strong>getEntities</strong> method</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="c1">// Retrieve the top 10 most popular entities</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="c1">// Retrieve the top 10 most popular entities</span>
 	
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">EntityUtils</span><span class="o">.</span><span class="na">getEntities</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="n">SortOrder</span><span class="o">.</span><span class="na">TOTAL_ACTIVITY</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntityListListener</span><span class="o">()</span> <span class="o">{</span>
@@ -211,7 +211,7 @@ provide aggregate data on comments, likes, shares and views.  Refer to the <a cl
 <h2>Entity Meta Data<a class="headerlink" href="#entity-meta-data" title="Permalink to this headline">¶</a></h2>
 <p>Entities stored in Socialize can optionally include <em>meta data</em>.  This is for any additional information you want to store about the entity.</p>
 <p>Meta data is stored with the entity and returned then the entity is requested.</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;name&quot;</span><span class="o">);</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;name&quot;</span><span class="o">);</span>
 <span class="n">entity</span><span class="o">.</span><span class="na">setMetaData</span><span class="o">(</span><span class="s">&quot;meta data&quot;</span><span class="o">);</span>
 
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
@@ -251,7 +251,7 @@ provide aggregate data on comments, likes, shares and views.  Refer to the <a cl
 </pre></div>
 </div>
 <p>If you want a more complex data structure, we recommend using JSON as an object notation</p>
-<div class="highlight-java"><div class="highlight"><pre>	
+<div class="highlight-java"><div class="highlight"><pre><span></span>	
 <span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;name&quot;</span><span class="o">);</span>
 
 <span class="c1">// Store a custom dictionary as a JSON object</span>
@@ -336,7 +336,7 @@ taken from your entity meta data.</p>
 <p class="last">If your entity key uses an HTTP URL the contents of your entity page will be automatically parsed from that URL by default</p>
 </div>
 <p>To customize the content displayed on your entity pages simply add a JSON structure to your entity <strong>meta data</strong> that includes the following <em>szsd_</em> prefixed attributes:</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;szsd_thumb&quot;</span><span class="o">:</span><span class="s2">&quot;http://the_url_to_your_thumbnail_image&quot;</span><span class="p">,</span> 
     <span class="s2">&quot;szsd_title&quot;</span><span class="o">:</span> <span class="s2">&quot;Some title for the page, if you don&#39;t want to use the entity name&quot;</span><span class="p">,</span> 
     <span class="s2">&quot;szsd_description&quot;</span><span class="o">:</span> <span class="s2">&quot;Description text on the page if there is no URL to parse&quot;</span>
@@ -344,7 +344,7 @@ taken from your entity meta data.</p>
 </pre></div>
 </div>
 <p>In code this would look something like this</p>
-<div class="highlight-java"><div class="highlight"><pre>	
+<div class="highlight-java"><div class="highlight"><pre><span></span>	
 <span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;name&quot;</span><span class="o">);</span>
 
 <span class="c1">// Store a custom dictionary as a JSON object</span>
@@ -383,11 +383,11 @@ taken from your entity meta data.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <form class="search" action="search.html?v=v3.1.6" method="get">
+    <form class="search" action="search.html?v=v3.1.7" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -398,13 +398,13 @@ taken from your entity meta data.</p>
     </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-<h3><a href="index.html?v=v3.1.6">Table Of Contents</a></h3>
+<h3><a href="index.html?v=v3.1.7">Table Of Contents</a></h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v3.1.6">What&#8217;s New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v3.1.6">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lifecycle.html?v=v3.1.6">Socialize Lifecycle</a></li>
-<li class="toctree-l1"><a class="reference internal" href="demo.html?v=v3.1.6">Socialize Demo App</a></li>
-<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v3.1.6">Socialize Action Bar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v3.1.7">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v3.1.7">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lifecycle.html?v=v3.1.7">Socialize Lifecycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html?v=v3.1.7">Socialize Demo App</a></li>
+<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v3.1.7">Socialize Action Bar</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Socialize Entities</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#auto-creation-of-entities">Auto-Creation of Entities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#manual-creation-of-entities">Manual Creation of Entities</a></li>
@@ -414,42 +414,42 @@ taken from your entity meta data.</p>
 <li class="toctree-l2"><a class="reference internal" href="#entities-without-urls">Entities Without URLs</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v3.1.6">Custom Like Buttons</a></li>
-<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v3.1.6">Facebook Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v3.1.6">Twitter Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pinterest.html?v=v3.1.6">Sharing to Pinterest</a></li>
-<li class="toctree-l1"><a class="reference internal" href="facebook_adv.html?v=v3.1.6">Advanced Facebook</a></li>
-<li class="toctree-l1"><a class="reference internal" href="twitter_adv.html?v=v3.1.6">Advanced Twitter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v3.1.6">SmartAlerts (Push Notifications)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v3.1.6">Entity Loaders</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deep_linking.html?v=v3.1.6">Deep Linking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="localization.html?v=v3.1.6">Localization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v3.1.6">Socialize Core SDK Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="best_practice.html?v=v3.1.6">Extending Socialize</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html?v=v3.1.6">Configuration Settings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v3.1.6">Amazon AppStore URLs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v3.1.6">ProGuard Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v3.1.6">Troubleshooting &amp; Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v3.1.6">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v3.1.7">Custom Like Buttons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v3.1.7">Facebook Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v3.1.7">Twitter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pinterest.html?v=v3.1.7">Sharing to Pinterest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook_adv.html?v=v3.1.7">Advanced Facebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter_adv.html?v=v3.1.7">Advanced Twitter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v3.1.7">SmartAlerts (Push Notifications)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v3.1.7">Entity Loaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deep_linking.html?v=v3.1.7">Deep Linking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="localization.html?v=v3.1.7">Localization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v3.1.7">Socialize Core SDK Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="best_practice.html?v=v3.1.7">Extending Socialize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html?v=v3.1.7">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v3.1.7">Amazon AppStore URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v3.1.7">ProGuard Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v3.1.7">Troubleshooting &amp; Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v3.1.7">Change Log</a></li>
 </ul>
 
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="like_button.html?v=v3.1.6" title="Custom Like Buttons"
+          <a href="like_button.html?v=v3.1.7" title="Custom Like Buttons"
              >next</a></li>
         <li class="right" >
-          <a href="action_bar.html?v=v3.1.6" title="Socialize Action Bar"
+          <a href="action_bar.html?v=v3.1.7" title="Socialize Action Bar"
              >previous</a> |</li>
-        <li><a href="index.html?v=v3.1.6">Socialize Android SDK v3.1.6 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html?v=v3.1.7">Socialize Android SDK v3.1.7 documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2012, Socialize Inc.
     </div>
   </body>

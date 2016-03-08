@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Socialize Core SDK Guide &mdash; Socialize Android SDK v3.1.6 documentation</title>
+    <title>Socialize Core SDK Guide &mdash; Socialize Android SDK v3.1.7 documentation</title>
     
     <link rel="stylesheet" href="static/nature.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     'v3.1.6',
+        VERSION:     'v3.1.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,28 +24,28 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v3.1.6 documentation" href="index.html?v=v3.1.6" />
-    <link rel="next" title="Extending Socialize" href="best_practice.html?v=v3.1.6" />
-    <link rel="prev" title="Localization" href="localization.html?v=v3.1.6" /> 
+    <link rel="top" title="Socialize Android SDK v3.1.7 documentation" href="index.html?v=v3.1.7" />
+    <link rel="next" title="Extending Socialize" href="best_practice.html?v=v3.1.7" />
+    <link rel="prev" title="Localization" href="localization.html?v=v3.1.7" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="best_practice.html?v=v3.1.6" title="Extending Socialize"
+          <a href="best_practice.html?v=v3.1.7" title="Extending Socialize"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="localization.html?v=v3.1.6" title="Localization"
+          <a href="localization.html?v=v3.1.7" title="Localization"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html?v=v3.1.6">Socialize Android SDK v3.1.6 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html?v=v3.1.7">Socialize Android SDK v3.1.7 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
       <META HTTP-EQUIV="Pragma" CONTENT="no-cache"/>
     <META HTTP-EQUIV="Expires" CONTENT="-1"/>
@@ -139,7 +139,7 @@ The following section is not required if you are simply using the <b>Action Bar<
 </div>
 <p>The Socialize SDK should be initialized in the <strong>onCreate()</strong> method of your Activity.
 You should also include the onPause and onResume methods.</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="nd">@Override</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="nd">@Override</span>
 <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
 	<span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
 	
@@ -163,7 +163,7 @@ You should also include the onPause and onResume methods.</p>
 </pre></div>
 </div>
 <p>If you want to know about initialization success (e.g. if you want to access Socialize after init), you can also specify a listener</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="nd">@Override</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="nd">@Override</span>
 <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
 	<span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
 	
@@ -235,7 +235,7 @@ This can either be an entity you created previously, or a new entity which will 
 <div class="section" id="creating-an-entity-inline">
 <h3>Creating an Entity Inline<a class="headerlink" href="#creating-an-entity-inline" title="Permalink to this headline">¶</a></h3>
 <p>A typical use of an entity might be when posting a comment.  Here the entity name is specified.</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;name&quot;</span><span class="o">);</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;name&quot;</span><span class="o">);</span>
 
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">CommentUtils</span><span class="o">.</span><span class="na">addComment</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="s">&quot;The comment&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">CommentAddListener</span><span class="o">()</span> <span class="o">{</span>
@@ -253,7 +253,7 @@ This can either be an entity you created previously, or a new entity which will 
 </pre></div>
 </div>
 <p>Alternatively a <strong>null</strong> argument can be specified for the name which will instruct the server to leave the existing name intact.</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
 
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">CommentUtils</span><span class="o">.</span><span class="na">addComment</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="s">&quot;The comment&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">CommentAddListener</span><span class="o">()</span> <span class="o">{</span>
@@ -279,7 +279,7 @@ entity when viewing reports on the Socialize dash board.</p>
 comment,view,share or like against a key that does not currently exist, it will be automatically created
 for you.</p>
 <p>To create an entity, simply call the <strong>saveEntity</strong> method:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;name&quot;</span><span class="o">);</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;name&quot;</span><span class="o">);</span>
 
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">EntityUtils</span><span class="o">.</span><span class="na">saveEntity</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntityAddListener</span><span class="o">()</span> <span class="o">{</span>
@@ -300,8 +300,8 @@ for you.</p>
 <div class="section" id="retrieving-entity-data">
 <h3>Retrieving Entity Data<a class="headerlink" href="#retrieving-entity-data" title="Permalink to this headline">¶</a></h3>
 <p>An existing entity can be retrieved via the <strong>getEntity</strong> method.  Entities obtained in this way will also
-provide aggregate data on comments, likes, shares and views.  Refer to the <a class="reference internal" href="#entity-stats"><em>Entity Stats (Global)</em></a> section for more detail on these aggregate values.</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="c1">// The &quot;this&quot; argument refers to the current Activity	</span>
+provide aggregate data on comments, likes, shares and views.  Refer to the <a class="reference internal" href="#entity-stats"><span>Entity Stats (Global)</span></a> section for more detail on these aggregate values.</p>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="c1">// The &quot;this&quot; argument refers to the current Activity	</span>
 <span class="n">EntityUtils</span><span class="o">.</span><span class="na">getEntity</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntityGetListener</span><span class="o">()</span> <span class="o">{</span>
 	
 	<span class="nd">@Override</span>
@@ -322,7 +322,7 @@ provide aggregate data on comments, likes, shares and views.  Refer to the <a cl
 </pre></div>
 </div>
 <p>You can also retrieve several entities in one call:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">EntityUtils</span><span class="o">.</span><span class="na">getEntities</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntityListListener</span><span class="o">()</span> <span class="o">{</span>
 
 	<span class="nd">@Override</span>
@@ -345,7 +345,7 @@ provide aggregate data on comments, likes, shares and views.  Refer to the <a cl
 <div class="section" id="retrieving-popular-entities">
 <h3>Retrieving Popular Entities<a class="headerlink" href="#retrieving-popular-entities" title="Permalink to this headline">¶</a></h3>
 <p>You can retrieve a list of entities ordered by popularity (activity) by passing a SortOrder paramter to the <strong>getEntities</strong> method</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="c1">// Retrieve the top 10 most popular entities</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="c1">// Retrieve the top 10 most popular entities</span>
 	
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">EntityUtils</span><span class="o">.</span><span class="na">getEntities</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="n">SortOrder</span><span class="o">.</span><span class="na">TOTAL_ACTIVITY</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntityListListener</span><span class="o">()</span> <span class="o">{</span>
@@ -370,7 +370,7 @@ provide aggregate data on comments, likes, shares and views.  Refer to the <a cl
 <div class="section" id="entity-stats-global">
 <span id="entity-stats"></span><h3>Entity Stats (Global)<a class="headerlink" href="#entity-stats-global" title="Permalink to this headline">¶</a></h3>
 <p>Each entity object retrieved from the server contains aggregate statistics about the number of comments,likes,views and shares:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="c1">// The &quot;this&quot; argument refers to the current Activity	</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="c1">// The &quot;this&quot; argument refers to the current Activity	</span>
 <span class="n">EntityUtils</span><span class="o">.</span><span class="na">getEntity</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntityGetListener</span><span class="o">()</span> <span class="o">{</span>
 	
 	<span class="nd">@Override</span>
@@ -400,7 +400,7 @@ provide aggregate data on comments, likes, shares and views.  Refer to the <a cl
 <div class="section" id="entity-stats-user">
 <h3>Entity Stats (User)<a class="headerlink" href="#entity-stats-user" title="Permalink to this headline">¶</a></h3>
 <p>You can also retrieve information about the current user&#8217;s actions on the entity:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="c1">// The &quot;this&quot; argument refers to the current Activity	</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="c1">// The &quot;this&quot; argument refers to the current Activity	</span>
 <span class="n">EntityUtils</span><span class="o">.</span><span class="na">getEntity</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntityGetListener</span><span class="o">()</span> <span class="o">{</span>
 	
 	<span class="nd">@Override</span>
@@ -430,7 +430,7 @@ provide aggregate data on comments, likes, shares and views.  Refer to the <a cl
 <h3>Entity Meta Data<a class="headerlink" href="#entity-meta-data" title="Permalink to this headline">¶</a></h3>
 <p>Entities stored in Socialize can optionally include <em>meta data</em>.  This is for any additional information you want to store about the entity.</p>
 <p>Meta data is stored with the entity and returned then the entity is requested.</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;name&quot;</span><span class="o">);</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;name&quot;</span><span class="o">);</span>
 <span class="n">entity</span><span class="o">.</span><span class="na">setMetaData</span><span class="o">(</span><span class="s">&quot;meta data&quot;</span><span class="o">);</span>
 
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
@@ -470,7 +470,7 @@ provide aggregate data on comments, likes, shares and views.  Refer to the <a cl
 </pre></div>
 </div>
 <p>If you want a more complex data structure, we recommend using JSON as an object notation</p>
-<div class="highlight-java"><div class="highlight"><pre>	
+<div class="highlight-java"><div class="highlight"><pre><span></span>	
 <span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;name&quot;</span><span class="o">);</span>
 
 <span class="c1">// Store a custom dictionary as a JSON object</span>
@@ -528,7 +528,7 @@ provide aggregate data on comments, likes, shares and views.  Refer to the <a cl
 <div class="section" id="entity-activity">
 <h3>Entity Activity<a class="headerlink" href="#entity-activity" title="Permalink to this headline">¶</a></h3>
 <p>All actions performed on an entity (comment,share,like) can be retrieved using <strong>ActionUtils</strong></p>
-<div class="highlight-java"><div class="highlight"><pre><span class="c1">// Get the last 10 actions performed in the app for the entity with the key &quot;key&quot;</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="c1">// Get the last 10 actions performed in the app for the entity with the key &quot;key&quot;</span>
 <span class="n">ActionUtils</span><span class="o">.</span><span class="na">getActionsByEntity</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="k">new</span> <span class="n">ActionListListener</span><span class="o">()</span> <span class="o">{</span>
 	
 	<span class="nd">@Override</span>
@@ -571,11 +571,11 @@ The following section is not required if you are simply using the <b>Action Bar<
 <div class="section" id="getting-a-user">
 <h3>Getting a User<a class="headerlink" href="#getting-a-user" title="Permalink to this headline">¶</a></h3>
 <p>To obtain a reference to the current user simply call the <strong>getCurrentUser</strong> method</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">User</span> <span class="n">currentUser</span> <span class="o">=</span> <span class="n">UserUtils</span><span class="o">.</span><span class="na">getCurrentUser</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">User</span> <span class="n">currentUser</span> <span class="o">=</span> <span class="n">UserUtils</span><span class="o">.</span><span class="na">getCurrentUser</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
 </pre></div>
 </div>
 <p>To obtain a User object for a user other than the current user</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="kt">long</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">123L</span><span class="o">;</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="kt">long</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">123L</span><span class="o">;</span>
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">UserUtils</span><span class="o">.</span><span class="na">getUser</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">id</span><span class="o">,</span> <span class="k">new</span> <span class="n">UserGetListener</span><span class="o">()</span> <span class="o">{</span>
 	
@@ -600,12 +600,12 @@ The following section is not required if you are simply using the <b>Action Bar<
 <div class="section" id="user-settings">
 <h3>User Settings<a class="headerlink" href="#user-settings" title="Permalink to this headline">¶</a></h3>
 <p>To allow a user to update their settings you can simply present them with the User Settings view:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">UserUtils</span><span class="o">.</span><span class="na">showUserSettings</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
 </pre></div>
 </div>
 <p>If you want to build your own UI to update a User&#8217;s settings you can simply call the <em>saveUserSettings</em> method</p>
-<div class="highlight-java"><div class="highlight"><pre>	
+<div class="highlight-java"><div class="highlight"><pre><span></span>	
 	<span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 	<span class="k">try</span> <span class="o">{</span>
 		<span class="n">UserSettings</span> <span class="n">userSettings</span> <span class="o">=</span> <span class="n">UserUtils</span><span class="o">.</span><span class="na">getUserSettings</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
@@ -633,7 +633,7 @@ The following section is not required if you are simply using the <b>Action Bar<
 </div>
 <p>To globally override the activity that is displayed when a call to <strong>showUserSettings</strong> is made you can set a user
 settings activity class on the global Socialize instance:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="c1">// Replace ProfileActivity with your own activity class</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="c1">// Replace ProfileActivity with your own activity class</span>
 <span class="n">Socialize</span><span class="o">.</span><span class="na">getSocialize</span><span class="o">().</span><span class="na">setUserSettingsActivity</span><span class="o">(</span><span class="n">ProfileActivity</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
 </pre></div>
 </div>
@@ -642,7 +642,7 @@ settings activity class on the global Socialize instance:</p>
 <div class="section" id="user-activity">
 <h3>User Activity<a class="headerlink" href="#user-activity" title="Permalink to this headline">¶</a></h3>
 <p>You can display a profile view for any user which includes their recent activity</p>
-<div class="highlight-java"><div class="highlight"><pre>	
+<div class="highlight-java"><div class="highlight"><pre><span></span>	
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">UserUtils</span><span class="o">.</span><span class="na">getCurrentUser</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
 
@@ -650,7 +650,7 @@ settings activity class on the global Socialize instance:</p>
 </pre></div>
 </div>
 <p>Or retrieve the raw list of actions performed by a user using <strong>ActionUtils</strong></p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">UserUtils</span><span class="o">.</span><span class="na">getCurrentUser</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">UserUtils</span><span class="o">.</span><span class="na">getCurrentUser</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
 
 <span class="c1">// Get the most recent 10 actions by this user</span>
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
@@ -671,7 +671,7 @@ settings activity class on the global Socialize instance:</p>
 </pre></div>
 </div>
 <p>Or get the list of actions by a user on a single entity</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="c1">// Get the last 10 actions performed in the app for the entity with the key &quot;key&quot; by the current user</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="c1">// Get the last 10 actions performed in the app for the entity with the key &quot;key&quot; by the current user</span>
 <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">UserUtils</span><span class="o">.</span><span class="na">getCurrentUser</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
 	
 <span class="n">ActionUtils</span><span class="o">.</span><span class="na">getActionsByUserAndEntity</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">user</span><span class="o">.</span><span class="na">getId</span><span class="o">(),</span> <span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="k">new</span> <span class="n">ActionListListener</span><span class="o">()</span> <span class="o">{</span>
@@ -712,7 +712,7 @@ settings activity class on the global Socialize instance:</p>
 The following section is not required if you are simply using the <b>Action Bar</b>
 </div>
 </div><p>Using the <strong>ActionUtils</strong> class you can also retrieve application-wide activity</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="c1">// Get the last 10 actions performed in the app</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="c1">// Get the last 10 actions performed in the app</span>
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">ActionUtils</span><span class="o">.</span><span class="na">getActionsByApplication</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="k">new</span> <span class="n">ActionListListener</span><span class="o">()</span> <span class="o">{</span>
 	
@@ -755,7 +755,7 @@ The following section is not required if you are simply using the <b>Action Bar<
 <h3>Default Share Dialog<a class="headerlink" href="#default-share-dialog" title="Permalink to this headline">¶</a></h3>
 <p>The simplest way to allow users to share an entity (your content) is via the share dialog</p>
 <img alt="images/2_0_share_default.png" src="images/2_0_share_default.png" />
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
 
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">ShareUtils</span><span class="o">.</span><span class="na">showShareDialog</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">);</span>
@@ -766,7 +766,7 @@ The following section is not required if you are simply using the <b>Action Bar<
 <span id="custom-share"></span><h3>Custom Share Dialog<a class="headerlink" href="#custom-share-dialog" title="Permalink to this headline">¶</a></h3>
 <p>If you just want to allow sharing to Social Networks</p>
 <img alt="images/2_0_share_via_networks.png" src="images/2_0_share_via_networks.png" />
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>	
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>	
 
 <span class="c1">// Setup the options for display</span>
 <span class="kt">int</span> <span class="n">options</span> <span class="o">=</span> <span class="n">ShareUtils</span><span class="o">.</span><span class="na">FACEBOOK</span> <span class="o">|</span> <span class="n">ShareUtils</span><span class="o">.</span><span class="na">TWITTER</span> <span class="o">|</span> <span class="n">ShareUtils</span><span class="o">.</span><span class="na">GOOGLE_PLUS</span><span class="o">;</span>
@@ -798,7 +798,7 @@ The following section is not required if you are simply using the <b>Action Bar<
 <p>If you want to allow the user to add a comment when sharing but you still want to use the default UI controls
 you can implement a <em>Flow Interrupt</em> to extract text from the user before the share</p>
 <img alt="images/2_0_share_with_comment.png" src="images/2_0_share_with_comment.png" />
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>	
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>	
 
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">ShareUtils</span><span class="o">.</span><span class="na">showShareDialog</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="k">new</span> <span class="n">SocialNetworkDialogListener</span><span class="o">()</span> <span class="o">{</span>
@@ -842,7 +842,7 @@ you can implement a <em>Flow Interrupt</em> to extract text from the user before
 <h3>Customizing the Content of Facebook &amp; Twiter Posts<a class="headerlink" href="#customizing-the-content-of-facebook-twiter-posts" title="Permalink to this headline">¶</a></h3>
 <p>In some situations you may want to override the default behavior of posting to Facebook or Twitter.  In these cases you can
 implement the <strong>onBeforePost</strong> method of the listener you pass to the ShareUtils call</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>	
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>	
 
 <span class="c1">// Setup the options for display</span>
 <span class="kt">int</span> <span class="n">options</span> <span class="o">=</span> <span class="n">ShareUtils</span><span class="o">.</span><span class="na">SOCIAL</span><span class="o">;</span> <span class="c1">// This is just a shortcut for Twitter, Facebook and Google+.</span>
@@ -882,7 +882,7 @@ implement the <strong>onBeforePost</strong> method of the listener you pass to t
 <div class="section" id="customizing-the-content-of-email-sms-posts">
 <h3>Customizing the Content of Email &amp; SMS Posts<a class="headerlink" href="#customizing-the-content-of-email-sms-posts" title="Permalink to this headline">¶</a></h3>
 <p>You can also override the default text for email and sms shares</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Activity</span> <span class="n">context</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">Activity</span> <span class="n">context</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
 
 <span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
 
@@ -910,7 +910,7 @@ implement the <strong>onBeforePost</strong> method of the listener you pass to t
 <h3>Retrieving Shares<a class="headerlink" href="#retrieving-shares" title="Permalink to this headline">¶</a></h3>
 <p>You can retrieve existing share events by User, Entity, Application or directly using an ID</p>
 <p>List shares by User</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">UserUtils</span><span class="o">.</span><span class="na">getCurrentUser</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">UserUtils</span><span class="o">.</span><span class="na">getCurrentUser</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
 
 <span class="c1">// Get first 10 shares by user</span>
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
@@ -929,7 +929,7 @@ implement the <strong>onBeforePost</strong> method of the listener you pass to t
 </pre></div>
 </div>
 <p>List shares by Entity</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">String</span> <span class="n">entityKey</span> <span class="o">=</span> <span class="s">&quot;http://getsocialize.com&quot;</span><span class="o">;</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">String</span> <span class="n">entityKey</span> <span class="o">=</span> <span class="s">&quot;http://getsocialize.com&quot;</span><span class="o">;</span>
 
 <span class="c1">// Get first 10 shares</span>
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
@@ -948,7 +948,7 @@ implement the <strong>onBeforePost</strong> method of the listener you pass to t
 </pre></div>
 </div>
 <p>List shares by ID</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="kt">long</span> <span class="n">shareId</span> <span class="o">=</span> <span class="mi">123L</span><span class="o">;</span> 
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="kt">long</span> <span class="n">shareId</span> <span class="o">=</span> <span class="mi">123L</span><span class="o">;</span> 
 
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">ShareUtils</span><span class="o">.</span><span class="na">getShare</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="k">new</span> <span class="n">ShareGetListener</span><span class="o">()</span> <span class="o">{</span>
@@ -972,7 +972,7 @@ implement the <strong>onBeforePost</strong> method of the listener you pass to t
 </pre></div>
 </div>
 <p>List shares by Application</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="c1">// Get first 10 shares</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="c1">// Get first 10 shares</span>
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">ShareUtils</span><span class="o">.</span><span class="na">getSharesByApplication</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="k">new</span> <span class="n">ShareListListener</span><span class="o">()</span> <span class="o">{</span>
 	
@@ -1013,9 +1013,9 @@ The following section is not required if you are simply using the <b>Action Bar<
 </div>
 </div><div class="section" id="displaying-the-comment-list-ui">
 <h3>Displaying the Comment List UI<a class="headerlink" href="#displaying-the-comment-list-ui" title="Permalink to this headline">¶</a></h3>
-<p>The standard Socialize Comment List UI is included with the <a class="reference internal" href="action_bar.html?v=v3.1.6"><em>Socialize Action Bar</em></a> however if you wanted to create your own ActionBar or
+<p>The standard Socialize Comment List UI is included with the <a class="reference internal" href="action_bar.html?v=v3.1.7"><em>Socialize Action Bar</em></a> however if you wanted to create your own ActionBar or
 simply want to launch the Comment List from elsewhere in your app this can simply be done with a few lines of code</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
 
 <span class="c1">// Show the comment list view</span>
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
@@ -1023,7 +1023,7 @@ simply want to launch the Comment List from elsewhere in your app this can simpl
 </pre></div>
 </div>
 <p>You can also display the UI with a listener to handle events</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
 
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">CommentUtils</span><span class="o">.</span><span class="na">showCommentView</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="k">new</span> <span class="n">OnCommentViewActionListener</span><span class="o">()</span> <span class="o">{</span>
@@ -1102,7 +1102,7 @@ simply want to launch the Comment List from elsewhere in your app this can simpl
 <div class="section" id="making-hyerlinks-clickable">
 <h3>Making Hyerlinks Clickable<a class="headerlink" href="#making-hyerlinks-clickable" title="Permalink to this headline">¶</a></h3>
 <p>The Socialize SDK includes a pre-built OnCommentViewActionListener instance that automatically makes hyperlinks appearing in comments clickable</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
 
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">CommentUtils</span><span class="o">.</span><span class="na">showCommentView</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="k">new</span> <span class="n">LinkifyCommentViewActionListener</span><span class="o">());</span>
@@ -1112,7 +1112,7 @@ simply want to launch the Comment List from elsewhere in your app this can simpl
 <div class="section" id="adding-comments">
 <h3>Adding Comments<a class="headerlink" href="#adding-comments" title="Permalink to this headline">¶</a></h3>
 <p>To create a comment programmatically you simply call the <strong>addComment</strong> method on <strong>CommentUtils</strong></p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
 
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">CommentUtils</span><span class="o">.</span><span class="na">addComment</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="s">&quot;This the comment&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">CommentAddListener</span><span class="o">()</span> <span class="o">{</span>
@@ -1129,7 +1129,7 @@ simply want to launch the Comment List from elsewhere in your app this can simpl
 </pre></div>
 </div>
 <p>You can also manually specify how the comment is to be propagated to 3rd party networks such as Facebook and Twitter</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
 
 <span class="c1">// Get the default options for the user.</span>
 <span class="n">CommentOptions</span> <span class="n">commentOptions</span> <span class="o">=</span> <span class="n">CommentUtils</span><span class="o">.</span><span class="na">getUserCommentOptions</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
@@ -1178,7 +1178,7 @@ simply want to launch the Comment List from elsewhere in your app this can simpl
 <div class="section" id="adding-comments-without-sharing">
 <h3>Adding Comments Without Sharing<a class="headerlink" href="#adding-comments-without-sharing" title="Permalink to this headline">¶</a></h3>
 <p>If you want to explicitly disable sharing of comments you can do this using the <strong>CommentOptions</strong></p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
 
 <span class="c1">// Get the default options for the user.</span>
 <span class="n">CommentOptions</span> <span class="n">commentOptions</span> <span class="o">=</span> <span class="n">CommentUtils</span><span class="o">.</span><span class="na">getUserCommentOptions</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
@@ -1207,7 +1207,7 @@ simply want to launch the Comment List from elsewhere in your app this can simpl
 <h3>Retrieving Comments<a class="headerlink" href="#retrieving-comments" title="Permalink to this headline">¶</a></h3>
 <p>You can retrieve existing comments by User, Entity, Application or directly using an ID</p>
 <p>List comments by User</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">UserUtils</span><span class="o">.</span><span class="na">getCurrentUser</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">UserUtils</span><span class="o">.</span><span class="na">getCurrentUser</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
 
 <span class="c1">// Get first 10 comments by user</span>
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
@@ -1226,7 +1226,7 @@ simply want to launch the Comment List from elsewhere in your app this can simpl
 </pre></div>
 </div>
 <p>List comments by Entity</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">String</span> <span class="n">entityKey</span> <span class="o">=</span> <span class="s">&quot;http://getsocialize.com&quot;</span><span class="o">;</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">String</span> <span class="n">entityKey</span> <span class="o">=</span> <span class="s">&quot;http://getsocialize.com&quot;</span><span class="o">;</span>
 
 <span class="c1">// Get first 10 comments</span>
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
@@ -1245,7 +1245,7 @@ simply want to launch the Comment List from elsewhere in your app this can simpl
 </pre></div>
 </div>
 <p>List comments by ID</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="kt">long</span> <span class="n">commentId0</span> <span class="o">=</span> <span class="mi">123</span><span class="o">;</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="kt">long</span> <span class="n">commentId0</span> <span class="o">=</span> <span class="mi">123</span><span class="o">;</span>
 <span class="kt">long</span> <span class="n">commentId1</span> <span class="o">=</span> <span class="mi">456</span><span class="o">;</span>
 
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
@@ -1269,7 +1269,7 @@ simply want to launch the Comment List from elsewhere in your app this can simpl
 </pre></div>
 </div>
 <p>List comments by Application</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="c1">// Get first 10 comments</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="c1">// Get first 10 comments</span>
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">CommentUtils</span><span class="o">.</span><span class="na">getCommentsByApplication</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="k">new</span> <span class="n">CommentListListener</span><span class="o">()</span> <span class="o">{</span>
 	
@@ -1311,7 +1311,7 @@ The following section is not required if you are simply using the <b>Action Bar<
 </div><div class="section" id="liking">
 <h3>Liking<a class="headerlink" href="#liking" title="Permalink to this headline">¶</a></h3>
 <p>To create a like programmatically you simply call the <strong>like</strong> method on <strong>LikeUtils</strong></p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
 
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">LikeUtils</span><span class="o">.</span><span class="na">like</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="k">new</span> <span class="n">LikeAddListener</span><span class="o">()</span> <span class="o">{</span>
@@ -1329,7 +1329,7 @@ The following section is not required if you are simply using the <b>Action Bar<
 </pre></div>
 </div>
 <p>You can also manually specify how the like is to be propagated to 3rd party networks such as Facebook and Twitter</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
 
 <span class="c1">// Get the default options for the user.</span>
 <span class="n">LikeOptions</span> <span class="n">likeOptions</span> <span class="o">=</span> <span class="n">LikeUtils</span><span class="o">.</span><span class="na">getUserLikeOptions</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
@@ -1376,7 +1376,7 @@ The following section is not required if you are simply using the <b>Action Bar<
 <div class="section" id="un-liking">
 <h3>Un-Liking<a class="headerlink" href="#un-liking" title="Permalink to this headline">¶</a></h3>
 <p>You can also remove a previous like from an entity</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="c1">// Just use the entity key of the entity that was liked</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="c1">// Just use the entity key of the entity that was liked</span>
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">LikeUtils</span><span class="o">.</span><span class="na">unlike</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">LikeDeleteListener</span><span class="o">()</span> <span class="o">{</span>
 	
@@ -1397,7 +1397,7 @@ The following section is not required if you are simply using the <b>Action Bar<
 <h3>Retrieving Likes<a class="headerlink" href="#retrieving-likes" title="Permalink to this headline">¶</a></h3>
 <p>You can retrieve existing likes by User, Entity or Application wide</p>
 <p>List likes by User</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">UserUtils</span><span class="o">.</span><span class="na">getCurrentUser</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">UserUtils</span><span class="o">.</span><span class="na">getCurrentUser</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
 
 <span class="c1">// Get first 10 likes by user</span>
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
@@ -1416,7 +1416,7 @@ The following section is not required if you are simply using the <b>Action Bar<
 </pre></div>
 </div>
 <p>List likes by Entity</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">String</span> <span class="n">entityKey</span> <span class="o">=</span> <span class="s">&quot;http://getsocialize.com&quot;</span><span class="o">;</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">String</span> <span class="n">entityKey</span> <span class="o">=</span> <span class="s">&quot;http://getsocialize.com&quot;</span><span class="o">;</span>
 
 <span class="c1">// Get first 10 likes</span>
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
@@ -1435,7 +1435,7 @@ The following section is not required if you are simply using the <b>Action Bar<
 </pre></div>
 </div>
 <p>List likes by Application</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="c1">// Get first 10 likes</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="c1">// Get first 10 likes</span>
 <span class="c1">// The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">LikeUtils</span><span class="o">.</span><span class="na">getLikesByApplication</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="k">new</span> <span class="n">LikeListListener</span><span class="o">()</span> <span class="o">{</span>
 	
@@ -1477,7 +1477,7 @@ The following section is not required if you are simply using the <b>Action Bar<
 </div><p>A &#8220;view&#8221; represents the action of a user <em>viewing</em> an entity and is an extremely useful analytics tool</p>
 <div class="section" id="recording-views">
 <h3>Recording Views<a class="headerlink" href="#recording-views" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">Entity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">&quot;http://myentity.com&quot;</span><span class="o">,</span> <span class="s">&quot;My Name&quot;</span><span class="o">);</span>
 
 <span class="c1">//The &quot;this&quot; argument refers to the current Activity</span>
 <span class="n">ViewUtils</span><span class="o">.</span><span class="na">view</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="k">new</span> <span class="n">ViewAddListener</span><span class="o">()</span> <span class="o">{</span>
@@ -1503,11 +1503,11 @@ The following section is not required if you are simply using the <b>Action Bar<
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <form class="search" action="search.html?v=v3.1.6" method="get">
+    <form class="search" action="search.html?v=v3.1.7" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -1518,24 +1518,24 @@ The following section is not required if you are simply using the <b>Action Bar<
     </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-<h3><a href="index.html?v=v3.1.6">Table Of Contents</a></h3>
+<h3><a href="index.html?v=v3.1.7">Table Of Contents</a></h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v3.1.6">What&#8217;s New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v3.1.6">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lifecycle.html?v=v3.1.6">Socialize Lifecycle</a></li>
-<li class="toctree-l1"><a class="reference internal" href="demo.html?v=v3.1.6">Socialize Demo App</a></li>
-<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v3.1.6">Socialize Action Bar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="entities.html?v=v3.1.6">Socialize Entities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v3.1.6">Custom Like Buttons</a></li>
-<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v3.1.6">Facebook Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v3.1.6">Twitter Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pinterest.html?v=v3.1.6">Sharing to Pinterest</a></li>
-<li class="toctree-l1"><a class="reference internal" href="facebook_adv.html?v=v3.1.6">Advanced Facebook</a></li>
-<li class="toctree-l1"><a class="reference internal" href="twitter_adv.html?v=v3.1.6">Advanced Twitter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v3.1.6">SmartAlerts (Push Notifications)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v3.1.6">Entity Loaders</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deep_linking.html?v=v3.1.6">Deep Linking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="localization.html?v=v3.1.6">Localization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v3.1.7">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v3.1.7">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lifecycle.html?v=v3.1.7">Socialize Lifecycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html?v=v3.1.7">Socialize Demo App</a></li>
+<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v3.1.7">Socialize Action Bar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entities.html?v=v3.1.7">Socialize Entities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v3.1.7">Custom Like Buttons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v3.1.7">Facebook Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v3.1.7">Twitter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pinterest.html?v=v3.1.7">Sharing to Pinterest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook_adv.html?v=v3.1.7">Advanced Facebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter_adv.html?v=v3.1.7">Advanced Twitter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v3.1.7">SmartAlerts (Push Notifications)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v3.1.7">Entity Loaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deep_linking.html?v=v3.1.7">Deep Linking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="localization.html?v=v3.1.7">Localization</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Socialize Core SDK Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#initializing-socialize-optional">Initializing Socialize (Optional)</a></li>
@@ -1548,31 +1548,31 @@ The following section is not required if you are simply using the <b>Action Bar<
 <li class="toctree-l2"><a class="reference internal" href="#views">Views</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="best_practice.html?v=v3.1.6">Extending Socialize</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html?v=v3.1.6">Configuration Settings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v3.1.6">Amazon AppStore URLs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v3.1.6">ProGuard Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v3.1.6">Troubleshooting &amp; Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v3.1.6">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="best_practice.html?v=v3.1.7">Extending Socialize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html?v=v3.1.7">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v3.1.7">Amazon AppStore URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v3.1.7">ProGuard Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v3.1.7">Troubleshooting &amp; Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v3.1.7">Change Log</a></li>
 </ul>
 
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="best_practice.html?v=v3.1.6" title="Extending Socialize"
+          <a href="best_practice.html?v=v3.1.7" title="Extending Socialize"
              >next</a></li>
         <li class="right" >
-          <a href="localization.html?v=v3.1.6" title="Localization"
+          <a href="localization.html?v=v3.1.7" title="Localization"
              >previous</a> |</li>
-        <li><a href="index.html?v=v3.1.6">Socialize Android SDK v3.1.6 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html?v=v3.1.7">Socialize Android SDK v3.1.7 documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2012, Socialize Inc.
     </div>
   </body>

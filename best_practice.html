@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Extending Socialize &mdash; Socialize Android SDK v3.1.6 documentation</title>
+    <title>Extending Socialize &mdash; Socialize Android SDK v3.1.7 documentation</title>
     
     <link rel="stylesheet" href="static/nature.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     'v3.1.6',
+        VERSION:     'v3.1.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,28 +24,28 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v3.1.6 documentation" href="index.html?v=v3.1.6" />
-    <link rel="next" title="Configuration Settings" href="config.html?v=v3.1.6" />
-    <link rel="prev" title="Socialize Core SDK Guide" href="sdk_user_guide.html?v=v3.1.6" /> 
+    <link rel="top" title="Socialize Android SDK v3.1.7 documentation" href="index.html?v=v3.1.7" />
+    <link rel="next" title="Configuration Settings" href="config.html?v=v3.1.7" />
+    <link rel="prev" title="Socialize Core SDK Guide" href="sdk_user_guide.html?v=v3.1.7" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="config.html?v=v3.1.6" title="Configuration Settings"
+          <a href="config.html?v=v3.1.7" title="Configuration Settings"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="sdk_user_guide.html?v=v3.1.6" title="Socialize Core SDK Guide"
+          <a href="sdk_user_guide.html?v=v3.1.7" title="Socialize Core SDK Guide"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html?v=v3.1.6">Socialize Android SDK v3.1.6 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html?v=v3.1.7">Socialize Android SDK v3.1.7 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
       <META HTTP-EQUIV="Pragma" CONTENT="no-cache"/>
     <META HTTP-EQUIV="Expires" CONTENT="-1"/>
@@ -126,7 +126,7 @@ and/or intercept calls made within the SDK.</p>
 </div></blockquote>
 <p>By far the most common use case is the first in this list.  Creating a completely custom UI is one of the most requested
 features of the Socialize SDK.</p>
-<p>Although some customization is provided within the ActionBar (Refer to <a class="reference internal" href="action_bar.html?v=v3.1.6#custom-actionbar"><em>Customizing the Action Bar</em></a>) a complete re-imagining of the UI experience
+<p>Although some customization is provided within the ActionBar (Refer to <a class="reference internal" href="action_bar.html?v=v3.1.7#custom-actionbar"><span>Customizing the Action Bar</span></a>) a complete re-imagining of the UI experience
 requires a slightly more comprehensive approach.</p>
 <div class="section" id="best-practice-for-ui-customization">
 <h3>Best Practice for UI Customization<a class="headerlink" href="#best-practice-for-ui-customization" title="Permalink to this headline">¶</a></h3>
@@ -136,7 +136,7 @@ UI elements and replace the default ones provided by Socialize.  This is a 4 ste
 <p class="first admonition-title">Note</p>
 <p class="last">The following applies to <strong>Android</strong> implementations.  Differences may apply for other platforms.</p>
 </div>
-<p>See the <a class="reference internal" href="#example"><em>Customizing a View - Working Example</em></a> section at the bottom of this page for an example.</p>
+<p>See the <a class="reference internal" href="#example"><span>Customizing a View - Working Example</span></a> section at the bottom of this page for an example.</p>
 <div class="section" id="step-1-declare-your-ui-in-a-layout-xml-file">
 <h4>Step 1 - Declare your UI in a layout XML file<a class="headerlink" href="#step-1-declare-your-ui-in-a-layout-xml-file" title="Permalink to this headline">¶</a></h4>
 <p>All of the UI default components in the Sociaize SDK for Android are created programmatically <a class="footnote-reference" href="#id7" id="id1">[1]</a>, however it is not necessary to
@@ -158,7 +158,7 @@ callback listeners provided in the SDK to override the default <em>click</em> ac
 <h4>Step 4 - Implement the user actions taken from your UI using the Core SDK<a class="headerlink" href="#step-4-implement-the-user-actions-taken-from-your-ui-using-the-core-sdk" title="Permalink to this headline">¶</a></h4>
 <p>Once you have your UI and have bound the user actions you can then just call the Socialize Core SDK in the same way the
 Socialize UI components do.</p>
-<p>See the <a class="reference internal" href="#example"><em>Customizing a View - Working Example</em></a> section at the bottom of this page for an example, and/or refer to the <a class="reference internal" href="sdk_user_guide.html?v=v3.1.6"><em>Socialize Core SDK Guide</em></a> section for details on
+<p>See the <a class="reference internal" href="#example"><span>Customizing a View - Working Example</span></a> section at the bottom of this page for an example, and/or refer to the <a class="reference internal" href="sdk_user_guide.html?v=v3.1.7"><em>Socialize Core SDK Guide</em></a> section for details on
 calling the Socialize Core SDK.</p>
 </div>
 </div>
@@ -203,70 +203,70 @@ a Socialize class may lead to unexpected errors as new versions of the SDK are r
 <p>Following the steps decsribed above:</p>
 <div class="section" id="id3">
 <h3>Step 1 - Declare your UI in a layout XML file<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-java"><div class="highlight"><pre><span class="o">&lt;?</span><span class="n">xml</span> <span class="n">version</span><span class="o">=</span><span class="s">&quot;1.0&quot;</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&quot;utf-8&quot;</span><span class="o">?&gt;</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="o">&lt;?</span><span class="n">xml</span> <span class="n">version</span><span class="o">=</span><span class="s">&quot;1.0&quot;</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&quot;utf-8&quot;</span><span class="o">?&gt;</span>
 
-<span class="o">&lt;</span><span class="n">LinearLayout</span> <span class="nl">xmlns:</span><span class="n">android</span><span class="o">=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
-              <span class="nl">android:</span><span class="n">orientation</span><span class="o">=</span><span class="s">&quot;vertical&quot;</span>
-              <span class="nl">android:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">&quot;match_parent&quot;</span>
-              <span class="nl">android:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">&quot;match_parent&quot;</span>
-              <span class="nl">android:</span><span class="n">background</span><span class="o">=</span><span class="s">&quot;#004765&quot;</span>
-              <span class="nl">android:</span><span class="n">baselineAligned</span><span class="o">=</span><span class="s">&quot;true&quot;</span>
-              <span class="nl">android:</span><span class="n">padding</span><span class="o">=</span><span class="s">&quot;8dp&quot;</span><span class="o">&gt;</span>
-
-    <span class="o">&lt;</span><span class="n">TextView</span>
-            <span class="nl">android:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">&quot;fill_parent&quot;</span>
-            <span class="nl">android:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">&quot;wrap_content&quot;</span>
-            <span class="nl">android:</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;First Name&quot;</span>
-            <span class="nl">android:</span><span class="n">id</span><span class="o">=</span><span class="s">&quot;@+id/lblFirstName&quot;</span><span class="o">/&gt;</span>
-
-    <span class="o">&lt;</span><span class="n">EditText</span>
-            <span class="nl">android:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">&quot;fill_parent&quot;</span>
-            <span class="nl">android:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">&quot;wrap_content&quot;</span>
-            <span class="nl">android:</span><span class="n">id</span><span class="o">=</span><span class="s">&quot;@+id/txtFirstName&quot;</span>
-            <span class="nl">android:</span><span class="n">inputType</span><span class="o">=</span><span class="s">&quot;text&quot;</span><span class="o">/&gt;</span>
+<span class="o">&lt;</span><span class="n">LinearLayout</span> <span class="n">xmlns</span><span class="o">:</span><span class="n">android</span><span class="o">=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
+              <span class="n">android</span><span class="o">:</span><span class="n">orientation</span><span class="o">=</span><span class="s">&quot;vertical&quot;</span>
+              <span class="n">android</span><span class="o">:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">&quot;match_parent&quot;</span>
+              <span class="n">android</span><span class="o">:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">&quot;match_parent&quot;</span>
+              <span class="n">android</span><span class="o">:</span><span class="n">background</span><span class="o">=</span><span class="s">&quot;#004765&quot;</span>
+              <span class="n">android</span><span class="o">:</span><span class="n">baselineAligned</span><span class="o">=</span><span class="s">&quot;true&quot;</span>
+              <span class="n">android</span><span class="o">:</span><span class="n">padding</span><span class="o">=</span><span class="s">&quot;8dp&quot;</span><span class="o">&gt;</span>
 
     <span class="o">&lt;</span><span class="n">TextView</span>
-            <span class="nl">android:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">&quot;fill_parent&quot;</span>
-            <span class="nl">android:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">&quot;wrap_content&quot;</span>
-            <span class="nl">android:</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Last Name&quot;</span>
-            <span class="nl">android:</span><span class="n">id</span><span class="o">=</span><span class="s">&quot;@+id/lblLastName&quot;</span><span class="o">/&gt;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">&quot;fill_parent&quot;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">&quot;wrap_content&quot;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;First Name&quot;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">id</span><span class="o">=</span><span class="s">&quot;@+id/lblFirstName&quot;</span><span class="o">/&gt;</span>
 
     <span class="o">&lt;</span><span class="n">EditText</span>
-            <span class="nl">android:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">&quot;fill_parent&quot;</span>
-            <span class="nl">android:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">&quot;wrap_content&quot;</span>
-            <span class="nl">android:</span><span class="n">id</span><span class="o">=</span><span class="s">&quot;@+id/txtLastName&quot;</span>
-            <span class="nl">android:</span><span class="n">inputType</span><span class="o">=</span><span class="s">&quot;text&quot;</span><span class="o">/&gt;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">&quot;fill_parent&quot;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">&quot;wrap_content&quot;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">id</span><span class="o">=</span><span class="s">&quot;@+id/txtFirstName&quot;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">inputType</span><span class="o">=</span><span class="s">&quot;text&quot;</span><span class="o">/&gt;</span>
 
     <span class="o">&lt;</span><span class="n">TextView</span>
-            <span class="nl">android:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">&quot;fill_parent&quot;</span>
-            <span class="nl">android:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">&quot;wrap_content&quot;</span>
-            <span class="nl">android:</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Meta Data&quot;</span>
-            <span class="nl">android:</span><span class="n">id</span><span class="o">=</span><span class="s">&quot;@+id/lblMeta&quot;</span><span class="o">/&gt;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">&quot;fill_parent&quot;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">&quot;wrap_content&quot;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Last Name&quot;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">id</span><span class="o">=</span><span class="s">&quot;@+id/lblLastName&quot;</span><span class="o">/&gt;</span>
 
     <span class="o">&lt;</span><span class="n">EditText</span>
-            <span class="nl">android:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">&quot;fill_parent&quot;</span>
-            <span class="nl">android:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">&quot;wrap_content&quot;</span>
-            <span class="nl">android:</span><span class="n">id</span><span class="o">=</span><span class="s">&quot;@+id/txtMeta&quot;</span>
-            <span class="nl">android:</span><span class="n">inputType</span><span class="o">=</span><span class="s">&quot;text&quot;</span><span class="o">/&gt;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">&quot;fill_parent&quot;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">&quot;wrap_content&quot;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">id</span><span class="o">=</span><span class="s">&quot;@+id/txtLastName&quot;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">inputType</span><span class="o">=</span><span class="s">&quot;text&quot;</span><span class="o">/&gt;</span>
+
+    <span class="o">&lt;</span><span class="n">TextView</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">&quot;fill_parent&quot;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">&quot;wrap_content&quot;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Meta Data&quot;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">id</span><span class="o">=</span><span class="s">&quot;@+id/lblMeta&quot;</span><span class="o">/&gt;</span>
+
+    <span class="o">&lt;</span><span class="n">EditText</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">&quot;fill_parent&quot;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">&quot;wrap_content&quot;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">id</span><span class="o">=</span><span class="s">&quot;@+id/txtMeta&quot;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">inputType</span><span class="o">=</span><span class="s">&quot;text&quot;</span><span class="o">/&gt;</span>
 
     <span class="o">&lt;</span><span class="n">LinearLayout</span>
-            <span class="nl">android:</span><span class="n">orientation</span><span class="o">=</span><span class="s">&quot;horizontal&quot;</span>
-            <span class="nl">android:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">&quot;fill_parent&quot;</span>
-            <span class="nl">android:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">&quot;wrap_content&quot;</span>
-            <span class="nl">android:</span><span class="n">gravity</span><span class="o">=</span><span class="s">&quot;center_vertical|right&quot;</span><span class="o">&gt;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">orientation</span><span class="o">=</span><span class="s">&quot;horizontal&quot;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">&quot;fill_parent&quot;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">&quot;wrap_content&quot;</span>
+            <span class="n">android</span><span class="o">:</span><span class="n">gravity</span><span class="o">=</span><span class="s">&quot;center_vertical|right&quot;</span><span class="o">&gt;</span>
 
         <span class="o">&lt;</span><span class="n">Button</span>
-                <span class="nl">android:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">&quot;wrap_content&quot;</span>
-                <span class="nl">android:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">&quot;wrap_content&quot;</span>
-                <span class="nl">android:</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Cancel&quot;</span>
-                <span class="nl">android:</span><span class="n">id</span><span class="o">=</span><span class="s">&quot;@+id/btnCancel&quot;</span>
-                <span class="nl">android:</span><span class="n">layout_gravity</span><span class="o">=</span><span class="s">&quot;center&quot;</span><span class="o">/&gt;</span>
+                <span class="n">android</span><span class="o">:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">&quot;wrap_content&quot;</span>
+                <span class="n">android</span><span class="o">:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">&quot;wrap_content&quot;</span>
+                <span class="n">android</span><span class="o">:</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Cancel&quot;</span>
+                <span class="n">android</span><span class="o">:</span><span class="n">id</span><span class="o">=</span><span class="s">&quot;@+id/btnCancel&quot;</span>
+                <span class="n">android</span><span class="o">:</span><span class="n">layout_gravity</span><span class="o">=</span><span class="s">&quot;center&quot;</span><span class="o">/&gt;</span>
         <span class="o">&lt;</span><span class="n">Button</span>
-                <span class="nl">android:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">&quot;wrap_content&quot;</span>
-                <span class="nl">android:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">&quot;wrap_content&quot;</span>
-                <span class="nl">android:</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Save&quot;</span>
-                <span class="nl">android:</span><span class="n">id</span><span class="o">=</span><span class="s">&quot;@+id/btnSave&quot;</span>
-                <span class="nl">android:</span><span class="n">layout_gravity</span><span class="o">=</span><span class="s">&quot;center&quot;</span><span class="o">/&gt;</span>
+                <span class="n">android</span><span class="o">:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">&quot;wrap_content&quot;</span>
+                <span class="n">android</span><span class="o">:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">&quot;wrap_content&quot;</span>
+                <span class="n">android</span><span class="o">:</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Save&quot;</span>
+                <span class="n">android</span><span class="o">:</span><span class="n">id</span><span class="o">=</span><span class="s">&quot;@+id/btnSave&quot;</span>
+                <span class="n">android</span><span class="o">:</span><span class="n">layout_gravity</span><span class="o">=</span><span class="s">&quot;center&quot;</span><span class="o">/&gt;</span>
 
     <span class="o">&lt;/</span><span class="n">LinearLayout</span><span class="o">&gt;</span>
 
@@ -276,7 +276,7 @@ a Socialize class may lead to unexpected errors as new versions of the SDK are r
 </div>
 <div class="section" id="id4">
 <h3>Step 2 - Create an Activity to house the layout<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-java"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">android.app.Activity</span><span class="o">;</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">android.app.Activity</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">android.os.Bundle</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">android.view.View</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">android.widget.Button</span><span class="o">;</span>
@@ -435,7 +435,7 @@ a Socialize class may lead to unexpected errors as new versions of the SDK are r
 </div>
 <div class="section" id="id5">
 <h3>Step 3 - Override the default behaviour for user actions (where required)<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">View</span> <span class="n">actionBar</span> <span class="o">=</span> <span class="n">ActionBarUtils</span><span class="o">.</span><span class="na">showActionBar</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">actionbar</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="n">ActionBarListener</span><span class="o">()</span> <span class="o">{</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">View</span> <span class="n">actionBar</span> <span class="o">=</span> <span class="n">ActionBarUtils</span><span class="o">.</span><span class="na">showActionBar</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">actionbar</span><span class="o">,</span> <span class="n">entity</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="n">ActionBarListener</span><span class="o">()</span> <span class="o">{</span>
 	<span class="nd">@Override</span>
 	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">ActionBarView</span> <span class="n">actionBar</span><span class="o">)</span> <span class="o">{</span>
 
@@ -460,7 +460,7 @@ a Socialize class may lead to unexpected errors as new versions of the SDK are r
 <div class="section" id="id6">
 <h3>Step 4 - Implement the user actions taken from your UI using the Core SDK<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <p>(taken from CustomProfileViewActivity)</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">btnSave</span><span class="o">.</span><span class="na">setOnClickListener</span><span class="o">(</span><span class="k">new</span> <span class="n">View</span><span class="o">.</span><span class="na">OnClickListener</span><span class="o">()</span> <span class="o">{</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">btnSave</span><span class="o">.</span><span class="na">setOnClickListener</span><span class="o">(</span><span class="k">new</span> <span class="n">View</span><span class="o">.</span><span class="na">OnClickListener</span><span class="o">()</span> <span class="o">{</span>
 	<span class="nd">@Override</span>
 	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onClick</span><span class="o">(</span><span class="n">View</span> <span class="n">view</span><span class="o">)</span> <span class="o">{</span>
 
@@ -535,7 +535,7 @@ Class and Object definitions are made <em>declaratively</em> in XML files that a
 </div></blockquote>
 <p>Each of these files defines one or more <em>beans</em> which corresponds to Socialize objects.</p>
 <p>For example the following defines the &#8220;DeviceUtils&#8221; object:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="o">&lt;</span><span class="n">bean</span> <span class="n">id</span><span class="o">=</span><span class="s">&quot;deviceUtils&quot;</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;com.socialize.util.DeviceUtils&quot;</span><span class="o">&gt;</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">bean</span> <span class="n">id</span><span class="o">=</span><span class="s">&quot;deviceUtils&quot;</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;com.socialize.util.DeviceUtils&quot;</span><span class="o">&gt;</span>
     <span class="o">&lt;</span><span class="n">property</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;logger&quot;</span> <span class="n">ref</span><span class="o">=</span><span class="s">&quot;logger&quot;</span><span class="o">/&gt;</span>
     <span class="o">&lt;</span><span class="n">property</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;appUtils&quot;</span> <span class="n">ref</span><span class="o">=</span><span class="s">&quot;appUtils&quot;</span><span class="o">/&gt;</span>
     <span class="o">&lt;</span><span class="n">init</span><span class="o">-</span><span class="n">method</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;init&quot;</span><span class="o">&gt;</span>
@@ -545,7 +545,7 @@ Class and Object definitions are made <em>declaratively</em> in XML files that a
 </pre></div>
 </div>
 <p>To replace this implementation, simply create a <strong>separate</strong> XML file that redefines this bean and place it in your classpath</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="o">&lt;</span><span class="n">beans</span><span class="o">&gt;</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">beans</span><span class="o">&gt;</span>
     <span class="o">&lt;</span><span class="n">bean</span> <span class="n">id</span><span class="o">=</span><span class="s">&quot;deviceUtils&quot;</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;com.yourpackage.MyDeviceUtils&quot;</span><span class="o">&gt;</span>
         <span class="o">&lt;</span><span class="n">property</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;logger&quot;</span> <span class="n">ref</span><span class="o">=</span><span class="s">&quot;logger&quot;</span><span class="o">/&gt;</span>
         <span class="o">&lt;</span><span class="n">property</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;appUtils&quot;</span> <span class="n">ref</span><span class="o">=</span><span class="s">&quot;appUtils&quot;</span><span class="o">/&gt;</span>
@@ -558,7 +558,7 @@ Class and Object definitions are made <em>declaratively</em> in XML files that a
 </div>
 <p>If you are simply extending the Socialize class, be sure to include <strong>ALL OBJECT INITIALIZATION PARAMETERS</strong> in the bean declaration.</p>
 <p>Finally add a line to your <strong>socialize.properties</strong> file:</p>
-<div class="highlight-properties"><div class="highlight"><pre><span class="c"># Specify a classpath reference to your bean override file</span>
+<div class="highlight-properties"><div class="highlight"><pre><span></span><span class="c"># Specify a classpath reference to your bean override file</span>
 <span class="na">bean.overrides</span><span class="o">=</span><span class="s">override_beans.xml</span>
 </pre></div>
 </div>
@@ -584,11 +584,11 @@ Class and Object definitions are made <em>declaratively</em> in XML files that a
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <form class="search" action="search.html?v=v3.1.6" method="get">
+    <form class="search" action="search.html?v=v3.1.7" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -599,25 +599,25 @@ Class and Object definitions are made <em>declaratively</em> in XML files that a
     </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-<h3><a href="index.html?v=v3.1.6">Table Of Contents</a></h3>
+<h3><a href="index.html?v=v3.1.7">Table Of Contents</a></h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v3.1.6">What&#8217;s New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v3.1.6">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lifecycle.html?v=v3.1.6">Socialize Lifecycle</a></li>
-<li class="toctree-l1"><a class="reference internal" href="demo.html?v=v3.1.6">Socialize Demo App</a></li>
-<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v3.1.6">Socialize Action Bar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="entities.html?v=v3.1.6">Socialize Entities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v3.1.6">Custom Like Buttons</a></li>
-<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v3.1.6">Facebook Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v3.1.6">Twitter Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pinterest.html?v=v3.1.6">Sharing to Pinterest</a></li>
-<li class="toctree-l1"><a class="reference internal" href="facebook_adv.html?v=v3.1.6">Advanced Facebook</a></li>
-<li class="toctree-l1"><a class="reference internal" href="twitter_adv.html?v=v3.1.6">Advanced Twitter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v3.1.6">SmartAlerts (Push Notifications)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v3.1.6">Entity Loaders</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deep_linking.html?v=v3.1.6">Deep Linking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="localization.html?v=v3.1.6">Localization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v3.1.6">Socialize Core SDK Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v3.1.7">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v3.1.7">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lifecycle.html?v=v3.1.7">Socialize Lifecycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html?v=v3.1.7">Socialize Demo App</a></li>
+<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v3.1.7">Socialize Action Bar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entities.html?v=v3.1.7">Socialize Entities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v3.1.7">Custom Like Buttons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v3.1.7">Facebook Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v3.1.7">Twitter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pinterest.html?v=v3.1.7">Sharing to Pinterest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook_adv.html?v=v3.1.7">Advanced Facebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter_adv.html?v=v3.1.7">Advanced Twitter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v3.1.7">SmartAlerts (Push Notifications)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v3.1.7">Entity Loaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deep_linking.html?v=v3.1.7">Deep Linking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="localization.html?v=v3.1.7">Localization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v3.1.7">Socialize Core SDK Guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Extending Socialize</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#architecture">Architecture</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#use-cases-best-practices">Use Cases &amp; Best Practices</a></li>
@@ -626,30 +626,30 @@ Class and Object definitions are made <em>declaratively</em> in XML files that a
 <li class="toctree-l2"><a class="reference internal" href="#expert-level-customization">Expert Level Customization</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="config.html?v=v3.1.6">Configuration Settings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v3.1.6">Amazon AppStore URLs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v3.1.6">ProGuard Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v3.1.6">Troubleshooting &amp; Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v3.1.6">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html?v=v3.1.7">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v3.1.7">Amazon AppStore URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v3.1.7">ProGuard Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v3.1.7">Troubleshooting &amp; Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v3.1.7">Change Log</a></li>
 </ul>
 
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="config.html?v=v3.1.6" title="Configuration Settings"
+          <a href="config.html?v=v3.1.7" title="Configuration Settings"
              >next</a></li>
         <li class="right" >
-          <a href="sdk_user_guide.html?v=v3.1.6" title="Socialize Core SDK Guide"
+          <a href="sdk_user_guide.html?v=v3.1.7" title="Socialize Core SDK Guide"
              >previous</a> |</li>
-        <li><a href="index.html?v=v3.1.6">Socialize Android SDK v3.1.6 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html?v=v3.1.7">Socialize Android SDK v3.1.7 documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2012, Socialize Inc.
     </div>
   </body>
