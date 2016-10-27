@@ -458,7 +458,7 @@ public abstract class BaseFacebookFacade implements FacebookFacade {
 	 */
 	@Override
 	public void post(Activity parent, SocialNetworkListener listener, PostData postData) {
-		doFacebookCall(parent, postData.getPostValues(), "me/links", HttpMethod.POST, listener);
+		doFacebookCall(parent, postData.getPostValues(), "me/feed", HttpMethod.POST, listener);
 	}	
 		
 	/* (non-Javadoc)
